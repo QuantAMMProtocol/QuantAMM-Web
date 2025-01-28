@@ -1,0 +1,14 @@
+query GetPoolEvents($first: Int, $skip: Int, $where: GqlPoolEventsFilter) {
+  poolEvents(first: $first, skip: $skip, where: $where) {
+    id
+    poolId
+    blockNumber
+    blockTimestamp
+    timestamp
+    type
+    chain
+    valueUSD
+    sender
+    tx
+  }
+}

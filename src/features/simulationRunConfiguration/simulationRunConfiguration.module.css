@@ -1,0 +1,60 @@
+.smallp {
+  font-size: 15px;
+  padding-left: 10px;
+  padding-bottom: 0px;
+  text-align: left;
+  margin-right: 4px;
+}
+
+.runSimulationblock {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  background-color: lightslategray;
+}
+
+.runSimulationblockPadding {
+  padding: 10px;
+}
+
+.addModifyButton {
+  padding: 5px;
+}
+
+.runSim {
+  padding-right: 10px;
+}
+
+.simulationPoolTypeDesc {
+  padding-right: 5px;
+  padding-left: 5px;
+}
+
+.simulationRunnerBox {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.initialPoolTable {
+  height: 60vh;
+}
+.ant-input-number-group-addon {
+  background-color: black;
+}
+
+.rowWidth {
+  width: 100%;
+}
+
+.updateRuleParam {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.addCoinRow {
+  padding-bottom: 10px;
+}
+
+.initialPoolChartDiv {
+  overflow-y: scroll;
+  height: 75vh;
+}

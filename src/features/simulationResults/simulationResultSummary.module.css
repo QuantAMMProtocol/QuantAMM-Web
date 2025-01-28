@@ -1,0 +1,97 @@
+.marketValueChart {
+  min-height: 200px;
+}
+
+.predefinedRunButton {
+  height: 100px;
+}
+
+.simRunSection {
+  padding: 10px;
+}
+
+.importResetButton {
+  margin-top: 5;
+  height: 40;
+  margin-left: 10;
+}
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.simResultDividers {
+  margin: 2px;
+}
+
+.weightChartDescription {
+  padding-top: 15px;
+}
+
+.tableParent {
+  height: 40vh;
+}
+
+.summaryTableParent {
+  height: 60vh;
+}
+
+.runDetailSummaryTableParent {
+  height: 20vh;
+}
+
+.resultChartRow {
+  overflow-y: scroll;
+  height: 58vh;
+}
+.reallyBadAnalysisResult {
+  background-color: rgb(128, 0, 0);
+  color: white;
+}
+
+.quiteBadAnalysisResult {
+  background-color: rgb(182, 4, 4);
+  color: white;
+}
+
+.badAnalysisResult {
+  background-color: rgb(239, 45, 45);
+  color: white;
+}
+
+.borderlineBadAnalysisResult {
+  background-color: rgb(243, 111, 111);
+}
+
+.transparentAnalysisResult {
+  background-color: transparent;
+}
+
+.reallyGoodAnalysisResult {
+  background-color: rgb(20, 87, 2);
+  color: white;
+}
+
+.quiteGoodAnalysisResult {
+  background-color: rgb(34, 139, 5);
+  color: white;
+}
+
+.goodAnalysisResult {
+  background-color: rgb(99, 167, 81);
+  color: white;
+}
+
+.borderlineGoodAnalysisResult {
+  background-color: rgb(152, 203, 138);
+}
+
+.profit {
+  color: rgb(8, 120, 8);
+}
+
+.loss {
+  color: rgb(195, 11, 11);
+}

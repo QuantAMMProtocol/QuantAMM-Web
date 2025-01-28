@@ -1,0 +1,47 @@
+query GetPools(
+  $first: Int
+  $orderBy: GqlPoolOrderBy
+  $orderDirection: GqlPoolOrderDirection
+  $skip: Int
+  $textSearch: String
+  $where: GqlPoolFilter
+) {
+  poolGetPools(
+    first: $first
+    orderBy: $orderBy
+    orderDirection: $orderDirection
+    skip: $skip
+    textSearch: $textSearch
+    where: $where
+  ) {
+    __typename
+    address
+    chain
+    name
+    decimals
+    type
+    id
+    symbol
+    createTime
+    owner
+    allTokens {
+      __typename
+      weight
+      symbol
+      address
+    }
+    dynamicData {
+      poolId
+      fees24h
+      swapFee
+      totalLiquidity
+      totalShares
+      volume24h
+      apr {
+        swapApr
+      }
+      yieldCapture48h
+    }
+    tags
+  }
+}

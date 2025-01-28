@@ -1,0 +1,33 @@
+query GetPoolById($id: String!, $chain: GqlChain!) {
+  poolGetPool(id: $id, chain: $chain) {
+    __typename
+    address
+    chain
+    name
+    decimals
+    type
+    id
+    symbol
+    createTime
+    owner
+    allTokens {
+      __typename
+      weight
+      symbol
+      address
+    }
+    dynamicData {
+      poolId
+      fees24h
+      swapFee
+      totalLiquidity
+      totalShares
+      volume24h
+      apr {
+        swapApr
+      }
+      yieldCapture48h
+    }
+    tags
+  }
+}

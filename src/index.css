@@ -1,0 +1,70 @@
+:root {
+  --primary-color: #162536;
+  --primary-dark: rgb(11, 24, 39);
+  --primary-darker: #030c16;
+  --primary-light: #233242;
+  --primary-lighter: #3d4e61;
+  --secondary-color: #e6ce97;
+  --secondary-light: #655d33;
+  --secondary-lighter: #948b58;
+  --secondary-dark: #3b340d;
+  --secondary-darker: #221e02;
+
+  --main-background: var(--primary-color);
+  --card-top-background: rgba(11, 24, 39, 0.35);
+  --card-chain-background: var(--primary-lighter);
+  --sidebar-top-background: var(--primary-color);
+  --product-detail-nav__container: var(--primary-color);
+  --dropdown-text-color: var(--secondary-color);
+  --product-item-background: rgba(11, 24, 39, 0.96);
+  --product-item-background-shadow: 20px 20px 50px 0px rgba(0, 0, 0, 0.25) inset,
+    10px 10px 25px 0px rgba(0, 0, 0, 0.18) inset,
+    2px 2px 11px 0px rgba(0, 0, 0, 0.19) inset, 0px -1px 1px 0px #ffffff40 inset;
+  --product-item-background-border-color: rgba(229, 211, 190, 0.05);
+  --tooltip-background-color: var(--primary-darker);
+  --tooltip-text-color: #f0f2f5;
+}
+
+[data-theme='light'] {
+  --main-background: #f0f2f5;
+  --card-top-background: rgba(11, 24, 39, 0.25);
+  --card-chain-background: var(--secondary-color);
+  --sidebar-top-background: #f0f2f5;
+  --product-detail-nav__container: #f0f2f5;
+  --dropdown-text-color: var(--secondary-dark);
+  --product-item-background: rgba(244, 244, 244, 0.96);
+  --product-item-background-shadow: 4px 4px 4px 0px rgba(0, 0, 0, 0.04) inset,
+    7px 6px 12px 0px rgba(0, 0, 0, 0.08) inset,
+    40px 40px 80px 0px rgba(0, 0, 0, 0.05) inset,
+    0px -1px 1px 0px rgba(255, 255, 255, 0.25) inset;
+  --product-item-background-border-color: rgba(176, 126, 67, 0.08);
+  --tooltip-background-color: var(--main-background);
+  --tooltip-text-color: var(--secondary-dark);
+}
+
+body,
+#root {
+  height: 100dvh;
+  background-color: var(--main-background);
+}
+
+body {
+  margin: 0;
+  font-family: Jost;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.overall-graph-tooltip-title {
+  margin: 0;
+}
+
+.ag-chart-tooltip-content {
+  background-color: var(--tooltip-background-color) !important;
+  color: var(--tooltip-text-color) !important;
+}

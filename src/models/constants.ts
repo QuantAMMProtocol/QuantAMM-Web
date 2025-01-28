@@ -1,0 +1,1 @@
+export const CURRENT_PERFORMANCE_PERIOD = '3m';

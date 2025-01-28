@@ -1,0 +1,140 @@
+import { FC, useMemo, useRef, useState } from 'react';
+import { ColDef, GridOptions, SideBarDef } from 'ag-grid-community';
+import { AgGridReact } from 'ag-grid-react';
+import { Button } from 'antd';
+import { useAppSelector } from '../../../app/hooks';
+import { selectAgGridTheme } from '../../themes/themeSlice';
+import { SimulationRunBreakdown } from '../../simulationResults/simulationResultSummaryModels';
+import { getAnalysisSummary } from './AnalysisBreakdownTableHelpers';
+
+interface AnalysisBreakdownTableProps {
+  simulationRunBreakdowns: SimulationRunBreakdown[];
+  height?: number;
+}
+
+export const AnalysisBreakdownTable: FC<AnalysisBreakdownTableProps> = ({
+  simulationRunBreakdowns,
+  height = 700,
+}) => {
+  const darkThemeAg = useAppSelector(selectAgGridTheme);
+  const gridRef = useRef<AgGridReact>(null);
+
+  const [finAnalysisColDefs] = useState<ColDef[]>([
+    { colId: 'updateRule', field: 'updateRule', headerName: 'Update Rule' },
+    {
+      colId: 'parameters',
+      field: 'parameters',
+      headerName: 'Parameters',
+      hide: true,
+    },
+    {
+      colId: 'timePeriodName',
+      field: 'timePeriodName',
+      headerName: 'Time Period',
+      rowGroupIndex: 0,
+      hide: true,
+    },
+    {
+      colId: 'benchmark',
+      field: 'benchmark',
+      headerName: 'R(b)',
+      rowGroupIndex: 2,
+      hide: true,
+    },
+    {
+      colId: 'rf',
+      field: 'rf',
+      headerName: 'R(f)',
+      rowGroupIndex: 1,
+      hide: true,
+    },
+    {
+      colId: 'metricName',
+      field: 'metricName',
+      sortable: true,
+      sort: 'asc',
+      headerName: 'MetricName',
+      minWidth: 250,
+    },
+    {
+      colId: 'metricValue',
+      field: 'metricValue',
+      headerName: 'metricValue',
+    },
+  ]);
+
+  const analysisGridOptions: GridOptions = useMemo(
+    () => ({
+      columnDefs: finAnalysisColDefs,
+      rowHeight: 26,
+      defaultColDef: {
+        filter: 'agTextColumnFilter',
+        sortable: true,
+        resizable: true,
+        enablePivot: true,
+      },
+      columnTypes: {
+        nonEditableColumn: { editable: false },
+      },
+      groupDefaultExpanded: 3,
+    }),
+    [finAnalysisColDefs]
+  );
+
+  const sideBar: SideBarDef = {
+    toolPanels: [
+      {
+        id: 'columns',
+        labelDefault: 'Columns',
+        labelKey: 'columns',
+        iconKey: 'columns',
+        toolPanel: 'agColumnsToolPanel',
+        minWidth: 100,
+        maxWidth: 300,
+        width: 200,
+      },
+      {
+        id: 'filters',
+        labelDefault: 'Filters',
+        labelKey: 'filters',
+        iconKey: 'filter',
+        toolPanel: 'agFiltersToolPanel',
+        minWidth: 100,
+        maxWidth: 300,
+        width: 200,
+      },
+    ],
+    position: 'right',
+    defaultToolPanel: 'none',
+  };
+
+  const rowData = useMemo(
+    () => getAnalysisSummary(simulationRunBreakdowns),
+    [simulationRunBreakdowns]
+  );
+
+  const handleDownloadCSV = () => {
+    gridRef.current?.api?.exportDataAsCsv();
+  };
+
+  return (
+    <div style={{ width: '100%' }}>
+      <div style={{ display: 'flex', justifyContent: 'end', padding: 10 }}>
+        <Button onClick={handleDownloadCSV}>Download CSV</Button>
+      </div>
+      <div
+        id="details"
+        className={darkThemeAg}
+        style={{ height, width: '100%' }}
+      >
+        <AgGridReact
+          ref={gridRef}
+          rowData={rowData}
+          gridOptions={analysisGridOptions}
+          columnDefs={finAnalysisColDefs}
+          sideBar={sideBar}
+        />
+      </div>
+    </div>
+  );
+};

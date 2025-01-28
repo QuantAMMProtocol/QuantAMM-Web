@@ -1,0 +1,18 @@
+query GetHistoricalPrices(
+  $addresses: [String!]!
+  $chain: GqlChain!
+  $range: GqlTokenChartDataRange!
+) {
+  tokenGetHistoricalPrices(
+    addresses: $addresses
+    chain: $chain
+    range: $range
+  ) {
+    address
+    chain
+    prices {
+      price
+      timestamp
+    }
+  }
+}

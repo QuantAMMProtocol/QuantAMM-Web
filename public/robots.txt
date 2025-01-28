@@ -1,0 +1,3 @@
+# https://www.quantAMMtstxt.org/quantAMMtstxt.html
+User-agent: *
+Disallow:
