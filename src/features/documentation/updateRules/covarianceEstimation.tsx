@@ -61,7 +61,7 @@ export function CoVarianceEstimation() {
                 </MathJax>
                 <MathJax>
                   {
-                    ' \\[\\mathbf{Sigma}_t=\\left(1-\\lambda\\right)\\mathbf{A}_{t}\\]'
+                    ' \\[\\mathbf{\\Sigma}_t=\\left(1-\\lambda\\right)\\mathbf{A}_{t}\\]'
                   }
                 </MathJax>
                 <p>
@@ -83,7 +83,7 @@ export function CoVarianceEstimation() {
                   <span>
                     from the current estimate of the covariance matrix,
                   </span>
-                  <MathJax inline>{' \\(mathbf{Sigma}_t\\) '}</MathJax>
+                  <MathJax inline>{' \\(\\mathbf{\\Sigma}_t\\) '}</MathJax>
                   <span> and </span>
                   <MathJax inline>{' \\(\\lambda\\) '}</MathJax>
                   <span>

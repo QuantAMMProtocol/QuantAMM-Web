@@ -1,0 +1,185 @@
+import { FC, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Button, Card, Col, List, Row, Typography } from 'antd';
+import { useAppSelector } from '../../../../app/hooks';
+import { Product } from '../../../../models';
+import { selectTheme } from '../../../themes/themeSlice';
+import {
+  ProductItemCompositionGraph,
+  ProductItemOverviewGraph,
+} from '../../../shared';
+import { getScoreColor, MAX_SCORE } from '../../../shared/graphs/helpers';
+import { ProductModal } from '../../../productDetail/modal/productModal';
+import { getBalancerPoolUrl } from '../../../../utils';
+import { productExplorerTranslation } from '../../translations';
+import {
+  getCurrentPrice,
+  getTimeDifference,
+  getTvl,
+} from '../productItemHelpers';
+import { ProductItemPerformanceLineGraph } from './productItemPerformanceLineGraph';
+import { ProductItemBackground } from '../productItemBackground';
+
+import styles from './productItemWide.module.scss';
+
+const { Text } = Typography;
+
+interface ProductItemProps {
+  product: Product;
+}
+
+export const ProductItemWide: FC<ProductItemProps> = ({ product }) => {
+  const isDarkTheme = useAppSelector(selectTheme);
+
+  const [productModalUrl, setProductModalUrl] = useState<string | undefined>(
+    undefined
+  );
+
+  const baseBalancerUrl = getBalancerPoolUrl(product.chain, product.id);
+  const addLiquidityBalancerPoolUrl = `${baseBalancerUrl}/add-liquidity`;
+
+  const showProductModal = () => {
+    setProductModalUrl(addLiquidityBalancerPoolUrl);
+  };
+
+  const hideProductModal = () => {
+    setProductModalUrl(undefined);
+  };
+
+  return (
+    <div
+      className={
+        isDarkTheme
+          ? [
+              styles['product-item__card-container__dark'],
+              styles['product-item-wide__card-container'],
+            ].join(' ')
+          : [
+              styles['product-item__card-container__light'],
+              styles['product-item-wide__card-container'],
+            ].join(' ')
+      }
+    >
+      <Card className={styles['product-item__card']} hoverable>
+        <ProductItemBackground wide>
+          <Row>
+            <Col
+              span={5}
+              className={styles['product-item__card-column-left']}
+              style={{ position: 'relative' }}
+            >
+              <div className={styles['product-item__card__title']}>
+                <Text
+                  ellipsis={{ tooltip: product.name }}
+                  className={styles['product-item__card-top__text']}
+                >
+                  {product.name}
+                </Text>
+              </div>
+              <div className={styles['product-item__card__title-chain']}>
+                <Text>{productExplorerTranslation[product.chain]}</Text>
+              </div>
+            </Col>
+
+            <Col span={2} className={styles['product-item__card-column']}>
+              <Text className={styles['product-item__card-under-body__text']}>
+                <span style={{ color: 'var(--secondary-text-color)' }}>
+                  {getTvl(product)}
+                </span>
+              </Text>
+            </Col>
+
+            <Col span={2} className={styles['product-item__card-column']}>
+              <Text className={styles['product-item__card-under-body__text']}>
+                <span style={{ color: 'var(--secondary-text-color)' }}>
+                  {getCurrentPrice(product)}
+                </span>
+              </Text>
+            </Col>
+
+            <Col span={2} className={styles['product-item__card-column']}>
+              <Text className={styles['product-item__card-under-body__text']}>
+                <span style={{ color: 'var(--secondary-lighter)' }}>
+                  {getTimeDifference(product.createTime)}
+                </span>
+              </Text>
+            </Col>
+
+            <Col span={3} className={styles['product-item__card-column']}>
+              <List
+                dataSource={Object.entries(product.overview)}
+                renderItem={(item) => (
+                  <List.Item style={{ padding: 0 }}>
+                    <Text
+                      className={styles['product-item__card-scores__text']}
+                      style={{ color: getScoreColor(Number(item[1].value)) }}
+                    >
+                      {String(item[1].metric)}
+                    </Text>
+                    <Text
+                      className={styles['product-item__card-scores__text']}
+                      style={{
+                        color: getScoreColor(Number(item[1].value)),
+                        marginLeft: 4,
+                      }}
+                    >
+                      {String(item[1].value)} / {MAX_SCORE}
+                    </Text>
+                  </List.Item>
+                )}
+              />
+            </Col>
+
+            <Col span={2}>
+              <div className={styles['product-item-graph']}>
+                <ProductItemOverviewGraph
+                  data={product.overview}
+                  isDarkTheme={isDarkTheme}
+                  wide={true}
+                  showScoreOverall={true}
+                />
+              </div>
+            </Col>
+            <Col span={2}>
+              <div className={styles['product-item-graph']}>
+                <ProductItemPerformanceLineGraph
+                  product={product}
+                  wide={true}
+                />
+              </div>
+            </Col>
+            <Col span={2}>
+              <div className={styles['product-item-graph']}>
+                <ProductItemCompositionGraph
+                  data={product.poolConstituents}
+                  wide={true}
+                  showTokenNames={true}
+                />
+              </div>
+            </Col>
+
+            <Col span={4} className={styles['product-item__card-column-right']}>
+              <div className={styles['product-item__card__action']}>
+                <Button size="small" type="link">
+                  <Link to={`${String(product.id)}`}>details</Link>
+                </Button>
+                <Button
+                  size="small"
+                  type="primary"
+                  onClick={() => showProductModal()}
+                >
+                  deposit
+                </Button>
+              </div>
+            </Col>
+          </Row>
+        </ProductItemBackground>
+        <ProductModal
+          isVisible={!!productModalUrl}
+          onClose={hideProductModal}
+          url={productModalUrl}
+        />
+      </Card>
+    </div>
+  );
+};

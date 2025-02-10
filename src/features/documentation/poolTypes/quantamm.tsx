@@ -15,7 +15,7 @@ export function QuantAMMPoolDescription() {
             <Col span={24}>
               <Fade>
                 <p>
-                  <span>Our proposal is to update</span>
+                  <span>QuantAMM updates</span>
                   <MathJax inline>{' \\(\\mathbf{w}\\) '}</MathJax>
                   <span>
                     {' '}
@@ -43,7 +43,7 @@ export function QuantAMMPoolDescription() {
                     explicit, as it now depends on the current, and changing,
                     value of
                   </span>
-                  <MathJax inline>{' \\(\\mathbf{w}(t)\\). '}</MathJax>.
+                  <MathJax inline>{' \\(\\mathbf{w}(t)\\). '}</MathJax>
                 </p>
                 <p>
                   <span>Since any trade with a pool must not decrease</span>
@@ -54,8 +54,8 @@ export function QuantAMMPoolDescription() {
                     take place are those which bring the reserves into the
                     target ratio, meaning that the DEX is not required to
                     execute any trades of its own to enact the rebalancing. At
-                    the same time, this ensures that a QuantAMM pool is better
-                    able to avoid impermanent loss than a pool with static
+                    the same time, this means that a QuantAMM pool can reduce
+                    exposure to impermanent loss compared to a pool with static
                     weights, since those trades which take place move the
                     reserves from less-desired assets (whose weights decrease)
                     into more-desired ones (as their weights increase).
@@ -63,14 +63,14 @@ export function QuantAMMPoolDescription() {
                 </p>
                 <h3>How to determine the target weights</h3>
                 <p>
-                  The inevitable quesiton is then, in what way should
-                  pools&apos; weights change? Indeed, there is a universe of
-                  possible such update rules — that is, possible functions to
-                  determine the changes in weights — but for an update rule to
-                  be appealing it has to offer superior capital performance than
-                  HODL: it has to be an effective strategy. It also has to be
-                  feasible to run on-chain for a given blockchain (it has to be
-                  economical to run).
+                  The key question is then, in what way should pools&apos;
+                  weights change? Indeed, there is a universe of possible such
+                  update rules — that is, possible functions to determine the
+                  changes in weights — but for an update rule to be appealing it
+                  has to offer superior capital performance than HODL: it has to
+                  be an effective strategy. It also has to be feasible to run
+                  on-chain for a given blockchain (it has to be economical to
+                  run).
                 </p>
                 <p>
                   The update rule section defines potential rules that have
@@ -79,19 +79,16 @@ export function QuantAMMPoolDescription() {
                   efficiently on chain. The update rule also has to fulfill
                   various natural mathematical properties, for example making
                   sure that the resulting weights are valid by summing to one
-                  and having values in the range [0, 1).
+                  and having values in the range [0, 1), or a range with that.
                 </p>
                 <p>
                   We believe that automated, on-chain, permission-less and
                   non-custodial methods for this, built as a DEX, are the most
-                  desirable, in-keeping both with the broad ethos of DeFi as
-                  well as having real-world advantages to the users of such a
-                  protocol. These include:
+                  desirable, consistent with the broad ethos of DeFi and having
+                  real-world advantages to the users of such a protocol. These
+                  include:
                 </p>
-                <p>
-                  1. The reliability of the system, as it would not rely on some
-                  central organisation or machine to make manage capital;
-                </p>
+                <p>1. System reliability through decentralized execution;</p>
                 <p>
                   2. the ease of verifying the logic and structure of the
                   portfolio strategy, as it is implemented as a smart contract;
@@ -118,11 +115,11 @@ export function QuantAMMPoolDescription() {
                   In the previous situation we considered the case of constant
                   weights with changing market prices. We will now consider how
                   the holdings, and thus value, of a QuantAMM pool changes when
-                  the weights are updated. That is, now we will consider fixed
-                  market prices but a pool with changing weights. So, mirroring
-                  the above, we have that, given a change in pool weights,
-                  arbitrageurs will trade with the pool until the quoted prices
-                  of the pool match the current market prices.
+                  the weights are updated. We will consider fixed market prices
+                  but a pool with changing weights. So, mirroring the above, we
+                  have that, given a change in pool weights, arbitrageurs will
+                  trade with the pool until the quoted prices of the pool match
+                  the current market prices.
                 </p>
                 <p>
                   <span>We will start with weights</span>

@@ -141,6 +141,21 @@ export function SimulationSimplifiedRunButton() {
                     continue;
                   }
                 }
+                //Import disabled given that v3 api has not been released yet
+                //else if (sim.poolType.name == 'LIVE') {
+                //  const selectedPoolData as ProductDto = balancerPools.find(
+                //    dispatch(
+                //      useFinancialAnalysis({
+                //        product: selectedPoolData!,
+                //        benchmark: Benchmark.HODL,
+                //        loadToSimulator: true,
+                //      })
+                //    );
+                //      benchmark: Benchmark.HODL,
+                //      loadToSimulator: true,
+                //    });
+                //  }
+                //}
               }
             })
           );

@@ -6,19 +6,21 @@ export const MinVariance = () => {
   return (
     <>
       <Title level={3}>
-        <Text style={{ color: '#E6CE97', fontSize: 'inherit' }}>
+        <Text
+          style={{ color: 'var(--secondary-text-color)', fontSize: 'inherit' }}
+        >
           &ldquo;Hold more of the least volatile constituent&rdquo;
         </Text>
       </Title>
       <p>
-        <Text strong style={{ color: '#E6CE97' }}>
+        <Text strong style={{ color: 'var(--secondary-text-color)' }}>
           Volatility is bad:{' '}
         </Text>
         If the constituents are not supposed to be volatile, then you really
         should derisk if one is starting to act erratically.
       </p>
       <p>
-        <Text strong style={{ color: '#E6CE97' }}>
+        <Text strong style={{ color: 'var(--secondary-text-color)' }}>
           More Detail:{' '}
         </Text>
         <p>

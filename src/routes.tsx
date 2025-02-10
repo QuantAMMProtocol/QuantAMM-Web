@@ -1,7 +1,9 @@
 import { Navigate, createBrowserRouter } from 'react-router-dom';
+import { INITIAL_LOAD_POOLS_COUNT } from './models/constants';
 import App from './App';
 import { CoinData } from './features/coinData/coinData';
 import { SimulationRunner } from './features/simulationRunner/simulationRunner';
+import { ProductDetail, ProductExplorer } from './features';
 import { About } from './features/documentation/about';
 import { Documentation } from './features/documentation/documentation';
 import { SimulationSavedResultComparison } from './features/simulationResults/resultComparisonTab/simulationSavedResultComparison';
@@ -16,7 +18,7 @@ export const routes = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <SimulationRunner />,
+        element: <SimulationRunner poolsToLoad={INITIAL_LOAD_POOLS_COUNT} />,
       },
       {
         path: ROUTES.HOME,
@@ -25,6 +27,19 @@ export const routes = createBrowserRouter([
       {
         path: ROUTES.DOCUMENTATION,
         element: <Documentation />,
+      },
+      {
+        path: ROUTES.PRODUCT_EXPLORER,
+        children: [
+          {
+            index: true,
+            element: <ProductExplorer />,
+          },
+          {
+            path: ':id',
+            element: <ProductDetail />,
+          },
+        ],
       },
       {
         path: ROUTES.EXAMPLES,
@@ -36,7 +51,7 @@ export const routes = createBrowserRouter([
       },
       {
         path: ROUTES.SIMULATION_RUNNER,
-        element: <SimulationRunner />,
+        element: <SimulationRunner poolsToLoad={INITIAL_LOAD_POOLS_COUNT} />,
       },
       {
         path: ROUTES.SIMULATION_COMPARER,

@@ -132,8 +132,7 @@ export interface SwapImport {
 export interface PoolType {
   name: string;
   mandatoryProperties: string[];
-  shortDesciption: string;
-  longDescription: string;
+  shortDescription: string;
   requiresPoolNumeraire: boolean;
 }
 

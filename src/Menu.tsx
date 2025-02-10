@@ -55,6 +55,11 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
       icon: <FireOutlined />,
     },
     {
+      label: 'Product Explorer',
+      key: ROUTES.PRODUCT_EXPLORER,
+      icon: <RadarChartOutlined type="vertical" />,
+    },
+    {
       label: 'Simulator:',
       key: 'divider',
       disabled: true,

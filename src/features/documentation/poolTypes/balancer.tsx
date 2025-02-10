@@ -46,15 +46,8 @@ export function BalancerPoolDescription() {
                   <MathJax inline>{' \\(w_i=\\frac{1}{N}\\) '}</MathJax>
                   <span>
                     {' '}
-                    , an equal amount of value will be stored in each token. (We
-                    sometimes write{' '}
+                    , an equal amount of value will be stored in each token.
                   </span>
-                  <MathJax inline>{' \\(\\mathcal{P}\\) '}</MathJax>
-                  <span> to denote the tuple </span>
-                  <MathJax inline>
-                    {' \\((\\mathcal{T}, \\mathbf{w}, R)\\) '}
-                  </MathJax>
-                  <span> defining a pool.) </span>
                 </p>
                 <p>
                   There are a variety of reasons one might wish to have, for a
@@ -70,8 +63,7 @@ export function BalancerPoolDescription() {
                   allocated to that token. However, since the portfolio weights
                   must sum to <MathJax inline>{' \\(1\\) '}</MathJax>, this
                   makes for a relatively greater risk of impermanent loss on at
-                  least one other token in the portfolio. This points to the
-                  downsides of the hard-coded portfolio weights.
+                  least one other token in the portfolio.
                 </p>
               </Fade>
             </Col>

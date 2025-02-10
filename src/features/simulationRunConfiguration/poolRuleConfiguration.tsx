@@ -183,6 +183,7 @@ export function PoolRuleConfiguration() {
                 </Select>
               </Col>
             </Col>
+
             <Col span={24} style={{ paddingTop: '10px' }}>
               <div hidden={!localPoolType.requiresPoolNumeraire}>
                 <Select
@@ -194,7 +195,6 @@ export function PoolRuleConfiguration() {
                   placeholder="Select pool coin numeraire"
                   disabled={!coinDataLoaded || runStatusIndex == 2}
                   onChange={(value: string) => {
-                    console.log('value', value);
                     dispatch(setPoolCoinNumeraire(value));
                   }}
                   key={poolNumeraire}

@@ -271,8 +271,7 @@ export const handleFileChange = (
               poolConstituents: jsonData.simulationRun.poolConstituents,
               poolType: {
                 name: 'HODL',
-                shortDesciption: 'HODL',
-                longDescription: 'HODL',
+                shortDescription: 'HODL',
                 mandatoryProperties: [],
                 requiresPoolNumeraire: false,
               },

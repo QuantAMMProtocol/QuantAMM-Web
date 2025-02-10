@@ -132,7 +132,6 @@ export const simConfigurationSlice = createSlice({
       );
     },
     upsertSelectedSimplifiedPool: (state, action: PayloadAction<string>) => {
-      console.log(action.payload);
       if (
         state.selectedSimplifiedPools.filter((x) => x == action.payload)
           .length == 0 &&
@@ -200,12 +199,17 @@ export const simConfigurationSlice = createSlice({
         liquidityPool.enableAutomaticArbBots = true;
 
         state.simulationLiquidityPools.push(liquidityPool);
+
+        const originalUpdateRule = state.initialLiquidityPool.updateRule;
+
         if (state.simulationSimplifiedIncludeLvrRuns) {
           const lvrEquivalentRule = state.availableUpdateRules.find(
             (x) =>
               x.applicablePoolTypes[0] ==
-              'LVR for ' + liquidityPool.updateRule.applicablePoolTypes[0]
+                'LVR for ' + liquidityPool.updateRule.applicablePoolTypes[0] &&
+              x.updateRuleName == 'LVR - ' + originalUpdateRule.updateRuleName
           );
+
           if (
             lvrEquivalentRule != undefined &&
             lvrEquivalentRule.updateRuleName !=
@@ -222,8 +226,10 @@ export const simConfigurationSlice = createSlice({
           const rvrEquivalentRule = state.availableUpdateRules.find(
             (x) =>
               x.applicablePoolTypes[0] ==
-              'RVR for ' + liquidityPool.updateRule.applicablePoolTypes[0]
+                'RVR for ' + liquidityPool.updateRule.applicablePoolTypes[0] &&
+              x.updateRuleName == 'RVR - ' + originalUpdateRule.updateRuleName
           );
+
           if (
             rvrEquivalentRule != undefined &&
             rvrEquivalentRule.updateRuleName !=
@@ -237,7 +243,6 @@ export const simConfigurationSlice = createSlice({
         }
 
         function createLiquidityPoolFromInitialPool(): LiquidityPool {
-          console.log(state.initialLiquidityPool);
           return {
             id:
               poolLength > 0
@@ -262,8 +267,7 @@ export const simConfigurationSlice = createSlice({
                   '')
             ) ?? {
               name: 'unknown',
-              shortDesciption: 'unknown',
-              longDescription: 'unknown',
+              shortDescription: 'unknown',
               mandatoryProperties: [],
               requiresPoolNumeraire:
                 state.initialLiquidityPool.poolType.requiresPoolNumeraire,
@@ -902,6 +906,39 @@ export const selectSwapImports = (state: RootState) => {
 };
 export const selectGasSteps = (state: RootState) => {
   return state.simConfig.gasPriceImport;
+};
+
+export const maxInitialPoolConstituentAvailableDate = (state: RootState) => {
+  let defaultEndDate = 0;
+  state.simConfig.initialLiquidityPool.poolConstituents.forEach((x) => {
+    const maxUnixDate = Math.max(
+      ...x.coin.dailyPriceHistory.map((price) => price.unix)
+    );
+    if (maxUnixDate > defaultEndDate) {
+      defaultEndDate = maxUnixDate;
+    }
+  });
+  if (defaultEndDate == 0) {
+    defaultEndDate = new Date('2024-12-31').getTime() / 1000;
+  }
+
+  return new Date(defaultEndDate * 1000).toISOString().split('T')[0];
+};
+export const minInitialPoolConstituentAvailableDate = (state: RootState) => {
+  let defaultStartDate = Number.MAX_SAFE_INTEGER;
+  state.simConfig.initialLiquidityPool.poolConstituents.forEach((x) => {
+    const minUnixDate = Math.min(
+      ...x.coin.dailyPriceHistory.map((price) => price.unix)
+    );
+    if (minUnixDate < defaultStartDate) {
+      defaultStartDate = minUnixDate;
+    }
+  });
+  if (defaultStartDate == Number.MAX_SAFE_INTEGER) {
+    defaultStartDate = new Date('2000-01-01').getTime() / 1000;
+  }
+
+  return new Date(defaultStartDate * 1000).toISOString().split('T')[0];
 };
 
 export const selectSimulationSimplifiedIncludeLvrRuns = (state: RootState) =>

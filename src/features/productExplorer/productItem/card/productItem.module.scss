@@ -1,0 +1,133 @@
+.product-item__card-container__dark {
+  --cardTopBkg: var(--primary-dark);
+  --brdColor: #e6ce97;
+  --cardBottomBkg: rgba(230, 206, 151, 1);
+  --cardBottomColor: var(--primary-color);
+}
+
+.product-item__card-container__light {
+  --cardTopBkg: #ffffef;
+  --brdColor: var(--primary-dark);
+  --cardBottomBkg: #ffffff;
+  --cardBottomColor: rgb(24, 144, 255);
+}
+
+div.product-item__card-container {
+  margin: auto;
+  width: 290px;
+}
+
+div.product-item__card {
+  width: 100%;
+  border-color: var(--brdColor);
+  border-radius: 12px;
+  overflow: hidden;
+
+  & > div {
+    padding: 0 !important;
+    width: 100%;
+  }
+}
+
+div.product-item__card__top {
+  position: relative;
+  text-align: center;
+  top: 0;
+  width: 100%;
+  background-color: var(--card-top-background);
+  border-radius: 0;
+  padding: 2px 8px;
+
+  > span {
+    font-size: 20px;
+    font-weight: bolder;
+  }
+}
+
+div.product-item__card__bottom-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  bottom: 0;
+  width: 100%;
+  padding: 12px 0 8px 0;
+  font-size: 14px;
+  border-radius: 0;
+
+  > span {
+    color: var(--brdColor) !important;
+  }
+}
+
+div.product-item__card__bottom-title,
+div.product-item__card__bottom-text,
+div.product-item__card__bottom-text-secondary {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  justify-content: baseline;
+  padding-left: 8px;
+
+  > span {
+    font-weight: 400;
+  }
+}
+
+div.product-item__card__bottom-chain {
+  background-color: var(--card-chain-background);
+  border-radius: 0 20px 20px 0;
+
+  > span {
+    text-transform: lowercase;
+  }
+}
+
+div.product-item__card__bottom-title {
+  padding-bottom: 8px;
+  text-align: center;
+
+  > span {
+    font-size: 20px;
+    font-weight: 600;
+  }
+}
+
+div.product-item__card-body {
+  position: relative;
+  padding: 0;
+}
+
+span.product-item__card-under-body__text {
+  font-weight: 600;
+}
+
+div.product-item__card-under-body {
+  padding-top: 8px;
+}
+
+div.product-item__card__action {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 100%;
+  width: 100%;
+}
+
+div.product-item-graph {
+  position: relative;
+  height: 252px;
+  margin: 0;
+  z-index: 1;
+}
+
+div.product-item__card__loading {
+  height: 436px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

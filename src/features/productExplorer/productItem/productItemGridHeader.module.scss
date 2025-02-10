@@ -1,0 +1,13 @@
+div.product-item-grid-header-wide {
+  width: 100%;
+  border-color: transparent;
+
+  &>div {
+    padding: 0 !important;
+  }
+}
+
+
+div.product-item-grid-header__column {
+  text-align: center;
+}

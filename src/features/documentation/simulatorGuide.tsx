@@ -7,8 +7,6 @@ import {
   CheckCircleOutlined,
 } from '@ant-design/icons';
 import { useState } from 'react';
-import styles from './documentation.module.css';
-
 const { Step } = Steps;
 
 export function SimulatorGuide() {
@@ -63,102 +61,46 @@ export function SimulatorGuide() {
       label: 'The QuantAMM Balancer Simulator',
       children: (
         <ul>
-          {/* <li style={{ marginBottom: 20 }}>
-            The QuantAMM Balancer Simulator enables users to model, explore, and
-            tune various AMM mechanisms through a web interface. It provides
-            deep insights into pool behavior and performance under different
-            market conditions.
-          </li> */}
+          <li style={{ marginBottom: 20 }}>
+            The QuantAMM Balancer Simulator enables users to model, test, and
+            optimize various AMM designs through an intuitive web interface. It
+            provides deep insights into pool behavior and performance under
+            different market conditions.
+          </li>
           <li style={{ marginBottom: 20 }}>
             The simulator supports a comprehensive range of AMM protocols from
-            the Balancer ecosystem:
+            the Balancer ecosystem and related designs:
             <ul style={{ marginTop: 10, marginBottom: 10 }}>
               <li>
-                <strong>
-                  <a
-                    href="https://docs.balancer.fi/concepts/explore-available-balancer-pools/weighted-pool/weighted-pool.html"
-                    className={styles.linkStyle}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Balancer Base Weighted Pools
-                  </a>
-                </strong>
-                : Supports multiple tokens with different weights
+                <strong>Balancer Base Weighted Pools</strong>: The foundation of
+                many modern AMM designs, supporting arbitrary numbers of tokens
+                with different weights
               </li>
               <li>
-                <strong>
-                  <a
-                    href="https://quantamm.fi"
-                    className={styles.linkStyle}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    QuantAMM Pools
-                  </a>
-                </strong>
-                : Dynamic weight AMMs that automatically adjust pool weights
-                based on market conditions according to a chosen strategy
+                <strong>QuantAMM Pools</strong>: Dynamic weight AMMs that
+                automatically adjust pool weights based on market conditions and
+                a chosen strategies
               </li>
               <li>
-                <strong>
-                  <a
-                    href="https://cow.fi/cow-amm"
-                    className={styles.linkStyle}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    CowAMM Pools
-                  </a>
-                </strong>
-                : Pools that use the CoW Swap protocol and a custom invariant to
-                reduce rebalancing costs to the pool
+                <strong>CowAMM Pools</strong>: Pools that use the CoW Swap
+                protocol and a custom invariant to provide reduced rebalancing
+                costs for LPs
               </li>
               <li>
-                <strong>
-                  <a
-                    href="https://docs.gyro.finance/gyroscope-protocol/concentrated-liquidity-pools/e-clps"
-                    className={styles.linkStyle}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Gyroscope E-CLP Pools
-                  </a>
-                </strong>
-                : Elliptic Concentrated Liquidity Pools offer extreme capital
-                efficiency
+                <strong>Gyroscope E-CLP Pools</strong>: Elliptic Concentrated
+                Liquidity Pools that provide extreme capital efficiency for
+                traders
               </li>
             </ul>
           </li>
           <li style={{ marginBottom: 20 }}>
             <strong>Token Support</strong>:
             <ul style={{ marginTop: 10, marginBottom: 10 }}>
-              <li>Balancer & QuantAMM support 2-8 tokens in a pool</li>
+              <li>Balancer pools support 2-8 tokens</li>
               <li>
                 CowAMM & Gyroscope E-CLP pools are limited to 2 tokens only
               </li>
             </ul>
-          </li>
-          <li style={{ marginBottom: 20 }}>
-            Pools can also be benchmarked against{' '}
-            <a
-              href="https://arxiv.org/abs/2208.06046"
-              className={styles.linkStyle}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Loss Versus Rebalancing
-            </a>{' '}
-            and{' '}
-            <a
-              href="https://arxiv.org/abs/2410.23404"
-              className={styles.linkStyle}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Rebalancing Versus Rebalancing
-            </a>{' '}
-            metrics.
           </li>
         </ul>
       ),
@@ -169,8 +111,9 @@ export function SimulatorGuide() {
       children: (
         <ul>
           <li style={{ marginBottom: 20 }}>
-            The simulator models AMM behavior, including arbitrage & trades,
-            changes in pool composition, and pool performance metrics.
+            The simulator provides comprehensive modeling of AMM behavior,
+            including arbitrage & trades, changes in pool composition, and pool
+            performance metrics.
           </li>
           <li style={{ marginBottom: 20 }}>
             Dynamic weight AMMs, such as QuantAMM, support a wide range of
@@ -195,34 +138,29 @@ export function SimulatorGuide() {
       children: (
         <ul>
           <li style={{ marginBottom: 20 }}>
-            The simulator is built with a powerful Python backend that provides
-            a web API. It leverages{' '}
-            <a
-              href="https://github.com/google/jax"
-              className={styles.linkStyle}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              JAX
-            </a>
-            , a high-performance computing framework, to enable GPU
-            acceleration. The entire backend can be installed as a standard
-            Python package via <code>pip</code>, making setup straightforward.
-            For development or custom deployments, the API server can also be
-            run locally.
+            Here we provide a hosted version of the quantamm simulator. The
+            simulator is built with a powerful Python backend that provides a
+            web API. It leverages{' '}
+            <a href="https://github.com/google/jax">JAX</a>, a high-performance
+            computing framework, to enable GPU acceleration. The entire backend
+            can be installed as a standard Python package via <code>pip</code>,
+            making setup straightforward. For development or custom deployments,
+            the API server can also be run locally.
           </li>
           <li style={{ marginBottom: 20 }}>
-            Price data is taken from Binance and Coinbase at minute level. In
-            our model, this minute-level granularity represents the fastest
-            possible reaction time for arbitrageurs - faster arbitrage generally
-            leads to more efficient rebalancing and better pool performance. We
-            use minute-level data as a conservative baseline, though
-            arbitrageurs often act more quickly in practice.
+            Price data is taken from Binance and Coinbase at the minute level.
+            The granularity of price data determines how quickly we can model
+            arbitrageur responses - faster arbitrage generally leads to more
+            efficient rebalancing and better pool performance. We use
+            minute-level data as a conservative baseline, though arbitrageurs
+            often act more quickly in practice.
           </li>
           <li style={{ marginBottom: 20 }}>
-            Financial analysis uses standard market metrics, with risk-free
-            rates [R(f)] drawn from the 3-Month Treasury Bill rate (DTB3) in
-            FRED, the Federal Reserve's economic database.
+            The simulator provides comprehensive financial analysis capabilities
+            using custom functions. For risk-free rate calculations [R(f)], we
+            use the 3-Month Treasury Bill rate (DTB3) obtained from FRED
+            (Federal Reserve Economic Data), the official economic database of
+            the Federal Reserve.
           </li>
         </ul>
       ),
@@ -232,19 +170,24 @@ export function SimulatorGuide() {
       label: 'Extensibility',
       children: (
         <ul>
-          <li style={{ marginBottom: 10 }}>
-            The Python backend accepts custom AMM designs through:
+          <li style={{ marginBottom: 20 }}>
+            The simulator's Python backend is designed for customization and
+            extension, allowing you to implement and test your own AMM
+            innovations. This flexibility enables:
           </li>
-          <ul style={{ marginBottom: 20 }}>
-            <li>New pool types via trading functions</li>
-            <li>Novel QuantAMM strategies</li>
-            <li>Custom optimization objectives</li>
+          <ul style={{ marginTop: 10, marginBottom: 10 }}>
+            <li>Custom trading functions for new pool types</li>
+            <li>Novel QuantAMM strategies and parameters</li>
+            <li>Specialized optimization objectives</li>
             <li>Integration with existing trading systems</li>
           </ul>
           <li style={{ marginBottom: 20 }}>
-            All designs - built-in and custom - make use of the same
-            optimization framework. Full documentation ships with the Python
-            package.
+            The system is extensible through its Python backend package. Power
+            users can add custom trading functions and QuantAMM strategies by
+            implementing new pool types. The backend maintains full machine
+            learning capabilities for parameter optimization of custom
+            implementations. Documentation for extending the system will be
+            available with the Python package release.
           </li>
         </ul>
       ),
@@ -255,25 +198,39 @@ export function SimulatorGuide() {
       children: (
         <ul>
           <li style={{ marginBottom: 20 }}>
-            Strategy Optimization: Tune dynamic pool strategies and their
-            parameters to optimize performance metrics. Parameter optimization
-            considers real-world constraints like pool fees and gas costs.
+            The Python package includes additional advanced features:
           </li>
           <li style={{ marginBottom: 20 }}>
-            Fee Optimization: Design dynamic fee mechanisms that respond to
-            market conditions and tune their response to changing market
-            conditions.
+            Comprehensive Parameter Optimization:
+            <ul style={{ marginTop: 10, marginBottom: 10 }}>
+              <li>
+                Strategy Optimization: Tune dynamic pool strategies and their
+                parameters to optimize performance metrics
+              </li>
+              <li>
+                Fee Mechanism Design: Optimize dynamic fee hooks and fee
+                parameters while accounting for market conditions
+              </li>
+              <li>
+                Realistic Modeling: Parameter optimization considers real-world
+                constraints like pool fees and gas costs
+              </li>
+              <li>
+                High-Performance Computing: GPU-accelerated optimization enables
+                rapid exploration of parameter spaces
+              </li>
+              <li>
+                Flexible Methods: Choose between gradient-based approaches for
+                direct optimization or gradient-free methods for complex
+                landscapes, discrete parameters and significant speedups in some
+                cases
+              </li>
+            </ul>
           </li>
           <li style={{ marginBottom: 20 }}>
-            GPU-accelerated optimization enables rapid exploration of parameter
-            spaces. Choose between gradient-based approaches for direct
-            optimization or gradient-free methods for discrete parameters and
-            significant speedups in some cases.
-          </li>
-          <li style={{ marginBottom: 20 }}>
-            Data Preprocessing: Combine and clean price data from external
-            sources. Missing data points are filled to ensure continuous price
-            data for simulation.
+            Custom Data Preprocessing: Combine and clean price data from
+            external sources, with intelligent gap-filling to ensure continuous,
+            high-quality price data for simulation.
           </li>
         </ul>
       ),

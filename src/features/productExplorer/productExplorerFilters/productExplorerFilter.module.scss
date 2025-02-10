@@ -1,0 +1,98 @@
+.filter-bar-container__dark {
+  --bgColor: #243242;
+}
+
+.filter-bar-container__light {
+  --bgColor: #fefffe;
+}
+
+.filter-bar-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 0px;
+}
+
+.filter-bar-container__collapsible {
+  @extend .filter-bar-container;
+  padding: 4px 4px 4px 12px;
+  margin-top: 0;
+  background-color: var(--bgColor);
+  border-style: solid;
+  border-color: var(--secondary-text-color);
+  border-width: 1px 1px 1px 0;
+}
+
+.filter-bar {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+  width: 100%;
+
+  span {
+    cursor: pointer;
+
+    &:hover {
+      color: #e6ce97;
+    }
+  }
+
+  & > div:nth-child(2) {
+    margin-top: 0;
+
+    h4 {
+      margin-top: 18px;
+    }
+  }
+}
+
+.filter-bar__collapsed {
+  display: none;
+}
+
+.filter-bar__reset {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  width: 100%;
+
+  > span {
+    > span {
+      color: transparent;
+    }
+
+    &:hover {
+      color: #a60000;
+
+      & > span {
+        color: #a60000;
+      }
+    }
+  }
+}
+
+.filter-bar__filter-group {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  width: 100%;
+  margin: 12px 0 6px;
+
+  h4 {
+    margin-top: 12px;
+  }
+}
+
+.filter-bar__filters {
+  display: flex;
+  flex-direction: column;
+  row-gap: 6px;
+  width: 100%;
+
+  > label {
+    text-align: left;
+    margin-left: 0 !important;
+  }
+}

@@ -6,13 +6,15 @@ export const PowerChannel = () => {
   return (
     <>
       <Title level={3}>
-        <Text style={{ color: '#E6CE97', fontSize: 'inherit' }}>
+        <Text
+          style={{ color: 'var(--secondary-text-color)', fontSize: 'inherit' }}
+        >
           &ldquo;Ignore the noise of small price movements, act fast on large
           price movements&rdquo;
         </Text>
       </Title>
       <p>
-        <Text strong style={{ color: '#E6CE97' }}>
+        <Text strong style={{ color: 'var(--secondary-text-color)' }}>
           Noise is unpredictable and you can get caught out:{' '}
         </Text>
         Broad market movements can be more predictable than &quot;technical
@@ -20,20 +22,20 @@ export const PowerChannel = () => {
         long term.
       </p>
       <p>
-        <Text strong style={{ color: '#E6CE97' }}>
+        <Text strong style={{ color: 'var(--secondary-text-color)' }}>
           HODL when prices move in small noise patters:{' '}
         </Text>
         Just don&apos;t act. HODL is a good strategy when the price is moving in
         small ways
       </p>
       <p>
-        <Text strong style={{ color: '#E6CE97' }}>
+        <Text strong style={{ color: 'var(--secondary-text-color)' }}>
           Act big if the price moves outside of your noise thresholds:{' '}
         </Text>
         FOMO into a mooning consituent or exit a freefalling one.
       </p>
       <p>
-        <Text strong style={{ color: '#E6CE97' }}>
+        <Text strong style={{ color: 'var(--secondary-text-color)' }}>
           More detail:{' '}
         </Text>
         <p>

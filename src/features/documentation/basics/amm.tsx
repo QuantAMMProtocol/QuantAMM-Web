@@ -9,7 +9,44 @@ export function AMMDescription() {
       <Col style={{ padding: 20 }} span={16}>
         <Fade>
           <MathJaxContext>
-            <h2>Background on Constant-Function Market Makers</h2>
+            <h2>Simulating Automated Market Makers</h2>
+            <p>
+              Automated Market Makers (AMMs) are autonomous systems that manage
+              holdings of assets. While first designed as a way to enable
+              permissionless trading, a fundamental innovation is the
+              transformation of portfolio management into pure mathematical
+              functions operating on-chain. The QuantAMM Simulator provides a
+              mathematical framework for exploring this design space within the
+              Balancer V3 protocol. It models the mathematical relationships
+              between pool design, trading mechanics, and market dynamics. The
+              simulator enables mathematical verification of AMM designs without
+              capital deployment. It systematically evaluates pool performance
+              against historical market data to quantify behavior under
+              real-world conditions.
+            </p>
+            <p>
+              Other AMM simulations replay historical transaction sequences,
+              constraining analysis to existing pool designs, pool compositions
+              and trade flows. That approach optimizes liquidity provision
+              solely for swap fee collection.
+            </p>
+            <p>
+              AMMs are complete portfolio management systems, so this simulator
+              focuses on how LP tokens accrue value from the changes in value of
+              the assets in the pool. To that end, we have designed the
+              simulator to model <i>any</i> basket of assets over any time span,
+              given a time series of prices. The simulator works by calculating
+              and applying the arbitrage trades that exist for pools.
+            </p>
+            <p>
+              Advanced users can also model provided trade data, custom hooks
+              that vary pool fees, and even turn off the arbitrage trades.
+            </p>
+            <p>
+              The simulator models Balancer weighted pools, CowAMM pools,
+              Gyroscope E-CLP pools, and our own QuantAMM pools.
+            </p>
+            <h3>Automated Market Maker 101</h3>
             <p>
               Automated Market Makers (AMMs) are a variety of decentralised
               exchange (DEX) where a mathematical formula is used on-chain to
@@ -36,11 +73,12 @@ export function AMMDescription() {
               portfolio and reduces the mis-pricing. In other words, the pool
               pays arbitrageurs to rebalance.
             </p>
+            <h3>Understanding AMM Mechanics</h3>
             <p>
               <span>
                 The simplest Constant-Function Market Maker (CFMM) is where the
-                trading function is simply the product of the quantity of two
-                tokens deposited:
+                trading function is the product of the quantity of two tokens
+                deposited:
               </span>
               <MathJax>{' \\[R_1 R_2 = k\\]'}</MathJax>
               <span>where</span>
@@ -67,8 +105,8 @@ export function AMMDescription() {
                 {' \\[\\tilde{R}_1 \\tilde{R}_2 \\geq k = R_1 R_2\\]'}
               </MathJax>
               <span>
-                Here we are ignoring fees charged on the transaction, for
-                simplicity&apos;s sake.
+                (Here we are ignoring fees charged on the transaction, for
+                simplicity&apos;s sake.)
               </span>
             </p>
           </MathJaxContext>

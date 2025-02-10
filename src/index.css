@@ -15,7 +15,7 @@
   --card-chain-background: var(--primary-lighter);
   --sidebar-top-background: var(--primary-color);
   --product-detail-nav__container: var(--primary-color);
-  --dropdown-text-color: var(--secondary-color);
+  --secondary-text-color: var(--secondary-color);
   --product-item-background: rgba(11, 24, 39, 0.96);
   --product-item-background-shadow: 20px 20px 50px 0px rgba(0, 0, 0, 0.25) inset,
     10px 10px 25px 0px rgba(0, 0, 0, 0.18) inset,
@@ -28,10 +28,10 @@
 [data-theme='light'] {
   --main-background: #f0f2f5;
   --card-top-background: rgba(11, 24, 39, 0.25);
-  --card-chain-background: var(--secondary-color);
+  --card-chain-background: var(--secondary-text-color);
   --sidebar-top-background: #f0f2f5;
   --product-detail-nav__container: #f0f2f5;
-  --dropdown-text-color: var(--secondary-dark);
+  --secondary-text-color: var(--secondary-dark);
   --product-item-background: rgba(244, 244, 244, 0.96);
   --product-item-background-shadow: 4px 4px 4px 0px rgba(0, 0, 0, 0.04) inset,
     7px 6px 12px 0px rgba(0, 0, 0, 0.08) inset,

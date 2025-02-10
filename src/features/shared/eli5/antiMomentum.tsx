@@ -6,13 +6,15 @@ export const AntiMomentum = () => {
   return (
     <>
       <Title level={3}>
-        <Text style={{ color: '#E6CE97', fontSize: 'inherit' }}>
+        <Text
+          style={{ color: 'var(--secondary-text-color)', fontSize: 'inherit' }}
+        >
           &ldquo;deviations will revert back to the mean. Buy and sell assuming
           prices will revert &rdquo;
         </Text>
       </Title>
       <p>
-        <Text strong style={{ color: '#E6CE97' }}>
+        <Text strong style={{ color: 'var(--secondary-text-color)' }}>
           Calculate the average price given the last N number of days:{' '}
         </Text>
         Often associated with weighted moving averages, this strategy expects a
@@ -20,7 +22,7 @@ export const AntiMomentum = () => {
         channel strategy outside the channel.
       </p>
       <p>
-        <Text strong style={{ color: '#E6CE97' }}>
+        <Text strong style={{ color: 'var(--secondary-text-color)' }}>
           Buy and sell as if you knew the price would always go back to that
           average:{' '}
         </Text>
@@ -29,7 +31,7 @@ export const AntiMomentum = () => {
         price to rise again.
       </p>
       <p>
-        <Text strong style={{ color: '#E6CE97' }}>
+        <Text strong style={{ color: 'var(--secondary-text-color)' }}>
           More detail:{' '}
         </Text>
         This is a much more refined strategy that can be considered market cycle

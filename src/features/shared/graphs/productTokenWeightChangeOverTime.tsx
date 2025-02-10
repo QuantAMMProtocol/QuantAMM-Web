@@ -74,7 +74,7 @@ export const ProductTokenWeightChangeOverTimeGraph: FC<
         (constituent: ProductPoolConstituents, index: number) => {
           if (isBenchmark) {
             timeStep[normalisedTokenName(constituent.coin.toLowerCase())] =
-              Number(constituent.weight) *
+              normalisedTimeSeries[0].amounts[index] *
               item.tokenPrices[constituent.address];
           } else {
             timeStep[normalisedTokenName(constituent.coin.toLowerCase())] =

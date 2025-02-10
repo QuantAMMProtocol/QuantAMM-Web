@@ -1,0 +1,19 @@
+@mixin grid-area {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.product-detail-stats__title-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-detail-stats__title-container {
+  position: absolute;
+  left: 100px;
+  top: 0;
+  bottom: 0;
+}

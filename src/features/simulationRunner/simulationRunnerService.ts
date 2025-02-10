@@ -32,7 +32,7 @@ export const simulationRunnerService = createApi({
       transformResponse: (response: string): SimulationResult => {
         //It is possible for a certain product that a certain ratio cannot be calculated, instead of defaulting to 0
         //we can pass NaN so that a warning/error can be displayed for a given metric on a give product
-
+        console.log(response);
         const sanitizedResponse = response.replace(/:\s*NaN/g, ': null');
         return JSON.parse(sanitizedResponse);
       },
