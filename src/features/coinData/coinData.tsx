@@ -15,7 +15,7 @@ import {
   GridOptions,
 } from 'ag-grid-community';
 
-import { Row, Col, Menu, Spin, Tabs } from 'antd';
+import { Row, Col, Menu, Tabs } from 'antd';
 import {
   CopyrightOutlined,
   DownOutlined,
@@ -76,6 +76,7 @@ export function CoinData() {
       field: 'date',
       type: ['dateColumn', 'nonEditableColumn'],
       chartDataType: 'time',
+      width: 150,
     },
     {
       colId: 'open',
@@ -197,7 +198,6 @@ export function CoinData() {
     position: 'right',
     defaultToolPanel: 'none',
   };
-
   const gridOptions: GridOptions = {
     columnDefs: columnDefs,
     rowHeight: 26,
@@ -319,16 +319,6 @@ export function CoinData() {
                 </Col>
                 <Col span={20}>
                   <div hidden={priceDataLoaded}>
-                    <Row>
-                      <Col span={8}></Col>
-                      <Col span={8}>
-                        <Spin
-                          size="large"
-                          tip="Loading Coin/Token Price Data..."
-                        ></Spin>
-                      </Col>
-                      <Col span={8}></Col>
-                    </Row>
                     {coinLoadStatus.map((x, index) => (
                       <Row key={index}>
                         <Col span={8}></Col>
@@ -342,12 +332,17 @@ export function CoinData() {
                       </Row>
                     ))}
                   </div>
-                  <Row hidden={!priceDataLoaded}>
+                  <Row>
                     <Col span={24}>
-                      <div className={styles.tableParent + ' wrapper'}>
+                      <div hidden={!priceDataLoaded}>
                         <div
                           id="myGrid"
                           className={styles.tableParent + ' ' + darkThemeAg}
+                          style={{
+                            width: '100%',
+                            paddingLeft: '60px',
+                            paddingRight: '30px',
+                          }}
                         >
                           <AgGridReact
                             className={styles.tableParent}
@@ -361,58 +356,68 @@ export function CoinData() {
                       </div>
                     </Col>
                   </Row>
-                  <Row hidden={!priceDataLoaded}>
+                  <Row>
                     <Col span={24}>
-                      <AgCharts
-                        options={{
-                          height: 300,
-                          navigator: {
-                            enabled: true,
-                            height: 5,
-                            spacing: 6,
-                          },
-                          axes: [
-                            getTimeAxisOption(getCoinSeries()[0].data.length),
-                            {
-                              type: 'number',
-                              position: 'left',
-                              label: {
-                                format: '$~s',
-                              },
+                      <div
+                        hidden={!priceDataLoaded}
+                        style={{
+                          width: '100%',
+                          paddingLeft: '60px',
+                          paddingRight: '30px',
+                          paddingTop: '20px',
+                        }}
+                      >
+                        <AgCharts
+                          options={{
+                            height: 300,
+                            navigator: {
+                              enabled: true,
+                              height: 5,
+                              spacing: 6,
                             },
-                          ],
-                          series: getCoinSeries(),
-                          legend: {
-                            position: 'top',
-                          },
-                          overlays: {
-                            noData: {
-                              text: 'No data',
-                            },
-                          },
-                          theme: {
-                            baseTheme: chartTheme,
-                            overrides: {
-                              common: {
-                                background: {
-                                  fill: 'transparent',
+                            axes: [
+                              getTimeAxisOption(getCoinSeries()[0].data.length),
+                              {
+                                type: 'number',
+                                position: 'left',
+                                label: {
+                                  format: '$~s',
                                 },
                               },
-                              line: {
-                                series: {
-                                  stroke: '#DAAB43',
-                                  cursor: 'crosshair',
-                                  marker: {
+                            ],
+                            series: getCoinSeries(),
+                            legend: {
+                              position: 'top',
+                            },
+                            overlays: {
+                              noData: {
+                                text: 'No data',
+                              },
+                            },
+                            theme: {
+                              baseTheme: chartTheme,
+                              overrides: {
+                                common: {
+                                  background: {
+                                    fill: 'transparent',
+                                  },
+                                },
+                                line: {
+                                  series: {
                                     stroke: '#DAAB43',
-                                    fill: '#DAAB43',
-                                    enabled: false,
+                                    cursor: 'crosshair',
+                                    marker: {
+                                      stroke: '#DAAB43',
+                                      fill: '#DAAB43',
+                                      enabled: false,
+                                    },
                                   },
                                 },
                               },
                             },
-                          },
-                        }}
-                      />
+                          }}
+                        />
+                      </div>
                     </Col>
                   </Row>
                 </Col>

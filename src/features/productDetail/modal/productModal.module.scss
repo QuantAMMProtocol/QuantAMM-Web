@@ -1,0 +1,86 @@
+.modalContainer {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+
+.productModal {
+  font-size: 46px;
+  .balancerTitle {
+    font-size: x-large;
+  }
+}
+
+.modalTitle {
+  font-size: 30px;
+  margin-bottom: 2%;
+  font-weight: bold;
+}
+
+.modalButton {
+  display: flex;
+  align-items: center;
+  padding: 24px;
+  width: 100%;
+  height: 120%;
+  max-width: 500px;
+  border-radius: 16px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.modalIcon {
+  width: 48px;
+  height: 48px;
+  margin-right: 20px;
+}
+
+.modalContent {
+  flex-grow: 1;
+  text-align: left;
+}
+
+.modalTitle {
+  font-size: 22px;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.modalDescription {
+  font-size: 16px;
+  margin: 0;
+}
+
+.externalLinkIcon {
+  margin-left: 20px;
+  width: 24px;
+  height: 24px;
+}
+
+.redirectContainer {
+  text-align: center;
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: auto;
+}
+
+.redirectMessage {
+  font-size: 18px;
+  color: rgb(70, 142, 210);
+
+  p {
+    margin: 0;
+  }
+}
+
+.countdownNumber {
+  font-size: 48px;
+  font-weight: bold;
+  display: block;
+  margin: 10px 0;
+}

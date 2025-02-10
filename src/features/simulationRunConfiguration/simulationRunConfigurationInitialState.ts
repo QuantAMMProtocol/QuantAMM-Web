@@ -6,8 +6,8 @@ import {
 } from './simulationRunConfigModels';
 
 export const ConfigInitialState: SimulationRunConfig = {
-  startDate: '2021-02-03 00:00:00',
-  endDate: '2022-07-22 23:59:00',
+  startDate: '2024-01-01 00:00:00',
+  endDate: '2024-12-29 23:59:00',
   coinLoadStatus: [],
   coinPriceHistoryLoadedStatus: 'pending',
   simulationSimplifiedIncludeLvrRuns: false,
@@ -94,121 +94,92 @@ export const ConfigInitialState: SimulationRunConfig = {
     {
       name: 'HODL',
       mandatoryProperties: [],
-      shortDesciption:
-        'Buy and Hold. No AMM. No fees. No impermanent loss. Run this as a benchmark',
-      longDescription:
+      shortDescription:
         'Buy and Hold. No AMM. No fees. No impermanent loss. Run this as a benchmark',
       requiresPoolNumeraire: false,
     },
     {
       name: 'Balancer Weighted',
       mandatoryProperties: [],
-      shortDesciption:
+      shortDescription:
         'The classic, the original, the Balancer Weighted Pool. This pool type is a constant function market maker, which means that the pool will always have liquidity for the assets in the pool. This pool type is the most common and is used in most of the pools on the platform.',
-      longDescription:
-        'Geometric mean market makers hold their assets in a fixed ratio, which is determined by the initial reserves. This means that the pool will always have liquidity for the assets in the pool. This pool type is the most common and is used in most of the pools on the platform.' +
-        'The Balancer Weighted Pool is a constant function market maker, which means that the pool will always have liquidity for the assets in the pool. This pool type is the most common and is used in most of the pools on the platform.',
       requiresPoolNumeraire: false,
     },
     {
       name: 'LVR for Balancer Weighted',
       mandatoryProperties: [],
-      shortDesciption:
+      shortDescription:
         'The classic, the original, the Balancer Weighted Pool. This pool type is a constant function market maker, which means that the pool will always have liquidity for the assets in the pool. This pool type is the most common and is used in most of the pools on the platform.',
-      longDescription:
-        'Geometric mean market makers hold their assets in a fixed ratio, which is determined by the initial reserves. This means that the pool will always have liquidity for the assets in the pool. This pool type is the most common and is used in most of the pools on the platform.' +
-        'The Balancer Weighted Pool is a constant function market maker, which means that the pool will always have liquidity for the assets in the pool. This pool type is the most common and is used in most of the pools on the platform.',
       requiresPoolNumeraire: false,
     },
     {
       name: 'RVR for Balancer Weighted',
       mandatoryProperties: [],
-      shortDesciption:
+      shortDescription:
         'The classic, the original, the Balancer Weighted Pool. This pool type is a constant function market maker, which means that the pool will always have liquidity for the assets in the pool. This pool type is the most common and is used in most of the pools on the platform.',
-      longDescription:
-        'Geometric mean market makers hold their assets in a fixed ratio, which is determined by the initial reserves. This means that the pool will always have liquidity for the assets in the pool. This pool type is the most common and is used in most of the pools on the platform.' +
-        'The Balancer Weighted Pool is a constant function market maker, which means that the pool will always have liquidity for the assets in the pool. This pool type is the most common and is used in most of the pools on the platform.',
       requiresPoolNumeraire: false,
     },
     {
       name: 'QuantAMM',
       mandatoryProperties: ['Update Rule'],
-      shortDesciption:
+      shortDescription:
         'QuantAMM pools dynamically change their weight over time according to a known strategy or update rule. This allows you to appreciate value from the pool holdings not just fees',
-      longDescription:
-        'QuantAMM pools define a strategy in a smart contract. This contract is called every hour or every day and updates a strategy signal that determines what the target weights should be over the next hour' +
-        'This means that if one token is going up in value, hopefully the strategy will weight the pool heavily in that favour, riding the bull run of tokens and leaving less favourable tokens. ' +
-        'Strategies are opinionated, but yet again so are fixed weights. The difference is that the strategy can be changed, and the fixed weights cannot. You also earn fees ontop of any gains from the strategy.',
       requiresPoolNumeraire: false,
     },
     {
       name: 'LVR for QuantAMM',
       mandatoryProperties: ['Update Rule'],
-      shortDesciption:
+      shortDescription:
         'QuantAMM pools dynamically change their weight over time according to a known strategy or update rule. This allows you to appreciate value from the pool holdings not just fees',
-      longDescription:
-        'QuantAMM pools define a strategy in a smart contract. This contract is called every hour or every day and updates a strategy signal that determines what the target weights should be over the next hour' +
-        'This means that if one token is going up in value, hopefully the strategy will weight the pool heavily in that favour, riding the bull run of tokens and leaving less favourable tokens. ' +
-        'Strategies are opinionated, but yet again so are fixed weights. The difference is that the strategy can be changed, and the fixed weights cannot. You also earn fees ontop of any gains from the strategy.',
       requiresPoolNumeraire: false,
     },
     {
       name: 'RVR for QuantAMM',
       mandatoryProperties: ['Update Rule'],
-      shortDesciption:
+      shortDescription:
         'QuantAMM pools dynamically change their weight over time according to a known strategy or update rule. This allows you to appreciate value from the pool holdings not just fees',
-      longDescription:
-        'QuantAMM pools define a strategy in a smart contract. This contract is called every hour or every day and updates a strategy signal that determines what the target weights should be over the next hour' +
-        'This means that if one token is going up in value, hopefully the strategy will weight the pool heavily in that favour, riding the bull run of tokens and leaving less favourable tokens. ' +
-        'Strategies are opinionated, but yet again so are fixed weights. The difference is that the strategy can be changed, and the fixed weights cannot. You also earn fees ontop of any gains from the strategy.',
       requiresPoolNumeraire: false,
     },
     {
-      name: 'CowAMM',
+      name: 'CowAMM Weighted',
       mandatoryProperties: [],
-      shortDesciption:
-        'CowAMM pools combine CowSwap with AMMs. Batching and averaging trade price means that scalpers get an average price and dont front run you.' +
+      shortDescription:
+        'CowAMM Weighted pools combine CowSwap with AMMs. Batching and averaging trade price means that scalpers get an average price and dont front run you.' +
         ' This means that with enough retail flow per batch, you pay the market price not the potentially distorted AMM price',
-      longDescription: 'TODO CH',
       requiresPoolNumeraire: false,
     },
     {
-      name: 'LVR for CowAMM',
+      name: 'LVR for CowAMM Weighted',
       mandatoryProperties: [],
-      shortDesciption:
-        'CowAMM pools combine CowSwap with AMMs. Batching and averaging trade price means that scalpers get an average price and dont front run you.' +
+      shortDescription:
+        'CowAMM Weighted pools combine CowSwap with AMMs. Batching and averaging trade price means that scalpers get an average price and dont front run you.' +
         ' This means that with enough retail flow per batch, you pay the market price not the potentially distorted AMM price',
-      longDescription: 'TODO CH',
       requiresPoolNumeraire: false,
     },
     {
-      name: 'RVR for CowAMM',
+      name: 'RVR for CowAMM Weighted',
       mandatoryProperties: [],
-      shortDesciption:
-        'CowAMM pools combine CowSwap with AMMs. Batching and averaging trade price means that scalpers get an average price and dont front run you.' +
+      shortDescription:
+        'CowAMM Weighted pools combine CowSwap with AMMs. Batching and averaging trade price means that scalpers get an average price and dont front run you.' +
         ' This means that with enough retail flow per batch, you pay the market price not the potentially distorted AMM price',
-      longDescription: 'TODO CH',
       requiresPoolNumeraire: false,
     },
     {
       name: 'Gyroscope',
       mandatoryProperties: [],
-      shortDesciption: 'Stable pool with yield',
-      longDescription: 'TODO',
+      shortDescription: 'Stable pool with yield',
       requiresPoolNumeraire: true,
     },
     {
       name: 'LVR for Gyroscope',
       mandatoryProperties: [],
-      shortDesciption: 'Stable pool with yield',
-      longDescription: 'TODO',
+      shortDescription: 'Stable pool with yield',
       requiresPoolNumeraire: true,
     },
     {
       name: 'RVR for Gyroscope',
       mandatoryProperties: [],
-      shortDesciption: 'Stable pool with yield',
-      longDescription: 'TODO',
+      shortDescription: 'Stable pool with yield',
       requiresPoolNumeraire: true,
     },
   ],
@@ -226,10 +197,10 @@ export const ConfigInitialState: SimulationRunConfig = {
       updateRuleParameters: [],
     },
     {
-      updateRuleName: 'CowAMM',
-      updateRuleKey: 'CowAMM',
+      updateRuleName: 'CowAMM Weighted',
+      updateRuleKey: 'CowAMM Weighted',
       updateRuleSimKey: 'cow',
-      updateRuleResultProfileSummary: 'CowAMM simulation engine',
+      updateRuleResultProfileSummary: 'CowAMM Weighted simulation engine',
       heatmapKeys: [],
       updateRuleRunUrl: 'runSimulation',
       updateRuleTrainUrl: 'runTraining',
@@ -245,29 +216,29 @@ export const ConfigInitialState: SimulationRunConfig = {
           maxValue: '1.0',
         },
       ],
-      applicablePoolTypes: ['CowAMM'],
+      applicablePoolTypes: ['CowAMM Weighted'],
     },
     {
-      updateRuleName: 'LVR - CowAMM',
+      updateRuleName: 'LVR - CowAMM Weighted',
       updateRuleKey: 'lvr__CowAMM',
       updateRuleSimKey: 'lvr__cow',
-      updateRuleResultProfileSummary: 'CowAMM LVR simulation engine',
+      updateRuleResultProfileSummary: 'CowAMM Weighted LVR simulation engine',
       heatmapKeys: [],
       updateRuleRunUrl: 'runSimulation',
       updateRuleTrainUrl: undefined,
       updateRuleParameters: [],
-      applicablePoolTypes: ['LVR for CowAMM'],
+      applicablePoolTypes: ['LVR for CowAMM Weighted'],
     },
     {
-      updateRuleName: 'RVR - CowAMM',
+      updateRuleName: 'RVR - CowAMM Weighted',
       updateRuleKey: 'rvr__CowAMM',
       updateRuleSimKey: 'rvr__cow',
-      updateRuleResultProfileSummary: 'CowAMM RVR simulation engine',
+      updateRuleResultProfileSummary: 'CowAMM Weighted RVR simulation engine',
       heatmapKeys: [],
       updateRuleRunUrl: 'runSimulation',
       updateRuleTrainUrl: undefined,
       updateRuleParameters: [],
-      applicablePoolTypes: ['RVR for CowAMM'],
+      applicablePoolTypes: ['RVR for CowAMM Weighted'],
     },
     {
       updateRuleName: 'Gyroscope',
@@ -801,7 +772,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           applicableCoins: [],
           factorValue: '1',
           minValue: '0',
-          maxValue: '3000',
+          maxValue: '20',
         },
         {
           factorName: 'width',
@@ -1075,7 +1046,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           applicableCoins: [],
           factorValue: '1',
           minValue: '0',
-          maxValue: '3000',
+          maxValue: '20',
         },
         {
           factorName: 'width',
@@ -1234,198 +1205,10 @@ export const ConfigInitialState: SimulationRunConfig = {
       maxValue: 100,
     },
   ],
-  //["ADA","BAT","BTC","DAI","DOGE","ETH","LINK","QTUM","TRX","XMR"]
   availableCoins: [
     {
-      coinName: 'AAVE',
-      coinCode: 'AAVE',
-      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-      coinComparisons: new Map<string, CoinComparison>(),
-      dailyPriceHistory: [
-        {
-          date: '2020-01-01 00:00:00:00',
-          unix: 1234,
-          open: 1234,
-          high: 1234,
-          low: 1234,
-          close: 1234,
-        },
-      ],
-      dailyReturns: new Map<number, ReturnTimeStep>(),
-    },
-    {
-      coinName: 'Cosmos',
-      coinCode: 'ATOM',
-      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-      coinComparisons: new Map<string, CoinComparison>(),
-      dailyPriceHistory: [
-        {
-          date: '2020-01-01 00:00:00:00',
-          unix: 1234,
-          open: 1234,
-          high: 1234,
-          low: 1234,
-          close: 1234,
-        },
-      ],
-      dailyReturns: new Map<number, ReturnTimeStep>(),
-    },
-    {
-      coinName: 'Binance',
-      coinCode: 'BNB',
-      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-      coinComparisons: new Map<string, CoinComparison>(),
-      dailyPriceHistory: [
-        {
-          date: '2020-01-01 00:00:00:00',
-          unix: 1234,
-          open: 1234,
-          high: 1234,
-          low: 1234,
-          close: 1234,
-        },
-      ],
-      dailyReturns: new Map<number, ReturnTimeStep>(),
-    },
-    {
-      coinName: 'EOS',
-      coinCode: 'EOS',
-      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-      coinComparisons: new Map<string, CoinComparison>(),
-      dailyPriceHistory: [
-        {
-          date: '2020-01-01 00:00:00:00',
-          unix: 1234,
-          open: 1234,
-          high: 1234,
-          low: 1234,
-          close: 1234,
-        },
-      ],
-      dailyReturns: new Map<number, ReturnTimeStep>(),
-    },
-    {
-      coinName: 'Solana',
-      coinCode: 'SOL',
-      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-      coinComparisons: new Map<string, CoinComparison>(),
-      dailyPriceHistory: [
-        {
-          date: '2020-01-01 00:00:00:00',
-          unix: 1234,
-          open: 1234,
-          high: 1234,
-          low: 1234,
-          close: 1234,
-        },
-      ],
-      dailyReturns: new Map<number, ReturnTimeStep>(),
-    },
-    {
-      coinName: 'Ripple',
-      coinCode: 'XRP',
-      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-      coinComparisons: new Map<string, CoinComparison>(),
-      dailyPriceHistory: [
-        {
-          date: '2020-01-01 00:00:00:00',
-          unix: 1234,
-          open: 1234,
-          high: 1234,
-          low: 1234,
-          close: 1234,
-        },
-      ],
-      dailyReturns: new Map<number, ReturnTimeStep>(),
-    },
-    {
-      coinName: 'Monero',
-      coinCode: 'XMR',
-      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-      coinComparisons: new Map<string, CoinComparison>(),
-      dailyPriceHistory: [
-        {
-          date: '2020-01-01 00:00:00:00',
-          unix: 1234,
-          open: 1234,
-          high: 1234,
-          low: 1234,
-          close: 1234,
-        },
-      ],
-      dailyReturns: new Map<number, ReturnTimeStep>(),
-    },
-    {
-      coinName: 'Tron',
-      coinCode: 'TRX',
-      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-      coinComparisons: new Map<string, CoinComparison>(),
-      dailyPriceHistory: [
-        {
-          date: '2020-01-01 00:00:00:00',
-          unix: 1234,
-          open: 1234,
-          high: 1234,
-          low: 1234,
-          close: 1234,
-        },
-      ],
-      dailyReturns: new Map<number, ReturnTimeStep>(),
-    },
-    {
-      coinName: 'Qtum',
-      coinCode: 'QTUM',
-      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-      coinComparisons: new Map<string, CoinComparison>(),
-      dailyPriceHistory: [
-        {
-          date: '2020-01-01 00:00:00:00',
-          unix: 1234,
-          open: 1234,
-          high: 1234,
-          low: 1234,
-          close: 1234,
-        },
-      ],
-      dailyReturns: new Map<number, ReturnTimeStep>(),
-    },
-    {
-      coinName: 'Basic Attention Token',
-      coinCode: 'BAT',
-      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-      coinComparisons: new Map<string, CoinComparison>(),
-      dailyPriceHistory: [
-        {
-          date: '2020-01-01 00:00:00:00',
-          unix: 1234,
-          open: 1234,
-          high: 1234,
-          low: 1234,
-          close: 1234,
-        },
-      ],
-      dailyReturns: new Map<number, ReturnTimeStep>(),
-    },
-    {
-      coinName: 'Chainlink',
-      coinCode: 'LINK',
-      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-      coinComparisons: new Map<string, CoinComparison>(),
-      dailyPriceHistory: [
-        {
-          date: '2020-01-01 00:00:00:00',
-          unix: 1234,
-          open: 1234,
-          high: 1234,
-          low: 1234,
-          close: 1234,
-        },
-      ],
-      dailyReturns: new Map<number, ReturnTimeStep>(),
-    },
-    {
-      coinName: 'DogeCoin',
-      coinCode: 'DOGE',
+      coinName: 'Bitcoin',
+      coinCode: 'BTC',
       dailyPriceHistoryMap: new Map<number, CoinPrice>(),
       coinComparisons: new Map<string, CoinComparison>(),
       dailyPriceHistory: [
@@ -1458,8 +1241,8 @@ export const ConfigInitialState: SimulationRunConfig = {
       dailyReturns: new Map<number, ReturnTimeStep>(),
     },
     {
-      coinName: 'Bitcoin',
-      coinCode: 'BTC',
+      coinName: 'Ripple',
+      coinCode: 'XRP',
       dailyPriceHistoryMap: new Map<number, CoinPrice>(),
       coinComparisons: new Map<string, CoinComparison>(),
       dailyPriceHistory: [
@@ -1475,8 +1258,8 @@ export const ConfigInitialState: SimulationRunConfig = {
       dailyReturns: new Map<number, ReturnTimeStep>(),
     },
     {
-      coinName: 'Cardano',
-      coinCode: 'ADA',
+      coinName: 'Solana',
+      coinCode: 'SOL',
       dailyPriceHistoryMap: new Map<number, CoinPrice>(),
       coinComparisons: new Map<string, CoinComparison>(),
       dailyPriceHistory: [
@@ -1492,8 +1275,8 @@ export const ConfigInitialState: SimulationRunConfig = {
       dailyReturns: new Map<number, ReturnTimeStep>(),
     },
     {
-      coinName: 'Uniswap',
-      coinCode: 'UNI',
+      coinName: 'Binance',
+      coinCode: 'BNB',
       dailyPriceHistoryMap: new Map<number, CoinPrice>(),
       coinComparisons: new Map<string, CoinComparison>(),
       dailyPriceHistory: [
@@ -1526,8 +1309,76 @@ export const ConfigInitialState: SimulationRunConfig = {
       dailyReturns: new Map<number, ReturnTimeStep>(),
     },
     {
-      coinName: 'Polygon',
-      coinCode: 'MATIC',
+      coinName: 'DogeCoin',
+      coinCode: 'DOGE',
+      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
+      coinComparisons: new Map<string, CoinComparison>(),
+      dailyPriceHistory: [
+        {
+          date: '2020-01-01 00:00:00:00',
+          unix: 1234,
+          open: 1234,
+          high: 1234,
+          low: 1234,
+          close: 1234,
+        },
+      ],
+      dailyReturns: new Map<number, ReturnTimeStep>(),
+    },
+    {
+      coinName: 'Cardano',
+      coinCode: 'ADA',
+      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
+      coinComparisons: new Map<string, CoinComparison>(),
+      dailyPriceHistory: [
+        {
+          date: '2020-01-01 00:00:00:00',
+          unix: 1234,
+          open: 1234,
+          high: 1234,
+          low: 1234,
+          close: 1234,
+        },
+      ],
+      dailyReturns: new Map<number, ReturnTimeStep>(),
+    },
+    {
+      coinName: 'Tron',
+      coinCode: 'TRX',
+      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
+      coinComparisons: new Map<string, CoinComparison>(),
+      dailyPriceHistory: [
+        {
+          date: '2020-01-01 00:00:00:00',
+          unix: 1234,
+          open: 1234,
+          high: 1234,
+          low: 1234,
+          close: 1234,
+        },
+      ],
+      dailyReturns: new Map<number, ReturnTimeStep>(),
+    },
+    {
+      coinName: 'Chainlink',
+      coinCode: 'LINK',
+      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
+      coinComparisons: new Map<string, CoinComparison>(),
+      dailyPriceHistory: [
+        {
+          date: '2020-01-01 00:00:00:00',
+          unix: 1234,
+          open: 1234,
+          high: 1234,
+          low: 1234,
+          close: 1234,
+        },
+      ],
+      dailyReturns: new Map<number, ReturnTimeStep>(),
+    },
+    {
+      coinName: 'Avalanche',
+      coinCode: 'AVAX',
       dailyPriceHistoryMap: new Map<number, CoinPrice>(),
       coinComparisons: new Map<string, CoinComparison>(),
       dailyPriceHistory: [
@@ -1545,6 +1396,278 @@ export const ConfigInitialState: SimulationRunConfig = {
     {
       coinName: 'Stellar',
       coinCode: 'XLM',
+      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
+      coinComparisons: new Map<string, CoinComparison>(),
+      dailyPriceHistory: [
+        {
+          date: '2020-01-01 00:00:00:00',
+          unix: 1234,
+          open: 1234,
+          high: 1234,
+          low: 1234,
+          close: 1234,
+        },
+      ],
+      dailyReturns: new Map<number, ReturnTimeStep>(),
+    },
+    {
+      coinName: 'Shiba Inu',
+      coinCode: 'SHIB',
+      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
+      coinComparisons: new Map<string, CoinComparison>(),
+      dailyPriceHistory: [
+        {
+          date: '2020-01-01 00:00:00:00',
+          unix: 1234,
+          open: 1234,
+          high: 1234,
+          low: 1234,
+          close: 1234,
+        },
+      ],
+      dailyReturns: new Map<number, ReturnTimeStep>(),
+    },
+    {
+      coinName: 'Uniswap',
+      coinCode: 'UNI',
+      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
+      coinComparisons: new Map<string, CoinComparison>(),
+      dailyPriceHistory: [
+        {
+          date: '2020-01-01 00:00:00:00',
+          unix: 1234,
+          open: 1234,
+          high: 1234,
+          low: 1234,
+          close: 1234,
+        },
+      ],
+      dailyReturns: new Map<number, ReturnTimeStep>(),
+    },
+    {
+      coinName: 'AAVE',
+      coinCode: 'AAVE',
+      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
+      coinComparisons: new Map<string, CoinComparison>(),
+      dailyPriceHistory: [
+        {
+          date: '2020-01-01 00:00:00:00',
+          unix: 1234,
+          open: 1234,
+          high: 1234,
+          low: 1234,
+          close: 1234,
+        },
+      ],
+      dailyReturns: new Map<number, ReturnTimeStep>(),
+    },
+    {
+      coinName: 'Monero',
+      coinCode: 'XMR',
+      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
+      coinComparisons: new Map<string, CoinComparison>(),
+      dailyPriceHistory: [
+        {
+          date: '2020-01-01 00:00:00:00',
+          unix: 1234,
+          open: 1234,
+          high: 1234,
+          low: 1234,
+          close: 1234,
+        },
+      ],
+      dailyReturns: new Map<number, ReturnTimeStep>(),
+    },
+    {
+      coinName: 'Polygon',
+      coinCode: 'MATIC',
+      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
+      coinComparisons: new Map<string, CoinComparison>(),
+      dailyPriceHistory: [
+        {
+          date: '2020-01-01 00:00:00:00',
+          unix: 1234,
+          open: 1234,
+          high: 1234,
+          low: 1234,
+          close: 1234,
+        },
+      ],
+      dailyReturns: new Map<number, ReturnTimeStep>(),
+    },
+    {
+      coinName: 'Algorand',
+      coinCode: 'ALGO',
+      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
+      coinComparisons: new Map<string, CoinComparison>(),
+      dailyPriceHistory: [
+        {
+          date: '2020-01-01 00:00:00:00',
+          unix: 1234,
+          open: 1234,
+          high: 1234,
+          low: 1234,
+          close: 1234,
+        },
+      ],
+      dailyReturns: new Map<number, ReturnTimeStep>(),
+    },
+    {
+      coinName: 'Arbitrum',
+      coinCode: 'ARB',
+      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
+      coinComparisons: new Map<string, CoinComparison>(),
+      dailyPriceHistory: [
+        {
+          date: '2020-01-01 00:00:00:00',
+          unix: 1234,
+          open: 1234,
+          high: 1234,
+          low: 1234,
+          close: 1234,
+        },
+      ],
+      dailyReturns: new Map<number, ReturnTimeStep>(),
+    },
+    {
+      coinName: 'Filecoin',
+      coinCode: 'FIL',
+      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
+      coinComparisons: new Map<string, CoinComparison>(),
+      dailyPriceHistory: [
+        {
+          date: '2020-01-01 00:00:00:00',
+          unix: 1234,
+          open: 1234,
+          high: 1234,
+          low: 1234,
+          close: 1234,
+        },
+      ],
+      dailyReturns: new Map<number, ReturnTimeStep>(),
+    },
+    {
+      coinName: 'Cosmos',
+      coinCode: 'ATOM',
+      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
+      coinComparisons: new Map<string, CoinComparison>(),
+      dailyPriceHistory: [
+        {
+          date: '2020-01-01 00:00:00:00',
+          unix: 1234,
+          open: 1234,
+          high: 1234,
+          low: 1234,
+          close: 1234,
+        },
+      ],
+      dailyReturns: new Map<number, ReturnTimeStep>(),
+    },
+    {
+      coinName: 'EOS',
+      coinCode: 'EOS',
+      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
+      coinComparisons: new Map<string, CoinComparison>(),
+      dailyPriceHistory: [
+        {
+          date: '2020-01-01 00:00:00:00',
+          unix: 1234,
+          open: 1234,
+          high: 1234,
+          low: 1234,
+          close: 1234,
+        },
+      ],
+      dailyReturns: new Map<number, ReturnTimeStep>(),
+    },
+    {
+      coinName: 'Maker DAO',
+      coinCode: 'MKR',
+      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
+      coinComparisons: new Map<string, CoinComparison>(),
+      dailyPriceHistory: [
+        {
+          date: '2020-01-01 00:00:00:00',
+          unix: 1234,
+          open: 1234,
+          high: 1234,
+          low: 1234,
+          close: 1234,
+        },
+      ],
+      dailyReturns: new Map<number, ReturnTimeStep>(),
+    },
+    {
+      coinName: 'Lido',
+      coinCode: 'LDO',
+      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
+      coinComparisons: new Map<string, CoinComparison>(),
+      dailyPriceHistory: [
+        {
+          date: '2020-01-01 00:00:00:00',
+          unix: 1234,
+          open: 1234,
+          high: 1234,
+          low: 1234,
+          close: 1234,
+        },
+      ],
+      dailyReturns: new Map<number, ReturnTimeStep>(),
+    },
+    {
+      coinName: 'DyDx',
+      coinCode: 'DYDX',
+      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
+      coinComparisons: new Map<string, CoinComparison>(),
+      dailyPriceHistory: [
+        {
+          date: '2020-01-01 00:00:00:00',
+          unix: 1234,
+          open: 1234,
+          high: 1234,
+          low: 1234,
+          close: 1234,
+        },
+      ],
+      dailyReturns: new Map<number, ReturnTimeStep>(),
+    },
+    {
+      coinName: 'Compound',
+      coinCode: 'COMP',
+      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
+      coinComparisons: new Map<string, CoinComparison>(),
+      dailyPriceHistory: [
+        {
+          date: '2020-01-01 00:00:00:00',
+          unix: 1234,
+          open: 1234,
+          high: 1234,
+          low: 1234,
+          close: 1234,
+        },
+      ],
+      dailyReturns: new Map<number, ReturnTimeStep>(),
+    },
+    {
+      coinName: 'Curve',
+      coinCode: 'CRV',
+      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
+      coinComparisons: new Map<string, CoinComparison>(),
+      dailyPriceHistory: [
+        {
+          date: '2020-01-01 00:00:00:00',
+          unix: 1234,
+          open: 1234,
+          high: 1234,
+          low: 1234,
+          close: 1234,
+        },
+      ],
+      dailyReturns: new Map<number, ReturnTimeStep>(),
+    },
+    {
+      coinName: 'SushiSwap',
+      coinCode: 'SUSHI',
       dailyPriceHistoryMap: new Map<number, CoinPrice>(),
       coinComparisons: new Map<string, CoinComparison>(),
       dailyPriceHistory: [
@@ -1617,9 +1740,7 @@ export const ConfigInitialState: SimulationRunConfig = {
     poolType: {
       name: 'HODL',
       mandatoryProperties: [],
-      shortDesciption: 'Buy and hold strategy',
-      longDescription:
-        'This is a simple strategy that just buys and holds the same proportion of each coin in the pool. The return is just the price change (proportional per coin held at the start) of each coin over time.',
+      shortDescription: 'Buy and hold strategy',
       requiresPoolNumeraire: false,
     },
     poolConstituents: [
@@ -1687,9 +1808,7 @@ export const ConfigInitialState: SimulationRunConfig = {
       poolType: {
         name: 'QuantAMM',
         mandatoryProperties: ['Update Rule'],
-        shortDesciption: 'Quantitative Automated Market Maker',
-        longDescription:
-          'This is a quantitative automated market maker that uses a rule to update the pool weights. The rule can be trained on historical data to optimise the pool weights for a given objective.',
+        shortDescription: 'Quantitative Automated Market Maker',
         requiresPoolNumeraire: false,
       },
       updateRule: {

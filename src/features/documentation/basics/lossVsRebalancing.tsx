@@ -11,26 +11,22 @@ const LossVsRebalancing: React.FC = () => {
         <Col span={16}>
           <MathJaxContext>
             <Fade>
-              <h1>Loss vs Rebalancing (LVR)</h1>
+              <h1>Loss-Versus-Rebalancing (LVR)</h1>
               <p>
-                Loss vs Rebalancing (LVR) is a concept used in portfolio
-                management to describe the trade-off between the potential loss
-                of a portfolio and the benefits of rebalancing. Rebalancing is
-                the process of realigning the weightings of a portfolio of
-                assets to maintain a desired level of asset allocation. This is
-                typically done by periodically buying or selling assets in the
-                portfolio to maintain the original or desired level of asset
-                allocation.
+                <a href="https://arxiv.org/abs/2208.06046">
+                  Loss-Versus-Rebalancing (LVR)
+                </a>{' '}
+                measures how efficiently an AMM pool performs compared to an
+                idealized portfolio executing the same rebalancing strategy with
+                zero trading costs. It quantifies the difference between an AMM
+                pool's value and that of a frictionless portfolio maintaining
+                the same target composition through direct market trades.
               </p>
-              <p>
-                Loss-Versus-Rebalancing is a metric that compares the P&L of an
-                AMM pool versus that of an idealised portfolio that aims to
-                mirror the pool.
-              </p>
+
               <p>
                 In a two token AMM pool we can interpret one token as the risk
                 asset, with reserves <MathJax inline>{`x`}</MathJax>, and the
-                other as the risk-off asset, with reserves{' '}
+                other as the risk-off (numeraire) asset, with reserves{' '}
                 <MathJax inline>{`y`}</MathJax>. We can then define{' '}
                 <MathJax inline>{`P`}</MathJax> as the price of{' '}
                 <MathJax inline>{`x`}</MathJax> using{' '}
@@ -64,12 +60,13 @@ const LossVsRebalancing: React.FC = () => {
               </p>
               <p>
                 LVR has been extended to handle when constant function market
-                makers charge fees on their trades (called &apos;ARB&apos;).
-                Fees mean that there is only an arbitrage opportunity if the
-                pool&apos;s quoted prices sufficiently deviate from market
-                prices to leave the pool&apos;s no-trade (a.k.a. no-arb) region.
-                Within the setup studied (risk asset prices diffuse under
-                geometric Brownian motion,{' '}
+                makers charge fees on their trades (called{' '}
+                <a href="https://arxiv.org/abs/2305.14604">ARB</a>). Fees mean
+                that there is only an arbitrage opportunity if the pool&apos;s
+                quoted prices sufficiently deviate from market prices to leave
+                the pool&apos;s no-trade (a.k.a. no-arb) region. Within the
+                setup studied (risk asset prices diffuse under geometric
+                Brownian motion,{' '}
                 <MathJax inline>{`\\[V_\\mathsf{rebal}(t)\\]`}</MathJax>{' '}
                 unchanged, low fees, fast blocks), the presence of CFMM fees
                 decreases LVR by the fraction of time that an arbitrage trade is
@@ -88,41 +85,12 @@ const LossVsRebalancing: React.FC = () => {
                 rebalancing method.
               </p>
               <p>
-                So far LVR and its extensions have only been used to compare
-                efficiency of constant-mix strategies that (absent trading fees)
-                tend to perform badly when done by AMMs.
+                LVR, as proposed, (and its extension ARB) has been used to
+                analyse the efficiency of two-token constant-mix strategies that
+                (absent trading fees) tend to perform badly when done by AMMs.
+                In this simulator we can apply LVR modelling to any AMM pool,
+                including our own QuantAMM pools.
               </p>
-              <p>
-                Mathematically, the concept of LVR can be expressed using the
-                following equations:
-              </p>
-              <div>
-                <MathJax
-                  inline
-                >{`\\[LVR = \\frac{\\text{Potential Loss}}{\\text{Rebalancing Benefits}}\\]`}</MathJax>
-              </div>
-              <p>Where:</p>
-              <ul>
-                <li>
-                  <strong>Potential Loss</strong>: The potential loss of the
-                  portfolio if it is not rebalanced.
-                </li>
-                <li>
-                  <strong>Rebalancing Benefits</strong>: The benefits of
-                  rebalancing the portfolio, including maintaining the desired
-                  risk level and potentially improving returns.
-                </li>
-              </ul>
-              <p>
-                Another important equation related to LVR is the rebalancing
-                threshold, which is the point at which the benefits of
-                rebalancing outweigh the costs. This can be expressed as:
-              </p>
-              <div>
-                <MathJax
-                  inline
-                >{`\\[\\text{Rebalancing Threshold} = \\frac{\\text{Transaction Costs} + \\text{Taxes}}{\\text{Expected Benefits of Rebalancing}}\\]`}</MathJax>
-              </div>
             </Fade>
           </MathJaxContext>
         </Col>

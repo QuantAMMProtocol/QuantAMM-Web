@@ -1,4 +1,5 @@
 import {
+  GqlChain,
   GqlPoolSnapshotDataRange,
   GqlTokenChartDataRange,
 } from '../__generated__/graphql-types';
@@ -39,14 +40,13 @@ export const generatePoolSnapshotsQuery = (
 };
 
 export const generateTokenPricesQuery = (
-  token: string,
+  addresses: string[],
+  chain: GqlChain,
   range: GqlTokenChartDataRange
 ) => {
-  const [chain, address] = token.split(':');
-
   return `query getTokenPrices {
     tokenGetHistoricalPrices(
-        addresses: "${address}",
+        addresses: [${addresses.map((address) => `"${address}"`).join(',')}],
         chain: ${chain}
         range: ${range}
     ) {

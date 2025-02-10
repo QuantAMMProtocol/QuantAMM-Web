@@ -71,7 +71,7 @@ export const getAnalysisSummary = (
     .forEach((x) => {
       if (x.simulationRunResultAnalysis) {
         x.simulationRunResultAnalysis.return_analysis.forEach((y) => {
-          let breakdown: FlatQuantDynamicAnalysisBreakdown = {
+          const breakdown: FlatQuantDynamicAnalysisBreakdown = {
             updateRule: x.simulationRun.updateRule.updateRuleName,
             parameters: (
               x.simulationRun.updateRule.updateRuleParameters || []
@@ -102,7 +102,7 @@ export const getAnalysisSummary = (
             z.benchmarkName?.toLowerCase() !=
             x.simulationRun.updateRule.updateRuleName.toLowerCase()
           ) {
-            let breakdown: FlatQuantDynamicAnalysisBreakdown = {
+            const breakdown: FlatQuantDynamicAnalysisBreakdown = {
               updateRule: x.simulationRun.updateRule.updateRuleName,
               parameters: (
                 x.simulationRun.updateRule.updateRuleParameters || []

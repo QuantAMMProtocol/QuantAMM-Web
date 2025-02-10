@@ -1,33 +1,4 @@
-//HODL
-import hodlEthUSDC from '../prerun_sims/hodl/HODL_-ETH-USDC.json';
-
-//Balancer examples
-
-import balancerWeightedEthUSDC from '../prerun_sims/balancer/Balancer Weighted_ETH-USDC.json';
-import balancerWeightedEthUSDCLvr from '../prerun_sims/balancer/LVR - Balancer Weighted_-ETH-USDC.json';
-import balancerWeightedEthUSDCRvr from '../prerun_sims/balancer/RVR - Balancer Weighted_-ETH-USDC.json';
-
-//CowAMM examples
-
-import cowAMMEthUSDC from '../prerun_sims/cowAMM/CowAMM[arb_quality_1.0]_-ETH-USDC.json';
-import cowAMMEthUSDCLvr from '../prerun_sims/cowAMM/LVR - CowAMM_-ETH-USDC.json';
-import cowAMMEthUSDCRvr from '../prerun_sims/cowAMM/RVR - CowAMM_-ETH-USDC.json';
-
-//Gyroscope examples
-
-import qyroscopeEthUSDC from '../prerun_sims/gyroscope/Gyroscope[alpha_1000][beta_5000]_-ETH-USDC.json';
-import qyroscopeEthUSDCLvr from '../prerun_sims/gyroscope/LVR - Gyroscope[alpha_1000][beta_5000]_-ETH-USDC.json';
-import qyroscopeEthUSDCRvr from '../prerun_sims/gyroscope/RVR - Gyroscope[alpha_1000][beta_5000]_-ETH-USDC.json';
-
-//QuantAMM examples
-
-import btcUSDCEthHodl from '../prerun_sims/quantAMM/Momentum[k_per_day_50][memory_days_5]_-ETH-BTC-USDC.json';
-import btcUSDCEthMomentum from '../prerun_sims/quantAMM/Momentum[k_per_day_50][memory_days_5]_-ETH-BTC-USDC.json';
-import btcUSDCEthPowerChannel from '../prerun_sims/quantAMM/Power Channel[k_per_day_50][memory_days_5][exponent_1.13]_-BTC-ETH-USDC.json';
-import btcUSDCEthAntiMomentum from '../prerun_sims/quantAMM/AntiMomentum[k_per_day_0.005][memory_days_80]_-BTC-ETH-USDC.json';
-import btcUSDCEthChannelFollowing from '../prerun_sims/quantAMM/Channel Following_VectorParams.json';
-import btcUSDCEthDifferenceMomentum from '../prerun_sims/quantAMM/Difference Momentum[k_per_day_-10,-5,5,2][memory_days_2_100,2,2,5][memory_days_1_70,1,30,15]_-BTC-ETH-PAXG-USDC.json';
-
+import { decode } from '@msgpack/msgpack';
 import {
   ReturnTimeStep,
   SimulationRunBreakdown,
@@ -38,7 +9,8 @@ import {
   CoinPrice,
 } from '../features/simulationRunConfiguration/simulationRunConfigModels';
 
-type Pool =
+// Declare the Pool type with new possible values
+export type Pool =
   | 'balancerWeighted'
   | 'balancerWeightedLvr'
   | 'balancerWeightedRvr'
@@ -56,6 +28,7 @@ type Pool =
   | 'hodlEthUsdc'
   | 'hodlBtcEthUsdc';
 
+// Helper to convert MessagePack data to breakdown DTO
 export const convertBreakdownDtoToBreakdown = (
   dto: SimulationRunBreakdownDto
 ): SimulationRunBreakdown => {
@@ -100,68 +73,56 @@ export const convertBreakdownDtoToBreakdown = (
   };
 };
 
-export const getBreakdown = (poolName: Pool): SimulationRunBreakdown => {
-  let pool;
-  switch (poolName) {
-    case 'balancerWeighted':
-      pool = balancerWeightedEthUSDC;
-      break;
-    case 'balancerWeightedLvr':
-      pool = balancerWeightedEthUSDCLvr;
-      break;
-    case 'balancerWeightedRvr':
-      pool = balancerWeightedEthUSDCRvr;
-      break;
+// Function to dynamically load MessagePack file and convert it to breakdown
+export const getBreakdown = async (
+  poolName: Pool
+): Promise<SimulationRunBreakdown> => {
+  const poolFileMapping: Record<Pool, string> = {
+    // Mapping pool names to corresponding file paths
+    balancerWeighted: './prerun_sims/Balancer Weighted_ETH-USDC.msgpack',
+    balancerWeightedLvr:
+      './prerun_sims/LVR - Balancer Weighted_-ETH-USDC.msgpack',
+    balancerWeightedRvr:
+      './prerun_sims/RVR - Balancer Weighted_-ETH-USDC.msgpack',
+    cowAMM: './prerun_sims/CowAMM[arb_quality_1.0]_-ETH-USDC.msgpack',
+    cowAmmLvr: './prerun_sims/LVR - CowAMM_-ETH-USDC.msgpack',
+    cowAmmRvr: './prerun_sims/RVR - CowAMM_-ETH-USDC.msgpack',
+    gyroscope:
+      './prerun_sims/Gyroscope[alpha_1000][beta_5000]_-ETH-USDC.msgpack',
+    gyroscopeLvr:
+      './prerun_sims/LVR - Gyroscope[alpha_1000][beta_5000]_-ETH-USDC.msgpack',
+    gyroscopeRvr:
+      './prerun_sims/RVR - Gyroscope[alpha_1000][beta_5000]_-ETH-USDC.msgpack',
+    quantAMMMomentum:
+      './prerun_sims/Momentum[k_per_day_50][memory_days_5]_-ETH-BTC-USDC.msgpack',
+    quantAMMAntiMomentum:
+      './prerun_sims/AntiMomentum[k_per_day_0.005][memory_days_80]_-BTC-ETH-USDC.msgpack',
+    quantAMMPowerChannel:
+      './prerun_sims/Power Channel[k_per_day_50][memory_days_5][exponent_1.13]_-BTC-ETH-USDC.msgpack',
+    quantAMMChannelFollowing:
+      './prerun_sims/Channel Following_VectorParams.msgpack',
+    quantAMMMeanReversionChannel:
+      './prerun_sims/Difference Momentum[k_per_day_-10,-5,5,2][memory_days_2_100,2,2,5][memory_days_1_70,1,30,15]_-BTC-ETH-PAXG-USDC.msgpack',
+    hodlEthUsdc: './prerun_sims/HODL_-ETH-USDC.msgpack',
+    hodlBtcEthUsdc:
+      './prerun_sims/Momentum[k_per_day_50][memory_days_5]_-ETH-BTC-USDC.msgpack', // Example; replace with actual path
+  };
 
-    case 'cowAMM':
-      pool = cowAMMEthUSDC;
-      break;
+  const poolFilePath = poolFileMapping[poolName];
 
-    case 'cowAmmLvr':
-      pool = cowAMMEthUSDCLvr;
-      break;
-
-    case 'cowAmmRvr':
-      pool = cowAMMEthUSDCRvr;
-      break;
-
-    case 'gyroscope':
-      pool = qyroscopeEthUSDC;
-      break;
-
-    case 'gyroscopeLvr':
-      pool = qyroscopeEthUSDCLvr;
-      break;
-
-    case 'gyroscopeRvr':
-      pool = qyroscopeEthUSDCRvr;
-      break;
-    case 'quantAMMMomentum':
-      pool = btcUSDCEthMomentum;
-      break;
-    case 'quantAMMAntiMomentum':
-      pool = btcUSDCEthAntiMomentum;
-      break;
-    case 'quantAMMPowerChannel':
-      pool = btcUSDCEthPowerChannel;
-      break;
-    case 'quantAMMChannelFollowing':
-      pool = btcUSDCEthChannelFollowing;
-      break;
-    case 'quantAMMMeanReversionChannel':
-      pool = btcUSDCEthDifferenceMomentum;
-      break;
-    case 'hodlEthUsdc':
-      pool = hodlEthUSDC;
-      break;
-    case 'hodlBtcEthUsdc':
-      pool = btcUSDCEthHodl;
-      break;
-
-    default:
+  if (!poolFilePath) {
+    throw new Error(`No MessagePack file found for pool: ${poolName}`);
   }
 
+  // Fetch the MessagePack file dynamically
+  const response = await fetch(poolFilePath);
+  console.log('response', response);
+  const buffer = await response.arrayBuffer();
+  console.log('buffer', buffer);
+  const decodedData = decode(new Uint8Array(buffer));
+  console.log('decodedata', decodedData);
+
   return convertBreakdownDtoToBreakdown(
-    pool as unknown as SimulationRunBreakdownDto
+    decodedData as SimulationRunBreakdownDto
   );
 };

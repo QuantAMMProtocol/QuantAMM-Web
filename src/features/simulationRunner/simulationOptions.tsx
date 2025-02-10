@@ -1,4 +1,15 @@
-import { Button, Col, DatePicker, Divider, Radio, Row, Select } from 'antd';
+import {
+  Button,
+  Col,
+  DatePicker,
+  Divider,
+  Radio,
+  Row,
+  Select,
+  Tooltip,
+} from 'antd';
+
+import { InfoCircleOutlined } from '@ant-design/icons';
 
 import dayjs from 'dayjs';
 import { SimulatorGuide } from '../documentation/simulatorGuide';
@@ -59,9 +70,6 @@ export function SimulatorOptions() {
     return selectedCoins.map((x) => x.coinCode);
   }, [selectedCoins]);
 
-  const formattedStartDate = dayjs(startDate, dateFormat);
-  const formattedEndDate = dayjs(endDate, dateFormat);
-
   const dispatch = useAppDispatch();
   return (
     <div>
@@ -111,7 +119,7 @@ export function SimulatorOptions() {
                       value={selectedCoinCodes}
                       style={{
                         marginTop: '10px',
-                        width: '90%',
+                        width: '150px',
                       }}
                       placeholder="Select coins"
                       onSelect={(item: string) =>
@@ -128,8 +136,13 @@ export function SimulatorOptions() {
                     />
                   </Col>
                 </Col>
-                <Col span={9}>
-                  <Col span={24}>2. Choose pools</Col>
+                <Col span={10}>
+                  <Col span={24}>
+                    2. Choose pools
+                    <Tooltip title="Gyroscope requires token specific configuration, use the advanced simulator to configure">
+                      <InfoCircleOutlined style={{ paddingLeft: '5px' }} />
+                    </Tooltip>
+                  </Col>
                   <Col span={24}>
                     <Select
                       size="small"
@@ -139,7 +152,7 @@ export function SimulatorOptions() {
                       value={simplifiedPools}
                       style={{
                         marginTop: '10px',
-                        width: '90%',
+                        width: '250px',
                       }}
                       placeholder="Select pools to run"
                       onSelect={(item: string) =>
@@ -186,15 +199,21 @@ export function SimulatorOptions() {
                     </Radio>
                   </Col>
                 </Col>
-                <Col span={9}>
+                <Col span={8}>
                   <Col span={24}>3. Choose Time Range</Col>
                   <Col span={24}>
                     <RangePicker
                       size="small"
                       style={{ marginTop: '10px', fontSize: '7x' }}
                       disabledDate={disabledDate}
-                      defaultValue={[formattedStartDate, formattedEndDate]}
-                      value={[formattedStartDate, formattedEndDate]}
+                      defaultValue={[
+                        dayjs(startDate, dateFormat),
+                        dayjs(endDate, dateFormat),
+                      ]}
+                      value={[
+                        dayjs(startDate, dateFormat),
+                        dayjs(endDate, dateFormat),
+                      ]}
                       onChange={(_dates, dateStrings) => {
                         dispatch(
                           setDateRange({

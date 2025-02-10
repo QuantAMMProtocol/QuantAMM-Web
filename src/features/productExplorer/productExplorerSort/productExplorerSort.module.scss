@@ -1,0 +1,17 @@
+.product-explorer__sort-container {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+
+  // > 'lg' breakpoint
+  @media screen and (max-width: 991px) {
+    justify-content: center;
+  }
+}
+
+.product-explorer__sort {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto 8px;
+}

@@ -1,0 +1,27 @@
+div.product-item-grid__header {
+  height: auto;
+  width: 100%;
+
+  //  > 'lg' breakpoint
+  @media screen and (min-width: 992px) {
+    max-width: 900px;
+    margin: auto;
+  }
+
+  // > 'xl' breakpoint
+  @media screen and (min-width: 1200px) {
+    margin-left: 0;
+  }
+
+  // > 4 cards breakpoint
+  @media screen and (min-width: 1432px) {
+    max-width: 1200px;
+  }
+}
+
+
+.product-item-grid__content {
+  max-width: 1600px;
+  padding: 12px;
+  width: 100%;
+}

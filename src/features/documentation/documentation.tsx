@@ -27,7 +27,7 @@ const items = [
     key: 'Basics',
     children: [
       {
-        label: 'Automated Market Making',
+        label: 'Simulating Automated Market Makers',
         key: 'AutomatedMarketMakers',
       },
       {
@@ -35,11 +35,11 @@ const items = [
         key: 'ImpermanentLoss',
       },
       {
-        label: 'Loss vs Rebalancing (LVR)',
+        label: 'Loss-Versus-Rebalancing (LVR)',
         key: 'LVR',
       },
       {
-        label: 'Rebalancing vs Rebalancing (RVR)',
+        label: 'Rebalancing-Versus-Rebalancing (RVR)',
         key: 'RVR',
       },
     ],
@@ -54,15 +54,15 @@ const items = [
         key: 'Balancer',
       },
       {
-        label: 'QuantAMM:TFMM Introducing Time',
+        label: 'QuantAMM: Introducing Time',
         key: 'QuantAMM',
       },
       {
-        label: 'CowAMM:FM-AMM Introducing Solvers',
+        label: 'Cow AMM: Introducing Solvers',
         key: 'CowAMM',
       },
       {
-        label: 'Gyroscope:ECLP Introducing Stability',
+        label: 'Gyroscope: Introducing Stability',
         key: 'Gyroscope',
       },
     ],

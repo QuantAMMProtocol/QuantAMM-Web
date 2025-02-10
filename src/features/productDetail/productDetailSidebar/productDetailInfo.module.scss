@@ -1,0 +1,33 @@
+.product-detail-info__container {
+  display: grid;
+  grid-template-columns: fit-content(50%) 1fr;
+  gap: 1px 0;
+  padding: 0;
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+.product-detail-info__item-left {
+  padding: 4px;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+
+.product-detail-info__item-right {
+  padding: 4px;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  font-weight: bold;
+
+  @media (max-width: 768px) {
+    justify-content: start;
+  }
+}
+
+.product-detail-info__item-icon {
+  margin-left: 8px;
+}

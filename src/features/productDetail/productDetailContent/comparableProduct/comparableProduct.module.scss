@@ -1,0 +1,27 @@
+.comparable-product-selector__card {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: start;
+  border: 1px solid transparent;
+  height: 100%;
+  width: 100%;
+
+  > div {
+    width: 100%;
+  }
+}
+
+.comparable-product-selector__card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.comparable-product-selector__dropdown__container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}

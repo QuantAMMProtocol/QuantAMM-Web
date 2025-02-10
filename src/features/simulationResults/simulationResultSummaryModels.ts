@@ -78,20 +78,3 @@ export interface FlatResultSummaryBreakdown {
   totalReturn: number;
   originatingBreakdown: SimulationRunBreakdown;
 }
-
-export interface FlatQuantAnalysisBreakdown {
-  updateRule: string;
-  parameters: string;
-  timePeriodName: string;
-  startDate: string;
-  endDate: string;
-  benchmark: string;
-  rf: string;
-  beta: number;
-  sharpeRatio: number;
-  sortinoRatio: number;
-  treynorRatio: number | undefined;
-  jensensAlpha: number | undefined;
-  trackingError: number | undefined;
-  informationRatio: number | undefined;
-}

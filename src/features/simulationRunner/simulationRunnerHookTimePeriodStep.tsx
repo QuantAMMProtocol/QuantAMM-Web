@@ -143,8 +143,7 @@ export function SimulationRunnerHookTimePeriodStep() {
               <Menu
                 hidden={simulationPools.length == 0}
                 style={{
-                  width: 250,
-                  fontSize: 10,
+                  fontSize: 15,
                 }}
                 defaultSelectedKeys={[currentTimeRangeSelection]}
                 items={simulationPools.map((x) => {
@@ -167,7 +166,7 @@ export function SimulationRunnerHookTimePeriodStep() {
               />
             </Col>
           </Row>
-          <Row>
+          <Row style={{ paddingLeft: '10px' }}>
             <Col span={24}>
               <Divider orientation="center">
                 Fixed fees
@@ -190,7 +189,7 @@ export function SimulationRunnerHookTimePeriodStep() {
               />
             </Col>
             <Col span={2}></Col>
-            <Col span={6}>
+            <Col span={6} style={{ marginTop: '10px' }}>
               <Button
                 onClick={addFixedFeeToState}
                 disabled={selectedSimulationPool == undefined}
@@ -200,7 +199,7 @@ export function SimulationRunnerHookTimePeriodStep() {
               </Button>
             </Col>
           </Row>
-          <Row>
+          <Row style={{ paddingLeft: '10px' }}>
             <Col span={24}>
               <p style={{ textAlign: 'center' }}>or</p>
               <Divider orientation="center">
@@ -211,7 +210,7 @@ export function SimulationRunnerHookTimePeriodStep() {
               </Divider>
             </Col>
           </Row>
-          <Row>
+          <Row style={{ paddingLeft: '10px' }}>
             <Col span={16}>
               <p>Expected CSV header format:</p>
               <p>
@@ -245,7 +244,7 @@ export function SimulationRunnerHookTimePeriodStep() {
               </Button>
             </Col>
           </Row>
-          <Row>
+          <Row style={{ paddingLeft: '10px' }}>
             <Col span={24} style={{ paddingLeft: '10px' }}>
               <Divider />
               <Button

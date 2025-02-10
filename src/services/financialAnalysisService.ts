@@ -41,6 +41,7 @@ export const financialAnalysisService = createApi({
               .replace(/:\s*NaN/g, ': null')
               .replace(/: NaN/g, ': null')
               .replace(/NaN/g, 'null');
+
             return JSON.parse(sanitizedResponse) as FinancialAnalysisResultDto;
           } catch (error) {
             console.error(

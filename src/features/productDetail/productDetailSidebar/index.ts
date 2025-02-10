@@ -1,0 +1,1 @@
+export { ProductDetailSidebar } from './productDetailSideBar';

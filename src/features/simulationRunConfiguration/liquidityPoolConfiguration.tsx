@@ -230,10 +230,22 @@ export function LiquidityPoolConfiguration() {
             <Row>
               <Col span={20}>
                 <InputNumber
-                  disabled={!coinDataLoaded || runStatusIndex == 2}
+                  disabled={
+                    !coinDataLoaded ||
+                    runStatusIndex == 2 ||
+                    poolConstituents.length + selectedCoinCodes.length > 8
+                  }
+                  status={
+                    (initialMarketValue == 0 ||
+                      initialMarketValue == undefined ||
+                      initialMarketValue == null) &&
+                    selectedCoinCodes.length > 0
+                      ? 'error'
+                      : undefined
+                  }
                   addonBefore={'$'}
                   value={initialMarketValue}
-                  placeholder="value"
+                  placeholder="enter dollar value to add"
                   style={{ width: '90%' }}
                   onChange={(e) => {
                     dispatch(setSelectedInitialCoinAmount(e));
@@ -242,7 +254,14 @@ export function LiquidityPoolConfiguration() {
               </Col>
               <Col span={4}>
                 <Button
-                  disabled={!coinDataLoaded || runStatusIndex == 2}
+                  disabled={
+                    !coinDataLoaded ||
+                    runStatusIndex == 2 ||
+                    poolConstituents.length + selectedCoinCodes.length > 8 ||
+                    initialMarketValue == 0 ||
+                    initialMarketValue == undefined ||
+                    initialMarketValue == null
+                  }
                   type="primary"
                   icon={<PlusCircleOutlined />}
                   onClick={() => {
@@ -260,7 +279,7 @@ export function LiquidityPoolConfiguration() {
         <Row>
           <Col span={24}>
             <div
-              id="initialPoolConstituentTable"
+              id="myGrid"
               className={styles.initialPoolTable + ' ' + darkThemeAg}
             >
               <AgGridReact

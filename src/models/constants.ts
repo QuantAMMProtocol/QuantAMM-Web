@@ -1,1 +1,3 @@
 export const CURRENT_PERFORMANCE_PERIOD = '3m';
+
+export const INITIAL_LOAD_POOLS_COUNT = 20;

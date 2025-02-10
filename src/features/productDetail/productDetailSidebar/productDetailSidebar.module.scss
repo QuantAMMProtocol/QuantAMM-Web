@@ -1,0 +1,28 @@
+.product-detail-sidebar__sider {
+  padding-right: 8px;
+  border-right: 1px solid var(--primary-lighter);
+
+  @media (max-width: 768px) {
+    padding-right: 0;
+  }
+}
+
+.product-detail-sidebar__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  background-color: var(--sidebar-top-background);
+}
+
+.product-detail-sidebar__top-title {
+  margin-right: 12px;
+  margin-bottom: 0 !important;
+  margin-top: 0 !important;
+  color: var(--seconary-color);
+
+  @media (max-width: 768px) {
+    font-size: 16px !important;
+    line-height: 1.5 !important;
+  }
+}

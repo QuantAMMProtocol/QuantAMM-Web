@@ -1,8 +1,6 @@
 import { GqlPoolDynamicData } from '../__generated__/graphql-types';
 import { SimulationRunBreakdown } from '../features/simulationResults/simulationResultSummaryModels';
 
-// TODO - https://robodex.atlassian.net/browse/QUAMM-53
-
 export type BalancerTokenType =
   | 'COMPOSABLE_STABLE'
   | 'ELEMENT'
@@ -44,6 +42,7 @@ export enum StrategyEnum {
   CHANNEL_FOLLOWING,
   POWER_CHANNEL,
   MIN_VARIANCE,
+  NONE,
 }
 
 export type Strategy = keyof typeof StrategyEnum;
@@ -102,7 +101,12 @@ export interface ProductDto {
   memory: number;
   market: string;
   createTime: string;
-  owner: string;
+  swapManager: string;
+  pauseManager: string;
+  disableUnbalancedLiquidity?: boolean;
+  enableAddLiquidityCustom?: boolean;
+  enableDonation?: boolean;
+  enableRemoveLiquidityCustom?: boolean;
   poolConstituents: ProductPoolConstituents[];
   dailyPerformance: DailyPerformance[];
   monthlyPerformance: MonthlyPerformance[];
@@ -142,6 +146,18 @@ export type ProductExplorerSortMetric =
   | 'age'
   | 'sharePrice';
 
+export interface FinancialMetricThresholds {
+  key: string;
+  veryLow: number;
+  veryLowColor: string;
+  low: number;
+  lowColor: string;
+  medium: number;
+  mediumColor: string;
+  high: number;
+  highColor: string;
+}
+
 export interface ProductExplorer {
   loadingProducts: boolean;
   loadingFilters: boolean;
@@ -157,6 +173,9 @@ export interface ProductExplorer {
   sortingMetric: ProductExplorerSortMetric;
   overrideTab?: OverrideTab;
   horizontalView: boolean;
+  returnMetricThresholds: FinancialMetricThresholds[];
+  benchmarkMetricThresholds: FinancialMetricThresholds[];
+  poolDetailSelectedGraphRange: TimeRange;
 }
 
 export interface ProductMetric {
@@ -182,3 +201,9 @@ export interface ProductConstituentEvent {
 }
 
 export type SortingDirection = 'asc' | 'desc';
+
+export type TimeRange = '7d' | '1m' | '3m' | '1y' | 'max';
+
+export const timeRanges: TimeRange[] = ['7d', '1m', '3m', '1y', 'max'];
+
+export type ExtendedTimeRange = TimeRange | '6m';
