@@ -131,17 +131,6 @@ export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({ product }) => {
       },
     },
     {
-      key: '2',
-      label: 'Pool Info',
-      children: <ProductDetailSidebarPoolInfo product={product} />,
-      style: panelStyle,
-      styles: {
-        header: {
-          padding: '0',
-        },
-      },
-    },
-    {
       key: '5',
       label: 'About Pool Type',
       children: <ProductDetailSidebarStrategySummary product={product} />,

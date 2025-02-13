@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import { Typography } from 'antd';
-import { CloseOutlined } from '@ant-design/icons';
+import { Col, Row, Tooltip, Typography } from 'antd';
+import { CloseOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { FinancialMetricThresholds, Product } from '../../../../models';
 import {
   ReturnDistributionGraph,
@@ -108,6 +108,9 @@ export const ProductDetailSummaryDesktop: FC<
           width={'auto'}
           onChangeItem={handleBenchmarkAnalysisChange}
         />
+        <Tooltip title="Select a benchmark to compare the product with">
+          <InfoCircleOutlined style={{ paddingLeft: '5px' }} />
+        </Tooltip>
       </div>
 
       {/* fourth column */}
@@ -136,14 +139,35 @@ export const ProductDetailSummaryDesktop: FC<
       {/* third row */}
       {/* first column */}
       <div className={styles['product-detail-summary__item-vertical']}>
-        <ProductDetailDropdown
-          items={returnAnalysisDropdownOptions}
-          isLoading={
-            loadingSimulationRunBreakdown &&
-            loadingOtherProductSimulationRunBreakdown
-          }
-          onChangeItem={handleReturnAnalysisChange}
-        />
+        <Row>
+          <Col span={4}>
+            <Tooltip
+              title={
+                returnAnalysisThresholds?.find(
+                  (x) => x.key == selectedReturnAnalysis?.metricName
+                )?.tooltipDescription
+              }
+            >
+              <InfoCircleOutlined
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  height: '100%',
+                }}
+              />
+            </Tooltip>
+          </Col>
+          <Col span={20}>
+            <ProductDetailDropdown
+              items={returnAnalysisDropdownOptions}
+              isLoading={
+                loadingSimulationRunBreakdown &&
+                loadingOtherProductSimulationRunBreakdown
+              }
+              onChangeItem={handleReturnAnalysisChange}
+            />
+          </Col>
+        </Row>
       </div>
 
       {/* second column */}
@@ -232,14 +256,35 @@ export const ProductDetailSummaryDesktop: FC<
       {/* fourth row */}
       {/* first column */}
       <div className={styles['product-detail-summary__item-vertical']}>
-        <ProductDetailDropdown
-          items={benchmarkReturnAnalysisDropdownOptions}
-          isLoading={
-            loadingSimulationRunBreakdown &&
-            loadingOtherProductSimulationRunBreakdown
-          }
-          onChangeItem={handleBenchmarkAnalysisChange}
-        />
+        <Row>
+          <Col span={4}>
+            <Tooltip
+              title={
+                benchmarkReturnAnalysisThresholds?.find(
+                  (x) => x.key == selectedBenchmarkReturnAnalysis?.metricName
+                )?.tooltipDescription
+              }
+            >
+              <InfoCircleOutlined
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  height: '100%',
+                }}
+              />
+            </Tooltip>
+          </Col>
+          <Col span={20}>
+            <ProductDetailDropdown
+              items={benchmarkReturnAnalysisDropdownOptions}
+              isLoading={
+                loadingSimulationRunBreakdown &&
+                loadingOtherProductSimulationRunBreakdown
+              }
+              onChangeItem={handleBenchmarkAnalysisChange}
+            />
+          </Col>
+        </Row>
       </div>
 
       {/* second column */}
