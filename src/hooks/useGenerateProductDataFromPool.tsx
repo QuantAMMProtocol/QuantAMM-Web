@@ -36,7 +36,7 @@ export const useGenerateProductDataFromPool = (
 
           const poolSnapshotsMap = await getPoolSnapshotsMap([pool]);
 
-          const tokens = poolData.poolGetPool?.allTokens.map(
+          const tokens = poolData.poolGetPool?.poolTokens.map(
             (token) => `${pool.chain}:${getTokenAddress(token)}`
           );
 

@@ -39,10 +39,10 @@ const mapPerformanceData = (
 
       return {
         month: period,
-        value: data[index].sharePrice,
-        return: data[index].return,
-        absReturn: Math.abs(data[index].return),
-        trendUp: data[index].return > 0,
+        value: data[index]?.sharePrice,
+        return: data[index]?.return,
+        absReturn: Math.abs(data[index]?.return),
+        trendUp: data[index]?.return > 0,
       };
     })
     .filter((item) => item !== undefined);

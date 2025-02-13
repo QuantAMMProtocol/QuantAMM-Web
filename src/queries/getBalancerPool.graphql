@@ -10,11 +10,12 @@ query GetPoolById($id: String!, $chain: GqlChain!) {
     symbol
     createTime
     owner
-    allTokens {
+    poolTokens {
       __typename
       weight
       symbol
       address
+      index
     }
     dynamicData {
       poolId

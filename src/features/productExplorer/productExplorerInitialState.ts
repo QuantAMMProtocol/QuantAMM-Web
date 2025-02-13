@@ -27,6 +27,8 @@ export const productExplorerInitialState: ProductExplorer = {
       mediumColor: 'rgba(240, 228, 6, 0.6)',
       high: 1.5,
       highColor: 'rgba(2, 189, 46, 0.6)',
+      tooltipDescription:
+        'The Calmar ratio is a risk-adjusted measure of return. It is calculated as the ratio of the annualized return over the maximum drawdown over the past 36 months. The higher the Calmar ratio, the better the risk-adjusted return.',
     },
     {
       key: 'Annualized Omega Ratio',
@@ -38,6 +40,8 @@ export const productExplorerInitialState: ProductExplorer = {
       mediumColor: 'rgba(240, 228, 6, 0.6)',
       high: 3,
       highColor: 'rgba(2, 189, 46, 0.6)',
+      tooltipDescription:
+        'The Omega ratio is a risk-adjusted measure of return. It is calculated as the ratio of the probability-weighted return over a target return. The higher the Omega ratio, the better the risk-adjusted return.',
     },
     {
       key: 'Annualized Return on VaR',
@@ -49,6 +53,8 @@ export const productExplorerInitialState: ProductExplorer = {
       mediumColor: 'rgba(240, 228, 6, 0.6)',
       high: 1.5,
       highColor: 'rgba(2, 189, 46, 0.6)',
+      tooltipDescription:
+        'The Return on VaR is a risk-adjusted measure of return. It is calculated as the ratio of the annualized return over the annualized Value at Risk (VaR) over the past 36 months. The higher the Return on VaR, the better the risk-adjusted return.',
     },
     {
       key: 'Annualized Sharpe Ratio',
@@ -60,6 +66,8 @@ export const productExplorerInitialState: ProductExplorer = {
       mediumColor: 'rgba(240, 228, 6, 0.6)',
       high: 2,
       highColor: 'rgba(2, 189, 46, 0.6)',
+      tooltipDescription:
+        'The Sharpe ratio is a risk-adjusted measure of return. It is calculated as the ratio of the annualized return over the annualized standard deviation of returns over the past 36 months. The higher the Sharpe ratio, the better the risk-adjusted return.',
     },
     {
       key: 'Annualized Sortino Ratio',
@@ -71,6 +79,8 @@ export const productExplorerInitialState: ProductExplorer = {
       mediumColor: 'rgba(240, 228, 6, 0.6)',
       high: 3,
       highColor: 'rgba(2, 189, 46, 0.6)',
+      tooltipDescription:
+        'The Sortino ratio is a risk-adjusted measure of return. It is calculated as the ratio of the annualized return over the downside deviation of returns over the past 36 months. The higher the Sortino ratio, the better the risk-adjusted return.',
     },
     {
       key: 'Conditional Drawdown at Risk',
@@ -82,6 +92,8 @@ export const productExplorerInitialState: ProductExplorer = {
       mediumColor: 'rgba(240, 228, 6, 0.6)',
       high: 1.5,
       highColor: 'rgba(2, 189, 46, 0.6)',
+      tooltipDescription:
+        'The Conditional Drawdown at Risk is a risk-adjusted measure of return. It is calculated as the ratio of the annualized return over the conditional Value at Risk (VaR) over the past 36 months. The higher the Conditional Drawdown at Risk, the better the risk-adjusted return.',
     },
     {
       key: 'Daily Returns Maximum Drawdown',
@@ -93,6 +105,8 @@ export const productExplorerInitialState: ProductExplorer = {
       mediumColor: 'rgba(240, 228, 6, 0.6)',
       high: 1.5,
       highColor: 'rgba(2, 189, 46, 0.6)',
+      tooltipDescription:
+        'The Maximum Drawdown is a risk-adjusted measure of return. It is calculated as the ratio of the annualized return over the maximum drawdown over the past 36 months. The higher the Maximum Drawdown, the better the risk-adjusted return.',
     },
     {
       key: 'Monthly Returns Maximum Drawdown',
@@ -104,6 +118,8 @@ export const productExplorerInitialState: ProductExplorer = {
       mediumColor: 'rgba(240, 228, 6, 0.6)',
       high: 1.5,
       highColor: 'rgba(2, 189, 46, 0.6)',
+      tooltipDescription:
+        'The Maximum Drawdown is a risk-adjusted measure of return. It is calculated as the ratio of the annualized return over the maximum drawdown over the past 36 months. The higher the Maximum Drawdown, the better the risk-adjusted return.',
     },
     {
       key: 'Return on VaR',
@@ -115,6 +131,8 @@ export const productExplorerInitialState: ProductExplorer = {
       mediumColor: 'rgba(240, 228, 6, 0.6)',
       high: 1.5,
       highColor: 'rgba(2, 189, 46, 0.6)',
+      tooltipDescription:
+        'The Return on VaR is a risk-adjusted measure of return. It is calculated as the ratio of the annualized return over the annualized Value at Risk (VaR) over the past 36 months. The higher the Return on VaR, the better the risk-adjusted return.',
     },
     {
       key: 'Sharpe Ratio',
@@ -126,6 +144,8 @@ export const productExplorerInitialState: ProductExplorer = {
       mediumColor: 'rgba(240, 228, 6, 0.6)',
       high: 3,
       highColor: 'rgba(2, 189, 46, 0.6)',
+      tooltipDescription:
+        'The Sharpe ratio is a risk-adjusted measure of return. It is calculated as the ratio of the annualized return over the annualized standard deviation of returns over the past 36 months. The higher the Sharpe ratio, the better the risk-adjusted return.',
     },
     {
       key: 'Sterling Ratio',
@@ -137,6 +157,8 @@ export const productExplorerInitialState: ProductExplorer = {
       mediumColor: 'rgba(240, 228, 6, 0.6)',
       high: 1.5,
       highColor: 'rgba(2, 189, 46, 0.6)',
+      tooltipDescription:
+        'The Sterling ratio is a risk-adjusted measure of return. It is calculated as the ratio of the annualized return over the downside deviation of returns over the past 36 months. The higher the Sterling ratio, the better the risk-adjusted return.',
     },
     {
       key: 'Ulcer Index',
@@ -148,6 +170,8 @@ export const productExplorerInitialState: ProductExplorer = {
       mediumColor: 'rgba(240, 228, 6, 0.6)',
       high: 1.5,
       highColor: 'rgba(2, 189, 46, 0.6)',
+      tooltipDescription:
+        'The Ulcer Index is a risk-adjusted measure of return. It is calculated as the ratio of the annualized return over the maximum drawdown over the past 36 months. The higher the Ulcer Index, the better the risk-adjusted return.',
     },
     {
       key: 'Weekly Returns Maximum Drawdown',
@@ -159,6 +183,8 @@ export const productExplorerInitialState: ProductExplorer = {
       mediumColor: 'rgba(240, 228, 6, 0.6)',
       high: 1.5,
       highColor: 'rgba(2, 189, 46, 0.6)',
+      tooltipDescription:
+        'The Maximum Drawdown is a risk-adjusted measure of return. It is calculated as the ratio of the annualized return over the maximum drawdown over the past 36 months. The higher the Maximum Drawdown, the better the risk-adjusted return.',
     },
     {
       key: 'kurtosis',
@@ -170,6 +196,8 @@ export const productExplorerInitialState: ProductExplorer = {
       mediumColor: 'rgba(240, 228, 6, 0.6)',
       high: 4,
       highColor: 'rgba(2, 189, 46, 0.6)',
+      tooltipDescription:
+        'Kurtosis is a measure of the "tailedness" of the probability distribution of returns. A high kurtosis indicates a high probability of extreme values in the distribution.',
     },
     {
       key: 'skewness',
@@ -181,6 +209,8 @@ export const productExplorerInitialState: ProductExplorer = {
       mediumColor: 'rgba(240, 228, 6, 0.6)',
       high: 4,
       highColor: 'rgba(2, 189, 46, 0.6)',
+      tooltipDescription:
+        'Skewness is a measure of the asymmetry of the probability distribution of returns. A positive skewness indicates a right-skewed distribution, while a negative skewness indicates a left-skewed distribution.',
     },
     {
       key: 'std',
@@ -192,6 +222,8 @@ export const productExplorerInitialState: ProductExplorer = {
       mediumColor: 'rgba(240, 228, 6, 0.6)',
       high: 3,
       highColor: 'rgba(2, 189, 46, 0.6)',
+      tooltipDescription:
+        'The standard deviation of returns is a measure of the dispersion of returns around the mean return. A higher standard deviation indicates higher volatility.',
     },
   ],
   benchmarkMetricThresholds: [
@@ -205,6 +237,8 @@ export const productExplorerInitialState: ProductExplorer = {
       mediumColor: 'rgba(240, 228, 6, 0.6)',
       high: 2,
       highColor: 'rgba(2, 189, 46, 0.6)',
+      tooltipDescription:
+        'The Information ratio is a risk-adjusted measure of return. It is calculated as the ratio of the annualized excess return over the benchmark over the annualized tracking error over the past 36 months. The higher the Information ratio, the better the risk-adjusted return.',
     },
     {
       key: "Annualized Jensen's Alpha",
@@ -216,6 +250,8 @@ export const productExplorerInitialState: ProductExplorer = {
       mediumColor: 'rgba(240, 228, 6, 0.6)',
       high: 10,
       highColor: 'rgba(2, 189, 46, 0.6)',
+      tooltipDescription:
+        'Jensen’s Alpha is a risk-adjusted measure of return. It is calculated as the excess return over the benchmark over the expected return based on the Capital Asset Pricing Model (CAPM). The higher the Jensen’s Alpha, the better the risk-adjusted return.',
     },
     {
       key: 'Beta',
@@ -227,6 +263,8 @@ export const productExplorerInitialState: ProductExplorer = {
       mediumColor: 'rgba(240, 228, 6, 0.6)',
       high: 1.5,
       highColor: 'rgba(2, 189, 46, 0.6)',
+      tooltipDescription:
+        'Beta is a measure of the sensitivity of the product to market movements. A beta of 1 indicates that the product moves in line with the market, while a beta greater than 1 indicates that the product is more volatile than the market.',
     },
     {
       key: 'Daily VaR (95)',
@@ -238,6 +276,8 @@ export const productExplorerInitialState: ProductExplorer = {
       mediumColor: 'rgba(240, 228, 6, 0.6)',
       high: 1.5,
       highColor: 'rgba(2, 189, 46, 0.6)',
+      tooltipDescription:
+        'Value at Risk (VaR) is a measure of the potential loss in value of a product over a given time period and confidence level. A higher VaR indicates a higher potential loss.',
     },
     {
       key: 'Downside Capture Ratio',
@@ -249,6 +289,8 @@ export const productExplorerInitialState: ProductExplorer = {
       mediumColor: 'rgba(240, 228, 6, 0.6)',
       high: 1.5,
       highColor: 'rgba(2, 189, 46, 0.6)',
+      tooltipDescription:
+        'The Downside Capture Ratio is a measure of the product’s performance relative to the benchmark during periods of negative benchmark returns. A downside capture ratio of less than 1 indicates that the product has outperformed the benchmark during periods of negative benchmark returns.',
     },
     {
       key: 'Total Capture Ratio',
@@ -260,6 +302,8 @@ export const productExplorerInitialState: ProductExplorer = {
       mediumColor: 'rgba(240, 228, 6, 0.6)',
       high: 1.5,
       highColor: 'rgba(2, 189, 46, 0.6)',
+      tooltipDescription:
+        'The Total Capture Ratio is a measure of the product’s performance relative to the benchmark during all periods. A total capture ratio of less than 1 indicates that the product has outperformed the benchmark during all periods.',
     },
     {
       key: 'Tracking Error',
@@ -271,6 +315,8 @@ export const productExplorerInitialState: ProductExplorer = {
       mediumColor: 'rgba(240, 228, 6, 0.6)',
       high: 1.5,
       highColor: 'rgba(2, 189, 46, 0.6)',
+      tooltipDescription:
+        'Tracking Error is a measure of the volatility of the excess return of the product over the benchmark. A higher tracking error indicates higher active risk.',
     },
     {
       key: 'Upside Capture Ratio',
@@ -282,6 +328,8 @@ export const productExplorerInitialState: ProductExplorer = {
       mediumColor: 'rgba(240, 228, 6, 0.6)',
       high: 1.5,
       highColor: 'rgba(2, 189, 46, 0.6)',
+      tooltipDescription:
+        'The Upside Capture Ratio is a measure of the product’s performance relative to the benchmark during periods of positive benchmark returns. An upside capture ratio of more than 1 indicates that the product has outperformed the benchmark during periods of positive benchmark returns.',
     },
     {
       key: 'Volatility',
@@ -293,6 +341,8 @@ export const productExplorerInitialState: ProductExplorer = {
       mediumColor: 'rgba(240, 228, 6, 0.6)',
       high: 1.5,
       highColor: 'rgba(2, 189, 46, 0.6)',
+      tooltipDescription:
+        'Volatility is a measure of the dispersion of returns around the mean return. A higher volatility indicates higher risk.',
     },
   ],
 };

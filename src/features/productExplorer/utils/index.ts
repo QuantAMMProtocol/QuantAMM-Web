@@ -104,7 +104,7 @@ export function getProductRecordFromPoolList(
           },
           {
             metric: 'diversification',
-            value: pool.allTokens.length > 5 ? 5 : pool.allTokens.length - 1,
+            value: pool.poolTokens.length > 5 ? 5 : pool.poolTokens.length - 1,
             maxScore: MAX_SCORE,
             description:
               'Diversification rating is how many tokens are in the pool. If there are more than 5 that is a max score of 5 otherwise the score is n-1',
@@ -130,11 +130,11 @@ export function getProductRecordFromPoolList(
           dailyPerformance,
           CURRENT_PERFORMANCE_PERIOD
         ),
-        poolConstituents: (pool.allTokens || []).map((token) => ({
+        poolConstituents: (pool.poolTokens || []).map((token) => ({
           coin: token.symbol,
           weight:
             parseFloat(
-              token.weight ?? (100 / pool.allTokens.length).toString()
+              token.weight ?? (100 / pool.poolTokens.length).toString()
             ) * 100,
           address: token.address,
         })),
@@ -207,7 +207,7 @@ export function getProductFromPool(
       },
       {
         metric: 'diversification',
-        value: pool.allTokens.length > 5 ? 5 : pool.allTokens.length - 1,
+        value: pool.poolTokens.length > 5 ? 5 : pool.poolTokens.length - 1,
         maxScore: MAX_SCORE,
         description: 'Diversification rating is blah blah blah blah ',
       },
@@ -226,10 +226,10 @@ export function getProductFromPool(
       dailyPerformance,
       CURRENT_PERFORMANCE_PERIOD
     ),
-    poolConstituents: (pool.allTokens || []).map((token) => ({
+    poolConstituents: (pool.poolTokens || []).map((token) => ({
       coin: token.symbol,
       weight:
-        parseFloat(token.weight ?? (100 / pool.allTokens.length).toString()) *
+        parseFloat(token.weight ?? (100 / pool.poolTokens.length).toString()) *
         100,
       address: token.address,
     })),
@@ -411,7 +411,7 @@ function getAdaptability(
 export function fetchTokenList(pools: GqlPoolMinimal[]): string[] {
   return Array.from(
     pools.reduce((acc, pool) => {
-      pool.allTokens.forEach((token) => acc.add(token.address));
+      pool.poolTokens.forEach((token) => acc.add(token.address));
       return acc;
     }, new Set<string>())
   );

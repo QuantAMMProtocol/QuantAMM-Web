@@ -24,11 +24,12 @@ query GetPools(
     symbol
     createTime
     owner
-    allTokens {
+    poolTokens {
       __typename
       weight
       symbol
       address
+      index
     }
     dynamicData {
       poolId

@@ -156,6 +156,7 @@ export interface FinancialMetricThresholds {
   mediumColor: string;
   high: number;
   highColor: string;
+  tooltipDescription: string;
 }
 
 export interface ProductExplorer {
