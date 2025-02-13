@@ -159,7 +159,7 @@ export const getTimeSeriesDataForProductList = (
         })
       );
 
-      const amounts = filterOutBptToken(pool as GqlPoolMinimal, snapshot);
+      const amounts = filterOutBptToken(pool, snapshot);
 
       return {
         timestamp: snapshot.timestamp,
@@ -227,15 +227,11 @@ export const getTimeSeriesDataForProduct = (
       })
     );
 
-    const bptIndex = pool.poolGetPool?.poolTokens.find(
-      (token) => token.address === pool.poolGetPool?.id.substring(0, 42)
-    )?.index;
+    const amounts = filterOutBptToken(pool.poolGetPool, snapshot);
 
     return {
       timestamp: snapshot.timestamp,
-      amounts: snapshot.amounts
-        .map(Number)
-        .filter((_, index) => index !== bptIndex),
+      amounts,
       fees24h: Number(snapshot.fees24h),
       totalLiquidity: Number(snapshot.totalLiquidity),
       sharePrice: Number(snapshot.sharePrice),

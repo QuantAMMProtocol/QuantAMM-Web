@@ -1,6 +1,5 @@
 import {
   GqlChain,
-  GqlPoolMinimal,
   GqlPoolSnapshotDataRange,
   GqlTokenChartDataRange,
 } from '../__generated__/graphql-types';
@@ -80,7 +79,7 @@ export const findClosestPrice = (
 };
 
 export const filterOutBptToken = (
-  pool: GqlPoolMinimal,
+  pool: { id: string; poolTokens: { address: string }[] },
   snapshot: TimeSeriesData
 ): number[] => {
   const poolBptTokenAddress = pool.id.substring(0, 42);
