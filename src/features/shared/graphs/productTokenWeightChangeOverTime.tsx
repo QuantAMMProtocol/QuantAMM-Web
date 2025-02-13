@@ -57,6 +57,24 @@ export const ProductTokenWeightChangeOverTimeGraph: FC<
     }
   }, [product]);
 
+  const filteredConstituents = useMemo(() => {
+    const poolBptTokenAddress = product.id.substring(0, 42);
+
+    const bptIndex = product.poolConstituents.findIndex(
+      (token) => token.address === poolBptTokenAddress
+    );
+
+    if (bptIndex === -1) {
+      return product.poolConstituents;
+    }
+
+    return product.poolConstituents.filter(
+      (_: ProductPoolConstituents, index: number) => {
+        return index !== bptIndex;
+      }
+    );
+  }, [product]);
+
   const normalisedTimeSeries = useMemo(() => {
     return getChartTimeStepsFromProduct(product.timeSeries);
   }, [product]);
@@ -70,7 +88,7 @@ export const ProductTokenWeightChangeOverTimeGraph: FC<
         timestamp: item.timestamp * 1000,
       };
 
-      product.poolConstituents.forEach(
+      filteredConstituents.forEach(
         (constituent: ProductPoolConstituents, index: number) => {
           if (isBenchmark) {
             timeStep[normalisedTokenName(constituent.coin.toLowerCase())] =
@@ -89,27 +107,25 @@ export const ProductTokenWeightChangeOverTimeGraph: FC<
     });
 
     return result;
-  }, [normalisedTimeSeries, product, isBenchmark]);
+  }, [normalisedTimeSeries, filteredConstituents, isBenchmark]);
 
   const normalisedAreaSeries: AgAreaSeriesOptions[] =
     useMemo((): AgAreaSeriesOptions[] => {
       const series: AgAreaSeriesOptions[] = [];
 
-      product.poolConstituents.forEach(
-        (constituent: ProductPoolConstituents) => {
-          series.push({
-            type: 'area',
-            xKey: 'timestamp',
-            yKey: normalisedTokenName(constituent.coin.toLowerCase()),
-            yName: constituent.coin.toLowerCase(),
-            normalizedTo: 100,
-            stacked: true,
-          });
-        }
-      );
+      filteredConstituents.forEach((constituent: ProductPoolConstituents) => {
+        series.push({
+          type: 'area',
+          xKey: 'timestamp',
+          yKey: normalisedTokenName(constituent.coin.toLowerCase()),
+          yName: constituent.coin.toLowerCase(),
+          normalizedTo: 100,
+          stacked: true,
+        });
+      });
 
       return series;
-    }, [product]);
+    }, [filteredConstituents]);
 
   const timeAxisOption: AgTimeAxisOptions = useMemo(() => {
     if (normalisedTimeSeries.length < 1) {

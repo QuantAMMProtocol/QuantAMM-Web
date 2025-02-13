@@ -15,6 +15,7 @@ import {
   findClosestPrice,
   generatePoolSnapshotsQuery,
   generateTokenPricesQuery,
+  filterOutBptToken,
 } from './utils';
 
 export const DEFAULT_INITIAL_TOTAL_SHARES = 1;
@@ -158,15 +159,11 @@ export const getTimeSeriesDataForProductList = (
         })
       );
 
-      const bptIndex = pool.poolTokens.find(
-        (token) => token.address === pool.id.substring(0, 42)
-      )?.index;
+      const amounts = filterOutBptToken(pool as GqlPoolMinimal, snapshot);
 
       return {
         timestamp: snapshot.timestamp,
-        amounts: snapshot.amounts
-          .map(Number)
-          .filter((_, index) => index !== bptIndex),
+        amounts,
         fees24h: Number(snapshot.fees24h),
         totalLiquidity: Number(snapshot.totalLiquidity),
         sharePrice: Number(snapshot.sharePrice),
