@@ -20,7 +20,7 @@ export const productExplorerSlice = createSlice({
   name: 'productExplorerSlice',
   initialState: productExplorerInitialState,
   reducers: {
-    loadingProducts: (state) => {
+    setLoadingProducts: (state) => {
       state.loadingProducts = true;
     },
     loadProducts: (state, action: PayloadAction<Product[]>) => {
@@ -266,7 +266,7 @@ export const selectHorizontalView = (state: RootState) =>
   state.productExplorer.horizontalView;
 
 export const {
-  loadingProducts,
+  setLoadingProducts,
   loadProducts,
   loadingFilters,
   loadFilters,

@@ -21,7 +21,7 @@ export const ProductExplorer = () => {
     error: filterError,
   } = useRetrieveFiltersQuery();
 
-  const { productError } = useLoadData(INITIAL_LOAD_POOLS_COUNT);
+  const { productListError } = useLoadData(INITIAL_LOAD_POOLS_COUNT);
 
   useEffect(() => {
     if (isLoadingFilters) {
@@ -35,7 +35,7 @@ export const ProductExplorer = () => {
 
   return (
     <Layout style={{ minHeight: '100vh', padding: 12 }}>
-      {productError ? (
+      {productListError ? (
         <ProductExplorerError />
       ) : (
         <>

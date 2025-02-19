@@ -3,7 +3,7 @@ import {
   GqlPoolSnapshotDataRange,
   GqlTokenChartDataRange,
 } from '../__generated__/graphql-types';
-import { TimeSeriesData } from '../models';
+import { Product, TimeSeriesData } from '../models';
 
 export const generatePoolSnapshotsQuery = (
   pools: { id: string; chain: string }[],
@@ -79,13 +79,13 @@ export const findClosestPrice = (
 };
 
 export const filterOutBptToken = (
-  pool: { id: string; poolTokens: { address: string }[] },
+  product: Product,
   snapshot: TimeSeriesData
 ): number[] => {
-  const poolBptTokenAddress = pool.id.substring(0, 42);
+  const poolBptTokenAddress = product.id.substring(0, 42);
 
-  const bptIndex = pool.poolTokens.findIndex(
-    (token) => token.address === poolBptTokenAddress
+  const bptIndex = product.poolConstituents.findIndex(
+    (token: { address: string }) => token.address === poolBptTokenAddress
   );
 
   let filteredAmounts;

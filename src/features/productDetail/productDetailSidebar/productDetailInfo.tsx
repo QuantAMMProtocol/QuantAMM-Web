@@ -48,9 +48,9 @@ export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({ product }) => {
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <Title style={{ margin: 0, textAlign: 'left' }} level={2}>
               $
-              {product.timeSeries[
+              {product.timeSeries?.[
                 product.timeSeries.length - 1
-              ].sharePrice.toFixed(2)}
+              ]?.sharePrice.toFixed(2)}
             </Title>
             <span
               style={{
@@ -184,19 +184,19 @@ export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({ product }) => {
 
   function getProductPerformanceForSelectedTimeRange(): number {
     if (selectedTimeRange == '7d') {
-      return product.oneWeekPerformance.return;
+      return product.oneWeekPerformance?.return ?? 0;
     }
     if (selectedTimeRange == '1m') {
-      return product.oneMonthPerformance.return;
+      return product.oneMonthPerformance?.return ?? 0;
     }
     if (selectedTimeRange == '3m') {
-      return product.threeMonthPerformance.return;
+      return product.threeMonthPerformance?.return ?? 0;
     }
     if (selectedTimeRange == '1y') {
-      return product.oneYearPerformance.return;
+      return product.oneYearPerformance?.return ?? 0;
     }
     if (selectedTimeRange == 'max') {
-      return product.inceptionPerformance.return;
+      return product.inceptionPerformance?.return ?? 0;
     }
     return 0;
   }

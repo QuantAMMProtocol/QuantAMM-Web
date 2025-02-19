@@ -1,7 +1,6 @@
 import { ApolloQueryResult, gql } from '@apollo/client';
 import {
   GetPoolByIdQuery,
-  GetPoolsQuery,
   GqlChain,
   GqlHistoricalTokenPrice,
   GqlHistoricalTokenPriceEntry,
@@ -9,7 +8,7 @@ import {
   GqlPoolSnapshotDataRange,
   GqlTokenChartDataRange,
 } from '../__generated__/graphql-types';
-import { PoolTimeSeriesData, TimeSeriesData } from '../models';
+import { Product, ProductTimeSeriesData, TimeSeriesData } from '../models';
 import { apolloClient } from '../queries/apolloClient';
 import {
   findClosestPrice,
@@ -135,15 +134,15 @@ export const getTokenPriceMap = (
 
 // TODO: getTimeSeriesDataForProductList and getTimeSeriesDataForProduct have some shared logic, can we abstract it out?
 export const getTimeSeriesDataForProductList = (
-  pools: GetPoolsQuery,
+  products: Product[],
   poolSnapshotsMap: Record<string, TimeSeriesData[]>,
   tokenPricesMap: Record<
     string,
     Record<string, Pick<GqlHistoricalTokenPriceEntry, 'timestamp' | 'price'>[]>
   >
-): PoolTimeSeriesData[] => {
-  return pools.poolGetPools.map((pool, index) => {
-    const snapshots = poolSnapshotsMap[`poolSnapshot${index + 1}`];
+): ProductTimeSeriesData[] => {
+  return products.map((product, index) => {
+    const snapshots = poolSnapshotsMap[`poolSnapshot${index + 1}`] || [];
     const hodlAmounts = snapshots[0]?.amounts;
     const initialTotalShares =
       snapshots[0]?.totalShares > 0
@@ -151,15 +150,15 @@ export const getTimeSeriesDataForProductList = (
         : DEFAULT_INITIAL_TOTAL_SHARES;
     const tempTimeSeries = snapshots.map((snapshot: TimeSeriesData) => {
       const tokenPrices = Object.fromEntries(
-        pool.poolTokens.map((token) => {
+        product.poolConstituents.map((token: { address: string }) => {
           const priceData =
-            tokenPricesMap[pool.chain]?.[getTokenAddress(token)] || [];
+            tokenPricesMap[product.chain]?.[getTokenAddress(token)] || [];
           const closestPrice = findClosestPrice(priceData, snapshot.timestamp);
           return [token.address, closestPrice];
         })
       );
 
-      const amounts = filterOutBptToken(pool, snapshot);
+      const amounts = filterOutBptToken(product, snapshot);
 
       return {
         timestamp: snapshot.timestamp,
@@ -187,14 +186,15 @@ export const getTimeSeriesDataForProductList = (
       let hodlTotalLiquidity = 0;
       for (let j = 0; j < timestep.amounts.length; j++) {
         hodlTotalLiquidity +=
-          hodlAmounts[j] * timestep.tokenPrices[pool.poolTokens[j].address];
+          hodlAmounts[j] *
+          timestep.tokenPrices[product.poolConstituents[j].address];
       }
       timestep.hodlSharePrice = hodlTotalLiquidity / initialTotalShares;
     }
 
     return {
-      poolId: pool.id,
-      chain: pool.chain,
+      productId: product.id,
+      chain: product.chain,
       timeSeries: noZeroPriceTimeSeries,
     };
   });
@@ -207,7 +207,7 @@ export const getTimeSeriesDataForProduct = (
     string,
     Record<string, Pick<GqlHistoricalTokenPriceEntry, 'timestamp' | 'price'>[]>
   >
-): PoolTimeSeriesData => {
+): ProductTimeSeriesData => {
   const snapshots = poolSnapshotsMap.poolSnapshot1;
   const hodlAmounts = snapshots[0]?.amounts;
   const initialTotalShares =
@@ -227,7 +227,17 @@ export const getTimeSeriesDataForProduct = (
       })
     );
 
-    const amounts = filterOutBptToken(pool.poolGetPool, snapshot);
+    const amounts = filterOutBptToken(
+      {
+        id: pool.poolGetPool?.id,
+        chain: pool.poolGetPool?.chain,
+        poolConstituents: pool.poolGetPool?.poolTokens.map((token) => ({
+          address: token.address,
+          weight: token.weight,
+        })),
+      } as Product,
+      snapshot
+    );
 
     return {
       timestamp: snapshot.timestamp,
@@ -261,8 +271,8 @@ export const getTimeSeriesDataForProduct = (
     timestep.hodlSharePrice = hodlTotalLiquidity / initialTotalShares;
   }
 
-  const timeSeriesData: PoolTimeSeriesData = {
-    poolId: pool.poolGetPool?.id,
+  const timeSeriesData: ProductTimeSeriesData = {
+    productId: pool.poolGetPool?.id,
     chain: pool.poolGetPool?.chain,
     timeSeries: noZeroPriceTimeSeries,
   };

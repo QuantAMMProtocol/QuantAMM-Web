@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useAppDispatch } from '../app/hooks';
 import {
-  loadingProducts,
+  setLoadingProducts,
   loadProducts,
 } from '../features/productExplorer/productExplorerSlice';
 import { useFetchProductListData } from './useFetchProductListData';
@@ -9,26 +9,21 @@ import { useFetchProductListData } from './useFetchProductListData';
 export const useLoadData = (poolsToLoad: number) => {
   const dispatch = useAppDispatch();
 
-  const {
-    data: productData,
-    loading: isLoadingProducts,
-    error: productError,
-  } = useFetchProductListData(poolsToLoad);
+  const { productList, productListLoading, productListError } =
+    useFetchProductListData(poolsToLoad);
 
   useEffect(() => {
-    if (isLoadingProducts) {
-      dispatch(loadingProducts());
+    if (productListLoading) {
+      dispatch(setLoadingProducts());
     }
-    if (!isLoadingProducts && productData && !productError) {
-      if (productData.length > 0) {
-        dispatch(loadProducts(productData));
+    if (!productListLoading && productList && !productListError) {
+      if (productList.length > 0) {
+        dispatch(loadProducts(productList));
       }
     }
-  }, [productData, dispatch, productError, isLoadingProducts]);
+  }, [productList, productListLoading, productListError, dispatch]);
 
   return {
-    isLoadingProducts,
-    productData,
-    productError,
+    productListError,
   };
 };

@@ -92,6 +92,9 @@ export const ProductItemCompositionGraph: FC<
               text: 'No data',
             },
           },
+          animation: {
+            enabled: !wide,
+          },
           theme: {
             baseTheme: chartTheme,
             overrides: {

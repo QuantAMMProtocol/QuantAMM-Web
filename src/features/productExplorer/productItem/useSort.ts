@@ -27,19 +27,21 @@ export const useSort = () => {
             productB.overview.find((item) => item.metric === sortingMetric)
               ?.value ?? 0;
         } else if (sortingMetric == 'performance') {
-          comparableA = productA.currentPerformance || 0;
-          comparableB = productB.currentPerformance || 0;
+          comparableA = productA.currentPerformance ?? 0;
+          comparableB = productB.currentPerformance ?? 0;
         } else if (sortingMetric == 'tvl') {
-          comparableA = parseFloat(productA.dynamicData.totalLiquidity) || 0;
-          comparableB = parseFloat(productB.dynamicData.totalLiquidity) || 0;
+          comparableA = parseFloat(productA.dynamicData?.totalLiquidity) ?? 0;
+          comparableB = parseFloat(productB.dynamicData?.totalLiquidity) || 0;
         } else if (sortingMetric == 'yield') {
-          comparableA = parseFloat(productA.dynamicData.yieldCapture48h) || 0;
-          comparableB = parseFloat(productB.dynamicData.yieldCapture48h) || 0;
+          comparableA = parseFloat(productA.dynamicData?.yieldCapture48h) || 0;
+          comparableB = parseFloat(productB.dynamicData?.yieldCapture48h) || 0;
         } else if (sortingMetric == 'sharePrice') {
           comparableA =
-            productA.timeSeries[productA.timeSeries.length - 1].sharePrice || 0;
+            productA.timeSeries?.[productA.timeSeries?.length - 1]
+              ?.sharePrice ?? 0;
           comparableB =
-            productB.timeSeries[productB.timeSeries.length - 1].sharePrice || 0;
+            productB.timeSeries?.[productB.timeSeries?.length - 1]
+              ?.sharePrice ?? 0;
         } else if (sortingMetric == 'age') {
           comparableA = productA.createTime
             ? new Date(productA.createTime).getTime()
@@ -58,11 +60,11 @@ export const useSort = () => {
         }
 
         const totalA = productA.overview.reduce(
-          (total, next) => (total += next.value),
+          (total, next) => (total += next.value ?? 0),
           0
         );
         const totalB = productB.overview.reduce(
-          (total, next) => (total += next.value),
+          (total, next) => (total += next.value ?? 0),
           0
         );
 

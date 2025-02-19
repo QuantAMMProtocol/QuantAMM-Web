@@ -400,7 +400,7 @@ export const ProductDetailSummaryDesktop: FC<
         {' '}
         <div style={{ height: '100%', width: '100%' }}>
           <ReturnDistributionGraph
-            marketValues={product.timeSeries.map((x) => x.sharePrice)}
+            marketValues={product.timeSeries?.map((x) => x.sharePrice) ?? []}
             yAxisOverride={{ title: { enabled: false } }}
           />
         </div>
@@ -412,7 +412,9 @@ export const ProductDetailSummaryDesktop: FC<
         <div style={{ height: '100%', width: '100%' }}>
           <ReturnDistributionGraph
             yAxisOverride={{ title: { enabled: false } }}
-            marketValues={product.timeSeries.map((x) => x.hodlSharePrice)}
+            marketValues={
+              product.timeSeries?.map((x) => x.hodlSharePrice) ?? []
+            }
           />
         </div>
       </div>
@@ -424,7 +426,7 @@ export const ProductDetailSummaryDesktop: FC<
             <ReturnDistributionGraph
               yAxisOverride={{ title: { enabled: false } }}
               marketValues={
-                comparingProduct?.timeSeries.map((x) => x.sharePrice) ?? []
+                comparingProduct?.timeSeries?.map((x) => x.sharePrice) ?? []
               }
             />
           </div>

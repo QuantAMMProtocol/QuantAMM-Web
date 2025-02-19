@@ -40,7 +40,7 @@ export const useFinancialAnalysis = ({
         dispatch(loadingSimulationRunBreakdown(product.id));
         if (
           (product?.timeSeries?.length ?? 0) > 0 &&
-          product?.timeSeries[0].timestamp
+          product?.timeSeries?.[0]?.timestamp
         ) {
           product?.timeSeries[product?.timeSeries.length - 1].timestamp;
 
@@ -48,12 +48,15 @@ export const useFinancialAnalysis = ({
             if (i === 0) {
               return [step.timestamp * 1000, 0, 0];
             }
-            const prevStep = product?.timeSeries[i - 1];
+            const prevStep = product?.timeSeries?.[i - 1];
+            if (!prevStep) {
+              return null;
+            }
             const portfolio_return =
-              (step.sharePrice - prevStep.sharePrice) / prevStep.sharePrice;
+              (step.sharePrice - prevStep?.sharePrice) / prevStep?.sharePrice;
             const hodl_return =
-              (step.hodlSharePrice - prevStep.hodlSharePrice) /
-              prevStep.hodlSharePrice;
+              (step.hodlSharePrice - prevStep?.hodlSharePrice) /
+              prevStep?.hodlSharePrice;
 
             return [step.timestamp * 1000, portfolio_return, hodl_return];
           });
@@ -77,7 +80,10 @@ export const useFinancialAnalysis = ({
                   ).toLocaleString()
                 : '',
               tokens: tokens,
-              returns: portfolioReturns ?? [],
+              returns:
+                portfolioReturns.filter(
+                  (portfolioReturn) => portfolioReturn !== null
+                ) ?? [],
               benchmarks: [benchmark],
             },
           });

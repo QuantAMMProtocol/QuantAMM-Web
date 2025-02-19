@@ -76,7 +76,7 @@ export const ProductTokenWeightChangeOverTimeGraph: FC<
   }, [product]);
 
   const normalisedTimeSeries = useMemo(() => {
-    return getChartTimeStepsFromProduct(product.timeSeries);
+    return getChartTimeStepsFromProduct(product.timeSeries ?? []);
   }, [product]);
 
   const normalisedAreaData = useMemo(() => {
