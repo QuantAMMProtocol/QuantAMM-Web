@@ -1,4 +1,4 @@
-import { CSSProperties, FC } from 'react';
+import { CSSProperties, FC, useMemo } from 'react';
 import { CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons';
 import { Collapse, CollapseProps } from 'antd';
 import { Product } from '../../../models';
@@ -22,6 +22,34 @@ interface ProductDetailInfoProps {
 }
 
 export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({ product }) => {
+  const panelStyle: React.CSSProperties = {
+    background: 'transparent',
+    border: 'none',
+  };
+
+  const selectedTimeRange = useAppSelector(
+    selectProductDetailSelectedTimeRange
+  );
+
+  const productPerformance = useMemo(() => {
+    if (selectedTimeRange == '7d') {
+      return product.oneWeekPerformance?.return;
+    }
+    if (selectedTimeRange == '1m') {
+      return product.oneMonthPerformance?.return;
+    }
+    if (selectedTimeRange == '3m') {
+      return product.threeMonthPerformance?.return;
+    }
+    if (selectedTimeRange == '1y') {
+      return product.oneYearPerformance?.return;
+    }
+    if (selectedTimeRange == 'max') {
+      return product.inceptionPerformance?.return;
+    }
+    return 0;
+  }, [product, selectedTimeRange]);
+
   const getItems: (panelStyle: CSSProperties) => CollapseProps['items'] = (
     panelStyle
   ) => [
@@ -48,9 +76,9 @@ export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({ product }) => {
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <Title style={{ margin: 0, textAlign: 'left' }} level={2}>
               $
-              {product.timeSeries[
+              {product.timeSeries?.[
                 product.timeSeries.length - 1
-              ].sharePrice.toFixed(2)}
+              ]?.sharePrice.toFixed(2)}
             </Title>
             <span
               style={{
@@ -59,7 +87,7 @@ export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({ product }) => {
                 color: performanceSummaryColour(),
               }}
             >
-              {getProductPerformanceForSelectedTimeRange() < 0 ? (
+              {productPerformance && productPerformance < 0 ? (
                 <CaretDownOutlined />
               ) : (
                 <CaretUpOutlined />
@@ -72,7 +100,7 @@ export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({ product }) => {
                 color: performanceSummaryColour(),
               }}
             >
-              {getProductPerformanceForSelectedTimeRange().toFixed(2)}%
+              {productPerformance ? productPerformance.toFixed(2) : 'N/A'}%
             </span>
             <span
               style={{
@@ -173,41 +201,13 @@ export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({ product }) => {
     },
   ];
 
-  const panelStyle: React.CSSProperties = {
-    background: 'transparent',
-    border: 'none',
-  };
-
-  const selectedTimeRange = useAppSelector(
-    selectProductDetailSelectedTimeRange
-  );
-
-  function getProductPerformanceForSelectedTimeRange(): number {
-    if (selectedTimeRange == '7d') {
-      return product.oneWeekPerformance.return;
-    }
-    if (selectedTimeRange == '1m') {
-      return product.oneMonthPerformance.return;
-    }
-    if (selectedTimeRange == '3m') {
-      return product.threeMonthPerformance.return;
-    }
-    if (selectedTimeRange == '1y') {
-      return product.oneYearPerformance.return;
-    }
-    if (selectedTimeRange == 'max') {
-      return product.inceptionPerformance.return;
-    }
-    return 0;
-  }
-
   function performanceSummaryColour(): string {
-    if (getProductPerformanceForSelectedTimeRange() < 0) {
-      return 'red';
-    } else if (getProductPerformanceForSelectedTimeRange() == 0) {
-      return 'grey';
+    if (productPerformance && productPerformance < 0) {
+      return 'var(--red)';
+    } else if (productPerformance && productPerformance === 0) {
+      return 'var(--grey)';
     }
-    return 'green';
+    return 'var(--green)';
   }
 
   return (

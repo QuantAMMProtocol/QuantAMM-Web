@@ -25,7 +25,9 @@ export const ProductDetail = () => {
     product: product!,
     benchmark: Benchmark.HODL,
     loadToSimulator: false,
-    shouldRun: !!product,
+    shouldRun: product?.timeSeries?.length
+      ? product.timeSeries.length > 0
+      : false,
   });
 
   return (

@@ -60,8 +60,8 @@ export interface TimeSeriesData {
   hodlSharePrice: number;
 }
 
-export interface PoolTimeSeriesData {
-  poolId: string;
+export interface ProductTimeSeriesData {
+  productId: string;
   chain: string;
   timeSeries: TimeSeriesData[];
 }
@@ -87,6 +87,9 @@ export interface PerformancePeriod {
   return: number;
 }
 
+// TODO
+// we don't need ProductDto, we can use Product directly
+// all performance properties can be grouped
 export interface ProductDto {
   id: string;
   address: string;
@@ -108,25 +111,25 @@ export interface ProductDto {
   enableDonation?: boolean;
   enableRemoveLiquidityCustom?: boolean;
   poolConstituents: ProductPoolConstituents[];
-  dailyPerformance: DailyPerformance[];
-  monthlyPerformance: MonthlyPerformance[];
-  inceptionPerformance: PerformancePeriod;
-  oneYearPerformance: PerformancePeriod;
-  sixMonthPerformance: PerformancePeriod;
-  threeMonthPerformance: PerformancePeriod;
-  oneMonthPerformance: PerformancePeriod;
-  oneWeekPerformance: PerformancePeriod;
-  timeSeries: TimeSeriesData[];
+  currentPerformance?: number;
+  dailyPerformance?: DailyPerformance[];
+  monthlyPerformance?: MonthlyPerformance[];
+  inceptionPerformance?: PerformancePeriod;
+  oneYearPerformance?: PerformancePeriod;
+  sixMonthPerformance?: PerformancePeriod;
+  threeMonthPerformance?: PerformancePeriod;
+  oneMonthPerformance?: PerformancePeriod;
+  oneWeekPerformance?: PerformancePeriod;
+  timeSeries?: TimeSeriesData[];
   benchmarkTimeSeries: TimeSeriesData[][] | undefined;
   benchmarkNames: string[] | undefined;
-  currentPerformance: number;
   overview: {
     metric: ProductOverviewMetric;
-    value: number;
+    value?: number;
     maxScore: number;
     description: string;
   }[];
-  dynamicData: GqlPoolDynamicData;
+  dynamicData?: GqlPoolDynamicData;
 }
 
 export type Product = ProductDto & {

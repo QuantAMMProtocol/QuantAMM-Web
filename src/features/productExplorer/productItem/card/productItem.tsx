@@ -9,15 +9,12 @@ import {
   ProductItemOverviewGraph,
 } from '../../../shared';
 import { ProductItemTabs } from '../tabs/productItemTabs';
+import { getCurrentPerformanceComponent } from '../shared/CurrentPerformance';
+import { getTimeDifference } from '../shared/TimeDifference';
 import { ProductItemPerformanceAreaGraph } from './productItemPerformanceAreaGraph';
 import { ProductItemBottom } from './productItemBottom';
 import { ProductItemBackground } from '../productItemBackground';
-import {
-  getCurrentPerformanceComponent,
-  getTimeDifference,
-  getTvl,
-} from '../productItemHelpers';
-
+import { getTvl } from '../productItemHelpers';
 import styles from './productItem.module.scss';
 
 const DEFAULT_ACTIVE_KEY = '1';
@@ -59,16 +56,25 @@ export const ProductItem: FC<ProductItemProps> = ({ product }) => {
         children:
           activeKey === '2' ? (
             <div className={styles['product-item-graph']}>
-              <ProductItemPerformanceAreaGraph
-                data={[
-                  product.oneWeekPerformance,
-                  product.oneMonthPerformance,
-                  product.threeMonthPerformance,
-                  product.sixMonthPerformance,
-                  product.oneYearPerformance,
-                  product.inceptionPerformance,
-                ]}
-              />
+              {product.oneWeekPerformance &&
+              product.oneMonthPerformance &&
+              product.threeMonthPerformance &&
+              product.sixMonthPerformance &&
+              product.oneYearPerformance &&
+              product.inceptionPerformance ? (
+                <ProductItemPerformanceAreaGraph
+                  data={[
+                    product.oneWeekPerformance,
+                    product.oneMonthPerformance,
+                    product.threeMonthPerformance,
+                    product.sixMonthPerformance,
+                    product.oneYearPerformance,
+                    product.inceptionPerformance,
+                  ]}
+                />
+              ) : (
+                <></>
+              )}
             </div>
           ) : (
             <></>

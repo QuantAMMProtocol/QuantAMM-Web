@@ -31,6 +31,9 @@ export const getChartTimeSteps = (breakdown: SimulationRunBreakdown) => {
 // if data range is less than THREE_MONTHS, returns everything
 // else return the first data point of the day
 export const getChartTimeStepsFromProduct = (timeSeries: TimeSeriesData[]) => {
+  if (timeSeries.length === 0) {
+    return [];
+  }
   const maxTime =
     timeSeries[timeSeries.length - 1].timestamp - timeSeries[0].timestamp;
 

@@ -12,7 +12,7 @@ import { useAppSelector } from '../../../../app/hooks';
 import { CURRENT_PERFORMANCE_PERIOD, Product } from '../../../../models';
 import { selectAgChartTheme } from '../../../themes/themeSlice';
 import { filterByTimeRange } from '../../../productDetail/productDetailContent/helpers';
-import { getCurrentPerformanceComponent } from '../productItemHelpers';
+import { getCurrentPerformanceComponent } from '../shared/CurrentPerformance';
 
 import styles from './productItemPerformanceLineGraph.module.scss';
 
@@ -23,7 +23,7 @@ interface ProductItemPerformanceGraphProps {
   wide?: boolean;
 }
 const mapPerformanceData = (product: Product) => {
-  const findFirstNonZeroPerformance = product.timeSeries.findIndex(
+  const findFirstNonZeroPerformance = product.timeSeries!.findIndex(
     (dataPoint) => dataPoint.sharePrice !== 0
   );
 
@@ -32,7 +32,7 @@ const mapPerformanceData = (product: Product) => {
   }
 
   return product.timeSeries
-    .slice(findFirstNonZeroPerformance)
+    ?.slice(findFirstNonZeroPerformance)
     .filter((dataPoint) =>
       filterByTimeRange(dataPoint.timestamp, CURRENT_PERFORMANCE_PERIOD)
     )
@@ -126,6 +126,9 @@ export const ProductItemPerformanceLineGraph: FC<
             noData: {
               text: 'No data',
             },
+          },
+          animation: {
+            enabled: false,
           },
           theme: {
             baseTheme: chartTheme,

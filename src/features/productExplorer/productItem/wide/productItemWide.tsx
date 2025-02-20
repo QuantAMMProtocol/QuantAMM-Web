@@ -1,6 +1,6 @@
-import { FC, useState } from 'react';
+import { FC, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Card, Col, List, Row, Typography } from 'antd';
+import { Button, Card, Col, List, Row, Spin, Typography } from 'antd';
 import { useAppSelector } from '../../../../app/hooks';
 import { Product } from '../../../../models';
 import { selectTheme } from '../../../themes/themeSlice';
@@ -12,11 +12,8 @@ import { getScoreColor, MAX_SCORE } from '../../../shared/graphs/helpers';
 import { ProductModal } from '../../../productDetail/modal/productModal';
 import { getBalancerPoolUrl } from '../../../../utils';
 import { productExplorerTranslation } from '../../translations';
-import {
-  getCurrentPrice,
-  getTimeDifference,
-  getTvl,
-} from '../productItemHelpers';
+import { getTimeDifference } from '../shared/TimeDifference';
+import { getCurrentPrice, getTvl } from '../productItemHelpers';
 import { ProductItemPerformanceLineGraph } from './productItemPerformanceLineGraph';
 import { ProductItemBackground } from '../productItemBackground';
 
@@ -45,6 +42,18 @@ export const ProductItemWide: FC<ProductItemProps> = ({ product }) => {
   const hideProductModal = () => {
     setProductModalUrl(undefined);
   };
+
+  const tvl = useMemo(() => {
+    return getTvl(product);
+  }, [product]);
+
+  const currentPrice = useMemo(() => {
+    return getCurrentPrice(product);
+  }, [product]);
+
+  const shouldShow = useMemo(() => {
+    return product.timeSeries && product.timeSeries.length > 0;
+  }, [product]);
 
   return (
     <div
@@ -84,7 +93,7 @@ export const ProductItemWide: FC<ProductItemProps> = ({ product }) => {
             <Col span={2} className={styles['product-item__card-column']}>
               <Text className={styles['product-item__card-under-body__text']}>
                 <span style={{ color: 'var(--secondary-text-color)' }}>
-                  {getTvl(product)}
+                  {tvl ? tvl : <Spin />}
                 </span>
               </Text>
             </Col>
@@ -92,7 +101,7 @@ export const ProductItemWide: FC<ProductItemProps> = ({ product }) => {
             <Col span={2} className={styles['product-item__card-column']}>
               <Text className={styles['product-item__card-under-body__text']}>
                 <span style={{ color: 'var(--secondary-text-color)' }}>
-                  {getCurrentPrice(product)}
+                  {currentPrice ? currentPrice : <Spin />}
                 </span>
               </Text>
             </Col>
@@ -105,47 +114,74 @@ export const ProductItemWide: FC<ProductItemProps> = ({ product }) => {
               </Text>
             </Col>
 
-            <Col span={3} className={styles['product-item__card-column']}>
-              <List
-                dataSource={Object.entries(product.overview)}
-                renderItem={(item) => (
-                  <List.Item style={{ padding: 0 }}>
-                    <Text
-                      className={styles['product-item__card-scores__text']}
-                      style={{ color: getScoreColor(Number(item[1].value)) }}
-                    >
-                      {String(item[1].metric)}
-                    </Text>
-                    <Text
-                      className={styles['product-item__card-scores__text']}
-                      style={{
-                        color: getScoreColor(Number(item[1].value)),
-                        marginLeft: 4,
-                      }}
-                    >
-                      {String(item[1].value)} / {MAX_SCORE}
-                    </Text>
-                  </List.Item>
-                )}
-              />
+            <Col
+              span={3}
+              className={
+                shouldShow ? styles['product-item__card-column'] : undefined
+              }
+            >
+              {product.overview.length > 0 ? (
+                <List
+                  dataSource={Object.entries(product.overview)}
+                  renderItem={(item) => (
+                    <List.Item style={{ padding: 0 }}>
+                      <Text
+                        className={styles['product-item__card-scores__text']}
+                        style={{ color: getScoreColor(Number(item[1].value)) }}
+                      >
+                        {String(item[1].metric)}
+                      </Text>
+                      <Text
+                        className={styles['product-item__card-scores__text']}
+                        style={{
+                          color: getScoreColor(Number(item[1].value)),
+                          marginLeft: 4,
+                        }}
+                      >
+                        {String(item[1].value)} / {MAX_SCORE}
+                      </Text>
+                    </List.Item>
+                  )}
+                />
+              ) : (
+                <Spin />
+              )}
             </Col>
 
-            <Col span={2}>
-              <div className={styles['product-item-graph']}>
-                <ProductItemOverviewGraph
-                  data={product.overview}
-                  isDarkTheme={isDarkTheme}
-                  wide={true}
-                  showScoreOverall={true}
-                />
-              </div>
+            <Col
+              span={2}
+              className={
+                shouldShow ? undefined : styles['product-item__card-column']
+              }
+            >
+              {product.overview.length > 0 ? (
+                <div className={styles['product-item-graph']}>
+                  <ProductItemOverviewGraph
+                    data={product.overview}
+                    isDarkTheme={isDarkTheme}
+                    wide={true}
+                    showScoreOverall={true}
+                  />
+                </div>
+              ) : (
+                <Spin />
+              )}
             </Col>
-            <Col span={2}>
+            <Col
+              span={2}
+              className={
+                shouldShow ? undefined : styles['product-item__card-column']
+              }
+            >
               <div className={styles['product-item-graph']}>
-                <ProductItemPerformanceLineGraph
-                  product={product}
-                  wide={true}
-                />
+                {shouldShow ? (
+                  <ProductItemPerformanceLineGraph
+                    product={product}
+                    wide={true}
+                  />
+                ) : (
+                  <Spin />
+                )}
               </div>
             </Col>
             <Col span={2}>

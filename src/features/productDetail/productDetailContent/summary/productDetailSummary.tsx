@@ -229,7 +229,7 @@ export const ProductDetailSummary: FC<ProductDetailSummaryProps> = ({
     product: productData,
     benchmark: Benchmark.HODL,
     loadToSimulator: false,
-    shouldRun: !!productData,
+    shouldRun: !!productData?.timeSeries?.length,
   });
 
   const comparingProduct = selectProductById(

@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { SerializedError } from '@reduxjs/toolkit';
 import { ApolloError } from '@apollo/client';
 import { GetPoolByIdQuery } from '../__generated__/graphql-types';
-import { PoolTimeSeriesData, Product } from '../models';
-import { getProductFromPool } from '../features/productExplorer/utils';
+import { Product, ProductTimeSeriesData } from '../models';
+import { getProductFromPool } from '../utils/mapPoolToProduct';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import {
   getPoolSnapshotsMap,
@@ -44,7 +44,7 @@ export const useGenerateProductDataFromPool = (
 
           const tokenPricesMap = getTokenPriceMap(pricesResponses);
 
-          const timeSeriesData: PoolTimeSeriesData =
+          const timeSeriesData: ProductTimeSeriesData =
             getTimeSeriesDataForProduct(
               poolData,
               poolSnapshotsMap,

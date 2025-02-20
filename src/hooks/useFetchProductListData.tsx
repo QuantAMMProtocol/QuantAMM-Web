@@ -11,21 +11,31 @@ import {
 import { useAppSelector } from '../app/hooks';
 import { selectActiveFilters } from '../features/productExplorer/productExplorerSlice';
 import { FilterMap, ProductDto } from '../models';
-import { useGenerateProductsFromPoolList } from './useGenerateProductsFromPoolList';
+import { useGenerateBaseProductsFromPoolList } from './useGenerateBaseProductsFromPoolList';
+import { useFetchSnapshotData } from './useFetchSnapshotData';
+import { useFetchTokenPrices } from './useFetchTokenPrices';
+import { useGenerateFullProductsFromPoolList } from './useGenerateFullProductsFromPoolList';
+import { ApolloError } from '@apollo/client';
+import { SerializedError } from '@reduxjs/toolkit';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 
 const IS_STUB_DATA = import.meta.env.VITE_USE_STUBS_DATA === 'true';
 
 export const useFetchProductListData = (poolsToLoad: number) => {
-  const [products, setProducts] = useState<ProductDto[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [productList, setProductList] = useState<ProductDto[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<
+    FetchBaseQueryError | SerializedError | ApolloError | null
+  >(null);
 
   const activeFilters = useAppSelector<FilterMap>(selectActiveFilters);
 
+  // if IS_STUB_DATA is true, use the stub data
   const {
     data: stubData,
     isLoading: stubDataLoading,
     error: stubDataError,
-  } = useRetrieveProductsQuery();
+  } = useRetrieveProductsQuery(undefined, { skip: !IS_STUB_DATA });
 
   const where: GqlPoolFilter = useMemo(() => {
     const filter: GqlPoolFilter = {};
@@ -50,6 +60,7 @@ export const useFetchProductListData = (poolsToLoad: number) => {
     return filter;
   }, [activeFilters.chain, activeFilters.poolType, activeFilters.minTvl]);
 
+  // if IS_STUB_DATA is false, use the stub data
   const {
     data: poolData,
     loading: isLoadingPools,
@@ -61,40 +72,76 @@ export const useFetchProductListData = (poolsToLoad: number) => {
       orderDirection: GqlPoolOrderDirection.Desc,
       where,
     },
+    skip: IS_STUB_DATA,
   });
 
-  const {
-    productsData,
-    error: productsDataError,
-    loading: productsDataLoading,
-  } = useGenerateProductsFromPoolList(
-    IS_STUB_DATA ? stubData : poolData,
-    IS_STUB_DATA ? stubDataLoading : isLoadingPools,
-    IS_STUB_DATA ? stubDataError : poolError
+  // generate the base products from the pool data
+  const { baseProductsData, baseProductsLoading, baseProductsError } =
+    useGenerateBaseProductsFromPoolList(
+      IS_STUB_DATA ? stubData : poolData,
+      IS_STUB_DATA ? stubDataLoading : isLoadingPools,
+      IS_STUB_DATA ? stubDataError : poolError
+    );
+
+  // fetch the snapshot data for the pool data
+  const { poolSnapshotsMap, poolSnapshotsMapLoading } = useFetchSnapshotData(
+    poolData!,
+    {
+      skip: IS_STUB_DATA,
+    }
   );
 
-  useEffect(() => {
-    if (!productsDataLoading && !productsDataError && productsData) {
-      setProducts(productsData);
-      setIsLoading(false);
-    }
-  }, [productsData, productsDataLoading, productsDataError]);
+  // fetch the token prices for the pool data
+  const { tokenPrices, tokenPricesLoading } = useFetchTokenPrices(poolData!, {
+    skip: IS_STUB_DATA,
+  });
+
+  // generate the full products from the pool data
+  const { fullProductsData, fullProductsLoading, fullProductsError } =
+    useGenerateFullProductsFromPoolList(
+      baseProductsData,
+      poolSnapshotsMap,
+      tokenPrices,
+      {
+        skip: IS_STUB_DATA && poolSnapshotsMapLoading && tokenPricesLoading,
+      }
+    );
 
   useEffect(() => {
-    setProducts([]);
-    setIsLoading(true);
+    if (baseProductsError) {
+      setError(baseProductsError);
+    }
+    if (!baseProductsLoading && !baseProductsError && baseProductsData) {
+      setProductList(baseProductsData);
+      setLoading(false);
+    }
+    if (!fullProductsLoading && !fullProductsError && fullProductsData) {
+      setProductList(fullProductsData);
+    }
+  }, [
+    baseProductsData,
+    baseProductsLoading,
+    baseProductsError,
+    fullProductsData,
+    fullProductsLoading,
+    fullProductsError,
+  ]);
+
+  useEffect(() => {
+    setProductList([]);
+    setLoading(true);
   }, [activeFilters]);
 
-  const loading = useMemo(() => {
+  const productListLoading = useMemo(() => {
     if (IS_STUB_DATA) {
-      return isLoading ?? stubDataLoading;
+      return loading ?? stubDataLoading;
     }
-    return isLoading ?? productsDataLoading;
-  }, [stubDataLoading, productsDataLoading, isLoading]);
+    return loading ?? baseProductsLoading;
+  }, [stubDataLoading, baseProductsLoading, loading]);
 
   return {
-    data: products,
-    loading,
-    error: IS_STUB_DATA ? stubDataError : productsDataError,
+    productList,
+    productListLoading,
+    productListError: IS_STUB_DATA ? stubDataError : error,
   };
 };

@@ -22,7 +22,7 @@ import styles from './productItemOverviewGraph.module.scss';
 const { Text } = Typography;
 
 interface ProductItemOverviewGraphProps {
-  data: { metric: string; value: number }[];
+  data: { metric: string; value?: number }[];
   isDarkTheme: boolean;
   wide?: boolean;
   showScoreOverall?: boolean;
@@ -36,7 +36,7 @@ export const ProductItemOverviewGraph: FC<ProductItemOverviewGraphProps> = ({
 }) => {
   const chartTheme = useAppSelector(selectAgChartTheme);
 
-  const totalScore = getTotalScore(data.map((item) => item.value));
+  const totalScore = getTotalScore(data.map((item) => item.value ?? 0));
 
   const radarColor = useMemo(() => {
     return getTotalScoreColor(totalScore);
@@ -123,6 +123,9 @@ export const ProductItemOverviewGraph: FC<ProductItemOverviewGraphProps> = ({
             noData: {
               text: 'No data',
             },
+          },
+          animation: {
+            enabled: !wide,
           },
           theme: {
             baseTheme: chartTheme,
