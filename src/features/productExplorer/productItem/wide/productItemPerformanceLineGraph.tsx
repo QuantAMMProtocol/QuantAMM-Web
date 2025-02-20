@@ -23,11 +23,7 @@ interface ProductItemPerformanceGraphProps {
   wide?: boolean;
 }
 const mapPerformanceData = (product: Product) => {
-  if (!product.timeSeries) {
-    return [];
-  }
-
-  const findFirstNonZeroPerformance = product.timeSeries.findIndex(
+  const findFirstNonZeroPerformance = product.timeSeries!.findIndex(
     (dataPoint) => dataPoint.sharePrice !== 0
   );
 

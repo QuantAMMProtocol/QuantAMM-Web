@@ -8,7 +8,7 @@ import { apolloClient } from './queries/apolloClient';
 import reportWebVitals from './reportWebVitals';
 import { routes } from './routes';
 
-import './index.css';
+import './index.scss';
 
 const container = document.getElementById('root')!;
 const root = createRoot(container);

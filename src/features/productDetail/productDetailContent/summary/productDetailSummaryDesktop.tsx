@@ -397,39 +397,47 @@ export const ProductDetailSummaryDesktop: FC<
 
       {/* second column */}
       <div className={styles['product-detail-summary__item']}>
-        {' '}
-        <div style={{ height: '100%', width: '100%' }}>
-          <ReturnDistributionGraph
-            marketValues={product.timeSeries?.map((x) => x.sharePrice) ?? []}
-            yAxisOverride={{ title: { enabled: false } }}
-          />
-        </div>
+        {product.timeSeries?.length ? (
+          <div style={{ height: '100%', width: '100%' }}>
+            <ReturnDistributionGraph
+              marketValues={product.timeSeries.map((x) => x.sharePrice)}
+              yAxisOverride={{ title: { enabled: false } }}
+            />
+          </div>
+        ) : (
+          <>No Data</>
+        )}
       </div>
 
       {/* third column */}
       <div className={styles['product-detail-summary__item']}>
-        {' '}
-        <div style={{ height: '100%', width: '100%' }}>
-          <ReturnDistributionGraph
-            yAxisOverride={{ title: { enabled: false } }}
-            marketValues={
-              product.timeSeries?.map((x) => x.hodlSharePrice) ?? []
-            }
-          />
-        </div>
+        {product.timeSeries?.length ? (
+          <div style={{ height: '100%', width: '100%' }}>
+            <ReturnDistributionGraph
+              yAxisOverride={{ title: { enabled: false } }}
+              marketValues={product.timeSeries.map((x) => x.hodlSharePrice)}
+            />
+          </div>
+        ) : (
+          <>No Data</>
+        )}
       </div>
 
       {/* fourth column */}
       {comparingProduct && (
         <div className={styles['product-detail-summary__item']}>
-          <div style={{ height: '100%', width: '100%' }}>
-            <ReturnDistributionGraph
-              yAxisOverride={{ title: { enabled: false } }}
-              marketValues={
-                comparingProduct?.timeSeries?.map((x) => x.sharePrice) ?? []
-              }
-            />
-          </div>
+          {comparingProduct.timeSeries?.length ? (
+            <div style={{ height: '100%', width: '100%' }}>
+              <ReturnDistributionGraph
+                yAxisOverride={{ title: { enabled: false } }}
+                marketValues={comparingProduct.timeSeries.map(
+                  (x) => x.sharePrice
+                )}
+              />
+            </div>
+          ) : (
+            <>No Data</>
+          )}
         </div>
       )}
     </>

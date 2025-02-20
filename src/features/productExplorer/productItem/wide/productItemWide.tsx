@@ -51,6 +51,10 @@ export const ProductItemWide: FC<ProductItemProps> = ({ product }) => {
     return getCurrentPrice(product);
   }, [product]);
 
+  const shouldShow = useMemo(() => {
+    return product.timeSeries && product.timeSeries.length > 0;
+  }, [product]);
+
   return (
     <div
       className={
@@ -113,9 +117,7 @@ export const ProductItemWide: FC<ProductItemProps> = ({ product }) => {
             <Col
               span={3}
               className={
-                product.timeSeries
-                  ? styles['product-item__card-column']
-                  : undefined
+                shouldShow ? styles['product-item__card-column'] : undefined
               }
             >
               {product.overview.length > 0 ? (
@@ -149,9 +151,7 @@ export const ProductItemWide: FC<ProductItemProps> = ({ product }) => {
             <Col
               span={2}
               className={
-                product.timeSeries
-                  ? undefined
-                  : styles['product-item__card-column']
+                shouldShow ? undefined : styles['product-item__card-column']
               }
             >
               {product.overview.length > 0 ? (
@@ -170,13 +170,11 @@ export const ProductItemWide: FC<ProductItemProps> = ({ product }) => {
             <Col
               span={2}
               className={
-                product.timeSeries
-                  ? undefined
-                  : styles['product-item__card-column']
+                shouldShow ? undefined : styles['product-item__card-column']
               }
             >
               <div className={styles['product-item-graph']}>
-                {product.timeSeries ? (
+                {shouldShow ? (
                   <ProductItemPerformanceLineGraph
                     product={product}
                     wide={true}
