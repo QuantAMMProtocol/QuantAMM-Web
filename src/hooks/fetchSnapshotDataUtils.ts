@@ -8,7 +8,12 @@ import {
   GqlPoolSnapshotDataRange,
   GqlTokenChartDataRange,
 } from '../__generated__/graphql-types';
-import { Product, ProductTimeSeriesData, TimeSeriesData } from '../models';
+import {
+  Product,
+  ProductMap,
+  ProductTimeSeriesData,
+  TimeSeriesData,
+} from '../models';
 import { apolloClient } from '../queries/apolloClient';
 import {
   findClosestPrice,
@@ -134,15 +139,15 @@ export const getTokenPriceMap = (
 
 // TODO: getTimeSeriesDataForProductList and getTimeSeriesDataForProduct have some shared logic, can we abstract it out?
 export const getTimeSeriesDataForProductList = (
-  products: Product[],
+  productMap: ProductMap,
   poolSnapshotsMap: Record<string, TimeSeriesData[]>,
   tokenPricesMap: Record<
     string,
     Record<string, Pick<GqlHistoricalTokenPriceEntry, 'timestamp' | 'price'>[]>
   >
 ): ProductTimeSeriesData[] => {
-  return products.map((product, index) => {
-    const snapshots = poolSnapshotsMap[`poolSnapshot${index + 1}`] || [];
+  return Object.values(productMap).map((product) => {
+    const snapshots = poolSnapshotsMap[`poolSnapshot_${product.id}`] || [];
     const hodlAmounts = snapshots[0]?.amounts;
     const initialTotalShares =
       snapshots[0]?.totalShares > 0

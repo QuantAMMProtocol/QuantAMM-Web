@@ -4,14 +4,14 @@ import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { ApolloError } from '@apollo/client';
 import { GetPoolsQuery, GqlPoolMinimal } from '../__generated__/graphql-types';
 import { mapPoolToBaseProduct } from '../utils/mapPoolToProduct';
-import { Product } from '../models';
+import { ProductMap } from '../models';
 
 export const useGenerateBaseProductsFromPoolList = (
   poolData?: GetPoolsQuery,
   isLoadingPools?: boolean,
   poolError?: FetchBaseQueryError | SerializedError | ApolloError
 ) => {
-  const [baseProductsData, setBaseProductsData] = useState<Product[]>([]);
+  const [baseProductsData, setBaseProductsData] = useState<ProductMap>({});
   const [baseProductsLoading, setBaseProductsLoading] = useState<boolean>(true);
   const [baseProductsError, setBaseProductsError] = useState<
     FetchBaseQueryError | SerializedError | ApolloError | undefined
@@ -21,7 +21,7 @@ export const useGenerateBaseProductsFromPoolList = (
     if (!isLoadingPools && !poolError && poolData) {
       const fetchData = () => {
         try {
-          const productData: Product[] = mapPoolToBaseProduct(
+          const productData: ProductMap = mapPoolToBaseProduct(
             poolData.poolGetPools as GqlPoolMinimal[]
           );
 

@@ -15,6 +15,7 @@ import {
   PerformancePeriod,
   CURRENT_PERFORMANCE_PERIOD,
   ExtendedTimeRange,
+  ProductMap,
 } from '../models';
 import { MAX_SCORE } from '../features/shared/graphs/helpers';
 import { TimeRange } from '../models';
@@ -27,49 +28,58 @@ const formatTimestamp = (timestamp: number): string => {
   return format(fromUnixTime(timestamp), 'yyyy/MM/dd HH:mm:ss');
 };
 
-export const mapPoolToBaseProduct = (pools: GqlPoolMinimal[]): Product[] => {
-  return pools.map((pool) => ({
-    id: pool.id,
-    address: String(pool.address),
-    name: pool.name || '',
-    symbol: pool.symbol,
-    decimals: pool.decimals,
-    basketTheme: 'Main Cap', // TODO: get from pool
-    tokenType: pool.type,
-    strategy: getStrategy(pool),
-    chain: pool.chain,
-    frequency: 'daily', // TODO: get from pool
-    memory: 30,
-    market: 'adaptive',
-    createTime: formatTimestamp(pool.createTime),
-    swapManager: pool.swapFeeManager,
-    pauseManager: pool.pauseManager,
-    disableUnbalancedLiquidity:
-      pool.liquidityManagement?.disableUnbalancedLiquidity?.valueOf(),
-    enableAddLiquidityCustom:
-      pool.liquidityManagement?.enableAddLiquidityCustom?.valueOf(),
-    enableDonation: pool.liquidityManagement?.enableDonation?.valueOf(),
-    enableRemoveLiquidityCustom:
-      pool.liquidityManagement?.enableRemoveLiquidityCustom?.valueOf(),
-    overview: [],
-    poolConstituents: (pool.poolTokens || []).map((token) => ({
-      coin: token.symbol,
-      weight:
-        parseFloat(token.weight ?? (100 / pool.poolTokens.length).toString()) *
-        100,
-      address: token.address,
-    })),
-    dynamicData: pool.dynamicData,
-    benchmarkNames: ['HODL'],
-    benchmarkTimeSeries: [],
-  }));
+export const mapPoolToBaseProduct = (pools: GqlPoolMinimal[]): ProductMap => {
+  const productMap: ProductMap = {};
+  pools.forEach((pool) => {
+    productMap[pool.id] = {
+      id: pool.id,
+      address: String(pool.address),
+      name: pool.name || '',
+      symbol: pool.symbol,
+      decimals: pool.decimals,
+      basketTheme: 'Main Cap', // TODO: get from pool
+      tokenType: pool.type,
+      strategy: getStrategy(pool),
+      chain: pool.chain,
+      frequency: 'daily', // TODO: get from pool
+      memory: 30,
+      market: 'adaptive',
+      createTime: formatTimestamp(pool.createTime),
+      swapManager: pool.swapFeeManager,
+      pauseManager: pool.pauseManager,
+      disableUnbalancedLiquidity:
+        pool.liquidityManagement?.disableUnbalancedLiquidity?.valueOf(),
+      enableAddLiquidityCustom:
+        pool.liquidityManagement?.enableAddLiquidityCustom?.valueOf(),
+      enableDonation: pool.liquidityManagement?.enableDonation?.valueOf(),
+      enableRemoveLiquidityCustom:
+        pool.liquidityManagement?.enableRemoveLiquidityCustom?.valueOf(),
+      overview: [],
+      poolConstituents: (pool.poolTokens || []).map((token) => ({
+        coin: token.symbol,
+        weight:
+          parseFloat(
+            token.weight ?? (100 / pool.poolTokens.length).toString()
+          ) * 100,
+        address: token.address,
+      })),
+      dynamicData: pool.dynamicData,
+      benchmarkNames: ['HODL'],
+      benchmarkTimeSeries: [],
+    };
+  });
+
+  return productMap;
 };
 
 export const getFullProductsFromSnapshots = (
-  products: Product[],
+  productMap: ProductMap,
   snapshots: ProductTimeSeriesData[]
-): Product[] => {
-  return products.map((product) => {
+): ProductMap => {
+  const products = Object.values(productMap);
+  const fullProductMap: ProductMap = {};
+
+  products.forEach((product) => {
     const snapshot =
       snapshots.find((s) => s.productId === product.id) ??
       ({} as ProductTimeSeriesData);
@@ -83,7 +93,7 @@ export const getFullProductsFromSnapshots = (
       }
     );
 
-    return {
+    fullProductMap[product.id] = {
       ...product,
       overview: [
         {
@@ -157,6 +167,8 @@ export const getFullProductsFromSnapshots = (
       oneWeekPerformance: getCurrentSharePrice(dailyPerformance, '7d'),
     };
   });
+
+  return fullProductMap;
 };
 
 export const getProductFromPool = (

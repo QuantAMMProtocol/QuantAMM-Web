@@ -41,7 +41,7 @@ import { PoolRuleConfiguration } from '../simulationRunConfiguration/poolRuleCon
 import { SimulationResultsSummaryStep } from '../simulationResults/simulationResultsSummaryStep';
 import { SimulationResultSaveToCompareTab } from '../simulationResults/simulationResultSaveToCompareTab';
 import { SimulationRunnerHistoricInProgress } from './simulationRunnerHistoricInProgress';
-import { useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { useFetchProductListData } from '../../hooks/useFetchProductListData';
 import {
   Coin,
@@ -73,8 +73,10 @@ export function SimulationRunner({ poolsToLoad }: SimulationRunnerProps) {
 
   const [forceViewResults, setForceViewResults] = useState(false); //DEV TODO
 
-  const { data: balancerPools, loading: poolsLoading } =
+  const { productMap, productMapLoading } =
     useFetchProductListData(poolsToLoad);
+
+  const balancerPools = useMemo(() => Object.values(productMap), [productMap]);
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -112,7 +114,7 @@ export function SimulationRunner({ poolsToLoad }: SimulationRunnerProps) {
   };
 
   const handleBalancerPoolImport = (poolId: string) => {
-    const selectedPoolData = balancerPools.find((pool) => pool.id === poolId);
+    const selectedPoolData = productMap[poolId];
     if (selectedPoolData) {
       // Update state with Balancer pool data
       dispatch(setStartDate(new Date().toISOString())); // Set to current date or adjust as needed
@@ -139,21 +141,26 @@ export function SimulationRunner({ poolsToLoad }: SimulationRunnerProps) {
           coinCode: constituent.coin,
           coinName: constituent.coin,
           amount:
-            selectedPoolData.timeSeries[selectedPoolData.timeSeries.length - 1]
-              .amounts[selectedPoolData.poolConstituents.indexOf(constituent)],
+            selectedPoolData.timeSeries?.[
+              selectedPoolData.timeSeries.length - 1
+            ]?.amounts?.[
+              selectedPoolData.poolConstituents.indexOf(constituent)
+            ],
           marketValue:
-            constituent.weight * selectedPoolData.dynamicData.totalLiquidity,
+            constituent.weight * selectedPoolData.dynamicData?.totalLiquidity,
           currentPrice:
-            selectedPoolData.timeSeries[selectedPoolData.timeSeries.length - 1]
-              .tokenPrices[
+            selectedPoolData.timeSeries?.[
+              selectedPoolData.timeSeries.length - 1
+            ]?.tokenPrices?.[
               selectedPoolData.poolConstituents.indexOf(constituent)
             ], //unknown for now
           currentPriceUnix:
-            selectedPoolData.timeSeries[selectedPoolData.timeSeries.length - 1]
-              .timestamp,
+            selectedPoolData.timeSeries?.[
+              selectedPoolData.timeSeries.length - 1
+            ]?.timestamp,
           address: constituent.address,
           usdValue:
-            constituent.weight * selectedPoolData.dynamicData.totalLiquidity, //unknown for now
+            constituent.weight * selectedPoolData.dynamicData?.totalLiquidity, //unknown for now
           weight: constituent.weight,
           factorValue: null,
         }));
@@ -488,7 +495,7 @@ export function SimulationRunner({ poolsToLoad }: SimulationRunnerProps) {
               <Select
                 style={{ width: '100%' }}
                 placeholder="Select a Balancer Pool"
-                loading={poolsLoading}
+                loading={productMapLoading}
                 onChange={(value) => setSelectedPool(value)}
               >
                 {balancerPools.map((pool) => (

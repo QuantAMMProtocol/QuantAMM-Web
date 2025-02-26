@@ -136,6 +136,8 @@ export type Product = ProductDto & {
   simulationRunBreakdown?: SimulationRunBreakdown;
 };
 
+export type ProductMap = Record<string, Product>;
+
 export type FilterDto = Record<string, string[]>[];
 
 export type FilterMap = Record<string, string[]>;
@@ -169,8 +171,7 @@ export interface ProductExplorer {
   loadingSimulationRunBreakdown: Record<string, boolean>;
   asOfUnixTime: number;
   blockIndex: number;
-  originalProducts: Product[];
-  filteredProducts: Product[];
+  productMap: ProductMap;
   originalFilters: FilterList;
   activeFilters: FilterMap;
   sortingDirection: SortingDirection;
