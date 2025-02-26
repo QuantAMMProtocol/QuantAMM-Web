@@ -10,7 +10,7 @@ import {
 } from '../__generated__/graphql-types';
 import { useAppSelector } from '../app/hooks';
 import { selectActiveFilters } from '../features/productExplorer/productExplorerSlice';
-import { FilterMap, ProductDto } from '../models';
+import { FilterMap, ProductMap } from '../models';
 import { useGenerateBaseProductsFromPoolList } from './useGenerateBaseProductsFromPoolList';
 import { useFetchSnapshotData } from './useFetchSnapshotData';
 import { useFetchTokenPrices } from './useFetchTokenPrices';
@@ -22,7 +22,7 @@ import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 const IS_STUB_DATA = import.meta.env.VITE_USE_STUBS_DATA === 'true';
 
 export const useFetchProductListData = (poolsToLoad: number) => {
-  const [productList, setProductList] = useState<ProductDto[]>([]);
+  const [productMap, setProductMap] = useState<ProductMap>({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<
     FetchBaseQueryError | SerializedError | ApolloError | null
@@ -111,28 +111,28 @@ export const useFetchProductListData = (poolsToLoad: number) => {
     if (baseProductsError) {
       setError(baseProductsError);
     }
-    if (!baseProductsLoading && !baseProductsError && baseProductsData) {
-      setProductList(baseProductsData);
-      setLoading(false);
-    }
-    if (!fullProductsLoading && !fullProductsError && fullProductsData) {
-      setProductList(fullProductsData);
-    }
-  }, [
-    baseProductsData,
-    baseProductsLoading,
-    baseProductsError,
-    fullProductsData,
-    fullProductsLoading,
-    fullProductsError,
-  ]);
+  }, [baseProductsError]);
 
   useEffect(() => {
-    setProductList([]);
+    if (!baseProductsLoading && !baseProductsError && baseProductsData) {
+      setProductMap(baseProductsData);
+      setLoading(false);
+    }
+  }, [baseProductsData, baseProductsLoading, baseProductsError]);
+
+  useEffect(() => {
+    if (!fullProductsLoading && !fullProductsError && fullProductsData) {
+      setProductMap(fullProductsData);
+      setLoading(false);
+    }
+  }, [fullProductsData, fullProductsLoading, fullProductsError]);
+
+  useEffect(() => {
+    setProductMap({});
     setLoading(true);
   }, [activeFilters]);
 
-  const productListLoading = useMemo(() => {
+  const productMapLoading = useMemo(() => {
     if (IS_STUB_DATA) {
       return loading ?? stubDataLoading;
     }
@@ -140,8 +140,8 @@ export const useFetchProductListData = (poolsToLoad: number) => {
   }, [stubDataLoading, baseProductsLoading, loading]);
 
   return {
-    productList,
-    productListLoading,
-    productListError: IS_STUB_DATA ? stubDataError : error,
+    productMap,
+    productMapLoading,
+    productMapError: IS_STUB_DATA ? stubDataError : error,
   };
 };

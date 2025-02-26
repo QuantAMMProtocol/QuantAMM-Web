@@ -117,7 +117,9 @@ export const ProductItemWide: FC<ProductItemProps> = ({ product }) => {
             <Col
               span={3}
               className={
-                shouldShow ? styles['product-item__card-column'] : undefined
+                product.overview.length > 0
+                  ? styles['product-item__card-column']
+                  : undefined
               }
             >
               {product.overview.length > 0 ? (
@@ -127,7 +129,9 @@ export const ProductItemWide: FC<ProductItemProps> = ({ product }) => {
                     <List.Item style={{ padding: 0 }}>
                       <Text
                         className={styles['product-item__card-scores__text']}
-                        style={{ color: getScoreColor(Number(item[1].value)) }}
+                        style={{
+                          color: getScoreColor(Number(item[1].value)),
+                        }}
                       >
                         {String(item[1].metric)}
                       </Text>
@@ -144,16 +148,15 @@ export const ProductItemWide: FC<ProductItemProps> = ({ product }) => {
                   )}
                 />
               ) : (
-                <Spin />
+                <div className={styles['product-item-graph']}>
+                  <div className={styles['product-item__card__loading']}>
+                    <Spin />
+                  </div>
+                </div>
               )}
             </Col>
 
-            <Col
-              span={2}
-              className={
-                shouldShow ? undefined : styles['product-item__card-column']
-              }
-            >
+            <Col span={2}>
               {product.overview.length > 0 ? (
                 <div className={styles['product-item-graph']}>
                   <ProductItemOverviewGraph
@@ -164,25 +167,24 @@ export const ProductItemWide: FC<ProductItemProps> = ({ product }) => {
                   />
                 </div>
               ) : (
-                <Spin />
+                <div className={styles['product-item__card__loading']}>
+                  <Spin />
+                </div>
               )}
             </Col>
-            <Col
-              span={2}
-              className={
-                shouldShow ? undefined : styles['product-item__card-column']
-              }
-            >
-              <div className={styles['product-item-graph']}>
-                {shouldShow ? (
+            <Col span={2}>
+              {shouldShow ? (
+                <div className={styles['product-item-graph']}>
                   <ProductItemPerformanceLineGraph
                     product={product}
                     wide={true}
                   />
-                ) : (
+                </div>
+              ) : (
+                <div className={styles['product-item__card__loading']}>
                   <Spin />
-                )}
-              </div>
+                </div>
+              )}
             </Col>
             <Col span={2}>
               <div className={styles['product-item-graph']}>

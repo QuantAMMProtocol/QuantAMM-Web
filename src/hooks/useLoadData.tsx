@@ -9,21 +9,19 @@ import { useFetchProductListData } from './useFetchProductListData';
 export const useLoadData = (poolsToLoad: number) => {
   const dispatch = useAppDispatch();
 
-  const { productList, productListLoading, productListError } =
+  const { productMap, productMapLoading, productMapError } =
     useFetchProductListData(poolsToLoad);
 
   useEffect(() => {
-    if (productListLoading) {
+    if (productMapLoading) {
       dispatch(setLoadingProducts());
     }
-    if (!productListLoading && productList && !productListError) {
-      if (productList.length > 0) {
-        dispatch(loadProducts(productList));
-      }
+    if (!productMapLoading && productMap && !productMapError) {
+      dispatch(loadProducts(productMap));
     }
-  }, [productList, productListLoading, productListError, dispatch]);
+  }, [productMap, productMapLoading, productMapError, dispatch]);
 
   return {
-    productListError,
+    productMapError,
   };
 };

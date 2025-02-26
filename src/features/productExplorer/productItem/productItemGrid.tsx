@@ -90,7 +90,7 @@ export const ProductItemGrid: FC<ProductItemGridProps> = ({ wide }) => {
               </Col>
             ))}
           {products &&
-            sort(products).map((product) => (
+            sort(Object.values(products)).map((product) => (
               <Col xs={wide ? 24 : undefined} key={product.id}>
                 {wide ? (
                   <ProductItemWide product={product} />

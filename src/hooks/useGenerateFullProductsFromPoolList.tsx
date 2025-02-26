@@ -3,17 +3,12 @@ import { SerializedError } from '@reduxjs/toolkit';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { ApolloError } from '@apollo/client';
 import { GqlHistoricalTokenPriceEntry } from '../__generated__/graphql-types';
-import {
-  ProductTimeSeriesData,
-  Product,
-  ProductDto,
-  TimeSeriesData,
-} from '../models';
+import { ProductTimeSeriesData, TimeSeriesData, ProductMap } from '../models';
 import { getFullProductsFromSnapshots } from '../utils/mapPoolToProduct';
 import { getTimeSeriesDataForProductList } from './fetchSnapshotDataUtils';
 
 export const useGenerateFullProductsFromPoolList = (
-  baseProductsData?: Product[],
+  baseProductsData: ProductMap,
   poolSnapshots?: Record<string, TimeSeriesData[]>,
   tokenPrices?: Record<
     string,
@@ -22,7 +17,7 @@ export const useGenerateFullProductsFromPoolList = (
   options?: { skip: boolean }
 ) => {
   const { skip } = options ?? { skip: false };
-  const [fullProductsData, setFullProductsData] = useState<ProductDto[]>([]);
+  const [fullProductsData, setFullProductsData] = useState<ProductMap>({});
   const [fullProductsLoading, setFullProductsLoading] = useState<boolean>(true);
   const [fullProductsError, setFullProductsError] = useState<
     FetchBaseQueryError | SerializedError | ApolloError | undefined
@@ -39,7 +34,7 @@ export const useGenerateFullProductsFromPoolList = (
             tokenPrices
           );
 
-        const productsData: Product[] = getFullProductsFromSnapshots(
+        const productsData: ProductMap = getFullProductsFromSnapshots(
           baseProductsData,
           timeSeriesData
         );

@@ -24,8 +24,8 @@ export const generatePoolSnapshotsQuery = (
   `;
 
   const queries = pools.map(
-    (pool, index) => `
-    poolSnapshot${index + 1}: poolGetSnapshots(chain: ${
+    (pool) => `
+    poolSnapshot_${pool.id}: poolGetSnapshots(chain: ${
       pool.chain
     }, range: ${range}, id: "${pool.id}") {
       ${baseQuery}

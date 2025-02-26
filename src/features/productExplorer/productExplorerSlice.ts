@@ -7,6 +7,7 @@ import {
   ProductExplorerSortMetric,
   SortingDirection,
   TimeRange,
+  ProductMap,
 } from '../../models';
 import { SimulationRunBreakdown } from '../simulationResults/simulationResultSummaryModels';
 import { productExplorerInitialState } from './productExplorerInitialState';
@@ -23,9 +24,8 @@ export const productExplorerSlice = createSlice({
     setLoadingProducts: (state) => {
       state.loadingProducts = true;
     },
-    loadProducts: (state, action: PayloadAction<Product[]>) => {
-      state.originalProducts = action.payload;
-      state.filteredProducts = action.payload;
+    loadProducts: (state, action: PayloadAction<ProductMap>) => {
+      state.productMap = action.payload;
       state.loadingProducts = false;
     },
     loadingFilters: (state) => {
@@ -76,14 +76,6 @@ export const productExplorerSlice = createSlice({
       } else {
         state.activeFilters = {};
       }
-
-      state.filteredProducts = state.originalProducts.filter((product) => {
-        return Object.keys(state.activeFilters).every(
-          (category) =>
-            !state.activeFilters[category] ||
-            state.activeFilters[category].includes((product as any)[category])
-        );
-      });
     },
     setSortingMetric: (
       state,
@@ -98,9 +90,7 @@ export const productExplorerSlice = createSlice({
       state,
       action: PayloadAction<ProductSimulationRunBreakdown>
     ) => {
-      const targetProduct = state.filteredProducts.find(
-        (product) => product.id === action.payload.productId
-      );
+      const targetProduct = state.productMap[action.payload.productId];
       if (targetProduct) {
         targetProduct.simulationRunBreakdown =
           action.payload.simulationRunBreakdown;
@@ -121,21 +111,14 @@ export const selectSimulationRunnerStatus = (state: RootState) =>
   state.simRunner.simulationRunStatus;
 
 export const selectProducts = (state: RootState) => {
-  return state.productExplorer.filteredProducts;
+  return state.productExplorer.productMap;
 };
 
 export const selectProductById = (
-  products: Product[],
+  products: ProductMap,
   id: string
 ): Product | undefined => {
-  return products.find((product) => product.id === id);
-};
-
-export const excludeProductById = (
-  products: Product[],
-  id: string
-): Product[] | [] => {
-  return products.filter((product) => product.id !== id) ?? [];
+  return products[id];
 };
 
 export const selectLoadingProducts = (state: RootState) =>
@@ -193,9 +176,7 @@ export const selectReturnAnalysisByProductId = (
   state: RootState,
   id: string
 ) => {
-  const targetProduct = state.productExplorer.filteredProducts.find(
-    (product) => product.id === id
-  );
+  const targetProduct = state.productExplorer.productMap[id];
 
   if (targetProduct) {
     return (
@@ -213,9 +194,7 @@ export const selectBenchmarkAnalysisByProductId = (
   id: string,
   benchmarkName: string | null
 ) => {
-  const targetProduct = state.productExplorer.filteredProducts.find(
-    (product) => product.id === id
-  );
+  const targetProduct = state.productExplorer.productMap[id];
 
   if (targetProduct && benchmarkName) {
     return targetProduct.simulationRunBreakdown?.simulationRunResultAnalysis?.benchmark_analysis.filter(
@@ -241,9 +220,7 @@ export const selectTimeseriesAnalysisByProductId = (
   state: RootState,
   id: string
 ) => {
-  const targetProduct = state.productExplorer.filteredProducts.find(
-    (product) => product.id === id
-  );
+  const targetProduct = state.productExplorer.productMap[id];
 
   if (targetProduct) {
     const result =

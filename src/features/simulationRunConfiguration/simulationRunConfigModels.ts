@@ -32,11 +32,11 @@ export interface CoinDto {
 
 export interface LiquidityPoolCoin {
   coin: Coin;
-  amount: number;
-  marketValue: number;
-  currentPrice: number;
-  currentPriceUnix: number;
-  weight: number;
+  amount: number | undefined;
+  marketValue: number | undefined;
+  currentPrice: number | undefined;
+  currentPriceUnix: number | undefined;
+  weight: number | undefined;
   factorValue: string | null;
 }
 
