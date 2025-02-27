@@ -181,6 +181,9 @@ export interface ProductExplorer {
   returnMetricThresholds: FinancialMetricThresholds[];
   benchmarkMetricThresholds: FinancialMetricThresholds[];
   poolDetailSelectedGraphRange: TimeRange;
+  pageSize: number;
+  page: number;
+  totalPools?: number;
 }
 
 export interface ProductMetric {

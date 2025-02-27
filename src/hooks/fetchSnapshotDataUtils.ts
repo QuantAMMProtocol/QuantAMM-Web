@@ -213,7 +213,7 @@ export const getTimeSeriesDataForProduct = (
     Record<string, Pick<GqlHistoricalTokenPriceEntry, 'timestamp' | 'price'>[]>
   >
 ): ProductTimeSeriesData => {
-  const snapshots = poolSnapshotsMap.poolSnapshot1;
+  const snapshots = poolSnapshotsMap[`poolSnapshot_${pool.poolGetPool?.id}`];
   const hodlAmounts = snapshots[0]?.amounts;
   const initialTotalShares =
     snapshots[0]?.totalShares > 0

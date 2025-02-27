@@ -101,7 +101,7 @@ export const ProductItemOverviewGraph: FC<ProductItemOverviewGraphProps> = ({
     <div className={styles['product-item__graph-overlay']}>
       {showScoreOverall && (
         <div className={styles['product-item__graph-overlay__content']}>
-          <Text strong style={{ fontSize: wide ? 10 : '' }}>
+          <Text strong style={{ fontSize: wide ? 9 : '' }}>
             Overall Score{' '}
             <span style={{ color: radarColor }}>
               {totalScore}/{MAX_TOTAL_SCORE}

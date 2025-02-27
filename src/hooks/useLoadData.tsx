@@ -1,16 +1,22 @@
 import { useEffect } from 'react';
-import { useAppDispatch } from '../app/hooks';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
 import {
   setLoadingProducts,
   loadProducts,
+  selectPageSize,
+  selectPage,
+  setTotalPools,
 } from '../features/productExplorer/productExplorerSlice';
 import { useFetchProductListData } from './useFetchProductListData';
 
-export const useLoadData = (poolsToLoad: number) => {
+export const useLoadData = () => {
   const dispatch = useAppDispatch();
 
-  const { productMap, productMapLoading, productMapError } =
-    useFetchProductListData(poolsToLoad);
+  const pageSize = useAppSelector(selectPageSize);
+  const page = useAppSelector(selectPage);
+
+  const { productMap, productMapLoading, productMapError, count } =
+    useFetchProductListData(pageSize, page);
 
   useEffect(() => {
     if (productMapLoading) {
@@ -20,6 +26,12 @@ export const useLoadData = (poolsToLoad: number) => {
       dispatch(loadProducts(productMap));
     }
   }, [productMap, productMapLoading, productMapError, dispatch]);
+
+  useEffect(() => {
+    if (count) {
+      dispatch(setTotalPools(count));
+    }
+  }, [count, dispatch]);
 
   return {
     productMapError,

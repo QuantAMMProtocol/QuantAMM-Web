@@ -4,7 +4,6 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useRetrieveFiltersQuery } from '../../services/productRetrievalService';
 import { useLoadData } from '../../hooks/useLoadData';
 import { selectTheme } from '../themes/themeSlice';
-import { INITIAL_LOAD_POOLS_COUNT } from '../../models';
 import { ProductExplorerFilters } from './productExplorerFilters';
 import { loadingFilters, loadFilters } from './productExplorerSlice';
 import { ProductExplorerError } from './productExplorerError';
@@ -21,7 +20,7 @@ export const ProductExplorer = () => {
     error: filterError,
   } = useRetrieveFiltersQuery();
 
-  const { productMapError } = useLoadData(INITIAL_LOAD_POOLS_COUNT);
+  const { productMapError } = useLoadData();
 
   useEffect(() => {
     if (isLoadingFilters) {
