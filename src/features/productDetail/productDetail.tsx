@@ -1,25 +1,26 @@
+import { useEffect } from 'react';
 import { Layout, Spin } from 'antd';
 import { useParams } from 'react-router-dom';
 import { GqlChain } from '../../__generated__/graphql-types';
-import { useAppSelector } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useFinancialAnalysis } from '../../hooks/useFinancialAnalysis';
 import { useFetchProductData } from '../../hooks/useFetchProductData';
 import { ProductDetailContent } from './productDetailContent';
 import { ProductDetailSidebar } from './productDetailSidebar';
 import { Benchmark } from '../../models';
 import { selectTheme } from '../themes/themeSlice';
+import { loadProducts } from '../productExplorer/productExplorerSlice';
 
 export const ProductDetail = () => {
   const { chain, id } = useParams();
 
+  const dispatch = useAppDispatch();
   const isDark = useAppSelector(selectTheme);
 
-  const { data: product, loading } = useFetchProductData(
+  const { product, productLoading, productError } = useFetchProductData(
     id!,
     chain as GqlChain
   );
-
-  console.log('product ==>', product, chain, GqlChain.Mainnet, id);
 
   useFinancialAnalysis({
     product: product!,
@@ -30,13 +31,19 @@ export const ProductDetail = () => {
       : false,
   });
 
+  useEffect(() => {
+    if (product && !productLoading) {
+      dispatch(loadProducts({ [product.id]: product }));
+    }
+  }, [product, productLoading, dispatch]);
+
   return (
     <Layout style={{ minHeight: '100vh', padding: 20 }}>
-      {loading && <Spin />}
-      {product && (
+      {productLoading && <Spin />}
+      {!productLoading && !productError && !!id && (
         <Layout>
-          <ProductDetailSidebar product={product} isDark={isDark} />
-          <ProductDetailContent product={product} />
+          <ProductDetailSidebar id={id} isDark={isDark} />
+          <ProductDetailContent id={id} />
         </Layout>
       )}
     </Layout>

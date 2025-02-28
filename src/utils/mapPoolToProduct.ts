@@ -251,7 +251,7 @@ export const getProductFromPool = (
         100,
       address: token.address,
     })),
-    dynamicData: {} as GqlPoolDynamicData, // TODO: pool.dynamicData ?
+    dynamicData: pool.dynamicData as GqlPoolDynamicData,
     inceptionPerformance: getCurrentSharePrice(dailyPerformance, 'max'),
     oneYearPerformance: getCurrentSharePrice(dailyPerformance, '1y'),
     sixMonthPerformance: getCurrentSharePrice(dailyPerformance, '6m'),

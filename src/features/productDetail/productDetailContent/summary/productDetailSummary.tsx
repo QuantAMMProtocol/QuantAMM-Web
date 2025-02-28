@@ -220,7 +220,7 @@ export const ProductDetailSummary: FC<ProductDetailSummaryProps> = ({
     }
   };
 
-  const { data: productData } = useFetchProductData(
+  const { product: productData } = useFetchProductData(
     comparingProductId?.id ?? '',
     comparingProductId?.chain ?? GqlChain.Mainnet
   );

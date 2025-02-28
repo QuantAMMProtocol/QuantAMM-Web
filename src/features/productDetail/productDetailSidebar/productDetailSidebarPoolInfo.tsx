@@ -41,12 +41,12 @@ export const ProductDetailSidebarPoolInfo: FC<
       <ProductDetailSidebarElement side="left" text="Fee 24h" />
       <ProductDetailSidebarElement
         side="right"
-        text={formatter.format(Number(product.dynamicData.fees24h))}
+        text={formatter.format(Number(product.dynamicData?.fees24h))}
       />
       <ProductDetailSidebarElement side="left" text="Swap fee" />
       <ProductDetailSidebarElement
         side="right"
-        text={formatter.format(Number(product.dynamicData.swapFee))}
+        text={formatter.format(Number(product.dynamicData?.swapFee))}
       />
       <ProductDetailSidebarElement side="left" text="Swap Fee Manager" />
       <ProductDetailSidebarElement
@@ -83,8 +83,8 @@ export const ProductDetailSidebarPoolInfo: FC<
       <ProductDetailSidebarElement side="left" text="Pool Address" />
       <ProductDetailSidebarElement
         side="right"
-        text={shortenAddress(product.address)}
-        href={'https://etherscan.io/address/' + product.dynamicData.poolId}
+        text={shortenAddress(product.id)}
+        href={'https://etherscan.io/address/' + product.address}
       />
       <ProductDetailSidebarElement side="left" text="Creation Date" />
       <ProductDetailSidebarElement side="right" text={product.createTime} />

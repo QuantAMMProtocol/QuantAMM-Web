@@ -15,23 +15,24 @@ export const useFetchProductData = (id: string, chain: GqlChain) => {
       id,
       chain,
     },
+    skip: !id || !chain,
   });
 
-  const {
-    productData,
-    error: balancerDataError,
-    loading: balancerDataLoading,
-  } = useGenerateProductDataFromPool(poolData, isLoadingPools, poolError);
+  const { productData, error, loading } = useGenerateProductDataFromPool(
+    poolData,
+    isLoadingPools,
+    poolError
+  );
 
   useEffect(() => {
-    if (!balancerDataLoading && !balancerDataError && productData) {
+    if (!loading && !error && productData) {
       setProduct(productData);
     }
-  }, [productData, balancerDataLoading, balancerDataError]);
+  }, [productData, loading, error]);
 
   return {
-    data: product,
-    loading: balancerDataLoading,
-    error: balancerDataError,
+    product,
+    productLoading: loading,
+    productError: error,
   };
 };
