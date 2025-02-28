@@ -196,7 +196,7 @@ export enum GqlHookType {
   ExitFee = 'EXIT_FEE',
   FeeTaking = 'FEE_TAKING',
   Lottery = 'LOTTERY',
-  MevCapture = 'MEV_CAPTURE',
+  MevTax = 'MEV_TAX',
   NftliquidityPosition = 'NFTLIQUIDITY_POSITION',
   StableSurge = 'STABLE_SURGE',
   Unknown = 'UNKNOWN',
@@ -412,6 +412,8 @@ export type GqlPoolAprItem = {
 export enum GqlPoolAprItemType {
   /** APR that pools earns when BPT is staked on AURA. */
   Aura = 'AURA',
+  /** Dynamic swap fee APR based on data from the last 24h */
+  DynamicSwapFee_24H = 'DYNAMIC_SWAP_FEE_24H',
   /** Represents the yield from an IB (Interest-Bearing) asset APR in a pool. */
   IbYield = 'IB_YIELD',
   /** APR in a pool that can be earned through locking, i.e. veBAL */
@@ -864,7 +866,6 @@ export type GqlPoolFilter = {
   chainIn?: InputMaybe<Array<GqlChain>>;
   chainNotIn?: InputMaybe<Array<GqlChain>>;
   createTime?: InputMaybe<GqlPoolTimePeriod>;
-  hasHook?: InputMaybe<Scalars['Boolean']['input']>;
   idIn?: InputMaybe<Array<Scalars['String']['input']>>;
   idNotIn?: InputMaybe<Array<Scalars['String']['input']>>;
   minTvl?: InputMaybe<Scalars['Float']['input']>;
@@ -1627,6 +1628,8 @@ export type GqlPoolTokenDetail = {
   balance: Scalars['BigDecimal']['output'];
   /** USD Balance of the pool token. */
   balanceUSD: Scalars['BigDecimal']['output'];
+  /** If it is an ERC4626 token, this defines whether we can use wrap/unwrap through the buffer in swap paths for this token. */
+  canUseBufferForSwaps?: Maybe<Scalars['Boolean']['output']>;
   chain?: Maybe<GqlChain>;
   chainId?: Maybe<Scalars['Int']['output']>;
   /** Coingecko ID */
@@ -1643,7 +1646,10 @@ export type GqlPoolTokenDetail = {
   index: Scalars['Int']['output'];
   /** Whether the token is in the allow list. */
   isAllowed: Scalars['Boolean']['output'];
-  /** If it is an ERC4626 token, this defines whether we allow it to use the buffer for pool operations. */
+  /**
+   * If it is an ERC4626 token, this defines whether we allow it to use the buffer for pool operations.
+   * @deprecated Use useUnderlyingForAddRemove and useWrappedForAddRemove instead
+   */
   isBufferAllowed: Scalars['Boolean']['output'];
   /** Whether the token is considered an ERC4626 token. */
   isErc4626: Scalars['Boolean']['output'];
@@ -1661,16 +1667,26 @@ export type GqlPoolTokenDetail = {
   priceRateProvider?: Maybe<Scalars['String']['output']>;
   /** Additional data for the price rate provider, such as reviews or warnings. */
   priceRateProviderData?: Maybe<GqlPriceRateProviderData>;
-  /** The priority of the token, can be used for sorting. */
+  /**
+   * The priority of the token, can be used for sorting.
+   * @deprecated Unused
+   */
   priority?: Maybe<Scalars['Int']['output']>;
   /** Conversion factor used to adjust for token decimals for uniform precision in calculations. V3 only. */
   scalingFactor?: Maybe<Scalars['BigDecimal']['output']>;
   /** Symbol of the pool token. */
   symbol: Scalars['String']['output'];
-  /** Is the token tradable */
+  /**
+   * Is the token tradable
+   * @deprecated Unused
+   */
   tradable?: Maybe<Scalars['Boolean']['output']>;
   /** If it is an ERC4626, this will be the underlying token if present in the API. */
   underlyingToken?: Maybe<GqlToken>;
+  /** If it is an ERC4626 token, this defines whether we allow underlying tokens to be used for add/remove operations. */
+  useUnderlyingForAddRemove?: Maybe<Scalars['Boolean']['output']>;
+  /** If it is an ERC4626 token, this defines whether we allow the wrapped tokens to be used for add/remove operations. */
+  useWrappedForAddRemove?: Maybe<Scalars['Boolean']['output']>;
   /** The weight of the token in the pool if it is a weighted pool, null otherwise */
   weight?: Maybe<Scalars['BigDecimal']['output']>;
 };
@@ -2150,6 +2166,10 @@ export type GqlStakedSonicData = {
   delegatedValidators: Array<GqlStakedSonicDelegatedValidator>;
   /** Current exchange rate for stS -> S */
   exchangeRate: Scalars['String']['output'];
+  /** The total protocol fee collected in the last 24 hours. */
+  protocolFee24h: Scalars['String']['output'];
+  /** The total rewards claimed in the last 24 hours. */
+  rewardsClaimed24h: Scalars['String']['output'];
   /** The current rebasing APR for stS. */
   stakingApr: Scalars['String']['output'];
   /** Total amount of S in custody of stS. Delegated S plus pool S. */
@@ -2173,6 +2193,10 @@ export type GqlStakedSonicSnapshot = {
   /** Current exchange rate for stS -> S */
   exchangeRate: Scalars['String']['output'];
   id: Scalars['ID']['output'];
+  /** The total protocol fee collected during that day. */
+  protocolFee24h: Scalars['String']['output'];
+  /** The total rewards claimed during that day. */
+  rewardsClaimed24h: Scalars['String']['output'];
   /** The timestamp of the snapshot. Timestamp is end of day midnight. */
   timestamp: Scalars['Int']['output'];
   /** Total amount of S in custody of stS. Delegated S plus pool S. */
@@ -2491,7 +2515,7 @@ export type HookConfig = {
   shouldCallComputeDynamicSwapFee: Scalars['Boolean']['output'];
 };
 
-export type HookParams = ExitFeeHookParams | FeeTakingHookParams | StableSurgeHookParams;
+export type HookParams = ExitFeeHookParams | FeeTakingHookParams | MevTaxHookParams | StableSurgeHookParams;
 
 /** Liquidity management settings for v3 pools. */
 export type LiquidityManagement = {
@@ -2504,6 +2528,14 @@ export type LiquidityManagement = {
   enableDonation?: Maybe<Scalars['Boolean']['output']>;
   /** Whether this pool support additional, custom remove liquditiy operations apart from proportional, unbalanced and single asset. */
   enableRemoveLiquidityCustom?: Maybe<Scalars['Boolean']['output']>;
+};
+
+/** MevTax hook specific params. Percentage format is 0.01 -> 0.01%. */
+export type MevTaxHookParams = {
+  __typename?: 'MevTaxHookParams';
+  maxMevSwapFeePercentage?: Maybe<Scalars['String']['output']>;
+  mevTaxMultiplier?: Maybe<Scalars['String']['output']>;
+  mevTaxThreshold?: Maybe<Scalars['String']['output']>;
 };
 
 export type Mutation = {
@@ -3015,6 +3047,11 @@ export type QueryVeBalGetUserBalancesArgs = {
   chains?: InputMaybe<Array<GqlChain>>;
 };
 
+
+export type QueryVeBalGetVotingListArgs = {
+  includeKilled?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
 /** StableSurge hook specific params. Percentage format is 0.01 -> 0.01%. */
 export type StableSurgeHookParams = {
   __typename?: 'StableSurgeHookParams';
@@ -3080,6 +3117,13 @@ export type GetPoolEventsQueryVariables = Exact<{
 
 
 export type GetPoolEventsQuery = { __typename?: 'Query', poolEvents: Array<{ __typename?: 'GqlPoolAddRemoveEventV3', id: string, poolId: string, blockNumber: number, blockTimestamp: number, timestamp: number, type: GqlPoolEventType, chain: GqlChain, valueUSD: number, sender: string, tx: string } | { __typename?: 'GqlPoolSwapEventCowAmm', id: string, poolId: string, blockNumber: number, blockTimestamp: number, timestamp: number, type: GqlPoolEventType, chain: GqlChain, valueUSD: number, sender: string, tx: string } | { __typename?: 'GqlPoolSwapEventV3', id: string, poolId: string, blockNumber: number, blockTimestamp: number, timestamp: number, type: GqlPoolEventType, chain: GqlChain, valueUSD: number, sender: string, tx: string }> };
+
+export type GetPoolsCountQueryVariables = Exact<{
+  where?: InputMaybe<GqlPoolFilter>;
+}>;
+
+
+export type GetPoolsCountQuery = { __typename?: 'Query', poolGetPoolsCount: number };
 
 export type GetPoolsSummaryQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -3396,6 +3440,44 @@ export type GetPoolEventsQueryHookResult = ReturnType<typeof useGetPoolEventsQue
 export type GetPoolEventsLazyQueryHookResult = ReturnType<typeof useGetPoolEventsLazyQuery>;
 export type GetPoolEventsSuspenseQueryHookResult = ReturnType<typeof useGetPoolEventsSuspenseQuery>;
 export type GetPoolEventsQueryResult = Apollo.QueryResult<GetPoolEventsQuery, GetPoolEventsQueryVariables>;
+export const GetPoolsCountDocument = gql`
+    query GetPoolsCount($where: GqlPoolFilter) {
+  poolGetPoolsCount(where: $where)
+}
+    `;
+
+/**
+ * __useGetPoolsCountQuery__
+ *
+ * To run a query within a React component, call `useGetPoolsCountQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPoolsCountQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPoolsCountQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGetPoolsCountQuery(baseOptions?: Apollo.QueryHookOptions<GetPoolsCountQuery, GetPoolsCountQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetPoolsCountQuery, GetPoolsCountQueryVariables>(GetPoolsCountDocument, options);
+      }
+export function useGetPoolsCountLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPoolsCountQuery, GetPoolsCountQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetPoolsCountQuery, GetPoolsCountQueryVariables>(GetPoolsCountDocument, options);
+        }
+export function useGetPoolsCountSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetPoolsCountQuery, GetPoolsCountQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetPoolsCountQuery, GetPoolsCountQueryVariables>(GetPoolsCountDocument, options);
+        }
+export type GetPoolsCountQueryHookResult = ReturnType<typeof useGetPoolsCountQuery>;
+export type GetPoolsCountLazyQueryHookResult = ReturnType<typeof useGetPoolsCountLazyQuery>;
+export type GetPoolsCountSuspenseQueryHookResult = ReturnType<typeof useGetPoolsCountSuspenseQuery>;
+export type GetPoolsCountQueryResult = Apollo.QueryResult<GetPoolsCountQuery, GetPoolsCountQueryVariables>;
 export const GetPoolsSummaryDocument = gql`
     query GetPoolsSummary($first: Int, $orderBy: GqlPoolOrderBy, $orderDirection: GqlPoolOrderDirection, $skip: Int, $textSearch: String, $where: GqlPoolFilter) {
   poolGetPools(

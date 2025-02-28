@@ -199,7 +199,7 @@ export const ProductItemWide: FC<ProductItemProps> = ({ product }) => {
             <Col span={4} className={styles['product-item__card-column-right']}>
               <div className={styles['product-item__card__action']}>
                 <Button size="small" type="link">
-                  <Link to={`${String(product.id)}`}>details</Link>
+                  <Link to={`${product.chain}/${product.id}`}>details</Link>
                 </Button>
                 <Button
                   size="small"

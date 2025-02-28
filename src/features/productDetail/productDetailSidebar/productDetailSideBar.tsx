@@ -2,24 +2,28 @@ import { CSSProperties, FC, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Affix, Button, Layout } from 'antd';
 import { LeftOutlined, TableOutlined } from '@ant-design/icons';
-import { Product } from '../../../models';
+import { useAppSelector } from '../../../app/hooks';
+import {
+  selectProductById,
+  selectProducts,
+} from '../../productExplorer/productExplorerSlice';
 import { ProductDetailInfo } from './productDetailInfo';
-
 import styles from './productDetailSidebar.module.scss';
 
 const { Sider } = Layout;
 
 interface ProductDetailSidebarProps {
-  product: Product;
+  id: string;
   isDark?: boolean;
 }
 
 export const ProductDetailSidebar: FC<ProductDetailSidebarProps> = ({
-  product,
+  id,
   isDark = false,
 }) => {
   const [collapsed, setCollapsed] = useState<boolean>(true);
   const [brokenBreakpoint, setBrokenBreakpoint] = useState<boolean>(true);
+  const product = selectProductById(useAppSelector(selectProducts), id);
 
   const style: CSSProperties = useMemo(() => {
     if (brokenBreakpoint) {
@@ -73,7 +77,7 @@ export const ProductDetailSidebar: FC<ProductDetailSidebarProps> = ({
           </Button>
         </div>
       </Affix>
-      <ProductDetailInfo product={product} />
+      {product && <ProductDetailInfo product={product} />}
     </Sider>
   );
 };

@@ -1,25 +1,26 @@
+import { useEffect } from 'react';
 import { Layout, Spin } from 'antd';
 import { useParams } from 'react-router-dom';
-import { useAppSelector } from '../../app/hooks';
+import { GqlChain } from '../../__generated__/graphql-types';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useFinancialAnalysis } from '../../hooks/useFinancialAnalysis';
-import { useLoadData } from '../../hooks/useLoadData';
-import {
-  selectProductById,
-  selectProducts,
-} from '../productExplorer/productExplorerSlice';
+import { useFetchProductData } from '../../hooks/useFetchProductData';
 import { ProductDetailContent } from './productDetailContent';
 import { ProductDetailSidebar } from './productDetailSidebar';
 import { Benchmark } from '../../models';
-import { INITIAL_LOAD_POOLS_COUNT } from '../../models/constants';
 import { selectTheme } from '../themes/themeSlice';
-export const ProductDetail = () => {
-  const { id } = useParams();
+import { loadProducts } from '../productExplorer/productExplorerSlice';
 
+export const ProductDetail = () => {
+  const { chain, id } = useParams();
+
+  const dispatch = useAppDispatch();
   const isDark = useAppSelector(selectTheme);
 
-  useLoadData(INITIAL_LOAD_POOLS_COUNT);
-
-  const product = selectProductById(useAppSelector(selectProducts), id!);
+  const { product, productLoading, productError } = useFetchProductData(
+    id!,
+    chain as GqlChain
+  );
 
   useFinancialAnalysis({
     product: product!,
@@ -30,13 +31,19 @@ export const ProductDetail = () => {
       : false,
   });
 
+  useEffect(() => {
+    if (product && !productLoading) {
+      dispatch(loadProducts({ [product.id]: product }));
+    }
+  }, [product, productLoading, dispatch]);
+
   return (
     <Layout style={{ minHeight: '100vh', padding: 20 }}>
-      {!product && <Spin />}
-      {product && (
+      {productLoading && <Spin />}
+      {!productLoading && !productError && !!id && (
         <Layout>
-          <ProductDetailSidebar product={product} isDark={isDark} />
-          <ProductDetailContent product={product} />
+          <ProductDetailSidebar id={id} isDark={isDark} />
+          <ProductDetailContent id={id} />
         </Layout>
       )}
     </Layout>

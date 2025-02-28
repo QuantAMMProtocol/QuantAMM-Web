@@ -40,7 +40,7 @@ export const ProductItemBottom: FC<ProductItemBottomProps> = ({ product }) => {
       <Col offset={4} span={12}>
         <div className={styles['product-item__card__action']}>
           <Button size="small" type="link">
-            <Link to={`${String(product.id)}`}>details</Link>
+            <Link to={`${product.chain}/${product.id}`}>details</Link>
           </Button>
           <Button
             size="small"

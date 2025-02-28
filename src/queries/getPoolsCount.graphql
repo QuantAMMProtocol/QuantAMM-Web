@@ -1,0 +1,3 @@
+query GetPoolsCount($where: GqlPoolFilter) {
+  poolGetPoolsCount(where: $where)
+}

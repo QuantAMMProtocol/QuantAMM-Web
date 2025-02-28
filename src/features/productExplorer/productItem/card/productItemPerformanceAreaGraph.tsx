@@ -10,6 +10,10 @@ import {
 import { useAppSelector } from '../../../../app/hooks';
 import { MonthlyPerformance, PerformancePeriod } from '../../../../models';
 import { selectAgChartTheme } from '../../../themes/themeSlice';
+import {
+  currencyFormatter,
+  percentageFormatter,
+} from '../../../../utils/formatters';
 
 type PerformanceGraphData = MonthlyPerformance & {
   trendUp: boolean;
@@ -96,12 +100,7 @@ export const ProductItemPerformanceAreaGraph: FC<
         tooltip: {
           renderer: (params): string | AgTooltipRendererResult => {
             return {
-              content: new Intl.NumberFormat('en-US', {
-                style: 'currency',
-                currency: 'USD',
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              }).format(Number(params.datum.absReturn)),
+              content: currencyFormatter(params.datum.absReturn),
             };
           },
         },
@@ -119,12 +118,7 @@ export const ProductItemPerformanceAreaGraph: FC<
           }
         : {
             enabled: item.value !== 0,
-            text: `${Intl.NumberFormat('en', {
-              notation: 'compact',
-              maximumSignificantDigits: 2,
-              minimumFractionDigits: 1,
-              maximumFractionDigits: 3,
-            }).format(item.return)}%`,
+            text: percentageFormatter(item.return),
             color: item.trendUp ? 'green' : 'red',
           },
     }));

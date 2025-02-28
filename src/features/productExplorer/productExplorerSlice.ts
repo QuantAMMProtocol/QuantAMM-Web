@@ -2,12 +2,13 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
 import {
   FilterList,
+  INITIAL_PAGE,
   OverrideTab,
   Product,
   ProductExplorerSortMetric,
+  ProductMap,
   SortingDirection,
   TimeRange,
-  ProductMap,
 } from '../../models';
 import { SimulationRunBreakdown } from '../simulationResults/simulationResultSummaryModels';
 import { productExplorerInitialState } from './productExplorerInitialState';
@@ -52,6 +53,10 @@ export const productExplorerSlice = createSlice({
         minTvl?: number;
       }>
     ) => {
+      state.loadingProducts = true;
+      state.productMap = {};
+      state.page = INITIAL_PAGE;
+
       const { filterCategory, filter, minTvl } = action.payload;
       const newFilters = { ...state.activeFilters };
 
@@ -103,6 +108,19 @@ export const productExplorerSlice = createSlice({
     },
     setOverrideTab: (state, action: PayloadAction<OverrideTab | undefined>) => {
       state.overrideTab = action.payload;
+    },
+    setPageSize: (state, action: PayloadAction<number>) => {
+      state.loadingProducts = true;
+      state.pageSize = action.payload;
+      state.page = INITIAL_PAGE;
+    },
+    setPage: (state, action: PayloadAction<number>) => {
+      state.productMap = {};
+      state.loadingProducts = true;
+      state.page = action.payload;
+    },
+    setTotalPools: (state, action: PayloadAction<number | undefined>) => {
+      state.totalPools = action.payload;
     },
   },
 });
@@ -239,6 +257,14 @@ export const selectTimeseriesAnalysisByProductId = (
   return null;
 };
 
+export const selectPageSize = (state: RootState) =>
+  state.productExplorer.pageSize;
+
+export const selectPage = (state: RootState) => state.productExplorer.page;
+
+export const selectTotalPools = (state: RootState) =>
+  state.productExplorer.totalPools;
+
 export const selectHorizontalView = (state: RootState) =>
   state.productExplorer.horizontalView;
 
@@ -255,6 +281,9 @@ export const {
   setSortingDirection,
   setOverrideTab,
   setPoolDetailSelectedGraphRange,
+  setPageSize,
+  setPage,
+  setTotalPools,
 } = productExplorerSlice.actions;
 
 export default productExplorerSlice.reducer;

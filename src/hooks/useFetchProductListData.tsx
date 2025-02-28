@@ -6,11 +6,12 @@ import {
   GqlPoolOrderBy,
   GqlPoolOrderDirection,
   GqlPoolType,
+  useGetPoolsCountQuery,
   useGetPoolsQuery,
 } from '../__generated__/graphql-types';
 import { useAppSelector } from '../app/hooks';
 import { selectActiveFilters } from '../features/productExplorer/productExplorerSlice';
-import { FilterMap, ProductMap } from '../models';
+import { FilterMap, INITIAL_PAGE, ProductMap } from '../models';
 import { useGenerateBaseProductsFromPoolList } from './useGenerateBaseProductsFromPoolList';
 import { useFetchSnapshotData } from './useFetchSnapshotData';
 import { useFetchTokenPrices } from './useFetchTokenPrices';
@@ -21,7 +22,10 @@ import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 
 const IS_STUB_DATA = import.meta.env.VITE_USE_STUBS_DATA === 'true';
 
-export const useFetchProductListData = (poolsToLoad: number) => {
+export const useFetchProductListData = (
+  pageSize: number,
+  page = INITIAL_PAGE
+) => {
   const [productMap, setProductMap] = useState<ProductMap>({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<
@@ -60,6 +64,13 @@ export const useFetchProductListData = (poolsToLoad: number) => {
     return filter;
   }, [activeFilters.chain, activeFilters.poolType, activeFilters.minTvl]);
 
+  const count = useGetPoolsCountQuery({
+    variables: {
+      where,
+    },
+    skip: IS_STUB_DATA,
+  });
+
   // if IS_STUB_DATA is false, use the stub data
   const {
     data: poolData,
@@ -67,7 +78,8 @@ export const useFetchProductListData = (poolsToLoad: number) => {
     error: poolError,
   } = useGetPoolsQuery({
     variables: {
-      first: poolsToLoad,
+      first: pageSize,
+      skip: (page - 1) * pageSize,
       orderBy: GqlPoolOrderBy.TotalLiquidity,
       orderDirection: GqlPoolOrderDirection.Desc,
       where,
@@ -143,5 +155,6 @@ export const useFetchProductListData = (poolsToLoad: number) => {
     productMap,
     productMapLoading,
     productMapError: IS_STUB_DATA ? stubDataError : error,
+    count: count.data?.poolGetPoolsCount,
   };
 };

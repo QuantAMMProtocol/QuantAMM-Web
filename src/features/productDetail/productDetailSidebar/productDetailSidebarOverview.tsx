@@ -19,8 +19,8 @@ export const ProductDetailSidebarOverview: FC<
       <ProductDetailSidebarElement side="left" text="Pool ID" />
       <ProductDetailSidebarElement
         side="right"
-        text={shortenAddress(product.dynamicData.poolId)}
-        href={'https://etherscan.io/address/' + product.dynamicData.poolId}
+        text={shortenAddress(product.id)}
+        href={'https://etherscan.io/address/' + product.dynamicData?.poolId}
       />
 
       <ProductDetailSidebarElement side="left" text="Pool name" />
@@ -41,13 +41,13 @@ export const ProductDetailSidebarOverview: FC<
       <ProductDetailSidebarElement side="left" text="TVL" />
       <ProductDetailSidebarElement
         side="right"
-        text={formatter.format(Number(product.dynamicData.totalLiquidity))}
+        text={formatter.format(Number(product.dynamicData?.totalLiquidity))}
       />
 
       <ProductDetailSidebarElement side="left" text="Volume (24h)" />
       <ProductDetailSidebarElement
         side="right"
-        text={formatter.format(Number(product.dynamicData.volume24h))}
+        text={formatter.format(Number(product.dynamicData?.volume24h))}
       />
     </div>
   );

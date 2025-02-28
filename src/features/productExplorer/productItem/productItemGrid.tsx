@@ -3,10 +3,14 @@ import { Col, Layout, Row } from 'antd';
 import autoAnimate from '@formkit/auto-animate';
 import { ProductItem } from './card/productItem';
 import { useAppSelector } from '../../../app/hooks';
-import { INITIAL_LOAD_POOLS_COUNT } from '../../../models';
-import { selectLoadingProducts, selectProducts } from '../productExplorerSlice';
+import {
+  selectLoadingProducts,
+  selectPageSize,
+  selectProducts,
+} from '../productExplorerSlice';
 import { ProductExplorerSort } from '../productExplorerSort/productExplorerSort';
 import { ProductExplorerTabOverride } from '../productExplorerTabOverride/productExplorerTabOverride';
+import { ProductExplorerPagination } from '../ProductExplorerPagination';
 import { useSort } from './useSort';
 import { ProductItemWide } from './wide/productItemWide';
 import { ProductItemGridHeader } from './productItemGridHeader';
@@ -27,6 +31,7 @@ export const ProductItemGrid: FC<ProductItemGridProps> = ({ wide }) => {
 
   const products = useAppSelector(selectProducts);
   const loading = useAppSelector(selectLoadingProducts);
+  const pageSize = useAppSelector(selectPageSize);
   const { sort } = useSort();
 
   useEffect(() => {
@@ -35,7 +40,7 @@ export const ProductItemGrid: FC<ProductItemGridProps> = ({ wide }) => {
 
   const loadingProducts = Array.from(
     {
-      length: INITIAL_LOAD_POOLS_COUNT,
+      length: pageSize,
     },
     (_, index) => index
   );
@@ -99,6 +104,9 @@ export const ProductItemGrid: FC<ProductItemGridProps> = ({ wide }) => {
                 )}
               </Col>
             ))}
+        </Row>
+        <Row style={{ marginTop: 16 }} justify="center">
+          <ProductExplorerPagination />
         </Row>
       </Content>
     </Layout>
