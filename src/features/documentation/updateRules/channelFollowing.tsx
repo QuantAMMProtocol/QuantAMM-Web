@@ -44,7 +44,7 @@ export function ChannelFollowingUpdateRule() {
                     <Col span={8}>
                       <img
                         loading="lazy"
-                        src={'./documentation/channel_following.svg'}
+                        src={'/documentation/channel_following.svg'}
                         style={{
                           width: '100%',
                           paddingLeft: '10%',

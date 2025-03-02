@@ -15,14 +15,14 @@ export function HeatMapGraph(props: HeatMapProp) {
         <img
           hidden={isDarkTheme}
           loading="lazy"
-          src={'./heatmaps/' + props.heatMap.imageName + '_light.png'}
+          src={'/heatmaps/' + props.heatMap.imageName + '_light.png'}
           alt=""
           style={{ width: '100%' }}
         />
         <img
           hidden={!isDarkTheme}
           loading="lazy"
-          src={'./heatmaps/' + props.heatMap.imageName + '_dark.png'}
+          src={'/heatmaps/' + props.heatMap.imageName + '_dark.png'}
           alt=""
           style={{ width: '100%' }}
         />

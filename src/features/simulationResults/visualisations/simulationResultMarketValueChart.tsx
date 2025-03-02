@@ -106,7 +106,7 @@ export function SimulationResultMarketValueChart(props: BreakdownProps) {
   return (
     <div>
       <Divider className={styles.simResultDividers}>
-        Pool Total MV over time
+        Pool Holding $ over time
       </Divider>
 
       <Row>

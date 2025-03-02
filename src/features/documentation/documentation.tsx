@@ -20,6 +20,7 @@ import { QuantAMMPoolDescription } from './poolTypes/quantamm';
 import { BalancerPoolDescription } from './poolTypes/balancer';
 import AMMDescription from './basics/amm';
 import RebalancingVsRebalancing from './basics/rebalancingvsRebalancing';
+import { useParams } from 'react-router-dom';
 
 const items = [
   {
@@ -129,8 +130,9 @@ const submenuKeys = [
 ];
 
 export function Documentation() {
+  const { id } = useParams();
   const [openKeys, setOpenKeys] = useState(rootSubmenuKeys);
-  const [current, updateCurrent] = useState('AutomatedMarketMakers');
+  const [current, updateCurrent] = useState(id ? id : 'AutomatedMarketMakers');
 
   const onClick = (e: any) => {
     if (submenuKeys.indexOf(e.key) != -1) {

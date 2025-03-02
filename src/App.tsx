@@ -129,7 +129,7 @@ function App() {
   return (
     <AntDesignThemeProvider>
       <Layout className={style.app}>
-        <Header style={{ padding: 0 }}>
+        <Header style={{ padding: 0, height: 'auto' }}>
           <MenuComponent initialise={initialisePage} />
         </Header>
         <Content>
