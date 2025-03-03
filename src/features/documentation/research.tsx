@@ -70,7 +70,9 @@ export function Research() {
                       alignItems: 'center',
                     }}
                   >
-                    <Button type="primary">View Full Article</Button>
+                    <Button 
+                    href='https://cdn.prod.website-files.com/6616670ddddc931f1dd3aa73/6617c4c2381409947dc42c7a_TFMM_litepaper.pdf'
+                    type="primary">View Full Article</Button>
                   </Col>
                 </Row>
                 <Row>
@@ -120,7 +122,9 @@ export function Research() {
                       alignItems: 'center',
                     }}
                   >
-                    <Button type="primary">View Full Article</Button>
+                    <Button 
+                    href='https://cdn.prod.website-files.com/6616670ddddc931f1dd3aa73/6617c4c260d10f98e065f1ea_QuantAMM_Litepaper.pdf'
+                    type="primary">View Full Article</Button>
                   </Col>
                 </Row>
               </Col>
@@ -199,7 +203,9 @@ export function Research() {
                       alignItems: 'center',
                     }}
                   >
-                    <Button type="primary">View Full Article</Button>
+                    <Button 
+                    href='https://cdn.prod.website-files.com/6616670ddddc931f1dd3aa73/672283811331fc9bef39be23_RVR_30_10_24.pdf'
+                    type="primary">View Full Article</Button>
                   </Col>
                 </Row>
                 <Row>
@@ -251,7 +257,9 @@ export function Research() {
                       alignItems: 'center',
                     }}
                   >
-                    <Button type="primary">View Full Article</Button>
+                    <Button 
+                    href='https://arxiv.org/abs/2403.18737'
+                    type="primary">View Full Article</Button>
                   </Col>
                 </Row>
                 <Row>
@@ -293,7 +301,9 @@ export function Research() {
                       alignItems: 'center',
                     }}
                   >
-                    <Button type="primary">View Full Article</Button>
+                    <Button 
+                    href='https://arxiv.org/abs/2402.06731'
+                    type="primary">View Full Article</Button>
                   </Col>
                 </Row>
               </Col>
@@ -340,7 +350,9 @@ export function Research() {
                       alignItems: 'center',
                     }}
                   >
-                    <Button type="primary">View Full Article</Button>
+                    <Button 
+                    href='https://arxiv.org/abs/2404.15489'
+                    type="primary">View Full Article</Button>
                   </Col>
                 </Row>
               </Col>
