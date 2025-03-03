@@ -7,7 +7,6 @@ import {
 export const initialParams: GetPoolsSummaryQueryVariables = {
   first: 10,
   where: {
-    chainIn: [GqlChain.Mainnet],
     minTvl: 10000,
   },
 };

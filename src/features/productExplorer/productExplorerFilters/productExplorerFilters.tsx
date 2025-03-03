@@ -5,8 +5,17 @@ import {
   useMemo,
   CSSProperties,
   useEffect,
+  ChangeEvent,
 } from 'react';
-import { Checkbox, InputNumber, Layout, Spin, Switch, Typography } from 'antd';
+import {
+  Checkbox,
+  Input,
+  InputNumber,
+  Layout,
+  Spin,
+  Switch,
+  Typography,
+} from 'antd';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import {
   CloseOutlined,
@@ -22,7 +31,9 @@ import {
   selectFilters,
   selectHorizontalView,
   selectLoadingFilters,
+  selectTextSearch,
   setFilters,
+  setTextSearch,
 } from '../productExplorerSlice';
 import { productExplorerTranslation } from '../translations';
 
@@ -44,6 +55,7 @@ export const ProductExplorerFilters: FC<ProductExplorerFiltersProps> = ({
   const filters = useAppSelector<FilterList>(selectFilters);
   const activeFilters = useAppSelector<FilterMap>(selectActiveFilters);
   const initialHorizontalView = useAppSelector<boolean>(selectHorizontalView);
+  const initialTextSearch = useAppSelector<string>(selectTextSearch);
   const loading = useAppSelector<boolean>(selectLoadingFilters);
 
   const [collapsed, setCollapsed] = useState<boolean>(true);
@@ -63,6 +75,8 @@ export const ProductExplorerFilters: FC<ProductExplorerFiltersProps> = ({
 
   const handleResetClick = useCallback(() => {
     dispatch(setFilters({}));
+    dispatch(setFilters({ filterCategory: 'tvl', minTvl: undefined }));
+    dispatch(setTextSearch(''));
   }, [dispatch]);
 
   const handleFilterClick = useCallback(
@@ -88,6 +102,18 @@ export const ProductExplorerFilters: FC<ProductExplorerFiltersProps> = ({
   const debouncedHandleTvlChange = useMemo(
     () => debounce(handleTvlChange, 500),
     [handleTvlChange]
+  );
+
+  const handleTextSearchChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      dispatch(setTextSearch(event.target.value));
+    },
+    [dispatch]
+  );
+
+  const debouncedHandleTextSearchChange = useMemo(
+    () => debounce(handleTextSearchChange, 500),
+    [handleTextSearchChange]
   );
 
   useEffect(() => {
@@ -225,7 +251,9 @@ export const ProductExplorerFilters: FC<ProductExplorerFiltersProps> = ({
                 <InputNumber<number>
                   min={0}
                   max={1000000000}
-                  defaultValue={0}
+                  defaultValue={parseFloat(
+                    activeFilters.minTvl?.[0] ?? '10000'
+                  )}
                   formatter={(value) =>
                     `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
                   }
@@ -236,6 +264,17 @@ export const ProductExplorerFilters: FC<ProductExplorerFiltersProps> = ({
                   style={{ width: '100%' }}
                 />
                 <Text>minimum tvl</Text>
+              </div>
+              <div className={styles['filter-bar__filter-group']}>
+                <Title level={4}>Search</Title>
+                <div className={styles['filter-bar__filters']}>
+                  <Input
+                    placeholder="Search"
+                    defaultValue={initialTextSearch}
+                    onChange={debouncedHandleTextSearchChange}
+                    style={{ width: '100%' }}
+                  />
+                </div>
               </div>
             </div>
           </div>
