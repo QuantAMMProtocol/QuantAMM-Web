@@ -30,8 +30,6 @@ import { SimulationRunBreakdown } from '../../simulationResults/simulationResult
 import { WeightChangeOverTimeGraph } from '../../shared/graphs/weightChangeOverTime';
 import { ROUTES } from '../../../routesEnum';
 import { SimulationRunner } from '../../simulationRunner/simulationRunner';
-import { Gallery } from 'react-grid-gallery';
-import { companyImages } from './partnersImages';
 
 const { Title } = Typography;
 
@@ -860,7 +858,7 @@ const LandingPage: React.FC = () => {
         </ParallaxLayer>
         <ParallaxLayer
           speed={0.1}
-          sticky={{ start: 5, end: 8 }}
+          sticky={{ start: 6, end: 8 }}
           style={{
             display: 'flex',
             alignItems: 'center',
@@ -1012,7 +1010,7 @@ const LandingPage: React.FC = () => {
           </Row>
         </ParallaxLayer>
 
-        <ParallaxLayer speed={0.4} factor={1} sticky={{ start: 8, end: 12 }} style={{
+        <ParallaxLayer factor={1} sticky={{ start: 9, end: 11 }} style={{
             height: '100%',}}>
           <Row style={{ height: '100%' }}>
             <Col span={24}>
