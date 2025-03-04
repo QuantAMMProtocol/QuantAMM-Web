@@ -9,6 +9,7 @@ import { SimulationSavedResultComparison } from './features/simulationResults/re
 import { ROUTES } from './routesEnum';
 import LandingPage from './features/documentation/landing/landingPage';
 import { Research } from './features/documentation/research';
+import { CompanyPage } from './features/documentation/company';
 
 const BASE_ROUTE = '/';
 
@@ -54,6 +55,10 @@ export const routes = createBrowserRouter([
       {
         path: ROUTES.EXAMPLES,
         element: <About />,
+      },
+      {
+        path: ROUTES.COMPANY,
+        element: <CompanyPage />,
       },
       {
         path: ROUTES.RESEARCH,

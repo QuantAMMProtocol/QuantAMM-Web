@@ -1,4 +1,4 @@
-import { FC, useCallback, useState } from 'react';
+import { FC, useCallback, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Menu, Switch, MenuProps, Button } from 'antd';
 import {
@@ -26,7 +26,12 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
   const dispatch = useAppDispatch();
   const isDark = useAppSelector(selectTheme);
   const navigate = useNavigate();
-
+  const backgroundColor = useMemo(() => {
+    return (current as ROUTES) == ROUTES.HOME
+            ? '#2c496b'
+            : 'var(--main-background)';
+  }, [current]);
+  
   const toggleTheme = (isChecked: boolean) => {
     dispatch(changeTheme(isChecked || (current as ROUTES) == ROUTES.HOME));
     changeTheme(isChecked);
@@ -66,11 +71,6 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
           {
             key: 'Company',
             label: 'Company',
-            icon: <FireOutlined />,
-          },
-          {
-            key: 'Vision',
-            label: 'Vision',
             icon: <FireOutlined />,
           },
           {
@@ -124,17 +124,14 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
       },
     ];
   }
-
+  
   return (
     <div
       style={{
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        backgroundColor:
-          (current as ROUTES) == ROUTES.HOME
-            ? '#2c496b'
-            : 'var(--main-background)',
+        backgroundColor: backgroundColor,
         width: '100%',
       }}
     >

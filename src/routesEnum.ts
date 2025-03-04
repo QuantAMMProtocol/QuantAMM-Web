@@ -7,4 +7,5 @@ export enum ROUTES {
   SIMULATION_COMPARER = 'simulation-results-comparer',
   EXAMPLES = 'examples',
   RESEARCH = 'research',
+  COMPANY = 'company',
 }
