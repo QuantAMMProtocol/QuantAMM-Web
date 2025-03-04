@@ -22,10 +22,13 @@ interface MenuComponentProps {
 }
 
 export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
-  const [current, setCurrent] = useState<string>(initialise as unknown as ROUTES);
+  const navigate = useNavigate();
+  const path = window.location.pathname.split('/')[1];
+  console.log("path", path);
+  const [current, setCurrent] = useState<string>(path && path != '' ? path as unknown as ROUTES : ROUTES.HOME);
+  console.log(current)
   const dispatch = useAppDispatch();
   const isDark = useAppSelector(selectTheme);
-  const navigate = useNavigate();
   const backgroundColor = useMemo(() => {
     return (current as ROUTES) == ROUTES.HOME
             ? '#2c496b'
