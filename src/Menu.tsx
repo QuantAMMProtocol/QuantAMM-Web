@@ -22,7 +22,7 @@ interface MenuComponentProps {
 }
 
 export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
-  const [current, setCurrent] = useState<string>(ROUTES.HOME);
+  const [current, setCurrent] = useState<string>(initialise as unknown as ROUTES);
   const dispatch = useAppDispatch();
   const isDark = useAppSelector(selectTheme);
   const navigate = useNavigate();
@@ -31,7 +31,7 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
             ? '#2c496b'
             : 'var(--main-background)';
   }, [current]);
-  
+
   const toggleTheme = (isChecked: boolean) => {
     dispatch(changeTheme(isChecked || (current as ROUTES) == ROUTES.HOME));
     changeTheme(isChecked);
