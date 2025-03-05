@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useMemo, useRef, useState } from 'react';
 import { Col, Layout, Row } from 'antd';
 import autoAnimate from '@formkit/auto-animate';
 import { ProductItem } from './card/productItem';
@@ -33,6 +33,11 @@ export const ProductItemGrid: FC<ProductItemGridProps> = ({ wide }) => {
   const loading = useAppSelector(selectLoadingProducts);
   const pageSize = useAppSelector(selectPageSize);
   const { sort } = useSort();
+
+  const areProductsLoaded = useMemo(
+    () => Object.keys(products).length > 0,
+    [products]
+  );
 
   useEffect(() => {
     parent.current && autoAnimate(parent.current);
@@ -88,13 +93,14 @@ export const ProductItemGrid: FC<ProductItemGridProps> = ({ wide }) => {
           }}
         >
           {wide && <ProductItemGridHeader />}
-          {loading &&
+          {(loading || !areProductsLoaded) &&
             loadingProducts.map((loadingProduct) => (
               <Col xs={wide ? 24 : undefined} key={loadingProduct}>
                 {wide ? <ProductItemWideLoading /> : <ProductItemLoading />}
               </Col>
             ))}
-          {products &&
+          {!loading &&
+            areProductsLoaded &&
             sort(Object.values(products)).map((product) => (
               <Col xs={wide ? 24 : undefined} key={product.id}>
                 {wide ? (
@@ -105,9 +111,11 @@ export const ProductItemGrid: FC<ProductItemGridProps> = ({ wide }) => {
               </Col>
             ))}
         </Row>
-        <Row style={{ marginTop: 16 }} justify="center">
-          <ProductExplorerPagination />
-        </Row>
+        {!loading && areProductsLoaded && (
+          <Row style={{ marginTop: 16 }} justify="center">
+            <ProductExplorerPagination />
+          </Row>
+        )}
       </Content>
     </Layout>
   );

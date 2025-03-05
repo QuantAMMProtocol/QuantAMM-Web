@@ -5,7 +5,13 @@ import { useRetrieveFiltersQuery } from '../../services/productRetrievalService'
 import { useLoadData } from '../../hooks/useLoadData';
 import { selectTheme } from '../themes/themeSlice';
 import { ProductExplorerFilters } from './productExplorerFilters';
-import { loadingFilters, loadFilters } from './productExplorerSlice';
+import {
+  loadingFilters,
+  loadFilters,
+  setLoadingProducts,
+  loadProducts,
+  setTotalPools,
+} from './productExplorerSlice';
 import { ProductExplorerError } from './productExplorerError';
 import { ProductItemGrid } from './productItem';
 
@@ -20,7 +26,8 @@ export const ProductExplorer = () => {
     error: filterError,
   } = useRetrieveFiltersQuery();
 
-  const { productMapError } = useLoadData();
+  const { productMapError, productMapLoading, productMap, productCount } =
+    useLoadData();
 
   useEffect(() => {
     if (isLoadingFilters) {
@@ -31,6 +38,21 @@ export const ProductExplorer = () => {
       dispatch(loadFilters(filterList));
     }
   }, [dispatch, filterList, filterError, isLoadingFilters]);
+
+  useEffect(() => {
+    if (productMapLoading) {
+      dispatch(setLoadingProducts());
+    }
+    if (!productMapLoading && productMap && !productMapError) {
+      dispatch(loadProducts(productMap));
+    }
+  }, [productMap, productMapLoading, productMapError, dispatch]);
+
+  useEffect(() => {
+    if (productCount) {
+      dispatch(setTotalPools(productCount));
+    }
+  }, [productCount, dispatch]);
 
   return (
     <Layout style={{ minHeight: '100vh', padding: 12 }}>
