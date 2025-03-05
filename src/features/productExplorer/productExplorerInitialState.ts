@@ -16,6 +16,7 @@ export const productExplorerInitialState: ProductExplorer = {
   productMap: {},
   originalFilters: [],
   activeFilters: {},
+  textSearch: '',
   sortingMetric: 'tvl',
   sortingDirection: 'desc',
   overrideTab: undefined,

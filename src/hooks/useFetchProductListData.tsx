@@ -10,7 +10,10 @@ import {
   useGetPoolsQuery,
 } from '../__generated__/graphql-types';
 import { useAppSelector } from '../app/hooks';
-import { selectActiveFilters } from '../features/productExplorer/productExplorerSlice';
+import {
+  selectActiveFilters,
+  selectTextSearch,
+} from '../features/productExplorer/productExplorerSlice';
 import { FilterMap, INITIAL_PAGE, ProductMap } from '../models';
 import { useGenerateBaseProductsFromPoolList } from './useGenerateBaseProductsFromPoolList';
 import { useFetchSnapshotData } from './useFetchSnapshotData';
@@ -33,6 +36,7 @@ export const useFetchProductListData = (
   >(null);
 
   const activeFilters = useAppSelector<FilterMap>(selectActiveFilters);
+  const textSearch = useAppSelector<string>(selectTextSearch);
 
   // if IS_STUB_DATA is true, use the stub data
   const {
@@ -42,26 +46,26 @@ export const useFetchProductListData = (
   } = useRetrieveProductsQuery(undefined, { skip: !IS_STUB_DATA });
 
   const where: GqlPoolFilter = useMemo(() => {
-    const filter: GqlPoolFilter = {};
+    const whereClause: GqlPoolFilter = {};
     if (activeFilters.chain) {
-      filter.chainIn = activeFilters.chain as GqlChain[];
+      whereClause.chainIn = activeFilters.chain as GqlChain[];
     } else if (activeFilters.chain === undefined) {
-      delete filter.chainIn;
+      delete whereClause.chainIn;
     }
 
     if (activeFilters.poolType) {
-      filter.poolTypeIn = activeFilters.poolType as GqlPoolType[];
+      whereClause.poolTypeIn = activeFilters.poolType as GqlPoolType[];
     } else if (activeFilters.poolType === undefined) {
-      delete filter.poolTypeIn;
+      delete whereClause.poolTypeIn;
     }
 
     if (activeFilters.minTvl) {
-      filter.minTvl = parseFloat(activeFilters.minTvl[0]);
+      whereClause.minTvl = parseFloat(activeFilters.minTvl[0]);
     } else if (activeFilters.minTvl === undefined) {
-      delete filter.minTvl;
+      delete whereClause.minTvl;
     }
 
-    return filter;
+    return whereClause;
   }, [activeFilters.chain, activeFilters.poolType, activeFilters.minTvl]);
 
   const count = useGetPoolsCountQuery({
@@ -83,6 +87,7 @@ export const useFetchProductListData = (
       orderBy: GqlPoolOrderBy.TotalLiquidity,
       orderDirection: GqlPoolOrderDirection.Desc,
       where,
+      textSearch,
     },
     skip: IS_STUB_DATA,
   });

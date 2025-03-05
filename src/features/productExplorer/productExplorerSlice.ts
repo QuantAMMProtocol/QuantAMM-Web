@@ -36,6 +36,9 @@ export const productExplorerSlice = createSlice({
       state.originalFilters = action.payload;
       state.loadingFilters = false;
     },
+    setTextSearch: (state, action: PayloadAction<string>) => {
+      state.textSearch = action.payload;
+    },
     loadingError: (state, action: PayloadAction<boolean>) => {
       state.loadingError = action.payload;
     },
@@ -147,6 +150,9 @@ export const selectFilters = (state: RootState) =>
 
 export const selectActiveFilters = (state: RootState) =>
   state.productExplorer.activeFilters;
+
+export const selectTextSearch = (state: RootState) =>
+  state.productExplorer.textSearch;
 
 export const selectLoadingError = (state: RootState) =>
   state.productExplorer.loadingError;
@@ -275,6 +281,7 @@ export const {
   loadFilters,
   loadingError,
   setFilters,
+  setTextSearch,
   setSortingMetric,
   loadingSimulationRunBreakdown,
   setProductSimulationRunBreakdown,

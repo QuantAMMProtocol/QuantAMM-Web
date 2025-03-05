@@ -3,6 +3,7 @@ import { Button, Card } from 'antd';
 import { GetPoolsSummaryQueryVariables } from '../../../../__generated__/graphql-types';
 import { ProductDetailDropdownSelect } from '../components/productDetailDropdownSelect';
 import { ProductDetailNumericalInput } from '../components/productDetailNumericalInput';
+import { ProductDetailInput } from '../components/productDetailInput';
 import { ComparableProductDropdown } from './comparableProductDropdown';
 import {
   chains,
@@ -97,6 +98,11 @@ export const ComparableProductSelector = ({
     setInitialSearch(false);
   };
 
+  const handleSearchChange = (value: string) => {
+    setParams((prev) => ({ ...prev, textSearch: value }));
+    setInitialSearch(false);
+  };
+
   const handleSelect = (poolId: string) => {
     onSelect && onSelect(poolId);
   };
@@ -124,6 +130,13 @@ export const ComparableProductSelector = ({
           placeholder="Min TVL"
           onChange={handleMinTvlChange}
           min={1000}
+        />
+
+        <ProductDetailInput
+          label="Search"
+          value={params.textSearch ?? ''}
+          placeholder="Search"
+          onChange={handleSearchChange}
         />
 
         <Button type="primary" onClick={handleSearchClick}>

@@ -374,10 +374,12 @@ export const ProductDetailSummaryMobile = ({
           >
             <Text strong>{product.name}</Text>
             <div style={{ height: '100%', width: '100%' }}>
-              <ReturnDistributionGraph
-                marketValues={product.timeSeries.map((x) => x.sharePrice)}
-                yAxisOverride={{ title: { enabled: false } }}
-              />
+              {product.timeSeries?.length && (
+                <ReturnDistributionGraph
+                  marketValues={product.timeSeries.map((x) => x.sharePrice)}
+                  yAxisOverride={{ title: { enabled: false } }}
+                />
+              )}
             </div>
           </div>
 
@@ -389,10 +391,12 @@ export const ProductDetailSummaryMobile = ({
                 'No benchmark selected'}
             </Text>
             <div style={{ height: '100%', width: '100%' }}>
-              <ReturnDistributionGraph
-                marketValues={product.timeSeries.map((x) => x.hodlSharePrice)}
-                yAxisOverride={{ title: { enabled: false } }}
-              />
+              {product.timeSeries?.length && (
+                <ReturnDistributionGraph
+                  marketValues={product.timeSeries.map((x) => x.hodlSharePrice)}
+                  yAxisOverride={{ title: { enabled: false } }}
+                />
+              )}
             </div>
           </div>
 
@@ -404,12 +408,15 @@ export const ProductDetailSummaryMobile = ({
             >
               <Text strong>{comparingProduct?.name}</Text>
               <div style={{ height: '100%', width: '100%' }}>
-                <ReturnDistributionGraph
-                  marketValues={
-                    comparingProduct?.timeSeries.map((x) => x.sharePrice) ?? []
-                  }
-                  yAxisOverride={{ title: { enabled: false } }}
-                />
+                {comparingProduct?.timeSeries?.length && (
+                  <ReturnDistributionGraph
+                    marketValues={
+                      comparingProduct?.timeSeries.map((x) => x.sharePrice) ??
+                      []
+                    }
+                    yAxisOverride={{ title: { enabled: false } }}
+                  />
+                )}
               </div>
             </div>
           )}

@@ -174,6 +174,7 @@ export interface ProductExplorer {
   productMap: ProductMap;
   originalFilters: FilterList;
   activeFilters: FilterMap;
+  textSearch: string;
   sortingDirection: SortingDirection;
   sortingMetric: ProductExplorerSortMetric;
   overrideTab?: OverrideTab;
