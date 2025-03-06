@@ -301,7 +301,7 @@ export function LandingPageMobile() {
               key={index}
               src={`/companies/${img}`}
               alt={img}
-              style={{ width: '50px', height: 'auto', borderRadius: '10px' }}
+              style={{ width: '15%', height: 'auto' }}
             />
           ))}
         </div>
@@ -328,8 +328,8 @@ export function LandingPageMobile() {
       {/* Contact Us */}
       <div style={{ padding: '20px', textAlign: 'center' }}>
         <Title level={3}>Contact Us</Title>
-        <p>Email: contact@quantamm.com</p>
-        <p>Twitter: @QuantAMM</p>
+        <p>Email: info@quantamm.fi</p>
+        <p>Twitter: @QuantAMMDefi</p>
       </div>
     </div>
   );
