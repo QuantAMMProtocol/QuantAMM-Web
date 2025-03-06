@@ -891,9 +891,12 @@ export function LandingPageDesktop() {
                               Temporal Function Market Making Litepaper
                             </h4>
                           </Tooltip>
-                          <Button 
-                          href='https://cdn.prod.website-files.com/6616670ddddc931f1dd3aa73/6617c4c2381409947dc42c7a_TFMM_litepaper.pdf'
-                          size="small">View Full Paper</Button>
+                          <Button
+                            href="https://cdn.prod.website-files.com/6616670ddddc931f1dd3aa73/6617c4c2381409947dc42c7a_TFMM_litepaper.pdf"
+                            size="small"
+                          >
+                            View Full Paper
+                          </Button>
                         </Card.Grid>
                         <Card.Grid style={articleCardGridStyle}>
                           <Tooltip title="Blockchain Traded Funds: their construction, strategy tuning and application">
@@ -902,9 +905,12 @@ export function LandingPageDesktop() {
                             />
                             <h4>QuantAMM Protocol Litepaper</h4>
                           </Tooltip>
-                          <Button 
-                          href='https://cdn.prod.website-files.com/6616670ddddc931f1dd3aa73/6617c4c260d10f98e065f1ea_QuantAMM_Litepaper.pdf'
-                          size="small">View Full Paper</Button>
+                          <Button
+                            href="https://cdn.prod.website-files.com/6616670ddddc931f1dd3aa73/6617c4c260d10f98e065f1ea_QuantAMM_Litepaper.pdf"
+                            size="small"
+                          >
+                            View Full Paper
+                          </Button>
                         </Card.Grid>
                         <Card.Grid style={articleCardGridStyle}>
                           <Tooltip title="A comparison of TFMM rebalancing for fund managers compared to running CEX portfolios">
@@ -916,9 +922,12 @@ export function LandingPageDesktop() {
                               Loss-versus-Rebalancing
                             </h4>
                           </Tooltip>
-                          <Button 
-                          href='https://cdn.prod.website-files.com/6616670ddddc931f1dd3aa73/672283811331fc9bef39be23_RVR_30_10_24.pdf'
-                          size="small">View Full Paper</Button>
+                          <Button
+                            href="https://cdn.prod.website-files.com/6616670ddddc931f1dd3aa73/672283811331fc9bef39be23_RVR_30_10_24.pdf"
+                            size="small"
+                          >
+                            View Full Paper
+                          </Button>
                         </Card.Grid>
                         <Card.Grid style={articleCardGridStyle}>
                           <Tooltip title="Linear interpolation between two target weights is Efficient. This paper explores further efficiencies available in non-linear rebalancing mechanisms">
@@ -927,9 +936,12 @@ export function LandingPageDesktop() {
                             />
                             <h4>Optimal Rebalancing in Dynamic AMMs</h4>
                           </Tooltip>
-                          <Button 
-                          href='https://arxiv.org/abs/2403.18737'
-                          size="small">View Full Paper</Button>
+                          <Button
+                            href="https://arxiv.org/abs/2403.18737"
+                            size="small"
+                          >
+                            View Full Paper
+                          </Button>
                         </Card.Grid>
                         <Card.Grid style={articleCardGridStyle}>
                           <Tooltip title="For N-token trades, convex solvers have been required to find the optimal trade. This paper provides a closed-form solution for arbitrage.">
@@ -941,9 +953,12 @@ export function LandingPageDesktop() {
                               arbitrage
                             </h4>
                           </Tooltip>
-                          <Button 
-                          href='https://arxiv.org/abs/2402.06731'
-                          size="small">View Full Paper</Button>
+                          <Button
+                            href="https://arxiv.org/abs/2402.06731"
+                            size="small"
+                          >
+                            View Full Paper
+                          </Button>
                         </Card.Grid>
                         <Card.Grid style={articleCardGridStyle}>
                           <Tooltip title="Dynamic weight AMMs provide a multiblock MEV opportunity. This paper outlines the types of protections required to prevent further loss">
@@ -955,9 +970,12 @@ export function LandingPageDesktop() {
                               dynamic AMMs
                             </h4>
                           </Tooltip>
-                          <Button 
-                          href='https://arxiv.org/abs/2404.15489'
-                          size="small">View Full Paper</Button>
+                          <Button
+                            href="https://arxiv.org/abs/2404.15489"
+                            size="small"
+                          >
+                            View Full Paper
+                          </Button>
                         </Card.Grid>
                         <Card.Grid style={articleCardGridStyle}>
                           <Tooltip title="An overview on TFMM mechanisms and why asset management is the primary focus">
@@ -969,9 +987,12 @@ export function LandingPageDesktop() {
                               providing
                             </h4>
                           </Tooltip>
-                          <Button 
-                          href='https://medium.com/@QuantAMM/temporal-function-market-making-tfmm-the-use-of-amms-outside-of-core-liquidity-providing-bc403e76b97'
-                          size="small">View Article</Button>
+                          <Button
+                            href="https://medium.com/@QuantAMM/temporal-function-market-making-tfmm-the-use-of-amms-outside-of-core-liquidity-providing-bc403e76b97"
+                            size="small"
+                          >
+                            View Article
+                          </Button>
                         </Card.Grid>
                         <Card.Grid style={articleCardGridStyle}>
                           <Tooltip title="Comparing the current DeFi evolution to TradFi and where BTFs fit in">
@@ -983,9 +1004,12 @@ export function LandingPageDesktop() {
                               Revolution
                             </h4>
                           </Tooltip>
-                          <Button 
-                          href='https://medium.com/@QuantAMM/the-state-of-asset-management-in-defi-and-the-btf-revolution-5622abf9920a'
-                          size="small">View Article</Button>
+                          <Button
+                            href="https://medium.com/@QuantAMM/the-state-of-asset-management-in-defi-and-the-btf-revolution-5622abf9920a"
+                            size="small"
+                          >
+                            View Article
+                          </Button>
                         </Card.Grid>
                         <Card.Grid style={articleCardGridStyle}>
                           <Tooltip title="TFMMs are one new approach to AMMs. This article explores other approaches and their trade-offs">
@@ -997,9 +1021,12 @@ export function LandingPageDesktop() {
                               approaches
                             </h4>
                           </Tooltip>
-                          <Button 
-                          href='https://medium.com/@QuantAMM/looking-back-at-amms-of-2023-innovations-and-new-approaches-834d373b4f3b'
-                          size="small">View Article</Button>
+                          <Button
+                            href="https://medium.com/@QuantAMM/looking-back-at-amms-of-2023-innovations-and-new-approaches-834d373b4f3b"
+                            size="small"
+                          >
+                            View Article
+                          </Button>
                         </Card.Grid>
                       </Card>
                     </div>
@@ -1010,8 +1037,13 @@ export function LandingPageDesktop() {
           </Row>
         </ParallaxLayer>
 
-        <ParallaxLayer factor={1} sticky={{ start: 9, end: 11 }} style={{
-            height: '100%',}}>
+        <ParallaxLayer
+          factor={1}
+          sticky={{ start: 9, end: 11 }}
+          style={{
+            height: '100%',
+          }}
+        >
           <Row style={{ height: '100%' }}>
             <Col span={24}>
               <ProductItemBackground
@@ -1028,38 +1060,48 @@ export function LandingPageDesktop() {
                   >
                     <Row>
                       <Col span={24}>
-                        <div style={{ 
-                          textAlign: 'center', 
-                          display: 'flex', 
-                          flexDirection: 'column', 
-                          justifyContent: 'center', 
-                          height: '100%', 
-                          padding: '20px', 
-                          marginTop:'8vh',
-                          alignItems: 'center' 
-                          }}>
+                        <div
+                          style={{
+                            textAlign: 'center',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            height: '100%',
+                            padding: '20px',
+                            marginTop: '8vh',
+                            alignItems: 'center',
+                          }}
+                        >
                           <h2>OUR VISION</h2>
                           <p>
-                          At QuantAMM, our vision is to build a passive fund product that everyone can understand and everyone can access. There has been decades of TradFi passive product innovations. While ETFs with BTC/ETH are coming, we go one step further and bring generic fund construction infrastructure on chain:
+                            At QuantAMM, our vision is to build a passive fund
+                            product that everyone can understand and everyone
+                            can access. There has been decades of TradFi passive
+                            product innovations. While ETFs with BTC/ETH are
+                            coming, we go one step further and bring generic
+                            fund construction infrastructure on chain:
                           </p>
                           <p>
-                          Real World Savings for investors and institutions by running funds on-chain
+                            Real World Savings for investors and institutions by
+                            running funds on-chain
                           </p>
                           <p>
-                          Our belief and all our research shows that all of the above can only be achieved with a new form of passive AMM:
+                            Our belief and all our research shows that all of
+                            the above can only be achieved with a new form of
+                            passive AMM:
                           </p>
                         </div>
                       </Col>
                     </Row>
                   </Col>
-                  <Col span={6}  style={{ marginTop: '5vh' }}>
+                  <Col span={6} style={{ marginTop: '5vh' }}>
                     <img
                       style={{
                         width: '75%',
                         height: 'auto',
                         display: 'block',
                         margin: '5 auto',
-                        borderRadius:'45%'
+                        borderRadius: '45%',
                       }}
                       src="/companies/matthew-willetts.jpg"
                     />
@@ -1078,14 +1120,14 @@ export function LandingPageDesktop() {
                     </p>
                     <p style={{ margin: 0 }}>BA Natural Sciences @ Cambridge</p>
                   </Col>
-                  <Col span={6}  style={{ marginTop: '5vh' }}>
+                  <Col span={6} style={{ marginTop: '5vh' }}>
                     <img
                       style={{
                         width: '75%',
                         height: 'auto',
                         display: 'block',
                         margin: '5 auto',
-                        borderRadius:'45%'
+                        borderRadius: '45%',
                       }}
                       src="/companies/christian.jpg"
                     />
@@ -1144,127 +1186,127 @@ export function LandingPageDesktop() {
                   <Col span={4}></Col>
                 </Row>
                 <Row
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginTop: '5vh',
+                  }}
+                >
+                  <Col span={4}></Col>
+                  <Col span={1}>
+                    <img
                       style={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        marginTop: '5vh'
+                        width: '90%',
+                        height: 'auto',
+                        display: 'block',
+                        margin: '0 auto',
                       }}
-                    >
-                      <Col span={4}></Col>
-                      <Col span={1}>
-                        <img
-                          style={{
-                            width: '90%',
-                            height: 'auto',
-                            display: 'block',
-                            margin: '0 auto',
-                          }}
-                          src="/companies/8vc.png"
-                        />
-                      </Col>
-                      <Col span={1}>
-                        <img
-                          style={{
-                            width: '80%',
-                            height: 'auto',
-                            display: 'block',
-                            margin: '0 auto',
-                          }}
-                          src="/companies/369.png"
-                        />
-                      </Col>
-                      <Col span={2}>
-                        <img
-                          style={{
-                            width: '100%',
-                            height: 'auto',
-                            display: 'block',
-                            margin: '5 auto',
-                          }}
-                          src="/companies/BalancerV3.png"
-                        />
-                      </Col>
-                      <Col span={2}>
-                        <img
-                          style={{
-                            width: '100%',
-                            height: 'auto',
-                            display: 'block',
-                            margin: '5 auto',
-                          }}
-                          src="/companies/chainlink_build.png"
-                        />
-                      </Col>
-                      <Col span={1}>
-                        <img
-                          style={{
-                            width: '75%',
-                            height: 'auto',
-                            display: 'block',
-                            margin: '5 auto',
-                          }}
-                          src="/companies/Mako.png"
-                        />
-                      </Col>
-                      <Col span={2}>
-                        <img
-                          style={{
-                            width: '90%',
-                            height: 'auto',
-                            display: 'block',
-                            margin: '5 auto',
-                          }}
-                          src="/companies/longhashx.png"
-                        />
-                      </Col>
-                      <Col span={1}>
-                        <img
-                          style={{
-                            width: '100%',
-                            height: 'auto',
-                            display: 'block',
-                            margin: '5 auto',
-                          }}
-                          src="/companies/Marshland.png"
-                        />
-                      </Col>
-                      <Col span={2}>
-                        <img
-                          style={{
-                            width: '100%',
-                            height: 'auto',
-                            display: 'block',
-                            margin: '5 auto',
-                            justifyContent: 'center',
-                          }}
-                          src="/companies/Codehawks.png"
-                        />
-                      </Col>
-                      <Col span={1}>
-                        <img
-                          style={{
-                            width: '100%',
-                            height: 'auto',
-                            display: 'block',
-                            margin: '10 auto',
-                          }}
-                          src="/companies/Cyfrin.png"
-                        />
-                      </Col>
-                      <Col span={1}>
-                        <img
-                          style={{
-                            width: '100%',
-                            height: 'auto',
-                            display: 'block',
-                            margin: '20 auto',
-                          }}
-                          src="/companies/Hypernest.png"
-                        />
-                      </Col>
-                      <Col span={4}></Col>
-                    </Row>
+                      src="/companies/8vc.png"
+                    />
+                  </Col>
+                  <Col span={1}>
+                    <img
+                      style={{
+                        width: '80%',
+                        height: 'auto',
+                        display: 'block',
+                        margin: '0 auto',
+                      }}
+                      src="/companies/369.png"
+                    />
+                  </Col>
+                  <Col span={2}>
+                    <img
+                      style={{
+                        width: '100%',
+                        height: 'auto',
+                        display: 'block',
+                        margin: '5 auto',
+                      }}
+                      src="/companies/BalancerV3.png"
+                    />
+                  </Col>
+                  <Col span={2}>
+                    <img
+                      style={{
+                        width: '100%',
+                        height: 'auto',
+                        display: 'block',
+                        margin: '5 auto',
+                      }}
+                      src="/companies/chainlink_build.png"
+                    />
+                  </Col>
+                  <Col span={1}>
+                    <img
+                      style={{
+                        width: '75%',
+                        height: 'auto',
+                        display: 'block',
+                        margin: '5 auto',
+                      }}
+                      src="/companies/Mako.png"
+                    />
+                  </Col>
+                  <Col span={2}>
+                    <img
+                      style={{
+                        width: '90%',
+                        height: 'auto',
+                        display: 'block',
+                        margin: '5 auto',
+                      }}
+                      src="/companies/longhashx.png"
+                    />
+                  </Col>
+                  <Col span={1}>
+                    <img
+                      style={{
+                        width: '100%',
+                        height: 'auto',
+                        display: 'block',
+                        margin: '5 auto',
+                      }}
+                      src="/companies/Marshland.png"
+                    />
+                  </Col>
+                  <Col span={2}>
+                    <img
+                      style={{
+                        width: '100%',
+                        height: 'auto',
+                        display: 'block',
+                        margin: '5 auto',
+                        justifyContent: 'center',
+                      }}
+                      src="/companies/Codehawks.png"
+                    />
+                  </Col>
+                  <Col span={1}>
+                    <img
+                      style={{
+                        width: '100%',
+                        height: 'auto',
+                        display: 'block',
+                        margin: '10 auto',
+                      }}
+                      src="/companies/Cyfrin.png"
+                    />
+                  </Col>
+                  <Col span={1}>
+                    <img
+                      style={{
+                        width: '100%',
+                        height: 'auto',
+                        display: 'block',
+                        margin: '20 auto',
+                      }}
+                      src="/companies/Hypernest.png"
+                    />
+                  </Col>
+                  <Col span={4}></Col>
+                </Row>
               </ProductItemBackground>
             </Col>
           </Row>
@@ -1296,23 +1338,30 @@ export function LandingPageDesktop() {
             justifyContent: 'flex-start',
           }}
         >
-           {/* Contact Us */}
-            <div style={{ padding: '20px', textAlign: 'center', width: '100%' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <img
+          {/* Contact Us */}
+          <div
+            style={{
+              padding: '20px',
+              textAlign: 'center',
+              width: '100%',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            <img
               src="/assets/colour_ts.png"
               alt="QuantAMM"
               style={{ width: '100px', height: 'auto' }}
-              />
-              <Title level={3}>Contact Us</Title>
-              <p>Email: info@quantamm.fi</p>
-              <p>Twitter: @QuantAMMDefi</p>
-            </div>
-            </div>
+            />
+            <Title level={3}>Contact Us</Title>
+            <p>Email: info@quantamm.fi</p>
+            <p>Twitter: @QuantAMMDefi</p>
+          </div>
         </ParallaxLayer>
       </Parallax>
     </div>
   );
-};
+}
 
 export default LandingPageDesktop;
