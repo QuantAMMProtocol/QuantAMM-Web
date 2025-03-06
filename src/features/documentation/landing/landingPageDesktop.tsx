@@ -88,7 +88,7 @@ export function LandingPageDesktop() {
       }}
     >
       <Parallax
-        pages={14}
+        pages={18}
         id="parallax_container"
         style={{ height: '95vh', width: '100%', position: 'relative' }}
       >
@@ -1284,6 +1284,31 @@ export function LandingPageDesktop() {
             {' '}
             <SimulationRunner />
           </div>
+        </ParallaxLayer>
+
+        <ParallaxLayer
+          speed={0.4}
+          sticky={{ start: 15, end: 18 }}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            backgroundColor: '#162536',
+            justifyContent: 'flex-start',
+          }}
+        >
+           {/* Contact Us */}
+            <div style={{ padding: '20px', textAlign: 'center', width: '100%' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <img
+              src="/assets/colour_ts.png"
+              alt="QuantAMM"
+              style={{ width: '100px', height: 'auto' }}
+              />
+              <Title level={3}>Contact Us</Title>
+              <p>Email: info@quantamm.fi</p>
+              <p>Twitter: @QuantAMMDefi</p>
+            </div>
+            </div>
         </ParallaxLayer>
       </Parallax>
     </div>
