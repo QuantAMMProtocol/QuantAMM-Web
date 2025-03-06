@@ -27,7 +27,6 @@ import debounce from 'lodash/debounce';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { FilterList, FilterMap } from '../../../models';
 import {
-  selectActiveFilters,
   selectFilters,
   selectHorizontalView,
   selectLoadingFilters,
@@ -38,6 +37,7 @@ import {
 import { productExplorerTranslation } from '../translations';
 
 import styles from './productExplorerFilter.module.scss';
+import { updateFilters } from '../../../utils/filters';
 
 const { Sider } = Layout;
 const { Title, Text } = Typography;
@@ -53,10 +53,11 @@ export const ProductExplorerFilters: FC<ProductExplorerFiltersProps> = ({
 }) => {
   const dispatch = useAppDispatch();
   const filters = useAppSelector<FilterList>(selectFilters);
-  const activeFilters = useAppSelector<FilterMap>(selectActiveFilters);
   const initialHorizontalView = useAppSelector<boolean>(selectHorizontalView);
   const initialTextSearch = useAppSelector<string>(selectTextSearch);
   const loading = useAppSelector<boolean>(selectLoadingFilters);
+
+  const [localFilters, setLocalFilters] = useState<FilterMap>({});
 
   const [collapsed, setCollapsed] = useState<boolean>(true);
   const [brokenBreakpoint, setBrokenBreakpoint] = useState<boolean>(true);
@@ -77,12 +78,16 @@ export const ProductExplorerFilters: FC<ProductExplorerFiltersProps> = ({
     dispatch(setFilters({}));
     dispatch(setFilters({ filterCategory: 'tvl', minTvl: undefined }));
     dispatch(setTextSearch(''));
+    setLocalFilters({});
   }, [dispatch]);
 
   const handleFilterClick = useCallback(
     (event: CheckboxChangeEvent) => {
       const filter = (event.target as any)['data-filter'];
       const filterCategory = (event.target as any)['data-filter-category'];
+      setLocalFilters((prev) =>
+        updateFilters({ filterCategory, filter }, prev)
+      );
       dispatch(setFilters({ filterCategory, filter }));
     },
     [dispatch]
@@ -229,7 +234,7 @@ export const ProductExplorerFilters: FC<ProductExplorerFiltersProps> = ({
                       return (
                         <Checkbox
                           key={filter}
-                          checked={activeFilters[filterCategory]?.includes(
+                          checked={localFilters[filterCategory]?.includes(
                             filter
                           )}
                           disabled={false}
@@ -251,9 +256,7 @@ export const ProductExplorerFilters: FC<ProductExplorerFiltersProps> = ({
                 <InputNumber<number>
                   min={0}
                   max={1000000000}
-                  defaultValue={parseFloat(
-                    activeFilters.minTvl?.[0] ?? '10000'
-                  )}
+                  defaultValue={parseFloat(localFilters.minTvl?.[0] ?? '10000')}
                   formatter={(value) =>
                     `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
                   }

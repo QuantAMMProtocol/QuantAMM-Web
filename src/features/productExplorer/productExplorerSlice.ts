@@ -10,6 +10,7 @@ import {
   SortingDirection,
   TimeRange,
 } from '../../models';
+import { FilterPayload, updateFilters } from '../../utils/filters';
 import { SimulationRunBreakdown } from '../simulationResults/simulationResultSummaryModels';
 import { productExplorerInitialState } from './productExplorerInitialState';
 
@@ -48,42 +49,12 @@ export const productExplorerSlice = createSlice({
     ) => {
       state.poolDetailSelectedGraphRange = action.payload;
     },
-    setFilters: (
-      state,
-      action: PayloadAction<{
-        filterCategory?: string;
-        filter?: string;
-        minTvl?: number;
-      }>
-    ) => {
+    setFilters: (state, action: PayloadAction<FilterPayload>) => {
       state.loadingProducts = true;
       state.productMap = {};
       state.page = INITIAL_PAGE;
 
-      const { filterCategory, filter, minTvl } = action.payload;
-      const newFilters = { ...state.activeFilters };
-
-      if (filterCategory && filter) {
-        if (newFilters[filterCategory]?.includes(filter)) {
-          newFilters[filterCategory] = newFilters[filterCategory].filter(
-            (f) => f !== filter
-          );
-          if (newFilters[filterCategory].length === 0)
-            delete newFilters[filterCategory];
-        } else {
-          newFilters[filterCategory] = newFilters[filterCategory]
-            ? [...newFilters[filterCategory], filter]
-            : [filter];
-        }
-        state.activeFilters = newFilters;
-      } else if (filterCategory === 'tvl') {
-        state.activeFilters = {
-          ...state.activeFilters,
-          minTvl: [minTvl?.toString() ?? ''],
-        };
-      } else {
-        state.activeFilters = {};
-      }
+      state.activeFilters = updateFilters(action.payload, state.activeFilters);
     },
     setSortingMetric: (
       state,
