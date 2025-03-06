@@ -84,6 +84,7 @@ export const ProductItemBackground: FC<ProductItemBackgroundProps> = ({
                 transform: `scale(${1 + index * 0.1}) translateY(-50%)`,
                 width: wide ? '70%' : '',
                 height: wide ? '100%' : '',
+                top: wide ? '50%' : '',
               }}
             ></div>
           ))}
