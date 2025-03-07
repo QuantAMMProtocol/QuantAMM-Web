@@ -9,10 +9,10 @@ import { getScoreColor, MAX_SCORE } from '../../../shared/graphs/helpers';
 import { ProductModal } from '../../../productDetail/modal/productModal';
 import { getBalancerPoolUrl } from '../../../../utils';
 import { productExplorerTranslation } from '../../translations';
-import { percentageFormatter } from '../../../../utils/formatters';
 import { getTimeDifference } from '../shared/TimeDifference';
 import { getCurrentPrice, getTvl } from '../productItemHelpers';
 import { ProductItemPerformanceLineGraph } from './productItemPerformanceLineGraph';
+import { ProductItemTokenList } from './productItemTokenList';
 import { ProductItemBackground } from '../productItemBackground';
 
 import styles from './productItemWide.module.scss';
@@ -48,27 +48,6 @@ export const ProductItemWide: FC<ProductItemProps> = ({ product }) => {
   const currentPrice = useMemo(() => {
     return getCurrentPrice(product);
   }, [product]);
-
-  const totalWeight = useMemo(() => {
-    return product.poolConstituents.reduce(
-      (acc, token) => acc + token.weight,
-      0
-    );
-  }, [product]);
-
-  const tokenList = useMemo(() => {
-    const mappedTokens = product.poolConstituents.map((token) => [
-      token.coin,
-      token.weight / totalWeight,
-    ]);
-
-    const firstColumn = mappedTokens.slice(0, 3);
-    const secondColumn = mappedTokens.slice(3);
-
-    return secondColumn.length > 0
-      ? [firstColumn, secondColumn]
-      : [mappedTokens];
-  }, [product, totalWeight]);
 
   const shouldShow = useMemo(() => {
     return product.timeSeries && product.timeSeries.length > 0;
@@ -207,54 +186,25 @@ export const ProductItemWide: FC<ProductItemProps> = ({ product }) => {
             </Col>
             <Col
               span={3}
-              className={styles['product-item__card-column']}
-              style={{
-                paddingLeft: 0,
-                paddingRight: 0,
-                overflow: 'hidden',
-              }}
+              className={
+                shouldShow ? styles['product-item__card-column'] : undefined
+              }
+              style={
+                shouldShow
+                  ? {
+                      padding: 0,
+                      overflow: 'hidden',
+                    }
+                  : undefined
+              }
             >
-              <div
-                className={
-                  tokenList.length > 1
-                    ? styles['product-item__card-token-list__double']
-                    : styles['product-item__card-token-list']
-                }
-              >
-                {tokenList.length > 0 &&
-                  tokenList.map((column, index) => (
-                    <List
-                      key={index}
-                      dataSource={column}
-                      renderItem={(item) => (
-                        <List.Item
-                          style={{
-                            padding: 0,
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                          }}
-                        >
-                          <Text
-                            className={styles['product-item__card-token']}
-                            title={String(item[0])}
-                          >
-                            {String(item[0])}
-                          </Text>
-                          <Text
-                            className={styles['product-item__card-token']}
-                            style={{
-                              marginLeft: 4,
-                              minWidth: 35,
-                              textAlign: 'right',
-                            }}
-                          >
-                            {percentageFormatter(Number(item[1]) * 100)}
-                          </Text>
-                        </List.Item>
-                      )}
-                    />
-                  ))}
-              </div>
+              {shouldShow ? (
+                <ProductItemTokenList product={product} />
+              ) : (
+                <div className={styles['product-item__card__loading']}>
+                  <Spin />
+                </div>
+              )}
             </Col>
 
             <Col span={3} className={styles['product-item__card-column-right']}>
