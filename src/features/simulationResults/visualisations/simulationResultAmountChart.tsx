@@ -65,12 +65,14 @@ export function SimulationResultAmountChart(props: BreakdownProps) {
 
       current.coinsHeld.forEach((coinHeld) => {
         const lowerCode = coinHeld.coin.coinCode.toLowerCase();
-        timeStep[normalisedTokenName(lowerCode)] = Math.abs(
-          coinHeld.amount -
-            (prev?.coinsHeld.find(
-              (z) => z.coin.coinCode == coinHeld.coin.coinCode
-            )?.amount ?? 0)
-        );
+        if (coinHeld.amount) {
+          timeStep[normalisedTokenName(lowerCode)] = Math.abs(
+            coinHeld.amount -
+              (prev?.coinsHeld.find(
+                (z) => z.coin.coinCode == coinHeld.coin.coinCode
+              )?.amount ?? 0)
+          );
+        }
       });
 
       result.push(timeStep);

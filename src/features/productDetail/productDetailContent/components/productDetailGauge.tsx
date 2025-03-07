@@ -126,7 +126,6 @@ export const ProductDetailGauge: FC<ProductDetailGaugeProps> = ({
       id="product-detail-gauge"
       className={styles['product-detail-gauge__container']}
     >
-      {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
       <AgGauge options={options as any} />
     </div>
   );

@@ -73,10 +73,10 @@ export interface UpdateRuleFactorDto {
 export interface LiquidityPoolCoinDto {
   coinName: string;
   coinCode: string;
-  marketValue: number;
-  currentPrice: number;
-  amount: number;
-  weight: number;
+  marketValue: number | undefined;
+  currentPrice: number | undefined;
+  amount: number | undefined;
+  weight: number | undefined;
 }
 
 export interface SimulationResult {

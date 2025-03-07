@@ -13,17 +13,24 @@ export const ProductDetailSidebarPerformanceGraph: FC<
 > = ({ product }) => {
   return (
     <div className={styles['product-detail-sidebar-graph']}>
-      <ProductItemPerformanceAreaGraph
-        data={[
-          product.oneWeekPerformance,
-          product.oneMonthPerformance,
-          product.threeMonthPerformance,
-          product.sixMonthPerformance,
-          product.oneYearPerformance,
-          product.inceptionPerformance,
-        ]}
-        wide={false}
-      />
+      {product.oneWeekPerformance &&
+        product.oneMonthPerformance &&
+        product.threeMonthPerformance &&
+        product.sixMonthPerformance &&
+        product.oneYearPerformance &&
+        product.inceptionPerformance && (
+          <ProductItemPerformanceAreaGraph
+            data={[
+              product.oneWeekPerformance,
+              product.oneMonthPerformance,
+              product.threeMonthPerformance,
+              product.sixMonthPerformance,
+              product.oneYearPerformance,
+              product.inceptionPerformance,
+            ]}
+            wide={false}
+          />
+        )}
     </div>
   );
 };
