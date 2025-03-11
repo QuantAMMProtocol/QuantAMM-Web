@@ -1,6 +1,6 @@
 import { FC, useMemo } from 'react';
 import { AgCharts } from 'ag-charts-react';
-import { Tooltip, Typography } from 'antd';
+import { Typography } from 'antd';
 import {
   AgPolarSeriesOptions,
   AgTooltipRendererResult,
@@ -17,11 +17,12 @@ interface ProductItemCompositionGraphProps {
   data: ProductPoolConstituents[];
   wide?: boolean;
   showTokenNames?: boolean;
+  onTokenNamesClick?: () => void;
 }
 
 export const ProductItemCompositionGraph: FC<
   ProductItemCompositionGraphProps
-> = ({ data, wide, showTokenNames }) => {
+> = ({ data, wide, showTokenNames, onTokenNamesClick }) => {
   const chartTheme = useAppSelector(selectAgChartTheme);
 
   const totalWeight = data.reduce((acc, item) => acc + item.weight, 0);
@@ -57,25 +58,15 @@ export const ProductItemCompositionGraph: FC<
     <div className={styles['product-item__graph-overlay']}>
       {showTokenNames && (
         <div className={styles['product-item__graph-overlay__content']}>
-          <Tooltip
-            placement="bottom"
-            title={
-              <ul style={{ margin: 0 }}>
-                {data.map((item) => (
-                  <li key={item.coin}>{item.coin}</li>
-                ))}
-              </ul>
-            }
+          <Text
+            strong
+            style={{
+              fontSize: wide ? 10 : '',
+            }}
+            onClick={onTokenNamesClick}
           >
-            <Text
-              strong
-              style={{
-                fontSize: wide ? 10 : '',
-              }}
-            >
-              Token list
-            </Text>
-          </Tooltip>
+            Token list
+          </Text>
         </div>
       )}
       <AgCharts
