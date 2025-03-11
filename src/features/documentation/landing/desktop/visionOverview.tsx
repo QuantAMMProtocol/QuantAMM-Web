@@ -173,7 +173,7 @@ export function VisionOverview(){
             <img
               loading="lazy"
               style={{
-                width: '80%',
+                width: '100%',
                 height: 'auto',
                 display: 'block',
                 margin: '0 auto',
@@ -205,11 +205,11 @@ export function VisionOverview(){
               src="/companies/chainlink_build.png"
             />
           </Col>
-          <Col span={1}>
+          <Col span={1} style={{marginLeft: '10px'}}>
             <img
               loading="lazy"
               style={{
-                width: '75%',
+                width: '70%',
                 height: 'auto',
                 display: 'block',
                 margin: '5 auto',
@@ -217,11 +217,11 @@ export function VisionOverview(){
               src="/companies/Mako.png"
             />
           </Col>
-          <Col span={2}>
+          <Col span={2} style={{ display: 'flex', justifyContent: 'center' }}>
             <img
               loading="lazy"
               style={{
-                width: '90%',
+                width: '80%',
                 height: 'auto',
                 display: 'block',
                 margin: '5 auto',
