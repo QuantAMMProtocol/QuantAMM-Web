@@ -685,7 +685,7 @@ export const updatePoolAmounts = (
 ) => {
   poolConstituents.forEach((x) => {
     const currentPrice = getCurrentPrice(x.coin, currentDate);
-    if (currentPrice != undefined) {
+    if (currentPrice != undefined && x.marketValue != undefined) {
       x.currentPrice = currentPrice?.close;
       x.currentPriceUnix = currentPrice?.closeUnix;
       x.amount = x.marketValue / x.currentPrice;
@@ -696,12 +696,14 @@ export const updatePoolAmounts = (
 export const updatePoolWeights = (poolConstituents: LiquidityPoolCoin[]) => {
   const initialValue = 0;
   const totalMarketValue = poolConstituents.reduce((prev, current) => {
-    return prev + current.marketValue;
+    return prev + (current.marketValue ?? 0);
   }, initialValue);
   if (totalMarketValue > 0) {
-    poolConstituents.forEach(
-      (x) => (x.weight = (x.marketValue / totalMarketValue) * 100)
-    );
+    poolConstituents.forEach((x) => {
+      if (x.marketValue) {
+        x.weight = (x.marketValue / totalMarketValue) * 100;
+      }
+    });
   }
 };
 

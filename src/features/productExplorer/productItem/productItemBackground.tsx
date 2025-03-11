@@ -19,7 +19,6 @@ export const ProductItemBackground: FC<ProductItemBackgroundProps> = ({
   layers = DEFAULT_LAYERS,
   wide,
 }) => {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   const layerList = useMemo(() => new Array(layers).fill(0), [layers]);
 
   const isDark = useAppSelector(selectTheme);

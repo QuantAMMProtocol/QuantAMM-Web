@@ -36,13 +36,15 @@ export function SimulationResultWeightChart({ breakdowns }: BreakdownProps) {
     const data: FlatWeightData[] = [];
     const final = breakdown.timeSteps[breakdown.timeSteps.length - 1];
     breakdown.simulationRun.poolConstituents.forEach((x) => {
-      data.push({
-        coinCode: x.coin.coinCode,
-        initialWeight: x.weight,
-        finalWeight:
-          final.coinsHeld.find((y) => y.coin.coinCode == x.coin.coinCode)
-            ?.weight ?? x.weight,
-      });
+      if (x.weight) {
+        data.push({
+          coinCode: x.coin.coinCode,
+          initialWeight: x.weight,
+          finalWeight:
+            final.coinsHeld.find((y) => y.coin.coinCode == x.coin.coinCode)
+              ?.weight ?? x.weight,
+        });
+      }
     });
 
     return data;

@@ -30,13 +30,13 @@ export const ProductDetailSidebarConfig: FC<
       />
       <ProductDetailSidebarElement
         side="right"
-        text={formatter.format(Number(product.dynamicData.swapFee))}
+        text={formatter.format(Number(product.dynamicData?.swapFee))}
       />
 
       <ProductDetailSidebarElement side="left" text="Is Pool Paused" />
       <ProductDetailSidebarElement
         side="right"
-        text={product.dynamicData.isPaused ? 'true' : 'false'}
+        text={product.dynamicData?.isPaused ? 'true' : 'false'}
       />
 
       <ProductDetailSidebarElement side="left" text="Pause Window End Time" />
@@ -48,7 +48,7 @@ export const ProductDetailSidebarConfig: FC<
       />
       <ProductDetailSidebarElement
         side="right"
-        text={product.dynamicData.isInRecoveryMode ? 'true' : 'false'}
+        text={product.dynamicData?.isInRecoveryMode ? 'true' : 'false'}
       />
     </div>
   );
