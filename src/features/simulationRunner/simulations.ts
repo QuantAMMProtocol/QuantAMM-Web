@@ -152,7 +152,11 @@ export function runBalancer(
         coinP = currentPrice / currentItem.currentPrice;
       }
 
-      return prev * Math.pow(coinP, (currentItem.weight ?? 1) / 100);
+      if (currentItem.weight) {
+        return prev * Math.pow(coinP, currentItem.weight / 100);
+      }
+
+      return prev;
     }, initialValue);
 
     pool.poolConstituents.forEach((y) => {
