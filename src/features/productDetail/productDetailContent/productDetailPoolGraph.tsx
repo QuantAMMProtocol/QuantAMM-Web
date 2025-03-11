@@ -98,7 +98,7 @@ export const ProductDetailPoolGraph: FC<ProductDetailPoolGraphProps> = ({
   const getData = useCallback(
     (timeSeries: SimulationResultTimeseries[]) => {
       const firstAxisData = [
-        ...product.timeSeries
+        ...(product.timeSeries ?? [])
           .filter((dataPoint) =>
             filterByTimeRange(dataPoint.timestamp, selectedTimeRange)
           )
@@ -110,7 +110,7 @@ export const ProductDetailPoolGraph: FC<ProductDetailPoolGraphProps> = ({
       ];
 
       const benchmarkData = [
-        ...product.timeSeries
+        ...(product.timeSeries ?? [])
           .filter((dataPoint) =>
             filterByTimeRange(dataPoint.timestamp, selectedTimeRange)
           )
@@ -243,7 +243,7 @@ export const ProductDetailPoolGraph: FC<ProductDetailPoolGraphProps> = ({
         position: 'left',
         max:
           Math.max(
-            ...product.timeSeries
+            ...(product.timeSeries ?? [])
               .filter((dataPoint) =>
                 filterByTimeRange(dataPoint.timestamp, selectedTimeRange)
               )

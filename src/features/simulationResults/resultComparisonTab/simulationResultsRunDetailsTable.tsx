@@ -177,12 +177,13 @@ export function SimulationResultsRunDetailsTable(props: RunDetailProps) {
         return (
           params.data.originatingBreakdown as SimulationRunBreakdown
         ).simulationRun.poolConstituents
+          .filter((x) => x.weight !== undefined)
           .map(
             (x) =>
               '[' +
               x.coin.coinCode +
               ' | ' +
-              currencyFormatter(x.weight, '') +
+              currencyFormatter(x.weight!, '') +
               '%]'
           )
           .reduce<string>((accumulator, current) => {

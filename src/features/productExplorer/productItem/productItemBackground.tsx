@@ -23,7 +23,6 @@ export const ProductItemBackground: FC<ProductItemBackgroundProps> = ({
   backgroundColourOverride,
   borderColourOverride,
 }) => {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   const layerList = useMemo(() => new Array(layers).fill(0), [layers]);
 
   const isDark = useAppSelector(selectTheme);

@@ -56,50 +56,52 @@ export function runHodl(
 
     pool.poolConstituents.forEach((y) => {
       const currentPrice = y.coin.dailyPriceHistoryMap.get(x);
-      if (currentPrice != undefined) {
-        snapshot.coinsHeld.push({
-          coin: {
-            coinCode: y.coin.coinCode,
-            coinName: y.coin.coinName,
-            dailyPriceHistory: [], // no need to store histories here
-            dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-            dailyReturns: new Map<number, ReturnTimeStep>(),
-            coinComparisons: new Map<string, CoinComparison>(),
-          },
-          amount: y.amount,
-          marketValue: y.amount * currentPrice.close,
-          currentPrice: currentPrice.close,
-          currentPriceUnix: x,
-          weight: 0, // update later
-          factorValue: y.factorValue,
-        });
-        snapshot.totalPoolMarketValue += y.amount * currentPrice.close;
-      } else {
-        //keep price same as last if no price recorded for time
-        let latest = y;
-        if (results.length > 0) {
-          latest =
-            results[results.length - 1].coinsHeld.find(
-              (z) => z.coin.coinCode == y.coin.coinCode
-            ) ?? y;
+      if (y.amount) {
+        if (currentPrice != undefined) {
+          snapshot.coinsHeld.push({
+            coin: {
+              coinCode: y.coin.coinCode,
+              coinName: y.coin.coinName,
+              dailyPriceHistory: [], // no need to store histories here
+              dailyPriceHistoryMap: new Map<number, CoinPrice>(),
+              dailyReturns: new Map<number, ReturnTimeStep>(),
+              coinComparisons: new Map<string, CoinComparison>(),
+            },
+            amount: y.amount,
+            marketValue: y.amount * currentPrice.close,
+            currentPrice: currentPrice.close,
+            currentPriceUnix: x,
+            weight: 0, // update later
+            factorValue: y.factorValue,
+          });
+          snapshot.totalPoolMarketValue += y.amount * currentPrice.close;
+        } else if (y.currentPrice) {
+          //keep price same as last if no price recorded for time
+          let latest = y;
+          if (results.length > 0) {
+            latest =
+              results[results.length - 1].coinsHeld.find(
+                (z) => z.coin.coinCode == y.coin.coinCode
+              ) ?? y;
+          }
+          snapshot.coinsHeld.push({
+            coin: {
+              coinCode: latest.coin.coinCode,
+              coinName: latest.coin.coinName,
+              dailyPriceHistory: [], // no need to store histories here
+              dailyPriceHistoryMap: new Map<number, CoinPrice>(),
+              dailyReturns: new Map<number, ReturnTimeStep>(),
+              coinComparisons: new Map<string, CoinComparison>(),
+            },
+            amount: latest.amount,
+            marketValue: latest.marketValue,
+            currentPrice: latest.currentPrice,
+            currentPriceUnix: latest.currentPriceUnix,
+            factorValue: y.factorValue,
+            weight: 0, // update later
+          });
+          snapshot.totalPoolMarketValue += y.amount * y.currentPrice;
         }
-        snapshot.coinsHeld.push({
-          coin: {
-            coinCode: latest.coin.coinCode,
-            coinName: latest.coin.coinName,
-            dailyPriceHistory: [], // no need to store histories here
-            dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-            dailyReturns: new Map<number, ReturnTimeStep>(),
-            coinComparisons: new Map<string, CoinComparison>(),
-          },
-          amount: latest.amount,
-          marketValue: latest.marketValue,
-          currentPrice: latest.currentPrice,
-          currentPriceUnix: latest.currentPriceUnix,
-          factorValue: y.factorValue,
-          weight: 0, // update later
-        });
-        snapshot.totalPoolMarketValue += y.amount * y.currentPrice;
       }
     });
 
@@ -138,22 +140,30 @@ export function runBalancer(
     };
 
     const initialValue = 1;
-    const jPrice = pool.poolConstituents.reduce((prev, current) => {
-      let currentPrice =
-        current.coin.dailyPriceHistoryMap.get(x)?.close ?? current.currentPrice;
-      if (currentPrice == undefined) {
-        currentPrice = current.currentPrice;
-      }
-      const coinP: number = currentPrice / current.currentPrice;
+    const jPrice = pool.poolConstituents.reduce((prev, currentItem) => {
+      const currentPrice =
+        currentItem.coin.dailyPriceHistoryMap.get(x)?.close ??
+        currentItem.currentPrice;
+      let coinP;
 
-      return prev * Math.pow(coinP, current.weight / 100);
+      if (currentPrice == undefined || currentItem.currentPrice == undefined) {
+        coinP = 1;
+      } else {
+        coinP = currentPrice / currentItem.currentPrice;
+      }
+
+      if (currentItem.weight) {
+        return prev * Math.pow(coinP, currentItem.weight / 100);
+      }
+
+      return prev;
     }, initialValue);
 
     pool.poolConstituents.forEach((y) => {
       const currentPrice = y.coin.dailyPriceHistoryMap.get(x)?.close;
 
       if (i != 0 && currentPrice != undefined) {
-        if (currentPrice != undefined) {
+        if (currentPrice != undefined && y.amount && y.currentPrice) {
           const newAmount = y.amount * (y.currentPrice / currentPrice) * jPrice;
           snapshot.coinsHeld.push({
             coin: {
@@ -205,7 +215,7 @@ export function runBalancer(
     snapshot.totalPoolMarketValue = snapshot.coinsHeld
       .map((x) => x.marketValue)
       .reduce<number>((accumulator, current) => {
-        return accumulator + current;
+        return accumulator + (current ?? 0);
       }, 0);
 
     if (results.length > 0) {
