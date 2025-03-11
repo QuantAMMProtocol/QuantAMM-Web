@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Button, Card, Typography, Timeline, Collapse } from 'antd';
-import { motion } from 'framer-motion';
 import { PieChartOutlined, HourglassOutlined } from '@ant-design/icons';
 import { getBreakdown, Pool } from '../../../services/breakdownService';
 import { SimulationRunBreakdown } from '../../simulationResults/simulationResultSummaryModels';
@@ -93,26 +92,23 @@ export function LandingPageMobile() {
               }}
             >
               <div style={{ height: '8vh', marginBottom: '5px' }}>
-                <Button
-                  block
-                  style={{ whiteSpace: 'normal', height:'100%' }}
-                >
+                <Button block style={{ whiteSpace: 'normal', height: '100%' }}>
                   Mega Cap 30 day Trend BTF BTC/ETH/SOL/XRP/USDC
                 </Button>
               </div>
-              <div style={{ height: '8vh' ,
-                    marginBottom: '5px',}}>
+              <div style={{ height: '8vh', marginBottom: '5px' }}>
                 <Button
                   block
                   style={{
-                    whiteSpace: 'normal', height:'100%'
+                    whiteSpace: 'normal',
+                    height: '100%',
                   }}
                 >
                   Meme 7 day Trend BTF DOGE/SHIB/PEPE/USDC
                 </Button>
               </div>
               <div style={{ height: '8vh' }}>
-                <Button block style={{ whiteSpace: 'normal', height:'100%' }}>
+                <Button block style={{ whiteSpace: 'normal', height: '100%' }}>
                   Safe Haven 30 day Trend BTF BTC/PAXG/XAUt/USDC
                 </Button>
               </div>
@@ -264,6 +260,7 @@ export function LandingPageMobile() {
             style={{ marginBottom: '10px' }}
           >
             <img
+              loading="lazy"
               src={founder.image}
               alt={founder.name}
               style={{ width: '100px', borderRadius: '50%' }}
@@ -298,6 +295,7 @@ export function LandingPageMobile() {
             'Hypernest.png',
           ].map((img, index) => (
             <img
+              loading="lazy"
               key={index}
               src={`/companies/${img}`}
               alt={img}
@@ -328,6 +326,7 @@ export function LandingPageMobile() {
       {/* Contact Us */}
       <div style={{ padding: '20px', textAlign: 'center' }}>
         <img
+          loading="lazy"
           src="/assets/colour_ts.png"
           alt="QuantAMM"
           style={{ width: '100px', height: 'auto' }}

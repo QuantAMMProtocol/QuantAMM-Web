@@ -18,7 +18,6 @@ import { getChartTimeSteps } from './helpers';
 
 interface WeightChangeOverTimeGraphProps {
   simulationRunBreakdown: SimulationRunBreakdown;
-  xAxisOverride?: Partial<AgTimeAxisOptions>;
   yAxisOverride?: Partial<AgNumberAxisOptions>;
   legendOverride?: Partial<AgChartLegendOptions>;
   tickIntervalInMonths?: number;
@@ -29,7 +28,6 @@ interface WeightChangeOverTimeGraphProps {
 
 export const WeightChangeOverTimeGraph: FC<WeightChangeOverTimeGraphProps> = ({
   simulationRunBreakdown,
-  xAxisOverride,
   yAxisOverride,
   legendOverride,
   tickIntervalInMonths = 3,
@@ -113,7 +111,6 @@ export const WeightChangeOverTimeGraph: FC<WeightChangeOverTimeGraphProps> = ({
     <AgCharts
       options={{
         height: 230,
-        margin: { left: 0 },
         padding: {
           right: 20,
           top: 20,
@@ -122,7 +119,7 @@ export const WeightChangeOverTimeGraph: FC<WeightChangeOverTimeGraphProps> = ({
         },
         data: getNormalisedAreaData(simulationRunBreakdown),
         axes: [
-          { ...timeAxisOption, ...xAxisOverride },
+          { ...timeAxisOption },
           {
             type: 'number',
             position: 'left',

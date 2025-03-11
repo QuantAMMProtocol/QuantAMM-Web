@@ -194,6 +194,7 @@ export function LandingPageDesktop() {
                   <div style={{ display: 'flex', justifyContent: 'center' }}>
                     <Tooltip title="Balancer V3 Launch Partner">
                       <img
+                        loading="lazy"
                         style={{ width: '50%', height: '50%' }}
                         src="/background/Balancerv3.png"
                       />
@@ -251,6 +252,7 @@ export function LandingPageDesktop() {
                   <div style={{ display: 'flex', justifyContent: 'center' }}>
                     <Tooltip title="CHAINLINK BUILD program member">
                       <img
+                        loading="lazy"
                         style={{ width: '75%', height: '75%' }}
                         src="/background/secured_with_chainlink.png"
                       />
@@ -297,6 +299,7 @@ export function LandingPageDesktop() {
               >
                 <div style={{ marginTop: '10vh' }}>
                   <img
+                    loading="lazy"
                     style={{
                       width: '80%',
                       height: '80%',
@@ -560,6 +563,7 @@ export function LandingPageDesktop() {
                                 }}
                               >
                                 <img
+                                  loading="lazy"
                                   style={{
                                     width: '42%',
                                     height: '42%',
@@ -613,6 +617,7 @@ export function LandingPageDesktop() {
                           }}
                         >
                           <img
+                            loading="lazy"
                             style={{
                               width: '40%',
                               height: '40%',
@@ -649,6 +654,7 @@ export function LandingPageDesktop() {
                           }}
                         >
                           <img
+                            loading="lazy"
                             style={{
                               width: '50%',
                               height: '50%',
@@ -685,6 +691,7 @@ export function LandingPageDesktop() {
                           }}
                         >
                           <img
+                            loading="lazy"
                             style={{
                               width: '40%',
                               height: '40%',
@@ -721,6 +728,7 @@ export function LandingPageDesktop() {
                           }}
                         >
                           <img
+                            loading="lazy"
                             style={{
                               width: '50%',
                               height: '50%',
@@ -757,6 +765,7 @@ export function LandingPageDesktop() {
                           }}
                         >
                           <img
+                            loading="lazy"
                             style={{
                               width: '65%',
                               height: '65%',
@@ -817,6 +826,7 @@ export function LandingPageDesktop() {
                                 }}
                               >
                                 <img
+                                  loading="lazy"
                                   style={{
                                     width: '45%',
                                     height: '45%',
@@ -1096,6 +1106,7 @@ export function LandingPageDesktop() {
                   </Col>
                   <Col span={6} style={{ marginTop: '5vh' }}>
                     <img
+                      loading="lazy"
                       style={{
                         width: '75%',
                         height: 'auto',
@@ -1122,6 +1133,7 @@ export function LandingPageDesktop() {
                   </Col>
                   <Col span={6} style={{ marginTop: '5vh' }}>
                     <img
+                      loading="lazy"
                       style={{
                         width: '75%',
                         height: 'auto',
@@ -1196,6 +1208,7 @@ export function LandingPageDesktop() {
                   <Col span={4}></Col>
                   <Col span={1}>
                     <img
+                      loading="lazy"
                       style={{
                         width: '90%',
                         height: 'auto',
@@ -1207,6 +1220,7 @@ export function LandingPageDesktop() {
                   </Col>
                   <Col span={1}>
                     <img
+                      loading="lazy"
                       style={{
                         width: '80%',
                         height: 'auto',
@@ -1218,6 +1232,7 @@ export function LandingPageDesktop() {
                   </Col>
                   <Col span={2}>
                     <img
+                      loading="lazy"
                       style={{
                         width: '100%',
                         height: 'auto',
@@ -1229,6 +1244,7 @@ export function LandingPageDesktop() {
                   </Col>
                   <Col span={2}>
                     <img
+                      loading="lazy"
                       style={{
                         width: '100%',
                         height: 'auto',
@@ -1240,6 +1256,7 @@ export function LandingPageDesktop() {
                   </Col>
                   <Col span={1}>
                     <img
+                      loading="lazy"
                       style={{
                         width: '75%',
                         height: 'auto',
@@ -1251,6 +1268,7 @@ export function LandingPageDesktop() {
                   </Col>
                   <Col span={2}>
                     <img
+                      loading="lazy"
                       style={{
                         width: '90%',
                         height: 'auto',
@@ -1262,6 +1280,7 @@ export function LandingPageDesktop() {
                   </Col>
                   <Col span={1}>
                     <img
+                      loading="lazy"
                       style={{
                         width: '100%',
                         height: 'auto',
@@ -1273,6 +1292,7 @@ export function LandingPageDesktop() {
                   </Col>
                   <Col span={2}>
                     <img
+                      loading="lazy"
                       style={{
                         width: '100%',
                         height: 'auto',
@@ -1285,6 +1305,7 @@ export function LandingPageDesktop() {
                   </Col>
                   <Col span={1}>
                     <img
+                      loading="lazy"
                       style={{
                         width: '100%',
                         height: 'auto',
@@ -1296,6 +1317,7 @@ export function LandingPageDesktop() {
                   </Col>
                   <Col span={1}>
                     <img
+                      loading="lazy"
                       style={{
                         width: '100%',
                         height: 'auto',
@@ -1350,6 +1372,7 @@ export function LandingPageDesktop() {
             }}
           >
             <img
+              loading="lazy"
               src="/assets/colour_ts.png"
               alt="QuantAMM"
               style={{ width: '100px', height: 'auto' }}
