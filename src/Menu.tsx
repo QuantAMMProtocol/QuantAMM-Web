@@ -1,6 +1,6 @@
 import { FC, useCallback, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Menu, Switch, MenuProps, Button } from 'antd';
+import { Menu, Switch, MenuProps, Button, Grid } from 'antd';
 import {
   RadarChartOutlined,
   LineChartOutlined,
@@ -21,7 +21,12 @@ interface MenuComponentProps {
   initialise: (page: string) => void;
 }
 
+const { useBreakpoint } = Grid;
+
 export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
+  const screens = useBreakpoint();
+  const isMobile = !screens.lg && !screens.xl && !screens.xxl;
+
   const navigate = useNavigate();
   const path = window.location.pathname.split('/')[1];
   console.log("path", path);
@@ -52,6 +57,66 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
     },
     [initialise, navigate, dispatch]
   );
+
+  function getMobileItems(): MenuItem[] {
+    return [
+      {
+      key: 'home',
+      label: '',
+      icon: (
+        <img
+        loading="lazy"
+        src="/assets/quantamm-logo.png"
+        style={{ width: '150px', marginTop: '5px' }}
+        />
+      ),
+      },
+      {
+      key: 'Education',
+      label: '',
+      type: 'submenu',
+      icon: <MenuOutlined />,
+      children: [
+        {
+        key: 'Company',
+        label: 'Company',
+        icon: <FireOutlined />,
+        },
+        {
+        key: 'contact',
+        label: 'Contact',
+        icon: <LineChartOutlined />,
+        },
+        {
+        key: 'research',
+        label: 'Research',
+        icon: <FireOutlined />,
+        },
+        {
+        key: 'documentation',
+        label: 'Documentation',
+        icon: <FireOutlined />,
+        },
+        {
+        key: 'simulation-runner',
+        label: 'Historical Simulator',
+        icon: <LineChartOutlined />,
+        },
+        {
+        key: 'simulation-comparer',
+        label: 'Multi-run Simulation Results Comparer',
+        icon: <RadarChartOutlined />,
+        },
+        {
+        key: 'coins',
+        label: 'Simulation Price Data',
+        icon: <LineChartOutlined />,
+        },
+      ],
+      style: { marginLeft: 'auto' }, // Align to the right
+      },
+    ];
+  }
 
   function getItems(): MenuItem[] {
     return [
@@ -142,7 +207,7 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
         onClick={handleClick}
         selectedKeys={[current]}
         mode="horizontal"
-        items={getItems()}
+        items={isMobile ? getMobileItems() : getItems()}
         overflowedIndicator={<MenuOutlined />}
         style={{
           width: '100%',
