@@ -1,6 +1,6 @@
 import { Grid } from 'antd';
-import { LandingPageMobile } from './landingPageMobile';
-import LandingPageDesktop from './landingPageDesktop';
+import { LandingPageMobile } from './mobile/landingPageMobile';
+import LandingPageDesktop from './desktop/landingPageDesktop';
 
 const { useBreakpoint } = Grid;
 
