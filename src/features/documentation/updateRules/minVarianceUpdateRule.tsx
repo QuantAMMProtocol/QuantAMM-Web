@@ -44,7 +44,7 @@ export function MinVarianceUpdateRule() {
                     <Col span={8}>
                       <img
                         loading="lazy"
-                        src={'./documentation/minimum_variance.svg'}
+                        src={'/documentation/minimum_variance.svg'}
                         style={{
                           width: '100%',
                           paddingRight: '5%',

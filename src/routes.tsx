@@ -1,5 +1,4 @@
 import { Navigate, createBrowserRouter } from 'react-router-dom';
-import { INITIAL_LOAD_POOLS_COUNT } from './models/constants';
 import App from './App';
 import { CoinData } from './features/coinData/coinData';
 import { SimulationRunner } from './features/simulationRunner/simulationRunner';
@@ -8,6 +7,9 @@ import { About } from './features/documentation/about';
 import { Documentation } from './features/documentation/documentation';
 import { SimulationSavedResultComparison } from './features/simulationResults/resultComparisonTab/simulationSavedResultComparison';
 import { ROUTES } from './routesEnum';
+import LandingPage from './features/documentation/landing/landingPage';
+import { Research } from './features/documentation/research';
+import { CompanyPage } from './features/documentation/company';
 
 const BASE_ROUTE = '/';
 
@@ -18,7 +20,7 @@ export const routes = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <SimulationRunner poolsToLoad={INITIAL_LOAD_POOLS_COUNT} />,
+        element: <LandingPage />,
       },
       {
         path: ROUTES.HOME,
@@ -26,7 +28,16 @@ export const routes = createBrowserRouter([
       },
       {
         path: ROUTES.DOCUMENTATION,
-        element: <Documentation />,
+        children: [
+          {
+            index: true,
+            element: <Documentation />,
+          },
+          {
+            path: ':id',
+            element: <Documentation />,
+          },
+        ],
       },
       {
         path: ROUTES.PRODUCT_EXPLORER,
@@ -36,7 +47,7 @@ export const routes = createBrowserRouter([
             element: <ProductExplorer />,
           },
           {
-            path: ':chain/:id',
+            path: ':id',
             element: <ProductDetail />,
           },
         ],
@@ -46,12 +57,20 @@ export const routes = createBrowserRouter([
         element: <About />,
       },
       {
+        path: ROUTES.COMPANY,
+        element: <CompanyPage />,
+      },
+      {
+        path: ROUTES.RESEARCH,
+        element: <Research />,
+      },
+      {
         path: ROUTES.COINS,
         element: <CoinData />,
       },
       {
         path: ROUTES.SIMULATION_RUNNER,
-        element: <SimulationRunner poolsToLoad={INITIAL_LOAD_POOLS_COUNT} />,
+        element: <SimulationRunner />,
       },
       {
         path: ROUTES.SIMULATION_COMPARER,

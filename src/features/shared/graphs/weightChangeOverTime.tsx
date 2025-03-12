@@ -7,6 +7,7 @@ import {
   AgNumberAxisOptions,
   AgTimeAxisOptions,
   time,
+  AgChartThemeName,
 } from 'ag-charts-community';
 import 'ag-charts-enterprise';
 import { useAppSelector } from '../../../app/hooks';
@@ -17,19 +18,21 @@ import { getChartTimeSteps } from './helpers';
 
 interface WeightChangeOverTimeGraphProps {
   simulationRunBreakdown: SimulationRunBreakdown;
-  xAxisOverride?: Partial<AgTimeAxisOptions>;
   yAxisOverride?: Partial<AgNumberAxisOptions>;
   legendOverride?: Partial<AgChartLegendOptions>;
   tickIntervalInMonths?: number;
   area?: boolean;
+  overrideChartTheme?: AgChartThemeName;
+  overrideXAxisInterval?: number;
 }
 
 export const WeightChangeOverTimeGraph: FC<WeightChangeOverTimeGraphProps> = ({
   simulationRunBreakdown,
-  xAxisOverride,
   yAxisOverride,
   legendOverride,
   tickIntervalInMonths = 3,
+  overrideChartTheme,
+  overrideXAxisInterval,
 }) => {
   const chartTheme = useAppSelector(selectAgChartTheme);
 
@@ -39,11 +42,12 @@ export const WeightChangeOverTimeGraph: FC<WeightChangeOverTimeGraphProps> = ({
 
   const getNormalisedAreaData = (breakdown: SimulationRunBreakdown) => {
     const result: FlatWeightTimeStep[] = [];
+
     let data = getChartTimeSteps(breakdown);
 
-    if (data.length > 500) {
+    if (data.length > 200) {
       //stacked chart is more cpu intensive, ~500 points is a good balance
-      const proportion = Math.ceil(data.length / 500);
+      const proportion = Math.ceil(data.length / 200);
       data = data.filter((_, index) => index % proportion === 0);
     }
     data.forEach((item) => {
@@ -66,6 +70,14 @@ export const WeightChangeOverTimeGraph: FC<WeightChangeOverTimeGraphProps> = ({
   const getNormalisedAreaSeries = (
     breakdown: SimulationRunBreakdown
   ): AgAreaSeriesOptions[] => {
+    console.log(breakdown);
+    if (
+      !breakdown ||
+      breakdown?.simulationRun?.poolConstituents?.length === 0
+    ) {
+      return [];
+    }
+
     const series: AgAreaSeriesOptions[] = [];
     breakdown.simulationRun.poolConstituents.forEach((constituent) => {
       series.push({
@@ -85,33 +97,35 @@ export const WeightChangeOverTimeGraph: FC<WeightChangeOverTimeGraphProps> = ({
     return {
       type: 'time',
       interval: {
-        step: time.month.every(tickIntervalInMonths),
+        step: time.month.every(
+          overrideXAxisInterval ? overrideXAxisInterval : tickIntervalInMonths
+        ),
       },
       label: {
         format: '%m-%y',
       },
     };
-  }, [tickIntervalInMonths]);
+  }, [tickIntervalInMonths, overrideXAxisInterval]);
 
   return (
     <AgCharts
       options={{
         height: 230,
         padding: {
-          left: 20,
           right: 20,
           top: 20,
           bottom: 20,
+          left: 0,
         },
         data: getNormalisedAreaData(simulationRunBreakdown),
         axes: [
-          { ...timeAxisOption, ...xAxisOverride },
+          { ...timeAxisOption },
           {
             type: 'number',
             position: 'left',
             label: {
               formatter: (params: AgAxisLabelFormatterParams) => {
-                return params.value + '%';
+                return params.value.toFixed(2) + '%';
               },
             },
             ...yAxisOverride,
@@ -127,7 +141,7 @@ export const WeightChangeOverTimeGraph: FC<WeightChangeOverTimeGraphProps> = ({
           },
         },
         theme: {
-          baseTheme: chartTheme,
+          baseTheme: overrideChartTheme ? overrideChartTheme : chartTheme,
           overrides: {
             common: {
               background: {

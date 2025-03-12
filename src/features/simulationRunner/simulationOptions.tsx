@@ -77,7 +77,9 @@ export function SimulatorOptions() {
         <Col span={12} style={{ padding: 30 }}>
           <Row>
             <Col span={24}>
-              <h3>TLDR: Pre-Run Example Results and analytics</h3>
+              <h2 style={{ color: '#e6ce97' }}>
+                The Balancer V3 Historic Simulator powered by QuantAMM
+              </h2>
             </Col>
             <Col span={24}>
               <p>

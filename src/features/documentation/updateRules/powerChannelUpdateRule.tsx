@@ -44,7 +44,7 @@ export function PowerChannelUpdateRule() {
                     <Col span={8}>
                       <img
                         loading="lazy"
-                        src={'./documentation/power_channel.svg'}
+                        src={'/documentation/power_channel.svg'}
                         style={{
                           width: '100%',
                           paddingRight: '5%',

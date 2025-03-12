@@ -57,7 +57,7 @@ export const useFinancialAnalysis = ({
             const hodl_return =
               (step.hodlSharePrice - prevStep?.hodlSharePrice) /
               prevStep?.hodlSharePrice;
-
+            
             return [step.timestamp * 1000, portfolio_return, hodl_return];
           });
 

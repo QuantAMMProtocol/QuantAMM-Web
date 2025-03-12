@@ -86,7 +86,7 @@ export function SimulationResultsSummaryStep(props: BreakdownProps) {
     );
     menu.push(
       getItem(
-        'Pool MV over time',
+        'Pool $ value over time',
         'MarketValueOverTime',
         <LineChartOutlined />,
         false

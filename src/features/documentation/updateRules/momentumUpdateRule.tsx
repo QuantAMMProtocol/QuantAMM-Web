@@ -65,7 +65,7 @@ export function MomentumUpdateRule() {
                   <Col span={8}>
                     <img
                       loading="lazy"
-                      src={'./documentation/vanilla_momentum.svg'}
+                      src={'/documentation/vanilla_momentum.svg'}
                       style={{
                         width: '100%',
                         paddingRight: '5%',

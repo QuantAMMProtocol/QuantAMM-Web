@@ -15,6 +15,7 @@ const darkTheme = {
     colorBgBase: '#162536',
     colorBgContainer: '#162536',
     splitColor: '#162536',
+    fontFamily: 'Jost',
   },
   Menu: {
     algorithm: true,
@@ -27,6 +28,7 @@ const lightTheme = {
     colorInfo: '#3b340d',
     colorBgBase: '#fff',
     colorBgContainer: 'rgb(245, 245, 245)',
+    fontFamily: 'Jost',
   },
   Menu: {
     algorithm: true,

@@ -9,7 +9,7 @@ import {
   resetSimulationRunner,
 } from './simulationRunnerSlice';
 
-import { Button, Col, Divider, Row, Steps, Modal, Select, Tooltip } from 'antd';
+import { Button, Col, Divider, Row, Steps, Modal, Tooltip } from 'antd';
 import {
   CheckCircleOutlined,
   ClockCircleOutlined,
@@ -23,11 +23,7 @@ import {
 } from '@ant-design/icons';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
-  generateAndAddPoolToSim,
   resetSims,
-  setDateRange,
-  setEndDate,
-  setStartDate,
 } from '../simulationRunConfiguration/simulationRunConfigurationSlice';
 import { SimulationRunnerTimePeriodStep } from './simulationRunnerTimePeriodStep';
 import { SimulationRunnerHookTimePeriodStep } from './simulationRunnerHookTimePeriodStep';
@@ -41,22 +37,11 @@ import { PoolRuleConfiguration } from '../simulationRunConfiguration/poolRuleCon
 import { SimulationResultsSummaryStep } from '../simulationResults/simulationResultsSummaryStep';
 import { SimulationResultSaveToCompareTab } from '../simulationResults/simulationResultSaveToCompareTab';
 import { SimulationRunnerHistoricInProgress } from './simulationRunnerHistoricInProgress';
-import { useMemo, useRef, useState } from 'react';
-import { useFetchProductListData } from '../../hooks/useFetchProductListData';
-import {
-  Coin,
-  CoinComparison,
-  CoinPrice,
-  LiquidityPoolCoin,
-} from '../simulationRunConfiguration/simulationRunConfigModels';
-import { ReturnTimeStep } from '../simulationResults/simulationResultSummaryModels';
+import { useRef, useState } from 'react';
 import { SimulatorOptions } from './simulationOptions';
 
-interface SimulationRunnerProps {
-  poolsToLoad: number;
-}
 
-export function SimulationRunner({ poolsToLoad }: SimulationRunnerProps) {
+export function SimulationRunner() {
   const dispatch = useAppDispatch();
 
   const results = useAppSelector(selectSimulationRunBreakdowns);
@@ -69,14 +54,8 @@ export function SimulationRunner({ poolsToLoad }: SimulationRunnerProps) {
     selectSimulationRunnerCurrentStepIndex
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedPool, setSelectedPool] = useState<string | null>(null);
-
+  
   const [forceViewResults, setForceViewResults] = useState(false); //DEV TODO
-
-  const { productMap, productMapLoading } =
-    useFetchProductListData(poolsToLoad);
-
-  const balancerPools = useMemo(() => Object.values(productMap), [productMap]);
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -90,12 +69,6 @@ export function SimulationRunner({ poolsToLoad }: SimulationRunnerProps) {
     setIsModalOpen(false);
   };
 
-  const handleBalancerImportClick = () => {
-    if (selectedPool) {
-      handleBalancerPoolImport(selectedPool);
-      setIsModalOpen(false);
-    }
-  };
 
   const onChange = (value: number) => {
     if (value == 5 && runStatusIndex != 2) {
@@ -110,86 +83,6 @@ export function SimulationRunner({ poolsToLoad }: SimulationRunnerProps) {
   const handleButtonClick = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click(); // Only click if the ref is not null
-    }
-  };
-
-  const handleBalancerPoolImport = (poolId: string) => {
-    const selectedPoolData = productMap[poolId];
-    if (selectedPoolData) {
-      // Update state with Balancer pool data
-      dispatch(setStartDate(new Date().toISOString())); // Set to current date or adjust as needed
-      dispatch(setEndDate(new Date().toISOString())); // Set to current date or adjust as needed
-      dispatch(
-        setDateRange({
-          startDate: new Date().toISOString(),
-          endDate: new Date().toISOString(),
-        })
-      );
-
-      const createStubCoin = (coinCode: string): Coin => ({
-        coinName: coinCode,
-        coinCode: coinCode,
-        dailyPriceHistory: [],
-        dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-        dailyReturns: new Map<number, ReturnTimeStep>(),
-        coinComparisons: new Map<string, CoinComparison>(),
-      });
-
-      const poolConstituents: LiquidityPoolCoin[] =
-        selectedPoolData.poolConstituents.map((constituent) => ({
-          coin: createStubCoin(constituent.coin),
-          coinCode: constituent.coin,
-          coinName: constituent.coin,
-          amount:
-            selectedPoolData.timeSeries?.[
-              selectedPoolData.timeSeries.length - 1
-            ]?.amounts?.[
-              selectedPoolData.poolConstituents.indexOf(constituent)
-            ],
-          marketValue:
-            constituent.weight * selectedPoolData.dynamicData?.totalLiquidity,
-          currentPrice:
-            selectedPoolData.timeSeries?.[
-              selectedPoolData.timeSeries.length - 1
-            ]?.tokenPrices?.[
-              selectedPoolData.poolConstituents.indexOf(constituent)
-            ], //unknown for now
-          currentPriceUnix:
-            selectedPoolData.timeSeries?.[
-              selectedPoolData.timeSeries.length - 1
-            ]?.timestamp,
-          address: constituent.address,
-          usdValue:
-            constituent.weight * selectedPoolData.dynamicData?.totalLiquidity, //unknown for now
-          weight: constituent.weight,
-          factorValue: null,
-        }));
-
-      dispatch(
-        generateAndAddPoolToSim({
-          updateRule: {
-            updateRuleName: 'LIVE',
-            updateRuleKey: 'LIVE',
-            updateRuleSimKey: '',
-            updateRuleRunUrl: undefined,
-            applicablePoolTypes: ['LIVE'],
-            updateRuleTrainUrl: undefined,
-            updateRuleResultProfileSummary:
-              'Returns are the change in price relative to the initial reserves',
-            heatmapKeys: [],
-            updateRuleParameters: [],
-          },
-          enableAutomaticArbBots: false,
-          poolConstituents: poolConstituents,
-          poolType: {
-            name: 'LIVE',
-            mandatoryProperties: [],
-            shortDescription: 'LIVE',
-            requiresPoolNumeraire: false,
-          },
-          id: poolId,
-        })
-      );
     }
   };
 
@@ -458,7 +351,7 @@ export function SimulationRunner({ poolsToLoad }: SimulationRunnerProps) {
               ref={fileInputRef}
               onChange={(event) => handleDownloadParams(event, dispatch)}
             />
-            Import a Downloaded Run
+            Set Parameters to downloaded Run Params
           </Button>
 
           <div className={styles.orDivider}>OR</div>
@@ -475,46 +368,6 @@ export function SimulationRunner({ poolsToLoad }: SimulationRunnerProps) {
             Import Results from Run
           </Button>
 
-          {/* 
-          //Still waiting on Data for this
-          <Button shape="round" onClick={handleButtonClick}>
-            <input
-              type="file"
-              style={{ display: 'none' }}
-              ref={fileInputRef}
-              onChange={handleDownloadResults}
-            />
-            Run Fingerprint
-          </Button> */}
-
-          <div className={styles.orDivider}>OR</div>
-
-          <h4 className={styles.centeredHeader}>Import Pool from Balancer:</h4>
-          <Row gutter={8} align="middle">
-            <Col flex="auto">
-              <Select
-                style={{ width: '100%' }}
-                placeholder="Select a Balancer Pool"
-                loading={productMapLoading}
-                onChange={(value) => setSelectedPool(value)}
-              >
-                {balancerPools.map((pool) => (
-                  <Select.Option key={pool.id} value={pool.id}>
-                    {pool.name}
-                  </Select.Option>
-                ))}
-              </Select>
-            </Col>
-            <Col>
-              <Button
-                type="primary"
-                onClick={handleBalancerImportClick}
-                disabled={!selectedPool}
-              >
-                Import
-              </Button>
-            </Col>
-          </Row>
         </Col>
       </Modal>
 

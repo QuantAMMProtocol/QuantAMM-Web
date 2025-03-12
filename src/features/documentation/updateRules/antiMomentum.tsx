@@ -44,7 +44,7 @@ export function AntiMomentumUpdateRule() {
                     <Col span={8}>
                       <img
                         loading="lazy"
-                        src={'./documentation/mean_reversion.svg'}
+                        src={'/documentation/mean_reversion.svg'}
                         style={{
                           width: '100%',
                           paddingRight: '5%',

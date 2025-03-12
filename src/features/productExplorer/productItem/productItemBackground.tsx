@@ -12,12 +12,16 @@ const MotionBox = motion.div;
 interface ProductItemBackgroundProps extends PropsWithChildren {
   layers?: number;
   wide?: boolean;
+  backgroundColourOverride?: string;
+  borderColourOverride?: string;
 }
 
 export const ProductItemBackground: FC<ProductItemBackgroundProps> = ({
   children,
   layers = DEFAULT_LAYERS,
   wide,
+  backgroundColourOverride,
+  borderColourOverride,
 }) => {
   const layerList = useMemo(() => new Array(layers).fill(0), [layers]);
 
@@ -33,8 +37,11 @@ export const ProductItemBackground: FC<ProductItemBackgroundProps> = ({
   };
 
   const gradientColor = isDark
-    ? 'rgba(255, 255, 255, 0.03)'
+    ? 'rgba(177, 123, 123, 0.03)'
     : 'rgba(0, 0, 0, 0.05)';
+
+  const finalBackgroundColor =
+    backgroundColourOverride ?? 'var(--product-item-background)';
 
   const gradient = useMotionTemplate`
     radial-gradient(
@@ -62,20 +69,32 @@ export const ProductItemBackground: FC<ProductItemBackgroundProps> = ({
       />
       <div className={styles['product-item__background-shadow']}></div>
       <div className={styles['product-item__background-opacity']}>
-        <div className={styles['product-item__layer-container']}>
+        <div
+          className={styles['product-item__layer-container']}
+          style={{ backgroundColor: finalBackgroundColor }}
+        >
           {layerList.map((_, index) => (
             <div
               key={index}
               className={styles['product-item__background__layer']}
               style={{
+                backgroundColor: 'transparent',
+                borderColor: borderColourOverride ?? '',
                 transform: `scale(${1 + index * 0.1}) translateY(-50%)`,
                 width: wide ? '70%' : '',
                 height: wide ? '100%' : '',
+                top: wide ? '50%' : '',
               }}
             ></div>
           ))}
         </div>
-        <div style={{ zIndex: 1, width: '100%', height: '100%' }}>
+        <div
+          style={{
+            zIndex: 1,
+            width: '100%',
+            height: '100%',
+          }}
+        >
           {children}
         </div>
       </div>

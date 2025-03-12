@@ -6,6 +6,9 @@ const THREE_MONTHS = 7776000000;
 // if data range is less than THREE_MONTHS, returns everything
 // else return the first data point of the day
 export const getChartTimeSteps = (breakdown: SimulationRunBreakdown) => {
+  if ((breakdown?.timeSteps?.length ?? 0) === 0) {
+    return [];
+  }
   const maxTime =
     breakdown.timeSteps[breakdown.timeSteps.length - 1].unix -
     breakdown.timeSteps[0].unix;
