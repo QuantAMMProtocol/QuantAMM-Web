@@ -25,9 +25,7 @@ export function QuantAmmExplainer() {
           const fetchedBreakdowns = await Promise.all(
             poolNames.map((poolName) => getBreakdown(poolName))
           );
-          console.log('Fetched breakdowns:', fetchedBreakdowns);
           setBreakdowns(fetchedBreakdowns);
-          console.log('Breakdowns:', breakdowns);
           return fetchedBreakdowns;
         };
     
@@ -50,7 +48,6 @@ export function QuantAmmExplainer() {
               setLoading(false);
             });
         }
-        console.log('Breakdowns:', breakdowns);
       }, [setBreakdowns, setLoading, breakdowns, loading]);
     
       

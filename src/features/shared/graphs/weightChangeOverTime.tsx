@@ -70,7 +70,6 @@ export const WeightChangeOverTimeGraph: FC<WeightChangeOverTimeGraphProps> = ({
   const getNormalisedAreaSeries = (
     breakdown: SimulationRunBreakdown
   ): AgAreaSeriesOptions[] => {
-    console.log(breakdown);
     if (
       !breakdown ||
       breakdown?.simulationRun?.poolConstituents?.length === 0

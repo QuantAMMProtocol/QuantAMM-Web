@@ -29,9 +29,7 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
 
   const navigate = useNavigate();
   const path = window.location.pathname.split('/')[1];
-  console.log("path", path);
   const [current, setCurrent] = useState<string>(path && path != '' ? path as unknown as ROUTES : ROUTES.HOME);
-  console.log(current)
   const dispatch = useAppDispatch();
   const isDark = useAppSelector(selectTheme);
   const backgroundColor = useMemo(() => {

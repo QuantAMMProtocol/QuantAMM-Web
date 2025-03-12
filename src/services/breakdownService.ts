@@ -116,11 +116,10 @@ export const getBreakdown = async (
 
   // Fetch the MessagePack file dynamically
   const response = await fetch(poolFilePath);
-  console.log('response', response);
+ 
   const buffer = await response.arrayBuffer();
-  console.log('buffer', buffer);
+ 
   const decodedData = decode(new Uint8Array(buffer));
-  console.log('decodedata', decodedData);
 
   return convertBreakdownDtoToBreakdown(
     decodedData as SimulationRunBreakdownDto
