@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { GqlChain, useGetPoolByIdQuery } from '../__generated__/graphql-types';
-import { ProductDto } from '../models';
+import { Product } from '../models';
 import { useGenerateProductDataFromPool } from './useGenerateProductDataFromPool';
 
 export const useFetchProductData = (id: string, chain: GqlChain) => {
-  const [product, setProduct] = useState<ProductDto | null>(null);
+  const [product, setProduct] = useState<Product | null>(null);
 
   const {
     data: poolData,

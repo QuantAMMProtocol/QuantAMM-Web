@@ -24,8 +24,10 @@ query GetPoolById($id: String!, $chain: GqlChain!) {
       totalLiquidity
       totalShares
       volume24h
-      apr {
-        swapApr
+      aprItems {
+        apr
+        type
+        rewardTokenSymbol
       }
       yieldCapture48h
     }

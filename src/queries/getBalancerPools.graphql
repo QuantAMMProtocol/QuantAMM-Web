@@ -38,8 +38,10 @@ query GetPools(
       totalLiquidity
       totalShares
       volume24h
-      apr {
-        swapApr
+      aprItems {
+        apr
+        type
+        rewardTokenSymbol
       }
       yieldCapture48h
     }
