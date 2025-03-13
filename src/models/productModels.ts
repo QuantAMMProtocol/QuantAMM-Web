@@ -87,10 +87,7 @@ export interface PerformancePeriod {
   return: number;
 }
 
-// TODO
-// we don't need ProductDto, we can use Product directly
-// all performance properties can be grouped
-export interface ProductDto {
+export interface Product {
   id: string;
   address: string;
   name: string;
@@ -130,11 +127,8 @@ export interface ProductDto {
     description: string;
   }[];
   dynamicData?: GqlPoolDynamicData;
-}
-
-export type Product = ProductDto & {
   simulationRunBreakdown?: SimulationRunBreakdown;
-};
+}
 
 export type ProductMap = Record<string, Product>;
 
@@ -149,7 +143,8 @@ export type OverrideTab = 'overview' | 'performance' | 'tokens';
 export type ProductExplorerSortMetric =
   | ProductOverviewMetric
   | 'age'
-  | 'sharePrice';
+  | 'sharePrice'
+  | 'apr';
 
 export interface FinancialMetricThresholds {
   key: string;
