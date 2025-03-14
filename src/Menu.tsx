@@ -29,15 +29,15 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
 
   const navigate = useNavigate();
   const path = window.location.pathname.split('/')[1];
-  console.log("path", path);
-  const [current, setCurrent] = useState<string>(path && path != '' ? path as unknown as ROUTES : ROUTES.HOME);
-  console.log(current)
+  const [current, setCurrent] = useState<string>(
+    path && path != '' ? (path as unknown as ROUTES) : ROUTES.HOME
+  );
   const dispatch = useAppDispatch();
   const isDark = useAppSelector(selectTheme);
   const backgroundColor = useMemo(() => {
     return (current as ROUTES) == ROUTES.HOME
-            ? '#2c496b'
-            : 'var(--main-background)';
+      ? '#2c496b'
+      : 'var(--main-background)';
   }, [current]);
 
   const toggleTheme = (isChecked: boolean) => {
@@ -61,59 +61,59 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
   function getMobileItems(): MenuItem[] {
     return [
       {
-      key: 'home',
-      label: '',
-      icon: (
-        <img
-        loading="lazy"
-        src="/assets/quantamm-logo.png"
-        style={{ width: '150px', marginTop: '5px' }}
-        />
-      ),
+        key: 'home',
+        label: '',
+        icon: (
+          <img
+            loading="lazy"
+            src="/assets/quantamm-logo.png"
+            style={{ width: '150px', marginTop: '5px' }}
+          />
+        ),
       },
       {
-      key: 'Education',
-      label: '',
-      type: 'submenu',
-      icon: <MenuOutlined />,
-      children: [
-        {
-        key: 'Company',
-        label: 'Company',
-        icon: <FireOutlined />,
-        },
-        {
-        key: 'contact',
-        label: 'Contact',
-        icon: <LineChartOutlined />,
-        },
-        {
-        key: 'research',
-        label: 'Research',
-        icon: <FireOutlined />,
-        },
-        {
-        key: 'documentation',
-        label: 'Documentation',
-        icon: <FireOutlined />,
-        },
-        {
-        key: 'simulation-runner',
-        label: 'Historical Simulator',
-        icon: <LineChartOutlined />,
-        },
-        {
-        key: 'simulation-comparer',
-        label: 'Multi-run Simulation Results Comparer',
-        icon: <RadarChartOutlined />,
-        },
-        {
-        key: 'coins',
-        label: 'Simulation Price Data',
-        icon: <LineChartOutlined />,
-        },
-      ],
-      style: { marginLeft: 'auto' }, // Align to the right
+        key: 'Education',
+        label: '',
+        type: 'submenu',
+        icon: <MenuOutlined />,
+        children: [
+          {
+            key: 'Company',
+            label: 'Company',
+            icon: <FireOutlined />,
+          },
+          {
+            key: 'contact',
+            label: 'Contact',
+            icon: <LineChartOutlined />,
+          },
+          {
+            key: 'research',
+            label: 'Research',
+            icon: <FireOutlined />,
+          },
+          {
+            key: 'documentation',
+            label: 'Documentation',
+            icon: <FireOutlined />,
+          },
+          {
+            key: 'simulation-runner',
+            label: 'Historical Simulator',
+            icon: <LineChartOutlined />,
+          },
+          {
+            key: 'simulation-comparer',
+            label: 'Multi-run Simulation Results Comparer',
+            icon: <RadarChartOutlined />,
+          },
+          {
+            key: 'coins',
+            label: 'Simulation Price Data',
+            icon: <LineChartOutlined />,
+          },
+        ],
+        style: { marginLeft: 'auto' }, // Align to the right
       },
     ];
   }
@@ -192,7 +192,7 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
       },
     ];
   }
-  
+
   return (
     <div
       style={{
