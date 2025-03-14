@@ -1,6 +1,7 @@
 import { FC, useMemo } from 'react';
 import { AgCharts } from 'ag-charts-react';
 import {
+  AgAngleAxisLabelOrientation,
   AgAxisLabelFormatterParams,
   AgPolarAxisOptions,
   AgPolarSeriesOptions,
@@ -22,10 +23,20 @@ import styles from './productItemOverviewGraph.module.scss';
 const { Text } = Typography;
 
 interface ProductItemOverviewGraphProps {
-  data: { metric: string; value?: number }[];
+  data: {
+    metric: string;
+    value?: number;
+    maxScore: number;
+    description: string;
+  }[];
   isDarkTheme: boolean;
   wide?: boolean;
   showScoreOverall?: boolean;
+  orientationOverride?: AgAngleAxisLabelOrientation;
+  fontSizeOverride?: number;
+  intervalStepOverride?: number;
+  heightOverride?: number;
+  widthOverride?: number;
 }
 
 export const ProductItemOverviewGraph: FC<ProductItemOverviewGraphProps> = ({
@@ -33,6 +44,11 @@ export const ProductItemOverviewGraph: FC<ProductItemOverviewGraphProps> = ({
   isDarkTheme,
   wide,
   showScoreOverall,
+  orientationOverride,
+  fontSizeOverride,
+  intervalStepOverride,
+  heightOverride,
+  widthOverride,
 }) => {
   const chartTheme = useAppSelector(selectAgChartTheme);
 
@@ -75,18 +91,19 @@ export const ProductItemOverviewGraph: FC<ProductItemOverviewGraphProps> = ({
               enabled: false,
             }
           : {
-              orientation: 'parallel',
-              fontSize: 10,
+              orientation: orientationOverride ?? 'parallel',
+              fontSize: fontSizeOverride ?? 10,
               padding: 2,
               formatter: (params: AgAxisLabelFormatterParams) =>
-                productExplorerTranslation[params.value as string],
+                productExplorerTranslation[params.value as string] ||
+                (params.value as string),
             },
       },
       {
         type: 'radius-number',
         min: 0,
         max: 5,
-        interval: { step: 1 },
+        interval: { step: intervalStepOverride ?? 1 },
         tick: {
           width: 0,
         },
@@ -95,7 +112,7 @@ export const ProductItemOverviewGraph: FC<ProductItemOverviewGraphProps> = ({
         },
       },
     ];
-  }, [wide]);
+  }, [intervalStepOverride, fontSizeOverride, orientationOverride, wide]);
 
   return (
     <div className={styles['product-item__graph-overlay']}>
@@ -111,8 +128,8 @@ export const ProductItemOverviewGraph: FC<ProductItemOverviewGraphProps> = ({
       )}
       <AgCharts
         options={{
-          width: wide ? 100 : 288,
-          height: wide ? 100 : 240,
+          width: widthOverride ?? wide ? 100 : 288,
+          height: heightOverride ?? wide ? 100 : 240,
           data,
           series,
           axes,

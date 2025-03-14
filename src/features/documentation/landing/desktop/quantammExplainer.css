@@ -1,0 +1,13 @@
+.quantamm_success_step {
+    color: green;
+    background-color: transparent !important;
+}
+
+.quantamm_error_step {
+    color: red;
+    background-color: transparent !important;
+}
+
+:where(.css-dev-only-do-not-override-12rmomn).ant-timeline .ant-timeline-item-head {
+    background-color: transparent !important;
+}

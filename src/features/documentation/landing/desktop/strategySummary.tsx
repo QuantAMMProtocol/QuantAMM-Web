@@ -7,6 +7,9 @@ const { Title } = Typography;
 
 export function StrategySummary(){
     return <Row id="final_section_row">
+      
+
+
     <Col span={24}>
       <ProductItemBackground
         wide
@@ -83,9 +86,17 @@ export function StrategySummary(){
             </div>
           </Col>
           <Col span={10}>
-            <Title style={{ textAlign: 'center' }}>
+            <Title style={{ textAlign: 'center', marginBottom:0}}>
               Adaptive Rebalancing Strategies
             </Title>
+              <p
+                  style={{
+                    textAlign: 'center',
+                    marginTop: '0px',
+                  }}
+              >
+                  EXPLORE THE TRANSPARENT, AUTOMATIC MARKET STRATEGIES THAT RUN ON BTFS
+              </p>
             <Carousel
               arrows={true}
               autoplay={true}
