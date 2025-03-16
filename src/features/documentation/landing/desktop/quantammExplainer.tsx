@@ -14,12 +14,14 @@ import { ProductItemOverviewGraph } from '../../../shared';
 import { AgGauge } from 'ag-charts-react';
 import { Cross, HeartIcon } from 'lucide-react';
 import './quantammExplainer.css';
+import { motion } from 'framer-motion';
 
 const { Title } = Typography;
 
 export function QuantAmmExplainer() {
   const [breakdowns, setBreakdowns] = useState<SimulationRunBreakdown[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [visibleTimelines, setVisibleTimelines] = useState<boolean>(true);
   const performanceStages = [
     'Themed Baskets',
     'Liquid basket tokens',
@@ -71,7 +73,6 @@ export function QuantAmmExplainer() {
       backgroundColourOverride="#FFFEF2"
       borderColourOverride="#f6f4ef"
     >
-      
       <Row style={{ marginTop: '15vh' }}>
         <Col span={5}></Col>
         <Col span={2} style={{ height: '60vh', paddingTop: '10px' }}>
@@ -81,11 +82,18 @@ export function QuantAmmExplainer() {
                 type: 'linear-gauge',
                 container: document.getElementById('indexGauge'),
                 value: 3.8,
-
+                subtitle:{
+                  text: 'Index Products',
+                  fontFamily: 'Jost',
+                  fontSize: 16,
+                  color: '#162536',
+                  
+                },
                 scale: {
                   min: 0,
                   max: 8,
                   label: {
+                    fontFamily: 'Jost',
                     placement: 'before',
                     color: '#162536',
                     formatter: ({ index }) => {
@@ -136,14 +144,13 @@ export function QuantAmmExplainer() {
           style={{ padding: 0, height: '30vh', marginTop: '10px' }}
         >
           <Row>
-            <Col span={24} style={{marginBottom:'2vh'}}>
-              
-            <Title
+            <Col span={24} style={{ marginBottom: '2vh' }}>
+              <Title
                 style={{
                   color: '#162536',
                   textAlign: 'center',
                   margin: 0,
-                  padding:0,
+                  padding: 0,
                   fontWeight: '400',
                 }}
               >
@@ -154,7 +161,7 @@ export function QuantAmmExplainer() {
                   color: '#162536',
                   textAlign: 'center',
                   margin: 0,
-                  padding:0
+                  padding: 0,
                 }}
               >
                 BLOCKCHAIN TRADED FUNDS
@@ -174,49 +181,63 @@ export function QuantAmmExplainer() {
             <Col
               span={8}
               style={{
-                height: '100%',
+                height: '250px',
                 padding: 0,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
             >
-                <div>
-                <Timeline
-                  style={{ backgroundColor: 'transparent' }}
-                  mode="left"
-                  items={[
-                  {
-                    className: 'quantamm_error_step',
-                    label: '',
-                    children:
-                    'FACT: Crypto markets are volatile. Index products are slow to react',
-                    color: 'red',
-                    dot: (
-                    <CloseCircleOutlined className="quantamm_error_step" />
-                    ),
-                  },
-                  {
-                    className: 'quantamm_error_step',
-                    children:
-                    'FACT: Market Caps are correlated in crypto. Index products are not diversified',
-                    color: 'red',
-                    dot: (
-                    <CloseCircleOutlined className="timeline-clock-icon" />
-                    ),
-                  },
-                  {
-                    className: 'quantamm_error_step',
-                    children:
-                    'FACT: Crypto Index products charge fees as high as 1980s hedge funds',
-                    color: 'red',
-                    dot: (
-                    <CloseCircleOutlined className="timeline-clock-icon" />
-                    ),
-                  },
-                  ]}
-                />
-                </div>
+              <div hidden={visibleTimelines}>
+                {!visibleTimelines && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0 }}
+                    animate={{
+                      opacity: 1,
+                      scale: 1,
+                    }}
+                    transition={{
+                      duration: 1,
+                      scale: { type: 'spring', visualDuration: 0.5, bounce: 0.1 },
+                    }}
+                  >
+                    <Timeline
+                      style={{ backgroundColor: 'transparent' }}
+                      mode="left"
+                      items={[
+                        {
+                          className: 'quantamm_error_step',
+                          label: '',
+                          children:
+                            'FACT: Crypto markets are volatile. Index products are slow to react',
+                          color: 'red',
+                          dot: (
+                            <CloseCircleOutlined className="quantamm_error_step" />
+                          ),
+                        },
+                        {
+                          className: 'quantamm_error_step',
+                          children:
+                            'FACT: Market Caps are correlated in crypto. Index products are not diversified',
+                          color: 'red',
+                          dot: (
+                            <CloseCircleOutlined className="timeline-clock-icon" />
+                          ),
+                        },
+                        {
+                          className: 'quantamm_error_step',
+                          children:
+                            'FACT: Crypto Index products charge fees as high as 1980s hedge funds',
+                          color: 'red',
+                          dot: (
+                            <CloseCircleOutlined className="timeline-clock-icon" />
+                          ),
+                        },
+                      ]}
+                    />
+                  </motion.div>
+                )}
+              </div>
             </Col>
             <Col span={8} style={{ height: '100%', padding: 0 }}>
               <div
@@ -226,59 +247,79 @@ export function QuantAmmExplainer() {
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}
+                onMouseEnter={() => setVisibleTimelines(false)}
+                onMouseLeave={() => setVisibleTimelines(true)}
               >
                 <img
                   src="/background/blueSand.png"
-                  style={{ maxWidth: '100%', maxHeight: '100%', marginTop:'1vh' }}
+                  style={{
+                    maxWidth: '100%',
+                    maxHeight: '100%',
+                    marginTop: '1vh',
+                  }}
                 />
               </div>
             </Col>
             <Col
               span={8}
               style={{
-                height: '100%',
+                height: '250px',
                 padding: 0,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
             >
-              <div>
-                <Timeline
-                  style={{ backgroundColor: 'transparent' }}
-                  mode="right"
-                  items={[
+                <div hidden={visibleTimelines}>
+                {!visibleTimelines && (
+                  <motion.div
+                  initial={{ opacity: 0, scale: 0 }}
+                  animate={{
+                    opacity: 1,
+                    scale: 1,
+                  }}
+                  transition={{
+                    duration: 1,
+                    scale: { type: 'spring', visualDuration: 0.5, bounce: 0.1 },
+                  }}
+                  >
+                  <Timeline
+                    style={{ backgroundColor: 'transparent' }}
+                    mode="right"
+                    items={[
                     {
                       className: 'quantamm_success_step',
                       label: '',
                       children:
-                        'SOLUTION: Assess the market daily and adjust the BTF weights and holdings',
+                      'SOLUTION: Assess the market daily and adjust the BTF weights and holdings',
                       color: 'green',
                       dot: (
-                        <CheckCircleOutlined className="quantamm_success_step" />
+                      <CheckCircleOutlined className="quantamm_success_step" />
                       ),
                     },
                     {
                       className: 'quantamm_success_step',
                       children:
-                        'SOLUTION: Apply on-chain portfolio strategies to capitalise on prices',
+                      'SOLUTION: Apply on-chain portfolio strategies to capitalise on prices',
                       color: 'green',
                       dot: (
-                        <CheckCircleOutlined className="timeline-clock-icon" />
+                      <CheckCircleOutlined className="timeline-clock-icon" />
                       ),
                     },
                     {
                       className: 'quantamm_success_step',
                       children:
-                        'SOLUTION: No streaming fees for LPs! We take our maintenance fees elsewhere',
+                      'SOLUTION: No streaming fees for LPs! We take our maintenance fees elsewhere',
                       color: 'green',
                       dot: (
-                        <CheckCircleOutlined className="timeline-clock-icon" />
+                      <CheckCircleOutlined className="timeline-clock-icon" />
                       ),
                     },
-                  ]}
-                />
-              </div>
+                    ]}
+                  />
+                  </motion.div>
+                )}
+                </div>
             </Col>
             <Col span={24}>
               {' '}
@@ -286,7 +327,7 @@ export function QuantAmmExplainer() {
                 style={{
                   color: '#162536',
                   textAlign: 'center',
-                  marginTop: '0px',
+                  marginTop: '20px',
                 }}
               >
                 DON&apos;T BE A INDEX. REACT TO FAST MARKETS. BE A BTF.
@@ -301,11 +342,18 @@ export function QuantAmmExplainer() {
                 type: 'linear-gauge',
                 container: document.getElementById('quantammGauge'),
                 value: 8,
-
+                subtitle:{
+                  text: 'QUANTAMM BTF',
+                  fontFamily: 'Jost',
+                  fontSize: 16,
+                  color: '#162536',
+                  
+                },
                 scale: {
                   min: 0,
                   max: 8,
                   label: {
+                    fontFamily: 'Jost',
                     placement: 'after',
                     color: '#162536',
                     formatter: ({ index }) => {
@@ -352,7 +400,8 @@ export function QuantAmmExplainer() {
           </div>
         </Col>
         <Col span={4} style={{ paddingTop: '10px' }}></Col>
-      </Row><Row style={{ height: '10px', margin: 0, padding: 0 }}>
+      </Row>
+      <Row style={{ height: '10px', margin: 0, padding: 0 }}>
         <Col span={3}></Col>
         <Col
           span={4}
