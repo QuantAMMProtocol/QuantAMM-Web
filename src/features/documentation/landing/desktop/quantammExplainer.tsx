@@ -1,27 +1,20 @@
-import { Button, Col, Row, Steps, Timeline, Typography } from 'antd';
+import { Col, Row, Steps, Typography } from 'antd';
 import { ProductItemBackground } from '../../../productExplorer/productItem/productItemBackground';
-import { WeightChangeOverTimeGraph } from '../../../shared/graphs/weightChangeOverTime';
 import { SimulationRunBreakdown } from '../../../simulationResults/simulationResultSummaryModels';
 import { useEffect, useState } from 'react';
 import { getBreakdown, Pool } from '../../../../services/breakdownService';
-import { ROUTES } from '../../../../routesEnum';
 import {
   CheckCircleOutlined,
-  CheckOutlined,
   CloseCircleOutlined,
 } from '@ant-design/icons';
-import { ProductItemOverviewGraph } from '../../../shared';
 import { AgGauge } from 'ag-charts-react';
-import { Cross, HeartIcon } from 'lucide-react';
 import './quantammExplainer.css';
-import { motion } from 'framer-motion';
 
 const { Title } = Typography;
 
 export function QuantAmmExplainer() {
   const [breakdowns, setBreakdowns] = useState<SimulationRunBreakdown[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [visibleTimelines, setVisibleTimelines] = useState<boolean>(true);
   const performanceStages = [
     'Themed Baskets',
     'Liquid basket tokens',
@@ -86,8 +79,6 @@ export function QuantAmmExplainer() {
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}
-                onMouseEnter={() => setVisibleTimelines(false)}
-                onMouseLeave={() => setVisibleTimelines(true)}
               >
                 <img
                   src="/background/blueSand.png"
