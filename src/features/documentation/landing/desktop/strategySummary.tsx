@@ -135,7 +135,7 @@ export function StrategySummary() {
                 style={{
                   justifyContent: 'center',
                   alignItems: 'center',
-                  paddingTop: '12vh',
+                  paddingTop: '15vh',
                 }}
               >
                 <h4 style={{ textAlign: 'center', margin: 0 }}>
@@ -234,9 +234,8 @@ export function StrategySummary() {
                       <img
                         loading="lazy"
                         style={{
-                          width: '40%',
-                          height: '40%',
-                          padding: '15px',
+                          width: '50%',
+                          height: '50%',
                         }}
                         src="/documentation/channel_following.svg"
                       />
@@ -308,9 +307,10 @@ export function StrategySummary() {
                       <img
                         loading="lazy"
                         style={{
-                          width: '65%',
-                          height: '65%',
-                          marginBottom: '4vh',
+                          width: '55%',
+                          height: '55%',
+                          padding:'10px',
+                          marginTop:'2vh'
                         }}
                         src="/documentation/minimum_variance.svg"
                       />
