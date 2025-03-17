@@ -1,4 +1,7 @@
-import { GqlPoolDynamicData } from '../__generated__/graphql-types';
+import {
+  GqlPoolDynamicData,
+  GqlPoolType,
+} from '../__generated__/graphql-types';
 import { SimulationRunBreakdown } from '../features/simulationResults/simulationResultSummaryModels';
 
 export type BalancerTokenType =
@@ -94,6 +97,7 @@ export interface Product {
   symbol: string;
   decimals: number;
   basketTheme: string;
+  type: GqlPoolType;
   tokenType: string;
   strategy: Strategy;
   chain: string;

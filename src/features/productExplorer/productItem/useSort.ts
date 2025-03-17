@@ -49,6 +49,10 @@ export const useSort = () => {
           comparableB = productB.createTime
             ? new Date(productB.createTime).getTime()
             : 0;
+        } else if (sortingMetric == 'apr') {
+          // TODO: Get APR from product
+          comparableA = 1;
+          comparableB = 2;
         }
 
         if (comparableA < comparableB) {
