@@ -25,6 +25,7 @@ query GetPoolById($id: String!, $chain: GqlChain!) {
       totalShares
       volume24h
       aprItems {
+        id
         apr
         type
         rewardTokenSymbol
