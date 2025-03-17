@@ -27,7 +27,7 @@ export function QuantAmmExplainer() {
     'Liquid basket tokens',
     'Able to earn yield',
     'Safe on-chain re-balancing',
-    'No Streaming Fees for LPs',
+    'No Maintenance Fees for LPs',
     'Adaptive On-Chain Strategies',
     'Daily Market Responsiveness',
   ];
@@ -74,15 +74,11 @@ export function QuantAmmExplainer() {
       borderColourOverride="#f6f4ef"
     >
       <Row style={{ marginTop: '15vh' }}>
-        <Col span={4}></Col>
-        
-        <Col
-          span={9}
-          style={{ padding: 0, height: '30vh', marginTop: '10px' }}
-        >
-          <Row>
+        <Col span={3}></Col>
 
-          <Col span={24} style={{ padding: 0 }}>
+        <Col span={9} style={{ padding: 0, height: '30vh', marginTop: '10px' }}>
+          <Row>
+            <Col span={24} style={{ padding: 0 }}>
               <div
                 style={{
                   height: '10vh',
@@ -103,7 +99,7 @@ export function QuantAmmExplainer() {
                 />
               </div>
             </Col>
-            <Col span={24} style={{ marginBottom: '2vh' }}>
+            <Col span={24} style={{ marginBottom: '0.5vh' }}>
               <Title
                 style={{
                   color: '#162536',
@@ -137,64 +133,76 @@ export function QuantAmmExplainer() {
                 crypto.
               </p>
             </Col>
-            <Col span={24} style={{ padding: 0, marginTop: '20px' }}>
-            
-              <Steps
-                direction="horizontal"
-                current={1}
-                items={[
-                {
-                  title: 'FACT',
-                  description: 'Crypto markets are volatile.',
-                  status: 'error',
-                  icon: <CloseCircleOutlined />,
-                },
-                {
-                  className: 'quantamm_success_step',
-                  title: 'SOLUTION',
-                  description: 'Assess the market daily and react',
-                  icon: <CheckCircleOutlined />,
-                },
-                ]}
-              />
-              <Steps
-                direction="horizontal"
-                current={1}
-                items={[
-                {
-                  title: 'FACT',
-                  description: 'Market Caps are correlated in crypto.',
-                  status: 'error',
-                  icon: <CloseCircleOutlined />,
-                },
-                {
-                  title: 'SOLUTION',
-                  description: 'Apply non market cap portfolio strategies',
-                  status: 'finish',
-                  className: 'quantamm_success_step',
-                  icon: <CheckCircleOutlined />,
-                },
-                ]}
-              />
-              <Steps
-                direction="horizontal"
-                current={1}
-                items={[
-                {
-                  title: 'FACT',
-                  description: 'Index products charge fees as high as 1980s hedge funds',
-                  status: 'error',
-                  icon: <CloseCircleOutlined />,
-                },
-                {
-                  title: 'SOLUTION',
-                  description: 'No streaming fees for LPs! We take our maintenance fees elsewhere',
-                  status: 'finish',
-                  icon: <CheckCircleOutlined />,
-                  className: 'quantamm_success_step',
-                },
-                ]}
-              />
+            <Col
+              span={24}
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                padding: 0,
+              }}
+            >
+              <div style={{ width: '80%' }}>
+                <Steps
+                  style={{ marginLeft: '25px' }}
+                  direction="horizontal"
+                  current={1}
+                  items={[
+                    {
+                      title: 'FACT',
+                      description: 'Crypto markets are volatile',
+                      status: 'error',
+                      icon: <CloseCircleOutlined />,
+                    },
+                    {
+                      className: 'quantamm_success_step',
+                      title: 'SOLUTION',
+                      description: 'Assess the market daily and react',
+                      icon: <CheckCircleOutlined />,
+                      status: 'finish',
+                    },
+                  ]}
+                />
+                <Steps
+                  style={{ marginLeft: '25px' }}
+                  direction="horizontal"
+                  current={1}
+                  items={[
+                    {
+                      title: 'FACT',
+                      description: 'Market Caps are correlated in crypto',
+                      status: 'error',
+                      icon: <CloseCircleOutlined />,
+                    },
+                    {
+                      title: 'SOLUTION',
+                      description: 'Apply non market cap portfolio strategies',
+                      status: 'finish',
+                      className: 'quantamm_success_step',
+                      icon: <CheckCircleOutlined />,
+                    },
+                  ]}
+                />
+                <Steps
+                  style={{ marginLeft: '25px' }}
+                  direction="horizontal"
+                  current={1}
+                  items={[
+                    {
+                      title: 'FACT',
+                      description: 'Crypto Indexs charge hedge fund level fees',
+                      status: 'error',
+                      icon: <CloseCircleOutlined />,
+                    },
+                    {
+                      title: 'SOLUTION',
+                      description: 'No maintenace fees charged to LPs',
+                      status: 'finish',
+                      icon: <CheckCircleOutlined />,
+                      className: 'quantamm_success_step',
+                    },
+                  ]}
+                />
+              </div>
             </Col>
             <Col span={24}>
               {' '}
@@ -211,19 +219,21 @@ export function QuantAmmExplainer() {
           </Row>
         </Col>
         <Col span={4}></Col>
-        <Col span={1} style={{ height: '60vh', paddingTop: '10px', paddingLeft: '10px' }}>
+        <Col
+          span={1}
+          style={{ height: '60vh', paddingTop: '10px', paddingLeft: '10px' }}
+        >
           <div style={{ height: '100%' }} id="indexGauge">
             <AgGauge
               options={{
                 type: 'linear-gauge',
                 container: document.getElementById('indexGauge'),
                 value: 3.8,
-                subtitle:{
+                subtitle: {
                   text: 'Index',
                   fontFamily: 'Jost',
                   fontSize: 16,
                   color: '#162536',
-                  
                 },
                 scale: {
                   min: 0,
@@ -283,12 +293,11 @@ export function QuantAmmExplainer() {
                 type: 'linear-gauge',
                 container: document.getElementById('quantammGauge'),
                 value: 8,
-                subtitle:{
+                subtitle: {
                   text: 'BTF',
                   fontFamily: 'Jost',
                   fontSize: 16,
                   color: '#162536',
-                  
                 },
                 scale: {
                   min: 0,

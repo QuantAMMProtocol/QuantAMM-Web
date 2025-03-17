@@ -1,5 +1,5 @@
 .quantamm_success_step {
-    color: green;
+    color: green !important;
     background-color: transparent !important;
 }
 
@@ -10,4 +10,12 @@
 
 :where(.css-dev-only-do-not-override-12rmomn).ant-timeline .ant-timeline-item-head {
     background-color: transparent !important;
+}
+
+:where(.css-dev-only-do-not-override-12rmomn).ant-steps .ant-steps-item-finish>.ant-steps-item-container>.ant-steps-item-content>.ant-steps-item-title{
+    color: green !important;
+}
+
+:where(.css-dev-only-do-not-override-12rmomn).ant-steps .ant-steps-item-finish>.ant-steps-item-container>.ant-steps-item-content>.ant-steps-item-description{
+    color: green !important;
 }
