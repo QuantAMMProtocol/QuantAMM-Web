@@ -20,7 +20,6 @@ export const ProductItemApr: FC<ProductItemAprProps> = ({ product }) => {
         height="auto"
         product={product}
         poolId={product.id}
-        // textProps={{ fontWeight: 'medium', textAlign: 'right' }}
       />
     </div>
   ) : (

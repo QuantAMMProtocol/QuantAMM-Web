@@ -1,0 +1,54 @@
+.apr-tooltip-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 100%;
+
+  &:hover {
+    color: var(--secondary-text-color);
+  }
+
+  &.open {
+    color: var(--secondary-text-color);
+  }
+}
+
+.popover-content {
+  width: 300px;
+}
+
+.tooltip-item__container {
+  width: 300px;
+}
+
+.tooltip-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.apr-text {
+  color: 'font.primary';
+  text-align: left;
+  text-decoration: none;
+  white-space: pre-wrap;
+
+  &:hover {
+    color: var(--secondary-text-color);
+  }
+
+  &.open {
+    color: var(--secondary-text-color);
+  }
+}
+
+.tooltip-dashed-underline {
+  font-size: 14px;
+  color: #666666;
+  text-decoration: underline;
+  text-decoration-style: dashed;
+  text-underline-offset: 4px;
+  text-decoration-color: lightgray;
+}
