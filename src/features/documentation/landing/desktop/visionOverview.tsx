@@ -3,14 +3,18 @@ import { ProductItemBackground } from '../../../productExplorer/productItem/prod
 import { Steps } from 'antd';
 import { CheckCircleOutlined, LoadingOutlined } from '@ant-design/icons';
 
-export function VisionOverview() {
+interface VisionOverviewProps {
+  backgroundColor?: string;
+}
+
+export function VisionOverview({ backgroundColor = "#2c496b" }: VisionOverviewProps) {
   return (
     <Row style={{ height: '100%' }}>
       <Col span={24}>
         <ProductItemBackground
           wide
           layers={20}
-          backgroundColourOverride="#2c496b"
+          backgroundColourOverride={backgroundColor}
           borderColourOverride=""
         >
           <Row>

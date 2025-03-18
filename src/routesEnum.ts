@@ -8,4 +8,5 @@ export enum ROUTES {
   EXAMPLES = 'examples',
   RESEARCH = 'research',
   COMPANY = 'company',
+  CONTACT = 'contact'
 }

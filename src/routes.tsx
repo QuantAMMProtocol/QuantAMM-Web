@@ -10,6 +10,7 @@ import { ROUTES } from './routesEnum';
 import LandingPage from './features/documentation/landing/landingPage';
 import { Research } from './features/documentation/research';
 import { CompanyPage } from './features/documentation/company';
+import { ContactCompany } from './features/documentation/landing/desktop/contactCompany';
 
 const BASE_ROUTE = '/';
 
@@ -67,6 +68,10 @@ export const routes = createBrowserRouter([
       {
         path: ROUTES.COINS,
         element: <CoinData />,
+      },
+      {
+        path:ROUTES.CONTACT,
+        element: <ContactCompany />
       },
       {
         path: ROUTES.SIMULATION_RUNNER,

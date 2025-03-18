@@ -105,6 +105,6 @@ export function CompanyPage() {
             March/April 2025 - QuantAMM Launches BTF
           </Timeline.Item>
         </Timeline>
-      </div></div>: <VisionOverview />
+      </div></div> : <VisionOverview backgroundColor="#162536"/>
     );
     }
