@@ -1,5 +1,6 @@
 import { ReactNode, useState } from 'react';
-import { Divider, Modal, Popover } from 'antd';
+import { Divider, Popover } from 'antd';
+import { TooltipPlacement } from 'antd/es/tooltip';
 import BigNumber from 'bignumber.js';
 import {
   GqlChain,
@@ -7,16 +8,10 @@ import {
   GqlPoolAprItem,
   GqlPoolType,
 } from '../../../../../__generated__/graphql-types';
-
-// import {
-//   PlacementWithLogical,
-//   Popover,
-//   PopoverContent,
-//   PopoverTrigger,
-//   Stack,
-//   Portal,
-// } from '@chakra-ui/react';
-
+import { bn, fNum } from '../../../../../utils/numbers';
+import { isCowAmmPool, isVebalPool } from '../../../../../utils/poolHelpers';
+import { useAppSelector } from '../../../../../app/hooks';
+import { selectTheme } from '../../../../themes/themeSlice';
 import {
   swapFeesTooltipText,
   useAprTooltip,
@@ -29,11 +24,6 @@ import {
   SupportedHookType,
 } from './useAprTooltip';
 import { TooltipAprItem } from './TooltipAprItem';
-import { bn, fNum } from '../../../../../utils/numbers';
-
-import { isCowAmmPool, isVebalPool } from '../../../../../utils/poolHelpers';
-import { useAppSelector } from '../../../../../app/hooks';
-import { selectTheme } from '../../../../themes/themeSlice';
 
 import styles from './AprTooltip.module.scss';
 
@@ -41,7 +31,7 @@ interface Props {
   aprItems: GqlPoolAprItem[];
   numberFormatter?: (value: string) => BigNumber;
   displayValueFormatter?: (value: BigNumber) => string;
-  // placement?: PlacementWithLogical;
+  placement?: TooltipPlacement;
   poolId: string;
   poolType: GqlPoolType;
   vebalBoost?: string;

@@ -1,6 +1,6 @@
+import { ReactNode } from 'react';
 import { Typography, Popover } from 'antd';
 import BigNumber from 'bignumber.js';
-import { ReactNode } from 'react';
 
 import styles from './AprTooltip.module.scss';
 
@@ -22,10 +22,12 @@ interface PopoverAprItemProps {
   children?: ReactNode;
 }
 
-export function TooltipAprItem({
+export const TooltipAprItem = ({
   title,
   apr,
+  aprOpacity = 1,
   displayValueFormatter,
+  boxBackground,
   textBackground,
   textBackgroundClip,
   children,
@@ -33,16 +35,19 @@ export function TooltipAprItem({
   fontColor,
   tooltipText,
   valueFontColor,
-}: PopoverAprItemProps) {
+}: PopoverAprItemProps) => {
   return (
-    <div className={styles['tooltip-item__container']}>
+    <div
+      className={styles['tooltip-item__container']}
+      style={{ background: boxBackground }}
+    >
       <div className={styles['tooltip-item']}>
         <Text
           style={{
             background: textBackground,
             backgroundClip: textBackgroundClip,
             color: fontColor,
-            fontSize: '14px',
+            fontSize: '12px',
             fontWeight: fontWeight,
           }}
         >
@@ -52,17 +57,44 @@ export function TooltipAprItem({
           <Popover
             trigger="hover"
             content={
-              <div style={{ width: '300px' }}>
-                <Text>{tooltipText}</Text>
+              <div
+                style={{
+                  maxWidth: '300px',
+                  width: 'auto',
+                  padding: '2px',
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: '12px',
+                  }}
+                >
+                  {tooltipText}
+                </Text>
               </div>
             }
           >
-            <Text className={styles['tooltip-dashed-underline']}>
+            <Text
+              className={styles['tooltip-dashed-underline']}
+              style={{
+                color: valueFontColor ?? fontColor,
+                fontSize: '12px',
+                fontWeight: fontWeight,
+                opacity: aprOpacity,
+              }}
+            >
               {displayValueFormatter(apr)}
             </Text>
           </Popover>
         ) : (
-          <Text color={valueFontColor ?? fontColor}>
+          <Text
+            style={{
+              color: valueFontColor ?? fontColor,
+              fontSize: '12px',
+              fontWeight: fontWeight,
+              opacity: aprOpacity,
+            }}
+          >
             {displayValueFormatter(apr)}
           </Text>
         )}
@@ -70,4 +102,4 @@ export function TooltipAprItem({
       {children}
     </div>
   );
-}
+};

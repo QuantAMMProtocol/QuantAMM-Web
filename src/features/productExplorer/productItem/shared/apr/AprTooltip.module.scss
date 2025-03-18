@@ -20,13 +20,14 @@
 }
 
 .tooltip-item__container {
-  width: 300px;
+  background: var(--card-chain-background);
+  padding: 0 2px 3px 4px;
 }
 
 .tooltip-item {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 10px;
+  margin-bottom: 4px;
 }
 
 .apr-text {
