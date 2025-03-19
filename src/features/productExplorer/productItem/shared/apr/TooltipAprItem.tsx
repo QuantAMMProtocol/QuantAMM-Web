@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { CSSProperties, ReactNode } from 'react';
 import { Typography, Popover } from 'antd';
 import BigNumber from 'bignumber.js';
 
@@ -6,8 +6,8 @@ import styles from './AprTooltip.module.scss';
 
 const { Text } = Typography;
 
-interface PopoverAprItemProps {
-  fontWeight?: number;
+interface PopoverAprItemProps extends CSSProperties {
+  fontWeight?: number | string;
   fontColor?: string;
   valueFontColor?: string;
   title: string;
@@ -35,11 +35,12 @@ export const TooltipAprItem = ({
   fontColor,
   tooltipText,
   valueFontColor,
+  ...props
 }: PopoverAprItemProps) => {
   return (
     <div
       className={styles['tooltip-item__container']}
-      style={{ background: boxBackground }}
+      style={{ background: boxBackground, ...props }}
     >
       <div className={styles['tooltip-item']}>
         <Text
@@ -47,7 +48,7 @@ export const TooltipAprItem = ({
             background: textBackground,
             backgroundClip: textBackgroundClip,
             color: fontColor,
-            fontSize: '12px',
+            fontSize: '14px',
             fontWeight: fontWeight,
           }}
         >
@@ -62,11 +63,12 @@ export const TooltipAprItem = ({
                   maxWidth: '300px',
                   width: 'auto',
                   padding: '2px',
+                  backgroundColor: 'var(--tooltip-background-color)',
                 }}
               >
                 <Text
                   style={{
-                    fontSize: '12px',
+                    fontSize: '14px',
                   }}
                 >
                   {tooltipText}
@@ -78,7 +80,7 @@ export const TooltipAprItem = ({
               className={styles['tooltip-dashed-underline']}
               style={{
                 color: valueFontColor ?? fontColor,
-                fontSize: '12px',
+                fontSize: '14px',
                 fontWeight: fontWeight,
                 opacity: aprOpacity,
               }}
@@ -90,7 +92,7 @@ export const TooltipAprItem = ({
           <Text
             style={{
               color: valueFontColor ?? fontColor,
-              fontSize: '12px',
+              fontSize: '14px',
               fontWeight: fontWeight,
               opacity: aprOpacity,
             }}

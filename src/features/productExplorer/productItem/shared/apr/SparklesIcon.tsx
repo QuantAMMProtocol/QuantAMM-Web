@@ -65,7 +65,7 @@ export const SparklesIcon = ({
         }}
       >
         {isLBP(product.type) ? (
-          <InfoCircleOutlined color={isOpen ? hoverColor : '#a1a1aa'} />
+          <InfoCircleOutlined color={isOpen ? hoverColor : 'var(--gray-400)'} />
         ) : hasOnlySwapApr ? (
           <Icon
             component={StarIcon}

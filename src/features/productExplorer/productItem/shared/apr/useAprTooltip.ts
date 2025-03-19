@@ -1,5 +1,6 @@
 /* eslint-disable max-len */
 import BigNumber from 'bignumber.js';
+import { CSSProperties } from 'react';
 import {
   GqlChain,
   GqlHookType,
@@ -7,8 +8,6 @@ import {
   GqlPoolAprItemType,
 } from '../../../../../__generated__/graphql-types';
 import { bn } from '../../../../../utils/numbers';
-import { selectTheme } from '../../../../themes/themeSlice';
-import { useAppSelector } from '../../../../../app/hooks';
 
 export const swapFeesTooltipText = `LPs earn fees when swaps are routed through this pool. The displayed APR is net earnings for LPs (with all protocol fees already deducted). Fees automatically compound into positions—no claiming needed.`;
 
@@ -97,8 +96,6 @@ export function useAprTooltip({
   vebalBoost?: number;
   chain: GqlChain;
 }) {
-  const isDark = useAppSelector(selectTheme);
-
   const hasVeBalBoost =
     showVeBal &&
     !!aprItems.find((item) => item.type === GqlPoolAprItemType.StakingBoost);
@@ -261,13 +258,12 @@ export function useAprTooltip({
   const isVotingPresent = !votingAprDisplayed.isZero();
   const isLockingAprPresent = !lockingAprDisplayed.isZero();
 
-  const subitemPopoverAprItemProps = {
-    pt: 2,
-    pl: 'sm',
-    backgroundColor: 'background.level1',
+  const getSubitemPopoverAprItemProps = (isDark: boolean): CSSProperties => ({
+    paddingTop: '2px',
+    paddingLeft: '12px',
     fontWeight: 500,
-    fontColor: isDark ? 'gray.400' : 'gray.600',
-  };
+    color: isDark ? 'var(--gray-400)' : 'var(--gray-600)',
+  });
 
   return {
     totalBaseDisplayed,
@@ -289,7 +285,7 @@ export function useAprTooltip({
     lockingAprDisplayed,
     isVotingPresent,
     isLockingAprPresent,
-    subitemPopoverAprItemProps,
+    getSubitemPopoverAprItemProps,
     hasVeBalBoost,
     maxVeBal,
     totalBase,
