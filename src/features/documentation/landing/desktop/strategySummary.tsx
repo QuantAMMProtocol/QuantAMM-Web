@@ -5,12 +5,26 @@ import { useEffect, useState } from 'react';
 import { SimulationRunBreakdown } from '../../../simulationResults/simulationResultSummaryModels';
 import { getBreakdown, Pool } from '../../../../services/breakdownService';
 import { WeightChangeOverTimeGraph } from '../../../shared';
+import { SimulationResultMarketValueChart } from '../../../simulationResults/visualisations/simulationResultMarketValueChart';
 
 const { Title } = Typography;
 
 export function StrategySummary() {
   const [breakdowns, setBreakdowns] = useState<SimulationRunBreakdown[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [visibleCard, setVisibleCard] = useState<number>(0);
+
+  const handleCarouselChange = (current: number) => {
+    setVisibleCard(current);
+  };
+
+  const carouselRuleKeys = [
+    'Momentum',
+    'AntiMomentum',
+    'Channel Following',
+    'Power Channel',
+    'Power Channel',
+  ];
 
   // Effect to load breakdowns whenever the tab key changes
   useEffect(() => {
@@ -30,7 +44,11 @@ export function StrategySummary() {
       // Load breakdowns for the selected tab
       return await loadBreakdowns([
         'balancerWeighted',
+        'quantAMMMomentum',
         'quantAMMAntiMomentum',
+        'quantAMMChannelFollowing',
+        'quantAMMPowerChannel',
+        'hodlEthUsdc',
       ] as Pool[]); // Awaiting the asynchronous function here
     };
 
@@ -147,7 +165,12 @@ export function StrategySummary() {
                 <p style={{ textAlign: 'center', margin: 0 }}>
                   DO NOT TRUST OPAQUE MANAGERS
                 </p>
-                <Carousel arrows={true} autoplay={true} autoplaySpeed={3000}>
+                <Carousel
+                  arrows={true}
+                  autoplay={true}
+                  autoplaySpeed={3000}
+                  afterChange={handleCarouselChange}
+                >
                   <div>
                     <div
                       style={{
@@ -309,8 +332,8 @@ export function StrategySummary() {
                         style={{
                           width: '55%',
                           height: '55%',
-                          padding:'10px',
-                          marginTop:'2vh'
+                          padding: '10px',
+                          marginTop: '2vh',
                         }}
                         src="/documentation/minimum_variance.svg"
                       />
@@ -341,11 +364,22 @@ export function StrategySummary() {
                 style={{
                   height: '100%',
                   width: '100%',
+                  paddingLeft: '20px',
+                  paddingRight: '20px',
+                  paddingTop:'40px',
+                  paddingBottom:'80px'
                 }}
               >
-                <div
-                  style={{ display: 'flex', justifyContent: 'center' }}
-                ></div>
+                <SimulationResultMarketValueChart
+                  breakdowns={breakdowns.filter(
+                    (x) =>
+                      x.simulationRun.updateRule.updateRuleName ==
+                        carouselRuleKeys[visibleCard] ||
+                      x.simulationRun.updateRule.updateRuleSimKey == 'hodl'
+                  )}
+                  forceViewResults={true}
+                  overrideXAxisInterval={24}
+                />
               </div>
             </Col>
           </Row>

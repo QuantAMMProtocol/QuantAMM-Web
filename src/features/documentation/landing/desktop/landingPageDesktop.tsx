@@ -6,6 +6,7 @@ import { StrategySummary } from './strategySummary';
 import { ResearchExplorer } from './researchExplorer';
 import { VisionOverview } from './visionOverview';
 import { ContactCompany } from './contactCompany';
+import { FAQ } from './faq';
 
 
 export function LandingPageDesktop() {
@@ -17,7 +18,7 @@ export function LandingPageDesktop() {
       }}
     >
       <Parallax
-        pages={18}
+        pages={22}
         id="parallax_container"
         style={{ height: '95vh', width: '100%', position: 'relative' }}
       >
@@ -46,6 +47,13 @@ export function LandingPageDesktop() {
         <ParallaxLayer
           speed={0.1}
           sticky={{ start: 6, end: 8 }}
+          style={{ backgroundColor: 'white' }}
+        >
+          <FAQ /> 
+        </ParallaxLayer>
+        <ParallaxLayer
+          factor={1}
+          sticky={{ start: 9, end: 12 }}
           style={{
             display: 'flex',
             alignItems: 'center',
@@ -59,7 +67,7 @@ export function LandingPageDesktop() {
 
         <ParallaxLayer
           factor={1}
-          sticky={{ start: 9, end: 11 }}
+          sticky={{ start: 13, end: 16 }}
           style={{
             height: '100%',
           }}
@@ -69,7 +77,7 @@ export function LandingPageDesktop() {
 
         <ParallaxLayer
           speed={0.4}
-          sticky={{ start: 12, end: 14 }}
+          sticky={{ start: 17, end: 20 }}
           style={{
             display: 'flex',
             alignItems: 'center',
@@ -85,7 +93,7 @@ export function LandingPageDesktop() {
 
         <ParallaxLayer
           speed={0.4}
-          sticky={{ start: 15, end: 18 }}
+          sticky={{ start: 21, end: 22 }}
           style={{
             display: 'flex',
             alignItems: 'center',
