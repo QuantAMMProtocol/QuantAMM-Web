@@ -71,7 +71,7 @@ export const ProductItemWide: FC<ProductItemProps> = ({ product }) => {
         <ProductItemBackground wide>
           <Row>
             <Col
-              span={4}
+              span={5}
               className={styles['product-item__card-column-left']}
               style={{ position: 'relative' }}
             >
@@ -105,14 +105,14 @@ export const ProductItemWide: FC<ProductItemProps> = ({ product }) => {
             </Col>
 
             <Col
-              span={3}
+              span={2}
               className={styles['product-item__card-column']}
               style={{ padding: 0 }}
             >
               {product.dynamicData?.aprItems?.length ? (
                 <ProductItemApr product={product} />
               ) : (
-                <Text>No APR data</Text>
+                <Text style={{ fontSize: '12px' }}>No APR data</Text>
               )}
             </Col>
 

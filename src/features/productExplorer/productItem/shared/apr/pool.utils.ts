@@ -5,6 +5,7 @@ import {
 } from '../../../../../__generated__/graphql-types';
 import { bn, fNum } from '../../../../../utils/numbers';
 import { TOTAL_APR_TYPES } from './useAprTooltip';
+import { Product } from '../../../../../models';
 
 /**
  * Calculates the total APR based on the array of APR items and an optional boost value.
@@ -60,4 +61,8 @@ export function getTotalAprLabel(
   } else {
     return `${fNum('apr', minTotal.toString())} - ${fNum('apr', maxTotal.toString())}`;
   }
+}
+
+export function isProduct(product: any): product is Product {
+  return (product as Product).poolConstituents !== undefined;
 }

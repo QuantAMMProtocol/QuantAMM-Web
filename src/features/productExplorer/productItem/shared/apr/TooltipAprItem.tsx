@@ -58,17 +58,10 @@ export const TooltipAprItem = ({
           <Popover
             trigger="hover"
             content={
-              <div
-                style={{
-                  maxWidth: '300px',
-                  width: 'auto',
-                  padding: '2px',
-                  backgroundColor: 'var(--tooltip-background-color)',
-                }}
-              >
+              <div className={styles['tooltip-text']}>
                 <Text
                   style={{
-                    fontSize: '14px',
+                    fontSize: '16px',
                   }}
                 >
                   {tooltipText}

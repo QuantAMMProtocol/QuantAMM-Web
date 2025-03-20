@@ -44,11 +44,10 @@ interface Props {
   shouldDisplayMaxVeBalTooltip?: boolean;
   children?: ReactNode | (({ isOpen }: { isOpen: boolean }) => ReactNode);
   chain: GqlChain;
-  hookType?: GqlHookType; // check this?
+  hookType?: GqlHookType;
 }
 
 const balRewardGradient =
-  // eslint-disable-next-line max-len
   'linear-gradient(90deg, var(--secondary-light) 0%,  var(--secondary-lighter) 100%)';
 
 const defaultDisplayValueFormatter = (value: BigNumber) =>
@@ -255,7 +254,7 @@ export const BaseAprTooltip = ({
       )}
       <Divider style={{ margin: 0 }} />
       <TooltipAprItem
-        {...{ paddingLeft: '2px', paddingTop: '6px' }}
+        {...{ paddingLeft: '4px', paddingTop: '6px' }}
         apr={totalBaseDisplayed}
         displayValueFormatter={usedDisplayValueFormatter}
         title={totalBaseTitle}
@@ -320,6 +319,7 @@ export const BaseAprTooltip = ({
             }}
           >
             <TooltipAprItem
+              {...{ paddingTop: '6px' }}
               apr={extraBalAprDisplayed}
               displayValueFormatter={usedDisplayValueFormatter}
               fontColor={isDark ? 'var(--gray-400)' : 'var(--gray-600)'}
@@ -331,7 +331,7 @@ export const BaseAprTooltip = ({
             <Divider style={{ margin: 0 }} />
             <TooltipAprItem
               {...{
-                paddingLeft: '2px',
+                paddingLeft: '4px',
                 paddingTop: '6px',
               }}
               apr={maxVeBalDisplayed}
@@ -339,6 +339,7 @@ export const BaseAprTooltip = ({
               displayValueFormatter={usedDisplayValueFormatter}
               title={maxVeBalText || 'Max veBAL APR'}
               fontWeight={600}
+              fontColor={'var(--secondary-color)'}
               tooltipText={
                 shouldDisplayMaxVeBalTooltip
                   ? `${defaultDisplayValueFormatter(
@@ -358,7 +359,6 @@ export const BaseAprTooltip = ({
               display: 'flex',
               flexDirection: 'column',
               gap: 0,
-              borderRadius: 'md',
             }}
           >
             <TooltipAprItem

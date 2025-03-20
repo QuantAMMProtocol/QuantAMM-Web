@@ -4,7 +4,7 @@ import { Product } from '../../../../../models';
 import { GqlChain } from '../../../../../__generated__/graphql-types';
 import { useAppSelector } from '../../../../../app/hooks';
 import { selectTheme } from '../../../../themes/themeSlice';
-import { getTotalAprLabel } from './pool.utils';
+import { getTotalAprLabel, isProduct } from './pool.utils';
 import { BaseAprTooltip, BaseAprTooltipProps } from './BaseAprTooltip';
 import { SparklesIcon } from './SparklesIcon';
 
@@ -56,7 +56,7 @@ function MainAprTooltip({
       {...props}
       chain={product.chain as GqlChain}
       customPopoverContent={customPopoverContent}
-      // hookType={isPool(product) ? product.hook?.type : undefined}
+      hookType={isProduct(product) ? product.hook?.type : undefined}
       maxVeBalText="Total max veBAL APR"
       poolType={product.type}
       totalBaseText={(hasVeBalBoost) =>
