@@ -6,6 +6,9 @@ query GetPoolById($id: String!, $chain: GqlChain!) {
     name
     decimals
     type
+    hook {
+      type
+    }
     id
     symbol
     createTime

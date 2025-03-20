@@ -39,6 +39,7 @@ export const mapPoolToBaseProduct = (pools: GqlPoolMinimal[]): ProductMap => {
       decimals: pool.decimals,
       basketTheme: 'Main Cap', // TODO: get from pool
       type: pool.type,
+      hook: pool.hook,
       tokenType: pool.type, // TODO: unnecessary?
       strategy: getStrategy(pool),
       chain: pool.chain,
