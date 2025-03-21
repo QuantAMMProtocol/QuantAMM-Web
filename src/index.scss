@@ -20,12 +20,6 @@
   --gray-800: #27272a;
   --gray-900: #18181b;
 
-  --chakra-colors-background-level0: #ebe8e0;
-  --chakra-colors-background-level1: #efede6;
-  --chakra-colors-background-level2: #f5f3ef;
-  --chakra-colors-background-level3: #fbfaf9;
-  --chakra-colors-background-level4: #ffffff;
-
   --grey: rgba(166, 166, 166, 0.9);
   --green: rgba(2, 189, 46, 0.9);
   --red: rgba(166, 0, 0, 0.9);
@@ -43,7 +37,7 @@
   --product-item-background-border-color: rgba(229, 211, 190, 0.05);
   --tooltip-background-color: var(--primary-darker);
   --tooltip-text-color: #f0f2f5;
-  --tooltip-text-decoration-color: var(--chakra-colors-gray-500);
+  --tooltip-text-decoration-color: var(--gray-500);
 }
 
 [data-theme='light'] {
@@ -61,7 +55,7 @@
   --product-item-background-border-color: rgba(176, 126, 67, 0.08);
   --tooltip-background-color: var(--main-background);
   --tooltip-text-color: var(--secondary-dark);
-  --tooltip-text-decoration-color: var(--chakra-colors-gray-300);
+  --tooltip-text-decoration-color: var(--gray-500);
 }
 
 body,

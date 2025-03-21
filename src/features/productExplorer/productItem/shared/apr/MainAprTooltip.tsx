@@ -2,8 +2,6 @@ import { Popover, Typography } from 'antd';
 import { isLBP } from '../../../../../utils/poolHelpers';
 import { Product } from '../../../../../models';
 import { GqlChain } from '../../../../../__generated__/graphql-types';
-import { useAppSelector } from '../../../../../app/hooks';
-import { selectTheme } from '../../../../themes/themeSlice';
 import { getTotalAprLabel, isProduct } from './pool.utils';
 import { BaseAprTooltip, BaseAprTooltipProps } from './BaseAprTooltip';
 import { SparklesIcon } from './SparklesIcon';
@@ -38,8 +36,6 @@ function MainAprTooltip({
   id,
   ...props
 }: Props) {
-  const isDark = useAppSelector(selectTheme);
-
   const aprToShow =
     apr ??
     (product.dynamicData?.aprItems &&
@@ -80,12 +76,7 @@ function MainAprTooltip({
                 {aprLabel ? ' APR' : ''}
               </Text>
             )}
-            <SparklesIcon
-              id={id}
-              isOpen={isOpen}
-              product={product}
-              isDark={isDark}
-            />
+            <SparklesIcon id={id} isOpen={isOpen} product={product} />
           </div>
         </div>
       )}

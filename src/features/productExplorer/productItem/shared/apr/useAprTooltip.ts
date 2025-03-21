@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import BigNumber from 'bignumber.js';
 import { CSSProperties } from 'react';
 import {
