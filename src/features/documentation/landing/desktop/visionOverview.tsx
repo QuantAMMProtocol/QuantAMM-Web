@@ -145,7 +145,7 @@ export function VisionOverview({ backgroundColor = "#2c496b" }: VisionOverviewPr
                     status: 'process',
                   },
                   {
-                    title: 'March/April 2025',
+                    title: 'April 2025',
                     description: 'QuantAMM Launches BTF',
                     icon: <LoadingOutlined />,
                     status: 'process',

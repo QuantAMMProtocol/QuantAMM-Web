@@ -77,9 +77,9 @@ export function SimulatorOptions() {
         <Col span={12} style={{ padding: 30 }}>
           <Row>
             <Col span={24}>
-              <h2 style={{ color: '#e6ce97' }}>
-                The Balancer V3 Historic Simulator powered by QuantAMM
-              </h2>
+              <h1 style={{ color: '#e6ce97' }}>
+                QuantAMM Historic Simulator
+              </h1>
             </Col>
             <Col span={24}>
               <p>
