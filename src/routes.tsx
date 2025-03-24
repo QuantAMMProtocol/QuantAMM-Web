@@ -11,6 +11,7 @@ import LandingPage from './features/documentation/landing/landingPage';
 import { Research } from './features/documentation/research';
 import { CompanyPage } from './features/documentation/company';
 import { ContactCompany } from './features/documentation/landing/desktop/contactCompany';
+import TermsOfService from './features/documentation/landing/termsOfService';
 
 const BASE_ROUTE = '/';
 
@@ -81,6 +82,10 @@ export const routes = createBrowserRouter([
         path: ROUTES.SIMULATION_COMPARER,
         element: <SimulationSavedResultComparison />,
       },
+      {
+        path: ROUTES.TOS,
+        element: <TermsOfService />,
+      }
     ],
   },
 ]);

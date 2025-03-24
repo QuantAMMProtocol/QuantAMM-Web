@@ -115,6 +115,11 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
         ],
         style: { marginLeft: 'auto' }, // Align to the right
       },
+      {
+        key: 'tos',
+        label: 'Terms of Service',
+        icon: <LineChartOutlined />,
+      }
     ];
   }
 
@@ -180,6 +185,10 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
             icon: <LineChartOutlined />,
           },
         ],
+      },
+      {
+        key: 'tos',
+        label: 'Terms of Service',
       },
       {
         key: 'product-explorer',

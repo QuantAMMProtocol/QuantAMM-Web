@@ -419,7 +419,7 @@ export function FAQ() {
             <Row>
               <Col span={24}>
                 <h1
-                  style={{ color: 'black', textAlign: 'center', width: '100%' }}
+                  style={{ color: '#162536', textAlign: 'center', width: '100%' }}
                 >
                   Frequently Asked Questions
                 </h1>
@@ -436,7 +436,7 @@ export function FAQ() {
                   >
                     <Radio.Button
                       disabled={true}
-                      style={{ backgroundColor: 'black', color: 'white' }}
+                      style={{ backgroundColor: '#162536', color: 'white' }}
                     >
                       Choose Knowledge Level:{' '}
                     </Radio.Button>
@@ -452,7 +452,7 @@ export function FAQ() {
               </Col>
               <Col span={24}>
                 <Collapse
-                  style={{ width: '100%', backgroundColor: 'black' }}
+                  style={{ width: '100%', backgroundColor: '#2c496b' }}
                   accordion
                   items={items}
                   size="small"
