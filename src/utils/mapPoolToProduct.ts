@@ -1,3 +1,4 @@
+import BigNumber from 'bignumber.js';
 import { format, fromUnixTime, getTime } from 'date-fns';
 import {
   GetPoolByIdQuery,
@@ -23,6 +24,7 @@ import {
   filterByTimeRange,
   filterByExtendedTimeRange,
 } from '../features/productDetail/productDetailContent/helpers';
+import { useAprTooltip } from '../features/productExplorer/productItem/shared/apr/useAprTooltip';
 
 const formatTimestamp = (timestamp: number): string => {
   return format(fromUnixTime(timestamp), 'yyyy/MM/dd HH:mm:ss');
@@ -30,7 +32,14 @@ const formatTimestamp = (timestamp: number): string => {
 
 export const mapPoolToBaseProduct = (pools: GqlPoolMinimal[]): ProductMap => {
   const productMap: ProductMap = {};
+
   pools.forEach((pool) => {
+    const { getSortableApr } = useAprTooltip({
+      aprItems: pool.dynamicData?.aprItems ?? [],
+      numberFormatter: (value) => new BigNumber(value),
+      chain: pool.chain,
+    });
+
     productMap[pool.id] = {
       id: pool.id,
       address: String(pool.address),
@@ -68,6 +77,7 @@ export const mapPoolToBaseProduct = (pools: GqlPoolMinimal[]): ProductMap => {
       dynamicData: pool.dynamicData,
       benchmarkNames: ['HODL'],
       benchmarkTimeSeries: [],
+      sortableApr: getSortableApr(pool.id),
     };
   });
 
