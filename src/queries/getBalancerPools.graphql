@@ -20,6 +20,9 @@ query GetPools(
     name
     decimals
     type
+    hook {
+      type
+    }
     id
     symbol
     createTime
@@ -40,6 +43,7 @@ query GetPools(
       volume24h
       aprItems {
         apr
+        id
         type
         rewardTokenSymbol
       }

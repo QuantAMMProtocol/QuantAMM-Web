@@ -9,11 +9,11 @@ import { getScoreColor, MAX_SCORE } from '../../../shared/graphs/helpers';
 import { ProductModal } from '../../../productDetail/modal/productModal';
 import { getBalancerPoolUrl } from '../../../../utils';
 import { productExplorerTranslation } from '../../translations';
-import { getTimeDifference } from '../shared/TimeDifference';
 import { getCurrentPrice, getTvl } from '../productItemHelpers';
 import { ProductItemPerformanceLineGraph } from './productItemPerformanceLineGraph';
 import { ProductItemTokenList } from './productItemTokenList';
 import { ProductItemBackground } from '../productItemBackground';
+import { ProductItemApr } from './productItemApr';
 
 import styles from './productItemWide.module.scss';
 
@@ -104,12 +104,16 @@ export const ProductItemWide: FC<ProductItemProps> = ({ product }) => {
               </Text>
             </Col>
 
-            <Col span={2} className={styles['product-item__card-column']}>
-              <Text className={styles['product-item__card-under-body__text']}>
-                <span style={{ color: 'var(--secondary-lighter)' }}>
-                  {getTimeDifference(product.createTime)}
-                </span>
-              </Text>
+            <Col
+              span={2}
+              className={styles['product-item__card-column']}
+              style={{ padding: 0 }}
+            >
+              {product.dynamicData?.aprItems?.length ? (
+                <ProductItemApr product={product} />
+              ) : (
+                <Text style={{ fontSize: '12px' }}>No APR data</Text>
+              )}
             </Col>
 
             <Col

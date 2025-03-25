@@ -1,0 +1,73 @@
+.apr-tooltip-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 100%;
+
+  &:hover {
+    color: var(--secondary-text-color);
+  }
+
+  &.open {
+    color: var(--secondary-text-color);
+  }
+}
+
+.popover-content {
+  min-width: 300px;
+  overflow: hidden;
+  padding: 0;
+  width: fit-content;
+  background-color: transparent;
+  box-shadow:
+    0px 24px 40px color-mix(in srgb, var(--gray-900) 16%, transparent),
+    0px 0px 1px color-mix(in srgb, var(--gray-900) 30%, transparent);
+}
+
+.tooltip-item__container {
+  padding: 0 2px 6px 10px;
+  background-color: transparent;
+}
+
+.tooltip-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0;
+  margin: 0;
+}
+
+.tooltip-text {
+  max-width: 300px;
+  width: auto;
+  padding: 2px;
+  box-shadow:
+    0px 24px 40px color-mix(in srgb, var(--gray-900) 16%, transparent),
+    0px 0px 1px color-mix(in srgb, var(--gray-900) 30%, transparent);
+}
+
+.apr-text {
+  text-align: left;
+  text-decoration: none;
+  white-space: pre-wrap;
+  font-size: 12px;
+
+  &:hover {
+    color: var(--secondary-text-color);
+  }
+
+  &.open {
+    color: var(--secondary-text-color);
+  }
+}
+
+.tooltip-dashed-underline {
+  font-size: 14px;
+  color: #666666;
+  text-decoration: underline;
+  text-decoration-style: dashed;
+  text-underline-offset: 4px;
+  text-decoration-color: var(--tooltip-text-decoration-color);
+}

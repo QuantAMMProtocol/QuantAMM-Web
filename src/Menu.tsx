@@ -194,7 +194,11 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
         key: 'product-explorer',
         label: '',
         icon: (
-          <Button type="primary" size="small" style={{ width: '100%' }}>
+          <Button
+            type="primary"
+            size="small"
+            style={{ width: '100%', color: 'var(--main-background)' }}
+          >
             Launch App
           </Button>
         ),
