@@ -221,7 +221,7 @@ export function QuantAmmExplainer() {
                 container: document.getElementById('indexGauge'),
                 value: 3.8,
                 subtitle: {
-                  text: 'Index',
+                  text: 'INDEX',
                   fontFamily: 'Jost',
                   fontSize: 16,
                   color: '#162536',

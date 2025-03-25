@@ -9,6 +9,7 @@ export function FAQ() {
   const items = [
     {
       key: '1',
+      initialOpen: true,
       label: 'How do BTFs rebalance holdings?',
       children: (
         <>
@@ -201,6 +202,7 @@ export function FAQ() {
                   2x larger given.
                 </span>
               </p>
+              <p>The following gives a price for a swap:</p>
 
               <MathJax dynamic inline={false}>
                 {`\\[1 - \\frac{\\Delta_2}{R_2} = \\left( 1 + \\gamma \\frac{\\Delta_1}{R_1} \\right)^{-\\frac{w_1}{w_2}}.\\]`}
@@ -452,6 +454,7 @@ export function FAQ() {
               </Col>
               <Col span={24}>
                 <Collapse
+                  defaultActiveKey={['1']}
                   style={{ width: '100%', backgroundColor: '#2c496b' }}
                   accordion
                   items={items}

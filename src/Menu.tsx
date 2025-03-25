@@ -103,7 +103,7 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
             icon: <LineChartOutlined />,
           },
           {
-            key: 'simulation-comparer',
+            key: 'simulation-results-comparer',
             label: 'Multi-run Simulation Results Comparer',
             icon: <RadarChartOutlined />,
           },
@@ -175,7 +175,7 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
             icon: <LineChartOutlined />,
           },
           {
-            key: 'simulation-comparer',
+            key: 'simulation-results-comparer',
             label: 'Multi-run Simulation Results Comparer',
             icon: <RadarChartOutlined />,
           },

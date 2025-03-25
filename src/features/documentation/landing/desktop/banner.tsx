@@ -1,5 +1,5 @@
 import { ParallaxLayer } from "@react-spring/parallax";
-import { Button, Col, Row, Tooltip } from "antd";
+import { Col, Row, Tag, Tooltip } from "antd";
 import { Typography } from "antd";
 import { motion } from "framer-motion";
 
@@ -121,7 +121,7 @@ export function Banner() {
           </motion.div>
         </Col>
         <Col span={1}></Col>
-        <Col span={8} style={{ paddingTop: '5vh' }}>
+        <Col span={8} style={{ paddingTop: '2vh' }}>
           <motion.div
             initial={{ opacity: 0, scale: 0 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -131,18 +131,27 @@ export function Banner() {
               scale: { type: 'spring', visualDuration: 3, bounce: 0.1 },
             }}
           >
-            <h3 style={{ textAlign: 'center' }}>
-              Available Blockchain Traded Funds
+            <h3 style={{ textAlign: 'center', marginBottom:0 }}>
+              Blockchain Traded Funds Launching Soon
             </h3>
-            <Button style={{ width: '100%', margin: '10px' }}>
-              Mega Cap 30 day Trend BTF: BTC/ETH/SOL/XRP/USDC
-            </Button>
-            <Button style={{ width: '100%', margin: '10px' }}>
-              Meme 7 day Trend BTF: DOGE/SHIB/PEPE/USDC
-            </Button>
-            <Button style={{ width: '100%', margin: '10px' }}>
-              Safe Haven 30 day Trend BTF: BTC / PAXG / XAUt/ USDC
-            </Button>
+            <Tag style={{ width: '100%', margin: '5px', textAlign: 'center' }}>
+              <h3 style={{margin:'5px'}}>The Safe Haven</h3>
+              <p style={{margin:0}}> For those that see Bitcoin as a safe haven asset. </p>
+              <p style={{margin:0}}>This BTF follows price trends of Bitcoin, tokenized gold and T-Bills.</p>               
+            </Tag>
+            
+            <Tag style={{ width: '100%', margin: '5px', textAlign: 'center' }}>
+              <h3 style={{margin:'5px'}}>The RWA Agnostic</h3>
+              <p style={{margin:0}}> RWAs are the future but which ones? </p>
+              <p style={{margin:0}}>Track RWA issuers, that way you don&apos;t have to know.</p>               
+            </Tag>
+            
+            <Tag style={{ width: '100%', margin: '5px', textAlign: 'center' }}>
+              <h3 style={{margin:'5px'}}>Super Sonic Momentum</h3>
+              <p style={{margin:0}}> A SONIC ecosystem specific BTF </p>
+              <p style={{margin:0}}>All the yield of Ring tokens while capitalising on price trends</p>               
+            </Tag>
+            <p style={{textAlign:'right', margin:0}}>and more...</p>
           </motion.div>
         </Col>
         <Col span={1}></Col>

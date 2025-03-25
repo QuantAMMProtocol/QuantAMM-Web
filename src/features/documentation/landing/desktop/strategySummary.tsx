@@ -43,12 +43,12 @@ export function StrategySummary() {
     const loadData = async (): Promise<SimulationRunBreakdown[]> => {
       // Load breakdowns for the selected tab
       return await loadBreakdowns([
-        'balancerWeighted',
-        'quantAMMMomentum',
-        'quantAMMAntiMomentum',
-        'quantAMMChannelFollowing',
-        'quantAMMPowerChannel',
-        'hodlEthUsdc',
+        'solExampleWeighted',
+        'solExampleMomentum'
+      , 'solExampleAntimomentum'
+      , 'solExamplePowerChannel'
+      , 'solExampleChannelFollowing'
+      , 'solExampleHodl'
       ] as Pool[]); // Awaiting the asynchronous function here
     };
 
@@ -138,11 +138,11 @@ export function StrategySummary() {
                         breakdowns.filter(
                           (x) =>
                             x.simulationRun.updateRule.updateRuleName ==
-                            'AntiMomentum'
+                              carouselRuleKeys[visibleCard]
                         )[0]
                       }
                       overrideChartTheme="ag-default-dark"
-                      overrideXAxisInterval={12}
+                      overrideXAxisInterval={24}
                     />
                   </div>
                 </Col>
@@ -315,44 +315,6 @@ export function StrategySummary() {
                         }
                       >
                         View Power Channel Documentation
-                      </Button>
-                    </div>
-                  </div>
-                  <div>
-                    <div
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        paddingBottom: '20px',
-                      }}
-                    >
-                      <img
-                        loading="lazy"
-                        style={{
-                          width: '55%',
-                          height: '55%',
-                          padding: '10px',
-                          marginTop: '2vh',
-                        }}
-                        src="/documentation/minimum_variance.svg"
-                      />
-                      <h4 style={{ textAlign: 'center', marginBottom: 0 }}>
-                        Minimum Variance
-                      </h4>
-                      <p style={{ textAlign: 'center', marginTop: 0 }}>
-                        The asset with the least volatility is what you want to
-                        hold the most of.
-                      </p>
-                      <Button
-                        style={{ marginBottom: '10px' }}
-                        type="primary"
-                        size="small"
-                        onClick={() =>
-                          (window.location.href = `${ROUTES.DOCUMENTATION}/MinVariance`)
-                        }
-                      >
-                        View Minimum Variance Documentation
                       </Button>
                     </div>
                   </div>
