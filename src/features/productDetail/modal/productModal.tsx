@@ -72,7 +72,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({
           <div className={styles.modalContent}>
             <span className={styles.modalTitle}>Deposit on Balancer</span>
             <p className={styles.modalDescription}>
-              Access all Quantamm Pools directly on Balancer's UI
+              Access all QuantAMM Pools directly on Balancer&apos;s UI
             </p>
           </div>
           <ExternalLink className={styles.externalLinkIcon} />

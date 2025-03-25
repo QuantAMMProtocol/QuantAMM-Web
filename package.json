@@ -36,6 +36,7 @@
     "os": false
   },
   "dependencies": {
+    "@balancer/sdk": "^2.4.0",
     "@msgpack/msgpack": "^3.0.0-beta3",
     "@react-spring/parallax": "^9.7.5",
     "ag-charts-community": "^10.2.0",
@@ -47,6 +48,7 @@
     "antd": "^5.19.1",
     "axios": "^1.7.5",
     "better-react-mathjax": "^2.0.2",
+    "bignumber.js": "^9.1.2",
     "buffer": "^6.0.3",
     "csv-parse": "^5.2.2",
     "csv-parser": "^3.0.0",
@@ -58,6 +60,7 @@
     "lodash": "^4.17.21",
     "lucide-react": "^0.428.0",
     "moment": "^2.30.1",
+    "numeral": "^2.0.6",
     "react": "^18.2.0",
     "react-app-rewire-antd-theme": "^1.1.4",
     "react-awesome-reveal": "^4.2.5",
@@ -67,6 +70,7 @@
     "react-router-dom": "^6.23.1",
     "react-sticky-box": "^2.0.5",
     "sass": "^1.75.0",
+    "viem": "^2.23.10",
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {
@@ -85,6 +89,7 @@
     "@types/jest": "^27.5.2",
     "@types/lodash": "^4.17.15",
     "@types/node": "^20.0.0",
+    "@types/numeral": "^2.0.5",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
     "@typescript-eslint/eslint-plugin": "^7.2.0",

@@ -19,8 +19,9 @@ const LossVsRebalancing: React.FC = () => {
                 measures how efficiently an AMM pool performs compared to an
                 idealized portfolio executing the same rebalancing strategy with
                 zero trading costs. It quantifies the difference between an AMM
-                pool's value and that of a frictionless portfolio maintaining
-                the same target composition through direct market trades.
+                pool&apos;s value and that of a frictionless portfolio
+                maintaining the same target composition through direct market
+                trades.
               </p>
 
               <p>

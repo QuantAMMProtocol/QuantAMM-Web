@@ -19,8 +19,8 @@ export function SimulatorGuide() {
         <div>
           <p style={{ marginBottom: 20 }}>
             Follow these steps to configure and run your simulation. Each step
-            provides specific options that affect the simulation's behavior and
-            results.
+            provides specific options that affect the simulation&apos;s behavior
+            and results.
           </p>
           <p style={{ marginBottom: 20 }}>
             Ready to start? Use the button below to begin configuring your
@@ -121,7 +121,7 @@ export function SimulatorGuide() {
           </li>
           <li style={{ marginBottom: 20 }}>
             Trading fees and gas costs can be included as parameters to
-            accurately model AMM pools' rebalancing behaviour.
+            accurately model AMM pools&apos; rebalancing behaviour.
           </li>
           <li style={{ marginBottom: 20 }}>
             The simulator can processes externally-provided sequences of swaps.
@@ -171,8 +171,8 @@ export function SimulatorGuide() {
       children: (
         <ul>
           <li style={{ marginBottom: 20 }}>
-            The simulator's Python backend is designed for customization and
-            extension, allowing you to implement and test your own AMM
+            The simulator&apos;s Python backend is designed for customization
+            and extension, allowing you to implement and test your own AMM
             innovations. This flexibility enables:
           </li>
           <ul style={{ marginTop: 10, marginBottom: 10 }}>

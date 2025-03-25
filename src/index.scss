@@ -10,6 +10,16 @@
   --secondary-dark: #3b340d;
   --secondary-darker: #221e02;
 
+  --gray-100: #f4f4f5;
+  --gray-200: #e4e4e7;
+  --gray-300: #d4d4d8;
+  --gray-400: #a1a1aa;
+  --gray-500: #71717a;
+  --gray-600: #52525b;
+  --gray-700: #3f3f46;
+  --gray-800: #27272a;
+  --gray-900: #18181b;
+
   --grey: rgba(166, 166, 166, 0.9);
   --green: rgba(2, 189, 46, 0.9);
   --red: rgba(166, 0, 0, 0.9);
@@ -27,12 +37,13 @@
   --product-item-background-border-color: rgba(229, 211, 190, 0.05);
   --tooltip-background-color: var(--primary-darker);
   --tooltip-text-color: #f0f2f5;
+  --tooltip-text-decoration-color: var(--gray-500);
 }
 
 [data-theme='light'] {
   --main-background: #f0f2f5;
   --card-top-background: rgba(11, 24, 39, 0.25);
-  --card-chain-background: var(--secondary-text-color);
+  --card-chain-background: var(--secondary-lighter);
   --sidebar-top-background: #f0f2f5;
   --product-detail-nav__container: #f0f2f5;
   --secondary-text-color: var(--secondary-dark);
@@ -44,6 +55,7 @@
   --product-item-background-border-color: rgba(176, 126, 67, 0.08);
   --tooltip-background-color: var(--main-background);
   --tooltip-text-color: var(--secondary-dark);
+  --tooltip-text-decoration-color: var(--gray-500);
 }
 
 body,
