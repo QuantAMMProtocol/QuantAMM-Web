@@ -1,5 +1,5 @@
 const config = {
-  schema: 'https://api-v3.balancer.fi/', // Point to your GraphQL endpoint
+  schema: process.env.VITE_GRAPH_TARGET, // Point to your GraphQL endpoint
   documents: `./src/queries/*.graphql`, // Adjusted to include all .graphql files
   generates: {
     [`./src/__generated__/graphql-types.ts`]: {
