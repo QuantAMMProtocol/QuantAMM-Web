@@ -7,7 +7,7 @@ import {
 
 export const ConfigInitialState: SimulationRunConfig = {
   startDate: '2024-01-01 00:00:00',
-  endDate: '2024-12-29 23:59:00',
+  endDate: '2025-03-25 23:59:00',
   coinLoadStatus: [],
   coinPriceHistoryLoadedStatus: 'pending',
   simulationSimplifiedIncludeLvrRuns: false,
@@ -487,7 +487,7 @@ export const ConfigInitialState: SimulationRunConfig = {
             'Controls the exponential non-linearity that is applied to the price change signal',
           applicableCoins: [],
           factorValue: '2',
-          minValue: '1',
+          minValue: '0',
           maxValue: '20',
         },
         {
@@ -603,7 +603,7 @@ export const ConfigInitialState: SimulationRunConfig = {
             'Controls the exponential non-linearity that is applied to the price change signal',
           applicableCoins: [],
           factorValue: '2',
-          minValue: '1',
+          minValue: '0',
           maxValue: '20',
         },
       ],
@@ -761,7 +761,7 @@ export const ConfigInitialState: SimulationRunConfig = {
             'Controls the exponential non-linearity that is applied to the price change signal',
           applicableCoins: [],
           factorValue: '2',
-          minValue: '1',
+          minValue: '0',
           maxValue: '20',
         },
         {
@@ -877,7 +877,7 @@ export const ConfigInitialState: SimulationRunConfig = {
             'Controls the exponential non-linearity that is applied to the price change signal',
           applicableCoins: [],
           factorValue: '2',
-          minValue: '1',
+          minValue: '0',
           maxValue: '20',
         },
       ],
@@ -1035,7 +1035,7 @@ export const ConfigInitialState: SimulationRunConfig = {
             'Controls the exponential non-linearity that is applied to the price change signal',
           applicableCoins: [],
           factorValue: '2',
-          minValue: '1',
+          minValue: '0',
           maxValue: '20',
         },
         {
@@ -1151,7 +1151,7 @@ export const ConfigInitialState: SimulationRunConfig = {
             'Controls the exponential non-linearity that is applied to the price change signal',
           applicableCoins: [],
           factorValue: '2',
-          minValue: '1',
+          minValue: '0',
           maxValue: '20',
         },
       ],
