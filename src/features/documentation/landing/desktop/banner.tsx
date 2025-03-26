@@ -21,7 +21,7 @@ export function Banner() {
       speed={0}
       factor={1}
       style={{
-        height: '80vh',
+        height: '95vh',
         backgroundImage: 'url(./background/Hourglass_Dune_80.png)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
