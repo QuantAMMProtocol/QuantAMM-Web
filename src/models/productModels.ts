@@ -135,6 +135,7 @@ export interface Product {
   }[];
   dynamicData?: GqlPoolDynamicData;
   simulationRunBreakdown?: SimulationRunBreakdown;
+  sortableApr?: number;
 }
 
 export type ProductMap = Record<string, Product>;
