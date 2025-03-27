@@ -74,7 +74,7 @@ export function SimulatorOptions() {
   return (
     <div>
       <Row>
-        <Col span={12} style={{ padding: 30 }}>
+        <Col span={12} style={{ paddingLeft: 30, paddingRight:30, paddingTop:0 }}>
           <Row>
             <Col span={24}>
               <h1 style={{ color: '#e6ce97' }}>
@@ -257,7 +257,7 @@ export function SimulatorOptions() {
             </Col>
           </Row>
         </Col>
-        <Col span={12} style={{ padding: 30 }}>
+        <Col span={12}  style={{ paddingLeft: 30, paddingRight:30, paddingTop:0 }}>
           <SimulatorGuide />
         </Col>
       </Row>

@@ -4,8 +4,8 @@ import { SimulationRunBreakdown } from '../../../simulationResults/simulationRes
 import { useEffect, useState } from 'react';
 import { getBreakdown, Pool } from '../../../../services/breakdownService';
 import {
-  CheckCircleOutlined,
-  CloseCircleOutlined,
+  DownCircleOutlined,
+  UpCircleOutlined,
 } from '@ant-design/icons';
 import { AgGauge } from 'ag-charts-react';
 import './quantammExplainer.css';
@@ -142,13 +142,13 @@ export function QuantAmmExplainer() {
                       title: 'FACT',
                       description: 'Crypto markets are volatile',
                       status: 'error',
-                      icon: <CloseCircleOutlined />,
+                      icon: <DownCircleOutlined />,
                     },
                     {
                       className: 'quantamm_success_step',
                       title: 'SOLUTION',
                       description: 'Assess the market daily and react',
-                      icon: <CheckCircleOutlined />,
+                      icon: <UpCircleOutlined style={{color:'green'}}/>,
                       status: 'finish',
                     },
                   ]}
@@ -162,14 +162,14 @@ export function QuantAmmExplainer() {
                       title: 'FACT',
                       description: 'Market Caps are correlated in crypto',
                       status: 'error',
-                      icon: <CloseCircleOutlined />,
+                      icon: <DownCircleOutlined />,
                     },
                     {
                       title: 'SOLUTION',
                       description: 'Apply non market cap portfolio strategies',
                       status: 'finish',
                       className: 'quantamm_success_step',
-                      icon: <CheckCircleOutlined />,
+                      icon: <UpCircleOutlined style={{color:'green'}}/>,
                     },
                   ]}
                 />
@@ -182,13 +182,13 @@ export function QuantAmmExplainer() {
                       title: 'FACT',
                       description: 'Crypto Indexs charge hedge fund level fees',
                       status: 'error',
-                      icon: <CloseCircleOutlined />,
+                      icon: <DownCircleOutlined />,
                     },
                     {
                       title: 'SOLUTION',
                       description: 'No maintenace fees charged to LPs',
                       status: 'finish',
-                      icon: <CheckCircleOutlined />,
+                      icon: <UpCircleOutlined style={{color:'green'}}/>,
                       className: 'quantamm_success_step',
                     },
                   ]}

@@ -96,12 +96,12 @@ export const WeightChangeOverTimeGraph: FC<WeightChangeOverTimeGraphProps> = ({
     return {
       type: 'time',
       interval: {
-        step: time.month.every(
-          overrideXAxisInterval ? overrideXAxisInterval : tickIntervalInMonths
-        ),
+      step: time.month.every(
+        overrideXAxisInterval ? overrideXAxisInterval : tickIntervalInMonths
+      ),
       },
       label: {
-        format: '%m-%y',
+      format: '%Y-%m',
       },
     };
   }, [tickIntervalInMonths, overrideXAxisInterval]);
@@ -111,7 +111,7 @@ export const WeightChangeOverTimeGraph: FC<WeightChangeOverTimeGraphProps> = ({
       options={{
         height: 230,
         padding: {
-          right: 20,
+          right: 40,
           top: 20,
           bottom: 20,
           left: 0,
