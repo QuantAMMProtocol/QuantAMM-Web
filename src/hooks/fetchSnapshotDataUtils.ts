@@ -214,7 +214,8 @@ export const getTimeSeriesDataForProduct = (
   >
 ): ProductTimeSeriesData => {
   const snapshots = poolSnapshotsMap[`poolSnapshot_${pool.poolGetPool?.id}`];
-  const hodlAmounts = snapshots[0]?.amounts;
+  let hodlAmounts: number[] | undefined;
+
   const initialTotalShares =
     snapshots[0]?.totalShares > 0
       ? snapshots[0]?.totalShares
@@ -244,6 +245,10 @@ export const getTimeSeriesDataForProduct = (
       snapshot
     );
 
+    if (!hodlAmounts) {
+      hodlAmounts = amounts;
+    }
+
     return {
       timestamp: snapshot.timestamp,
       amounts,
@@ -270,7 +275,7 @@ export const getTimeSeriesDataForProduct = (
     let hodlTotalLiquidity = 0;
     for (let j = 0; j < timestep.amounts.length; j++) {
       hodlTotalLiquidity +=
-        hodlAmounts[j] *
+        hodlAmounts![j] *
         timestep.tokenPrices[pool.poolGetPool?.poolTokens[j].address];
     }
     timestep.hodlSharePrice = hodlTotalLiquidity / initialTotalShares;
