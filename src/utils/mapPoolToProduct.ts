@@ -203,7 +203,7 @@ export const getProductFromPool = (
     memory: 30,
     market: 'adaptive',
     createTime: formatTimestamp(pool.createTime),
-    swapManager: '', //TODO
+    swapManager: '', // TODO: how to get this?
 
     pauseManager: '',
     overview: [
