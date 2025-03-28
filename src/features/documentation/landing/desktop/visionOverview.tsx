@@ -19,7 +19,7 @@ export function VisionOverview({
           backgroundColourOverride={backgroundColor}
           borderColourOverride=""
         >
-          <Row>
+          <Row style={{marginTop:'10vh'}}>
             <Col span={4}></Col>
             <Col span={16}>
               <div
@@ -50,7 +50,7 @@ export function VisionOverview({
             </Col>
             <Col span={4}></Col>
           </Row>
-          <Row>
+          <Row  style={{marginTop:'10vh'}}>
             <Col span={4}></Col>
             <Col span={16}>
               <Steps
@@ -97,7 +97,7 @@ export function VisionOverview({
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
-              marginTop: '5vh',
+              marginTop: '14vh',
             }}
           >
             <Col span={4}></Col>
@@ -221,74 +221,6 @@ export function VisionOverview({
                 }}
                 src="/companies/Hypernest.png"
               />
-            </Col>
-            <Col span={4}></Col>
-          </Row>
-          <Row>
-            <Col span={24}>
-              <div
-                style={{
-                  textAlign: 'center',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                }}
-              >
-                <h1>Meet the Founders</h1>
-              </div>
-            </Col>
-            <Col span={4}></Col>
-            <Col span={8}>
-              <div
-                style={{
-                  textAlign: 'center',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                }}
-              >
-                <h3>Matthew Willetts</h3>
-                <p>Founder & CEO</p>
-                <h5 style={{ margin: 0 }}>Previous experience:</h5>
-                <p style={{ margin: 0 }}>CS Research Fellow @ UCL</p>
-                <p style={{ margin: 0 }}>
-                  PhD in statistics & machine learning @ Oxford
-                </p>
-                <p style={{ margin: 0 }}>
-                  AI consultant: clients including IDEO and Ford
-                </p>
-                <p style={{ margin: 0 }}>
-                  Catastrophe modelling @ Risk Management Solutions
-                </p>
-                <p style={{ margin: 0 }}>BA Natural Sciences @ Cambridge</p>
-              </div>
-            </Col>
-            <Col span={8}>
-              <div
-                style={{
-                  textAlign: 'center',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                }}
-              >
-                <h3>Christian Harrington</h3>
-                <p>Founder & CTO</p>
-                <h5 style={{ margin: 0 }}>Previous experience:</h5>
-                <p style={{ margin: 0 }}>
-                  Central OMS technical architect @ Man Group
-                </p>
-                <p style={{ margin: 0 }}>
-                  Ops and compliance tech project lead @ Man Group
-                </p>
-                <p style={{ margin: 0 }}>
-                  Full stack engineering on LME, LSE, ICE systems
-                </p>
-                <p style={{ margin: 0 }}>
-                  Low latency data feed engineering in C++
-                </p>
-                <p style={{ margin: 0 }}>BA Natural Sciences @ Cambridge</p>
-              </div>
             </Col>
             <Col span={4}></Col>
           </Row>
