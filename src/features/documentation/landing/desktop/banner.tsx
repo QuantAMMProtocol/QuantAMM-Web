@@ -83,7 +83,7 @@ export function Banner() {
           id="mission boxes"
           gutter={[16, 16]}
           style={{
-            paddingTop: '55vh',
+            paddingTop: '53vh',
             position: 'relative',
           }}
         >
@@ -131,21 +131,76 @@ export function Banner() {
                 scale: { type: 'spring', visualDuration: 3, bounce: 0.1 },
               }}
             >
-              <h3 style={{ textAlign: 'center', marginBottom: 0 }}>
-                Blockchain Traded Funds Launching Soon
-              </h3>
               <Tag
-                style={{ width: '100%', margin: '5px', textAlign: 'left' }}
+                style={{ width: '100%', margin: '5px', textAlign: 'center' }}
               >
                 <Row style={{ margin: 0, padding: 0 }}>
                   <Col span={4}>
-                  <img src="/assets/safe_haven_BTF_icon_mono.png" style={{width: '100%', height: 'auto'}}/> 
+                    <div
+                      style={{
+                        height: '100%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <img
+                        src="/assets/safe_haven_BTF_icon_mono.png"
+                        style={{ width: '100%', height: 'auto' }}
+                      />
+                    </div>
                   </Col>
-                  <Col span={20}>
+                  <Col span={16}>
                     <h3 style={{ margin: '5px' }}>The Safe Haven</h3>
-                    <p style={{ margin: 0, whiteSpace: 'pre-wrap' }}>
-                      Follow trends of Bitcoin, PAXOS gold and T-Bills.
-                    </p>{' '}
+                    <p
+                      style={{
+                        margin: '5px',
+                        paddingLeft: '5px',
+                        paddingRight: '5px',
+                        textAlign: 'center',
+                        whiteSpace: 'pre-wrap',
+                      }}
+                    >
+                      The doomsday BTF. Follow trends of Bitcoin, PAXOS gold and
+                      T-Bills.
+                    </p>
+                  </Col>
+                  <Col span={4}>
+                    <div
+                      style={{
+                        height: '100%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <Row style={{ width: '100%' }}>
+                        <Col span={12}>
+                          <p
+                            style={{ margin: 0, padding: 0, fontSize: '10px' }}
+                          >
+                            BTC
+                          </p>
+                          <p
+                            style={{ margin: 0, padding: 0, fontSize: '10px' }}
+                          >
+                            PAXG
+                          </p>
+                        </Col>
+                        <Col span={12}>
+                          <p
+                            style={{ margin: 0, padding: 0, fontSize: '10px' }}
+                          >
+                            USDC
+                          </p>
+                          <p
+                            style={{ margin: 0, padding: 0, fontSize: '10px' }}
+                          >
+                            USDT
+                          </p>
+                        </Col>
+                      </Row>
+                    </div>
                   </Col>
                 </Row>
               </Tag>
@@ -155,16 +210,79 @@ export function Banner() {
               >
                 <Row style={{ margin: 0, padding: 0 }}>
                   <Col span={4}>
-                  <img src="/assets/RWA_mono.png" style={{width: '100%', height: 'auto'}}/> 
+                    <div
+                      style={{
+                        height: '100%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <img
+                        src="/assets/RWA_mono.png"
+                        style={{ width: '100%', height: 'auto' }}
+                      />
+                    </div>
                   </Col>
-                  <Col span={20}>
-                  <h3 style={{ margin: '5px' }}>The RWA Agnostic</h3>
-                  <p style={{ margin: '5px' }}>
-                    RWAs are the future, track RWA issuers to gain sector
-                    exposure.
-                  </p>
+                  <Col span={16}>
+                    <h3 style={{ margin: '5px' }}>The RWA Agnostic</h3>
+                    <p
+                      style={{
+                        margin: '5px',
+                        paddingLeft: '5px',
+                        paddingRight: '5px',
+                        whiteSpace: 'pre-wrap',
+                      }}
+                    >
+                      RWAs are the future, track trending RWA issuers to gain
+                      sector exposure.
+                    </p>
                   </Col>
-                </Row>                
+                  <Col span={4}>
+                    <div
+                      style={{
+                        height: '100%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <Row style={{ width: '100%' }}>
+                        <Col span={12}>
+                          <p
+                            style={{ margin: 0, padding: 0, fontSize: '10px' }}
+                          >
+                            MKR
+                          </p>
+                          <p
+                            style={{ margin: 0, padding: 0, fontSize: '10px' }}
+                          >
+                            ONDO
+                          </p>
+                        </Col>
+                        <Col span={12}>
+                          <p
+                            style={{ margin: 0, padding: 0, fontSize: '10px' }}
+                          >
+                            MANTLE
+                          </p>
+                          <p
+                            style={{ margin: 0, padding: 0, fontSize: '10px' }}
+                          >
+                            LINK
+                          </p>
+                        </Col>
+                        <Col span={24}>
+                          <p
+                            style={{ margin: 0, padding: 0, fontSize: '10px' }}
+                          >
+                            USDC
+                          </p>
+                        </Col>
+                      </Row>
+                    </div>
+                  </Col>
+                </Row>
               </Tag>
 
               <Tag
@@ -172,26 +290,84 @@ export function Banner() {
               >
                 <Row style={{ margin: 0, padding: 0 }}>
                   <Col span={4}>
-                  <img src="/assets/sonic_BTF_icon.png" style={{width: '100%', height: 'auto'}}/> 
+                    <div
+                      style={{
+                        height: '100%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <img
+                        src="/assets/sonic_BTF_icon.png"
+                        style={{ width: '100%', height: 'auto' }}
+                      />
+                    </div>
                   </Col>
                   <Col span={16}>
-                    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', height: '100%' }}>
-                    <h3 style={{ margin: 0, textAlign: 'center' }}>Super Sonic Momentum</h3>
-                    <p style={{ margin: 0, textAlign: 'center' }}>
-                      The sonic ecosystem basket
-                    </p>
+                    <div
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        height: '100%',
+                      }}
+                    >
+                      <h3 style={{ margin: 0, textAlign: 'center' }}>
+                        Super Sonic Momentum
+                      </h3>
+                      <p
+                        style={{
+                          margin: 0,
+                          textAlign: 'center',
+                          whiteSpace: 'pre-wrap',
+                        }}
+                      >
+                        The sonic ecosystem basket. Stellar yields amplified by
+                        trend following strategies
+                      </p>
                     </div>
                   </Col>
                   <Col span={4}>
-                  <p style={{margin:0, padding:0, fontSize:'10px'}}>rBTC</p>
-                  <p style={{margin:0, padding:0, fontSize:'10px'}}>rETH</p>
-                  <p style={{margin:0, padding:0, fontSize:'10px'}}>rUSDC</p>
-                  <p style={{margin:0, padding:0, fontSize:'10px'}}>rSOL</p>
+                    <div
+                      style={{
+                        height: '100%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <Row style={{ width: '100%' }}>
+                        <Col span={12}>
+                          <p
+                            style={{ margin: 0, padding: 0, fontSize: '10px' }}
+                          >
+                            rBTC
+                          </p>
+                          <p
+                            style={{ margin: 0, padding: 0, fontSize: '10px' }}
+                          >
+                            rETH
+                          </p>
+                        </Col>
+                        <Col span={12}>
+                          <p
+                            style={{ margin: 0, padding: 0, fontSize: '10px' }}
+                          >
+                            rUSDC
+                          </p>
+                          <p
+                            style={{ margin: 0, padding: 0, fontSize: '10px' }}
+                          >
+                            rSOL
+                          </p>
+                        </Col>
+                      </Row>
+                    </div>
                   </Col>
                 </Row>
-                
               </Tag>
-              <p style={{ textAlign: 'right', margin: 0 }}>and more...</p>
+              <p style={{ textAlign: 'right', margin: 0 }}>and many more Blockchain Traded Funds launching soon!</p>
             </motion.div>
           </Col>
           <Col span={1}></Col>

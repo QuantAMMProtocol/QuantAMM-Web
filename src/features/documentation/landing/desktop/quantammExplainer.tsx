@@ -66,7 +66,7 @@ export function QuantAmmExplainer() {
       backgroundColourOverride="#FFFEF2"
       borderColourOverride="#f6f4ef"
     >
-      <Row style={{ marginTop: '15vh' }}>
+      <Row style={{ marginTop: '20vh' }}>
         <Col span={3}></Col>
 
         <Col span={9} style={{ padding: 0, height: '30vh', marginTop: '10px' }}>
@@ -120,8 +120,8 @@ export function QuantAmmExplainer() {
                   marginTop: '0px',
                 }}
               >
-                Fully on-chain ETFs that adapt to the volatility inherent with
-                crypto.
+                FULLY ON-CHAIN ETFs THAT ADAPT TO THE VOLATILITY INHERENT WITH
+                CRYPTO.
               </p>
             </Col>
             <Col
