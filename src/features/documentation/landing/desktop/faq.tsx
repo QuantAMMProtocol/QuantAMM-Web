@@ -418,12 +418,12 @@ export function FAQ() {
           </Col>
           <Col span={1}></Col>
           <Col span={13}>
-            <Row>
+            <Row style={{marginTop:'4vh'}}>
               <Col span={24}>
                 <h1
                   style={{ color: '#162536', textAlign: 'center', width: '100%' }}
                 >
-                  Frequently Asked Questions
+                  FREQUENTLY ASKED QUESTIONS
                 </h1>
               </Col>
               <Col
@@ -431,17 +431,14 @@ export function FAQ() {
                 style={{ display: 'flex', justifyContent: 'center' }}
               >
                 <Form.Item style={{ marginTop: '5px' }}>
+                  <label style={{ marginRight: '5px', color: '#162536' }}>
+                    Choose Knowledge Level:
+                  </label>
                   <Radio.Group
                     size="small"
                     value={eli5}
                     onChange={(e) => setEli5(e.target.value)}
                   >
-                    <Radio.Button
-                      disabled={true}
-                      style={{ backgroundColor: '#162536', color: 'white' }}
-                    >
-                      Choose Knowledge Level:{' '}
-                    </Radio.Button>
                     <Radio.Button value={'ELI5'}>ELI5</Radio.Button>
                     <Radio.Button value={'Crypto Native'}>
                       Crypto Native

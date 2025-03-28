@@ -112,12 +112,12 @@ export const getBreakdown = async (
     hodlEthUsdc: './prerun_sims/HODL_-ETH-USDC.msgpack',
     hodlBtcEthUsdc:
       './prerun_sims/Momentum[k_per_day_50][memory_days_5]_-ETH-BTC-USDC.msgpack', // Example; replace with actual path
-    solExampleMomentum: './prerun_sims/BTC-ETH-SOL-USDC-momentum.msgpack',
+    solExampleMomentum: './prerun_sims/BTC-ETH-SOL-USDC-momentum-daily.msgpack',
     solExampleAntimomentum: './prerun_sims/BTC-ETH-SOL-USDC-antimomentum.msgpack',
-    solExamplePowerChannel: './prerun_sims/BTC-ETH-SOL-USDC-power-channel.msgpack',
+    solExamplePowerChannel: './prerun_sims/BTC-ETH-SOL-USDC-power-channel-daily.msgpack',
     solExampleChannelFollowing:
-      './prerun_sims/BTC-ETH-SOL-USDC-channel-following.msgpack',
-    solExampleHodl: './prerun_sims/BTC-ETH-SOL-USDC-HODL.msgpack',
+      './prerun_sims/BTC-ETH-SOL-USDC-channel-following-daily.msgpack',
+    solExampleHodl: './prerun_sims/BTC-ETH-SOL-USDC-hodl-daily.msgpack',
     solExampleWeighted:'./prerun_sims/BTC-ETH-SOL-USDC-weighted.msgpack',
   };
 

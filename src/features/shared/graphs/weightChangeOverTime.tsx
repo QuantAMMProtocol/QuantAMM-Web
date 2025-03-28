@@ -30,7 +30,7 @@ export const WeightChangeOverTimeGraph: FC<WeightChangeOverTimeGraphProps> = ({
   simulationRunBreakdown,
   yAxisOverride,
   legendOverride,
-  tickIntervalInMonths = 3,
+  tickIntervalInMonths = 6,
   overrideChartTheme,
   overrideXAxisInterval,
 }) => {

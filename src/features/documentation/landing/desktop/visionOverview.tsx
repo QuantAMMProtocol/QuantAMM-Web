@@ -7,7 +7,9 @@ interface VisionOverviewProps {
   backgroundColor?: string;
 }
 
-export function VisionOverview({ backgroundColor = "#2c496b" }: VisionOverviewProps) {
+export function VisionOverview({
+  backgroundColor = '#2c496b',
+}: VisionOverviewProps) {
   return (
     <Row style={{ height: '100%' }}>
       <Col span={24}>
@@ -18,100 +20,35 @@ export function VisionOverview({ backgroundColor = "#2c496b" }: VisionOverviewPr
           borderColourOverride=""
         >
           <Row>
-            <Col span={2}></Col>
-            <Col span={8} style={{ paddingLeft: '20px', paddingRight: '20px' }}>
-              <Row>
-                <Col span={24}>
-                  <div
-                    style={{
-                      textAlign: 'center',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      justifyContent: 'center',
-                      height: '100%',
-                      padding: '20px',
-                      marginTop: '8vh',
-                      alignItems: 'center',
-                    }}
-                  >
-                    <h2>OUR VISION</h2>
-                    <p>
-                      At QuantAMM, our vision is to build a passive fund product
-                      that everyone can understand and everyone can access.
-                      There has been decades of TradFi passive product
-                      innovations. While ETFs with BTC/ETH are coming, we go one
-                      step further and bring generic fund construction
-                      infrastructure on chain:
-                    </p>
-                    <p>
-                      Real World Savings for investors and institutions by
-                      running funds on-chain
-                    </p>
-                    <p>
-                      Our belief and all our research shows that all of the
-                      above can only be achieved with a new form of passive AMM:
-                    </p>
-                  </div>
-                </Col>
-              </Row>
-            </Col>
-            <Col span={6} style={{ marginTop: '5vh' }}>
-              <img
-                loading="lazy"
+            <Col span={4}></Col>
+            <Col span={16}>
+              <div
                 style={{
-                  width: '75%',
-                  height: 'auto',
-                  display: 'block',
-                  margin: '5 auto',
-                  borderRadius: '45%',
+                  textAlign: 'center',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
                 }}
-                src="/companies/matthew-willetts.jpg"
-              />
-              <h3>Matthew Willetts</h3>
-              <p>Founder & CEO</p>
-              <h5 style={{ margin: 0 }}>Previous experience:</h5>
-              <p style={{ margin: 0 }}>CS Research Fellow @ UCL</p>
-              <p style={{ margin: 0 }}>
-                PhD in statistics & machine learning @ Oxford
-              </p>
-              <p style={{ margin: 0 }}>
-                AI consultant: clients including IDEO and Ford
-              </p>
-              <p style={{ margin: 0 }}>
-                Catastrophe modelling @ Risk Management Solutions
-              </p>
-              <p style={{ margin: 0 }}>BA Natural Sciences @ Cambridge</p>
+              >
+                <h1 style={{ marginBottom: '5px' }}>OUR VISION</h1>
+                <p style={{ marginBottom: 0 }}>
+                  At QuantAMM, our vision is to build a passive fund product
+                  that everyone can understand and everyone can access. There
+                  has been decades of TradFi passive product innovations. While
+                  ETFs with BTC/ETH are coming, we go one step further and bring
+                  generic fund construction infrastructure on chain:
+                </p>
+                <p style={{ marginBottom: 0 }}>
+                  Real World Savings for investors and institutions by running
+                  funds on-chain
+                </p>
+                <p style={{ marginBottom: 0 }}>
+                  Our belief and all our research shows that all of the above
+                  can only be achieved with a new form of passive AMM:
+                </p>
+              </div>
             </Col>
-            <Col span={6} style={{ marginTop: '5vh' }}>
-              <img
-                loading="lazy"
-                style={{
-                  width: '75%',
-                  height: 'auto',
-                  display: 'block',
-                  margin: '5 auto',
-                  borderRadius: '45%',
-                }}
-                src="/companies/christian.jpg"
-              />
-              <h3>Christian Harrington</h3>
-              <p>Founder & CTO</p>
-              <h5 style={{ margin: 0 }}>Previous experience:</h5>
-              <p style={{ margin: 0 }}>
-                Central OMS technical architect @ Man Group
-              </p>
-              <p style={{ margin: 0 }}>
-                Ops and compliance tech project lead @ Man Group
-              </p>
-              <p style={{ margin: 0 }}>
-                Full stack engineering on LME, LSE, ICE systems
-              </p>
-              <p style={{ margin: 0 }}>
-                Low latency data feed engineering in C++
-              </p>
-              <p style={{ margin: 0 }}>BA Natural Sciences @ Cambridge</p>
-            </Col>
-            <Col span={2}></Col>
+            <Col span={4}></Col>
           </Row>
           <Row>
             <Col span={4}></Col>
@@ -284,6 +221,74 @@ export function VisionOverview({ backgroundColor = "#2c496b" }: VisionOverviewPr
                 }}
                 src="/companies/Hypernest.png"
               />
+            </Col>
+            <Col span={4}></Col>
+          </Row>
+          <Row>
+            <Col span={24}>
+              <div
+                style={{
+                  textAlign: 'center',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                }}
+              >
+                <h1>Meet the Founders</h1>
+              </div>
+            </Col>
+            <Col span={4}></Col>
+            <Col span={8}>
+              <div
+                style={{
+                  textAlign: 'center',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                }}
+              >
+                <h3>Matthew Willetts</h3>
+                <p>Founder & CEO</p>
+                <h5 style={{ margin: 0 }}>Previous experience:</h5>
+                <p style={{ margin: 0 }}>CS Research Fellow @ UCL</p>
+                <p style={{ margin: 0 }}>
+                  PhD in statistics & machine learning @ Oxford
+                </p>
+                <p style={{ margin: 0 }}>
+                  AI consultant: clients including IDEO and Ford
+                </p>
+                <p style={{ margin: 0 }}>
+                  Catastrophe modelling @ Risk Management Solutions
+                </p>
+                <p style={{ margin: 0 }}>BA Natural Sciences @ Cambridge</p>
+              </div>
+            </Col>
+            <Col span={8}>
+              <div
+                style={{
+                  textAlign: 'center',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                }}
+              >
+                <h3>Christian Harrington</h3>
+                <p>Founder & CTO</p>
+                <h5 style={{ margin: 0 }}>Previous experience:</h5>
+                <p style={{ margin: 0 }}>
+                  Central OMS technical architect @ Man Group
+                </p>
+                <p style={{ margin: 0 }}>
+                  Ops and compliance tech project lead @ Man Group
+                </p>
+                <p style={{ margin: 0 }}>
+                  Full stack engineering on LME, LSE, ICE systems
+                </p>
+                <p style={{ margin: 0 }}>
+                  Low latency data feed engineering in C++
+                </p>
+                <p style={{ margin: 0 }}>BA Natural Sciences @ Cambridge</p>
+              </div>
             </Col>
             <Col span={4}></Col>
           </Row>
