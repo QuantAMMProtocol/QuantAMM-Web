@@ -63,7 +63,16 @@ export function QuantAmmExplainer() {
       backgroundColourOverride="#FFFEF2"
       borderColourOverride="#f6f4ef"
     >
-      <Row style={{ marginTop: '20vh', marginBottom: '20vh' }}>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100%',
+        }}
+      >
+      <Row>
         <Col span={3}></Col>
 
         <Col span={9} style={{ padding: 0, height: '30vh', marginTop: '10px' }}>
@@ -207,11 +216,14 @@ export function QuantAmmExplainer() {
           </Row>
         </Col>
         <Col span={4}></Col>
-        <Col span={1} style={{ height: '60vh', paddingTop: '10px' }}>
-          <div
+        <Col span={3} style={{ paddingTop: '15px' }}>
+        <div style={{display:'flex'}}>
+
+        <div
             style={{
               display: 'flex',
               justifyContent: 'center',
+              width: '100%',
             }}
             id="indexGauge"
           >
@@ -271,17 +283,16 @@ export function QuantAmmExplainer() {
                   bottom: 5,
                 },
                 height: 500,
-                width: 500,
+                width: 100,
               }}
             />
           </div>
-        </Col>
-        <Col span={1}></Col>
-        <Col span={1} style={{ height: '30vh', paddingTop: '10px' }}>
           <div
             style={{
               display: 'flex',
+              flexDirection:'row',
               justifyContent: 'center',
+              marginLeft: '-170px',
             }}
             id="quantammGauge"
           >
@@ -341,13 +352,14 @@ export function QuantAmmExplainer() {
                   bottom: 5,
                 },
                 height: 500,
-                width: 500,
+                width: 400,
               }}
             />
           </div>
+        </div>
         </Col>
-        <Col span={4} style={{ paddingTop: '10px' }}></Col>
       </Row>
+      </div>
     </ProductItemBackground>
   );
 }

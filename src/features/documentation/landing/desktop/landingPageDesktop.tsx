@@ -19,7 +19,7 @@ const items: { component: React.ComponentType; style: React.CSSProperties }[] =
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        height: '100%',
+        height: '100vh',
       },
     },
     {
@@ -29,9 +29,10 @@ const items: { component: React.ComponentType; style: React.CSSProperties }[] =
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'flex-start',
+        height: '100vh',
       },
     },
-    { component: FAQ, style: { backgroundColor: 'white', height: '100%' } },
+    { component: FAQ, style: { backgroundColor: 'white', height: '100vh' } },
     {
       component: ResearchExplorer,
       style: {
@@ -39,7 +40,7 @@ const items: { component: React.ComponentType; style: React.CSSProperties }[] =
         alignItems: 'center',
         justifyContent: 'flex-start',
         backgroundImage: 'url(./background/sand_background.png)',
-        height: '100%',
+        height: '100vh',
       },
     },
     {
@@ -49,7 +50,7 @@ const items: { component: React.ComponentType; style: React.CSSProperties }[] =
         alignItems: 'center',
         backgroundColor: '#162536',
         justifyContent: 'flex-start',
-        height: '100%',
+        height: '100vh',
       },
     },
     {
