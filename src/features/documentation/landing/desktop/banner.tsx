@@ -1,4 +1,4 @@
-import { ParallaxLayer } from '@react-spring/parallax';
+import { Parallax, ParallaxLayer } from '@react-spring/parallax';
 import { Col, Row, Tag, Tooltip } from 'antd';
 import { Typography } from 'antd';
 import { motion } from 'framer-motion';
@@ -7,13 +7,15 @@ const { Title } = Typography;
 
 export function Banner() {
   return (
-    <div
+    <Parallax
+      pages={1}
       style={{
-        height: '95vh',
+        height: 'calc(100vh - 40px)',
         backgroundPosition: 'center',
         position: 'relative',
         width: '100%',
         backgroundColor: '#352426',
+        overflow: 'hidden',
       }}
     >
       <ParallaxLayer
@@ -177,24 +179,40 @@ export function Banner() {
                       <Row style={{ width: '100%' }}>
                         <Col span={12}>
                           <p
-                            style={{ margin: 0, padding: 0, fontSize: '10px' }}
+                            style={{
+                              margin: 0,
+                              padding: 0,
+                              fontSize: '10px',
+                            }}
                           >
                             BTC
                           </p>
                           <p
-                            style={{ margin: 0, padding: 0, fontSize: '10px' }}
+                            style={{
+                              margin: 0,
+                              padding: 0,
+                              fontSize: '10px',
+                            }}
                           >
                             PAXG
                           </p>
                         </Col>
                         <Col span={12}>
                           <p
-                            style={{ margin: 0, padding: 0, fontSize: '10px' }}
+                            style={{
+                              margin: 0,
+                              padding: 0,
+                              fontSize: '10px',
+                            }}
                           >
                             USDC
                           </p>
                           <p
-                            style={{ margin: 0, padding: 0, fontSize: '10px' }}
+                            style={{
+                              margin: 0,
+                              padding: 0,
+                              fontSize: '10px',
+                            }}
                           >
                             USDT
                           </p>
@@ -250,31 +268,51 @@ export function Banner() {
                       <Row style={{ width: '100%' }}>
                         <Col span={12}>
                           <p
-                            style={{ margin: 0, padding: 0, fontSize: '10px' }}
+                            style={{
+                              margin: 0,
+                              padding: 0,
+                              fontSize: '10px',
+                            }}
                           >
                             MKR
                           </p>
                           <p
-                            style={{ margin: 0, padding: 0, fontSize: '10px' }}
+                            style={{
+                              margin: 0,
+                              padding: 0,
+                              fontSize: '10px',
+                            }}
                           >
                             ONDO
                           </p>
                         </Col>
                         <Col span={12}>
                           <p
-                            style={{ margin: 0, padding: 0, fontSize: '10px' }}
+                            style={{
+                              margin: 0,
+                              padding: 0,
+                              fontSize: '10px',
+                            }}
                           >
                             MANTLE
                           </p>
                           <p
-                            style={{ margin: 0, padding: 0, fontSize: '10px' }}
+                            style={{
+                              margin: 0,
+                              padding: 0,
+                              fontSize: '10px',
+                            }}
                           >
                             LINK
                           </p>
                         </Col>
                         <Col span={24}>
                           <p
-                            style={{ margin: 0, padding: 0, fontSize: '10px' }}
+                            style={{
+                              margin: 0,
+                              padding: 0,
+                              fontSize: '10px',
+                            }}
                           >
                             USDC
                           </p>
@@ -340,24 +378,40 @@ export function Banner() {
                       <Row style={{ width: '100%' }}>
                         <Col span={12}>
                           <p
-                            style={{ margin: 0, padding: 0, fontSize: '10px' }}
+                            style={{
+                              margin: 0,
+                              padding: 0,
+                              fontSize: '10px',
+                            }}
                           >
                             rBTC
                           </p>
                           <p
-                            style={{ margin: 0, padding: 0, fontSize: '10px' }}
+                            style={{
+                              margin: 0,
+                              padding: 0,
+                              fontSize: '10px',
+                            }}
                           >
                             rETH
                           </p>
                         </Col>
                         <Col span={12}>
                           <p
-                            style={{ margin: 0, padding: 0, fontSize: '10px' }}
+                            style={{
+                              margin: 0,
+                              padding: 0,
+                              fontSize: '10px',
+                            }}
                           >
                             rUSDC
                           </p>
                           <p
-                            style={{ margin: 0, padding: 0, fontSize: '10px' }}
+                            style={{
+                              margin: 0,
+                              padding: 0,
+                              fontSize: '10px',
+                            }}
                           >
                             rSOL
                           </p>
@@ -367,7 +421,9 @@ export function Banner() {
                   </Col>
                 </Row>
               </Tag>
-              <p style={{ textAlign: 'right', margin: 0 }}>and many more Blockchain Traded Funds launching soon!</p>
+              <p style={{ textAlign: 'right', margin: 0 }}>
+                and many more Blockchain Traded Funds launching soon!
+              </p>
             </motion.div>
           </Col>
           <Col span={1}></Col>
@@ -404,6 +460,6 @@ export function Banner() {
           <Col span={2}></Col>
         </Row>
       </ParallaxLayer>
-    </div>
+    </Parallax>
   );
 }

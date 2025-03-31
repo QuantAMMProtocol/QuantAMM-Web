@@ -3,10 +3,7 @@ import { ProductItemBackground } from '../../../productExplorer/productItem/prod
 import { SimulationRunBreakdown } from '../../../simulationResults/simulationResultSummaryModels';
 import { useEffect, useState } from 'react';
 import { getBreakdown, Pool } from '../../../../services/breakdownService';
-import {
-  DownCircleOutlined,
-  UpCircleOutlined,
-} from '@ant-design/icons';
+import { DownCircleOutlined, UpCircleOutlined } from '@ant-design/icons';
 import { AgGauge } from 'ag-charts-react';
 import './quantammExplainer.css';
 
@@ -66,7 +63,7 @@ export function QuantAmmExplainer() {
       backgroundColourOverride="#FFFEF2"
       borderColourOverride="#f6f4ef"
     >
-      <Row style={{ marginTop: '20vh' }}>
+      <Row style={{ marginTop: '20vh', marginBottom: '20vh' }}>
         <Col span={3}></Col>
 
         <Col span={9} style={{ padding: 0, height: '30vh', marginTop: '10px' }}>
@@ -148,7 +145,7 @@ export function QuantAmmExplainer() {
                       className: 'quantamm_success_step',
                       title: 'SOLUTION',
                       description: 'Assess the market daily and react',
-                      icon: <UpCircleOutlined style={{color:'green'}}/>,
+                      icon: <UpCircleOutlined style={{ color: 'green' }} />,
                       status: 'finish',
                     },
                   ]}
@@ -169,7 +166,7 @@ export function QuantAmmExplainer() {
                       description: 'Apply non market cap portfolio strategies',
                       status: 'finish',
                       className: 'quantamm_success_step',
-                      icon: <UpCircleOutlined style={{color:'green'}}/>,
+                      icon: <UpCircleOutlined style={{ color: 'green' }} />,
                     },
                   ]}
                 />
@@ -188,7 +185,7 @@ export function QuantAmmExplainer() {
                       title: 'SOLUTION',
                       description: 'No maintenace fees charged to LPs',
                       status: 'finish',
-                      icon: <UpCircleOutlined style={{color:'green'}}/>,
+                      icon: <UpCircleOutlined style={{ color: 'green' }} />,
                       className: 'quantamm_success_step',
                     },
                   ]}
@@ -210,11 +207,14 @@ export function QuantAmmExplainer() {
           </Row>
         </Col>
         <Col span={4}></Col>
-        <Col
-          span={1}
-          style={{ height: '60vh', paddingTop: '10px', paddingLeft: '10px' }}
-        >
-          <div style={{ height: '100%' }} id="indexGauge">
+        <Col span={1} style={{ height: '60vh', paddingTop: '10px' }}>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+            }}
+            id="indexGauge"
+          >
             <AgGauge
               options={{
                 type: 'linear-gauge',
@@ -278,7 +278,13 @@ export function QuantAmmExplainer() {
         </Col>
         <Col span={1}></Col>
         <Col span={1} style={{ height: '30vh', paddingTop: '10px' }}>
-          <div style={{ height: '100%' }} id="quantammGauge">
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+            }}
+            id="quantammGauge"
+          >
             <AgGauge
               options={{
                 type: 'linear-gauge',
