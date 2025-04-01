@@ -549,14 +549,20 @@ const mapDailyPerformanceToMonthlyPerformance = (
   return monthlyData;
 };
 
+// TODO: implement it properly
 const getStrategy = (pool: GqlPoolMinimal): Strategy => {
   if (isQuantAmmPool(pool.type)) {
-    const { tags } = pool as unknown as GqlPoolQuantAmmWeighted;
-    if (Array.isArray(tags) && tags.length > 0) {
-      return Object.values(StrategyEnum).includes(tags[0] as Strategy)
-        ? (tags[0] as Strategy)
-        : 'NONE';
-    }
+    const { quantAmmWeightedParams } =
+      pool as unknown as GqlPoolQuantAmmWeighted;
+    const { details } = quantAmmWeightedParams ?? {};
+
+    console.log('quantAmmWeightedParams details ==>', details);
+
+    // if (Array.isArray(tags) && tags.length > 0) {
+    //   return Object.values(StrategyEnum).includes(tags[0] as Strategy)
+    //     ? (tags[0] as Strategy)
+    //     : 'NONE';
+    // }
   }
 
   return 'NONE';

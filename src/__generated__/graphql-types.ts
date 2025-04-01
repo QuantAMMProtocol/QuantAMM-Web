@@ -27,10 +27,16 @@ export type Scalars = {
 /** The review data for the ERC4626 token */
 export type Erc4626ReviewData = {
   __typename?: 'Erc4626ReviewData';
+  /** If it is an ERC4626 token, this defines whether we can use wrap/unwrap through the buffer in swap paths for this token. */
+  canUseBufferForSwaps?: Maybe<Scalars['Boolean']['output']>;
   /** The filename of the review of the ERC4626 */
   reviewFile: Scalars['String']['output'];
   /** A summary of the ERC4626 review, usually just says safe or unsafe */
   summary: Scalars['String']['output'];
+  /** If it is an ERC4626 token, this defines whether we allow underlying tokens to be used for add/remove operations. */
+  useUnderlyingForAddRemove?: Maybe<Scalars['Boolean']['output']>;
+  /** If it is an ERC4626 token, this defines whether we allow the wrapped tokens to be used for add/remove operations. */
+  useWrappedForAddRemove?: Maybe<Scalars['Boolean']['output']>;
   /** Warnings associated with the ERC4626 */
   warnings: Array<Scalars['String']['output']>;
 };
@@ -327,6 +333,8 @@ export type GqlPoolAggregator = {
   poolTokens: Array<GqlPoolTokenDetail>;
   /** The protocol version on which the pool is deployed, 1, 2 or 3 */
   protocolVersion: Scalars['Int']['output'];
+  /** QuantAmm specific fields */
+  quantAmmWeightedParams?: Maybe<QuantAmmWeightedParams>;
   /** Data specific to gyro pools */
   root3Alpha?: Maybe<Scalars['String']['output']>;
   /** Data specific to gyro pools */
@@ -1259,6 +1267,7 @@ export type GqlPoolQuantAmmWeighted = GqlPoolBase & {
   poolCreator?: Maybe<Scalars['Bytes']['output']>;
   poolTokens: Array<GqlPoolTokenDetail>;
   protocolVersion: Scalars['Int']['output'];
+  quantAmmWeightedParams?: Maybe<QuantAmmWeightedParams>;
   staking?: Maybe<GqlPoolStaking>;
   /** Account empowered to set static swap fees for a pool (when 0 on V2 swap fees are immutable, on V3 delegate to governance) */
   swapFeeManager?: Maybe<Scalars['Bytes']['output']>;
@@ -2239,6 +2248,7 @@ export type GqlToken = {
   tradable: Scalars['Boolean']['output'];
   /** The Twitter username of the token */
   twitterUsername?: Maybe<Scalars['String']['output']>;
+  types?: Maybe<Array<GqlTokenType>>;
   /** The ERC4626 underlying token address, if applicable. */
   underlyingTokenAddress?: Maybe<Scalars['String']['output']>;
   /** The website URL of the token */
@@ -2319,6 +2329,8 @@ export type GqlTokenDynamicData = {
 export type GqlTokenFilter = {
   /** Only return tokens with these addresses */
   tokensIn?: InputMaybe<Array<Scalars['String']['input']>>;
+  /** Filter by token type */
+  typeIn?: InputMaybe<Array<GqlTokenType>>;
 };
 
 /** Result of the poolReloadPools mutation */
@@ -2350,6 +2362,7 @@ export type GqlTokenPriceChartDataItem = {
 
 export enum GqlTokenType {
   Bpt = 'BPT',
+  Erc4626 = 'ERC4626',
   PhantomBpt = 'PHANTOM_BPT',
   WhiteListed = 'WHITE_LISTED'
 }
@@ -2632,6 +2645,30 @@ export type PoolForBatchSwap = {
   name: Scalars['String']['output'];
   symbol: Scalars['String']['output'];
   type: GqlPoolType;
+};
+
+export type QuantAmmWeightedDetail = {
+  __typename?: 'QuantAMMWeightedDetail';
+  category: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+  type: Scalars['String']['output'];
+  value: Scalars['String']['output'];
+};
+
+export type QuantAmmWeightedParams = {
+  __typename?: 'QuantAmmWeightedParams';
+  absoluteWeightGuardRail: Scalars['String']['output'];
+  details: Array<QuantAmmWeightedDetail>;
+  epsilonMax: Scalars['String']['output'];
+  lambda: Array<Scalars['String']['output']>;
+  lastInterpolationTimePossible: Scalars['String']['output'];
+  lastUpdateIntervalTime: Scalars['String']['output'];
+  maxTradeSizeRatio: Scalars['String']['output'];
+  oracleStalenessThreshold: Scalars['String']['output'];
+  poolRegistry: Scalars['String']['output'];
+  updateInterval: Scalars['String']['output'];
+  weightBlockMultipliers: Array<Scalars['String']['output']>;
+  weightsAtLastUpdateInterval: Array<Scalars['String']['output']>;
 };
 
 export type Query = {
