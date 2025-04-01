@@ -4,6 +4,7 @@ import {
   GetPoolByIdQuery,
   GqlPoolDynamicData,
   GqlPoolMinimal,
+  GqlPoolQuantAmmWeighted,
 } from '../__generated__/graphql-types';
 import {
   DailyPerformance,
@@ -25,6 +26,7 @@ import {
   filterByExtendedTimeRange,
 } from '../features/productDetail/productDetailContent/helpers';
 import { useAprTooltip } from '../features/productExplorer/productItem/shared/apr/useAprTooltip';
+import { isQuantAmmPool } from './poolHelpers';
 
 const formatTimestamp = (timestamp: number): string => {
   return format(fromUnixTime(timestamp), 'yyyy/MM/dd HH:mm:ss');
@@ -207,7 +209,7 @@ export const getProductFromPool = (
     basketTheme: 'Main Cap',
     type: pool.type,
     tokenType: pool.type,
-    strategy: 'MOMENTUM', // TODO: get from pool
+    strategy: getStrategy(pool as unknown as GqlPoolMinimal),
     chain: pool.chain,
     frequency: 'daily',
     memory: 30,
@@ -548,11 +550,13 @@ const mapDailyPerformanceToMonthlyPerformance = (
 };
 
 const getStrategy = (pool: GqlPoolMinimal): Strategy => {
-  const { tags } = pool;
-  if (Array.isArray(tags) && tags.length > 0) {
-    return Object.values(StrategyEnum).includes(tags[0] as Strategy)
-      ? (tags[0] as Strategy)
-      : 'NONE';
+  if (isQuantAmmPool(pool.type)) {
+    const { tags } = pool as unknown as GqlPoolQuantAmmWeighted;
+    if (Array.isArray(tags) && tags.length > 0) {
+      return Object.values(StrategyEnum).includes(tags[0] as Strategy)
+        ? (tags[0] as Strategy)
+        : 'NONE';
+    }
   }
 
   return 'NONE';
