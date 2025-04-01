@@ -1,6 +1,7 @@
 import { Button, Card, Collapse } from "antd";
 
 import {
+  BarChartOutlined,
     HourglassOutlined,
     PieChartOutlined,
   } from '@ant-design/icons';
@@ -13,25 +14,34 @@ export function ResearchExplorerMobile(){
       <Panel header="Explore Our Research" key="1">
         {[
           {
-            title: 'Temporal Function Market Making Litepaper',
+            title: 'TFMM Litepaper',
             description:
               'A detailed explanation of the underlying AMM mechanism that makes QuantAMM possible.',
             link: 'https://cdn.prod.website-files.com/6616670ddddc931f1dd3aa73/6617c4c2381409947dc42c7a_TFMM_litepaper.pdf',
             icon: <PieChartOutlined />,
           },
           {
-            title: 'QuantAMM Protocol Litepaper',
+            title: 'QuantAMM Litepaper',
             description:
               'Blockchain Traded Funds: their construction, strategy tuning, and application.',
             link: 'https://cdn.prod.website-files.com/6616670ddddc931f1dd3aa73/6617c4c260d10f98e065f1ea_QuantAMM_Litepaper.pdf',
             icon: <HourglassOutlined />,
+          },
+          {
+            title: 'RVR - Improving the fidelity of Loss-versus-Rebalancing',
+            description:
+              'A comparison of TFMM rebalancing for fund managers compared to running CEX portfolios',
+            link: 'https://cdn.prod.website-files.com/6616670ddddc931f1dd3aa73/672283811331fc9bef39be23_RVR_30_10_24.pdf',
+            icon: (
+                <BarChartOutlined style={{ fontSize: '60px', marginTop: '10px' }} />
+            ),
           },
         ].map((paper, index) => (
           <Card
             key={index}
             title={
               <>
-                {paper.icon} {paper.title}
+          {paper.icon} {paper.title}
               </>
             }
             style={{ marginBottom: '10px' }}

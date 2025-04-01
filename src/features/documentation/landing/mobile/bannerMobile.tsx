@@ -1,4 +1,4 @@
-import { Button, Card, Typography } from "antd";
+import { Button, Card, Col, Row, Tag, Typography } from "antd";
 
 const { Title } = Typography;
 
@@ -37,20 +37,6 @@ export function BannerMobile(){
       </p>
     </div>
     <div style={{ marginTop: '40vh' }}>
-      <Card
-        style={{
-          width: '80%',
-          margin: '0 auto',
-          justifyContent: 'center',
-          alignContent: 'center',
-          height: '35vh',
-        }}
-        title={
-          <Title level={5} style={{ fontSize: '10px', margin: '5px' }}>
-            Upcoming Blockchain Traded Funds
-          </Title>
-        }
-      >
         <div
           style={{
             display: 'flex',
@@ -60,29 +46,112 @@ export function BannerMobile(){
             padding: '5px 0',
           }}
         >
-          <div style={{ height: '8vh', marginBottom: '5px' }}>
-            <Button block style={{ whiteSpace: 'normal', height: '100%' }}>
-              Mega Cap 30 day Trend BTF BTC/ETH/SOL/XRP/USDC
-            </Button>
-          </div>
-          <div style={{ height: '8vh', marginBottom: '5px' }}>
-            <Button
-              block
-              style={{
-                whiteSpace: 'normal',
-                height: '100%',
-              }}
-            >
-              Meme 7 day Trend BTF DOGE/SHIB/PEPE/USDC
-            </Button>
-          </div>
-          <div style={{ height: '8vh' }}>
-            <Button block style={{ whiteSpace: 'normal', height: '100%' }}>
-              Safe Haven 30 day Trend BTF BTC/PAXG/XAUt/USDC
-            </Button>
-          </div>
+          <Tag
+                style={{ width: '100%', margin: '5px', textAlign: 'center' }}
+              >
+                <Row style={{ margin: 0, padding: 0 }}>
+                  <Col span={24}>
+                    <div
+                      style={{
+                        height: '10%',
+                      }}
+                    >
+                      <img
+                        src="/assets/safe_haven_BTF_icon_mono.png"
+                        style={{ width: '10%', height: 'auto', marginTop:'5px' }}
+                      />
+                    </div>
+                  </Col>
+                  <Col span={24}>
+                    <h5 style={{ margin: 0 }}>The Safe Haven</h5>
+                    <p
+                      style={{
+                        margin: '5px',
+                        paddingLeft: '5px',
+                        paddingRight: '5px',
+                        textAlign: 'center',
+                        whiteSpace: 'pre-wrap',
+                      }}
+                    >
+                      Follow trends of BTC, Gold and T-Bills.
+                    </p>
+                  </Col>
+                </Row>
+              </Tag>
+
+              <Tag
+                style={{ width: '100%', margin: '5px', textAlign: 'center' }}
+              >
+                <Row style={{ margin: 0, padding: 0 }}>
+                  <Col span={24}>
+                    <div
+                      style={{
+                        height: '10%'
+                      }}
+                    >
+                      <img
+                        src="/assets/RWA_mono.png"
+                        style={{ width: '10%', height: 'auto', marginTop:'5px' }}
+                      />
+                    </div>
+                  </Col>
+                  <Col span={24}>
+                    <h5 style={{ margin: 0 }}>The RWA Agnostic</h5>
+                    <p
+                      style={{
+                        margin: '5px',
+                        paddingLeft: '5px',
+                        paddingRight: '5px',
+                        whiteSpace: 'pre-wrap',
+                      }}
+                    >
+                      Get RWA exposure by tracking RWA issuers.
+                    </p>
+                  </Col>
+                </Row>
+              </Tag>
+              <Tag
+                style={{ width: '100%', margin: '5px', textAlign: 'center' }}
+              >
+                <Row style={{ margin: 0, padding: 0 }}>
+                  <Col span={24}>
+                    <div
+                      style={{
+                        height: '10%',
+                      }}
+                    >
+                      <img
+                        src="/assets/sonic_BTF_icon.png"
+                        style={{ width: '10%', height: 'auto', marginTop:'5px' }}
+                      />
+                    </div>
+                  </Col>
+                  <Col span={24}>
+                    <div
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        height: '100%',
+                      }}
+                    >
+                      <h5 style={{ margin: 0, textAlign: 'center' }}>
+                        Super Sonic Momentum
+                      </h5>
+                      <p
+                        style={{
+                          margin: 0,
+                          textAlign: 'center',
+                          whiteSpace: 'pre-wrap',
+                        }}
+                      >
+                        Combining Sonic yield and trend following
+                      </p>
+                    </div>
+                  </Col>
+                </Row>
+              </Tag>
         </div>
-      </Card>
     </div>
   </div>
 }
