@@ -1,8 +1,5 @@
 import { Col, Row, Steps, Typography } from 'antd';
 import { ProductItemBackground } from '../../../productExplorer/productItem/productItemBackground';
-import { SimulationRunBreakdown } from '../../../simulationResults/simulationResultSummaryModels';
-import { useEffect, useState } from 'react';
-import { getBreakdown, Pool } from '../../../../services/breakdownService';
 import { DownCircleOutlined, UpCircleOutlined } from '@ant-design/icons';
 import { AgGauge } from 'ag-charts-react';
 import './quantammExplainer.css';
@@ -10,8 +7,6 @@ import './quantammExplainer.css';
 const { Title } = Typography;
 
 export function QuantAmmExplainer() {
-  const [breakdowns, setBreakdowns] = useState<SimulationRunBreakdown[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
   const performanceStages = [
     'Themed Baskets',
     'Liquid basket tokens',
@@ -21,40 +16,6 @@ export function QuantAmmExplainer() {
     'Adaptive On-Chain Strategies',
     'Daily Market Responsiveness',
   ];
-  // Effect to load breakdowns whenever the tab key changes
-  useEffect(() => {
-    // Function to load breakdowns based on the selected tab
-    const loadBreakdowns = async (
-      poolNames: Pool[]
-    ): Promise<SimulationRunBreakdown[]> => {
-      setLoading(true); // Start loading
-      const fetchedBreakdowns = await Promise.all(
-        poolNames.map((poolName) => getBreakdown(poolName))
-      );
-      setBreakdowns(fetchedBreakdowns);
-      return fetchedBreakdowns;
-    };
-
-    const loadData = async (): Promise<SimulationRunBreakdown[]> => {
-      // Load breakdowns for the selected tab
-      return await loadBreakdowns([
-        'balancerWeighted',
-        'quantAMMAntiMomentum',
-      ] as Pool[]); // Awaiting the asynchronous function here
-    };
-    if (loading) {
-      loadData()
-        .then((fetchedBreakdowns) => {
-          setBreakdowns(fetchedBreakdowns);
-        })
-        .catch((error) => {
-          console.error('Failed to load breakdowns:', error);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    }
-  }, [setBreakdowns, setLoading, breakdowns, loading]);
 
   return (
     <ProductItemBackground
