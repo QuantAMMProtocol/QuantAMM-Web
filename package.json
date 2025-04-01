@@ -10,7 +10,7 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "format": "prettier --write ./src",
     "preview": "vite preview",
-    "codegen": "graphql-codegen"
+    "codegen": "node -r dotenv/config ./node_modules/.bin/graphql-codegen dotenv_config_path=.env.local"
   },
   "eslintConfig": {
     "extends": [

@@ -1291,6 +1291,60 @@ export enum GqlPoolOrderDirection {
   Desc = 'desc'
 }
 
+export type GqlPoolQuantAmmWeighted = GqlPoolBase & {
+  __typename?: 'GqlPoolQuantAmmWeighted';
+  address: Scalars['Bytes']['output'];
+  /** @deprecated Use poolTokens instead */
+  allTokens: Array<GqlPoolTokenExpanded>;
+  categories?: Maybe<Array<Maybe<GqlPoolFilterCategory>>>;
+  chain: GqlChain;
+  createTime: Scalars['Int']['output'];
+  decimals: Scalars['Int']['output'];
+  /** @deprecated Use poolTokens instead */
+  displayTokens: Array<GqlPoolTokenDisplay>;
+  dynamicData: GqlPoolDynamicData;
+  factory?: Maybe<Scalars['Bytes']['output']>;
+  hasAnyAllowedBuffer: Scalars['Boolean']['output'];
+  hasErc4626: Scalars['Boolean']['output'];
+  hasNestedErc4626: Scalars['Boolean']['output'];
+  hook?: Maybe<GqlHook>;
+  id: Scalars['ID']['output'];
+  /** @deprecated Removed without replacement */
+  investConfig: GqlPoolInvestConfig;
+  liquidityManagement?: Maybe<LiquidityManagement>;
+  name: Scalars['String']['output'];
+  /** @deprecated Removed without replacement */
+  nestingType: GqlPoolNestingType;
+  /**
+   * The wallet address of the owner of the pool. Pool owners can set certain properties like swapFees or AMP.
+   * @deprecated Use swapFeeManager instead
+   */
+  owner?: Maybe<Scalars['Bytes']['output']>;
+  /** Account empowered to pause/unpause the pool (or 0 to delegate to governance) */
+  pauseManager?: Maybe<Scalars['Bytes']['output']>;
+  /** Account empowered to set the pool creator fee percentage */
+  poolCreator?: Maybe<Scalars['Bytes']['output']>;
+  poolTokens: Array<GqlPoolTokenDetail>;
+  protocolVersion: Scalars['Int']['output'];
+  staking?: Maybe<GqlPoolStaking>;
+  /** Account empowered to set static swap fees for a pool (when 0 on V2 swap fees are immutable, on V3 delegate to governance) */
+  swapFeeManager?: Maybe<Scalars['Bytes']['output']>;
+  symbol: Scalars['String']['output'];
+  tags?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  /**
+   * All tokens of the pool. If it is a nested pool, the nested pool is expanded with its own tokens again.
+   * @deprecated Use poolTokens instead
+   */
+  tokens: Array<GqlPoolTokenUnion>;
+  type: GqlPoolType;
+  userBalance?: Maybe<GqlPoolUserBalance>;
+  /** @deprecated use protocolVersion instead */
+  vaultVersion: Scalars['Int']['output'];
+  version: Scalars['Int']['output'];
+  /** @deprecated Removed without replacement */
+  withdrawConfig: GqlPoolWithdrawConfig;
+};
+
 export type GqlPoolSnapshot = {
   __typename?: 'GqlPoolSnapshot';
   amounts: Array<Scalars['String']['output']>;
@@ -1734,12 +1788,13 @@ export enum GqlPoolType {
   LiquidityBootstrapping = 'LIQUIDITY_BOOTSTRAPPING',
   MetaStable = 'META_STABLE',
   PhantomStable = 'PHANTOM_STABLE',
+  QuantAmmWeighted = 'QUANT_AMM_WEIGHTED',
   Stable = 'STABLE',
   Unknown = 'UNKNOWN',
   Weighted = 'WEIGHTED'
 }
 
-export type GqlPoolUnion = GqlPoolComposableStable | GqlPoolElement | GqlPoolFx | GqlPoolGyro | GqlPoolLiquidityBootstrapping | GqlPoolMetaStable | GqlPoolStable | GqlPoolWeighted;
+export type GqlPoolUnion = GqlPoolComposableStable | GqlPoolElement | GqlPoolFx | GqlPoolGyro | GqlPoolLiquidityBootstrapping | GqlPoolMetaStable | GqlPoolQuantAmmWeighted | GqlPoolStable | GqlPoolWeighted;
 
 /** If a user address was provided in the query, the user balance is populated here */
 export type GqlPoolUserBalance = {
@@ -3092,7 +3147,7 @@ export type GetPoolByIdQueryVariables = Exact<{
 }>;
 
 
-export type GetPoolByIdQuery = { __typename?: 'Query', poolGetPool: { __typename: 'GqlPoolComposableStable', address: any, chain: GqlChain, name: string, decimals: number, type: GqlPoolType, id: string, symbol: string, createTime: number, owner?: any | null, tags?: Array<string | null> | null, hook?: { __typename?: 'GqlHook', type: GqlHookType } | null, poolTokens: Array<{ __typename: 'GqlPoolTokenDetail', weight?: any | null, symbol: string, address: string, index: number }>, dynamicData: { __typename?: 'GqlPoolDynamicData', poolId: string, fees24h: any, swapFee: any, totalLiquidity: any, totalShares: any, volume24h: any, yieldCapture48h: any, aprItems: Array<{ __typename?: 'GqlPoolAprItem', id: string, apr: number, type: GqlPoolAprItemType, rewardTokenSymbol?: string | null }> } } | { __typename: 'GqlPoolElement', address: any, chain: GqlChain, name: string, decimals: number, type: GqlPoolType, id: string, symbol: string, createTime: number, owner?: any | null, tags?: Array<string | null> | null, hook?: { __typename?: 'GqlHook', type: GqlHookType } | null, poolTokens: Array<{ __typename: 'GqlPoolTokenDetail', weight?: any | null, symbol: string, address: string, index: number }>, dynamicData: { __typename?: 'GqlPoolDynamicData', poolId: string, fees24h: any, swapFee: any, totalLiquidity: any, totalShares: any, volume24h: any, yieldCapture48h: any, aprItems: Array<{ __typename?: 'GqlPoolAprItem', id: string, apr: number, type: GqlPoolAprItemType, rewardTokenSymbol?: string | null }> } } | { __typename: 'GqlPoolFx', address: any, chain: GqlChain, name: string, decimals: number, type: GqlPoolType, id: string, symbol: string, createTime: number, owner?: any | null, tags?: Array<string | null> | null, hook?: { __typename?: 'GqlHook', type: GqlHookType } | null, poolTokens: Array<{ __typename: 'GqlPoolTokenDetail', weight?: any | null, symbol: string, address: string, index: number }>, dynamicData: { __typename?: 'GqlPoolDynamicData', poolId: string, fees24h: any, swapFee: any, totalLiquidity: any, totalShares: any, volume24h: any, yieldCapture48h: any, aprItems: Array<{ __typename?: 'GqlPoolAprItem', id: string, apr: number, type: GqlPoolAprItemType, rewardTokenSymbol?: string | null }> } } | { __typename: 'GqlPoolGyro', address: any, chain: GqlChain, name: string, decimals: number, type: GqlPoolType, id: string, symbol: string, createTime: number, owner?: any | null, tags?: Array<string | null> | null, hook?: { __typename?: 'GqlHook', type: GqlHookType } | null, poolTokens: Array<{ __typename: 'GqlPoolTokenDetail', weight?: any | null, symbol: string, address: string, index: number }>, dynamicData: { __typename?: 'GqlPoolDynamicData', poolId: string, fees24h: any, swapFee: any, totalLiquidity: any, totalShares: any, volume24h: any, yieldCapture48h: any, aprItems: Array<{ __typename?: 'GqlPoolAprItem', id: string, apr: number, type: GqlPoolAprItemType, rewardTokenSymbol?: string | null }> } } | { __typename: 'GqlPoolLiquidityBootstrapping', address: any, chain: GqlChain, name: string, decimals: number, type: GqlPoolType, id: string, symbol: string, createTime: number, owner?: any | null, tags?: Array<string | null> | null, hook?: { __typename?: 'GqlHook', type: GqlHookType } | null, poolTokens: Array<{ __typename: 'GqlPoolTokenDetail', weight?: any | null, symbol: string, address: string, index: number }>, dynamicData: { __typename?: 'GqlPoolDynamicData', poolId: string, fees24h: any, swapFee: any, totalLiquidity: any, totalShares: any, volume24h: any, yieldCapture48h: any, aprItems: Array<{ __typename?: 'GqlPoolAprItem', id: string, apr: number, type: GqlPoolAprItemType, rewardTokenSymbol?: string | null }> } } | { __typename: 'GqlPoolMetaStable', address: any, chain: GqlChain, name: string, decimals: number, type: GqlPoolType, id: string, symbol: string, createTime: number, owner?: any | null, tags?: Array<string | null> | null, hook?: { __typename?: 'GqlHook', type: GqlHookType } | null, poolTokens: Array<{ __typename: 'GqlPoolTokenDetail', weight?: any | null, symbol: string, address: string, index: number }>, dynamicData: { __typename?: 'GqlPoolDynamicData', poolId: string, fees24h: any, swapFee: any, totalLiquidity: any, totalShares: any, volume24h: any, yieldCapture48h: any, aprItems: Array<{ __typename?: 'GqlPoolAprItem', id: string, apr: number, type: GqlPoolAprItemType, rewardTokenSymbol?: string | null }> } } | { __typename: 'GqlPoolStable', address: any, chain: GqlChain, name: string, decimals: number, type: GqlPoolType, id: string, symbol: string, createTime: number, owner?: any | null, tags?: Array<string | null> | null, hook?: { __typename?: 'GqlHook', type: GqlHookType } | null, poolTokens: Array<{ __typename: 'GqlPoolTokenDetail', weight?: any | null, symbol: string, address: string, index: number }>, dynamicData: { __typename?: 'GqlPoolDynamicData', poolId: string, fees24h: any, swapFee: any, totalLiquidity: any, totalShares: any, volume24h: any, yieldCapture48h: any, aprItems: Array<{ __typename?: 'GqlPoolAprItem', id: string, apr: number, type: GqlPoolAprItemType, rewardTokenSymbol?: string | null }> } } | { __typename: 'GqlPoolWeighted', address: any, chain: GqlChain, name: string, decimals: number, type: GqlPoolType, id: string, symbol: string, createTime: number, owner?: any | null, tags?: Array<string | null> | null, hook?: { __typename?: 'GqlHook', type: GqlHookType } | null, poolTokens: Array<{ __typename: 'GqlPoolTokenDetail', weight?: any | null, symbol: string, address: string, index: number }>, dynamicData: { __typename?: 'GqlPoolDynamicData', poolId: string, fees24h: any, swapFee: any, totalLiquidity: any, totalShares: any, volume24h: any, yieldCapture48h: any, aprItems: Array<{ __typename?: 'GqlPoolAprItem', id: string, apr: number, type: GqlPoolAprItemType, rewardTokenSymbol?: string | null }> } } };
+export type GetPoolByIdQuery = { __typename?: 'Query', poolGetPool: { __typename: 'GqlPoolComposableStable', address: any, chain: GqlChain, name: string, decimals: number, type: GqlPoolType, id: string, symbol: string, createTime: number, owner?: any | null, tags?: Array<string | null> | null, hook?: { __typename?: 'GqlHook', type: GqlHookType } | null, poolTokens: Array<{ __typename: 'GqlPoolTokenDetail', weight?: any | null, symbol: string, address: string, index: number }>, dynamicData: { __typename?: 'GqlPoolDynamicData', poolId: string, fees24h: any, swapFee: any, totalLiquidity: any, totalShares: any, volume24h: any, yieldCapture48h: any, aprItems: Array<{ __typename?: 'GqlPoolAprItem', id: string, apr: number, type: GqlPoolAprItemType, rewardTokenSymbol?: string | null }> } } | { __typename: 'GqlPoolElement', address: any, chain: GqlChain, name: string, decimals: number, type: GqlPoolType, id: string, symbol: string, createTime: number, owner?: any | null, tags?: Array<string | null> | null, hook?: { __typename?: 'GqlHook', type: GqlHookType } | null, poolTokens: Array<{ __typename: 'GqlPoolTokenDetail', weight?: any | null, symbol: string, address: string, index: number }>, dynamicData: { __typename?: 'GqlPoolDynamicData', poolId: string, fees24h: any, swapFee: any, totalLiquidity: any, totalShares: any, volume24h: any, yieldCapture48h: any, aprItems: Array<{ __typename?: 'GqlPoolAprItem', id: string, apr: number, type: GqlPoolAprItemType, rewardTokenSymbol?: string | null }> } } | { __typename: 'GqlPoolFx', address: any, chain: GqlChain, name: string, decimals: number, type: GqlPoolType, id: string, symbol: string, createTime: number, owner?: any | null, tags?: Array<string | null> | null, hook?: { __typename?: 'GqlHook', type: GqlHookType } | null, poolTokens: Array<{ __typename: 'GqlPoolTokenDetail', weight?: any | null, symbol: string, address: string, index: number }>, dynamicData: { __typename?: 'GqlPoolDynamicData', poolId: string, fees24h: any, swapFee: any, totalLiquidity: any, totalShares: any, volume24h: any, yieldCapture48h: any, aprItems: Array<{ __typename?: 'GqlPoolAprItem', id: string, apr: number, type: GqlPoolAprItemType, rewardTokenSymbol?: string | null }> } } | { __typename: 'GqlPoolGyro', address: any, chain: GqlChain, name: string, decimals: number, type: GqlPoolType, id: string, symbol: string, createTime: number, owner?: any | null, tags?: Array<string | null> | null, hook?: { __typename?: 'GqlHook', type: GqlHookType } | null, poolTokens: Array<{ __typename: 'GqlPoolTokenDetail', weight?: any | null, symbol: string, address: string, index: number }>, dynamicData: { __typename?: 'GqlPoolDynamicData', poolId: string, fees24h: any, swapFee: any, totalLiquidity: any, totalShares: any, volume24h: any, yieldCapture48h: any, aprItems: Array<{ __typename?: 'GqlPoolAprItem', id: string, apr: number, type: GqlPoolAprItemType, rewardTokenSymbol?: string | null }> } } | { __typename: 'GqlPoolLiquidityBootstrapping', address: any, chain: GqlChain, name: string, decimals: number, type: GqlPoolType, id: string, symbol: string, createTime: number, owner?: any | null, tags?: Array<string | null> | null, hook?: { __typename?: 'GqlHook', type: GqlHookType } | null, poolTokens: Array<{ __typename: 'GqlPoolTokenDetail', weight?: any | null, symbol: string, address: string, index: number }>, dynamicData: { __typename?: 'GqlPoolDynamicData', poolId: string, fees24h: any, swapFee: any, totalLiquidity: any, totalShares: any, volume24h: any, yieldCapture48h: any, aprItems: Array<{ __typename?: 'GqlPoolAprItem', id: string, apr: number, type: GqlPoolAprItemType, rewardTokenSymbol?: string | null }> } } | { __typename: 'GqlPoolMetaStable', address: any, chain: GqlChain, name: string, decimals: number, type: GqlPoolType, id: string, symbol: string, createTime: number, owner?: any | null, tags?: Array<string | null> | null, hook?: { __typename?: 'GqlHook', type: GqlHookType } | null, poolTokens: Array<{ __typename: 'GqlPoolTokenDetail', weight?: any | null, symbol: string, address: string, index: number }>, dynamicData: { __typename?: 'GqlPoolDynamicData', poolId: string, fees24h: any, swapFee: any, totalLiquidity: any, totalShares: any, volume24h: any, yieldCapture48h: any, aprItems: Array<{ __typename?: 'GqlPoolAprItem', id: string, apr: number, type: GqlPoolAprItemType, rewardTokenSymbol?: string | null }> } } | { __typename: 'GqlPoolQuantAmmWeighted', address: any, chain: GqlChain, name: string, decimals: number, type: GqlPoolType, id: string, symbol: string, createTime: number, owner?: any | null, tags?: Array<string | null> | null, hook?: { __typename?: 'GqlHook', type: GqlHookType } | null, poolTokens: Array<{ __typename: 'GqlPoolTokenDetail', weight?: any | null, symbol: string, address: string, index: number }>, dynamicData: { __typename?: 'GqlPoolDynamicData', poolId: string, fees24h: any, swapFee: any, totalLiquidity: any, totalShares: any, volume24h: any, yieldCapture48h: any, aprItems: Array<{ __typename?: 'GqlPoolAprItem', id: string, apr: number, type: GqlPoolAprItemType, rewardTokenSymbol?: string | null }> } } | { __typename: 'GqlPoolStable', address: any, chain: GqlChain, name: string, decimals: number, type: GqlPoolType, id: string, symbol: string, createTime: number, owner?: any | null, tags?: Array<string | null> | null, hook?: { __typename?: 'GqlHook', type: GqlHookType } | null, poolTokens: Array<{ __typename: 'GqlPoolTokenDetail', weight?: any | null, symbol: string, address: string, index: number }>, dynamicData: { __typename?: 'GqlPoolDynamicData', poolId: string, fees24h: any, swapFee: any, totalLiquidity: any, totalShares: any, volume24h: any, yieldCapture48h: any, aprItems: Array<{ __typename?: 'GqlPoolAprItem', id: string, apr: number, type: GqlPoolAprItemType, rewardTokenSymbol?: string | null }> } } | { __typename: 'GqlPoolWeighted', address: any, chain: GqlChain, name: string, decimals: number, type: GqlPoolType, id: string, symbol: string, createTime: number, owner?: any | null, tags?: Array<string | null> | null, hook?: { __typename?: 'GqlHook', type: GqlHookType } | null, poolTokens: Array<{ __typename: 'GqlPoolTokenDetail', weight?: any | null, symbol: string, address: string, index: number }>, dynamicData: { __typename?: 'GqlPoolDynamicData', poolId: string, fees24h: any, swapFee: any, totalLiquidity: any, totalShares: any, volume24h: any, yieldCapture48h: any, aprItems: Array<{ __typename?: 'GqlPoolAprItem', id: string, apr: number, type: GqlPoolAprItemType, rewardTokenSymbol?: string | null }> } } };
 
 export type GetPoolsQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']['input']>;
