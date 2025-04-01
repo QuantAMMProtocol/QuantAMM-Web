@@ -138,7 +138,7 @@ export function QuantAmmExplainer() {
                 padding: 0,
               }}
             >
-              <div style={{ width: '80%' }}>
+              <div style={{ width: '100%' }}>
                 <Steps
                   style={{ marginLeft: '25px' }}
                   direction="horizontal"

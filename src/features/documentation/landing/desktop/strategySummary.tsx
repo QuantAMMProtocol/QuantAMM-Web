@@ -81,73 +81,9 @@ export function StrategySummary() {
                 EXPLORE QUANTAMM REVOLUTIONARY ARCHITECTURE
               </Title>
             </Col>
-            <Col span={9}>
-              <Row>
-                <Col span={24} style={{ paddingTop: '40px' }}>
-                  <h4 style={{ textAlign: 'center', margin: 0 }}>
-                    Traditional DEX Pool Holdings
-                  </h4>
-                  <p style={{ textAlign: 'center', margin: 0 }}>
-                    Focus on earning fees, ignore price movements
-                  </p>
-                  <div
-                    style={{ paddingLeft: '80px', paddingRight: '80px' }}
-                    hidden={
-                      (loading && breakdowns.length == 0) ||
-                      breakdowns.filter(
-                        (x) =>
-                          x.simulationRun.updateRule.updateRuleName ==
-                          'Balancer Weighted'
-                      ).length == 0
-                    }
-                  >
-                    <WeightChangeOverTimeGraph
-                      simulationRunBreakdown={
-                        breakdowns.filter(
-                          (x) =>
-                            x.simulationRun.updateRule.updateRuleName ==
-                            'Balancer Weighted'
-                        )[0]
-                      }
-                      overrideChartTheme="ag-default-dark"
-                      overrideXAxisInterval={12}
-                    />
-                  </div>
-                </Col>
-                <Col span={24} style={{ paddingBottom: '40px' }}>
-                  <h4 style={{ textAlign: 'center', margin: 0 }}>
-                    QuantAMM BTF Pool Holdings
-                  </h4>
-                  <p style={{ textAlign: 'center', margin: 0 }}>
-                    React to markets while earning fees.
-                  </p>
-                  <p style={{ textAlign: 'center', margin: 0 }}></p>
-                  <div
-                    style={{ paddingLeft: '80px', paddingRight: '80px' }}
-                    hidden={
-                      (loading && breakdowns.length == 0) ||
-                      breakdowns.filter(
-                        (x) =>
-                          x.simulationRun.updateRule.updateRuleName ==
-                          'Balancer Weighted'
-                      ).length == 0
-                    }
-                  >
-                    <WeightChangeOverTimeGraph
-                      simulationRunBreakdown={
-                        breakdowns.filter(
-                          (x) =>
-                            x.simulationRun.updateRule.updateRuleName ==
-                              carouselRuleKeys[visibleCard]
-                        )[0]
-                      }
-                      overrideChartTheme="ag-default-dark"
-                      overrideXAxisInterval={24}
-                    />
-                  </div>
-                </Col>
-              </Row>
-            </Col>
+          </Row>
+          <Row>
+            <Col span={1}></Col>
             <Col span={6}>
               <div
                 style={{
@@ -320,6 +256,73 @@ export function StrategySummary() {
                   </div>
                 </Carousel>
               </div>
+            </Col>
+            <Col span={8}>
+              <Row>
+                <Col span={24} style={{ paddingTop: '40px' }}>
+                  <h4 style={{ textAlign: 'center', margin: 0 }}>
+                    Traditional DEX Pool Holdings
+                  </h4>
+                  <p style={{ textAlign: 'center', margin: 0 }}>
+                    Focus on earning fees, ignore price movements
+                  </p>
+                  <div
+                    style={{ paddingLeft: '80px', paddingRight: '80px' }}
+                    hidden={
+                      (loading && breakdowns.length == 0) ||
+                      breakdowns.filter(
+                        (x) =>
+                          x.simulationRun.updateRule.updateRuleName ==
+                          'Balancer Weighted'
+                      ).length == 0
+                    }
+                  >
+                    <WeightChangeOverTimeGraph
+                      simulationRunBreakdown={
+                        breakdowns.filter(
+                          (x) =>
+                            x.simulationRun.updateRule.updateRuleName ==
+                            'Balancer Weighted'
+                        )[0]
+                      }
+                      overrideChartTheme="ag-default-dark"
+                      overrideXAxisInterval={12}
+                    />
+                  </div>
+                </Col>
+                <Col span={24} style={{ paddingBottom: '40px' }}>
+                  <h4 style={{ textAlign: 'center', margin: 0 }}>
+                    QuantAMM BTF Pool Holdings
+                  </h4>
+                  <p style={{ textAlign: 'center', margin: 0 }}>
+                    React to markets while earning fees.
+                  </p>
+                  <p style={{ textAlign: 'center', margin: 0 }}></p>
+                  <div
+                    style={{ paddingLeft: '80px', paddingRight: '80px' }}
+                    hidden={
+                      (loading && breakdowns.length == 0) ||
+                      breakdowns.filter(
+                        (x) =>
+                          x.simulationRun.updateRule.updateRuleName ==
+                          'Balancer Weighted'
+                      ).length == 0
+                    }
+                  >
+                    <WeightChangeOverTimeGraph
+                      simulationRunBreakdown={
+                        breakdowns.filter(
+                          (x) =>
+                            x.simulationRun.updateRule.updateRuleName ==
+                              carouselRuleKeys[visibleCard]
+                        )[0]
+                      }
+                      overrideChartTheme="ag-default-dark"
+                      overrideXAxisInterval={24}
+                    />
+                  </div>
+                </Col>
+              </Row>
             </Col>
             <Col span={9}>
               <div
