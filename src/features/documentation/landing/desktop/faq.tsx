@@ -417,48 +417,50 @@ export function FAQ() {
             </div>
           </Col>
           <Col span={1}></Col>
-          <Col span={13}>
-            <Row style={{marginTop:'4vh'}}>
+          <Col span={13} style={{width: '100%', height:'100%'}}>
+            <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', height: '100%' }}>
+            <Row>
               <Col span={24}>
-                <h1
-                  style={{ color: '#162536', textAlign: 'center', width: '100%' }}
-                >
-                  FREQUENTLY ASKED QUESTIONS
-                </h1>
+              <h1
+                style={{ color: '#162536', textAlign: 'center', width: '100%' }}
+              >
+                FREQUENTLY ASKED QUESTIONS
+              </h1>
               </Col>
               <Col
-                span={24}
-                style={{ display: 'flex', justifyContent: 'center' }}
+              span={24}
+              style={{ display: 'flex', justifyContent: 'center' }}
               >
-                <Form.Item style={{ marginTop: '5px' }}>
-                  <label style={{ marginRight: '5px', color: '#162536' }}>
-                    Choose Knowledge Level:
-                  </label>
-                  <Radio.Group
-                    size="small"
-                    value={eli5}
-                    onChange={(e) => setEli5(e.target.value)}
-                  >
-                    <Radio.Button value={'ELI5'}>ELI5</Radio.Button>
-                    <Radio.Button value={'Crypto Native'}>
-                      Crypto Native
-                    </Radio.Button>
-                    <Radio.Button value={'Quant'}>
-                      Quant Mathematical
-                    </Radio.Button>
-                  </Radio.Group>
-                </Form.Item>
+              <Form.Item style={{ marginTop: '5px' }}>
+                <label style={{ marginRight: '5px', color: '#162536' }}>
+                Choose Knowledge Level:
+                </label>
+                <Radio.Group
+                size="small"
+                value={eli5}
+                onChange={(e) => setEli5(e.target.value)}
+                >
+                <Radio.Button value={'ELI5'}>ELI5</Radio.Button>
+                <Radio.Button value={'Crypto Native'}>
+                  Crypto Native
+                </Radio.Button>
+                <Radio.Button value={'Quant'}>
+                  Quant Mathematical
+                </Radio.Button>
+                </Radio.Group>
+              </Form.Item>
               </Col>
               <Col span={24}>
-                <Collapse
-                  defaultActiveKey={['1']}
-                  style={{ width: '100%', backgroundColor: '#2c496b' }}
-                  accordion
-                  items={items}
-                  size="small"
-                />
+              <Collapse
+                defaultActiveKey={['1']}
+                style={{ width: '100%', backgroundColor: '#2c496b' }}
+                accordion
+                items={items}
+                size="small"
+              />
               </Col>
             </Row>
+            </div>
           </Col>
           <Col span={1}></Col>
         </Row>

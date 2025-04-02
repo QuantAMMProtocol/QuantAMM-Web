@@ -286,7 +286,7 @@ export function StrategySummary() {
                         )[0]
                       }
                       overrideChartTheme="ag-default-dark"
-                      overrideXAxisInterval={12}
+                      overrideXAxisInterval={24}
                     />
                   </div>
                 </Col>

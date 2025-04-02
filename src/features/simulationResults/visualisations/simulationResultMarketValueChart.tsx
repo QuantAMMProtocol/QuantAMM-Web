@@ -100,7 +100,7 @@ export function SimulationResultMarketValueChart(props: BreakdownProps) {
                 : agCharts.time.month.every(1),
       },
       label: {
-        format: '%m/%y',
+        format: '%Y-%m',
       },
     };
   }
@@ -122,6 +122,9 @@ export function SimulationResultMarketValueChart(props: BreakdownProps) {
                     enabled: true,
                     height: 5,
                     spacing: 6,
+                  },
+                  padding:{
+                    right:40
                   },
                   axes: [
                     getTimeAxisOption(
