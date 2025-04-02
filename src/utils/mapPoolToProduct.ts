@@ -1,14 +1,17 @@
+import BigNumber from 'bignumber.js';
 import { format, fromUnixTime, getTime } from 'date-fns';
 import {
   GetPoolByIdQuery,
   GqlPoolDynamicData,
   GqlPoolMinimal,
+  GqlPoolQuantAmmWeighted,
+  Maybe,
+  QuantAmmWeightedParams,
 } from '../__generated__/graphql-types';
 import {
   DailyPerformance,
   Product,
   Strategy,
-  StrategyEnum,
   MonthlyPerformance,
   ProductTimeSeriesData,
   TimeSeriesData,
@@ -23,6 +26,8 @@ import {
   filterByTimeRange,
   filterByExtendedTimeRange,
 } from '../features/productDetail/productDetailContent/helpers';
+import { useAprTooltip } from '../features/productExplorer/productItem/shared/apr/useAprTooltip';
+import { isQuantAmmPool } from './poolHelpers';
 
 const formatTimestamp = (timestamp: number): string => {
   return format(fromUnixTime(timestamp), 'yyyy/MM/dd HH:mm:ss');
@@ -30,7 +35,14 @@ const formatTimestamp = (timestamp: number): string => {
 
 export const mapPoolToBaseProduct = (pools: GqlPoolMinimal[]): ProductMap => {
   const productMap: ProductMap = {};
+
   pools.forEach((pool) => {
+    const { getSortableApr } = useAprTooltip({
+      aprItems: pool.dynamicData?.aprItems ?? [],
+      numberFormatter: (value) => new BigNumber(value),
+      chain: pool.chain,
+    });
+
     productMap[pool.id] = {
       id: pool.id,
       address: String(pool.address),
@@ -68,6 +80,7 @@ export const mapPoolToBaseProduct = (pools: GqlPoolMinimal[]): ProductMap => {
       dynamicData: pool.dynamicData,
       benchmarkNames: ['HODL'],
       benchmarkTimeSeries: [],
+      sortableApr: getSortableApr(pool.id),
     };
   });
 
@@ -197,13 +210,13 @@ export const getProductFromPool = (
     basketTheme: 'Main Cap',
     type: pool.type,
     tokenType: pool.type,
-    strategy: 'MOMENTUM', // TODO: get from pool
+    strategy: getStrategy(pool as unknown as GqlPoolMinimal),
     chain: pool.chain,
     frequency: 'daily',
     memory: 30,
     market: 'adaptive',
     createTime: formatTimestamp(pool.createTime),
-    swapManager: '', //TODO
+    swapManager: '', // TODO: how to get this?
 
     pauseManager: '',
     overview: [
@@ -211,31 +224,31 @@ export const getProductFromPool = (
         metric: 'tvl',
         value: 1, // TODO: how to get this?
         maxScore: MAX_SCORE,
-        description: 'TVL rating is blah blah blah',
+        description: 'TVL rating is blah blah blah', // TODO: add proper description
       },
       {
         metric: 'performance',
         value: 1, // TODO: how to get this?
         maxScore: MAX_SCORE,
-        description: 'Performance rating is blah blah blah blah ',
+        description: 'Performance rating is blah blah blah blah ', // TODO: add proper description
       },
       {
         metric: 'adaptability',
-        value: getAdaptability('Fixed', '', ''), // TODO: get from pool
+        value: getAdaptabilityScore(pool as unknown as GqlPoolMinimal),
         maxScore: MAX_SCORE,
-        description: 'Adaptability rating is blah blah blah blah ',
+        description: 'Adaptability rating is blah blah blah blah ', // TODO: add proper description
       },
       {
         metric: 'diversification',
         value: pool.poolTokens.length > 5 ? 5 : pool.poolTokens.length - 1,
         maxScore: MAX_SCORE,
-        description: 'Diversification rating is blah blah blah blah ',
+        description: 'Diversification rating is blah blah blah blah ', // TODO: add proper description
       },
       {
         metric: 'yield',
         value: 1, // TODO: how to get this?
         maxScore: MAX_SCORE,
-        description: '',
+        description: 'Yield rating is blah blah blah blah ', // TODO: add proper description
       },
     ],
     timeSeries: snapshot?.timeSeries ?? ([] as TimeSeriesData[]),
@@ -263,6 +276,9 @@ export const getProductFromPool = (
     oneWeekPerformance: getCurrentSharePrice(dailyPerformance, '7d'),
     benchmarkNames: ['HODL'],
     benchmarkTimeSeries: [],
+    quantAmmWeightedParams: getMaybeQuantAmmWeightedParams(
+      pool as unknown as GqlPoolMinimal
+    ),
   };
 
   return product;
@@ -537,13 +553,43 @@ const mapDailyPerformanceToMonthlyPerformance = (
   return monthlyData;
 };
 
+const getMaybeQuantAmmWeightedParams = (
+  pool: GqlPoolMinimal
+): Maybe<QuantAmmWeightedParams> => {
+  if (isQuantAmmPool(pool.type)) {
+    const { quantAmmWeightedParams } =
+      pool as unknown as GqlPoolQuantAmmWeighted;
+    return quantAmmWeightedParams ?? null;
+  }
+  return null;
+};
+
 const getStrategy = (pool: GqlPoolMinimal): Strategy => {
-  const { tags } = pool;
-  if (Array.isArray(tags) && tags.length > 0) {
-    return Object.values(StrategyEnum).includes(tags[0] as Strategy)
-      ? (tags[0] as Strategy)
-      : 'NONE';
+  const quantAmmWeightedParams = getMaybeQuantAmmWeightedParams(pool);
+
+  if (quantAmmWeightedParams) {
+    const { details } = quantAmmWeightedParams;
+
+    return details?.find((detail) => detail.name === 'strategy')?.value as
+      | Strategy
+      | 'NONE';
   }
 
   return 'NONE';
+};
+
+const getAdaptabilityScore = (pool: GqlPoolMinimal): number => {
+  const quantAmmWeightedParams = getMaybeQuantAmmWeightedParams(pool);
+
+  if (quantAmmWeightedParams) {
+    const { details } = quantAmmWeightedParams;
+
+    const value = details?.find(
+      (detail) => detail.name === 'adaptabilityScore'
+    )?.value;
+
+    return value ? Number(value) : 0;
+  }
+
+  return 0;
 };

@@ -20,7 +20,7 @@ export const ProductDetailSidebarOverview: FC<
       <ProductDetailSidebarElement
         side="right"
         text={shortenAddress(product.id)}
-        href={'https://etherscan.io/address/' + product.dynamicData?.poolId}
+        href={'https://etherscan.io/address/' + product.dynamicData?.poolId} // TODO: the explorer link should come from the product strategy
       />
 
       <ProductDetailSidebarElement side="left" text="Pool name" />
@@ -35,7 +35,9 @@ export const ProductDetailSidebarOverview: FC<
       <ProductDetailSidebarElement side="left" text="Pool type" />
       <ProductDetailSidebarElement
         side="right"
-        text={product.strategy == 'NONE' ? product.tokenType : product.strategy}
+        text={
+          product.strategy === 'NONE' ? product.tokenType : product.strategy
+        }
       />
 
       <ProductDetailSidebarElement side="left" text="TVL" />

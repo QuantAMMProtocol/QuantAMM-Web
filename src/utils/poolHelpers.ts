@@ -18,3 +18,7 @@ export function isLiquidityBootstrapping(poolType: GqlPoolType): boolean {
 export function isLBP(poolType: GqlPoolType): boolean {
   return isLiquidityBootstrapping(poolType);
 }
+
+export function isQuantAmmPool(poolType: GqlPoolType): boolean {
+  return poolType === GqlPoolType.QuantAmmWeighted;
+}

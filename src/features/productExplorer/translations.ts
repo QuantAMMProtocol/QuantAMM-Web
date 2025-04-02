@@ -15,6 +15,7 @@ export const productExplorerTranslation: Record<string, string> = {
   SONIC: 'Sonic',
   ZKEVM: 'Zkevm',
   poolType: 'Pool Type',
+  QUANT_AMM_WEIGHTED: 'QuantAmm Weighted',
   COMPOSABLE_STABLE: 'Composable Stable',
   COW_AMM: 'Cow Amm',
   ELEMENT: 'Element',

@@ -221,7 +221,7 @@ export function CoinData() {
       params.api.getColumns()!.forEach((column) => {
         allColumnIds.push(column.getId());
       });
-    }, 200); //needs to render before it can resize??
+    }, 200); // TODO: needs to render before it can resize??
   }
 
   const getCurrentPriceData = () => {

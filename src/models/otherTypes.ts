@@ -1,3 +1,5 @@
+// TODO: rename this file to something more descriptive
+
 export interface DataPoint {
   month: string; // Expected format 'MMM DD'
   value: number;

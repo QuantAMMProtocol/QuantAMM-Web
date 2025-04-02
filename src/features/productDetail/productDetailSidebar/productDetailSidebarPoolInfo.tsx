@@ -22,14 +22,14 @@ export const ProductDetailSidebarPoolInfo: FC<
       />
       <ProductDetailSidebarElement
         side="right"
-        href="0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84"
+        href="0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84" // TODO: the explorer link should come from the product strategy
         target="_blank"
         text="Etherscan"
       />
       <ProductDetailSidebarElement side="left" text="Base pool contract" />
       <ProductDetailSidebarElement
         side="right"
-        href="0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84"
+        href="0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84" // TODO: the explorer link should come from the product
         target="_blank"
         text="Etherscan"
       />
@@ -84,7 +84,7 @@ export const ProductDetailSidebarPoolInfo: FC<
       <ProductDetailSidebarElement
         side="right"
         text={shortenAddress(product.id)}
-        href={'https://etherscan.io/address/' + product.address}
+        href={'https://etherscan.io/address/' + product.address} // TODO: the explorer link should depend on the chain
       />
       <ProductDetailSidebarElement side="left" text="Creation Date" />
       <ProductDetailSidebarElement side="right" text={product.createTime} />

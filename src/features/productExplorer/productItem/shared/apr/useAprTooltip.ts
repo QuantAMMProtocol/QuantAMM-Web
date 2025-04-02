@@ -7,6 +7,7 @@ import {
   GqlPoolAprItemType,
 } from '../../../../../__generated__/graphql-types';
 import { bn } from '../../../../../utils/numbers';
+import { isVebalPool } from '../../../../../utils/poolHelpers';
 
 export const swapFeesTooltipText = `LPs earn fees when swaps are routed through this pool. The displayed APR is net earnings for LPs (with all protocol fees already deducted). Fees automatically compound into positions—no claiming needed.`;
 
@@ -51,7 +52,7 @@ export const dynamicSwapFeesTooltipText: Record<SupportedHookType, string> = {
 };
 
 // Types that must be added to the total base
-const TOTAL_BASE_APR_TYPES = [
+export const TOTAL_BASE_APR_TYPES = [
   GqlPoolAprItemType.SwapFee_24H,
   GqlPoolAprItemType.IbYield,
   GqlPoolAprItemType.Staking,
@@ -264,6 +265,30 @@ export function useAprTooltip({
     color: isDark ? 'var(--gray-400)' : 'var(--gray-600)',
   });
 
+  const getSortableApr = (poolId: string) => {
+    const isVebal = isVebalPool(poolId);
+
+    // maBEETS APR
+    if (isMaBeetsPresent && maBeetsTotalAprDisplayed) {
+      return maBeetsTotalAprDisplayed.toNumber();
+    }
+
+    // MAX VEBAL APR
+    if (hasVeBalBoost && maxVeBalDisplayed) {
+      return maxVeBalDisplayed.toNumber();
+    }
+
+    // TOTAL APR
+    if (isVebal && totalCombinedDisplayed) {
+      return totalCombinedDisplayed.toNumber();
+    }
+
+    // base APR
+    if (totalBaseDisplayed) {
+      return totalBase.toNumber();
+    }
+  };
+
   return {
     totalBaseDisplayed,
     extraBalAprDisplayed,
@@ -299,6 +324,7 @@ export function useAprTooltip({
     maBeetsTotalAprDisplayed,
     dynamicSwapFeesDisplayed,
     dynamicSwapFeesTooltipText,
+    getSortableApr,
   };
 }
 
