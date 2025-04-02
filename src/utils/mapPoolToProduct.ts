@@ -5,12 +5,13 @@ import {
   GqlPoolDynamicData,
   GqlPoolMinimal,
   GqlPoolQuantAmmWeighted,
+  Maybe,
+  QuantAmmWeightedParams,
 } from '../__generated__/graphql-types';
 import {
   DailyPerformance,
   Product,
   Strategy,
-  StrategyEnum,
   MonthlyPerformance,
   ProductTimeSeriesData,
   TimeSeriesData,
@@ -223,31 +224,31 @@ export const getProductFromPool = (
         metric: 'tvl',
         value: 1, // TODO: how to get this?
         maxScore: MAX_SCORE,
-        description: 'TVL rating is blah blah blah',
+        description: 'TVL rating is blah blah blah', // TODO: add proper description
       },
       {
         metric: 'performance',
         value: 1, // TODO: how to get this?
         maxScore: MAX_SCORE,
-        description: 'Performance rating is blah blah blah blah ',
+        description: 'Performance rating is blah blah blah blah ', // TODO: add proper description
       },
       {
         metric: 'adaptability',
-        value: getAdaptability('Fixed', '', ''), // TODO: get from pool
+        value: getAdaptabilityScore(pool as unknown as GqlPoolMinimal),
         maxScore: MAX_SCORE,
-        description: 'Adaptability rating is blah blah blah blah ',
+        description: 'Adaptability rating is blah blah blah blah ', // TODO: add proper description
       },
       {
         metric: 'diversification',
         value: pool.poolTokens.length > 5 ? 5 : pool.poolTokens.length - 1,
         maxScore: MAX_SCORE,
-        description: 'Diversification rating is blah blah blah blah ',
+        description: 'Diversification rating is blah blah blah blah ', // TODO: add proper description
       },
       {
         metric: 'yield',
         value: 1, // TODO: how to get this?
         maxScore: MAX_SCORE,
-        description: '',
+        description: 'Yield rating is blah blah blah blah ', // TODO: add proper description
       },
     ],
     timeSeries: snapshot?.timeSeries ?? ([] as TimeSeriesData[]),
@@ -275,6 +276,9 @@ export const getProductFromPool = (
     oneWeekPerformance: getCurrentSharePrice(dailyPerformance, '7d'),
     benchmarkNames: ['HODL'],
     benchmarkTimeSeries: [],
+    quantAmmWeightedParams: getMaybeQuantAmmWeightedParams(
+      pool as unknown as GqlPoolMinimal
+    ),
   };
 
   return product;
@@ -549,21 +553,43 @@ const mapDailyPerformanceToMonthlyPerformance = (
   return monthlyData;
 };
 
-// TODO: implement it properly
-const getStrategy = (pool: GqlPoolMinimal): Strategy => {
+const getMaybeQuantAmmWeightedParams = (
+  pool: GqlPoolMinimal
+): Maybe<QuantAmmWeightedParams> => {
   if (isQuantAmmPool(pool.type)) {
     const { quantAmmWeightedParams } =
       pool as unknown as GqlPoolQuantAmmWeighted;
-    const { details } = quantAmmWeightedParams ?? {};
+    return quantAmmWeightedParams ?? null;
+  }
+  return null;
+};
 
-    console.log('quantAmmWeightedParams details ==>', details);
+const getStrategy = (pool: GqlPoolMinimal): Strategy => {
+  const quantAmmWeightedParams = getMaybeQuantAmmWeightedParams(pool);
 
-    // if (Array.isArray(tags) && tags.length > 0) {
-    //   return Object.values(StrategyEnum).includes(tags[0] as Strategy)
-    //     ? (tags[0] as Strategy)
-    //     : 'NONE';
-    // }
+  if (quantAmmWeightedParams) {
+    const { details } = quantAmmWeightedParams;
+
+    return details?.find((detail) => detail.name === 'strategy')?.value as
+      | Strategy
+      | 'NONE';
   }
 
   return 'NONE';
+};
+
+const getAdaptabilityScore = (pool: GqlPoolMinimal): number => {
+  const quantAmmWeightedParams = getMaybeQuantAmmWeightedParams(pool);
+
+  if (quantAmmWeightedParams) {
+    const { details } = quantAmmWeightedParams;
+
+    const value = details?.find(
+      (detail) => detail.name === 'adaptabilityScore'
+    )?.value;
+
+    return value ? Number(value) : 0;
+  }
+
+  return 0;
 };

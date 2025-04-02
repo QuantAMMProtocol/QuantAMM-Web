@@ -333,7 +333,7 @@ export type GqlPoolAggregator = {
   poolTokens: Array<GqlPoolTokenDetail>;
   /** The protocol version on which the pool is deployed, 1, 2 or 3 */
   protocolVersion: Scalars['Int']['output'];
-  /** QuantAmm specific fields */
+  /** QuantAmmWeighted specific fields */
   quantAmmWeightedParams?: Maybe<QuantAmmWeightedParams>;
   /** Data specific to gyro pools */
   root3Alpha?: Maybe<Scalars['String']['output']>;
@@ -496,6 +496,11 @@ export type GqlPoolBase = {
   hook?: Maybe<GqlHook>;
   /** The pool id. This is equal to the address for protocolVersion 3 pools */
   id: Scalars['ID']['output'];
+  /**
+   * Deprecated
+   * @deprecated Removed without replacement
+   */
+  investConfig: GqlPoolInvestConfig;
   /** Liquidity management settings for v3 pools. */
   liquidityManagement?: Maybe<LiquidityManagement>;
   /** The name of the pool as per contract */
@@ -532,6 +537,11 @@ export type GqlPoolBase = {
   vaultVersion: Scalars['Int']['output'];
   /** The version of the pool type. */
   version: Scalars['Int']['output'];
+  /**
+   * Deprecated
+   * @deprecated Removed without replacement
+   */
+  withdrawConfig: GqlPoolWithdrawConfig;
 };
 
 export type GqlPoolBatchSwap = {
@@ -591,6 +601,8 @@ export type GqlPoolComposableStable = GqlPoolBase & {
   hasNestedErc4626: Scalars['Boolean']['output'];
   hook?: Maybe<GqlHook>;
   id: Scalars['ID']['output'];
+  /** @deprecated Removed without replacement */
+  investConfig: GqlPoolInvestConfig;
   liquidityManagement?: Maybe<LiquidityManagement>;
   name: Scalars['String']['output'];
   /** @deprecated Removed without replacement */
@@ -621,6 +633,8 @@ export type GqlPoolComposableStable = GqlPoolBase & {
   /** @deprecated use protocolVersion instead */
   vaultVersion: Scalars['Int']['output'];
   version: Scalars['Int']['output'];
+  /** @deprecated Removed without replacement */
+  withdrawConfig: GqlPoolWithdrawConfig;
 };
 
 export type GqlPoolComposableStableNested = {
@@ -733,6 +747,8 @@ export type GqlPoolElement = GqlPoolBase & {
   hasNestedErc4626: Scalars['Boolean']['output'];
   hook?: Maybe<GqlHook>;
   id: Scalars['ID']['output'];
+  /** @deprecated Removed without replacement */
+  investConfig: GqlPoolInvestConfig;
   liquidityManagement?: Maybe<LiquidityManagement>;
   name: Scalars['String']['output'];
   /**
@@ -760,6 +776,8 @@ export type GqlPoolElement = GqlPoolBase & {
   /** @deprecated use protocolVersion instead */
   vaultVersion: Scalars['Int']['output'];
   version: Scalars['Int']['output'];
+  /** @deprecated Removed without replacement */
+  withdrawConfig: GqlPoolWithdrawConfig;
 };
 
 /** Represents an event that occurs in a pool. */
@@ -899,6 +917,8 @@ export type GqlPoolFx = GqlPoolBase & {
   hasNestedErc4626: Scalars['Boolean']['output'];
   hook?: Maybe<GqlHook>;
   id: Scalars['ID']['output'];
+  /** @deprecated Removed without replacement */
+  investConfig: GqlPoolInvestConfig;
   lambda: Scalars['String']['output'];
   liquidityManagement?: Maybe<LiquidityManagement>;
   name: Scalars['String']['output'];
@@ -928,6 +948,8 @@ export type GqlPoolFx = GqlPoolBase & {
   /** @deprecated use protocolVersion instead */
   vaultVersion: Scalars['Int']['output'];
   version: Scalars['Int']['output'];
+  /** @deprecated Removed without replacement */
+  withdrawConfig: GqlPoolWithdrawConfig;
 };
 
 export type GqlPoolGyro = GqlPoolBase & {
@@ -952,6 +974,8 @@ export type GqlPoolGyro = GqlPoolBase & {
   hasNestedErc4626: Scalars['Boolean']['output'];
   hook?: Maybe<GqlHook>;
   id: Scalars['ID']['output'];
+  /** @deprecated Removed without replacement */
+  investConfig: GqlPoolInvestConfig;
   lambda: Scalars['String']['output'];
   liquidityManagement?: Maybe<LiquidityManagement>;
   name: Scalars['String']['output'];
@@ -994,7 +1018,23 @@ export type GqlPoolGyro = GqlPoolBase & {
   vaultVersion: Scalars['Int']['output'];
   version: Scalars['Int']['output'];
   w: Scalars['String']['output'];
+  /** @deprecated Removed without replacement */
+  withdrawConfig: GqlPoolWithdrawConfig;
   z: Scalars['String']['output'];
+};
+
+export type GqlPoolInvestConfig = {
+  __typename?: 'GqlPoolInvestConfig';
+  options: Array<GqlPoolInvestOption>;
+  proportionalEnabled: Scalars['Boolean']['output'];
+  singleAssetEnabled: Scalars['Boolean']['output'];
+};
+
+export type GqlPoolInvestOption = {
+  __typename?: 'GqlPoolInvestOption';
+  poolTokenAddress: Scalars['String']['output'];
+  poolTokenIndex: Scalars['Int']['output'];
+  tokenOptions: Array<GqlPoolToken>;
 };
 
 export type GqlPoolJoinExit = {
@@ -1044,6 +1084,8 @@ export type GqlPoolLiquidityBootstrapping = GqlPoolBase & {
   hasNestedErc4626: Scalars['Boolean']['output'];
   hook?: Maybe<GqlHook>;
   id: Scalars['ID']['output'];
+  /** @deprecated Removed without replacement */
+  investConfig: GqlPoolInvestConfig;
   liquidityManagement?: Maybe<LiquidityManagement>;
   name: Scalars['String']['output'];
   /** @deprecated Removed without replacement */
@@ -1074,6 +1116,8 @@ export type GqlPoolLiquidityBootstrapping = GqlPoolBase & {
   /** @deprecated use protocolVersion instead */
   vaultVersion: Scalars['Int']['output'];
   version: Scalars['Int']['output'];
+  /** @deprecated Removed without replacement */
+  withdrawConfig: GqlPoolWithdrawConfig;
 };
 
 export type GqlPoolMetaStable = GqlPoolBase & {
@@ -1095,6 +1139,8 @@ export type GqlPoolMetaStable = GqlPoolBase & {
   hasNestedErc4626: Scalars['Boolean']['output'];
   hook?: Maybe<GqlHook>;
   id: Scalars['ID']['output'];
+  /** @deprecated Removed without replacement */
+  investConfig: GqlPoolInvestConfig;
   liquidityManagement?: Maybe<LiquidityManagement>;
   name: Scalars['String']['output'];
   /**
@@ -1120,6 +1166,8 @@ export type GqlPoolMetaStable = GqlPoolBase & {
   /** @deprecated use protocolVersion instead */
   vaultVersion: Scalars['Int']['output'];
   version: Scalars['Int']['output'];
+  /** @deprecated Removed without replacement */
+  withdrawConfig: GqlPoolWithdrawConfig;
 };
 
 /** The pool schema returned for poolGetPools (pool list query) */
@@ -1252,6 +1300,8 @@ export type GqlPoolQuantAmmWeighted = GqlPoolBase & {
   hasNestedErc4626: Scalars['Boolean']['output'];
   hook?: Maybe<GqlHook>;
   id: Scalars['ID']['output'];
+  /** @deprecated Removed without replacement */
+  investConfig: GqlPoolInvestConfig;
   liquidityManagement?: Maybe<LiquidityManagement>;
   name: Scalars['String']['output'];
   /** @deprecated Removed without replacement */
@@ -1283,6 +1333,8 @@ export type GqlPoolQuantAmmWeighted = GqlPoolBase & {
   /** @deprecated use protocolVersion instead */
   vaultVersion: Scalars['Int']['output'];
   version: Scalars['Int']['output'];
+  /** @deprecated Removed without replacement */
+  withdrawConfig: GqlPoolWithdrawConfig;
 };
 
 export type GqlPoolSnapshot = {
@@ -1333,6 +1385,8 @@ export type GqlPoolStable = GqlPoolBase & {
   hasNestedErc4626: Scalars['Boolean']['output'];
   hook?: Maybe<GqlHook>;
   id: Scalars['ID']['output'];
+  /** @deprecated Removed without replacement */
+  investConfig: GqlPoolInvestConfig;
   liquidityManagement?: Maybe<LiquidityManagement>;
   name: Scalars['String']['output'];
   /**
@@ -1358,6 +1412,8 @@ export type GqlPoolStable = GqlPoolBase & {
   /** @deprecated use protocolVersion instead */
   vaultVersion: Scalars['Int']['output'];
   version: Scalars['Int']['output'];
+  /** @deprecated Removed without replacement */
+  withdrawConfig: GqlPoolWithdrawConfig;
 };
 
 export type GqlPoolStaking = {
@@ -1771,6 +1827,8 @@ export type GqlPoolWeighted = GqlPoolBase & {
   hasNestedErc4626: Scalars['Boolean']['output'];
   hook?: Maybe<GqlHook>;
   id: Scalars['ID']['output'];
+  /** @deprecated Removed without replacement */
+  investConfig: GqlPoolInvestConfig;
   liquidityManagement?: Maybe<LiquidityManagement>;
   name: Scalars['String']['output'];
   /** @deprecated Removed without replacement */
@@ -1801,6 +1859,22 @@ export type GqlPoolWeighted = GqlPoolBase & {
   /** @deprecated use protocolVersion instead */
   vaultVersion: Scalars['Int']['output'];
   version: Scalars['Int']['output'];
+  /** @deprecated Removed without replacement */
+  withdrawConfig: GqlPoolWithdrawConfig;
+};
+
+export type GqlPoolWithdrawConfig = {
+  __typename?: 'GqlPoolWithdrawConfig';
+  options: Array<GqlPoolWithdrawOption>;
+  proportionalEnabled: Scalars['Boolean']['output'];
+  singleAssetEnabled: Scalars['Boolean']['output'];
+};
+
+export type GqlPoolWithdrawOption = {
+  __typename?: 'GqlPoolWithdrawOption';
+  poolTokenAddress: Scalars['String']['output'];
+  poolTokenIndex: Scalars['Int']['output'];
+  tokenOptions: Array<GqlPoolToken>;
 };
 
 /** Returns the price impact of the path. If there is an error in the price impact calculation, priceImpact will be undefined but the error string is populated. */
@@ -3077,7 +3151,7 @@ export type GetPoolByIdQueryVariables = Exact<{
 }>;
 
 
-export type GetPoolByIdQuery = { __typename?: 'Query', poolGetPool: { __typename: 'GqlPoolComposableStable', address: any, chain: GqlChain, name: string, decimals: number, type: GqlPoolType, id: string, symbol: string, createTime: number, owner?: any | null, tags?: Array<string | null> | null, hook?: { __typename?: 'GqlHook', type: GqlHookType } | null, poolTokens: Array<{ __typename: 'GqlPoolTokenDetail', weight?: any | null, symbol: string, address: string, index: number }>, dynamicData: { __typename?: 'GqlPoolDynamicData', poolId: string, fees24h: any, swapFee: any, totalLiquidity: any, totalShares: any, volume24h: any, yieldCapture48h: any, aprItems: Array<{ __typename?: 'GqlPoolAprItem', id: string, apr: number, type: GqlPoolAprItemType, rewardTokenSymbol?: string | null }> } } | { __typename: 'GqlPoolElement', address: any, chain: GqlChain, name: string, decimals: number, type: GqlPoolType, id: string, symbol: string, createTime: number, owner?: any | null, tags?: Array<string | null> | null, hook?: { __typename?: 'GqlHook', type: GqlHookType } | null, poolTokens: Array<{ __typename: 'GqlPoolTokenDetail', weight?: any | null, symbol: string, address: string, index: number }>, dynamicData: { __typename?: 'GqlPoolDynamicData', poolId: string, fees24h: any, swapFee: any, totalLiquidity: any, totalShares: any, volume24h: any, yieldCapture48h: any, aprItems: Array<{ __typename?: 'GqlPoolAprItem', id: string, apr: number, type: GqlPoolAprItemType, rewardTokenSymbol?: string | null }> } } | { __typename: 'GqlPoolFx', address: any, chain: GqlChain, name: string, decimals: number, type: GqlPoolType, id: string, symbol: string, createTime: number, owner?: any | null, tags?: Array<string | null> | null, hook?: { __typename?: 'GqlHook', type: GqlHookType } | null, poolTokens: Array<{ __typename: 'GqlPoolTokenDetail', weight?: any | null, symbol: string, address: string, index: number }>, dynamicData: { __typename?: 'GqlPoolDynamicData', poolId: string, fees24h: any, swapFee: any, totalLiquidity: any, totalShares: any, volume24h: any, yieldCapture48h: any, aprItems: Array<{ __typename?: 'GqlPoolAprItem', id: string, apr: number, type: GqlPoolAprItemType, rewardTokenSymbol?: string | null }> } } | { __typename: 'GqlPoolGyro', address: any, chain: GqlChain, name: string, decimals: number, type: GqlPoolType, id: string, symbol: string, createTime: number, owner?: any | null, tags?: Array<string | null> | null, hook?: { __typename?: 'GqlHook', type: GqlHookType } | null, poolTokens: Array<{ __typename: 'GqlPoolTokenDetail', weight?: any | null, symbol: string, address: string, index: number }>, dynamicData: { __typename?: 'GqlPoolDynamicData', poolId: string, fees24h: any, swapFee: any, totalLiquidity: any, totalShares: any, volume24h: any, yieldCapture48h: any, aprItems: Array<{ __typename?: 'GqlPoolAprItem', id: string, apr: number, type: GqlPoolAprItemType, rewardTokenSymbol?: string | null }> } } | { __typename: 'GqlPoolLiquidityBootstrapping', address: any, chain: GqlChain, name: string, decimals: number, type: GqlPoolType, id: string, symbol: string, createTime: number, owner?: any | null, tags?: Array<string | null> | null, hook?: { __typename?: 'GqlHook', type: GqlHookType } | null, poolTokens: Array<{ __typename: 'GqlPoolTokenDetail', weight?: any | null, symbol: string, address: string, index: number }>, dynamicData: { __typename?: 'GqlPoolDynamicData', poolId: string, fees24h: any, swapFee: any, totalLiquidity: any, totalShares: any, volume24h: any, yieldCapture48h: any, aprItems: Array<{ __typename?: 'GqlPoolAprItem', id: string, apr: number, type: GqlPoolAprItemType, rewardTokenSymbol?: string | null }> } } | { __typename: 'GqlPoolMetaStable', address: any, chain: GqlChain, name: string, decimals: number, type: GqlPoolType, id: string, symbol: string, createTime: number, owner?: any | null, tags?: Array<string | null> | null, hook?: { __typename?: 'GqlHook', type: GqlHookType } | null, poolTokens: Array<{ __typename: 'GqlPoolTokenDetail', weight?: any | null, symbol: string, address: string, index: number }>, dynamicData: { __typename?: 'GqlPoolDynamicData', poolId: string, fees24h: any, swapFee: any, totalLiquidity: any, totalShares: any, volume24h: any, yieldCapture48h: any, aprItems: Array<{ __typename?: 'GqlPoolAprItem', id: string, apr: number, type: GqlPoolAprItemType, rewardTokenSymbol?: string | null }> } } | { __typename: 'GqlPoolQuantAmmWeighted', address: any, chain: GqlChain, name: string, decimals: number, type: GqlPoolType, id: string, symbol: string, createTime: number, owner?: any | null, tags?: Array<string | null> | null, hook?: { __typename?: 'GqlHook', type: GqlHookType } | null, poolTokens: Array<{ __typename: 'GqlPoolTokenDetail', weight?: any | null, symbol: string, address: string, index: number }>, dynamicData: { __typename?: 'GqlPoolDynamicData', poolId: string, fees24h: any, swapFee: any, totalLiquidity: any, totalShares: any, volume24h: any, yieldCapture48h: any, aprItems: Array<{ __typename?: 'GqlPoolAprItem', id: string, apr: number, type: GqlPoolAprItemType, rewardTokenSymbol?: string | null }> } } | { __typename: 'GqlPoolStable', address: any, chain: GqlChain, name: string, decimals: number, type: GqlPoolType, id: string, symbol: string, createTime: number, owner?: any | null, tags?: Array<string | null> | null, hook?: { __typename?: 'GqlHook', type: GqlHookType } | null, poolTokens: Array<{ __typename: 'GqlPoolTokenDetail', weight?: any | null, symbol: string, address: string, index: number }>, dynamicData: { __typename?: 'GqlPoolDynamicData', poolId: string, fees24h: any, swapFee: any, totalLiquidity: any, totalShares: any, volume24h: any, yieldCapture48h: any, aprItems: Array<{ __typename?: 'GqlPoolAprItem', id: string, apr: number, type: GqlPoolAprItemType, rewardTokenSymbol?: string | null }> } } | { __typename: 'GqlPoolWeighted', address: any, chain: GqlChain, name: string, decimals: number, type: GqlPoolType, id: string, symbol: string, createTime: number, owner?: any | null, tags?: Array<string | null> | null, hook?: { __typename?: 'GqlHook', type: GqlHookType } | null, poolTokens: Array<{ __typename: 'GqlPoolTokenDetail', weight?: any | null, symbol: string, address: string, index: number }>, dynamicData: { __typename?: 'GqlPoolDynamicData', poolId: string, fees24h: any, swapFee: any, totalLiquidity: any, totalShares: any, volume24h: any, yieldCapture48h: any, aprItems: Array<{ __typename?: 'GqlPoolAprItem', id: string, apr: number, type: GqlPoolAprItemType, rewardTokenSymbol?: string | null }> } } };
+export type GetPoolByIdQuery = { __typename?: 'Query', poolGetPool: { __typename: 'GqlPoolComposableStable', address: any, chain: GqlChain, name: string, decimals: number, type: GqlPoolType, id: string, symbol: string, createTime: number, owner?: any | null, tags?: Array<string | null> | null, hook?: { __typename?: 'GqlHook', type: GqlHookType } | null, poolTokens: Array<{ __typename: 'GqlPoolTokenDetail', weight?: any | null, symbol: string, address: string, index: number }>, dynamicData: { __typename?: 'GqlPoolDynamicData', poolId: string, fees24h: any, swapFee: any, totalLiquidity: any, totalShares: any, volume24h: any, yieldCapture48h: any, aprItems: Array<{ __typename?: 'GqlPoolAprItem', id: string, apr: number, type: GqlPoolAprItemType, rewardTokenSymbol?: string | null }> } } | { __typename: 'GqlPoolElement', address: any, chain: GqlChain, name: string, decimals: number, type: GqlPoolType, id: string, symbol: string, createTime: number, owner?: any | null, tags?: Array<string | null> | null, hook?: { __typename?: 'GqlHook', type: GqlHookType } | null, poolTokens: Array<{ __typename: 'GqlPoolTokenDetail', weight?: any | null, symbol: string, address: string, index: number }>, dynamicData: { __typename?: 'GqlPoolDynamicData', poolId: string, fees24h: any, swapFee: any, totalLiquidity: any, totalShares: any, volume24h: any, yieldCapture48h: any, aprItems: Array<{ __typename?: 'GqlPoolAprItem', id: string, apr: number, type: GqlPoolAprItemType, rewardTokenSymbol?: string | null }> } } | { __typename: 'GqlPoolFx', address: any, chain: GqlChain, name: string, decimals: number, type: GqlPoolType, id: string, symbol: string, createTime: number, owner?: any | null, tags?: Array<string | null> | null, hook?: { __typename?: 'GqlHook', type: GqlHookType } | null, poolTokens: Array<{ __typename: 'GqlPoolTokenDetail', weight?: any | null, symbol: string, address: string, index: number }>, dynamicData: { __typename?: 'GqlPoolDynamicData', poolId: string, fees24h: any, swapFee: any, totalLiquidity: any, totalShares: any, volume24h: any, yieldCapture48h: any, aprItems: Array<{ __typename?: 'GqlPoolAprItem', id: string, apr: number, type: GqlPoolAprItemType, rewardTokenSymbol?: string | null }> } } | { __typename: 'GqlPoolGyro', address: any, chain: GqlChain, name: string, decimals: number, type: GqlPoolType, id: string, symbol: string, createTime: number, owner?: any | null, tags?: Array<string | null> | null, hook?: { __typename?: 'GqlHook', type: GqlHookType } | null, poolTokens: Array<{ __typename: 'GqlPoolTokenDetail', weight?: any | null, symbol: string, address: string, index: number }>, dynamicData: { __typename?: 'GqlPoolDynamicData', poolId: string, fees24h: any, swapFee: any, totalLiquidity: any, totalShares: any, volume24h: any, yieldCapture48h: any, aprItems: Array<{ __typename?: 'GqlPoolAprItem', id: string, apr: number, type: GqlPoolAprItemType, rewardTokenSymbol?: string | null }> } } | { __typename: 'GqlPoolLiquidityBootstrapping', address: any, chain: GqlChain, name: string, decimals: number, type: GqlPoolType, id: string, symbol: string, createTime: number, owner?: any | null, tags?: Array<string | null> | null, hook?: { __typename?: 'GqlHook', type: GqlHookType } | null, poolTokens: Array<{ __typename: 'GqlPoolTokenDetail', weight?: any | null, symbol: string, address: string, index: number }>, dynamicData: { __typename?: 'GqlPoolDynamicData', poolId: string, fees24h: any, swapFee: any, totalLiquidity: any, totalShares: any, volume24h: any, yieldCapture48h: any, aprItems: Array<{ __typename?: 'GqlPoolAprItem', id: string, apr: number, type: GqlPoolAprItemType, rewardTokenSymbol?: string | null }> } } | { __typename: 'GqlPoolMetaStable', address: any, chain: GqlChain, name: string, decimals: number, type: GqlPoolType, id: string, symbol: string, createTime: number, owner?: any | null, tags?: Array<string | null> | null, hook?: { __typename?: 'GqlHook', type: GqlHookType } | null, poolTokens: Array<{ __typename: 'GqlPoolTokenDetail', weight?: any | null, symbol: string, address: string, index: number }>, dynamicData: { __typename?: 'GqlPoolDynamicData', poolId: string, fees24h: any, swapFee: any, totalLiquidity: any, totalShares: any, volume24h: any, yieldCapture48h: any, aprItems: Array<{ __typename?: 'GqlPoolAprItem', id: string, apr: number, type: GqlPoolAprItemType, rewardTokenSymbol?: string | null }> } } | { __typename: 'GqlPoolQuantAmmWeighted', address: any, chain: GqlChain, name: string, decimals: number, type: GqlPoolType, id: string, symbol: string, createTime: number, owner?: any | null, tags?: Array<string | null> | null, quantAmmWeightedParams?: { __typename?: 'QuantAmmWeightedParams', absoluteWeightGuardRail: string, epsilonMax: string, lambda: Array<string>, lastInterpolationTimePossible: string, lastUpdateIntervalTime: string, maxTradeSizeRatio: string, oracleStalenessThreshold: string, poolRegistry: string, updateInterval: string, weightBlockMultipliers: Array<string>, weightsAtLastUpdateInterval: Array<string>, details: Array<{ __typename?: 'QuantAMMWeightedDetail', name: string, value: string }> } | null, hook?: { __typename?: 'GqlHook', type: GqlHookType } | null, poolTokens: Array<{ __typename: 'GqlPoolTokenDetail', weight?: any | null, symbol: string, address: string, index: number }>, dynamicData: { __typename?: 'GqlPoolDynamicData', poolId: string, fees24h: any, swapFee: any, totalLiquidity: any, totalShares: any, volume24h: any, yieldCapture48h: any, aprItems: Array<{ __typename?: 'GqlPoolAprItem', id: string, apr: number, type: GqlPoolAprItemType, rewardTokenSymbol?: string | null }> } } | { __typename: 'GqlPoolStable', address: any, chain: GqlChain, name: string, decimals: number, type: GqlPoolType, id: string, symbol: string, createTime: number, owner?: any | null, tags?: Array<string | null> | null, hook?: { __typename?: 'GqlHook', type: GqlHookType } | null, poolTokens: Array<{ __typename: 'GqlPoolTokenDetail', weight?: any | null, symbol: string, address: string, index: number }>, dynamicData: { __typename?: 'GqlPoolDynamicData', poolId: string, fees24h: any, swapFee: any, totalLiquidity: any, totalShares: any, volume24h: any, yieldCapture48h: any, aprItems: Array<{ __typename?: 'GqlPoolAprItem', id: string, apr: number, type: GqlPoolAprItemType, rewardTokenSymbol?: string | null }> } } | { __typename: 'GqlPoolWeighted', address: any, chain: GqlChain, name: string, decimals: number, type: GqlPoolType, id: string, symbol: string, createTime: number, owner?: any | null, tags?: Array<string | null> | null, hook?: { __typename?: 'GqlHook', type: GqlHookType } | null, poolTokens: Array<{ __typename: 'GqlPoolTokenDetail', weight?: any | null, symbol: string, address: string, index: number }>, dynamicData: { __typename?: 'GqlPoolDynamicData', poolId: string, fees24h: any, swapFee: any, totalLiquidity: any, totalShares: any, volume24h: any, yieldCapture48h: any, aprItems: Array<{ __typename?: 'GqlPoolAprItem', id: string, apr: number, type: GqlPoolAprItemType, rewardTokenSymbol?: string | null }> } } };
 
 export type GetPoolsQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -3175,6 +3249,25 @@ export const GetPoolByIdDocument = gql`
       yieldCapture48h
     }
     tags
+    ... on GqlPoolQuantAmmWeighted {
+      quantAmmWeightedParams {
+        absoluteWeightGuardRail
+        details {
+          name
+          value
+        }
+        epsilonMax
+        lambda
+        lastInterpolationTimePossible
+        lastUpdateIntervalTime
+        maxTradeSizeRatio
+        oracleStalenessThreshold
+        poolRegistry
+        updateInterval
+        weightBlockMultipliers
+        weightsAtLastUpdateInterval
+      }
+    }
   }
 }
     `;
