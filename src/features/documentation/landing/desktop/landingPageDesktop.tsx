@@ -15,7 +15,7 @@ const items: { component: React.ComponentType; style: React.CSSProperties }[] =
     {
       component: QuantAmmExplainer,
       style: {
-        backgroundColor: 'red',
+        backgroundColor: '#FFFEF2',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
