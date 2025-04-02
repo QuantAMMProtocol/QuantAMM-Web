@@ -3,6 +3,7 @@ import {
   GqlPoolDynamicData,
   GqlPoolType,
   Maybe,
+  QuantAmmWeightedParams,
 } from '../__generated__/graphql-types';
 import { SimulationRunBreakdown } from '../features/simulationResults/simulationResultSummaryModels';
 
@@ -136,6 +137,7 @@ export interface Product {
   dynamicData?: GqlPoolDynamicData;
   simulationRunBreakdown?: SimulationRunBreakdown;
   sortableApr?: number;
+  quantAmmWeightedParams?: Maybe<QuantAmmWeightedParams>;
 }
 
 export type ProductMap = Record<string, Product>;

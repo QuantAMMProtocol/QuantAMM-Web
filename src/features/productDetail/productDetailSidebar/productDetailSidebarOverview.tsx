@@ -35,7 +35,9 @@ export const ProductDetailSidebarOverview: FC<
       <ProductDetailSidebarElement side="left" text="Pool type" />
       <ProductDetailSidebarElement
         side="right"
-        text={product.strategy == 'NONE' ? product.tokenType : product.strategy}
+        text={
+          product.strategy === 'NONE' ? product.tokenType : product.strategy
+        }
       />
 
       <ProductDetailSidebarElement side="left" text="TVL" />

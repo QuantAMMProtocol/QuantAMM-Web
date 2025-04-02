@@ -36,5 +36,26 @@ query GetPoolById($id: String!, $chain: GqlChain!) {
       yieldCapture48h
     }
     tags
+    ... on GqlPoolQuantAmmWeighted {
+      quantAmmWeightedParams {
+        absoluteWeightGuardRail
+        details {
+          name
+          category
+          type
+          value
+        }
+        epsilonMax
+        lambda
+        lastInterpolationTimePossible
+        lastUpdateIntervalTime
+        maxTradeSizeRatio
+        oracleStalenessThreshold
+        poolRegistry
+        updateInterval
+        weightBlockMultipliers
+        weightsAtLastUpdateInterval
+      }
+    }
   }
 }
