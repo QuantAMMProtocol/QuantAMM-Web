@@ -26,7 +26,13 @@ export type Pool =
   | 'quantAMMChannelFollowing'
   | 'quantAMMMeanReversionChannel'
   | 'hodlEthUsdc'
-  | 'hodlBtcEthUsdc';
+  | 'hodlBtcEthUsdc'
+  | 'solExampleMomentum'
+  | 'solExampleAntimomentum'
+  | 'solExamplePowerChannel'
+  | 'solExampleChannelFollowing'
+  | 'solExampleHodl'
+  | 'solExampleWeighted';
 
 // Helper to convert MessagePack data to breakdown DTO
 export const convertBreakdownDtoToBreakdown = (
@@ -106,6 +112,13 @@ export const getBreakdown = async (
     hodlEthUsdc: './prerun_sims/HODL_-ETH-USDC.msgpack',
     hodlBtcEthUsdc:
       './prerun_sims/Momentum[k_per_day_50][memory_days_5]_-ETH-BTC-USDC.msgpack', // Example; replace with actual path
+    solExampleMomentum: './prerun_sims/BTC-ETH-SOL-USDC-momentum-daily.msgpack',
+    solExampleAntimomentum: './prerun_sims/BTC-ETH-SOL-USDC-antimomentum.msgpack',
+    solExamplePowerChannel: './prerun_sims/BTC-ETH-SOL-USDC-power-channel-daily.msgpack',
+    solExampleChannelFollowing:
+      './prerun_sims/BTC-ETH-SOL-USDC-channel-following-daily.msgpack',
+    solExampleHodl: './prerun_sims/BTC-ETH-SOL-USDC-hodl-daily.msgpack',
+    solExampleWeighted:'./prerun_sims/BTC-ETH-SOL-USDC-weighted.msgpack',
   };
 
   const poolFilePath = poolFileMapping[poolName];
@@ -116,11 +129,9 @@ export const getBreakdown = async (
 
   // Fetch the MessagePack file dynamically
   const response = await fetch(poolFilePath);
-  console.log('response', response);
   const buffer = await response.arrayBuffer();
-  console.log('buffer', buffer);
+
   const decodedData = decode(new Uint8Array(buffer));
-  console.log('decodedata', decodedData);
 
   return convertBreakdownDtoToBreakdown(
     decodedData as SimulationRunBreakdownDto

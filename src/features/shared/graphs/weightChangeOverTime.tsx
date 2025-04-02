@@ -30,7 +30,7 @@ export const WeightChangeOverTimeGraph: FC<WeightChangeOverTimeGraphProps> = ({
   simulationRunBreakdown,
   yAxisOverride,
   legendOverride,
-  tickIntervalInMonths = 3,
+  tickIntervalInMonths = 6,
   overrideChartTheme,
   overrideXAxisInterval,
 }) => {
@@ -70,7 +70,6 @@ export const WeightChangeOverTimeGraph: FC<WeightChangeOverTimeGraphProps> = ({
   const getNormalisedAreaSeries = (
     breakdown: SimulationRunBreakdown
   ): AgAreaSeriesOptions[] => {
-    console.log(breakdown);
     if (
       !breakdown ||
       breakdown?.simulationRun?.poolConstituents?.length === 0
@@ -97,12 +96,12 @@ export const WeightChangeOverTimeGraph: FC<WeightChangeOverTimeGraphProps> = ({
     return {
       type: 'time',
       interval: {
-        step: time.month.every(
-          overrideXAxisInterval ? overrideXAxisInterval : tickIntervalInMonths
-        ),
+      step: time.month.every(
+        overrideXAxisInterval ? overrideXAxisInterval : tickIntervalInMonths
+      ),
       },
       label: {
-        format: '%m-%y',
+      format: '%Y-%m',
       },
     };
   }, [tickIntervalInMonths, overrideXAxisInterval]);
@@ -112,7 +111,7 @@ export const WeightChangeOverTimeGraph: FC<WeightChangeOverTimeGraphProps> = ({
       options={{
         height: 230,
         padding: {
-          right: 20,
+          right: 40,
           top: 20,
           bottom: 20,
           left: 0,

@@ -103,7 +103,7 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
             icon: <LineChartOutlined />,
           },
           {
-            key: 'simulation-comparer',
+            key: 'simulation-results-comparer',
             label: 'Multi-run Simulation Results Comparer',
             icon: <RadarChartOutlined />,
           },
@@ -115,6 +115,11 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
         ],
         style: { marginLeft: 'auto' }, // Align to the right
       },
+      {
+        key: 'tos',
+        label: 'Terms of Service',
+        icon: <LineChartOutlined />,
+      }
     ];
   }
 
@@ -170,7 +175,7 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
             icon: <LineChartOutlined />,
           },
           {
-            key: 'simulation-comparer',
+            key: 'simulation-results-comparer',
             label: 'Multi-run Simulation Results Comparer',
             icon: <RadarChartOutlined />,
           },
@@ -180,6 +185,10 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
             icon: <LineChartOutlined />,
           },
         ],
+      },
+      {
+        key: 'tos',
+        label: 'Terms of Service',
       },
       {
         key: 'product-explorer',

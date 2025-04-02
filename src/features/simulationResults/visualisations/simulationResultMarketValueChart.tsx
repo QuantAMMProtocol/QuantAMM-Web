@@ -91,14 +91,16 @@ export function SimulationResultMarketValueChart(props: BreakdownProps) {
       type: 'time',
       interval: {
         step:
-          dataLength > 350
-            ? agCharts.time.month.every(6)
-            : dataLength > 150
-              ? agCharts.time.month.every(3)
-              : agCharts.time.month.every(1),
+          props.overrideXAxisInterval != undefined
+            ? agCharts.time.month.every(props.overrideXAxisInterval)
+            : dataLength > 350
+              ? agCharts.time.month.every(6)
+              : dataLength > 150
+                ? agCharts.time.month.every(3)
+                : agCharts.time.month.every(1),
       },
       label: {
-        format: '%m/%y',
+        format: '%Y-%m',
       },
     };
   }
@@ -120,6 +122,9 @@ export function SimulationResultMarketValueChart(props: BreakdownProps) {
                     enabled: true,
                     height: 5,
                     spacing: 6,
+                  },
+                  padding:{
+                    right:40
                   },
                   axes: [
                     getTimeAxisOption(

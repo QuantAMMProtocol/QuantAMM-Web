@@ -154,12 +154,12 @@ export function ConvertToUpdateRuleDto(rule: UpdateRule): UpdateRuleDto {
 
   convertedFactors.push({
     name: 'chunk_period',
-    value: ['60'],
+    value: ['1440'],
   });
 
   convertedFactors.push({
     name: 'weight_interpolation_period',
-    value: ['60'],
+    value: ['1440'],
   });
 
   return {

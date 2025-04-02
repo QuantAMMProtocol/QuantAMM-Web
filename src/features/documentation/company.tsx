@@ -102,9 +102,9 @@ export function CompanyPage() {
             H2 2024 - Cyfrin/Codehawks audits awaiting V3 launch
           </Timeline.Item>
           <Timeline.Item color="green">
-            March/April 2025 - QuantAMM Launches BTF
+            April 2025 - QuantAMM Launches BTF
           </Timeline.Item>
         </Timeline>
-      </div></div>: <VisionOverview />
+      </div></div> : <VisionOverview backgroundColor="#162536"/>
     );
     }

@@ -4,6 +4,7 @@ import { ResearchExplorerMobile } from './researchExplorerMobile';
 import { VisionOverviewMobile } from './visionOverviewMobile';
 import { TimelineMobile } from './timelineMobile';
 import { ContactCompanyMobile } from './contactCompany';
+import { StrategySummaryMobile } from './strategySummaryMobile';
 
 export function LandingPageMobile() {
   
@@ -11,6 +12,7 @@ export function LandingPageMobile() {
     <div style={{ width: '100%', padding: '10px', textAlign: 'center' }}>
       <BannerMobile />
       <QuantAMMExplainerMobile />
+      <StrategySummaryMobile />
       <ResearchExplorerMobile />
       <VisionOverviewMobile />
       <TimelineMobile />

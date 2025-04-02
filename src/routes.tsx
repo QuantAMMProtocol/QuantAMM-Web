@@ -10,6 +10,8 @@ import { ROUTES } from './routesEnum';
 import LandingPage from './features/documentation/landing/landingPage';
 import { Research } from './features/documentation/research';
 import { CompanyPage } from './features/documentation/company';
+import { ContactCompany } from './features/documentation/landing/desktop/contactCompany';
+import TermsOfService from './features/documentation/landing/termsOfService';
 
 const BASE_ROUTE = '/';
 
@@ -69,6 +71,10 @@ export const routes = createBrowserRouter([
         element: <CoinData />,
       },
       {
+        path:ROUTES.CONTACT,
+        element: <ContactCompany />
+      },
+      {
         path: ROUTES.SIMULATION_RUNNER,
         element: <SimulationRunner />,
       },
@@ -76,6 +82,10 @@ export const routes = createBrowserRouter([
         path: ROUTES.SIMULATION_COMPARER,
         element: <SimulationSavedResultComparison />,
       },
+      {
+        path: ROUTES.TOS,
+        element: <TermsOfService />,
+      }
     ],
   },
 ]);

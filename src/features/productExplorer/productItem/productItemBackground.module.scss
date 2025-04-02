@@ -1,6 +1,6 @@
 .product-item__background {
   background-image: url('/background/background-noise.png');
-  width: 100%;
+  width: calc(100% - 2px);
   height: 100%;
   position: relative;
 

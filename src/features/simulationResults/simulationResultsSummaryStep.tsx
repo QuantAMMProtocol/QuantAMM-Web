@@ -38,6 +38,8 @@ const { TabPane } = Tabs;
 export interface BreakdownProps {
   breakdowns: SimulationRunBreakdown[];
   forceViewResults: boolean;
+  overrideXAxisInterval?: number;
+  overrideYAxisInterval?: number;
 }
 
 export function SimulationResultsSummaryStep(props: BreakdownProps) {
