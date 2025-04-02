@@ -41,6 +41,8 @@ query GetPoolById($id: String!, $chain: GqlChain!) {
         absoluteWeightGuardRail
         details {
           name
+          category
+          type
           value
         }
         epsilonMax
