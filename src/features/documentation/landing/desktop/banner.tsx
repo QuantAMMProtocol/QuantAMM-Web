@@ -98,7 +98,7 @@ export function Banner() {
           }}
         >
           <Col
-            span={9}
+            span={8}
             style={{
               paddingTop: '5vh',
               paddingLeft:'15px',
@@ -478,9 +478,8 @@ export function Banner() {
               </p>
             </motion.div>
           </Col>
-          <Col span={1}></Col>
           <Col
-            span={5}
+            span={8}
             style={{
               paddingTop: '5vh',
               display: 'flex',
