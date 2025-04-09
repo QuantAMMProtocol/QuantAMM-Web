@@ -2,11 +2,18 @@ import { Parallax, ParallaxLayer } from '@react-spring/parallax';
 import { Col, Row, Tag, Tooltip } from 'antd';
 import { Typography } from 'antd';
 import { motion } from 'framer-motion';
-import { ProductItemOverviewGraph } from '../../../shared';
+import { AgGauge } from 'ag-charts-react';
 
 const { Title } = Typography;
 
 export function Banner() {
+  const performanceStages = [
+    'Themed Baskets',
+    'Earns Swap Fees',
+    'No streaming Fees',
+    'Reactive daily Strategies',
+  ];
+
   return (
     <Parallax
       pages={1}
@@ -50,7 +57,8 @@ export function Banner() {
                 style={{
                   color: 'white',
                   textAlign: 'center',
-                  marginBottom: '0px',
+                  marginTop: '10px',
+                  marginBottom:'0px',
                   fontWeight: '400',
                 }}
               >
@@ -73,8 +81,7 @@ export function Banner() {
                   marginTop: '0px',
                 }}
               >
-                BLOCKCHAIN TRADED FUNDS - DYNAMIC STRATEGY LIQUIDITY POOLS THAT
-                CAPITALISE ON INHERENT PRICE VOLATILITY
+                DYNAMIC STRATEGY LIQUIDITY POOLS CAPITALISE ON PRICE VOLATILITY WHILE STILL EARNING FEES AND YIELD
               </p>
             </motion.div>
           </Col>
@@ -90,14 +97,15 @@ export function Banner() {
             position: 'relative',
           }}
         >
-          <Col span={1}></Col>
           <Col
-            span={7}
+            span={9}
             style={{
               paddingTop: '5vh',
+              paddingLeft:'15px',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'flex-end',
+              width:'100%'
             }}
           >
             <motion.div
@@ -109,47 +117,55 @@ export function Banner() {
                 scale: { type: 'spring', visualDuration: 3, bounce: 0.1 },
               }}
             >
-              <div style={{ display: 'flex', justifyContent: 'center' }}>
-                <ProductItemOverviewGraph
-                  orientationOverride={'fixed'}
-                  isDarkTheme={true}
-                  data={[
-                    {
-                      metric: 'YIELD',
-                      value: 3,
-                      maxScore: 5,
-                      description: 'Earn fees like a liquidity pool',
-                    },
-                    {
-                      metric: 'ADAPTABILITY',
-                      value: 5,
-                      maxScore: 5,
-                      description: 'Earn fees like a liquidity pool',
-                    },
-                    {
-                      metric: 'DIVERSITY',
-                      value: 5,
-                      maxScore: 5,
-                      description: 'Earn fees like a liquidity pool',
-                    },
-                    {
-                      metric: 'SOPHISTICATION',
-                      value: 4,
-                      maxScore: 5,
-                      description: 'Earn fees like a liquidity pool',
-                    },
-                    {
-                      metric: 'FIRE AND FORGET',
-                      value: 4,
-                      maxScore: 5,
-                      description: 'Earn fees like a liquidity pool',
-                    },
-                  ]}
-                />
+              <div style={{ width:'100%' }} id='quantammGauge'>
+                <AgGauge
+                              options={{
+                                type: 'linear-gauge',
+                                theme: 'ag-financial-dark',
+                                direction: 'horizontal',
+                                container: document.getElementById('quantammGauge'),
+                                value: 8,
+                                scale: {
+                                  min: 0.5,
+                                  max: 4.5,
+                                  label: {
+                                    fontFamily: 'Jost',
+                                    placement: 'after',
+                                    formatter: ({ index }) => {
+                                      return `${performanceStages[index]}`;
+                                    },
+                                    fontSize:9
+                                  },
+                                  interval: {
+                                    values: [1, 2, 3, 4],
+                                  },
+                                },
+                                bar: {
+                                  fillMode: 'continuous',
+                                  fills: [
+                                    { color: 'rgba(166, 0, 0, 0.6)', stop: 1 },
+                                    { color: 'rgba(220, 109, 6, 0.6)', stop: 2 },
+                                    { color: 'rgba(240, 228, 6, 0.6)', stop: 3 },
+                                    { color: 'rgba(74, 189, 2, 0.6)', stop: 4 },
+                                  ],
+                                },
+                
+                                segmentation: {
+                                  enabled: true,
+                                  interval: {
+                                    values: [1, 2, 3, 4],
+                                  },
+                                  spacing: 2,
+                                },
+                                cornerMode: 'container',
+                                cornerRadius: 99,
+                                background: {
+                                  visible: false,
+                                  fill: 'transparent',
+                                },
+                              }}
+                            />
               </div>
-              <h3 style={{ textAlign: 'center' }}>
-                Secure Vault Infrastructure
-              </h3>
             </motion.div>
           </Col>
           <Col span={8} style={{ paddingTop: '2vh' }}>
@@ -162,6 +178,11 @@ export function Banner() {
                 scale: { type: 'spring', visualDuration: 3, bounce: 0.1 },
               }}
             >
+              <Row>
+              <Col span={24}><Tag
+                  style={{ width: '100%', margin: '5px', textAlign: 'center' }}
+                >INTRODUCING THE BLOCKCHAIN TRADED FUND</Tag></Col>
+              </Row>
               <Tooltip
                 title="The doomsday BTF. Follow trends of Bitcoin, PAXOS gold and
                       T-Bills."
@@ -453,7 +474,7 @@ export function Banner() {
                 </Tag>
               </Tooltip>
               <p style={{ textAlign: 'right', margin: 0 }}>
-                and many more Blockchain Traded Funds launching soon!
+                and many more launching soon!
               </p>
             </motion.div>
           </Col>
