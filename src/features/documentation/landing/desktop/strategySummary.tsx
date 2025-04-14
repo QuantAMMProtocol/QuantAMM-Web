@@ -325,7 +325,7 @@ export function StrategySummary() {
                 </Col>
                 <Col span={24}>
                   <h4 style={{ textAlign: 'center', margin: 0,paddingLeft: '50px', paddingRight: '30px' }}>
-                    QuantAMM <span style={{color:'#c7b283'}}>{strategy == "AntiMomentum" ? 'Price Reversion' : strategy}</span> BTF Pool Holdings
+                    QuantAMM <span style={{color:'#c7b283'}}>{strategy == "AntiMomentum" ? 'Price Reversion' : strategy}</span> Pool Holdings
                   </h4>
                   <p style={{ textAlign: 'center', margin: 0,paddingLeft: '50px',paddingRight: '30px' }}>
                     React to markets while earning fees.
@@ -369,22 +369,23 @@ export function StrategySummary() {
                 <SimulationResultMarketValueChart
                   breakdowns={breakdowns.filter(
                   (x) =>
-                    x.simulationRun.updateRule.updateRuleName == strategy ||
-                    x.simulationRun.updateRule.updateRuleSimKey == 'hodl'
+                  x.simulationRun.updateRule.updateRuleName == strategy ||
+                  x.simulationRun.updateRule.updateRuleSimKey == 'hodl'
                   )}
                   forceViewResults={true}
                   overrideXAxisInterval={24}
                   overrideSeriesStrokeColor={{
-                    'Momentum': '#c7b283',
-                    'AntiMomentum': '#c7b283',
-                    'Channel Following': '#c7b283',
-                    'Power Channel': '#c7b283',
+                  'Momentum': '#c7b283',
+                  'AntiMomentum': '#c7b283',
+                  'Channel Following': '#c7b283',
+                  'Power Channel': '#c7b283',
+                  'HODL': '#000000',
                   }}
                   overrideSeriesName={{
-                    'Momentum': 'QuantAMM',
-                    'AntiMomentum': 'QuantAMM',
-                    'Channel Following': 'QuantAMM',
-                    'Power Channel': 'QuantAMM',
+                  'Momentum': 'QuantAMM',
+                  'AntiMomentum': 'QuantAMM',
+                  'Channel Following': 'QuantAMM',
+                  'Power Channel': 'QuantAMM',
                   }}
                 />
                 </div>
