@@ -5,6 +5,7 @@ import { SimulationRunBreakdown } from '../../../simulationResults/simulationRes
 import { getBreakdown, Pool } from '../../../../services/breakdownService';
 import { WeightChangeOverTimeGraph } from '../../../shared';
 import { SimulationResultMarketValueChart } from '../../../simulationResults/visualisations/simulationResultMarketValueChart';
+import { set } from 'lodash';
 
 const { Title } = Typography;
 
@@ -12,6 +13,38 @@ export function StrategySummary() {
   const [breakdowns, setBreakdowns] = useState<SimulationRunBreakdown[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [strategy, setStrategy] = useState<string>("Momentum");
+
+  const [autoCycle, setAutoCycle] = useState<boolean>(true);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout | null = null;
+
+    if (autoCycle) {
+      const allStrageies = [
+        'Momentum',
+        'AntiMomentum',
+        'Channel Following',
+        'Power Channel',
+      ];
+
+      interval = setInterval(() => {
+        setStrategy((prevStrategy) => {
+          const currentIndex = allStrageies.indexOf(prevStrategy);
+          const nextIndex = (currentIndex + 1) % allStrageies.length;
+          return allStrageies[nextIndex];
+        });
+      }, 5000); // Change strategy every 5 seconds
+    }
+
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [autoCycle]);
+  
+
+
 
   // Effect to load breakdowns whenever the tab key changes
   useEffect(() => {
@@ -103,7 +136,7 @@ export function StrategySummary() {
                     </Col>
                     <Col span={13}>
                     <div style={{justifyContent:'center', alignContent:'center', height:'100%'}}>
-                      <Col span={24}><h4 style={{ margin: 0, padding: 0 }}>Momentum</h4></Col>
+                      <Col span={24}><h4 style={{ margin: 0, padding: 0, color:'#c7b283' }}>Momentum</h4></Col>
                       
                       <Col span={24}><p style={{ paddingRight:'10px' }}>
                       It&apos;s hard to buy low and sell high. It&apos;s easier to buy high and sell higher. Follow the trend.
@@ -114,13 +147,16 @@ export function StrategySummary() {
                     <Col span={3}>
                     <div style={{justifyContent:'center', alignContent:'center', height:'100%'}}>
                         <Button
-                        type="primary"
+                        disabled={strategy == 'Momentum'}
                         size="small"
-                        onClick={() =>
+                        style={{ backgroundColor: strategy == 'Momentum' ? '#c7b283' : undefined, color: strategy == 'Momentum' ? '#2c496b' : undefined }}
+                        onClick={() => {
                           setStrategy('Momentum')
+                          setAutoCycle(false)
+                        }
                         }
                       >
-                      Apply
+                        {strategy == 'Momentum' ? 'Active' : 'Apply'}
                       </Button>
                       </div>
                       </Col>
@@ -142,7 +178,7 @@ export function StrategySummary() {
                       </div>
                     </Col>
                     <Col span={13}>
-                      <Col span={24}><h4 style={{ margin: 0, padding: 0 }}>Price Mean Reversion</h4></Col>
+                      <Col span={24}><h4 style={{ margin: 0, padding: 0,color:'#c7b283' }}>Price Mean Reversion</h4></Col>
                       
                       <Col span={24}><p style={{ paddingRight:'10px' }}>
                       Deviations will revert back to the mean. Buy and sell assuming prices will revert
@@ -152,13 +188,15 @@ export function StrategySummary() {
                   <Col span={3}>
                   <div style={{justifyContent:'center', alignContent:'center', height:'100%'}}>
                       <Button
-                      type="primary"
+                      disabled={strategy == 'AntiMomentum'}
                       size="small"
-                      onClick={() =>
+                      style={{ backgroundColor: strategy == 'AntiMomentum' ? '#c7b283' : undefined, color: strategy == 'AntiMomentum' ? '#2c496b' : undefined }}
+                      onClick={() =>{
                       setStrategy('AntiMomentum')
+                      setAutoCycle(false)}
                     }
                     >
-                      Apply
+                      {strategy == 'AntiMomentum' ? 'Active' : 'Apply'}
                     </Button>
                     </div>
                     </Col>
@@ -181,7 +219,7 @@ export function StrategySummary() {
                     </Col>
                     <Col span={13}>
                     <div style={{justifyContent:'center', alignContent:'center', height:'100%'}}>
-                      <Col span={24}><h4 style={{ margin: 0, padding: 0 }}>Channel Following</h4></Col>
+                      <Col span={24}><h4 style={{ margin: 0, padding: 0, color:'#c7b283' }}>Channel Following</h4></Col>
                       
                       <Col span={24}><p style={{ paddingRight:'10px' }}>
                       Everything will revert to the mean on small movements but act fast on larger movements
@@ -191,13 +229,16 @@ export function StrategySummary() {
                     <Col span={3}>
                     <div style={{justifyContent:'center', alignContent:'center', height:'100%'}}>
                     <Button
-                      type="primary"
+                      disabled={strategy == 'Channel Following'}
                       size="small"
+                      style={{ backgroundColor: strategy == 'Channel Following' ? '#c7b283' : undefined, color: strategy == 'Channel Following' ? '#2c496b' : undefined }}
                       onClick={() =>
-                      setStrategy('Channel Following')
+                      {
+                      setStrategy('Channel Following')                      
+                      setAutoCycle(false)}
                       }
                     >
-                      Apply
+                      {strategy == 'Channel Following' ? 'Active' : 'Apply'}
                     </Button>
                     </div>
                     </Col>
@@ -221,7 +262,7 @@ export function StrategySummary() {
                     </Col>
                     <Col span={13}>
                     <div style={{justifyContent:'center', alignContent:'center', height:'100%'}}>
-                      <Col span={24}><h4 style={{ margin: 0, padding: 0 }}>Power Channel</h4></Col>
+                      <Col span={24}><h4 style={{ margin: 0, padding: 0, color:'#c7b283' }}>Power Channel</h4></Col>
                       <Col span={24}><p style={{ paddingRight:'10px' }}>
                       Ignore the noise of small price movements, act fast on large price movements
                       </p></Col>
@@ -230,13 +271,17 @@ export function StrategySummary() {
                     <Col span={3}>
                     <div style={{justifyContent:'center', alignContent:'center', height:'100%'}}>
                       <Button
-                      type="primary"
+                      disabled={strategy == 'Power Channel'}
                       size="small"
-                      onClick={() =>                        
+                      style={{ backgroundColor: strategy == 'Power Channel' ? '#c7b283' : undefined, color: strategy == 'Power Channel' ? '#2c496b' : undefined }}
+                      onClick={() =>                  
+                        {      
                           setStrategy('Power Channel')
+                          setAutoCycle(false)
+                        }
                       }
                     >
-                      Apply
+                      {strategy == 'Power Channel' ? 'Active' : 'Apply'}
                     </Button>
                     </div>
                     </Col>
@@ -274,13 +319,13 @@ export function StrategySummary() {
                         )[0]
                       }
                       overrideChartTheme="ag-default-dark"
-                      overrideXAxisInterval={24}
+                      overrideXAxisInterval={22}
                     />
                   </div>
                 </Col>
-                <Col span={24} style={{ paddingBottom: '40px' }}>
+                <Col span={24}>
                   <h4 style={{ textAlign: 'center', margin: 0,paddingLeft: '50px', paddingRight: '30px' }}>
-                    QuantAMM BTF Pool Holdings
+                    QuantAMM <span style={{color:'#c7b283'}}>{strategy == "AntiMomentum" ? 'Price Reversion' : strategy}</span> BTF Pool Holdings
                   </h4>
                   <p style={{ textAlign: 'center', margin: 0,paddingLeft: '50px',paddingRight: '30px' }}>
                     React to markets while earning fees.
@@ -305,33 +350,55 @@ export function StrategySummary() {
                         )[0]
                       }
                       overrideChartTheme="ag-default-dark"
-                      overrideXAxisInterval={24}
+                      overrideXAxisInterval={22}
                     />
                   </div>
                 </Col>
               </Row>
             </Col>
             <Col span={9}>
-              <div
+                <div
                 style={{
                   height: '100%',
                   width: '100%',
                   paddingLeft: '20px',
                   paddingRight: '20px',
-                  paddingTop:'40px',
-                  paddingBottom:'80px'
+                  paddingTop: '40px',
                 }}
-              >
+                >
                 <SimulationResultMarketValueChart
                   breakdowns={breakdowns.filter(
-                    (x) =>
-                      x.simulationRun.updateRule.updateRuleName ==
-                    strategy ||
-                      x.simulationRun.updateRule.updateRuleSimKey == 'hodl'
+                  (x) =>
+                    x.simulationRun.updateRule.updateRuleName == strategy ||
+                    x.simulationRun.updateRule.updateRuleSimKey == 'hodl'
                   )}
                   forceViewResults={true}
                   overrideXAxisInterval={24}
+                  overrideSeriesStrokeColor={{
+                    'Momentum': '#c7b283',
+                    'AntiMomentum': '#c7b283',
+                    'Channel Following': '#c7b283',
+                    'Power Channel': '#c7b283',
+                  }}
+                  overrideSeriesName={{
+                    'Momentum': 'QuantAMM',
+                    'AntiMomentum': 'QuantAMM',
+                    'Channel Following': 'QuantAMM',
+                    'Power Channel': 'QuantAMM',
+                  }}
                 />
+                </div>
+            </Col>
+          </Row>
+          <Row style={{ margin:0, padding:0 }}>
+            <Col span={24} style={{ padding: 0, margin: 0 }}>
+              <div style={{ textAlign: 'center', paddingBottom:'5vh', paddingRight:'80px'}}>
+                <Button
+                  size="small"
+                  onClick={() => setAutoCycle(!autoCycle)}
+                >
+                  {autoCycle ? 'Stop Stategy Cycling' : 'Start Stategy Cycling'}
+                </Button>
               </div>
             </Col>
           </Row>
