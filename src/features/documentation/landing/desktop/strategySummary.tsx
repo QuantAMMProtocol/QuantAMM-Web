@@ -5,7 +5,6 @@ import { SimulationRunBreakdown } from '../../../simulationResults/simulationRes
 import { getBreakdown, Pool } from '../../../../services/breakdownService';
 import { WeightChangeOverTimeGraph } from '../../../shared';
 import { SimulationResultMarketValueChart } from '../../../simulationResults/visualisations/simulationResultMarketValueChart';
-import { set } from 'lodash';
 
 const { Title } = Typography;
 
@@ -82,6 +81,36 @@ export function StrategySummary() {
         });
     }
   }, [setBreakdowns, setLoading, breakdowns, loading]);
+  const strategies = [
+    {
+      title: 'Momentum',
+      name: 'Momentum',
+      image: '/documentation/vanilla_momentum.svg',
+      description:
+        "It's hard to buy low and sell high. It's easier to buy high and sell higher. Follow the trend.",
+    },
+    {
+      title: 'Price Mean Reversion',
+      name: 'AntiMomentum',
+      image: '/documentation/mean_reversion.svg',
+      description:
+        'Deviations will revert back to the mean. Buy and sell assuming prices will revert.',
+    },
+    {
+      title: 'Channel Following',
+      name: 'Channel Following',
+      image: '/documentation/channel_following.svg',
+      description:
+        'Everything will revert to the mean on small movements but act fast on larger movements.',
+    },
+    {
+      title: 'Power Channel',
+      name: 'Power Channel',
+      image: '/documentation/power_channel.svg',
+      description:
+        'Ignore the noise of small price movements, act fast on large price movements.',
+    },
+  ];
 
   return (
     <Row id="final_section_row">
@@ -116,315 +145,80 @@ export function StrategySummary() {
                   FULLY DECENTRALISED, FULLY TRANSPARENT
                 </p>
                 <Row gutter={[8, 8]} style={{ marginTop: '2vh', padding: 0 }}>
-                  <Col span={24} style={{ margin: 0, padding: 0 }}>
-                    <Row>
-                      <Col span={8}>
-                        <div
-                          style={{
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                          }}
-                        >
-                          <img
-                            loading="lazy"
+                  
+                  {strategies.map((strategyItem) => (
+                    <Col span={24} style={{ margin: 0, padding: 0 }} key={strategyItem.name}>
+                      <Row>
+                        <Col span={8}>
+                          <div
                             style={{
-                              width: '100%',
-                              height: 'auto',
-                              padding: '15px',
+                              justifyContent: 'center',
+                              alignItems: 'center',
                             }}
-                            src="/documentation/vanilla_momentum.svg"
-                          />
-                        </div>
-                      </Col>
-                      <Col span={13}>
-                        <div
-                          style={{
-                            justifyContent: 'center',
-                            alignContent: 'center',
-                            height: '100%',
-                          }}
-                        >
-                          <Col span={24}>
-                            <h4
+                          >
+                            <img
+                              loading="lazy"
                               style={{
-                                margin: 0,
-                                padding: 0,
-                                color: '#c7b283',
+                                width: '100%',
+                                height: 'auto',
+                                padding: '15px',
                               }}
-                            >
-                              Momentum
-                            </h4>
-                          </Col>
-                          <Col span={24}>
-                            <p style={{ paddingRight: '10px' }}>
-                              It&apos;s hard to buy low and sell high. It&apos;s
-                              easier to buy high and sell higher. Follow the
-                              trend.
-                            </p>
-                          </Col>
-                        </div>
-                      </Col>
-                      <Col span={3}>
-                        <div
-                          style={{
-                            justifyContent: 'center',
-                            alignContent: 'center',
-                            height: '100%',
-                          }}
-                        >
-                          <Button
-                            disabled={strategy == 'Momentum'}
-                            size="small"
-                            style={{
-                              backgroundColor:
-                                strategy == 'Momentum' ? '#c7b283' : undefined,
-                              color:
-                                strategy == 'Momentum' ? '#2c496b' : undefined,
-                            }}
-                            onClick={() => {
-                              setStrategy('Momentum');
-                              setAutoCycle(false);
-                            }}
-                          >
-                            {strategy == 'Momentum' ? 'Active' : 'Apply'}
-                          </Button>
-                        </div>
-                      </Col>
-                    </Row>
-                  </Col>
-                  <Col span={24} style={{ margin: 0, padding: 0 }}>
-                    <Row>
-                      <Col span={8}>
-                        <div
-                          style={{
-                            justifyContent: 'center',
-                            alignContent: 'center',
-                            height: '100%',
-                          }}
-                        >
-                          <img
-                            loading="lazy"
-                            style={{
-                              width: '100%',
-                              height: 'auto',
-                              padding: '15px',
-                            }}
-                            src="/documentation/mean_reversion.svg"
-                          />
-                        </div>
-                      </Col>
-                      <Col span={13}>
-                        <Col span={24}>
-                          <h4
-                            style={{ margin: 0, padding: 0, color: '#c7b283' }}
-                          >
-                            Price Mean Reversion
-                          </h4>
+                              src={strategyItem.image}
+                            />
+                          </div>
                         </Col>
-
-                        <Col span={24}>
-                          <p style={{ paddingRight: '10px' }}>
-                            Deviations will revert back to the mean. Buy and
-                            sell assuming prices will revert
-                          </p>
+                        <Col span={13}>
+                          <div
+                            style={{
+                              justifyContent: 'center',
+                              alignContent: 'center',
+                              height: '100%',
+                            }}
+                          >
+                            <Col span={24}>
+                              <h4
+                                style={{
+                                  margin: 0,
+                                  padding: 0,
+                                  color: '#c7b283',
+                                }}
+                              >
+                                {strategyItem.title}
+                              </h4>
+                            </Col>
+                            <Col span={24}>
+                              <p style={{ paddingRight: '10px' }}>{strategyItem.description}</p>
+                            </Col>
+                          </div>
                         </Col>
-                      </Col>
-                      <Col span={3}>
-                        <div
-                          style={{
-                            justifyContent: 'center',
-                            alignContent: 'center',
-                            height: '100%',
-                          }}
-                        >
-                          <Button
-                            disabled={strategy == 'AntiMomentum'}
-                            size="small"
+                        <Col span={3}>
+                          <div
                             style={{
-                              backgroundColor:
-                                strategy == 'AntiMomentum'
-                                  ? '#c7b283'
-                                  : undefined,
-                              color:
-                                strategy == 'AntiMomentum'
-                                  ? '#2c496b'
-                                  : undefined,
-                            }}
-                            onClick={() => {
-                              setStrategy('AntiMomentum');
-                              setAutoCycle(false);
+                              justifyContent: 'center',
+                              alignContent: 'center',
+                              height: '100%',
                             }}
                           >
-                            {strategy == 'AntiMomentum' ? 'Active' : 'Apply'}
-                          </Button>
-                        </div>
-                      </Col>
-                    </Row>
-                  </Col>
-                  <Col span={24} style={{ margin: 0, padding: 0 }}>
-                    <Row>
-                      <Col span={8}>
-                        <div
-                          style={{
-                            justifyContent: 'center',
-                            alignContent: 'center',
-                            height: '100%',
-                          }}
-                        >
-                          <img
-                            loading="lazy"
-                            style={{
-                              width: '100%',
-                              height: 'auto',
-                              padding: '15px',
-                            }}
-                            src="/documentation/channel_following.svg"
-                          />
-                        </div>
-                      </Col>
-                      <Col span={13}>
-                        <div
-                          style={{
-                            justifyContent: 'center',
-                            alignContent: 'center',
-                            height: '100%',
-                          }}
-                        >
-                          <Col span={24}>
-                            <h4
+                            <Button
+                              disabled={strategy === strategyItem.name}
+                              size="small"
                               style={{
-                                margin: 0,
-                                padding: 0,
-                                color: '#c7b283',
+                                backgroundColor:
+                                  strategy === strategyItem.name ? '#c7b283' : undefined,
+                                color: strategy === strategyItem.name ? '#2c496b' : undefined,
+                              }}
+                              onClick={() => {
+                                setStrategy(strategyItem.name);
+                                setAutoCycle(false);
                               }}
                             >
-                              Channel Following
-                            </h4>
-                          </Col>
-
-                          <Col span={24}>
-                            <p style={{ paddingRight: '10px' }}>
-                              Everything will revert to the mean on small
-                              movements but act fast on larger movements
-                            </p>
-                          </Col>
-                        </div>
-                      </Col>
-                      <Col span={3}>
-                        <div
-                          style={{
-                            justifyContent: 'center',
-                            alignContent: 'center',
-                            height: '100%',
-                          }}
-                        >
-                          <Button
-                            disabled={strategy == 'Channel Following'}
-                            size="small"
-                            style={{
-                              backgroundColor:
-                                strategy == 'Channel Following'
-                                  ? '#c7b283'
-                                  : undefined,
-                              color:
-                                strategy == 'Channel Following'
-                                  ? '#2c496b'
-                                  : undefined,
-                            }}
-                            onClick={() => {
-                              setStrategy('Channel Following');
-                              setAutoCycle(false);
-                            }}
-                          >
-                            {strategy == 'Channel Following'
-                              ? 'Active'
-                              : 'Apply'}
-                          </Button>
-                        </div>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col span={24} style={{ margin: 0, padding: 0 }}>
-                    <Row>
-                      <Col span={8}>
-                        <div
-                          style={{
-                            justifyContent: 'center',
-                            alignContent: 'center',
-                            height: '100%',
-                          }}
-                        >
-                          <img
-                            loading="lazy"
-                            style={{
-                              width: '100%',
-                              height: 'auto',
-                              padding: '15px',
-                            }}
-                            src="/documentation/power_channel.svg"
-                          />
-                        </div>
-                      </Col>
-                      <Col span={13}>
-                        <div
-                          style={{
-                            justifyContent: 'center',
-                            alignContent: 'center',
-                            height: '100%',
-                          }}
-                        >
-                          <Col span={24}>
-                            <h4
-                              style={{
-                                margin: 0,
-                                padding: 0,
-                                color: '#c7b283',
-                              }}
-                            >
-                              Power Channel
-                            </h4>
-                          </Col>
-                          <Col span={24}>
-                            <p style={{ paddingRight: '10px' }}>
-                              Ignore the noise of small price movements, act
-                              fast on large price movements
-                            </p>
-                          </Col>
-                        </div>
-                      </Col>
-                      <Col span={3}>
-                        <div
-                          style={{
-                            justifyContent: 'center',
-                            alignContent: 'center',
-                            height: '100%',
-                          }}
-                        >
-                          <Button
-                            disabled={strategy == 'Power Channel'}
-                            size="small"
-                            style={{
-                              backgroundColor:
-                                strategy == 'Power Channel'
-                                  ? '#c7b283'
-                                  : undefined,
-                              color:
-                                strategy == 'Power Channel'
-                                  ? '#2c496b'
-                                  : undefined,
-                            }}
-                            onClick={() => {
-                              setStrategy('Power Channel');
-                              setAutoCycle(false);
-                            }}
-                          >
-                            {strategy == 'Power Channel' ? 'Active' : 'Apply'}
-                          </Button>
-                        </div>
-                      </Col>
-                    </Row>
-                  </Col>
+                              {strategy === strategyItem.name ? 'Active' : 'Apply'}
+                            </Button>
+                          </div>
+                        </Col>
+                      </Row>
+                    </Col>
+                  ))}
                 </Row>
               </div>
             </Col>
@@ -555,7 +349,7 @@ export function StrategySummary() {
                     AntiMomentum: '#c7b283',
                     'Channel Following': '#c7b283',
                     'Power Channel': '#c7b283',
-                    HODL: '#000000',
+                    HODL: 'rgb(22,37,54)',
                   }}
                   overrideSeriesName={{
                     Momentum: 'QuantAMM',
