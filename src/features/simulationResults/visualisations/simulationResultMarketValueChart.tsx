@@ -134,9 +134,9 @@ export function SimulationResultMarketValueChart(props: BreakdownProps) {
             <Col span={24}>
               <AgCharts
                 options={{
-                  height: 500,
+                  height: props.overrideHeight ?? 500,
                   navigator: {
-                    enabled: true,
+                    enabled: props.overrideNagivagtion ?? true,
                     height: 5,
                     spacing: 6,
                   },

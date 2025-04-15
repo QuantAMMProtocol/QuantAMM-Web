@@ -2,17 +2,35 @@ import { Parallax, ParallaxLayer } from '@react-spring/parallax';
 import { Col, Row, Tag, Tooltip } from 'antd';
 import { Typography } from 'antd';
 import { motion } from 'framer-motion';
-import { AgGauge } from 'ag-charts-react';
+import { SimulationResultMarketValueChart } from '../../../simulationResults/visualisations/simulationResultMarketValueChart';
+import { SimulationRunBreakdown } from '../../../simulationResults/simulationResultSummaryModels';
+import { useEffect, useState } from 'react';
+import { getBreakdown, Pool } from '../../../../services/breakdownService';
 
 const { Title } = Typography;
 
 export function Banner() {
-  const performanceStages = [
-    'Themed Baskets',
-    'Earns Swap Fees',
-    'No streaming Fees',
-    'Reactive daily Strategies',
-  ];
+  const [breakdowns, setBreakdowns] = useState<SimulationRunBreakdown[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    const loadBreakdowns = async (
+      poolNames: Pool[]
+    ): Promise<SimulationRunBreakdown[]> => {
+      setLoading(true);
+      const fetchedBreakdowns = await Promise.all(
+        poolNames.map((poolName) => getBreakdown(poolName))
+      );
+      setBreakdowns(fetchedBreakdowns);
+      return fetchedBreakdowns;
+    };
+
+    if (loading) {
+      loadBreakdowns(['balancerWeighted', 'quantAMMAntiMomentum'] as Pool[])
+        .catch(console.error)
+        .finally(() => setLoading(false));
+    }
+  }, [loading]);
 
   return (
     <Parallax
@@ -58,7 +76,7 @@ export function Banner() {
                   color: 'white',
                   textAlign: 'center',
                   marginTop: '10px',
-                  marginBottom:'0px',
+                  marginBottom: '0px',
                   fontWeight: '400',
                 }}
               >
@@ -81,7 +99,8 @@ export function Banner() {
                   marginTop: '0px',
                 }}
               >
-                DYNAMIC STRATEGY LIQUIDITY POOLS CAPITALISE ON PRICE VOLATILITY WHILE STILL EARNING FEES AND YIELD
+                DYNAMIC STRATEGY POOLS THAT CAPITALISE ON PRICE VOLATILITY WHILE
+                STILL EARNING FEES AND YIELD
               </p>
             </motion.div>
           </Col>
@@ -91,23 +110,13 @@ export function Banner() {
       <ParallaxLayer speed={0.04} factor={1}>
         <Row
           id="mission boxes"
-          gutter={[16, 16]}
           style={{
             paddingTop: '53vh',
             position: 'relative',
           }}
         >
-          <Col
-            span={8}
-            style={{
-              paddingTop: '5vh',
-              paddingLeft:'15px',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'flex-end',
-              width:'100%'
-            }}
-          >
+          <Col span={1}></Col>
+          <Col span={8} style={{ paddingTop: '6vh' }}>
             <motion.div
               initial={{ opacity: 0, scale: 0 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -116,377 +125,270 @@ export function Banner() {
                 delay: 1.2,
                 scale: { type: 'spring', visualDuration: 3, bounce: 0.1 },
               }}
-            >
-              <div style={{ width:'100%' }} id='quantammGauge'>
-                <AgGauge
-                              options={{
-                                type: 'linear-gauge',
-                                theme: 'ag-financial-dark',
-                                direction: 'horizontal',
-                                container: document.getElementById('quantammGauge'),
-                                value: 8,
-                                scale: {
-                                  min: 0.5,
-                                  max: 4.5,
-                                  label: {
-                                    fontFamily: 'Jost',
-                                    placement: 'after',
-                                    formatter: ({ index }) => {
-                                      return `${performanceStages[index]}`;
-                                    },
-                                    fontSize:9
-                                  },
-                                  interval: {
-                                    values: [1, 2, 3, 4],
-                                  },
-                                },
-                                bar: {
-                                  fillMode: 'continuous',
-                                  fills: [
-                                    { color: 'rgba(166, 0, 0, 0.6)', stop: 1 },
-                                    { color: 'rgba(220, 109, 6, 0.6)', stop: 2 },
-                                    { color: 'rgba(240, 228, 6, 0.6)', stop: 3 },
-                                    { color: 'rgba(74, 189, 2, 0.6)', stop: 4 },
-                                  ],
-                                },
-                
-                                segmentation: {
-                                  enabled: true,
-                                  interval: {
-                                    values: [1, 2, 3, 4],
-                                  },
-                                  spacing: 2,
-                                },
-                                cornerMode: 'container',
-                                cornerRadius: 99,
-                                background: {
-                                  visible: false,
-                                  fill: 'transparent',
-                                },
-                              }}
-                            />
-              </div>
-            </motion.div>
-          </Col>
-          <Col span={8} style={{ paddingTop: '2vh' }}>
-            <motion.div
-              initial={{ opacity: 0, scale: 0 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{
-                duration: 3,
-                delay: 1.2,
-                scale: { type: 'spring', visualDuration: 3, bounce: 0.1 },
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'flex-end',
+                height: '100%',
               }}
             >
-              <Row>
-              <Col span={24}><Tag
-                  style={{ width: '100%', margin: '5px', textAlign: 'center' }}
-                >INTRODUCING THE BLOCKCHAIN TRADED FUND</Tag></Col>
-              </Row>
-              <Tooltip
-                title="The doomsday BTF. Follow trends of Bitcoin, PAXOS gold and
-                      T-Bills."
+              <Tag
+                style={{
+                  width: '100%',
+                  margin: '5px',
+                  textAlign: 'center',
+                  border: 'transparent',
+                  backgroundColor: 'transparent',
+                  opacity: 0.4,
+                }}
               >
-                <Tag
-                  style={{ width: '100%', margin: '5px', textAlign: 'center' }}
-                >
-                  <Row style={{ margin: 0, padding: 0 }}>
-                    <Col span={4}>
-                      <div
+                <Row style={{ margin: 0, padding: 0 }}>
+                  <Col span={4}>
+                    <div
+                      style={{
+                        height: '100%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <img
+                        src="/assets/RWA_mono.png"
+                        style={{ width: '80%', height: 'auto' }}
+                      />
+                    </div>
+                  </Col>
+                  <Col span={16}>
+                    <div
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        height: '100%',
+                      }}
+                    >
+                      <h3 style={{ margin: '5px', textAlign: 'left' }}>
+                        The RWA Agnostic
+                      </h3>
+                      <p
                         style={{
-                          height: '100%',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
+                          textAlign: 'left',
+                          margin: 0,
+                          paddingLeft: '5px',
                         }}
                       >
-                        <img
-                          src="/assets/safe_haven_BTF_icon_mono.png"
-                          style={{ width: '100%', height: 'auto' }}
-                        />
-                      </div>
-                    </Col>
-                    <Col span={16}>
-                      <div
+                        RWAs are the future
+                      </p>
+                      <p
                         style={{
-                          display: 'flex',
-                          flexDirection: 'column',
-                          justifyContent: 'center',
-                          height: '100%',
+                          textAlign: 'left',
+                          margin: 0,
+                          paddingLeft: '5px',
                         }}
                       >
-                        <h3 style={{ margin: '5px', textAlign: 'center' }}>
-                          The Safe Haven BTF
-                        </h3>
-                      </div>
-                    </Col>
-                    <Col span={4}>
-                      <div
-                        style={{
-                          height: '100%',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }}
-                      >
-                        <Row style={{ width: '100%' }}>
-                          <Col span={12}>
-                            <p
-                              style={{
-                                margin: 0,
-                                padding: 0,
-                                fontSize: '10px',
-                              }}
-                            >
-                              Bitcoin
-                            </p>
-                            <p
-                              style={{
-                                margin: 0,
-                                padding: 0,
-                                fontSize: '10px',
-                              }}
-                            >
-                              Gold
-                            </p>
-                          </Col>
-                          <Col span={12}>
-                            <p
-                              style={{
-                                margin: 0,
-                                padding: 0,
-                                fontSize: '10px',
-                              }}
-                            >
-                              USDC
-                            </p>
-                            <p
-                              style={{
-                                margin: 0,
-                                padding: 0,
-                                fontSize: '10px',
-                              }}
-                            >
-                              Tbills
-                            </p>
-                          </Col>
-                        </Row>
-                      </div>
-                    </Col>
-                  </Row>
-                </Tag>
-              </Tooltip>
+                        Track RWA issuers to gain sector exposure.
+                      </p>
+                    </div>
+                  </Col>
+                  <Col span={4}>
+                    <div
+                      style={{
+                        height: '100%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <Row style={{ width: '100%' }}>
+                        <h4>Coming Soon</h4>
+                      </Row>
+                    </div>
+                  </Col>
+                </Row>
+              </Tag>
 
-              <Tooltip
-                title="RWAs are the future, track trending RWA issuers to gain
-                      sector exposure."
+              <Tag
+                style={{
+                  width: '100%',
+                  margin: '5px',
+                  textAlign: 'center',
+                  border: 'transparent',
+                  backgroundColor: 'transparent',
+                }}
               >
-                <Tag
-                  style={{ width: '100%', margin: '5px', textAlign: 'center' }}
-                >
-                  <Row style={{ margin: 0, padding: 0 }}>
-                    <Col span={4}>
-                      <div
+                <Row style={{ margin: 0, padding: 0 }}>
+                  <Col span={4}>
+                    <div
+                      style={{
+                        height: '100%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <img
+                        src="/assets/safe_haven_BTF_icon_mono.png"
+                        style={{ width: '90%', height: 'auto' }}
+                      />
+                    </div>
+                  </Col>
+                  <Col span={16}>
+                    <div
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        height: '100%',
+                      }}
+                    >
+                      <h3 style={{ margin: '5px', textAlign: 'left' }}>
+                        The Safe Haven
+                      </h3>
+                      <p
                         style={{
-                          height: '100%',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
+                          textAlign: 'left',
+                          margin: 0,
+                          paddingLeft: '5px',
                         }}
                       >
-                        <img
-                          src="/assets/RWA_mono.png"
-                          style={{ width: '100%', height: 'auto' }}
-                        />
-                      </div>
-                    </Col>
-                    <Col span={16}>
-                      <div
+                        The doomsday BTF.
+                      </p>
+                      <p
                         style={{
-                          display: 'flex',
-                          flexDirection: 'column',
-                          justifyContent: 'center',
-                          height: '100%',
+                          textAlign: 'left',
+                          margin: 0,
+                          paddingLeft: '5px',
                         }}
                       >
-                        <h3 style={{ margin: '5px' }}>The RWA Agnostic BTF</h3>
-                      </div>
-                    </Col>
-                    <Col span={4}>
-                      <div
-                        style={{
-                          height: '100%',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }}
-                      >
-                        <Row style={{ width: '100%' }}>
-                          <Col span={12}>
-                            <p
-                              style={{
-                                margin: 0,
-                                padding: 0,
-                                fontSize: '10px',
-                              }}
-                            >
-                              MKR
-                            </p>
-                            <p
-                              style={{
-                                margin: 0,
-                                padding: 0,
-                                fontSize: '10px',
-                              }}
-                            >
-                              ONDO
-                            </p>
-                          </Col>
-                          <Col span={12}>
-                            <p
-                              style={{
-                                margin: 0,
-                                padding: 0,
-                                fontSize: '10px',
-                              }}
-                            >
-                              MANTLE
-                            </p>
-                            <p
-                              style={{
-                                margin: 0,
-                                padding: 0,
-                                fontSize: '10px',
-                              }}
-                            >
-                              LINK
-                            </p>
-                          </Col>
-                          <Col span={24}>
-                            <p
-                              style={{
-                                margin: 0,
-                                padding: 0,
-                                fontSize: '10px',
-                              }}
-                            >
-                              USDC
-                            </p>
-                          </Col>
-                        </Row>
-                      </div>
-                    </Col>
-                  </Row>
-                </Tag>
-              </Tooltip>
-              <Tooltip
-                title={
-                  'The sonic ecosystem basket. Stellar yields amplified by trend following strategies'
-                }
+                        Bitcoin, PAXOS Gold
+                      </p>
+                    </div>
+                  </Col>
+                  <Col span={4}>
+                    <div
+                      style={{
+                        height: '100%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <Row style={{ width: '100%' }}>
+                        <Col span={24}>
+                          <p
+                            style={{
+                              margin: 0,
+                              padding: 0,
+                              fontSize: '10px',
+                            }}
+                          >
+                            Bitcoin
+                          </p>
+                        </Col>
+                        <Col span={24}>
+                          <p
+                            style={{
+                              margin: 0,
+                              padding: 0,
+                              fontSize: '10px',
+                            }}
+                          >
+                            Tokenized Gold
+                          </p>
+                        </Col>
+                        <Col span={24}>
+                          <p
+                            style={{
+                              margin: 0,
+                              padding: 0,
+                              fontSize: '10px',
+                            }}
+                          >
+                            USDC
+                          </p>
+                        </Col>
+                      </Row>
+                    </div>
+                  </Col>
+                </Row>
+              </Tag>
+
+              <Tag
+                style={{
+                  width: '100%',
+                  margin: '5px',
+                  textAlign: 'center',
+                  border: 'transparent',
+                  backgroundColor: 'transparent',
+                  opacity: 0.4,
+                }}
               >
-                <Tag
-                  style={{ width: '100%', margin: '5px', textAlign: 'center' }}
-                >
-                  <Row style={{ margin: 0, padding: 0 }}>
-                    <Col span={4}>
-                      <div
+                <Row style={{ margin: 0, padding: 0 }}>
+                  <Col span={4}>
+                    <div
+                      style={{
+                        height: '100%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <img
+                        src="/assets/sonic_BTF_icon.png"
+                        style={{ width: '80%', height: 'auto' }}
+                      />
+                    </div>
+                  </Col>
+                  <Col span={16}>
+                    <div
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        height: '100%',
+                        wordWrap: 'break-word',
+                      }}
+                    >
+                      <h3 style={{ margin: 0, textAlign: 'left' }}>
+                        Super Sonic Momentum
+                      </h3>
+                      <p
                         style={{
-                          height: '100%',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
+                          textAlign: 'left',
+                          margin: 0,
+                          paddingLeft: '5px',
                         }}
                       >
-                        <img
-                          src="/assets/sonic_BTF_icon.png"
-                          style={{ width: '100%', height: 'auto' }}
-                        />
-                      </div>
-                    </Col>
-                    <Col span={16}>
-                      <div
+                        The sonic ecosystem basket.
+                      </p>
+                      <p
                         style={{
-                          display: 'flex',
-                          flexDirection: 'column',
-                          justifyContent: 'center',
-                          height: '100%',
+                          textAlign: 'left',
+                          margin: 0,
+                          paddingLeft: '5px',
                         }}
                       >
-                        <h3 style={{ margin: 0, textAlign: 'center' }}>
-                          Super Sonic Momentum
-                        </h3>
-                      </div>
-                    </Col>
-                    <Col span={4}>
-                      <div
-                        style={{
-                          height: '100%',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }}
-                      >
-                        <Row style={{ width: '100%' }}>
-                          <Col span={12}>
-                            <p
-                              style={{
-                                margin: 0,
-                                padding: 0,
-                                fontSize: '10px',
-                              }}
-                            >
-                              rBTC
-                            </p>
-                            <p
-                              style={{
-                                margin: 0,
-                                padding: 0,
-                                fontSize: '10px',
-                              }}
-                            >
-                              rETH
-                            </p>
-                          </Col>
-                          <Col span={12}>
-                            <p
-                              style={{
-                                margin: 0,
-                                padding: 0,
-                                fontSize: '10px',
-                              }}
-                            >
-                              rUSDC
-                            </p>
-                            <p
-                              style={{
-                                margin: 0,
-                                padding: 0,
-                                fontSize: '10px',
-                              }}
-                            >
-                              rSOL
-                            </p>
-                          </Col>
-                        </Row>
-                      </div>
-                    </Col>
-                  </Row>
-                </Tag>
-              </Tooltip>
-              <p style={{ textAlign: 'right', margin: 0 }}>
-                and many more launching soon!
-              </p>
+                        High yields by trend following strategies.
+                      </p>
+                    </div>
+                  </Col>
+                  <Col span={4}>
+                    <div
+                      style={{
+                        height: '100%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <h4>Coming soon</h4>
+                    </div>
+                  </Col>
+                </Row>
+              </Tag>
             </motion.div>
           </Col>
-          <Col
-            span={8}
-            style={{
-              paddingTop: '5vh',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'flex-end',
-            }}
-          >
+          <Col span={6}>
             <motion.div
               initial={{ opacity: 0, scale: 0 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -495,20 +397,68 @@ export function Banner() {
                 delay: 1.2,
                 scale: { type: 'spring', visualDuration: 3, bounce: 0.1 },
               }}
+              style={{ height: '100%' }}
             >
-              <div style={{ display: 'flex', justifyContent: 'center' }}>
-                <Tooltip title="CHAINLINK BUILD program member">
-                  <img
-                    loading="lazy"
-                    style={{ width: '75%', height: '75%' }}
-                    src="/background/secured_with_chainlink.png"
-                  />
-                </Tooltip>
+              <div
+                style={{
+                  height: '100%',
+                  display: 'flex',
+                  alignItems: 'flex-end',
+                  flexDirection: 'column',
+                }}
+              >
+                <Row
+                  style={{
+                    height: '100%',
+                    alignItems: 'center',
+                    marginTop: '30px',
+                  }}
+                >
+                  <Col span={8}></Col>
+                  <Col span={8}>
+                    <Tooltip
+                      title={
+                        <>
+                          <span style={{ textAlign: 'center', width: '100%' }}>
+                            Built on Balancer V3
+                          </span>
+                          <br />
+                          <span style={{ textAlign: 'center' }}>
+                            Secured by Chainlink
+                          </span>
+                        </>
+                      }
+                    >
+                      <img
+                        loading="lazy"
+                        style={{ width: '100%', height: 'auto' }}
+                        src="/background/Balancerv3CL.png"
+                      />
+                    </Tooltip>
+                  </Col>
+                  <Col span={8}></Col>
+                </Row>
               </div>
-              <h3 style={{ textAlign: 'center' }}>Institutional Grade Data</h3>
             </motion.div>
           </Col>
-          <Col span={2}></Col>
+          <Col
+            span={8}
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'flex-end',
+              marginLeft: '-20px',
+            }}
+          >
+            <SimulationResultMarketValueChart
+              breakdowns={breakdowns}
+              forceViewResults={true}
+              overrideHeight={220}
+              overrideXAxisInterval={21}
+              overrideNagivagtion={false}
+            />
+          </Col>
+          <Col span={1}></Col>
         </Row>
       </ParallaxLayer>
     </Parallax>
