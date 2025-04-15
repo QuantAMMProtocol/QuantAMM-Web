@@ -58,6 +58,18 @@ export function QuantAmmExplainer() {
               </div>
             </Col>
             <Col span={24} style={{ marginBottom: '0.5vh', marginLeft:0, marginRight:0 }}>
+            
+            <Title
+                level={2}
+                style={{
+                  color: '#162536',
+                  textAlign: 'center',
+                  margin: 0,
+                  padding: 0,
+                }}
+              >
+                 INTRODUCING
+              </Title>
               <Title
                 level={2}
                 style={{
@@ -67,7 +79,7 @@ export function QuantAmmExplainer() {
                   padding: 0,
                 }}
               >
-                MOVE BEYOND LIQUIDITY PROVIDING
+                 BLOCKCHAIN TRADED FUNDS
               </Title>
 
               <p
