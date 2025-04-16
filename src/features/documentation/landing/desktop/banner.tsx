@@ -293,8 +293,16 @@ export function Banner() {
               breakdowns={breakdowns}
               forceViewResults={true}
               overrideHeight={220}
-              overrideXAxisInterval={21}
+              overrideXAxisInterval={19}
               overrideNagivagtion={false}
+              overrideSeriesStrokeColor={{
+                AntiMomentum: '#c7b283',
+                'Balancer Weighted': '#528aae',
+              }}
+              overrideSeriesName={{
+                AntiMomentum: 'QuantAMM',
+                'Balancer Weighted' : 'Traditional DEX'
+              }}
             />
           </Col>
           <Col span={1}></Col>

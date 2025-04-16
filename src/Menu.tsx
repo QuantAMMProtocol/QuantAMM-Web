@@ -17,7 +17,6 @@ import style from './app.module.scss';
 
 import { useLocation } from 'react-router-dom'; // add this at the top
 
-
 type MenuItem = Required<MenuProps>['items'][number];
 
 interface MenuComponentProps {
@@ -43,8 +42,9 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
   useEffect(() => {
     const newPath = location.pathname.split('/')[1] || ROUTES.HOME;
     setCurrent(newPath as ROUTES);
-
-    dispatch(changeTheme(newPath as ROUTES === ROUTES.HOME));
+    if ((newPath as ROUTES) === ROUTES.HOME) {
+      dispatch(changeTheme((newPath as ROUTES) === ROUTES.HOME));
+    }
   }, [location.pathname, dispatch]);
 
   const backgroundColor = useMemo(() => {
@@ -132,7 +132,7 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
         key: 'tos',
         label: 'Terms of Service',
         icon: <LineChartOutlined />,
-      }
+      },
     ];
   }
 
@@ -247,15 +247,15 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          height:'20px',
+          height: '20px',
           width: (current as ROUTES) == ROUTES.HOME ? '0px' : '40px',
-          paddingRight:'10px'
+          paddingRight: '10px',
         }}
         hidden={(current as ROUTES) == ROUTES.HOME}
       >
         <div hidden={(current as ROUTES) == ROUTES.HOME}>
           <Switch
-          style={{padding:0, margin:0}}
+            style={{ padding: 0, margin: 0 }}
             rootClassName="switch-root"
             className={style['switch-root']}
             checkedChildren={<MoonOutlined />}
