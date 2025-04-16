@@ -1,4 +1,4 @@
-import { FC, useCallback, useMemo, useState } from 'react';
+import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Menu, Switch, MenuProps, Button, Grid } from 'antd';
 import {
@@ -14,6 +14,9 @@ import { changeTheme, selectTheme } from './features/themes/themeSlice';
 import { ROUTES } from './routesEnum';
 
 import style from './app.module.scss';
+
+import { useLocation } from 'react-router-dom'; // add this at the top
+
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -34,6 +37,16 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
   );
   const dispatch = useAppDispatch();
   const isDark = useAppSelector(selectTheme);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    const newPath = location.pathname.split('/')[1] || ROUTES.HOME;
+    setCurrent(newPath as ROUTES);
+
+    dispatch(changeTheme(newPath as ROUTES === ROUTES.HOME));
+  }, [location.pathname, dispatch]);
+
   const backgroundColor = useMemo(() => {
     return (current as ROUTES) == ROUTES.HOME
       ? '#2c496b'
