@@ -234,12 +234,15 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          width: (current as ROUTES) == ROUTES.HOME ? '0px' : '60px',
+          height:'20px',
+          width: (current as ROUTES) == ROUTES.HOME ? '0px' : '40px',
+          paddingRight:'10px'
         }}
         hidden={(current as ROUTES) == ROUTES.HOME}
       >
         <div hidden={(current as ROUTES) == ROUTES.HOME}>
           <Switch
+          style={{padding:0, margin:0}}
             rootClassName="switch-root"
             className={style['switch-root']}
             checkedChildren={<MoonOutlined />}
