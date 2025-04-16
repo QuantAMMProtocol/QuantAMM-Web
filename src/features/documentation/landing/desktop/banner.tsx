@@ -1,5 +1,5 @@
 import { Parallax, ParallaxLayer } from '@react-spring/parallax';
-import { Col, Row, Tag, Tooltip } from 'antd';
+import { Button, Col, Row, Tag, Tooltip } from 'antd';
 import { Typography } from 'antd';
 import { motion } from 'framer-motion';
 import { SimulationResultMarketValueChart } from '../../../simulationResults/visualisations/simulationResultMarketValueChart';
@@ -18,30 +18,33 @@ export function Banner() {
       imgSrc: '/assets/RWA_mono.png',
       description: [
         'RWAs are the future',
-        'Track RWA issuers to gain sector exposure.',
+        'Track RWA issuers.',
       ],
-      constituents: ['Coming Soon'],
+      status: 'Coming Soon',
       opacity: 0.4,
       imgWidth: '80%',
+      focus:false
     },
     {
       title: 'The Safe Haven',
       imgSrc: '/assets/safe_haven_BTF_icon_mono.png',
-      description: ['The doomsday BTF.', 'Bitcoin, PAXOS Gold'],
-      constituents: ['Bitcoin', 'Tokenized Gold', 'USDC'],
+      description: ['The doomsday BTF.', 'Bitcoin, PAXOS Gold, Dollar (USDC)'],
+      status: 'Launching [Date]',
       opacity: 1,
       imgWidth: '90%',
+      focus:true
     },
     {
       title: 'Super Sonic Momentum',
       imgSrc: '/assets/sonic_BTF_icon.png',
       description: [
         'The sonic ecosystem basket.',
-        'High yields by trend following strategies.',
+        'Mega Cap Yield Focus'
       ],
-      constituents: ['Coming Soon'],
+      status: 'Coming Soon',
       opacity: 0.4,
       imgWidth: '80%',
+      focus:false
     },
   ];
 
@@ -147,8 +150,8 @@ export function Banner() {
             position: 'relative',
           }}
         >
-          <Col span={1}></Col>
-          <Col span={8} style={{ paddingTop: '6vh' }}>
+          <Col span={4}></Col>
+          <Col span={6} style={{ paddingTop: '6vh' }}>
             <motion.div
               initial={{ opacity: 0, scale: 0 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -193,7 +196,7 @@ export function Banner() {
                         />
                       </div>
                     </Col>
-                    <Col span={16}>
+                    <Col span={20}>
                       <div
                         style={{
                           display: 'flex',
@@ -203,7 +206,7 @@ export function Banner() {
                         }}
                       >
                         <h3 style={{ margin: '5px', textAlign: 'left' }}>
-                          {tag.title}
+                          {tag.title + ' - ' + tag.status}
                         </h3>
                         {tag.description.map((desc, i) => (
                           <p
@@ -219,43 +222,12 @@ export function Banner() {
                         ))}
                       </div>
                     </Col>
-                    <Col span={4}>
-                      <div
-                        style={{
-                          height: '100%',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }}
-                      >
-                        <Row style={{ width: '100%' }}>
-                          {tag.constituents.length === 1 &&
-                          tag.constituents[0] === 'Coming Soon' ? (
-                            <h4>{tag.constituents[0]}</h4>
-                          ) : (
-                            tag.constituents.map((token, i) => (
-                              <Col key={i} span={24}>
-                                <p
-                                  style={{
-                                    margin: 0,
-                                    padding: 0,
-                                    fontSize: '10px',
-                                  }}
-                                >
-                                  {token}
-                                </p>
-                              </Col>
-                            ))
-                          )}
-                        </Row>
-                      </div>
-                    </Col>
                   </Row>
                 </Tag>
               ))}
             </motion.div>
           </Col>
-          <Col span={6}>
+          <Col span={4}>
             <motion.div
               initial={{ opacity: 0, scale: 0 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -309,7 +281,7 @@ export function Banner() {
             </motion.div>
           </Col>
           <Col
-            span={8}
+            span={9}
             style={{
               display: 'flex',
               flexDirection: 'column',

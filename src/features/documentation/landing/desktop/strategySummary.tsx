@@ -1,4 +1,4 @@
-import { Button, Col, Row, Typography } from 'antd';
+import { Button, Col, Row, Tooltip, Typography } from 'antd';
 import { ProductItemBackground } from '../../../productExplorer/productItem/productItemBackground';
 import { useEffect, useState } from 'react';
 import { SimulationRunBreakdown } from '../../../simulationResults/simulationResultSummaryModels';
@@ -88,6 +88,7 @@ export function StrategySummary() {
       image: '/documentation/vanilla_momentum.svg',
       description:
         "It's hard to buy low and sell high. It's easier to buy high and sell higher. Follow the trend.",
+      imgWidth:'85%'
     },
     {
       title: 'Price Mean Reversion',
@@ -95,6 +96,7 @@ export function StrategySummary() {
       image: '/documentation/mean_reversion.svg',
       description:
         'Deviations will revert back to the mean. Buy and sell assuming prices will revert.',
+      imgWidth:'100%'
     },
     {
       title: 'Channel Following',
@@ -102,6 +104,7 @@ export function StrategySummary() {
       image: '/documentation/channel_following.svg',
       description:
         'Everything will revert to the mean on small movements but act fast on larger movements.',
+      imgWidth:'90%'
     },
     {
       title: 'Power Channel',
@@ -109,6 +112,7 @@ export function StrategySummary() {
       image: '/documentation/power_channel.svg',
       description:
         'Ignore the noise of small price movements, act fast on large price movements.',
+      imgWidth:'100%'
     },
   ];
 
@@ -129,7 +133,7 @@ export function StrategySummary() {
             </Col>
           </Row>
           <Row>
-            <Col span={7}>
+            <Col span={6}>
               <div
                 style={{
                   justifyContent: 'center',
@@ -145,10 +149,14 @@ export function StrategySummary() {
                   FULLY DECENTRALISED, FULLY TRANSPARENT
                 </p>
                 <Row gutter={[8, 8]} style={{ marginTop: '2vh', padding: 0 }}>
-                  
                   {strategies.map((strategyItem) => (
-                    <Col span={24} style={{ margin: 0, padding: 0 }} key={strategyItem.name}>
-                      <Row>
+                    <Col
+                      span={24}
+                      style={{ margin: 0, padding: 0, height: '100%' }}
+                      key={strategyItem.name}
+                      
+                    >
+                      <Row style={{marginTop:'2vh'}}>
                         <Col span={8}>
                           <div
                             style={{
@@ -159,7 +167,7 @@ export function StrategySummary() {
                             <img
                               loading="lazy"
                               style={{
-                                width: '100%',
+                                width: strategyItem.imgWidth,
                                 height: 'auto',
                                 padding: '15px',
                               }}
@@ -167,54 +175,41 @@ export function StrategySummary() {
                             />
                           </div>
                         </Col>
-                        <Col span={13}>
-                          <div
+                        <Col span={16}>
+                            <div
                             style={{
+                              display: 'flex',
+                              flexDirection: 'column',
                               justifyContent: 'center',
-                              alignContent: 'center',
+                              alignItems: 'center',
                               height: '100%',
                             }}
-                          >
-                            <Col span={24}>
-                              <h4
-                                style={{
-                                  margin: 0,
-                                  padding: 0,
-                                  color: '#c7b283',
-                                }}
-                              >
-                                {strategyItem.title}
-                              </h4>
-                            </Col>
-                            <Col span={24}>
-                              <p style={{ paddingRight: '10px' }}>{strategyItem.description}</p>
-                            </Col>
-                          </div>
-                        </Col>
-                        <Col span={3}>
-                          <div
-                            style={{
-                              justifyContent: 'center',
-                              alignContent: 'center',
-                              height: '100%',
-                            }}
-                          >
-                            <Button
+                            >
+                            <Tooltip title={strategyItem.description}>
+                              <Button
                               disabled={strategy === strategyItem.name}
                               size="small"
                               style={{
+                                width: '100%',
+                                height: '60%',
                                 backgroundColor:
-                                  strategy === strategyItem.name ? '#c7b283' : undefined,
-                                color: strategy === strategyItem.name ? '#2c496b' : undefined,
+                                strategy === strategyItem.name
+                                  ? '#c7b283'
+                                  : undefined,
+                                color:
+                                strategy === strategyItem.name
+                                  ? '#2c496b'
+                                  : undefined,
                               }}
                               onClick={() => {
                                 setStrategy(strategyItem.name);
                                 setAutoCycle(false);
                               }}
-                            >
-                              {strategy === strategyItem.name ? 'Active' : 'Apply'}
-                            </Button>
-                          </div>
+                              >
+                              {strategyItem.title}
+                              </Button>
+                            </Tooltip>
+                            </div>
                         </Col>
                       </Row>
                     </Col>
@@ -222,7 +217,7 @@ export function StrategySummary() {
                 </Row>
               </div>
             </Col>
-            <Col span={8}>
+            <Col span={10}>
               <Row>
                 <Col span={24} style={{ paddingTop: '40px' }}>
                   <h4
@@ -326,21 +321,21 @@ export function StrategySummary() {
                 </Col>
               </Row>
             </Col>
-            <Col span={9}>
+            <Col span={8}>
               <div
                 style={{
                   height: '100%',
                   width: '100%',
                   paddingLeft: '20px',
                   paddingRight: '20px',
-                  paddingTop: '40px',
+                  paddingTop: '20px',
                 }}
               >
                 <SimulationResultMarketValueChart
                   breakdowns={breakdowns.filter(
                     (x) =>
                       x.simulationRun.updateRule.updateRuleName == strategy ||
-                      x.simulationRun.updateRule.updateRuleSimKey == 'hodl'
+                      x.simulationRun.updateRule.updateRuleName == 'Balancer Weighted'
                   )}
                   forceViewResults={true}
                   overrideXAxisInterval={24}
@@ -349,13 +344,14 @@ export function StrategySummary() {
                     AntiMomentum: '#c7b283',
                     'Channel Following': '#c7b283',
                     'Power Channel': '#c7b283',
-                    HODL: 'rgb(22,37,54)',
+                    'Balancer Weighted': '#528aae',
                   }}
                   overrideSeriesName={{
                     Momentum: 'QuantAMM',
                     AntiMomentum: 'QuantAMM',
                     'Channel Following': 'QuantAMM',
                     'Power Channel': 'QuantAMM',
+                    'Balancer Weighted' : 'Traditional DEX'
                   }}
                 />
               </div>
@@ -371,7 +367,7 @@ export function StrategySummary() {
                 }}
               >
                 <Button size="small" onClick={() => setAutoCycle(!autoCycle)}>
-                  {autoCycle ? 'Stop Stategy Cycling' : 'Start Stategy Cycling'}
+                  {autoCycle ? 'Pause' : 'Resume'}
                 </Button>
               </div>
             </Col>
