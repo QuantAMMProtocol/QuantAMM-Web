@@ -1,5 +1,5 @@
 import { Parallax, ParallaxLayer } from '@react-spring/parallax';
-import { Button, Col, Row, Tag, Tooltip } from 'antd';
+import { Col, Row, Tag, Tooltip } from 'antd';
 import { Typography } from 'antd';
 import { motion } from 'framer-motion';
 import { SimulationResultMarketValueChart } from '../../../simulationResults/visualisations/simulationResultMarketValueChart';
