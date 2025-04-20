@@ -123,11 +123,11 @@ export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({ product }) => {
       },
     },
     {
-      key: '3',
+      key: '9',
       label: '',
-      children: <ProductDetailSidebarOverviewGraph product={product} />,
-      showArrow: false,
+      children: <ProductDetailSidebarPerformanceGraph product={product} />,
       style: panelStyle,
+      showArrow: false,
       styles: {
         header: {
           padding: '0',
@@ -162,18 +162,6 @@ export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({ product }) => {
       key: '5',
       label: 'About Pool Type',
       children: <ProductDetailSidebarStrategySummary product={product} />,
-      style: panelStyle,
-      showArrow: false,
-      styles: {
-        header: {
-          padding: '0',
-        },
-      },
-    },
-    {
-      key: '9',
-      label: '',
-      children: <ProductDetailSidebarPerformanceGraph product={product} />,
       style: panelStyle,
       showArrow: false,
       styles: {
