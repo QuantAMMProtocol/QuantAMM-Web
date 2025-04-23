@@ -27,7 +27,10 @@ export const productExplorerSlice = createSlice({
       state.loadingProducts = true;
     },
     loadProducts: (state, action: PayloadAction<ProductMap>) => {
-      state.productMap = action.payload;
+      state.productMap = {
+        ...state.productMap,
+        ...action.payload,
+      };
       state.loadingProducts = false;
     },
     loadingFilters: (state) => {
@@ -110,6 +113,7 @@ export const selectProductById = (
   products: ProductMap,
   id: string
 ): Product | undefined => {
+  console.log('products ==>', products);
   return products[id];
 };
 

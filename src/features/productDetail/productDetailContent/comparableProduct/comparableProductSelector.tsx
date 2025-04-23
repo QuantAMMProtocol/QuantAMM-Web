@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Card } from 'antd';
+import { Button, Card, Spin } from 'antd';
 import { GetPoolsSummaryQueryVariables } from '../../../../__generated__/graphql-types';
 import { ProductDetailDropdownSelect } from '../components/productDetailDropdownSelect';
 import { ProductDetailNumericalInput } from '../components/productDetailNumericalInput';
@@ -14,10 +14,12 @@ import {
 import styles from './comparableProduct.module.scss';
 
 interface ComparableProductSelectorProps {
+  comparingProductLoading: boolean;
   onSelect: (poolId: string) => void;
 }
 
 export const ComparableProductSelector = ({
+  comparingProductLoading,
   onSelect,
 }: ComparableProductSelectorProps) => {
   const [params, setParams] =
@@ -110,40 +112,48 @@ export const ComparableProductSelector = ({
   return (
     <Card className={styles['comparable-product-selector__card']}>
       <div className={styles['comparable-product-selector__card-content']}>
-        <ProductDetailDropdownSelect
-          label="Chain"
-          options={chains}
-          placeholder="Any chain"
-          onSelectedItems={handleChainChange}
-        />
+        {comparingProductLoading && <Spin />}
+        {!comparingProductLoading && (
+          <>
+            <ProductDetailDropdownSelect
+              label="Chain"
+              options={chains}
+              placeholder="Any chain"
+              onSelectedItems={handleChainChange}
+            />
 
-        <ProductDetailDropdownSelect
-          label="Pool Type"
-          options={poolTypes}
-          placeholder="Any pool type"
-          onSelectedItems={handlePoolTypeChange}
-        />
+            <ProductDetailDropdownSelect
+              label="Pool Type"
+              options={poolTypes}
+              placeholder="Any pool type"
+              onSelectedItems={handlePoolTypeChange}
+            />
 
-        <ProductDetailNumericalInput
-          label="Min TVL"
-          value={params.where?.minTvl ?? 0}
-          placeholder="Min TVL"
-          onChange={handleMinTvlChange}
-          min={1000}
-        />
+            <ProductDetailNumericalInput
+              label="Min TVL"
+              value={params.where?.minTvl ?? 0}
+              placeholder="Min TVL"
+              onChange={handleMinTvlChange}
+              min={1000}
+            />
 
-        <ProductDetailInput
-          label="Search"
-          value={params.textSearch ?? ''}
-          placeholder="Search"
-          onChange={handleSearchChange}
-        />
+            <ProductDetailInput
+              label="Search"
+              value={params.textSearch ?? ''}
+              placeholder="Search"
+              onChange={handleSearchChange}
+            />
 
-        <Button type="primary" onClick={handleSearchClick}>
-          Search
-        </Button>
-        {initialSearch && (
-          <ComparableProductDropdown params={params} onSelect={handleSelect} />
+            <Button type="primary" onClick={handleSearchClick}>
+              Search
+            </Button>
+            {initialSearch && (
+              <ComparableProductDropdown
+                params={params}
+                onSelect={handleSelect}
+              />
+            )}
+          </>
         )}
       </div>
     </Card>
