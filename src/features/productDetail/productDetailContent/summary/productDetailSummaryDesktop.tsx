@@ -106,6 +106,7 @@ export const ProductDetailSummaryDesktop: FC<
         <ProductDetailDropdown
           items={benchmarksDropdownOptions}
           width={'auto'}
+          disabled={true}
           onChangeItem={handleBenchmarkAnalysisChange}
         />
         <Tooltip title="Select a benchmark to compare the product with">
