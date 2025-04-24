@@ -38,6 +38,7 @@ interface ProductDetailSummaryDesktopProps {
   selectedReturnAnalysis?: SimulationRunMetric;
   selectedBenchmarkReturnAnalysis?: SimulationRunMetric;
   comparingProduct?: Product;
+  comparingProductLoading: boolean;
   comparingProductReturnAnalysis?: SimulationRunMetric[] | null;
   comparingProductBenchmarkAnalysis?: SimulationRunMetric[] | null;
   onSelectComparableProduct: (poolId: string) => void;
@@ -60,6 +61,7 @@ export const ProductDetailSummaryDesktop: FC<
   selectedReturnAnalysis,
   selectedBenchmarkReturnAnalysis,
   comparingProduct,
+  comparingProductLoading,
   comparingProductReturnAnalysis,
   comparingProductBenchmarkAnalysis,
   handleReturnAnalysisChange,
@@ -106,6 +108,7 @@ export const ProductDetailSummaryDesktop: FC<
         <ProductDetailDropdown
           items={benchmarksDropdownOptions}
           width={'auto'}
+          disabled={true}
           onChangeItem={handleBenchmarkAnalysisChange}
         />
         <Tooltip title="Select a benchmark to compare the product with">
@@ -132,7 +135,10 @@ export const ProductDetailSummaryDesktop: FC<
             </Text>
           </div>
         ) : (
-          <ComparableProductSelector onSelect={onSelectComparableProduct} />
+          <ComparableProductSelector
+            onSelect={onSelectComparableProduct}
+            comparingProductLoading={comparingProductLoading}
+          />
         )}
       </div>
 

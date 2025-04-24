@@ -1,21 +1,22 @@
 import { CSSProperties, FC, useMemo } from 'react';
 import { CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons';
-import { Collapse, CollapseProps } from 'antd';
+import { Collapse, CollapseProps, Typography } from 'antd';
 import { Product } from '../../../models';
 import { ProductDetailSidebarOverview } from './productDetailSidebarOverview';
 import { ProductDetailSidebarPoolInfo } from './productDetailSidebarPoolInfo';
-import { ProductDetailSidebarOverviewGraph } from './productDetailSidebarIOverviewGraph';
+// import { ProductDetailSidebarOverviewGraph } from './productDetailSidebarIOverviewGraph';
 import { ProductDetailSidebarCompositionGraph } from './productDetailSidebarICompositionGraph';
 import { ProductDetailSidebarSocials } from './productDetailSidebarSocials';
 
 import sharedStyles from '../../../shared.module.scss';
-import Title from 'antd/es/typography/Title';
 
 import styles from './productDetailSidebar.module.scss';
 import { useAppSelector } from '../../../app/hooks';
 import { selectProductDetailSelectedTimeRange } from '../../productExplorer/productExplorerSlice';
 import { ProductDetailSidebarStrategySummary } from './productDetailSidebarStrategySummary';
 import { ProductDetailSidebarPerformanceGraph } from './productDetailSidebarIPerformanceGraph';
+
+const { Title } = Typography;
 
 interface ProductDetailInfoProps {
   product: Product;

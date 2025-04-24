@@ -3,6 +3,7 @@ import { Col, Row, Typography } from 'antd';
 import { GqlChain } from '../../../../__generated__/graphql-types';
 import { Benchmark, Product } from '../../../../models';
 import {
+  loadProducts,
   selectBenchmarkAnalysisByProductId,
   selectBenchmarkMetricThresholds,
   selectLoadingSimulationRunBreakdown,
@@ -11,14 +12,14 @@ import {
   selectReturnAnalysisByProductId,
   selectReturnMetricThresholds,
 } from '../../../productExplorer/productExplorerSlice';
-import { useAppSelector } from '../../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { useFetchProductData } from '../../../../hooks/useFetchProductData';
 import { useFinancialAnalysis } from '../../../../hooks/useFinancialAnalysis';
 import { ProductDetailSummaryDesktop } from './productDetailSummaryDesktop';
 import { ProductDetailSummaryMobile } from './productDetailSummaryMobile';
+import { SimulationRunMetric } from '../../../simulationResults/simulationResultSummaryModels';
 
 import styles from './productDetailSummary.module.scss';
-import { SimulationRunMetric } from '../../../simulationResults/simulationResultSummaryModels';
 
 const { Title } = Typography;
 
@@ -59,6 +60,8 @@ export const ProductDetailSummary: FC<ProductDetailSummaryProps> = ({
   loadingSimulationRunBreakdown,
   isMobile,
 }) => {
+  const dispatch = useAppDispatch();
+
   const [selectedReturnAnalysis, setSelectedReturnAnalysis] = useState<
     SimulationRunMetric | undefined
   >(undefined);
@@ -220,10 +223,16 @@ export const ProductDetailSummary: FC<ProductDetailSummaryProps> = ({
     }
   };
 
-  const { product: productData } = useFetchProductData(
+  const { product: productData, productLoading } = useFetchProductData(
     comparingProductId?.id ?? '',
     comparingProductId?.chain ?? GqlChain.Mainnet
   );
+
+  useEffect(() => {
+    if (productData) {
+      dispatch(loadProducts({ [productData.id]: productData }));
+    }
+  }, [productData, dispatch]);
 
   useFinancialAnalysis({
     product: productData,
@@ -278,6 +287,7 @@ export const ProductDetailSummary: FC<ProductDetailSummaryProps> = ({
                 benchmarkAnalysisDropdownOptions
               }
               comparingProduct={comparingProduct}
+              comparingProductLoading={productLoading}
               onSelectComparableProduct={handleSelectComparableProduct}
               handleBenchmarkChange={handleBenchmarkChange}
               handleReturnAnalysisChange={handleReturnAnalysisChange}
@@ -306,6 +316,7 @@ export const ProductDetailSummary: FC<ProductDetailSummaryProps> = ({
                 benchmarkAnalysisDropdownOptions
               }
               comparingProduct={comparingProduct}
+              comparingProductLoading={productLoading}
               onSelectComparableProduct={handleSelectComparableProduct}
               handleBenchmarkChange={handleBenchmarkChange}
               handleReturnAnalysisChange={handleReturnAnalysisChange}
