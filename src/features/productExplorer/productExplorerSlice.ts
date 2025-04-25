@@ -113,7 +113,6 @@ export const selectProductById = (
   products: ProductMap,
   id: string
 ): Product | undefined => {
-  console.log('products ==>', products);
   return products[id];
 };
 

@@ -10,7 +10,7 @@ import { SimulationRunMetric } from '../../../simulationResults/simulationResult
 import { ProductDetailDropdown } from '../components/productDetailDropdown';
 import { ProductDetailGauge } from '../components/productDetailGauge';
 import { ComparableProductSelector } from '../comparableProduct/comparableProductSelector';
-import { getMax, benchmarksDropdownOptions } from './utils';
+import { getMax, benchmarksDropdownOptions, getMin } from './utils';
 
 import styles from './productDetailSummary.module.scss';
 
@@ -183,7 +183,7 @@ export const ProductDetailSummaryDesktop: FC<
             (x) => x.key == selectedReturnAnalysis?.metricName
           )}
           values={{
-            min: 0,
+            min: getMin(returnAnalysisThresholds, selectedReturnAnalysis),
             max: getMax(returnAnalysisThresholds, selectedReturnAnalysis),
             actual: getMax(returnAnalysisThresholds, selectedReturnAnalysis),
             target: selectedReturnAnalysis?.metricValue,
@@ -197,7 +197,12 @@ export const ProductDetailSummaryDesktop: FC<
             (x) => x.key == selectedReturnAnalysis?.metricName
           )}
           values={{
-            min: 0,
+            min: getMin(
+              returnAnalysisThresholds,
+              benchmarkAnalysis?.find(
+                (x) => x.metricName == selectedReturnAnalysis?.metricName
+              )
+            ),
             max: getMax(
               returnAnalysisThresholds,
               benchmarkAnalysis?.find(
@@ -234,7 +239,12 @@ export const ProductDetailSummaryDesktop: FC<
                 )?.metricName
             )}
             values={{
-              min: 0,
+              min: getMin(
+                returnAnalysisThresholds,
+                comparingProductReturnAnalysis?.find(
+                  (x) => x.metricName == selectedReturnAnalysis?.metricName
+                )
+              ),
               max: getMax(
                 returnAnalysisThresholds,
                 comparingProductReturnAnalysis?.find(
@@ -300,7 +310,10 @@ export const ProductDetailSummaryDesktop: FC<
             (x) => x.key == selectedBenchmarkReturnAnalysis?.metricName
           )}
           values={{
-            min: 0,
+            min: getMin(
+              benchmarkReturnAnalysisThresholds,
+              selectedBenchmarkReturnAnalysis
+            ),
             max: getMax(
               benchmarkReturnAnalysisThresholds,
               selectedBenchmarkReturnAnalysis
@@ -329,7 +342,13 @@ export const ProductDetailSummaryDesktop: FC<
                 )?.metricName
             )}
             values={{
-              min: 0,
+              min: getMin(
+                benchmarkReturnAnalysisThresholds,
+                comparingProductBenchmarkAnalysis?.find(
+                  (x) =>
+                    x.metricName == selectedBenchmarkReturnAnalysis?.metricName
+                )
+              ),
               max: getMax(
                 benchmarkReturnAnalysisThresholds,
                 comparingProductBenchmarkAnalysis?.find(
