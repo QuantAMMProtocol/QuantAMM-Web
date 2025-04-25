@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Col, Row, Tooltip, Typography } from 'antd';
+import { Col, Row, Spin, Tooltip, Typography } from 'antd';
 import { CloseOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { FinancialMetricThresholds, Product } from '../../../../models';
 import {
@@ -228,7 +228,7 @@ export const ProductDetailSummaryDesktop: FC<
 
       {/* fourth column */}
 
-      {comparingProduct && (
+      {comparingProduct && comparingProductReturnAnalysis ? (
         <div className={styles['product-detail-summary__item']}>
           <ProductDetailGauge
             thresholds={returnAnalysisThresholds?.find(
@@ -266,6 +266,10 @@ export const ProductDetailSummaryDesktop: FC<
               ),
             }}
           />
+        </div>
+      ) : (
+        <div className={styles['product-detail-summary__item']}>
+          <Spin />
         </div>
       )}
 
@@ -330,7 +334,7 @@ export const ProductDetailSummaryDesktop: FC<
       <div className={styles['product-detail-summary__item']}></div>
 
       {/* fourth column */}
-      {comparingProduct && (
+      {comparingProduct && comparingProductBenchmarkAnalysis ? (
         <div className={styles['product-detail-summary__item']}>
           <ProductDetailGauge
             thresholds={benchmarkReturnAnalysisThresholds?.find(
@@ -369,6 +373,10 @@ export const ProductDetailSummaryDesktop: FC<
               )?.metricValue,
             }}
           />
+        </div>
+      ) : (
+        <div className={styles['product-detail-summary__item']}>
+          <Spin />
         </div>
       )}
 
