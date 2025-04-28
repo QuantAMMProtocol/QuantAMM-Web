@@ -140,7 +140,7 @@ export function QuantAMMExplainerMobile() {
                           top: 5,
                           bottom: 5,
                         },
-                        height: 500,
+                        height: 450,
                         width: 100,
                       }}
                     />
@@ -209,7 +209,7 @@ export function QuantAMMExplainerMobile() {
                           top: 5,
                           bottom: 5,
                         },
-                        height: 500,
+                        height: 450,
                         width: 400,
                       }}
                     />
