@@ -32,11 +32,11 @@ export function BannerMobile(){
           paddingTop: 0,
         }}
       >
-        CAPITALIZE ON UNDERLYING PRICE MOVEMENTS WHILE STILL EARNING FEES
-        AND YIELD
+        DYNAMIC STRATEGY POOLS THAT CAPITALISE ON PRICE VOLATILITY WHILE
+        STILL EARNING FEES AND YIELD
       </p>
     </div>
-    <div style={{ marginTop: '40vh' }}>
+    <div style={{ marginTop: '38vh' }}>
         <div
           style={{
             display: 'flex',

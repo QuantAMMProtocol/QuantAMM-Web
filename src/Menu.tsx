@@ -125,13 +125,13 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
             label: 'Simulation Price Data',
             icon: <LineChartOutlined />,
           },
+          {
+            key: 'tos',
+            label: 'Terms of Service',
+            icon: <LineChartOutlined />,
+          }
         ],
         style: { marginLeft: 'auto' }, // Align to the right
-      },
-      {
-        key: 'tos',
-        label: 'Terms of Service',
-        icon: <LineChartOutlined />,
       },
     ];
   }
