@@ -228,7 +228,7 @@ export const ProductDetailSummaryDesktop: FC<
 
       {/* fourth column */}
 
-      {comparingProduct && comparingProductReturnAnalysis ? (
+      {comparingProduct && comparingProductReturnAnalysis && (
         <div className={styles['product-detail-summary__item']}>
           <ProductDetailGauge
             thresholds={returnAnalysisThresholds?.find(
@@ -267,7 +267,8 @@ export const ProductDetailSummaryDesktop: FC<
             }}
           />
         </div>
-      ) : (
+      )}
+      {comparingProduct && !comparingProductReturnAnalysis && (
         <div className={styles['product-detail-summary__item']}>
           <Spin />
         </div>
@@ -334,7 +335,7 @@ export const ProductDetailSummaryDesktop: FC<
       <div className={styles['product-detail-summary__item']}></div>
 
       {/* fourth column */}
-      {comparingProduct && comparingProductBenchmarkAnalysis ? (
+      {comparingProduct && comparingProductBenchmarkAnalysis && (
         <div className={styles['product-detail-summary__item']}>
           <ProductDetailGauge
             thresholds={benchmarkReturnAnalysisThresholds?.find(
@@ -374,7 +375,8 @@ export const ProductDetailSummaryDesktop: FC<
             }}
           />
         </div>
-      ) : (
+      )}
+      {comparingProduct && !comparingProductBenchmarkAnalysis && (
         <div className={styles['product-detail-summary__item']}>
           <Spin />
         </div>
