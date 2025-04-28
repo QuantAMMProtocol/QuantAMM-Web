@@ -88,7 +88,6 @@ const handleDownloadGas = (
   if (file && file.type === 'text/csv') {
     // Ensure it's a CSV file
     const reader = new FileReader();
-    console.log('handle gas');
     reader.onload = (loadEvent) => {
       const csvContent = loadEvent.target?.result;
       try {

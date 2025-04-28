@@ -147,7 +147,6 @@ export function calculateCovariance(
     const j = findLastAvailableReturn(rj, i.unix, 1, 604800000);
 
     if (j == undefined) {
-      console.log('covariariance could not find ' + i.unix);
     } else {
       sumRiRj += (i.return - riMean) * (j.return - rjMean);
     }

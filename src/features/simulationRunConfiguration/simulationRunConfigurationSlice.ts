@@ -993,11 +993,6 @@ export const selectPoolTypeDefaultUpdateRule = (
       (x) => x.updateRuleName == 'Momentum'
     );
   } else {
-    console.log(
-      state.simConfig.availableUpdateRules.find((x) =>
-        x.applicablePoolTypes.find((y) => y == poolType)
-      )?.updateRuleName
-    );
     return state.simConfig.availableUpdateRules.find((x) =>
       x.applicablePoolTypes.find((y) => y == poolType)
     );

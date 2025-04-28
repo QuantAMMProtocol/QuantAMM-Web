@@ -150,10 +150,6 @@ export const getBreakdown = async (
   const buffer = await response.arrayBuffer();
 
   const decodedData = decode(new Uint8Array(buffer));
-  console.log('Decoded data:', decodedData);
-  console.log(convertBreakdownDtoToBreakdown(
-    decodedData as SimulationRunBreakdownDto
-  ));
   return convertBreakdownDtoToBreakdown(
     decodedData as SimulationRunBreakdownDto
   );

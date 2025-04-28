@@ -56,7 +56,6 @@ export function Banner() {
       const fetchedBreakdowns = await Promise.all(
         poolNames.map((poolName) => getBreakdown(poolName))
       );
-      console.log('Fetched breakdowns:', fetchedBreakdowns);
       setBreakdowns(fetchedBreakdowns);
       return fetchedBreakdowns;
     };
