@@ -32,7 +32,16 @@ export type Pool =
   | 'solExamplePowerChannel'
   | 'solExampleChannelFollowing'
   | 'solExampleHodl'
-  | 'solExampleWeighted';
+  | 'solExampleWeighted'
+  | 'safeHavenBTF2025Test'
+  | 'safeHavenBTFAugTest'
+  | 'safeHavenBTFAugTrain'
+  | 'safeHavenCFMM2025Test'
+  | 'safeHavenCFMMAugTest'
+  | 'safeHavenCFMMAugTrain'
+  | 'safeHavenHodl2025Test'
+  | 'safeHavenHodlAugTest'
+  | 'safeHavenHodlAugTrain';
 
 // Helper to convert MessagePack data to breakdown DTO
 export const convertBreakdownDtoToBreakdown = (
@@ -119,6 +128,15 @@ export const getBreakdown = async (
       './prerun_sims/BTC-ETH-SOL-USDC-channel-following-daily.msgpack',
     solExampleHodl: './prerun_sims/BTC-ETH-SOL-USDC-hodl-daily.msgpack',
     solExampleWeighted:'./prerun_sims/BTC-ETH-SOL-USDC-weighted.msgpack',
+    safeHavenBTF2025Test: './prerun_sims/SAFE_HAVEN_BTF_2025_TEST.msgpack',
+    safeHavenBTFAugTest: './prerun_sims/SAFE_HAVEN_BTF_AUG_TEST.msgpack',
+    safeHavenBTFAugTrain: './prerun_sims/SAFE_HAVEN_BTF_AUG_TRAIN.msgpack',
+    safeHavenCFMM2025Test: './prerun_sims/SAFE_HAVEN_CFMM_2025_TEST.msgpack',
+    safeHavenCFMMAugTest: './prerun_sims/SAFE_HAVEN_CFMM_AUG_TEST.msgpack',
+    safeHavenCFMMAugTrain: './prerun_sims/SAFE_HAVEN_CFMM_AUG_TRAIN.msgpack',
+    safeHavenHodl2025Test: './prerun_sims/SAFE_HAVEN_HODL_2025_TEST.msgpack',
+    safeHavenHodlAugTest: './prerun_sims/SAFE_HAVEN_HODL_AUG_TEST.msgpack',
+    safeHavenHodlAugTrain: './prerun_sims/SAFE_HAVEN_HODL_AUG_TRAIN.msgpack',
   };
 
   const poolFilePath = poolFileMapping[poolName];
@@ -132,7 +150,10 @@ export const getBreakdown = async (
   const buffer = await response.arrayBuffer();
 
   const decodedData = decode(new Uint8Array(buffer));
-
+  console.log('Decoded data:', decodedData);
+  console.log(convertBreakdownDtoToBreakdown(
+    decodedData as SimulationRunBreakdownDto
+  ));
   return convertBreakdownDtoToBreakdown(
     decodedData as SimulationRunBreakdownDto
   );

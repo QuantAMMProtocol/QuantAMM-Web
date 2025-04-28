@@ -56,12 +56,13 @@ export function Banner() {
       const fetchedBreakdowns = await Promise.all(
         poolNames.map((poolName) => getBreakdown(poolName))
       );
+      console.log('Fetched breakdowns:', fetchedBreakdowns);
       setBreakdowns(fetchedBreakdowns);
       return fetchedBreakdowns;
     };
 
     if (loading) {
-      loadBreakdowns(['balancerWeighted', 'quantAMMAntiMomentum'] as Pool[])
+      loadBreakdowns(['safeHavenBTF2025Test', 'safeHavenCFMM2025Test', 'safeHavenHodl2025Test'] as Pool[])
         .catch(console.error)
         .finally(() => setLoading(false));
     }
@@ -293,14 +294,18 @@ export function Banner() {
               breakdowns={breakdowns}
               forceViewResults={true}
               overrideHeight={220}
-              overrideXAxisInterval={19}
+              overrideXAxisInterval={1}
+              overrideYAxisMax={11000000}
+              overrideYAxisMin={85000000}
+              overrideYAxisInterval={[9000000, 11000000]}
               overrideNagivagtion={false}
               overrideSeriesStrokeColor={{
-                AntiMomentum: '#c7b283',
+                "Power Channel": '#c7b283',
                 'Balancer Weighted': '#528aae',
+                'HODL': '#52ad80',
               }}
               overrideSeriesName={{
-                AntiMomentum: 'QuantAMM',
+                "Power Channel": 'QuantAMM',
                 'Balancer Weighted' : 'Traditional DEX'
               }}
             />

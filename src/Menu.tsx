@@ -1,6 +1,6 @@
 import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Menu, Switch, MenuProps, Button, Grid } from 'antd';
+import { Menu, Switch, MenuProps, Button, Grid, Tooltip } from 'antd';
 import {
   RadarChartOutlined,
   LineChartOutlined,
@@ -207,13 +207,16 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
         key: 'product-explorer',
         label: '',
         icon: (
-          <Button
-            type="primary"
-            size="small"
-            style={{ width: '100%', color: 'var(--main-background)' }}
-          >
-            Launch App
-          </Button>
+            <Tooltip title="Coming Soon">
+            <Button
+              type="primary"
+              size="small"
+              style={{ width: '100%', color: 'var(--main-background)' }}
+              disabled={true} // temporary before launch
+            >
+              Launch App
+            </Button>
+            </Tooltip>
         ),
       },
     ];

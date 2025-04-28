@@ -23,7 +23,7 @@ export interface SeriesConfig {
   yName: string;
   data: SimulationRunLiquidityPoolSnapshot[];
   marker: Marker;
-  stroke:string | undefined;
+  stroke: string | undefined;
 }
 
 export function SimulationResultMarketValueChart(props: BreakdownProps) {
@@ -69,34 +69,39 @@ export function SimulationResultMarketValueChart(props: BreakdownProps) {
       .forEach((x) => {
         let stokeOverride = undefined;
         if (props.overrideSeriesStrokeColor != undefined) {
-          const override = props.overrideSeriesStrokeColor[x.simulationRun.updateRule.updateRuleName];
+          const override =
+            props.overrideSeriesStrokeColor[
+              x.simulationRun.updateRule.updateRuleName
+            ];
           if (override != null) {
-              stokeOverride = override;
+            stokeOverride = override;
           }
         }
 
-        let nameOverride = x.simulationRun.updateRule.updateRuleName +
-        getDuplicateUpdateRuleNames(
-        breakdowns,
-        x.simulationRun.updateRule.updateRuleName
-        );
+        let nameOverride =
+          x.simulationRun.updateRule.updateRuleName +
+          getDuplicateUpdateRuleNames(
+            breakdowns,
+            x.simulationRun.updateRule.updateRuleName
+          );
 
         if (props.overrideSeriesName != undefined) {
-          const override = props.overrideSeriesName[x.simulationRun.updateRule.updateRuleName];
+          const override =
+            props.overrideSeriesName[x.simulationRun.updateRule.updateRuleName];
           if (override != null) {
-              nameOverride = override;
+            nameOverride = override;
           }
         }
         if (x.timeSteps.length != 0) {
           const data = getChartTimeSteps(x);
-            seriesArray.push({
+          seriesArray.push({
             xKey: 'unix',
             yKey: 'totalPoolMarketValue',
             yName: nameOverride,
             data: [...data],
             marker: { enabled: false },
             stroke: stokeOverride,
-            });
+          });
         }
       });
 
@@ -140,8 +145,8 @@ export function SimulationResultMarketValueChart(props: BreakdownProps) {
                     height: 5,
                     spacing: 6,
                   },
-                  padding:{
-                    right:40
+                  padding: {
+                    right: 40,
                   },
                   axes: [
                     getTimeAxisOption(
@@ -155,6 +160,13 @@ export function SimulationResultMarketValueChart(props: BreakdownProps) {
                       label: {
                         format: '$~s',
                       },
+                      max: props.overrideYAxisMax ?? undefined,
+                      min: props.overrideYAxisMin ?? undefined,
+                      interval: props.overrideYAxisInterval
+                        ? {
+                            values: props.overrideYAxisInterval,
+                          }
+                        : undefined,
                     },
                   ],
                   series: getSimulationResultSeries(simulationBreakdownResults),

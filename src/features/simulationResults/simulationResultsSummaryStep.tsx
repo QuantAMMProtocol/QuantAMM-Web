@@ -41,7 +41,9 @@ export interface BreakdownProps {
   forceViewResults: boolean;
   overrideHeight?:number;
   overrideXAxisInterval?: number;
-  overrideYAxisInterval?: number;
+  overrideYAxisInterval?: number[];
+  overrideYAxisMax?: number;
+  overrideYAxisMin?: number;
   overrideSeriesStrokeColor?:Dictionary<string>;
   overrideSeriesName?:Dictionary<string>;
   overrideNagivagtion?:boolean;
