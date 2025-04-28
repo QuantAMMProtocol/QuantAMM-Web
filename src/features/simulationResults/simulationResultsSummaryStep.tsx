@@ -32,14 +32,21 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { SimulationRunBreakdown } from './simulationResultSummaryModels';
 import { ItemType } from 'antd/es/menu/interface';
 import { SimulationResultDrawdownChart } from './visualisations/simulationResultDrawdownGraph';
+import { Dictionary } from '@reduxjs/toolkit';
 
 const { TabPane } = Tabs;
 
 export interface BreakdownProps {
   breakdowns: SimulationRunBreakdown[];
   forceViewResults: boolean;
+  overrideHeight?:number;
   overrideXAxisInterval?: number;
-  overrideYAxisInterval?: number;
+  overrideYAxisInterval?: number[];
+  overrideYAxisMax?: number;
+  overrideYAxisMin?: number;
+  overrideSeriesStrokeColor?:Dictionary<string>;
+  overrideSeriesName?:Dictionary<string>;
+  overrideNagivagtion?:boolean;
 }
 
 export function SimulationResultsSummaryStep(props: BreakdownProps) {

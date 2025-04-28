@@ -1,6 +1,6 @@
-import { FC, useCallback, useMemo, useState } from 'react';
+import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Menu, Switch, MenuProps, Button, Grid } from 'antd';
+import { Menu, Switch, MenuProps, Button, Grid, Tooltip } from 'antd';
 import {
   RadarChartOutlined,
   LineChartOutlined,
@@ -14,6 +14,8 @@ import { changeTheme, selectTheme } from './features/themes/themeSlice';
 import { ROUTES } from './routesEnum';
 
 import style from './app.module.scss';
+
+import { useLocation } from 'react-router-dom'; // add this at the top
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -34,6 +36,17 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
   );
   const dispatch = useAppDispatch();
   const isDark = useAppSelector(selectTheme);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    const newPath = location.pathname.split('/')[1] || ROUTES.HOME;
+    setCurrent(newPath as ROUTES);
+    if ((newPath as ROUTES) === ROUTES.HOME) {
+      dispatch(changeTheme((newPath as ROUTES) === ROUTES.HOME));
+    }
+  }, [location.pathname, dispatch]);
+
   const backgroundColor = useMemo(() => {
     return (current as ROUTES) == ROUTES.HOME
       ? '#2c496b'
@@ -119,7 +132,7 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
         key: 'tos',
         label: 'Terms of Service',
         icon: <LineChartOutlined />,
-      }
+      },
     ];
   }
 
@@ -194,13 +207,16 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
         key: 'product-explorer',
         label: '',
         icon: (
-          <Button
-            type="primary"
-            size="small"
-            style={{ width: '100%', color: 'var(--main-background)' }}
-          >
-            Launch App
-          </Button>
+            <Tooltip title="Coming Soon">
+            <Button
+              type="primary"
+              size="small"
+              style={{ width: '100%', color: 'var(--main-background)' }}
+              disabled={true} // temporary before launch
+            >
+              Launch App
+            </Button>
+            </Tooltip>
         ),
       },
     ];
@@ -234,12 +250,15 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          width: (current as ROUTES) == ROUTES.HOME ? '0px' : '60px',
+          height: '20px',
+          width: (current as ROUTES) == ROUTES.HOME ? '0px' : '40px',
+          paddingRight: '10px',
         }}
         hidden={(current as ROUTES) == ROUTES.HOME}
       >
         <div hidden={(current as ROUTES) == ROUTES.HOME}>
           <Switch
+            style={{ padding: 0, margin: 0 }}
             rootClassName="switch-root"
             className={style['switch-root']}
             checkedChildren={<MoonOutlined />}

@@ -23,6 +23,7 @@ export interface SeriesConfig {
   yName: string;
   data: SimulationRunLiquidityPoolSnapshot[];
   marker: Marker;
+  stroke: string | undefined;
 }
 
 export function SimulationResultMarketValueChart(props: BreakdownProps) {
@@ -66,19 +67,40 @@ export function SimulationResultMarketValueChart(props: BreakdownProps) {
       .filter((x) => x.simulationRunStatus == 'Complete')
       .filter((x) => x.timeRange.name == simulationTimeRangeSelected)
       .forEach((x) => {
+        let stokeOverride = undefined;
+        if (props.overrideSeriesStrokeColor != undefined) {
+          const override =
+            props.overrideSeriesStrokeColor[
+              x.simulationRun.updateRule.updateRuleName
+            ];
+          if (override != null) {
+            stokeOverride = override;
+          }
+        }
+
+        let nameOverride =
+          x.simulationRun.updateRule.updateRuleName +
+          getDuplicateUpdateRuleNames(
+            breakdowns,
+            x.simulationRun.updateRule.updateRuleName
+          );
+
+        if (props.overrideSeriesName != undefined) {
+          const override =
+            props.overrideSeriesName[x.simulationRun.updateRule.updateRuleName];
+          if (override != null) {
+            nameOverride = override;
+          }
+        }
         if (x.timeSteps.length != 0) {
           const data = getChartTimeSteps(x);
           seriesArray.push({
             xKey: 'unix',
             yKey: 'totalPoolMarketValue',
-            yName:
-              x.simulationRun.updateRule.updateRuleName +
-              getDuplicateUpdateRuleNames(
-                breakdowns,
-                x.simulationRun.updateRule.updateRuleName
-              ),
+            yName: nameOverride,
             data: [...data],
             marker: { enabled: false },
+            stroke: stokeOverride,
           });
         }
       });
@@ -108,7 +130,7 @@ export function SimulationResultMarketValueChart(props: BreakdownProps) {
   return (
     <div>
       <Divider className={styles.simResultDividers}>
-        Pool Holding $ over time
+        Simulated Pool Holding $ over time
       </Divider>
 
       <Row>
@@ -117,14 +139,14 @@ export function SimulationResultMarketValueChart(props: BreakdownProps) {
             <Col span={24}>
               <AgCharts
                 options={{
-                  height: 500,
+                  height: props.overrideHeight ?? 500,
                   navigator: {
-                    enabled: true,
+                    enabled: props.overrideNagivagtion ?? true,
                     height: 5,
                     spacing: 6,
                   },
-                  padding:{
-                    right:40
+                  padding: {
+                    right: 40,
                   },
                   axes: [
                     getTimeAxisOption(
@@ -138,6 +160,13 @@ export function SimulationResultMarketValueChart(props: BreakdownProps) {
                       label: {
                         format: '$~s',
                       },
+                      max: props.overrideYAxisMax ?? undefined,
+                      min: props.overrideYAxisMin ?? undefined,
+                      interval: props.overrideYAxisInterval
+                        ? {
+                            values: props.overrideYAxisInterval,
+                          }
+                        : undefined,
                     },
                   ],
                   series: getSimulationResultSeries(simulationBreakdownResults),

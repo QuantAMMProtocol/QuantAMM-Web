@@ -58,7 +58,7 @@ export const WeightChangeOverTimeGraph: FC<WeightChangeOverTimeGraphProps> = ({
 
       item.coinsHeld.forEach((coinHeld) => {
         const lowerCode = coinHeld.coin.coinCode.toLowerCase();
-        timeStep[normalisedTokenName(lowerCode)] = coinHeld.weight;
+        timeStep[normalisedTokenName(lowerCode)] = (coinHeld.weight ?? 0) * 100;
       });
 
       result.push(timeStep);
@@ -124,7 +124,7 @@ export const WeightChangeOverTimeGraph: FC<WeightChangeOverTimeGraphProps> = ({
             position: 'left',
             label: {
               formatter: (params: AgAxisLabelFormatterParams) => {
-                return params.value.toFixed(2) + '%';
+                return (params.value.toFixed(2)) + '%';
               },
             },
             ...yAxisOverride,

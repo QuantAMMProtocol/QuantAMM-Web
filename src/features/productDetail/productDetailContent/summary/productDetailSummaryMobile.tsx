@@ -29,6 +29,7 @@ interface ProductDetailSummaryMobileProps {
   selectedReturnAnalysis: SimulationRunMetric | undefined;
   selectedBenchmarkReturnAnalysis: SimulationRunMetric | undefined;
   comparingProduct?: Product;
+  comparingProductLoading: boolean;
   comparingProductReturnAnalysis?: SimulationRunMetric[] | null;
   comparingProductBenchmarkAnalysis?: SimulationRunMetric[] | null;
   onSelectComparableProduct: (poolId: string) => void;
@@ -71,6 +72,7 @@ export const ProductDetailSummaryMobile = ({
   selectedReturnAnalysis,
   selectedBenchmarkReturnAnalysis,
   comparingProduct,
+  comparingProductLoading,
   comparingProductReturnAnalysis,
   comparingProductBenchmarkAnalysis,
   handleBenchmarkChange,
@@ -111,6 +113,7 @@ export const ProductDetailSummaryMobile = ({
             children: (
               <ComparableProductSelector
                 onSelect={handleSelectComparableProduct}
+                comparingProductLoading={comparingProductLoading}
               />
             ),
           },

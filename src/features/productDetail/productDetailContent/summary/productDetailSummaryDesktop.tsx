@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Col, Row, Tooltip, Typography } from 'antd';
+import { Col, Row, Spin, Tooltip, Typography } from 'antd';
 import { CloseOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { FinancialMetricThresholds, Product } from '../../../../models';
 import {
@@ -10,7 +10,7 @@ import { SimulationRunMetric } from '../../../simulationResults/simulationResult
 import { ProductDetailDropdown } from '../components/productDetailDropdown';
 import { ProductDetailGauge } from '../components/productDetailGauge';
 import { ComparableProductSelector } from '../comparableProduct/comparableProductSelector';
-import { getMax, benchmarksDropdownOptions } from './utils';
+import { getMax, benchmarksDropdownOptions, getMin } from './utils';
 
 import styles from './productDetailSummary.module.scss';
 
@@ -38,6 +38,7 @@ interface ProductDetailSummaryDesktopProps {
   selectedReturnAnalysis?: SimulationRunMetric;
   selectedBenchmarkReturnAnalysis?: SimulationRunMetric;
   comparingProduct?: Product;
+  comparingProductLoading: boolean;
   comparingProductReturnAnalysis?: SimulationRunMetric[] | null;
   comparingProductBenchmarkAnalysis?: SimulationRunMetric[] | null;
   onSelectComparableProduct: (poolId: string) => void;
@@ -60,6 +61,7 @@ export const ProductDetailSummaryDesktop: FC<
   selectedReturnAnalysis,
   selectedBenchmarkReturnAnalysis,
   comparingProduct,
+  comparingProductLoading,
   comparingProductReturnAnalysis,
   comparingProductBenchmarkAnalysis,
   handleReturnAnalysisChange,
@@ -106,6 +108,7 @@ export const ProductDetailSummaryDesktop: FC<
         <ProductDetailDropdown
           items={benchmarksDropdownOptions}
           width={'auto'}
+          disabled={true}
           onChangeItem={handleBenchmarkAnalysisChange}
         />
         <Tooltip title="Select a benchmark to compare the product with">
@@ -132,7 +135,10 @@ export const ProductDetailSummaryDesktop: FC<
             </Text>
           </div>
         ) : (
-          <ComparableProductSelector onSelect={onSelectComparableProduct} />
+          <ComparableProductSelector
+            onSelect={onSelectComparableProduct}
+            comparingProductLoading={comparingProductLoading}
+          />
         )}
       </div>
 
@@ -177,7 +183,7 @@ export const ProductDetailSummaryDesktop: FC<
             (x) => x.key == selectedReturnAnalysis?.metricName
           )}
           values={{
-            min: 0,
+            min: getMin(returnAnalysisThresholds, selectedReturnAnalysis),
             max: getMax(returnAnalysisThresholds, selectedReturnAnalysis),
             actual: getMax(returnAnalysisThresholds, selectedReturnAnalysis),
             target: selectedReturnAnalysis?.metricValue,
@@ -191,7 +197,12 @@ export const ProductDetailSummaryDesktop: FC<
             (x) => x.key == selectedReturnAnalysis?.metricName
           )}
           values={{
-            min: 0,
+            min: getMin(
+              returnAnalysisThresholds,
+              benchmarkAnalysis?.find(
+                (x) => x.metricName == selectedReturnAnalysis?.metricName
+              )
+            ),
             max: getMax(
               returnAnalysisThresholds,
               benchmarkAnalysis?.find(
@@ -217,7 +228,7 @@ export const ProductDetailSummaryDesktop: FC<
 
       {/* fourth column */}
 
-      {comparingProduct && (
+      {comparingProduct && comparingProductReturnAnalysis && (
         <div className={styles['product-detail-summary__item']}>
           <ProductDetailGauge
             thresholds={returnAnalysisThresholds?.find(
@@ -228,7 +239,12 @@ export const ProductDetailSummaryDesktop: FC<
                 )?.metricName
             )}
             values={{
-              min: 0,
+              min: getMin(
+                returnAnalysisThresholds,
+                comparingProductReturnAnalysis?.find(
+                  (x) => x.metricName == selectedReturnAnalysis?.metricName
+                )
+              ),
               max: getMax(
                 returnAnalysisThresholds,
                 comparingProductReturnAnalysis?.find(
@@ -250,6 +266,11 @@ export const ProductDetailSummaryDesktop: FC<
               ),
             }}
           />
+        </div>
+      )}
+      {comparingProduct && !comparingProductReturnAnalysis && (
+        <div className={styles['product-detail-summary__item']}>
+          <Spin />
         </div>
       )}
 
@@ -294,7 +315,10 @@ export const ProductDetailSummaryDesktop: FC<
             (x) => x.key == selectedBenchmarkReturnAnalysis?.metricName
           )}
           values={{
-            min: 0,
+            min: getMin(
+              benchmarkReturnAnalysisThresholds,
+              selectedBenchmarkReturnAnalysis
+            ),
             max: getMax(
               benchmarkReturnAnalysisThresholds,
               selectedBenchmarkReturnAnalysis
@@ -311,7 +335,7 @@ export const ProductDetailSummaryDesktop: FC<
       <div className={styles['product-detail-summary__item']}></div>
 
       {/* fourth column */}
-      {comparingProduct && (
+      {comparingProduct && comparingProductBenchmarkAnalysis && (
         <div className={styles['product-detail-summary__item']}>
           <ProductDetailGauge
             thresholds={benchmarkReturnAnalysisThresholds?.find(
@@ -323,7 +347,13 @@ export const ProductDetailSummaryDesktop: FC<
                 )?.metricName
             )}
             values={{
-              min: 0,
+              min: getMin(
+                benchmarkReturnAnalysisThresholds,
+                comparingProductBenchmarkAnalysis?.find(
+                  (x) =>
+                    x.metricName == selectedBenchmarkReturnAnalysis?.metricName
+                )
+              ),
               max: getMax(
                 benchmarkReturnAnalysisThresholds,
                 comparingProductBenchmarkAnalysis?.find(
@@ -344,6 +374,11 @@ export const ProductDetailSummaryDesktop: FC<
               )?.metricValue,
             }}
           />
+        </div>
+      )}
+      {comparingProduct && !comparingProductBenchmarkAnalysis && (
+        <div className={styles['product-detail-summary__item']}>
+          <Spin />
         </div>
       )}
 

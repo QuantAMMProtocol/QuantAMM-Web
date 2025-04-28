@@ -3,9 +3,10 @@ import { AgGauge } from 'ag-charts-react';
 import { AgLinearGaugeOptions } from 'ag-charts-community';
 import { useAppSelector } from '../../../../app/hooks';
 import { selectAgChartTheme, selectTheme } from '../../../themes/themeSlice';
+import { FinancialMetricThresholds } from '../../../../models';
+import { isInvertedGauge } from '../summary/utils';
 
 import styles from './productDetailGauge.module.scss';
-import { FinancialMetricThresholds } from '../../../../models';
 
 interface ProductDetailGaugeProps {
   values: {
@@ -25,19 +26,33 @@ export const ProductDetailGauge: FC<ProductDetailGaugeProps> = ({
   const isDark = useAppSelector(selectTheme);
   const chartTheme = useAppSelector(selectAgChartTheme);
 
-  const performanceStages = ['', 'POOR', 'GOOD', 'VERY GOOD'];
+  const isInverted = isInvertedGauge(thresholds);
 
   if (!thresholds) {
     return <h5 style={{ color: 'red' }}>Thresholds are not defined</h5>;
   }
+
+  const performanceStages = ['', 'poor', 'good', 'very\ngood'];
+  const invertedPerformanceStages = ['very\ngood', 'good', 'poor', ''];
+
   const getColorForValue = (value: number): string => {
-    if (value <= thresholds.low) {
-      return thresholds.veryLowColor;
-    } else if (value <= thresholds.medium) {
+    if (isInverted) {
+      if (value <= thresholds.low) {
+        return thresholds.highColor;
+      }
+      if (value <= thresholds.medium) {
+        return thresholds.mediumColor;
+      }
+
       return thresholds.lowColor;
-    } else if (value <= thresholds.high) {
-      return thresholds.mediumColor;
     } else {
+      if (value <= thresholds.low) {
+        return thresholds.veryLowColor;
+      }
+      if (value <= thresholds.medium) {
+        return thresholds.mediumColor;
+      }
+
       return thresholds.highColor;
     }
   };
@@ -53,28 +68,47 @@ export const ProductDetailGauge: FC<ProductDetailGaugeProps> = ({
       label: {
         placement: 'after',
         color: isDark ? 'white' : 'black',
+        fontSize: 10,
+        fontWeight: 'normal',
         formatter: ({ index }) => {
-          return `${performanceStages[index]}`;
+          return isInverted
+            ? `${invertedPerformanceStages[index]}`
+            : `${performanceStages[index]}`;
         },
       },
       interval: {
-        values: [
-          thresholds.veryLow,
-          thresholds.low,
-          thresholds.medium,
-          thresholds.high,
-        ],
+        values: isInverted
+          ? [
+              thresholds.high,
+              thresholds.medium,
+              thresholds.low,
+              thresholds.veryLow,
+            ]
+          : [
+              thresholds.veryLow,
+              thresholds.low,
+              thresholds.medium,
+              thresholds.high,
+            ],
       },
     },
     bar: {
       fillMode: 'continuous',
-      fills: [
-        { color: thresholds.veryLowColor, stop: thresholds.veryLow },
-        { color: thresholds.lowColor, stop: thresholds.low },
-        { color: thresholds.mediumColor, stop: thresholds.medium },
-        { color: thresholds.highColor, stop: thresholds.high },
-        { color: 'rgba(2, 189, 46, 0.6)', stop: thresholds.high },
-      ],
+      fills: isInverted
+        ? [
+            { color: 'rgba(2, 189, 46, 0.6)', stop: thresholds.high },
+            { color: thresholds.highColor, stop: thresholds.high },
+            { color: thresholds.mediumColor, stop: thresholds.medium },
+            { color: thresholds.lowColor, stop: thresholds.low },
+            { color: thresholds.veryLowColor, stop: thresholds.veryLow },
+          ]
+        : [
+            { color: thresholds.veryLowColor, stop: thresholds.veryLow },
+            { color: thresholds.lowColor, stop: thresholds.low },
+            { color: thresholds.mediumColor, stop: thresholds.medium },
+            { color: thresholds.highColor, stop: thresholds.high },
+            { color: 'rgba(2, 189, 46, 0.6)', stop: thresholds.high },
+          ],
     },
     targets: values.target
       ? [

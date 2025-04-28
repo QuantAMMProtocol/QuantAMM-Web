@@ -921,7 +921,7 @@ export const maxInitialPoolConstituentAvailableDate = (state: RootState) => {
     }
   });
   if (defaultEndDate == 0) {
-    defaultEndDate = new Date('2025-03-25').getTime() / 1000;
+    defaultEndDate = new Date('2025-04-16').getTime() / 1000;
   }
 
   return new Date(defaultEndDate * 1000).toISOString().split('T')[0];
@@ -993,11 +993,6 @@ export const selectPoolTypeDefaultUpdateRule = (
       (x) => x.updateRuleName == 'Momentum'
     );
   } else {
-    console.log(
-      state.simConfig.availableUpdateRules.find((x) =>
-        x.applicablePoolTypes.find((y) => y == poolType)
-      )?.updateRuleName
-    );
     return state.simConfig.availableUpdateRules.find((x) =>
       x.applicablePoolTypes.find((y) => y == poolType)
     );

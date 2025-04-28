@@ -88,7 +88,6 @@ const handleDownloadGas = (
   if (file && file.type === 'text/csv') {
     // Ensure it's a CSV file
     const reader = new FileReader();
-    console.log('handle gas');
     reader.onload = (loadEvent) => {
       const csvContent = loadEvent.target?.result;
       try {
@@ -135,7 +134,7 @@ export function SimulationRunnerTimePeriodStep() {
     // Can not select days before today and today
     return (
       current < dayjs('2020-11-20', 'YYYY-MM-DD') ||
-      current > dayjs('2025-03-25', 'YYYY-MM-DD')
+      current > dayjs('2025-04-24', 'YYYY-MM-DD')
     );
   };
 

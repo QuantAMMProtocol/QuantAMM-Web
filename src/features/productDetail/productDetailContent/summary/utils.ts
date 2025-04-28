@@ -12,7 +12,26 @@ export function getMax(
   thresholds: FinancialMetricThresholds[],
   value?: SimulationRunMetric
 ): number {
-  return (thresholds.find((x) => x.key == value?.metricName)?.high ?? 0) * 1.2;
+  const target = thresholds.find((x) => x.key == value?.metricName);
+  const result = Math.max(target?.high ?? 0, target?.veryLow ?? 0) * 1.2;
+  return result;
+}
+
+export function getMin(
+  thresholds: FinancialMetricThresholds[],
+  value?: SimulationRunMetric
+): number {
+  const target = thresholds.find((x) => x.key == value?.metricName);
+  const result = Math.min(target?.veryLow ?? 0, target?.high ?? 0) * 0.8;
+  return result;
+}
+
+export function isInvertedGauge(
+  thresholds?: FinancialMetricThresholds
+): boolean {
+  if (!thresholds) return false;
+
+  return thresholds.high < thresholds.veryLow;
 }
 
 export function getMetricByName({

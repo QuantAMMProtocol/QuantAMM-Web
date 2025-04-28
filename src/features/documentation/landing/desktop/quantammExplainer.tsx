@@ -34,9 +34,9 @@ export function QuantAmmExplainer() {
         }}
       >
       <Row>
-        <Col span={3}></Col>
+        <Col span={2}></Col>
 
-        <Col span={9} style={{ padding: 0, height: '30vh', marginTop: '10px' }}>
+        <Col span={12} style={{ padding: 0, height: '30vh', marginTop: '10px' }}>
           <Row>
             <Col span={24} style={{ padding: 0 }}>
               <div
@@ -57,19 +57,21 @@ export function QuantAmmExplainer() {
                 />
               </div>
             </Col>
-            <Col span={24} style={{ marginBottom: '0.5vh' }}>
-              <Title
+            <Col span={24} style={{ marginBottom: '0.5vh', marginLeft:0, marginRight:0 }}>
+            
+            <Title
+                level={2}
                 style={{
                   color: '#162536',
                   textAlign: 'center',
                   margin: 0,
                   padding: 0,
-                  fontWeight: '400',
                 }}
               >
-                INTRODUCING
+                 INTRODUCING
               </Title>
               <Title
+                level={2}
                 style={{
                   color: '#162536',
                   textAlign: 'center',
@@ -77,7 +79,7 @@ export function QuantAmmExplainer() {
                   padding: 0,
                 }}
               >
-                BLOCKCHAIN TRADED FUNDS
+                 BLOCKCHAIN TRADED FUNDS
               </Title>
 
               <p
@@ -176,7 +178,7 @@ export function QuantAmmExplainer() {
             </Col>
           </Row>
         </Col>
-        <Col span={4}></Col>
+        <Col span={3}></Col>
         <Col span={3} style={{ paddingTop: '15px' }}>
         <div style={{display:'flex'}}>
 
