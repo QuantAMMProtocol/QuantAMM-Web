@@ -47,7 +47,7 @@ const items = [
     icon: <SortAscendingOutlined />,
   },
   {
-    label: 'Balancer Pool Types',
+    label: 'QuantAMM Core Concepts',
     key: 'PoolTypes',
     children: [
       {
@@ -57,14 +57,6 @@ const items = [
       {
         label: 'QuantAMM: Introducing Time',
         key: 'QuantAMM',
-      },
-      {
-        label: 'Cow AMM: Introducing Solvers',
-        key: 'CowAMM',
-      },
-      {
-        label: 'Gyroscope: Introducing Stability',
-        key: 'Gyroscope',
       },
     ],
   },
@@ -182,9 +174,20 @@ export function Documentation() {
                 '_blank'
               )
             }
-            style={{ marginTop: '15px', marginBottom: '15px', width: '100%' }}
+            style={{ marginTop: '15px', marginBottom: '15px', width: '80%', margin:'10px'  }}
           >
             Open Simulator Technical Code Docs
+          </Button>
+          <Button
+            onClick={() =>
+              window.open(
+                'https://quantamm.gitbook.io/quantamm-protocol/',
+                '_blank'
+              )
+            }
+            style={{ marginTop: '15px', marginBottom: '15px', width: '80%', margin:'10px' }}
+          >
+            Open Protocol Contracts GitBook
           </Button>
           <Menu
             mode="inline"
