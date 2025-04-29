@@ -1,4 +1,4 @@
-import { Col, Row, Steps, Typography } from 'antd';
+import { Col, Row, Typography } from 'antd';
 import { ProductItemBackground } from '../../../productExplorer/productItem/productItemBackground';
 import { DownCircleOutlined, UpCircleOutlined } from '@ant-design/icons';
 import { AgGauge } from 'ag-charts-react';
