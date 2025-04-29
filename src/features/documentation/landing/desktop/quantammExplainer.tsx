@@ -17,7 +17,7 @@ export function QuantAmmExplainer() {
     'Daily Market Responsiveness',
   ];
 
-  const RED = '#f5222d';
+  const RED = '#b90a0a';
   const GREEN = '#237804';
   const LINE = '#d9d9d9';
 
