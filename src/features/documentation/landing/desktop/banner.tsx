@@ -14,11 +14,20 @@ export function Banner() {
   const [loading, setLoading] = useState<boolean>(true);
   const productData = [
     {
-      title: 'The RWA Agnostic',
+      title: 'The Safe Haven',
+      imgSrc: '/assets/safe_haven_BTF_icon_mono.png',
+      description: ['The doomsday BTF', 'Bitcoin, PAXOS Gold, USDC'],
+      status: 'Launching May 2025',
+      opacity: 1,
+      imgWidth: '90%',
+      focus:true
+    },
+    {
+      title: 'RWA Issuers',
       imgSrc: '/assets/RWA_mono.png',
       description: [
         'RWAs are the future',
-        'Track RWA issuers.',
+        'Track RWA issuers',
       ],
       status: 'Coming Soon',
       opacity: 0.4,
@@ -26,20 +35,11 @@ export function Banner() {
       focus:false
     },
     {
-      title: 'The Safe Haven',
-      imgSrc: '/assets/safe_haven_BTF_icon_mono.png',
-      description: ['The doomsday BTF.', 'Bitcoin, PAXOS Gold, Dollar (USDC)'],
-      status: 'Launching [Date]',
-      opacity: 1,
-      imgWidth: '90%',
-      focus:true
-    },
-    {
       title: 'Super Sonic Momentum',
       imgSrc: '/assets/sonic_BTF_icon.png',
       description: [
-        'The sonic ecosystem basket.',
-        'Mega Cap Yield Focus'
+        'The sonic ecosystem basket',
+        'Mega Caps with Yield Focus'
       ],
       status: 'Coming Soon',
       opacity: 0.4,
