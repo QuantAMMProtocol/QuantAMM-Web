@@ -170,7 +170,7 @@ export function Documentation() {
           <Button
             onClick={() =>
               window.open(
-                'https://quantamm-quantammsim.readthedocs-hosted.com/',
+                'https://quantammsim.readthedocs.io/',
                 '_blank'
               )
             }
