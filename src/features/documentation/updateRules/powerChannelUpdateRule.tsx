@@ -4,8 +4,10 @@ import { useState } from 'react';
 import { useAppSelector } from '../../../app/hooks';
 import { selectAvailableUpdateRules } from '../../simulationRunConfiguration/simulationRunConfigurationSlice';
 import { Eli5 } from '../../shared';
-
-export function PowerChannelUpdateRule() {
+interface DocProps {
+  hideTitle?: boolean;
+}
+export function PowerChannelUpdateRule(props: DocProps) {
   const [eli5, setEli5] = useState('ELI5');
   const rules = useAppSelector(selectAvailableUpdateRules);
 
@@ -17,7 +19,9 @@ export function PowerChannelUpdateRule() {
           <Col style={{ padding: 10 }} span={23}>
             <Row>
               <Col span={24}>
-                <h1>QuantAMM Update Rule: Power Channel</h1>
+                <div hidden={props.hideTitle}>
+                  <h1>QuantAMM Update Rule: Power Channel</h1>
+                </div>
               </Col>
               <Col span={24}>
                 <Form.Item style={{ marginTop: '5px' }}>

@@ -9,5 +9,6 @@ export enum ROUTES {
   RESEARCH = 'research',
   COMPANY = 'company',
   CONTACT = 'contact',
-  TOS = 'tos'
+  TOS = 'tos',
+  SAFEHAVENFACTSHEET = 'safeHavenFactSheet',
 }
