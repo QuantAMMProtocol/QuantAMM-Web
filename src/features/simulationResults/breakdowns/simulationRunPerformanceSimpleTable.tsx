@@ -1,7 +1,6 @@
 import { FC, useCallback, useMemo, useRef } from 'react';
 import { ColDef, SideBarDef, CellStyle } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
-import { Button } from 'antd';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-quartz.css';
 import 'ag-grid-enterprise';
@@ -159,8 +158,6 @@ export const AnalysisSimplifiedBreakdownTable: FC<
     defaultToolPanel: 'none',
   };
 
-  const handleDownloadCSV = () => gridRef.current?.api?.exportDataAsCsv();
-
   const onGridReady = useCallback(
     (params: { api: any; columnApi: any }) => {
       params.api.setFilterModel({
@@ -186,9 +183,6 @@ export const AnalysisSimplifiedBreakdownTable: FC<
 
   return (
     <div style={{ width: '100%' }}>
-      <div style={{ display: 'flex', justifyContent: 'flex-end', padding: 10 }}>
-        <Button onClick={handleDownloadCSV}>Download CSV</Button>
-      </div>
       <div
         className={`${darkThemeAg} ag-theme-quartz`}
         style={{ width: '100%', height }}
