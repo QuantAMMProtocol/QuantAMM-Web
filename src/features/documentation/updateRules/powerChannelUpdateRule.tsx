@@ -6,6 +6,7 @@ import { selectAvailableUpdateRules } from '../../simulationRunConfiguration/sim
 import { Eli5 } from '../../shared';
 interface DocProps {
   hideTitle?: boolean;
+  hideImage?: boolean;
 }
 export function PowerChannelUpdateRule(props: DocProps) {
   const [eli5, setEli5] = useState('ELI5');
@@ -24,7 +25,7 @@ export function PowerChannelUpdateRule(props: DocProps) {
                 </div>
               </Col>
               <Col span={24}>
-                <Form.Item style={{ marginTop: '5px' }}>
+                <Form.Item style={{ marginTop: '5px', marginBottom: '0px' }}>
                   <Radio.Group
                     size="small"
                     value={eli5}
@@ -43,7 +44,7 @@ export function PowerChannelUpdateRule(props: DocProps) {
             </Row>
             <Row>
               <Col span={24}>
-                <div hidden={eli5 != 'ELI5'}>
+                <div hidden={eli5 != 'ELI5' || props.hideImage}>
                   <Row>
                     <Col span={8}>
                       <img
@@ -57,6 +58,13 @@ export function PowerChannelUpdateRule(props: DocProps) {
                       />
                     </Col>
                     <Col span={16}>
+                      <Eli5 strategy="POWER_CHANNEL" />
+                    </Col>
+                  </Row>
+                </div>
+                <div hidden={eli5 != 'ELI5' || (eli5 == 'ELI5' && !props.hideImage)}>
+                  <Row>
+                    <Col span={24}>
                       <Eli5 strategy="POWER_CHANNEL" />
                     </Col>
                   </Row>

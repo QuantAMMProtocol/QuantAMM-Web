@@ -329,7 +329,7 @@ export function Banner() {
                 'HODL': '#52ad80',
               }}
               overrideSeriesName={{
-                "Power Channel": 'QuantAMM',
+                "Power Channel": 'SAFE HAVEN BTF',
                 'Balancer Weighted' : 'Traditional DEX'
               }}
             />

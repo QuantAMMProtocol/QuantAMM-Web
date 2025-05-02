@@ -1,4 +1,4 @@
-import { Button, Card, Col, Row, Tooltip } from 'antd';
+import { Button, Card, Col, Row, Tag, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
 import { useMemo } from 'react';
 import { Radio } from 'antd';
@@ -7,6 +7,9 @@ import { getBreakdown, Pool } from '../../../services/breakdownService';
 import { WeightChangeOverTimeGraph } from '../../shared/graphs/weightChangeOverTime';
 import { PowerChannelUpdateRule } from '../updateRules/powerChannelUpdateRule';
 import { SimulationResultMarketValueChart } from '../../simulationResults/visualisations/simulationResultMarketValueChart';
+import { SimulationRunMvSummaryBreakdown } from '../../simulationResults/breakdowns/simulationResultMvSummaryBreakdown';
+import { SimulationRunPerformanceAnalysisBreakdown } from '../../simulationResults/breakdowns/simulationResultAnalysisBreakdown';
+import { AnalysisSimplifiedBreakdownTable } from '../../simulationResults/breakdowns/simulationRunPerformanceSimpleTable';
 
 export function SafeHavenFactSheet() {
   const [breakdowns, setBreakdowns] = useState<
@@ -58,11 +61,36 @@ export function SafeHavenFactSheet() {
   const safeHavenCFMM = useMemo(() => `safeHavenCFMM${period}`, [period]);
   const safeHavenHODL = useMemo(() => `safeHavenHodl${period}`, [period]);
 
+  const xAxisMonthInterval = useMemo(() => {
+    switch (period) {
+      case 'AugTest':
+        return 3;
+      case '2025Test':
+        return 1;
+      case 'AugTrain':
+        return 22;
+      default:
+        return 22;
+    }
+  }, [period]);
+
+  console.log(safeHavenBTF);
+  console.log(breakdowns[safeHavenBTF]);
+  console.log(breakdowns);
+
   return (
     <div>
       <Row>
-        <Col span={24}>
-          <h2>Safe Haven</h2>
+        <Col span={1}></Col>
+        <Col span={6}>
+          <img
+            src="/assets/safe_haven_BTF_icon_mono.png"
+            alt="Safe Haven BTF Icon"
+            style={{ width: '100%', height: 'auto' }}
+          />
+        </Col>
+        <Col span={16}>
+          <h1>The Safe Haven BTF</h1>
           <p>
             A safe haven is an investment that is expected to retain or increase
             in value during times of market turbulence. Safe havens are
@@ -71,8 +99,6 @@ export function SafeHavenFactSheet() {
             safe havens include gold, U.S. Treasury bonds, and certain
             currencies like the Swiss franc.
           </p>
-        </Col>
-        <Col span={24}>
           <p>
             Safe havens are often characterized by their low correlation with
             the broader market, meaning they tend to perform well when other
@@ -80,8 +106,6 @@ export function SafeHavenFactSheet() {
             investors looking to hedge against market volatility and protect
             their portfolios.
           </p>
-        </Col>
-        <Col span={24}>
           <p>
             In addition to their defensive qualities, safe havens can also
             provide a source of stability and predictability in an otherwise
@@ -89,8 +113,6 @@ export function SafeHavenFactSheet() {
             investors or those nearing retirement who may not have the time or
             risk tolerance to weather significant market downturns.
           </p>
-        </Col>
-        <Col span={24}>
           <p>
             However, it is important to note that safe havens are not without
             their risks. While they may provide a level of protection during
@@ -101,72 +123,145 @@ export function SafeHavenFactSheet() {
             volatility in their own right.
           </p>
         </Col>
+        <Col span={1}></Col>
+      </Row>
+      <Row>
+        <Col span={1}></Col>
+        <Col span={22}>
+          <h1>OVERVIEW</h1>
+        </Col>
+        <Col span={1}></Col>
       </Row>
       <Row>
         <Col span={1}></Col>
         <Col span={10}>
           <Row>
             <Col span={24}>
-              <h4>Overview</h4>
+              <Card title="GENERAL DEPLOYMENT INFORMATION">
+                <Tag color="primary">Safe Haven BTF</Tag>
+                <Tag color="blue">Safe Haven CFMM</Tag>
+                <Tag color="blue">Safe Haven HODL</Tag>
+                <Tag color="blue">Safe Haven BTF</Tag>
+                <Tag color="blue">Safe Haven CFMM</Tag>
+                <Tag color="blue">Safe Haven HODL</Tag>
+              </Card>
             </Col>
           </Row>
         </Col>
         <Col span={2}></Col>
         <Col span={10}>
-          <Row>
-            <Col span={24}>
-              <h4>Simulated Composition Over Time</h4>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={24}>
-              <Radio.Group
-                onChange={(e) => setPeriod(e.target.value)}
-                value={period}
-                buttonStyle="solid"
-                size="small"
+          <Card title="Simulated Composition Over Time">
+            <Row>
+              <Col span={24}>
+                <Radio.Group
+                  onChange={(e) => setPeriod(e.target.value)}
+                  value={period}
+                  buttonStyle="solid"
+                  size="small"
+                >
+                  <Radio.Button value="AugTest">
+                    Test Period: Aug24-Apr25
+                  </Radio.Button>
+                  <Radio.Button value="2025Test">
+                    Test Period: Jan-Apr25
+                  </Radio.Button>
+                  <Radio.Button value="AugTrain">
+                    Training Period: TODO-Aug24
+                  </Radio.Button>
+                </Radio.Group>
+              </Col>
+              <Col span={24}>
+                <WeightChangeOverTimeGraph
+                  simulationRunBreakdown={breakdowns[safeHavenBTF]}
+                  overrideChartTheme="ag-default-dark"
+                  overrideXAxisInterval={xAxisMonthInterval}
+                />
+              </Col>
+            </Row>
+          </Card>
+        </Col>
+        <Col span={1}></Col>
+      </Row>
+
+      <Row>
+        <Col span={1}></Col>
+        <Col span={22}>
+          <h1>CUMULATIVE PERFORMANCE</h1>
+        </Col>
+        <Col span={1}></Col>
+      </Row>
+      <Row>
+        <Col span={1}></Col>
+        <Col span={22}>
+          <Card
+            title={
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}
               >
-                <Radio.Button value="AugTest">
-                  Test Period: Aug24-Apr25
-                </Radio.Button>
-                <Radio.Button value="2025Test">
-                  Test Period: Jan-Apr25
-                </Radio.Button>
-                <Radio.Button value="AugTrain">
-                  Training Period: TODO-Aug24
-                </Radio.Button>
-              </Radio.Group>
-            </Col>
-            <Col span={24}>
-              <WeightChangeOverTimeGraph
-                simulationRunBreakdown={breakdowns[safeHavenBTF]}
-                overrideChartTheme="ag-default-dark"
-                overrideXAxisInterval={22}
+                <span>SIMULATED BTF TOTAL $ VALUE OVER TIME</span>
+                <Radio.Group
+                  onChange={(e) => setPeriod(e.target.value)}
+                  value={period}
+                  buttonStyle="solid"
+                  size="small"
+                >
+                  <Radio.Button value="AugTest">
+                    Test Period: Aug24-Apr25
+                  </Radio.Button>
+                  <Radio.Button value="2025Test">
+                    Test Period: Jan-Apr25
+                  </Radio.Button>
+                  <Radio.Button value="AugTrain">
+                    Training Period: TODO-Aug24
+                  </Radio.Button>
+                </Radio.Group>
+              </div>
+            }
+            style={{ margin: '5px' }}
+          >
+            <div hidden={loading}>
+              <SimulationResultMarketValueChart
+                hideTitle={true}
+                breakdowns={
+                  loading
+                    ? []
+                    : [
+                        breakdowns[safeHavenBTF],
+                        breakdowns[safeHavenCFMM],
+                        breakdowns[safeHavenHODL],
+                      ]
+                }
+                overrideXAxisInterval={xAxisMonthInterval}
+                forceViewResults={true}
               />
-            </Col>
-          </Row>
+            </div>
+          </Card>
         </Col>
         <Col span={1}></Col>
       </Row>
       <Row>
         <Col span={1}></Col>
+        <Col span={22}>
+          <h1>RE-WEIGHTING METHODOLOGY</h1>
+        </Col>
+        <Col span={1}></Col>
+        <Col span={1}></Col>
         <Col span={10}>
           <Row>
             <Col span={24}>
-              <h1>Re-weighting strategy and parameters</h1>
+              <Card title="Power Channel Strategy">
+                <PowerChannelUpdateRule hideTitle={true} hideImage={true} />
+              </Card>
             </Col>
-            <Col span={24}>
-              <PowerChannelUpdateRule hideTitle={true} />
-            </Col>
+            <Col span={24}></Col>
           </Row>
         </Col>
         <Col span={2}></Col>
         <Col span={10}>
-          <Row>
-            <Col span={24}>
-              <h4>Strategy Parameter selection</h4>
-            </Col>
-          </Row>
           <Row>
             <Col span={12}>
               <Card
@@ -179,11 +274,11 @@ export function SafeHavenFactSheet() {
               >
                 <Row>
                   <Col span={24}>
-                    <h5>Selection Methodology</h5>
                     <p>
-                      The basket was trained using SGD machine learning with an
-                      objective function of maximizing Sharpe Ratio. This was
-                      done using the QuantAMM simulator framework.
+                      The basket parameters was trained using SGD machine
+                      learning with an objective function of maximizing Sharpe
+                      Ratio. This was done using the QuantAMM simulator
+                      framework.
                     </p>
                     <Col span={12}>
                       <Button size="small">Documentation</Button>
@@ -197,7 +292,7 @@ export function SafeHavenFactSheet() {
             </Col>
             <Col span={12}>
               <Card
-                style={{ margin: '5px' }}
+                style={{ margin: '5px', height: '97%' }}
                 title={
                   <Tooltip title="The following represent different forms of the lambda setting used for different tooling">
                     Lambda Settings
@@ -279,6 +374,33 @@ export function SafeHavenFactSheet() {
             </Col>
             <Col span={24}>
               <div hidden={loading}></div>
+            </Col>
+          </Row>
+        </Col>
+        <Col span={1}></Col>
+      </Row>
+      <Row>
+        <Col span={1}></Col>
+        <Col span={22}>
+          <h1>CONCLUSION</h1>
+        </Col>
+        <Col span={1}></Col>
+      </Row>
+      <Row>
+        <Col span={1}></Col>
+        <Col span={24}>
+          <Row>
+            <Col span={24}>
+              <Card title="Conclusion" style={{ margin: '5px' }}>
+                <AnalysisSimplifiedBreakdownTable
+                  simulationRunBreakdowns={loading ? [] : [
+                    breakdowns[safeHavenBTF],
+                    breakdowns[safeHavenCFMM],
+                    breakdowns[safeHavenHODL],
+                  ]}
+                  visibleMetrics={["Absolute Return", "Sharpe Ratio"]}
+                />
+              </Card>
             </Col>
           </Row>
         </Col>
