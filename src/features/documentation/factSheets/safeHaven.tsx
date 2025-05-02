@@ -196,8 +196,6 @@ export function SafeHavenFactSheet() {
       <Row>
         <Col span={1}></Col>
         <Col span={22}>
-          console.log(safeHavenBTF); console.log(breakdowns[safeHavenBTF]);
-          console.log(breakdowns);
           <h1>CUMULATIVE PERFORMANCE</h1>
         </Col>
         <Col span={1}></Col>
