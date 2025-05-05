@@ -11,15 +11,17 @@ import {
   selectProducts,
   selectReturnAnalysisByProductId,
   selectReturnMetricThresholds,
+  setProductSimulationRunBreakdown,
 } from '../../../productExplorer/productExplorerSlice';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { useFetchProductData } from '../../../../hooks/useFetchProductData';
 import { useFinancialAnalysis } from '../../../../hooks/useFinancialAnalysis';
 import { ProductDetailSummaryDesktop } from './productDetailSummaryDesktop';
 import { ProductDetailSummaryMobile } from './productDetailSummaryMobile';
-import { SimulationRunMetric } from '../../../simulationResults/simulationResultSummaryModels';
+import { SimulationRunBreakdown, SimulationRunMetric } from '../../../simulationResults/simulationResultSummaryModels';
 
 import styles from './productDetailSummary.module.scss';
+import { getBreakdown, Pool } from '../../../../services/breakdownService';
 
 const { Title } = Typography;
 
@@ -54,6 +56,11 @@ interface ProductDetailSummaryProps {
 }
 
 const defaultBenchmark = Benchmark.HODL;
+
+const ADDRESS_POOL_MAP: Record<string, Pool> = {
+  '0xd4ed17bbf48af09b87fd7d8c60970f5da79d4852': 'safeHavenBTFAugTest',
+};
+
 
 export const ProductDetailSummary: FC<ProductDetailSummaryProps> = ({
   product,
@@ -234,11 +241,45 @@ export const ProductDetailSummary: FC<ProductDetailSummaryProps> = ({
     }
   }, [productData, dispatch]);
 
+  const [breakdowns, setBreakdowns] = useState<Record<Pool, SimulationRunBreakdown>>({} as Record<Pool, SimulationRunBreakdown>);
+  const [loadingBreakdowns, setLoadingBreakdowns] = useState(true);
+
+  const addressKey = product.address?.toLowerCase() ?? '';
+  const specialPoolKey = ADDRESS_POOL_MAP[addressKey];
+
+  useEffect(() => {
+    const pools = Object.values(ADDRESS_POOL_MAP);
+    const loadAll = async () => {
+      setLoadingBreakdowns(true);
+      const entries = await Promise.all(
+        pools.map(async (pool) => [pool, await getBreakdown(pool)] as const)
+      );
+      setBreakdowns(Object.fromEntries(entries) as Record<Pool, SimulationRunBreakdown>);
+      setLoadingBreakdowns(false);
+    };
+    void loadAll();
+  }, []);
+
+  useEffect(() => {
+    if (specialPoolKey && !loadingBreakdowns && breakdowns[specialPoolKey]) {
+      console.log('Dispatching breakdown for product:', product.id);
+      console.log('Breakdown:', breakdowns[specialPoolKey]);
+      dispatch(
+        setProductSimulationRunBreakdown({
+          productId: product.id,
+          simulationRunBreakdown: breakdowns[specialPoolKey],
+        })
+      );
+    }
+  }, [specialPoolKey, loadingBreakdowns, breakdowns, product, dispatch]);
+
+  const hasTimeSeries = Array.isArray(product.timeSeries) && product.timeSeries.length > 0;
+  const shouldRun = hasTimeSeries && !specialPoolKey;
   useFinancialAnalysis({
-    product: productData,
+    product,
     benchmark: Benchmark.HODL,
     loadToSimulator: false,
-    shouldRun: !!productData?.timeSeries?.length,
+    shouldRun,
   });
 
   const comparingProduct = selectProductById(
