@@ -1,5 +1,6 @@
 import { FC, useCallback, useEffect, useMemo, useState } from 'react';
-import { Col, Row, Typography } from 'antd';
+import { Col, Row, Tooltip, Typography } from 'antd';
+import { WarningOutlined } from '@ant-design/icons';
 import { GqlChain } from '../../../../__generated__/graphql-types';
 import { Benchmark, Product } from '../../../../models';
 import {
@@ -302,7 +303,12 @@ export const ProductDetailSummary: FC<ProductDetailSummaryProps> = ({
   return (
     <Row id="summary" style={{ marginTop: 20 }}>
       <Col span={24} className={styles['product-detail-summary__title']}>
-        <Title level={4}>HODL Performance Metric Analysis</Title>
+        {specialPoolKey ? 
+          <div>
+            <Tooltip title='This pool is new and does not have enough data for most financial metrics. This is a simulated performance metric analysis based on the Aug24-Apr25 period (see factsheet). Once the pool has been running for a while it will become live metrics'>
+            <Title level={4}>Simulated HODL Performance Metric Analysis {'  '} <WarningOutlined type='warning'/> </Title>
+            </Tooltip>
+          </div> : <Title level={4}>HODL Performance Metric Analysis</Title>}
       </Col>
       <Col span={24}>
         <div className={styles['product-detail-summary__container']}>

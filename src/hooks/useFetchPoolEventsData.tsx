@@ -13,8 +13,8 @@ export const useFetchPoolEventsData = ({
   chain,
   range,
 }: {
-  first: number;
-  skip: number;
+  first: number | undefined;
+  skip: number | undefined;
   poolId: string;
   chain: GqlChain;
   range: GqlPoolEventsDataRange;
