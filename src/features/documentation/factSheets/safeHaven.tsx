@@ -448,7 +448,7 @@ export function SafeHavenFactSheet() {
                     'Annualized Sortino Ratio',
                     'Annualized Information Ratio',
                     'Total Capture Ratio',
-                    "Annualized Jensen's Alpha",
+                    "Annualized Jensen's Alpha (%)",
                   ]}
                   height={300}
                 />
@@ -909,6 +909,20 @@ export function SafeHavenFactSheet() {
               <div hidden={loading}></div>
             </Col>
           </Row>
+        </Col>
+        <Col span={1}></Col>
+      </Row>
+      <Row>
+        <Col span={1}></Col>
+        <Col span={22}>
+          <h1>DISCLAIMERS</h1>
+        </Col>
+        <Col span={1}></Col>
+      </Row>
+      <Row>
+        <Col span={1}></Col>
+        <Col span={22}>
+          <h1>LEGAL</h1>
         </Col>
         <Col span={1}></Col>
       </Row>

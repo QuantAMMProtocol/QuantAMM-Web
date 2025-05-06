@@ -69,11 +69,13 @@ export const AnalysisSimplifiedBreakdownTable: FC<
       if (value >= medium) return t.mediumColor;
       if (value >= low)    return t.lowColor;
       if (value >= veryLow)return t.veryLowColor;
+      return '#610000'
     } else {
       if (value <= high)   return t.highColor;
       if (value <= medium) return t.mediumColor;
       if (value <= low)    return t.lowColor;
       if (value <= veryLow)return t.veryLowColor;
+      return '#01ec38'
     }
     return undefined;
   }, []);
@@ -88,7 +90,7 @@ export const AnalysisSimplifiedBreakdownTable: FC<
         sortable: true,
         filter: 'agSetColumnFilter',
         resizable: true,
-
+        width: 300,
         tooltipValueGetter: params => {
         const t = returnMetricThresholds.find(x => x.key === params.value);
         return t?.tooltipDescription;
