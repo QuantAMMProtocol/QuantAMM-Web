@@ -8,6 +8,7 @@ import { WeightChangeOverTimeGraph } from '../../shared/graphs/weightChangeOverT
 import { PowerChannelUpdateRule } from '../updateRules/powerChannelUpdateRule';
 import { SimulationResultMarketValueChart } from '../../simulationResults/visualisations/simulationResultMarketValueChart';
 import { AnalysisSimplifiedBreakdownTable } from '../../simulationResults/breakdowns/simulationRunPerformanceSimpleTable';
+import { QuantAMMPoolDescription } from '../poolTypes/quantamm';
 
 export function SafeHavenFactSheet() {
   const [breakdowns, setBreakdowns] = useState<
@@ -75,7 +76,7 @@ export function SafeHavenFactSheet() {
   return (
     <div>
       <Row>
-        <Col span={2}></Col>
+        <Col span={1}></Col>
         <Col span={10}>
           <div
             style={{
@@ -105,8 +106,8 @@ export function SafeHavenFactSheet() {
             </p>
           </div>
         </Col>
-        <Col span={2}></Col>
-        <Col span={8}>
+        <Col span={1}></Col>
+        <Col span={11}>
           <h4>BTF Objective</h4>
           <p>
             The Safe Haven BTF allows for a decentralised, automated and
@@ -133,21 +134,21 @@ export function SafeHavenFactSheet() {
             events.
           </p>
         </Col>
-        <Col span={2}></Col>
+        <Col span={1}></Col>
       </Row>
       <Row>
         <Col span={1}></Col>
         <Col span={22}>
-          <h1>OVERVIEW</h1>
+          <h1 style={{ marginLeft: '10px' }}>OVERVIEW</h1>
         </Col>
         <Col span={1}></Col>
       </Row>
-      <Row>
+      <Row style={{ height: '45vh' }}>
         <Col span={1}></Col>
         <Col span={10}>
-          <Row>
+          <Row style={{ height: '100%' }}>
             <Col span={24}>
-              <Card title="GENERAL DEPLOYMENT INFORMATION">
+              <Card title="GENERAL DEPLOYMENT LINKS" style={{ height: '100%' }}>
                 <Tag color="primary">Safe Haven BTF</Tag>
                 <Tag color="blue">Safe Haven CFMM</Tag>
                 <Tag color="blue">Safe Haven HODL</Tag>
@@ -158,11 +159,18 @@ export function SafeHavenFactSheet() {
             </Col>
           </Row>
         </Col>
-        <Col span={2}></Col>
-        <Col span={10}>
-          <Card title="Simulated Composition Over Time">
-            <Row>
-              <Col span={24}>
+        <Col span={1}></Col>
+        <Col span={11}>
+          <Card
+            title={
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}
+              >
+                <span>COMPOSITION OVER TIME</span>
                 <Radio.Group
                   onChange={(e) => setPeriod(e.target.value)}
                   value={period}
@@ -175,12 +183,13 @@ export function SafeHavenFactSheet() {
                   <Radio.Button value="2025Test">
                     Test Period: Jan-Apr25
                   </Radio.Button>
-                  <Radio.Button value="AugTrain">
-                    Training Period: TODO-Aug24
-                  </Radio.Button>
                 </Radio.Group>
-              </Col>
-              <Col span={24}>
+              </div>
+            }
+            style={{ height: '100%' }}
+          >
+            <Row>
+              <Col span={24} style={{ paddingTop: '30px' }}>
                 <WeightChangeOverTimeGraph
                   simulationRunBreakdown={breakdowns[safeHavenBTF]}
                   overrideChartTheme="ag-default-dark"
@@ -196,7 +205,7 @@ export function SafeHavenFactSheet() {
       <Row>
         <Col span={1}></Col>
         <Col span={22}>
-          <h1>CUMULATIVE PERFORMANCE</h1>
+          <h1 style={{ marginLeft: '10px' }}>CUMULATIVE PERFORMANCE</h1>
         </Col>
         <Col span={1}></Col>
       </Row>
@@ -225,9 +234,6 @@ export function SafeHavenFactSheet() {
                   <Radio.Button value="2025Test">
                     Test Period: Jan-Apr25
                   </Radio.Button>
-                  <Radio.Button value="AugTrain">
-                    Training Period: TODO-Aug24
-                  </Radio.Button>
                 </Radio.Group>
               </div>
             }
@@ -236,6 +242,7 @@ export function SafeHavenFactSheet() {
             <div hidden={loading}>
               <SimulationResultMarketValueChart
                 hideTitle={true}
+                overrideNagivagtion={false}
                 breakdowns={
                   loading
                     ? []
@@ -245,6 +252,15 @@ export function SafeHavenFactSheet() {
                         breakdowns[safeHavenHODL],
                       ]
                 }
+                overrideSeriesStrokeColor={{
+                  'Power Channel': '#c7b283',
+                  'Balancer Weighted': '#528aae',
+                  HODL: '#52ad80',
+                }}
+                overrideSeriesName={{
+                  'Power Channel': 'SAFE HAVEN BTF',
+                  'Balancer Weighted': 'Traditional DEX',
+                }}
                 overrideXAxisInterval={xAxisMonthInterval}
                 forceViewResults={true}
               />
@@ -256,135 +272,36 @@ export function SafeHavenFactSheet() {
       <Row>
         <Col span={1}></Col>
         <Col span={22}>
-          <h1>RE-WEIGHTING METHODOLOGY</h1>
+          <h1 style={{ marginLeft: '10px' }}>RE-WEIGHTING METHODOLOGY</h1>
         </Col>
         <Col span={1}></Col>
+      </Row>
+      <Row style={{ height: '80vh' }}>
         <Col span={1}></Col>
         <Col span={10}>
           <Row>
             <Col span={24}>
-              <Card title="Power Channel Strategy">
+              <Card
+                title="QuantAMM Rebalancing"
+                style={{ height: '80vh', overflowY: 'auto' }}
+              >
+                <QuantAMMPoolDescription hideTitle={true} fixedEL15={true}/>
+              </Card>
+            </Col>
+          </Row>
+        </Col>
+        <Col span={1}></Col>
+        <Col span={11}>
+          <Row>
+            <Col span={24} style={{ height: '100%' }}>
+              <Card
+                title="Power Channel Strategy"
+                style={{ height: '80vh', overflowY: 'auto' }}
+              >
                 <PowerChannelUpdateRule hideTitle={true} hideImage={true} />
               </Card>
             </Col>
             <Col span={24}></Col>
-          </Row>
-        </Col>
-        <Col span={2}></Col>
-        <Col span={10}>
-          <Row>
-            <Col span={12}>
-              <Card
-                style={{ margin: '5px' }}
-                title={
-                  <Tooltip title="The following section describes the technique and mutability of the parameters used in the strategy">
-                    Selection Methodology
-                  </Tooltip>
-                }
-              >
-                <Row>
-                  <Col span={24}>
-                    <p>
-                      The basket parameters was trained using SGD machine
-                      learning with an objective function of maximizing Sharpe
-                      Ratio. This was done using the QuantAMM simulator
-                      framework.
-                    </p>
-                    <Col span={12}>
-                      <Button size="small">Documentation</Button>
-                    </Col>
-                    <Col span={12}>
-                      <Button size="small">Simulator</Button>
-                    </Col>
-                  </Col>
-                </Row>
-              </Card>
-            </Col>
-            <Col span={12}>
-              <Card
-                style={{ margin: '5px', height: '97%' }}
-                title={
-                  <Tooltip title="The following represent different forms of the lambda setting used for different tooling">
-                    Lambda Settings
-                  </Tooltip>
-                }
-              >
-                <Row>
-                  <Col span={24}>
-                    <Tooltip title="Memory Days">
-                      <p>Memory Days: 0.5</p>
-                    </Tooltip>
-                  </Col>
-                  <Col span={24}>
-                    <Tooltip title="Lambda">
-                      <p>Memory Days: 0.5</p>
-                    </Tooltip>
-                  </Col>
-                  <Col span={24}>
-                    <Tooltip title="Memory Days">
-                      <p>Memory Days: 0.5</p>
-                    </Tooltip>
-                  </Col>
-                </Row>
-              </Card>
-            </Col>
-            <Col span={12}>
-              <Card title="Aggressiveness" style={{ margin: '5px' }}>
-                <Row>
-                  <Col span={24}>
-                    <p>
-                      The following represent different forms of the lambda
-                      setting used for different tooling
-                    </p>
-                  </Col>
-                  <Col span={24}>
-                    <Tooltip title="Memory Days">
-                      <p>Aggressiveness: 0.5</p>
-                    </Tooltip>
-                  </Col>
-                  <Col span={24}>
-                    <Tooltip title="k">
-                      <p>k: 0.5</p>
-                    </Tooltip>
-                  </Col>
-                  <Col span={24}>
-                    <Tooltip title="logk">
-                      <p>logk: 0.5</p>
-                    </Tooltip>
-                  </Col>
-                </Row>
-              </Card>
-            </Col>
-            <Col span={12}>
-              <Card title="Exponent" style={{ margin: '5px' }}>
-                <Row>
-                  <Col span={24}>
-                    <p>
-                      The following represent different forms of the lambda
-                      setting used for different tooling
-                    </p>
-                  </Col>
-                  <Col span={24}>
-                    <Tooltip title="Memory Days">
-                      <p>Aggressiveness: 0.5</p>
-                    </Tooltip>
-                  </Col>
-                  <Col span={24}>
-                    <Tooltip title="k">
-                      <p>k: 0.5</p>
-                    </Tooltip>
-                  </Col>
-                  <Col span={24}>
-                    <Tooltip title="logk">
-                      <p>logk: 0.5</p>
-                    </Tooltip>
-                  </Col>
-                </Row>
-              </Card>
-            </Col>
-            <Col span={24}>
-              <div hidden={loading}></div>
-            </Col>
           </Row>
         </Col>
         <Col span={1}></Col>
@@ -392,7 +309,9 @@ export function SafeHavenFactSheet() {
       <Row>
         <Col span={1}></Col>
         <Col span={22}>
-          <h1>QUANTITATIVE FINANCIAL ANALYSIS</h1>
+          <h1 style={{ marginLeft: '10px' }}>
+            QUANTITATIVE FINANCIAL ANALYSIS
+          </h1>
         </Col>
         <Col span={1}></Col>
       </Row>
@@ -411,7 +330,7 @@ export function SafeHavenFactSheet() {
                       alignItems: 'center',
                     }}
                   >
-                    <span>FINANCIAL METRICS</span>
+                    <span>SIMULATED FINANCIAL METRICS</span>
                     <Radio.Group
                       onChange={(e) => setPeriod(e.target.value)}
                       value={period}
@@ -423,9 +342,6 @@ export function SafeHavenFactSheet() {
                       </Radio.Button>
                       <Radio.Button value="2025Test">
                         Test Period: Jan-Apr25
-                      </Radio.Button>
-                      <Radio.Button value="AugTrain">
-                        Training Period: TODO-Aug24
                       </Radio.Button>
                     </Radio.Group>
                   </div>
@@ -480,16 +396,16 @@ export function SafeHavenFactSheet() {
       <Row>
         <Col span={1}></Col>
         <Col span={22}>
-          <h1>KEY FACTS</h1>
+          <h1 style={{ marginLeft: '10px' }}>KEY FACTS</h1>
         </Col>
         <Col span={1}></Col>
       </Row>
-      <Row>
+      <Row style={{height: '130vh'}}>
         <Col span={1}></Col>
         <Col span={10}>
           <Row>
             <Col span={24}>
-              <Card title="Advantages">
+              <Card title="Advantages" style={{ height: '100%' }}>
                 <Row>
                   <Col span={12}>
                     <Card
@@ -609,7 +525,7 @@ export function SafeHavenFactSheet() {
         <Col span={1}></Col>
         <Col span={11}>
           <Card
-            style={{ margin: '5px' }}
+            style={{ height: '100%' }}
             title={<Tooltip title="TODOs">Risks</Tooltip>}
           >
             <Row>
@@ -725,7 +641,9 @@ export function SafeHavenFactSheet() {
       <Row>
         <Col span={1}></Col>
         <Col span={22}>
-          <h1>RE-WEIGHTING STRATEGY PARAMETER SELECTION</h1>
+          <h1 style={{ marginLeft: '10px' }}>
+            RE-WEIGHTING STRATEGY PARAMETER SELECTION
+          </h1>
         </Col>
         <Col span={1}></Col>
       </Row>
@@ -754,7 +672,7 @@ export function SafeHavenFactSheet() {
       </Row>
       <Row>
         <Col span={1}></Col>
-        <Col span={14}>
+        <Col span={10}>
           <Col span={24}>
             <Card title="Training window TODO - Aug 2024">
               <Row>
@@ -788,7 +706,7 @@ export function SafeHavenFactSheet() {
           </Col>
         </Col>
         <Col span={1}></Col>
-        <Col span={7}>
+        <Col span={11}>
           <Row>
             <Col span={12}>
               <Card
@@ -915,14 +833,14 @@ export function SafeHavenFactSheet() {
       <Row>
         <Col span={1}></Col>
         <Col span={22}>
-          <h1>DISCLAIMERS</h1>
+          <h1 style={{ marginLeft: '10px' }}>DISCLAIMERS</h1>
         </Col>
         <Col span={1}></Col>
       </Row>
       <Row>
         <Col span={1}></Col>
         <Col span={22}>
-          <h1>LEGAL</h1>
+          <h1 style={{ marginLeft: '10px' }}>LEGAL</h1>
         </Col>
         <Col span={1}></Col>
       </Row>
