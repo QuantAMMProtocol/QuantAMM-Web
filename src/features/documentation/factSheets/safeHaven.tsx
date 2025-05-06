@@ -1180,7 +1180,7 @@ export function SafeHavenFactSheet() {
             memory of prices that get taken into account.
           </p>
           <p>
-            A training period of TODO-August 2024 was selected and parameters
+            A training period of March 2021-August 2024 was selected and parameters
             were selected using the machine learning technique called:
             Stochastic Gradient Descent. This was performed by the QuantAMM team
             using the QuantAMM simulator framework. A parameter set was selected
@@ -1198,7 +1198,7 @@ export function SafeHavenFactSheet() {
         <Col span={10}>
           <Col span={24}>
             <Card
-              title="Training window TODO - Aug 2024"
+              title="Training window March 2021 - Aug 2024"
               style={{ height: '130vh' }}
             >
               <Row>
