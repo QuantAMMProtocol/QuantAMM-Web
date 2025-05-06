@@ -8,6 +8,7 @@ export const initialParams: GetPoolsSummaryQueryVariables = {
   first: 10,
   where: {
     minTvl: 10000,
+    tagNotIn: ["BLACK_LISTED"]
   },
 };
 

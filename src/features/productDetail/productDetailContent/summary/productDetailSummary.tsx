@@ -1,5 +1,6 @@
 import { FC, useCallback, useEffect, useMemo, useState } from 'react';
-import { Col, Row, Typography } from 'antd';
+import { Col, Row, Tooltip, Typography } from 'antd';
+import { WarningOutlined } from '@ant-design/icons';
 import { GqlChain } from '../../../../__generated__/graphql-types';
 import { Benchmark, Product } from '../../../../models';
 import {
@@ -11,15 +12,17 @@ import {
   selectProducts,
   selectReturnAnalysisByProductId,
   selectReturnMetricThresholds,
+  setProductSimulationRunBreakdown,
 } from '../../../productExplorer/productExplorerSlice';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { useFetchProductData } from '../../../../hooks/useFetchProductData';
 import { useFinancialAnalysis } from '../../../../hooks/useFinancialAnalysis';
 import { ProductDetailSummaryDesktop } from './productDetailSummaryDesktop';
 import { ProductDetailSummaryMobile } from './productDetailSummaryMobile';
-import { SimulationRunMetric } from '../../../simulationResults/simulationResultSummaryModels';
+import { SimulationRunBreakdown, SimulationRunMetric } from '../../../simulationResults/simulationResultSummaryModels';
 
 import styles from './productDetailSummary.module.scss';
+import { getBreakdown, Pool } from '../../../../services/breakdownService';
 
 const { Title } = Typography;
 
@@ -54,6 +57,11 @@ interface ProductDetailSummaryProps {
 }
 
 const defaultBenchmark = Benchmark.HODL;
+
+const ADDRESS_POOL_MAP: Record<string, Pool> = {
+  '0xd4ed17bbf48af09b87fd7d8c60970f5da79d4852': 'safeHavenBTFAugTest',
+};
+
 
 export const ProductDetailSummary: FC<ProductDetailSummaryProps> = ({
   product,
@@ -234,11 +242,45 @@ export const ProductDetailSummary: FC<ProductDetailSummaryProps> = ({
     }
   }, [productData, dispatch]);
 
+  const [breakdowns, setBreakdowns] = useState<Record<Pool, SimulationRunBreakdown>>({} as Record<Pool, SimulationRunBreakdown>);
+  const [loadingBreakdowns, setLoadingBreakdowns] = useState(true);
+
+  const addressKey = product.address?.toLowerCase() ?? '';
+  const specialPoolKey = ADDRESS_POOL_MAP[addressKey];
+
+  useEffect(() => {
+    const pools = Object.values(ADDRESS_POOL_MAP);
+    const loadAll = async () => {
+      setLoadingBreakdowns(true);
+      const entries = await Promise.all(
+        pools.map(async (pool) => [pool, await getBreakdown(pool)] as const)
+      );
+      setBreakdowns(Object.fromEntries(entries) as Record<Pool, SimulationRunBreakdown>);
+      setLoadingBreakdowns(false);
+    };
+    void loadAll();
+  }, []);
+
+  useEffect(() => {
+    if (specialPoolKey && !loadingBreakdowns && breakdowns[specialPoolKey]) {
+      console.log('Dispatching breakdown for product:', product.id);
+      console.log('Breakdown:', breakdowns[specialPoolKey]);
+      dispatch(
+        setProductSimulationRunBreakdown({
+          productId: product.id,
+          simulationRunBreakdown: breakdowns[specialPoolKey],
+        })
+      );
+    }
+  }, [specialPoolKey, loadingBreakdowns, breakdowns, product, dispatch]);
+
+  const hasTimeSeries = Array.isArray(product.timeSeries) && product.timeSeries.length > 0;
+  const shouldRun = hasTimeSeries && !specialPoolKey;
   useFinancialAnalysis({
-    product: productData,
+    product,
     benchmark: Benchmark.HODL,
     loadToSimulator: false,
-    shouldRun: !!productData?.timeSeries?.length,
+    shouldRun,
   });
 
   const comparingProduct = selectProductById(
@@ -261,7 +303,12 @@ export const ProductDetailSummary: FC<ProductDetailSummaryProps> = ({
   return (
     <Row id="summary" style={{ marginTop: 20 }}>
       <Col span={24} className={styles['product-detail-summary__title']}>
-        <Title level={4}>HODL Performance Metric Analysis</Title>
+        {specialPoolKey ? 
+          <div>
+            <Tooltip title='This pool is new and does not have enough data for most financial metrics. This is a simulated performance metric analysis based on the Aug24-Apr25 period (see factsheet). Once the pool has been running for a while it will become live metrics'>
+            <Title level={4}>Simulated HODL Performance Metric Analysis {'  '} <WarningOutlined type='warning'/> </Title>
+            </Tooltip>
+          </div> : <Title level={4}>HODL Performance Metric Analysis</Title>}
       </Col>
       <Col span={24}>
         <div className={styles['product-detail-summary__container']}>

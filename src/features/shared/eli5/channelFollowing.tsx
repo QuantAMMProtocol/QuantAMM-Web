@@ -7,10 +7,10 @@ export const ChannelFollowing = () => {
     <>
       <Title level={3}>
         <Text
-          style={{ color: 'var(--secondary-text-color)', fontSize: 'inherit' }}
+          style={{ fontSize: 'inherit' }}
         >
-          &ldquo;Capitalize on small movements but act fast on larger
-          movements&rdquo;
+          Capitalize on small movements but act fast on larger
+          movements
         </Text>
       </Title>
       <p>

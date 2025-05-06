@@ -47,6 +47,8 @@ export interface BreakdownProps {
   overrideSeriesStrokeColor?:Dictionary<string>;
   overrideSeriesName?:Dictionary<string>;
   overrideNagivagtion?:boolean;
+  overrideTitle?:string;
+  hideTitle?:boolean;
 }
 
 export function SimulationResultsSummaryStep(props: BreakdownProps) {

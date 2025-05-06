@@ -33,10 +33,12 @@ export const ProductDetail = () => {
 
   useEffect(() => {
     if (product && !productLoading) {
+      console.log('Product:', product);
       dispatch(loadProducts({ [product.id]: product }));
     }
   }, [product, productLoading, dispatch]);
 
+  console.log('Product:', product);
   return (
     <Layout style={{ minHeight: '100vh', padding: 20 }}>
       {productLoading && <Spin />}

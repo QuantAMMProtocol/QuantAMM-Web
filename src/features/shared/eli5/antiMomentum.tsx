@@ -7,10 +7,10 @@ export const AntiMomentum = () => {
     <>
       <Title level={3}>
         <Text
-          style={{ color: 'var(--secondary-text-color)', fontSize: 'inherit' }}
+          style={{ fontSize: 'inherit' }}
         >
-          &ldquo;deviations will revert back to the mean. Buy and sell assuming
-          prices will revert &rdquo;
+          Deviations will revert back to the mean. Buy and sell assuming
+          prices will revert.
         </Text>
       </Title>
       <p>

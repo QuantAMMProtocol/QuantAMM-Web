@@ -7,7 +7,7 @@ export const Gyro = () => {
     <>
       <Title level={3}>
         <Text
-          style={{ color: 'var(--secondary-text-color)', fontSize: 'inherit' }}
+          style={{  fontSize: 'inherit' }}
         >
           Gyroscope E-CLP
         </Text>

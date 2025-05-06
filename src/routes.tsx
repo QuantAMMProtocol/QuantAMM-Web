@@ -12,6 +12,7 @@ import { Research } from './features/documentation/research';
 import { CompanyPage } from './features/documentation/company';
 import { ContactCompany } from './features/documentation/landing/desktop/contactCompany';
 import TermsOfService from './features/documentation/landing/termsOfService';
+import { SafeHavenFactSheet } from './features/documentation/factSheets/safeHaven';
 
 const BASE_ROUTE = '/';
 
@@ -53,6 +54,10 @@ export const routes = createBrowserRouter([
             element: <ProductDetail />,
           },
         ],
+      },
+      {
+        path: 'factsheet/' + ROUTES.SAFEHAVENFACTSHEET,
+        element:<SafeHavenFactSheet />,
       },
       {
         path: ROUTES.EXAMPLES,

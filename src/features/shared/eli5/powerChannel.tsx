@@ -7,10 +7,10 @@ export const PowerChannel = () => {
     <>
       <Title level={3}>
         <Text
-          style={{ color: 'var(--secondary-text-color)', fontSize: 'inherit' }}
+          style={{ fontSize: 'inherit' }}
         >
-          &ldquo;Ignore the noise of small price movements, act fast on large
-          price movements&rdquo;
+          Ignore the noise of small price movements, act fast on large
+          price movements
         </Text>
       </Title>
       <p>

@@ -65,6 +65,8 @@ export const useFetchProductListData = (
       delete whereClause.minTvl;
     }
 
+    whereClause.tagNotIn = ['BLACK_LISTED']
+
     return whereClause;
   }, [activeFilters.chain, activeFilters.poolType, activeFilters.minTvl]);
 

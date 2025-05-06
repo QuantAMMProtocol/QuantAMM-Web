@@ -22,6 +22,7 @@ export const useFetchPoolsSummaryByParams = (
       skip: DEFAULT_SKIPPED_POOLS,
       where: {
         minTvl: DEFAULT_MIN_TVL,
+        tagNotIn:["BLACK_LISTED"],
         ...params.where,
       },
       ...params,

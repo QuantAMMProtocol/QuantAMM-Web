@@ -7,9 +7,9 @@ export const FX = () => {
     <>
       <Title level={3}>
         <Text
-          style={{ color: 'var(--secondary-text-color)', fontSize: 'inherit' }}
+          style={{ fontSize: 'inherit' }}
         >
-          &ldquo;A balancer FX pool &rdquo;
+          A balancer FX pool 
         </Text>
       </Title>
       <p>

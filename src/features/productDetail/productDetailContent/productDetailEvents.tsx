@@ -1,6 +1,6 @@
 import { FC, useMemo, useRef, useState } from 'react';
 import { Button, Col, Row, Spin, Typography } from 'antd';
-import { ColDef, GridOptions } from 'ag-grid-community';
+import { ColDef, GridOptions, SideBarDef } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { format } from 'date-fns';
 import {
@@ -28,8 +28,8 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = ({
   const gridRef = useRef<AgGridReact>(null);
 
   const { poolEvents, loading, error } = useFetchPoolEventsData({
-    first: 100,
-    skip: 0,
+    first: undefined,
+    skip: undefined,
     poolId: product.id,
     chain: product.chain as GqlChain,
     range,
@@ -41,8 +41,16 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = ({
       field: 'timestamp',
       headerName: 'Timestamp',
       width: 180,
-      valueFormatter: (params) =>
-        format(params.value * 1000, 'MM-dd-yy HH:mm:ss'),
+      
+      valueFormatter: ({ value, node }) => {
+        // if it's a group row, or no valid numeric timestamp, just render blank (or return the group key)
+        if (!node?.group || typeof(value) !== 'number') {
+          return ''
+        }
+        // otherwise it's a real timestamp
+        return format(value * 1000, 'MM-dd-yy HH:mm:ss')
+      },
+      enableRowGroup: true,
     },
     {
       colId: 'id',
@@ -55,6 +63,8 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = ({
       field: 'blockNumber',
       headerName: 'Block Number',
       width: 150,
+      enableRowGroup: true,
+      type:'number',
     },
     { colId: 'type', field: 'type', headerName: 'Type', width: 100 },
     {
@@ -76,12 +86,16 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = ({
       field: 'sender',
       headerName: 'Sender',
       width: 140,
+      enableRowGroup: true,
+      type:'text',
     },
     {
       colId: 'tx',
       field: 'tx',
       headerName: 'Tx',
       width: 140,
+      enableRowGroup: true,
+      type:'text',
     },
   ]);
 
@@ -123,6 +137,33 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = ({
     }),
     [poolEventsColDefs]
   );
+
+    const sideBar: SideBarDef = {
+      toolPanels: [
+        {
+          id: 'columns',
+          labelDefault: 'Columns',
+          labelKey: 'columns',
+          iconKey: 'columns',
+          toolPanel: 'agColumnsToolPanel',
+          minWidth: 100,
+          maxWidth: 300,
+          width: 200,
+        },
+        {
+          id: 'filters',
+          labelDefault: 'Filters',
+          labelKey: 'filters',
+          iconKey: 'filter',
+          toolPanel: 'agFiltersToolPanel',
+          minWidth: 100,
+          maxWidth: 300,
+          width: 200,
+        },
+      ],
+      position: 'right',
+      defaultToolPanel: 'none',
+    };
 
   const handleDownloadCSV = () => {
     gridRef.current?.api?.exportDataAsCsv();
@@ -171,6 +212,7 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = ({
                 gridOptions={poolEventsGridOptions}
                 columnDefs={poolEventsColDefs}
                 ref={gridRef}
+                sideBar={sideBar}
               />
             </div>
           </div>
