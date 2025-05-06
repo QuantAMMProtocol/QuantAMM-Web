@@ -1,14 +1,17 @@
 .product-detail-info__container {
+  width: 100%;
+  box-sizing: border-box;
   display: grid;
-  grid-template-columns: fit-content(50%) 1fr;
+  /* first column: up to 50% of the container, but will size down to its content;
+     second column: take remaining space, and can shrink below its content‐width if needed */
+  grid-template-columns: fit-content(50%) minmax(0, 1fr);
   gap: 1px 0;
   padding: 0;
 
   @media (max-width: 768px) {
-    grid-template-columns: repeat(1, 1fr);
+    grid-template-columns: 1fr;
   }
 }
-
 .product-detail-info__item-left {
   padding: 4px;
   display: flex;
