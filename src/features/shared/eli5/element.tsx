@@ -7,7 +7,7 @@ export const ElementPool = () => {
     <>
       <Title level={3}>
         <Text
-          style={{ color: 'var(--secondary-text-color)', fontSize: 'inherit' }}
+          style={{ fontSize: 'inherit' }}
         >
           &ldquo;A balancer element pool &rdquo;
         </Text>

@@ -7,7 +7,7 @@ export const CowAMM = () => {
     <>
       <Title level={3}>
         <Text
-          style={{ color: 'var(--secondary-text-color)', fontSize: 'inherit' }}
+          style={{ fontSize: 'inherit' }}
         >
           CoW AMM
         </Text>

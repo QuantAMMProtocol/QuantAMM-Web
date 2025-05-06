@@ -21,7 +21,7 @@ export function Banner() {
       opacity: 1,
       imgWidth: '90%',
       focus: true,
-      route: '/safeHavenFactSheet',
+      route: 'factsheet/safeHavenFactSheet',
     },
     {
       title: 'RWA Issuers',

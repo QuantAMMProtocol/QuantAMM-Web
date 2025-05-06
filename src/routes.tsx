@@ -56,7 +56,7 @@ export const routes = createBrowserRouter([
         ],
       },
       {
-        path: ROUTES.SAFEHAVENFACTSHEET,
+        path: 'factsheet/' + ROUTES.SAFEHAVENFACTSHEET,
         element:<SafeHavenFactSheet />,
       },
       {

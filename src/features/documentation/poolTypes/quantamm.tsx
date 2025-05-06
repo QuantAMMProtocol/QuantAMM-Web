@@ -55,8 +55,8 @@ export function QuantAMMPoolDescription(props: OptionalProps) {
                 swap one token for another at an automated price. The holdings
                 within the liquidity pool are kept at constant equal weights.
               </p>
-              <h3 style={{ color: 'yellow' }}>How QuantAMM BTFs work</h3>
-              <p>
+              <h3 style={{ color: 'var(--secondary-text-color)' }}>How QuantAMM BTFs work</h3>
+              <p style={{ color: 'var(--secondary-text-color)' }}>
                 QuantAMM BTFs are automated market maker pools. However instead
                 of offering a competitive market price, BTFs offer a slightly
                 off market price. The aim of this off market price is to allow

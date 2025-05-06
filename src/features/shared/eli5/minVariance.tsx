@@ -9,7 +9,7 @@ export const MinVariance = () => {
         <Text
           style={{ color: 'var(--secondary-text-color)', fontSize: 'inherit' }}
         >
-          &ldquo;Hold more of the least volatile constituent&rdquo;
+          Hold more of the least volatile constituent
         </Text>
       </Title>
       <p>

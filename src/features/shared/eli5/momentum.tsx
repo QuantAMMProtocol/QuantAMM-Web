@@ -15,9 +15,9 @@ export const Momentum = () => {
               fontSize: 'inherit',
             }}
           >
-            &ldquo;Buy low and sell high
+            Buy low and sell high - Buy high and sell higher
           </Text>{' '}
-          - Buy high and sell higher&rdquo;
+          
         </Text>
       </Title>
       <p>
