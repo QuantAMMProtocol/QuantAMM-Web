@@ -9,6 +9,7 @@ import { PowerChannelUpdateRule } from '../updateRules/powerChannelUpdateRule';
 import { SimulationResultMarketValueChart } from '../../simulationResults/visualisations/simulationResultMarketValueChart';
 import { AnalysisSimplifiedBreakdownTable } from '../../simulationResults/breakdowns/simulationRunPerformanceSimpleTable';
 import { MathJax, MathJaxContext } from 'better-react-mathjax';
+import { InfoCircleOutlined } from '@ant-design/icons'
 
 export function SafeHavenFactSheet() {
   const [breakdowns, setBreakdowns] = useState<
@@ -795,14 +796,16 @@ export function SafeHavenFactSheet() {
                     <span>QUANTAMM REBALANCING</span>
                     <Radio.Group
                       size="small"
+                      buttonStyle="solid"
                       value={faqEli5}
                       onChange={(e) => setFAQEli5(e.target.value)}
+                      style={{ fontWeight: 'normal' }}
                     >
-                      <Radio.Button value={'ELI5'}>ELI5</Radio.Button>
-                      <Radio.Button value={'Crypto Native'}>
-                        Crypto Native
+                      <Radio.Button value="ELI5">ELI5</Radio.Button>
+                      <Radio.Button value="Crypto Native">
+                      Crypto Native
                       </Radio.Button>
-                      <Radio.Button value={'Quant'}>Quant</Radio.Button>
+                      <Radio.Button value="Quant">Quant</Radio.Button>
                     </Radio.Group>
                   </div>
                 }
@@ -943,9 +946,7 @@ export function SafeHavenFactSheet() {
                     <Card
                       style={{ margin: '5px' }}
                       title={
-                        <Tooltip title="The following section describes the technique and mutability of the parameters used in the strategy">
-                          Advanced Infrastructure
-                        </Tooltip>
+                          'Advanced Infrastructure'
                       }
                     >
                       <Row>
@@ -974,10 +975,7 @@ export function SafeHavenFactSheet() {
                   <Col span={12}>
                     <Card
                       style={{ margin: '5px', height: '98%' }}
-                      title={
-                        <Tooltip title="The following represent different forms of the lambda setting used for different tooling">
-                          Responsive Strategies
-                        </Tooltip>
+                      title={'Responsive Strategies'
                       }
                     >
                       <Row>
@@ -1058,16 +1056,13 @@ export function SafeHavenFactSheet() {
         <Col span={11}>
           <Card
             style={{ height: '130vh', overflowY: 'auto' }}
-            title={<Tooltip title="TODOs">Risks</Tooltip>}
+            title={'Risks'}
           >
             <Row>
               <Col span={12}>
                 <Card
                   style={{ margin: '5px' }}
-                  title={
-                    <Tooltip title="The following section describes the technique and mutability of the parameters used in the strategy">
-                      Directional Strategies
-                    </Tooltip>
+                  title={'Directional Strategies'
                   }
                 >
                   <Row>
@@ -1093,11 +1088,7 @@ export function SafeHavenFactSheet() {
               <Col span={12}>
                 <Card
                   style={{ margin: '5px', height: '97%' }}
-                  title={
-                    <Tooltip title="The following represent different forms of the lambda setting used for different tooling">
-                      AMM Mathematics
-                    </Tooltip>
-                  }
+                  title={'AMM Mathematics'}
                 >
                   <Row>
                     <Col span={24}>
@@ -1259,7 +1250,7 @@ export function SafeHavenFactSheet() {
                   style={{ margin: '5px' }}
                   title={
                     <Tooltip title="The following section describes the technique and mutability of the parameters used in the strategy">
-                      Multi-block MEV
+                      Multi-block MEV{'  '} <InfoCircleOutlined />
                     </Tooltip>
                   }
                 >
@@ -1285,34 +1276,26 @@ export function SafeHavenFactSheet() {
                 <Card
                   style={{ margin: '5px', height: '97%' }}
                   title={
-                    <Tooltip title="The following represent different forms of the lambda setting used for different tooling">
+                    <Tooltip title="The following represent different forms of the lambda setting used for different tooling. ">
                       Lambda Settings
                     </Tooltip>
                   }
                 >
                   <Row>
                     <Col span={24}>
-                      <Tooltip title="Memory Days">
-                        <p>Lambda:</p>
-                        <Tag>BTC - 1</Tag>
-                        <Tag>PAXG - 1</Tag>
-                        <Tag>USDC - 1</Tag>
+                      <Tooltip title="Lambda is the parameter used in the gradient estimators for the power channel. This is the on-chain value stored in the contracts">
+                        <p>Lambda:{'  '} <InfoCircleOutlined /></p>
+                        <Tag style={{margin:'5px'}}>BTC - 0.811035769801363300</Tag>
+                        <Tag style={{margin:'5px'}}>PAXG - 0.781490597023096500</Tag>
+                        <Tag style={{margin:'5px'}}>USDC - 0.289524066401247700</Tag>
                       </Tooltip>
                     </Col>
                     <Col span={24}>
-                      <Tooltip title="Lambda">
-                        <p>Memory Days: 0.5</p>
-                        <Tag>BTC - 1</Tag>
-                        <Tag>PAXG - 1</Tag>
-                        <Tag>USDC - 1</Tag>
-                      </Tooltip>
-                    </Col>
-                    <Col span={24}>
-                      <Tooltip title="Memory Days">
-                        <p>Logit Lambda: 0.5</p>
-                        <Tag>BTC - 1</Tag>
-                        <Tag>PAXG - 1</Tag>
-                        <Tag>USDC - 1</Tag>
+                      <Tooltip title="Memory days is a conversion of the lambda setting to a more understandable unit of the number of day of prices used in the strategy">
+                        <p>Memory Days:{'  '} <InfoCircleOutlined /></p>
+                        <Tag style={{margin:'5px'}}>BTC - 17.93552717</Tag>
+                        <Tag style={{margin:'5px'}}>PAXG - 15.31974493</Tag>
+                        <Tag style={{margin:'5px'}}>USDC - 3.38396553</Tag>
                       </Tooltip>
                     </Col>
                   </Row>
@@ -1328,27 +1311,19 @@ export function SafeHavenFactSheet() {
                       </p>
                     </Col>
                     <Col span={24}>
-                      <Tooltip title="k_per_day">
-                        <p>Aggressiveness: 0.5</p>
-                        <Tag>BTC - 1</Tag>
-                        <Tag>PAXG - 1</Tag>
-                        <Tag>USDC - 1</Tag>
+                      <Tooltip title="Otherwise known as k_per_day. This is the maximum % weight change per day the strategy can suggest prior to MEV guardrails being applied">
+                        <p>Aggressiveness: {'  '} <InfoCircleOutlined /></p>
+                        <Tag style={{margin:'5px'}}>BTC - 77.55380713</Tag>
+                        <Tag style={{margin:'5px'}}>PAXG - 52.65723196</Tag>
+                        <Tag style={{margin:'5px'}}>USDC - 75.62990544</Tag>
                       </Tooltip>
                     </Col>
                     <Col span={24}>
-                      <Tooltip title="k">
-                        <p>k: 0.5</p>
-                        <Tag>BTC - 1</Tag>
-                        <Tag>PAXG - 1</Tag>
-                        <Tag>USDC - 1</Tag>
-                      </Tooltip>
-                    </Col>
-                    <Col span={24}>
-                      <Tooltip title="logk">
-                        <p>logk: 0.5</p>
-                        <Tag>BTC - 1</Tag>
-                        <Tag>PAXG - 1</Tag>
-                        <Tag>USDC - 1</Tag>
+                      <Tooltip title="k is the on-chain value stored in the contracts and is the exact parameter used in the strategy calculations">
+                        <p>k:{'  '} <InfoCircleOutlined /></p>
+                        <Tag style={{margin:'5px'}}>BTC - 1390.9684145267538</Tag>
+                        <Tag style={{margin:'5px'}}>PAXG - 806.6953621597771</Tag>
+                        <Tag style={{margin:'5px'}}>USDC - 255.92899333099183</Tag>
                       </Tooltip>
                     </Col>
                   </Row>
@@ -1364,11 +1339,11 @@ export function SafeHavenFactSheet() {
                       </p>
                     </Col>
                     <Col span={24}>
-                      <Tooltip title="Memory Days">
-                        <p>Aggressiveness: 0.5</p>
-                        <Tag>BTC - 1</Tag>
-                        <Tag>PAXG - 1</Tag>
-                        <Tag>USDC - 1</Tag>
+                      <Tooltip title="The exponent is a variable used in the power channel strategy that dictate how big a price change has to be before the strategy starts to notice it. It is the primary difference between other strategies like momentum.">
+                        <p>Exponent:{'  '} <InfoCircleOutlined /></p>
+                        <Tag style={{margin:'5px'}}>BTC - 1.5312327931176639</Tag>
+                        <Tag style={{margin:'5px'}}>PAXG - 1</Tag>
+                        <Tag style={{margin:'5px'}}>USDC - 1</Tag>
                       </Tooltip>
                     </Col>
                   </Row>

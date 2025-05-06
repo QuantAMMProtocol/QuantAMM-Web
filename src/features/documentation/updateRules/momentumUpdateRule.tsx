@@ -52,7 +52,7 @@ export function MomentumUpdateRule() {
                     </Radio.Button>
                     <Radio.Button value={'ELI5'}>ELI5</Radio.Button>
                     <Radio.Button value={'Quant'}>
-                      Quant Mathematical
+                      Quant
                     </Radio.Button>
                   </Radio.Group>
                 </Form.Item>
