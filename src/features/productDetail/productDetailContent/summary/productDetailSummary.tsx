@@ -59,7 +59,7 @@ interface ProductDetailSummaryProps {
 const defaultBenchmark = Benchmark.HODL;
 
 const ADDRESS_POOL_MAP: Record<string, Pool> = {
-  '0xd4ed17bbf48af09b87fd7d8c60970f5da79d4852': 'safeHavenBTFAugTest',
+  '0x6b61d8680c4f9e560c8306807908553f95c749c5': 'safeHavenBTFAugTest',
 };
 
 

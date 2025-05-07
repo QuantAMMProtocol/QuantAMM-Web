@@ -1349,9 +1349,6 @@ export function SafeHavenFactSheet() {
                   </Row>
                 </Card>
               </Col>
-              <Col span={24}>
-                <div hidden={loading}></div>
-              </Col>
             </Row>
           </Card>
         </Col>
