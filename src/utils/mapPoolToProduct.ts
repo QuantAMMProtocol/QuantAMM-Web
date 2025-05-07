@@ -566,13 +566,18 @@ const getMaybeQuantAmmWeightedParams = (
 
 const getStrategy = (pool: GqlPoolMinimal): Strategy => {
   const quantAmmWeightedParams = getMaybeQuantAmmWeightedParams(pool);
-
+  console.log('quantAmmWeightedParams', quantAmmWeightedParams);
   if (quantAmmWeightedParams) {
     const { details } = quantAmmWeightedParams;
-
-    return details?.find((detail) => detail.name === 'strategy')?.value as
-      | Strategy
-      | 'NONE';
+    console.log('details', details);
+    console.log(details
+      ?.find((detail) => detail.name === 'updateRuleName')
+      ?.value?.toUpperCase()
+      .replace(/ /g, '_'))
+    return details
+      ?.find((detail) => detail.name === 'updateRuleName')
+      ?.value?.toUpperCase()
+      .replace(/ /g, '_') as Strategy | 'NONE';
   }
 
   return 'NONE';

@@ -445,7 +445,7 @@ export function FAQ() {
                   Crypto Native
                 </Radio.Button>
                 <Radio.Button value={'Quant'}>
-                  Quant Mathematical
+                  Quant
                 </Radio.Button>
                 </Radio.Group>
               </Form.Item>
