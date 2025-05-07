@@ -944,7 +944,7 @@ export function SafeHavenFactSheet() {
                 <Row>
                   <Col span={12}>
                     <Card
-                      style={{ margin: '5px' }}
+                      style={{ margin: '5px', height: '57vh' }}
                       title={
                           'Advanced Infrastructure'
                       }
@@ -974,7 +974,7 @@ export function SafeHavenFactSheet() {
                   </Col>
                   <Col span={12}>
                     <Card
-                      style={{ margin: '5px', height: '98%' }}
+                      style={{ margin: '5px', height: '57vh' }}
                       title={'Responsive Strategies'
                       }
                     >
@@ -1006,7 +1006,7 @@ export function SafeHavenFactSheet() {
                   <Col span={12}>
                     <Card
                       title="Secure Balancer Vault"
-                      style={{ margin: '5px' }}
+                      style={{ margin: '5px', height: '57vh' }}
                     >
                       <Row>
                         <Col span={24}>
@@ -1028,7 +1028,7 @@ export function SafeHavenFactSheet() {
                     </Card>
                   </Col>
                   <Col span={12}>
-                    <Card title="Cross asset baskets" style={{ margin: '5px' }}>
+                    <Card title="Cross asset baskets" style={{ margin: '5px', height: '57vh' }}>
                       <Row>
                         <Col span={24}>
                           <p>
@@ -1061,7 +1061,7 @@ export function SafeHavenFactSheet() {
             <Row>
               <Col span={12}>
                 <Card
-                  style={{ margin: '5px' }}
+                  style={{ margin: '5px', height: '57vh' }}
                   title={'Directional Strategies'
                   }
                 >
@@ -1087,7 +1087,7 @@ export function SafeHavenFactSheet() {
               </Col>
               <Col span={12}>
                 <Card
-                  style={{ margin: '5px', height: '97%' }}
+                  style={{ margin: '5px', height: '57vh' }}
                   title={'AMM Mathematics'}
                 >
                   <Row>
@@ -1112,7 +1112,7 @@ export function SafeHavenFactSheet() {
                 </Card>
               </Col>
               <Col span={12}>
-                <Card title="Contract Risk" style={{ margin: '5px' }}>
+                <Card title="Contract Risk" style={{ margin: '5px', height: '57vh' }}>
                   <Row>
                     <Col span={24}>
                       <p>
@@ -1135,7 +1135,7 @@ export function SafeHavenFactSheet() {
               <Col span={12}>
                 <Card
                   title="Oracle / Data Manipulation"
-                  style={{ margin: '5px' }}
+                  style={{ margin: '5px', height: '57vh' }}
                 >
                   <Row>
                     <Col span={24}>
@@ -1247,7 +1247,7 @@ export function SafeHavenFactSheet() {
             <Row>
               <Col span={12}>
                 <Card
-                  style={{ margin: '5px' }}
+                  style={{ margin: '5px', height: '57vh' }}
                   title={
                     <Tooltip title="The following section describes the technique and mutability of the parameters used in the strategy">
                       Multi-block MEV{'  '} <InfoCircleOutlined />
@@ -1274,7 +1274,7 @@ export function SafeHavenFactSheet() {
               </Col>
               <Col span={12}>
                 <Card
-                  style={{ margin: '5px', height: '97%' }}
+                  style={{ margin: '5px', height: '57vh' }}
                   title={
                     <Tooltip title="The following represent different forms of the lambda setting used for different tooling. ">
                       Lambda Settings
@@ -1302,7 +1302,7 @@ export function SafeHavenFactSheet() {
                 </Card>
               </Col>
               <Col span={12}>
-                <Card title="Aggressiveness" style={{ margin: '5px' }}>
+                <Card title="Aggressiveness" style={{ margin: '5px', height: '57vh' }}>
                   <Row>
                     <Col span={24}>
                       <p>
@@ -1330,7 +1330,7 @@ export function SafeHavenFactSheet() {
                 </Card>
               </Col>
               <Col span={12}>
-                <Card title="Exponent" style={{ margin: '5px' }}>
+                <Card title="Exponent" style={{ margin: '5px', height: '57vh' }}>
                   <Row>
                     <Col span={24}>
                       <p>
@@ -1351,20 +1351,6 @@ export function SafeHavenFactSheet() {
               </Col>
             </Row>
           </Card>
-        </Col>
-        <Col span={1}></Col>
-      </Row>
-      <Row>
-        <Col span={1}></Col>
-        <Col span={22}>
-          <h1 style={{ marginLeft: '10px' }}>DISCLAIMERS</h1>
-        </Col>
-        <Col span={1}></Col>
-      </Row>
-      <Row>
-        <Col span={1}></Col>
-        <Col span={22}>
-          <h1 style={{ marginLeft: '10px' }}>LEGAL</h1>
         </Col>
         <Col span={1}></Col>
       </Row>

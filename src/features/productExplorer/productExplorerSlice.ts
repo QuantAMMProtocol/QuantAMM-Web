@@ -209,7 +209,6 @@ export const selectBenchmarkAnalysisByProductId = (
   return null;
 };
 
-// TODO: temporary function, should come from the backend
 const getMetricKey = (metricName: string) => {
   return metricName.toLowerCase().replace(/ /g, '_');
 };

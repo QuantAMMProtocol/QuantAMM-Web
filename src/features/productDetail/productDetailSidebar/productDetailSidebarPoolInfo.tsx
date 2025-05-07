@@ -14,6 +14,24 @@ export const ProductDetailSidebarPoolInfo: FC<
 > = ({ product }) => {
   const formatter = Intl.NumberFormat('en');
 
+  const strategyRunnerContractAddresses: Record<string, string> = {
+    MAINNET: "0x21Ae9576a393413D6d91dFE2543dCb548Dbb8748",
+    BASE: "0x8Ca4e2a74B84c1feb9ADe19A0Ce0bFcd57e3f6F7",
+    ARBITRUM: "0x8Ca4e2a74B84c1feb9ADe19A0Ce0bFcd57e3f6F7",
+  };
+
+  const factoryAddress: Record<string, string> = {
+    MAINNET: "0x21Ae9576a393413D6d91dFE2543dCb548Dbb8748",
+    BASE: "0x8Ca4e2a74B84c1feb9ADe19A0Ce0bFcd57e3f6F7",
+    ARBITRUM: "0x8Ca4e2a74B84c1feb9ADe19A0Ce0bFcd57e3f6F7",
+  };
+
+  const expolerRootUrl: Record<string, string> = {
+    MAINNET: "https://etherscan.io",
+    BASE: "https://basescan.org",
+    ARBITRUM: "https://arbiscan.io",
+  };
+
   return (
     <div className={styles['product-detail-info__container']}>
       <ProductDetailSidebarElement
@@ -22,14 +40,14 @@ export const ProductDetailSidebarPoolInfo: FC<
       />
       <ProductDetailSidebarElement
         side="right"
-        href="0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84" // TODO: the explorer link should come from the product strategy
+        href={strategyRunnerContractAddresses[product.chain]}
         target="_blank"
         text="Etherscan"
       />
-      <ProductDetailSidebarElement side="left" text="Base pool contract" />
+      <ProductDetailSidebarElement side="left" text="Pool Factory contract" />
       <ProductDetailSidebarElement
         side="right"
-        href="0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84" // TODO: the explorer link should come from the product
+        href={factoryAddress[product.chain]} 
         target="_blank"
         text="Etherscan"
       />
@@ -84,7 +102,7 @@ export const ProductDetailSidebarPoolInfo: FC<
       <ProductDetailSidebarElement
         side="right"
         text={shortenAddress(product.id)}
-        href={'https://etherscan.io/address/' + product.address} // TODO: the explorer link should depend on the chain
+        href={expolerRootUrl[product.chain] + '/address/' + product.address}
       />
       <ProductDetailSidebarElement side="left" text="Creation Date" />
       <ProductDetailSidebarElement side="right" text={product.createTime} />

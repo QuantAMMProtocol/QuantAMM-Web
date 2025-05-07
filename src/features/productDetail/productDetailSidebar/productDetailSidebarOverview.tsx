@@ -9,18 +9,24 @@ interface ProductDetailSidebarOverviewProps {
   product: Product;
 }
 
+
 export const ProductDetailSidebarOverview: FC<
   ProductDetailSidebarOverviewProps
 > = ({ product }) => {
   const formatter = Intl.NumberFormat('en');
 
+  const expolerRootUrl: Record<string, string> = {
+    MAINNET: "https://etherscan.io",
+    BASE: "https://basescan.org",
+    ARBITRUM: "https://arbiscan.io",
+  };
   return (
     <div className={styles['product-detail-info__container']}>
       <ProductDetailSidebarElement side="left" text="Pool ID" />
       <ProductDetailSidebarElement
         side="right"
         text={shortenAddress(product.id)}
-        href={'https://etherscan.io/address/' + product.dynamicData?.poolId} // TODO: the explorer link should come from the product strategy
+        href={expolerRootUrl[product.chain] + '/address/' + product.dynamicData?.poolId}
       />
 
       <ProductDetailSidebarElement side="left" text="Pool name" />
