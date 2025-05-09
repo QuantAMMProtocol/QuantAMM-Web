@@ -23,12 +23,12 @@ export const ProductDetailSidebarPerformanceGraph: FC<
         product.inceptionPerformance && (
           <ProductItemPerformanceAreaGraph
             data={[
+              product.inceptionPerformance,
               performanceLength >= 7 ? product.oneWeekPerformance : performancePeriod,
               performanceLength >= 30 ? product.oneMonthPerformance : performancePeriod,
               performanceLength >= 90 ? product.threeMonthPerformance : performancePeriod,
               performanceLength >= 180 ? product.sixMonthPerformance : performancePeriod,
               performanceLength >= 365 ? product.oneYearPerformance : performancePeriod,
-              product.inceptionPerformance,
             ]}
             wide={false}
           />

@@ -49,6 +49,7 @@ export const ProductDetailDropdownSelect: FC<
         showSearch
         popupMatchSelectWidth
         loading={isLoading}
+        disabled={isLoading || options.length === 0}
         className={styles['product-detail-dropdown-select']}
         optionFilterProp="label"
         optionLabelProp="label"
@@ -62,7 +63,7 @@ export const ProductDetailDropdownSelect: FC<
           <Text
             className={styles['product-detail-dropdown-select__placeholder']}
           >
-            {isLoading ? 'Calculating' : placeholder}
+            {isLoading ? 'Calculating' : options.length > 0 ? placeholder : 'No Analysis Available'}
           </Text>
         }
       />

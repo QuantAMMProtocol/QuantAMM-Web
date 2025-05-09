@@ -29,12 +29,12 @@ const mapPerformanceData = (
   data: PerformancePeriod[]
 ): PerformanceGraphData[] => {
   const periods = [
+    'Inception to Date',
     'Last 7D',
     'Last Month',
     'Last 3M',
     'Last 6M',
     'Last Year',
-    'Inception to Date',
   ];
 
   return periods
