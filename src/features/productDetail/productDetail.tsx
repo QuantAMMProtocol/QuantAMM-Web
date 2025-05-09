@@ -18,7 +18,7 @@ export const ProductDetail = () => {
   const isDark = useAppSelector(selectTheme);
 
   const { product, productLoading, productError } = useFetchProductData(
-    id!,
+    id!.toLowerCase(),
     chain as GqlChain
   );
 
@@ -44,8 +44,8 @@ export const ProductDetail = () => {
       {productLoading && <Spin />}
       {!productLoading && !productError && !!id && (
         <Layout>
-          <ProductDetailSidebar id={id} isDark={isDark} />
-          <ProductDetailContent id={id} />
+          <ProductDetailSidebar id={id.toLowerCase()} isDark={isDark} />
+          <ProductDetailContent id={id.toLowerCase()} />
         </Layout>
       )}
     </Layout>
