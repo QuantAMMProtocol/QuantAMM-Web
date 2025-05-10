@@ -9,7 +9,7 @@ import { PowerChannelUpdateRule } from '../updateRules/powerChannelUpdateRule';
 import { SimulationResultMarketValueChart } from '../../simulationResults/visualisations/simulationResultMarketValueChart';
 import { AnalysisSimplifiedBreakdownTable } from '../../simulationResults/breakdowns/simulationRunPerformanceSimpleTable';
 import { MathJax, MathJaxContext } from 'better-react-mathjax';
-import { InfoCircleOutlined } from '@ant-design/icons'
+import { InfoCircleOutlined } from '@ant-design/icons';
 
 export function SafeHavenFactSheet() {
   const [breakdowns, setBreakdowns] = useState<
@@ -651,13 +651,91 @@ export function SafeHavenFactSheet() {
         <Col span={10}>
           <Row style={{ height: '100%' }}>
             <Col span={24}>
-              <Card title="GENERAL DEPLOYMENT LINKS" style={{ height: '100%' }}>
-                <Tag color="primary">Safe Haven BTF</Tag>
-                <Tag color="blue">Safe Haven CFMM</Tag>
-                <Tag color="blue">Safe Haven HODL</Tag>
-                <Tag color="blue">Safe Haven BTF</Tag>
-                <Tag color="blue">Safe Haven CFMM</Tag>
-                <Tag color="blue">Safe Haven HODL</Tag>
+              <Card title="GENERAL DETAILS" style={{ height: '100%' }}>
+                <Row>
+                  <Col span={2}></Col>
+                  <Col span={10}>
+                    <Col span={24}>
+                      <Tag
+                        style={{ margin: 10, color: '#c7b283', width: '80%' }}
+                        color="primary"
+                      >
+                        Deployment Links
+                      </Tag>
+                    </Col>
+                    <Col span={24}>
+                      <Tag style={{ margin: 10, width: '80%' }} color="primary">
+                        Pool Factory Contract
+                      </Tag>
+                    </Col>
+                    <Col span={24}>
+                      <Tag style={{ margin: 10, width: '80%' }} color="primary">
+                        Strategy Runner Contract
+                      </Tag>
+                    </Col>
+                    <Col span={24}>
+                      <Tag style={{ margin: 10, width: '80%' }} color="primary">
+                        Chainlink BTC Oracle
+                      </Tag>
+                    </Col>
+                    <Col span={24}>
+                      <Tag style={{ margin: 10, width: '80%' }} color="primary">
+                        Chainlink PAXG Oracle
+                      </Tag>
+                    </Col>
+                    <Col span={24}>
+                      <Tag style={{ margin: 10, width: '80%' }} color="primary">
+                        Chainlink USDC Oracle
+                      </Tag>
+                    </Col>
+                    <Col span={24}>
+                      <Tag style={{ margin: 10, width: '80%' }} color="primary">
+                        Chainlink Automation Task
+                      </Tag>
+                    </Col>
+                  </Col>
+                  <Col span={10}>
+                    <Col span={24}>
+                      <Tag
+                        style={{ margin: 10, width: '80%', color: '#c7b283' }}
+                        color="primary"
+                      >
+                        Fixed Settings
+                      </Tag>
+                    </Col>
+                    <Col span={24}>
+                      <Tag style={{ margin: 10, width: '80%' }} color="primary">
+                        Strategy Interval: 24H
+                      </Tag>
+                    </Col>
+                    <Col span={24}>
+                      <Tag style={{ margin: 10, width: '80%' }} color="primary">
+                        Strategy: Power Channel
+                      </Tag>
+                    </Col>
+                    <Col span={24}>
+                      <Tag style={{ margin: 10, width: '80%' }} color="primary">
+                        Staleness Limit: 24H
+                      </Tag>
+                    </Col>
+                    <Col span={24}>
+                      <Tag style={{ margin: 10, width: '80%' }} color="primary">
+                        Swap Fee: 2%
+                      </Tag>
+                    </Col>
+                    <Col span={24}>
+                      <Tag style={{ margin: 10, width: '80%' }} color="primary">
+                        Withdrawal Fee: 0%
+                      </Tag>
+                    </Col>
+                    <Col span={24}>
+                      <Tag style={{ margin: 10, width: '80%' }} color="primary">
+                        Streaming Fee: 0%
+                      </Tag>
+                    </Col>
+                  </Col>
+                  <Col span={2}></Col>
+                </Row>
               </Card>
             </Col>
           </Row>
@@ -803,7 +881,7 @@ export function SafeHavenFactSheet() {
                     >
                       <Radio.Button value="ELI5">ELI5</Radio.Button>
                       <Radio.Button value="Crypto Native">
-                      Crypto Native
+                        Crypto Native
                       </Radio.Button>
                       <Radio.Button value="Quant">Quant</Radio.Button>
                     </Radio.Group>
@@ -945,9 +1023,7 @@ export function SafeHavenFactSheet() {
                   <Col span={12}>
                     <Card
                       style={{ margin: '5px', height: '57vh' }}
-                      title={
-                          'Advanced Infrastructure'
-                      }
+                      title={'Advanced Infrastructure'}
                     >
                       <Row>
                         <Col span={24}>
@@ -975,8 +1051,7 @@ export function SafeHavenFactSheet() {
                   <Col span={12}>
                     <Card
                       style={{ margin: '5px', height: '57vh' }}
-                      title={'Responsive Strategies'
-                      }
+                      title={'Responsive Strategies'}
                     >
                       <Row>
                         <Col span={24}>
@@ -1028,7 +1103,10 @@ export function SafeHavenFactSheet() {
                     </Card>
                   </Col>
                   <Col span={12}>
-                    <Card title="Cross asset baskets" style={{ margin: '5px', height: '57vh' }}>
+                    <Card
+                      title="Cross asset baskets"
+                      style={{ margin: '5px', height: '57vh' }}
+                    >
                       <Row>
                         <Col span={24}>
                           <p>
@@ -1054,16 +1132,12 @@ export function SafeHavenFactSheet() {
         </Col>
         <Col span={1}></Col>
         <Col span={11}>
-          <Card
-            style={{ height: '130vh', overflowY: 'auto' }}
-            title={'Risks'}
-          >
+          <Card style={{ height: '130vh', overflowY: 'auto' }} title={'Risks'}>
             <Row>
               <Col span={12}>
                 <Card
                   style={{ margin: '5px', height: '57vh' }}
-                  title={'Directional Strategies'
-                  }
+                  title={'Directional Strategies'}
                 >
                   <Row>
                     <Col span={24}>
@@ -1112,7 +1186,10 @@ export function SafeHavenFactSheet() {
                 </Card>
               </Col>
               <Col span={12}>
-                <Card title="Contract Risk" style={{ margin: '5px', height: '57vh' }}>
+                <Card
+                  title="Contract Risk"
+                  style={{ margin: '5px', height: '57vh' }}
+                >
                   <Row>
                     <Col span={24}>
                       <p>
@@ -1180,15 +1257,16 @@ export function SafeHavenFactSheet() {
             memory of prices that get taken into account.
           </p>
           <p>
-            A training period of March 2021-August 2024 was selected and parameters
-            were selected using the machine learning technique called:
-            Stochastic Gradient Descent. This was performed by the QuantAMM team
-            using the QuantAMM simulator framework. A parameter set was selected
-            that maximised the Sharpe Ratio of the strategy. This was selected
-            over other objectives such as maximising Ulcer or Calmer Ratios as
-            the parameter set showed better test set statistics. Random [TODO]
-            length windows were selected within the test price range and trading
-            was performed over [TODO] steps and in batches of [] runs.
+            A training period of March 2021-August 2024 was selected and
+            parameters were selected using the machine learning technique
+            called: Stochastic Gradient Descent. This was performed by the
+            QuantAMM team using the QuantAMM simulator framework. A parameter
+            set was selected that maximised the Sharpe Ratio of the strategy.
+            This was selected over other objectives such as maximising Ulcer or
+            Calmer Ratios as the parameter set showed better test set
+            statistics. Random [TODO] length windows were selected within the
+            test price range and trading was performed over [TODO] steps and in
+            batches of [] runs.
           </p>
         </Col>
         <Col span={1}></Col>
@@ -1284,25 +1362,38 @@ export function SafeHavenFactSheet() {
                   <Row>
                     <Col span={24}>
                       <Tooltip title="Lambda is the parameter used in the gradient estimators for the power channel. This is the on-chain value stored in the contracts">
-                        <p>Lambda:{'  '} <InfoCircleOutlined /></p>
-                        <Tag style={{margin:'5px'}}>BTC - 0.811035769801363300</Tag>
-                        <Tag style={{margin:'5px'}}>PAXG - 0.781490597023096500</Tag>
-                        <Tag style={{margin:'5px'}}>USDC - 0.289524066401247700</Tag>
+                        <p>
+                          Lambda:{'  '} <InfoCircleOutlined />
+                        </p>
+                        <Tag style={{ margin: '5px' }}>
+                          BTC - 0.811035769801363300
+                        </Tag>
+                        <Tag style={{ margin: '5px' }}>
+                          PAXG - 0.781490597023096500
+                        </Tag>
+                        <Tag style={{ margin: '5px' }}>
+                          USDC - 0.289524066401247700
+                        </Tag>
                       </Tooltip>
                     </Col>
                     <Col span={24}>
                       <Tooltip title="Memory days is a conversion of the lambda setting to a more understandable unit of the number of day of prices used in the strategy">
-                        <p>Memory Days:{'  '} <InfoCircleOutlined /></p>
-                        <Tag style={{margin:'5px'}}>BTC - 17.93552717</Tag>
-                        <Tag style={{margin:'5px'}}>PAXG - 15.31974493</Tag>
-                        <Tag style={{margin:'5px'}}>USDC - 3.38396553</Tag>
+                        <p>
+                          Memory Days:{'  '} <InfoCircleOutlined />
+                        </p>
+                        <Tag style={{ margin: '5px' }}>BTC - 17.93552717</Tag>
+                        <Tag style={{ margin: '5px' }}>PAXG - 15.31974493</Tag>
+                        <Tag style={{ margin: '5px' }}>USDC - 3.38396553</Tag>
                       </Tooltip>
                     </Col>
                   </Row>
                 </Card>
               </Col>
               <Col span={12}>
-                <Card title="Aggressiveness" style={{ margin: '5px', height: '57vh' }}>
+                <Card
+                  title="Aggressiveness"
+                  style={{ margin: '5px', height: '57vh' }}
+                >
                   <Row>
                     <Col span={24}>
                       <p>
@@ -1312,25 +1403,38 @@ export function SafeHavenFactSheet() {
                     </Col>
                     <Col span={24}>
                       <Tooltip title="Otherwise known as k_per_day. This is the maximum % weight change per day the strategy can suggest prior to MEV guardrails being applied">
-                        <p>Aggressiveness: {'  '} <InfoCircleOutlined /></p>
-                        <Tag style={{margin:'5px'}}>BTC - 77.55380713</Tag>
-                        <Tag style={{margin:'5px'}}>PAXG - 52.65723196</Tag>
-                        <Tag style={{margin:'5px'}}>USDC - 75.62990544</Tag>
+                        <p>
+                          Aggressiveness: {'  '} <InfoCircleOutlined />
+                        </p>
+                        <Tag style={{ margin: '5px' }}>BTC - 77.55380713</Tag>
+                        <Tag style={{ margin: '5px' }}>PAXG - 52.65723196</Tag>
+                        <Tag style={{ margin: '5px' }}>USDC - 75.62990544</Tag>
                       </Tooltip>
                     </Col>
                     <Col span={24}>
                       <Tooltip title="k is the on-chain value stored in the contracts and is the exact parameter used in the strategy calculations">
-                        <p>k:{'  '} <InfoCircleOutlined /></p>
-                        <Tag style={{margin:'5px'}}>BTC - 1390.9684145267538</Tag>
-                        <Tag style={{margin:'5px'}}>PAXG - 806.6953621597771</Tag>
-                        <Tag style={{margin:'5px'}}>USDC - 255.92899333099183</Tag>
+                        <p>
+                          k:{'  '} <InfoCircleOutlined />
+                        </p>
+                        <Tag style={{ margin: '5px' }}>
+                          BTC - 1390.9684145267538
+                        </Tag>
+                        <Tag style={{ margin: '5px' }}>
+                          PAXG - 806.6953621597771
+                        </Tag>
+                        <Tag style={{ margin: '5px' }}>
+                          USDC - 255.92899333099183
+                        </Tag>
                       </Tooltip>
                     </Col>
                   </Row>
                 </Card>
               </Col>
               <Col span={12}>
-                <Card title="Exponent" style={{ margin: '5px', height: '57vh' }}>
+                <Card
+                  title="Exponent"
+                  style={{ margin: '5px', height: '57vh' }}
+                >
                   <Row>
                     <Col span={24}>
                       <p>
@@ -1340,10 +1444,14 @@ export function SafeHavenFactSheet() {
                     </Col>
                     <Col span={24}>
                       <Tooltip title="The exponent is a variable used in the power channel strategy that dictate how big a price change has to be before the strategy starts to notice it. It is the primary difference between other strategies like momentum.">
-                        <p>Exponent:{'  '} <InfoCircleOutlined /></p>
-                        <Tag style={{margin:'5px'}}>BTC - 1.5312327931176639</Tag>
-                        <Tag style={{margin:'5px'}}>PAXG - 1</Tag>
-                        <Tag style={{margin:'5px'}}>USDC - 1</Tag>
+                        <p>
+                          Exponent:{'  '} <InfoCircleOutlined />
+                        </p>
+                        <Tag style={{ margin: '5px' }}>
+                          BTC - 1.5312327931176639
+                        </Tag>
+                        <Tag style={{ margin: '5px' }}>PAXG - 1</Tag>
+                        <Tag style={{ margin: '5px' }}>USDC - 1</Tag>
                       </Tooltip>
                     </Col>
                   </Row>

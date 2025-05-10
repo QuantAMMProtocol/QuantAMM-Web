@@ -566,14 +566,13 @@ const getMaybeQuantAmmWeightedParams = (
 
 const getStrategy = (pool: GqlPoolMinimal): Strategy => {
   const quantAmmWeightedParams = getMaybeQuantAmmWeightedParams(pool);
-  console.log('quantAmmWeightedParams', quantAmmWeightedParams);
+  //API can be changed but in the meantime safe haven can be coded here
+  if(pool.address.toLowerCase() == '0x6b61d8680c4f9e560c8306807908553f95c749c5'){
+    return 'POWER_CHANNEL';
+  }
+
   if (quantAmmWeightedParams) {
     const { details } = quantAmmWeightedParams;
-    console.log('details', details);
-    console.log(details
-      ?.find((detail) => detail.name === 'updateRuleName')
-      ?.value?.toUpperCase()
-      .replace(/ /g, '_'))
     return details
       ?.find((detail) => detail.name === 'updateRuleName')
       ?.value?.toUpperCase()

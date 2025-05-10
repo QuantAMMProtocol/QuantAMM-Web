@@ -1,6 +1,11 @@
-import { FC, useMemo, useRef, useState } from 'react';
-import { Button, Col, Row, Spin, Typography } from 'antd';
-import { ColDef, GridOptions, SideBarDef } from 'ag-grid-community';
+import { FC, useMemo, useRef } from 'react';
+import { Button, Col, Row, Spin, Tag, Typography } from 'antd';
+import {
+  GridOptions,
+  ICellRendererParams,
+  SideBarDef,
+  ValueFormatterParams,
+} from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { format } from 'date-fns';
 import {
@@ -35,69 +40,159 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = ({
     range,
   });
 
-  const [poolEventsColDefs] = useState<ColDef[]>([
-    {
-      colId: 'timestamp',
-      field: 'timestamp',
-      headerName: 'Timestamp',
-      width: 180,
-      
-      valueFormatter: ({ value, node }) => {
-        // if it's a group row, or no valid numeric timestamp, just render blank (or return the group key)
-        if (!node?.group || typeof(value) !== 'number') {
-          return ''
-        }
-        // otherwise it's a real timestamp
-        return format(value * 1000, 'MM-dd-yy HH:mm:ss')
+  const explorerRootUrl: Record<string, string> = useMemo(
+    () => ({
+      MAINNET: 'https://etherscan.io',
+      BASE: 'https://basescan.org',
+      ARBITRUM: 'https://arbiscan.io',
+    }),
+    []
+  );
+
+  function truncateMiddle(
+    text: string,
+    startChars = 6,
+    endChars = 6,
+    ellipsis = '....'
+  ): string {
+    if ((text?.length ?? 0) <= startChars + endChars) {
+      return text;
+    }
+    const start = text.slice(0, startChars);
+    const end = text.slice(text.length - endChars);
+    return `${start}${ellipsis}${end}`;
+  }
+
+  const poolEventsColDefs = useMemo(
+    () => [
+      {
+        colId: 'timestamp',
+        field: 'timestamp',
+        headerName: 'Timestamp',
+        width: 180,
+
+        valueFormatter: (params: ValueFormatterParams) => {
+          console.log('params', params);
+          const { value, node } = params;
+          // if it's a group row, or no valid numeric timestamp, just render blank (or return the group key)
+          if (node?.group ?? typeof value !== 'number') {
+            console.log('value', value);
+            console.log('node', node);
+            return '';
+          }
+          // otherwise it's a real timestamp
+          return format(value * 1000, 'dd-MM-yy HH:mm:ss');
+        },
+        enableRowGroup: true,
       },
-      enableRowGroup: true,
-    },
-    {
-      colId: 'id',
-      field: 'id',
-      headerName: 'ID',
-      width: 140,
-    },
-    {
-      colId: 'blockNumber',
-      field: 'blockNumber',
-      headerName: 'Block Number',
-      width: 150,
-      enableRowGroup: true,
-      type:'number',
-    },
-    { colId: 'type', field: 'type', headerName: 'Type', width: 100 },
-    {
-      colId: 'valueUSD',
-      field: 'valueUSD',
-      headerName: 'Value',
-      width: 150,
-      valueFormatter: (params) =>
-        new Intl.NumberFormat('en-US', {
-          style: 'currency',
-          currency: 'USD',
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
-        }).format(Number(params.value)),
-      cellStyle: { textAlign: 'right' },
-    },
-    {
-      colId: 'sender',
-      field: 'sender',
-      headerName: 'Sender',
-      width: 140,
-      enableRowGroup: true,
-      type:'text',
-    },
-    {
-      colId: 'tx',
-      field: 'tx',
-      headerName: 'Tx',
-      width: 140,
-      enableRowGroup: true,
-      type:'text',
-    },
-  ]);
+      { colId: 'type', field: 'type', headerName: 'Type', width: 100 },
+      {
+        colId: 'valueUSD',
+        field: 'valueUSD',
+        headerName: 'Value',
+        width: 100,
+        valueFormatter: (params: { value: any }) => {
+          if (
+            params.value === null ||
+            params.value === undefined ||
+            isNaN(params.value)
+          ) {
+            return '';
+          }
+
+          return new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          }).format(Number(params.value));
+        },
+        cellStyle: { textAlign: 'right' },
+      },
+      {
+        colId: 'sender',
+        field: 'sender',
+        headerName: 'Sender',
+        width: 140,
+        enableRowGroup: true,
+        cellRenderer: (params: ICellRendererParams) => {
+          const base = explorerRootUrl[product.chain];
+          const url = `${base}/address/${params.value}`;
+          return (
+            <Tag
+              style={{
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'center',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              <a
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ textAlign: 'center' }}
+              >
+                {truncateMiddle(params.value)}
+              </a>
+            </Tag>
+          );
+        },
+      },
+      {
+        colId: 'tx',
+        field: 'tx',
+        headerName: 'Tx',
+        width: 140,
+        enableRowGroup: true,
+        // also link to the tx page
+        cellRenderer: (params: ICellRendererParams) => {
+          const base = explorerRootUrl[product.chain];
+          const url = `${base}/tx/${params.value}`;
+          return (
+            <Tag
+              style={{
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'center',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              <a
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  textAlign: 'center',
+                }}
+              >
+                {truncateMiddle(params.value)}
+              </a>
+            </Tag>
+          );
+        },
+      },
+      {
+        colId: 'id',
+        field: 'id',
+        headerName: 'ID',
+        width: 140,
+      },
+      {
+        colId: 'blockNumber',
+        field: 'blockNumber',
+        headerName: 'Block Number',
+        width: 150,
+        enableRowGroup: true,
+        type: 'number',
+      },
+    ],
+    [explorerRootUrl, product.chain]
+  );
 
   const rowData = poolEvents?.map(
     ({
@@ -138,32 +233,32 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = ({
     [poolEventsColDefs]
   );
 
-    const sideBar: SideBarDef = {
-      toolPanels: [
-        {
-          id: 'columns',
-          labelDefault: 'Columns',
-          labelKey: 'columns',
-          iconKey: 'columns',
-          toolPanel: 'agColumnsToolPanel',
-          minWidth: 100,
-          maxWidth: 300,
-          width: 200,
-        },
-        {
-          id: 'filters',
-          labelDefault: 'Filters',
-          labelKey: 'filters',
-          iconKey: 'filter',
-          toolPanel: 'agFiltersToolPanel',
-          minWidth: 100,
-          maxWidth: 300,
-          width: 200,
-        },
-      ],
-      position: 'right',
-      defaultToolPanel: 'none',
-    };
+  const sideBar: SideBarDef = {
+    toolPanels: [
+      {
+        id: 'columns',
+        labelDefault: 'Columns',
+        labelKey: 'columns',
+        iconKey: 'columns',
+        toolPanel: 'agColumnsToolPanel',
+        minWidth: 100,
+        maxWidth: 300,
+        width: 200,
+      },
+      {
+        id: 'filters',
+        labelDefault: 'Filters',
+        labelKey: 'filters',
+        iconKey: 'filter',
+        toolPanel: 'agFiltersToolPanel',
+        minWidth: 100,
+        maxWidth: 300,
+        width: 200,
+      },
+    ],
+    position: 'right',
+    defaultToolPanel: 'none',
+  };
 
   const handleDownloadCSV = () => {
     gridRef.current?.api?.exportDataAsCsv();
@@ -181,7 +276,31 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = ({
           borderBottom: '1px solid var(--primary-lighter)',
         }}
       >
-        <Title level={4}>Events</Title>
+        <Title
+          level={4}
+          style={{
+            width: '100%',
+            marginBottom: 0,
+            paddingLeft: 8,
+            paddingTop: 8,
+          }}
+        >
+          <Row>
+            <Col span={20}>
+              <h4>Events</h4>
+            </Col>
+            <Col span={4} style={{ textAlign: 'right' }}>
+              <Button
+                type="primary"
+                size="small"
+                onClick={handleDownloadCSV}
+                style={{ marginTop: 20 }}
+              >
+                Download CSV
+              </Button>
+            </Col>
+          </Row>
+        </Title>
       </Col>
       <Col
         span={24}
@@ -197,11 +316,6 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = ({
           <Spin />
         ) : (
           <div style={{ width: '100%' }}>
-            <div
-              style={{ display: 'flex', justifyContent: 'end', padding: 10 }}
-            >
-              <Button onClick={handleDownloadCSV}>Download CSV</Button>
-            </div>
             <div
               id="events"
               className={darkThemeAg}

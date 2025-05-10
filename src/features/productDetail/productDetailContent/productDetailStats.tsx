@@ -6,7 +6,6 @@ import { selectLoadingSimulationRunBreakdown } from '../../productExplorer/produ
 import { ProductDetailSummary } from './summary/productDetailSummary';
 import { ProductDetailTable } from './components/productDetailTable';
 
-const { Title } = Typography;
 const { useBreakpoint } = Grid;
 
 interface ProductDetailStatsProps {
@@ -31,18 +30,7 @@ export const ProductDetailStats: FC<ProductDetailStatsProps> = ({
       />
 
       <Row id="details" style={{ marginTop: 20 }}>
-        <Col
-          span={24}
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'start',
-            paddingLeft: 8,
-            borderBottom: '1px solid var(--primary-lighter)',
-          }}
-        >
-          <Title level={4}>Details</Title>
-        </Col>
+        
         <Col
           span={24}
           style={{
