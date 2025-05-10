@@ -6,7 +6,6 @@ import { selectLoadingSimulationRunBreakdown } from '../../productExplorer/produ
 import { ProductDetailSummary } from './summary/productDetailSummary';
 import { ProductDetailTable } from './components/productDetailTable';
 
-const { Title } = Typography;
 const { useBreakpoint } = Grid;
 
 interface ProductDetailStatsProps {

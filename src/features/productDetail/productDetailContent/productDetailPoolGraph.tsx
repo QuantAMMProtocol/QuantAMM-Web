@@ -254,16 +254,18 @@ export const ProductDetailPoolGraph: FC<ProductDetailPoolGraphProps> = ({
 
     const totalDuration =
       filteredData.length > 0
-        ? getTime(filteredData[filteredData.length - 1].timestamp) -
-          getTime(filteredData[0].timestamp)
+        ? (getTime(filteredData[filteredData.length - 1].timestamp) -
+          getTime(filteredData[0].timestamp)) * 1000
         : 0;
 
     const maxDataPoints = 30;
     const oneDay = 24 * 60 * 60 * 1000;
 
     if (totalDuration <= maxDataPoints * oneDay) {
+      console.log('Daily steps');
       return time.day.every(1); // Daily steps
     } else {
+      console.log('Monthly steps');
       const interval = Math.ceil(totalDuration / (maxDataPoints * oneDay));
       return time.day.every(interval); // Adjusted interval to fit max data points
     }
@@ -283,7 +285,9 @@ export const ProductDetailPoolGraph: FC<ProductDetailPoolGraphProps> = ({
         },  
         interval: {
           step: getIntervalStep,
-        }
+        },
+        max: getTime(product.timeSeries?.[product.timeSeries.length - 2]?.timestamp ?? 0) * 1000,
+        min: getTime(product.timeSeries?.[0]?.timestamp ?? 0) * 1000,
       },
       {
         type: 'number',
@@ -319,7 +323,7 @@ export const ProductDetailPoolGraph: FC<ProductDetailPoolGraphProps> = ({
     }
 
     return result;
-  }, [getSecondarySeries, selectedSecondAxis, product, selectedTimeRange, getAxesFormat]);
+  }, [getAxesFormat, getIntervalStep, product.timeSeries, getSecondarySeries, selectedTimeRange, selectedSecondAxis]);
 
   return (
     <Row id="graph">
