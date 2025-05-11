@@ -26,8 +26,6 @@ import {
 import { ProductDetailGraphTimeRangeSelector } from './components/productDetailGraphTimeRangeSelector';
 
 import styles from './productDetailPoolGraph.module.scss';
-import { steps } from 'framer-motion';
-
 const { Title } = Typography;
 
 export interface Marker {

@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Col, Grid, Row, Spin, Typography } from 'antd';
+import { Col, Grid, Row, Spin } from 'antd';
 import { useAppSelector } from '../../../app/hooks';
 import { Product } from '../../../models';
 import { selectLoadingSimulationRunBreakdown } from '../../productExplorer/productExplorerSlice';
