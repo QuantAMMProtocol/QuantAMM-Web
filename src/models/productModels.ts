@@ -170,6 +170,7 @@ export interface FinancialMetricThresholds {
 }
 
 export interface ProductExplorer {
+  acceptedTermsAndConditions:boolean;
   loadingProducts: boolean;
   loadingFilters: boolean;
   loadingError: boolean;

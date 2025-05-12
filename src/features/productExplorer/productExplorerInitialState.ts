@@ -7,6 +7,7 @@ import {
 import { ProductExplorer } from '../../models/productModels';
 
 export const productExplorerInitialState: ProductExplorer = {
+  acceptedTermsAndConditions:false,
   loadingProducts: true,
   loadingFilters: true,
   loadingError: false,

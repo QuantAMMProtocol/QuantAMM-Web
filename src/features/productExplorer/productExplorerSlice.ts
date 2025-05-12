@@ -52,6 +52,9 @@ export const productExplorerSlice = createSlice({
     ) => {
       state.poolDetailSelectedGraphRange = action.payload;
     },
+    setAcceptedTermsAndConditions: (state, action: PayloadAction<boolean>) => {
+      state.acceptedTermsAndConditions = action.payload;
+    },
     setFilters: (state, action: PayloadAction<FilterPayload>) => {
       state.loadingProducts = true;
       state.productMap = {};
@@ -115,6 +118,9 @@ export const selectProductById = (
 ): Product | undefined => {
   return products[id];
 };
+
+export const acceptedTermsAndConditions = (state: RootState) =>
+  state.productExplorer.acceptedTermsAndConditions;
 
 export const selectLoadingProducts = (state: RootState) =>
   state.productExplorer.loadingProducts;
