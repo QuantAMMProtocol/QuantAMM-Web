@@ -846,93 +846,7 @@ const TermsOfService: React.FC = () => {
             immediately preceding the event giving rise to the claim for
             liability.
           </Paragraph>
-          <Title level={3}>15. DISPUTE RESOLUTION & ARBITRATION</Title>
-          <Paragraph>
-            Please read the following section carefully because it requires you
-            to arbitrate certain disputes and claims with QuantAMM and limits
-            how you can seek relief from QuantAMM. Also, arbitration precludes
-            you from suing in court or having a jury trial.{' '}
-          </Paragraph>
-          <Paragraph>
-            You and QuantAMM agree that any dispute arising out of or related to
-            these Terms or the Services is personal to you and QuantAMM and that
-            any dispute will be resolved solely through individual action, and
-            will not be brought as a class arbitration, class action, or any
-            other type of representative proceeding.
-          </Paragraph>
-          <Paragraph>
-            {' '}
-            Except for small claims disputes in which you or QuantAMM seeks to
-            bring an individual action in small claims court located in the
-            county of your billing address or disputes in which you or QuantAMM
-            seeks injunctive or other equitable relief for the alleged unlawful
-            use of intellectual property, you and QuantAMM waive your rights to
-            a jury trial and to have any dispute arising out of or related to
-            these Terms or the Services resolved in court. Instead, for any
-            dispute or claim that you have against QuantAMM or relating in any
-            way to the Services, you agree to first contact QuantAMM and attempt
-            to resolve the claim informally by sending a written notice of your
-            claim (“Notice”) to QuantAMM by email at legal@quantamm.fi. The
-            Notice must (a) include your name, residence address, email address,
-            and telephone number; (b) describe the nature and basis of the
-            claim; and (c) set forth the specific relief sought. QuantAMM’s
-            notice to you will be similar in form to that described above
-            (although it may not be identical). If you and QuantAMM cannot reach
-            an agreement to resolve the claim within thirty (30) days after such
-            Notice is received, then either party may submit the dispute to
-            binding arbitration administered by JAMS or, under the limited
-            circumstances set forth above, in court. All disputes submitted to
-            JAMS will be resolved through confidential, binding arbitration
-            before one arbitrator. Arbitration proceedings will be held in the
-            Cayman Islands, under the JAMS Streamlined Arbitration Rules and
-            Procedures (“JAMS Rules”). The most recent version of the JAMS Rules
-            are available on the JAMS website and are hereby incorporated by
-            reference. You either acknowledge and agree that you have read and
-            understand the JAMS Rules or waive your opportunity to read the JAMS
-            Rules and waive any claim that the JAMS Rules are unfair or should
-            not apply for any reason. The arbitrator, QuantAMM, and you will
-            maintain the confidentiality of any arbitration proceedings,
-            judgments and awards, including all information gathered, prepared,
-            and presented for purposes of the arbitration or related to the
-            dispute(s) therein.{' '}
-          </Paragraph>
-          <Paragraph>
-            The arbitrator will have the authority to make appropriate rulings
-            to safeguard confidentiality unless the law provides to the
-            contrary. The duty of confidentiality does not apply to the extent
-            that disclosure is necessary to prepare for or conduct the
-            arbitration hearing on the merits, in connection with a court
-            application for a preliminary remedy or in connection with a
-            judicial challenge to an arbitration award or its enforcement, or to
-            the extent that disclosure is otherwise required by law or judicial
-            decision. You and QuantAMM agree that for any arbitration you
-            initiate, you will pay the filing fee and all other JAMS fees and
-            costs. For any arbitration initiated by QuantAMM, QuantAMM will pay
-            all JAMS fees and costs. You and QuantAMM agree that the courts of
-            the Cayman Islands have exclusive jurisdiction over the enforcement
-            of an arbitration award. Any claim arising out of or related to
-            these Terms or the Services must be filed within one (1) year after
-            such claim arose; otherwise, the claim is permanently barred, which
-            means that you and QuantAMM will not have the right to assert the
-            claim. If any portion of this Section 15 is found to be
-            unenforceable or unlawful for any reason, (a) the unenforceable or
-            unlawful provision will be severed from these Terms; (b) severance
-            of the unenforceable or unlawful provision will have no impact
-            whatsoever on the remainder of this Section 15 or the parties’
-            ability to compel arbitration of any remaining claims on an
-            individual basis under this Section 15; and (c) to the extent that
-            any claims must therefore proceed on a class, collective,
-            consolidated, or representative basis, such claims must be litigated
-            in a civil court of competent jurisdiction and not in arbitration,
-            and the parties agree that litigation of those claims will be stayed
-            pending the outcome of any individual claims in arbitration.
-            Further, if any part of this Section 15 is found to prohibit an
-            individual claim seeking public injunctive relief, then that
-            provision will have no effect to the extent such relief is allowed
-            to be sought out of arbitration, and the remainder of this Section
-            15 will be enforceable.
-          </Paragraph>
-          <Title level={3}>16. GOVERNING LAW</Title>
+          <Title level={3}>15. GOVERNING LAW</Title>
           <Paragraph>
             quantamm.fi is a website (the “Site”) operated by Robo Inc. (“we”).
             We are registered as a Seychelles International Business Company
@@ -941,7 +855,7 @@ const TermsOfService: React.FC = () => {
             Site at quantamm.fi. If you communicate with us electronically, you
             consent to receive communications from us electronically.
           </Paragraph>
-          <Title level={3}>17. GENERAL INFORMATION</Title>
+          <Title level={3}>16. GENERAL INFORMATION</Title>
           <Paragraph>
           <span style={{fontWeight:'bold'}}>17.1</span> Please refer to the QuantAMM privacy policy for information
             about how QuantAMM collects, use, share and otherwise process
@@ -1019,7 +933,7 @@ const TermsOfService: React.FC = () => {
             Agreement, there is no third-party beneficiaries to the Agreement
             other than the Indemnified Parties.
           </Paragraph>
-          <Title level={3}>18. QUANTAMM SIMULATOR</Title>
+          <Title level={3}>17. QUANTAMM SIMULATOR</Title>
           <Paragraph>
             QuantAMM provides an open source simulator of various AMM (Automated
             Market Maker) types including QuantAMM&apos;s TFMMs (Temporal
