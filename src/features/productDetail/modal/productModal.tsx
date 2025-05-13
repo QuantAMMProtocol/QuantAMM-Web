@@ -54,7 +54,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({
           (hereinafter referred to as &quot;Information&quot;) provided on such websites,
           in particular not for damages that may result from the use of this
           Information for your own investment decisions. Price and performance
-          data on the websites of Bitwise may differ from the price information
+          data on the websites of QuantAMM may differ from the price information
           on the websites of the respective online brokers or banks.
         </p>
 
