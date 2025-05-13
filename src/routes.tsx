@@ -11,7 +11,7 @@ import LandingPage from './features/documentation/landing/landingPage';
 import { Research } from './features/documentation/research';
 import { CompanyPage } from './features/documentation/company';
 import { ContactCompany } from './features/documentation/landing/desktop/contactCompany';
-import TermsOfService from './features/documentation/landing/termsOfService';
+import TermsOfService from './features/documentation/landing/newTermsOfService';
 import { SafeHavenFactSheet } from './features/documentation/factSheets/safeHaven';
 import InegligibleUser from './features/documentation/landing/IneligableUserLanding';
 
