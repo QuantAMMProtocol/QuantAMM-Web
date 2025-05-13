@@ -177,12 +177,6 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = ({
         },
       },
       {
-        colId: 'id',
-        field: 'id',
-        headerName: 'ID',
-        width: 140,
-      },
-      {
         colId: 'blockNumber',
         field: 'blockNumber',
         headerName: 'Block Number',
