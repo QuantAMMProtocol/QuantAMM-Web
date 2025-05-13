@@ -1,15 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import {
-  Modal,
-  Button,
-  Radio,
-  Checkbox,
-  Input,
-  Alert,
-  Space,
-  Typography,
-  Divider,
-} from 'antd';
+import { Modal, Button, Radio, Checkbox, Alert, Space, Typography } from 'antd';
 import {
   ExclamationCircleOutlined,
   InfoCircleOutlined,
@@ -28,8 +18,6 @@ export interface TermsOfServiceGateModalProps {
 }
 
 type LocationChoice = '' | 'uk' | 'nonUk';
-type InvestorChoice = '' | 'pro' | 'retail';
-const emailRegex = /.+@.+\..+/;
 
 const ToSSummary: React.FC = () => (
   <Typography>
@@ -94,44 +82,30 @@ const TermsOfServiceGateModal: React.FC<TermsOfServiceGateModalProps> = ({
 }) => {
   const acceptedTerms = useAppSelector(selectAcceptedTermsAndConditions);
   const [location, setLocation] = useState<LocationChoice>('');
-  const [investor, setInvestor] = useState<InvestorChoice>('');
   const [acceptedTos, setAcceptedTos] = useState(false);
-  const [workEmail, setWorkEmail] = useState('');
   const [continueEnabled, setContinueEnabled] = useState(false);
 
-  const emailIsValid = emailRegex.test(workEmail);
   const showUkBanner = isUkIp || location === 'uk';
 
   useEffect(() => {
-    let enable = false;
     if (location === 'nonUk') {
-      enable = acceptedTos;
+      setContinueEnabled(true);
+    } else {
+      setContinueEnabled(false);
     }
-    if (location === 'uk') {
-      const isPro = investor === 'pro';
-      const emailOk = !isPro || emailIsValid;
-      enable = isPro && emailOk && acceptedTos;
-    }
-    setContinueEnabled(enable);
-  }, [location, investor, acceptedTos, emailIsValid]);
+  }, [location]);
 
   const handleContinue = useCallback(() => {
     const entry = {
       ts: Date.now(),
       location,
-      investor,
-      email: investor === 'pro' ? workEmail : undefined,
     };
     try {
       sessionStorage.setItem('quantamm-gate', JSON.stringify(entry));
     } catch {
       /* empty */
     }
-    if (
-      !continueEnabled ||
-      (location === 'uk' && investor === 'retail') ||
-      location === ''
-    ) {
+    if (!continueEnabled || location === 'uk') {
       window.location.href = '/' + ROUTES.INELIGIBLEUSER;
     } else {
       console.log('Accepted terms:', entry);
@@ -139,7 +113,7 @@ const TermsOfServiceGateModal: React.FC<TermsOfServiceGateModalProps> = ({
       onClose();
       console.log(acceptedTerms);
     } // ✅ Close the modal only
-  }, [location, investor, workEmail, continueEnabled, onClose, acceptedTerms]);
+  }, [location, continueEnabled, onClose, acceptedTerms]);
 
   const renderContent = () => (
     <Space direction="vertical" size="large" style={{ width: '100%' }}>
@@ -150,48 +124,14 @@ const TermsOfServiceGateModal: React.FC<TermsOfServiceGateModalProps> = ({
         value={location}
         onChange={(e) => {
           setLocation(e.target.value as LocationChoice);
-          setInvestor('');
-          setWorkEmail('');
         }}
         style={{ display: 'block' }}
       >
-        <Radio value="uk">
-          I am accessing from inside the United Kingdom.
-        </Radio>
+        <Radio value="uk">I am accessing from inside the United Kingdom.</Radio>
         <Radio value="nonUk">
           I am accessing from outside the United Kingdom.
         </Radio>
       </Radio.Group>
-
-      {location === 'uk' && (
-        <>
-          <Divider orientation="left">UK users — confirm status</Divider>
-          <Radio.Group
-            value={investor}
-            onChange={(e) => setInvestor(e.target.value as InvestorChoice)}
-          >
-            <Space direction="vertical">
-              <Radio value="pro">
-                I am an <Text strong>Investment Professional</Text> (Article
-                19(5) FPO 2005).
-              </Radio>
-              <Radio value="retail">
-                I am a UK retail client (access will be denied).
-              </Radio>
-            </Space>
-          </Radio.Group>
-          {investor === 'pro' && (
-            <Input
-              style={{ marginTop: 12 }}
-              placeholder="Work e‑mail (regulated‑firm domain)"
-              value={workEmail}
-              onChange={(e) => setWorkEmail(e.target.value)}
-              status={workEmail && !emailIsValid ? 'error' : ''}
-            />
-          )}
-        </>
-      )}
-
       <Checkbox
         checked={acceptedTos}
         onChange={(e) => setAcceptedTos(e.target.checked)}
