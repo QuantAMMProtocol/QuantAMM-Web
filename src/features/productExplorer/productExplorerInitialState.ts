@@ -11,6 +11,7 @@ export const productExplorerInitialState: ProductExplorer = {
   loadingProducts: true,
   loadingFilters: true,
   loadingError: false,
+  loadingJsonProductSimulations: false,
   loadingSimulationRunBreakdown: {},
   asOfUnixTime: 0,
   blockIndex: 0,

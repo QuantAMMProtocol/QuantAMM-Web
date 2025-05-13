@@ -175,6 +175,7 @@ export interface ProductExplorer {
   loadingProducts: boolean;
   loadingFilters: boolean;
   loadingError: boolean;
+  loadingJsonProductSimulations:boolean;
   loadingSimulationRunBreakdown: Record<string, boolean>;
   asOfUnixTime: number;
   blockIndex: number;

@@ -7,12 +7,14 @@ import {
   loadProducts,
   selectBenchmarkAnalysisByProductId,
   selectBenchmarkMetricThresholds,
+  selectLoadingJsonBreakdown,
   selectLoadingSimulationRunBreakdown,
   selectProductById,
   selectProducts,
   selectQuantammSetPools,
   selectReturnAnalysisByProductId,
   selectReturnMetricThresholds,
+  setLoadingJsonProductSimulations,
   setProductSimulationRunBreakdown,
 } from '../../../productExplorer/productExplorerSlice';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
@@ -84,6 +86,8 @@ export const ProductDetailSummary: FC<ProductDetailSummaryProps> = ({
   );
 
   const quantAMMSetPools = useAppSelector(selectQuantammSetPools);
+
+  const loadingBreakdowns = useAppSelector(selectLoadingJsonBreakdown);
 
   const loadingOtherProductSimulationRunBreakdown = useAppSelector((state) =>
     selectLoadingSimulationRunBreakdown(state, comparingProductId?.id ?? '')
@@ -241,28 +245,25 @@ export const ProductDetailSummary: FC<ProductDetailSummaryProps> = ({
   }, [productData, dispatch]);
 
   const [breakdowns, setBreakdowns] = useState<Record<Pool, SimulationRunBreakdown>>({} as Record<Pool, SimulationRunBreakdown>);
-  const [loadingBreakdowns, setLoadingBreakdowns] = useState(true);
-
+  
   const addressKey = product.address?.toLowerCase() ?? '';
   const specialPoolKey = quantAMMSetPools[addressKey];
 
   useEffect(() => {
     const pools = Object.values(quantAMMSetPools);
     const loadAll = async () => {
-      setLoadingBreakdowns(true);
+      setLoadingJsonProductSimulations(true);
       const entries = await Promise.all(
         pools.map(async (pool) => [pool, await getBreakdown(pool)] as const)
       );
       setBreakdowns(Object.fromEntries(entries) as Record<Pool, SimulationRunBreakdown>);
-      setLoadingBreakdowns(false);
+      setLoadingJsonProductSimulations(false);
     };
     void loadAll();
-  }, []);
+  }, [quantAMMSetPools]);
 
   useEffect(() => {
     if (specialPoolKey && !loadingBreakdowns && breakdowns[specialPoolKey]) {
-      console.log('Dispatching breakdown for product:', product.id);
-      console.log('Breakdown:', breakdowns[specialPoolKey]);
       dispatch(
         setProductSimulationRunBreakdown({
           productId: product.id,

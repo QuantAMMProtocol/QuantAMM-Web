@@ -87,6 +87,9 @@ export const productExplorerSlice = createSlice({
     setSortingDirection: (state, action: PayloadAction<SortingDirection>) => {
       state.sortingDirection = action.payload;
     },
+    setLoadingJsonProductSimulations: (state, action: PayloadAction<boolean>) => {
+      state.loadingJsonProductSimulations = action.payload;
+    },
     setOverrideTab: (state, action: PayloadAction<OverrideTab | undefined>) => {
       state.overrideTab = action.payload;
     },
@@ -180,6 +183,11 @@ export const selectLoadingSimulationRunBreakdown = (
   state: RootState,
   productId: string
 ) => state.productExplorer.loadingSimulationRunBreakdown[productId];
+
+export const selectLoadingJsonBreakdown = (
+  state: RootState
+) => state.productExplorer.loadingJsonProductSimulations;
+
 
 export const selectReturnAnalysisByProductId = (
   state: RootState,
@@ -276,6 +284,7 @@ export const {
   setPage,
   setTotalPools,
   setAcceptedTermsAndConditions,
+  setLoadingJsonProductSimulations,
 } = productExplorerSlice.actions;
 
 export default productExplorerSlice.reducer;
