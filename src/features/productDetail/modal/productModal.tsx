@@ -6,12 +6,14 @@ import styles from './productModal.module.scss';
 
 interface ProductModalProps {
   isVisible: boolean;
+  isWithdraw: boolean;
   url?: string;
   onClose: () => void;
 }
 
 export const ProductModal: React.FC<ProductModalProps> = ({
   isVisible,
+  isWithdraw,
   url,
   onClose,
 }) => {
@@ -31,14 +33,14 @@ export const ProductModal: React.FC<ProductModalProps> = ({
 
   return (
     <Modal
-      title={<div className={styles.modalTitle}>Add liquidity</div>}
+      title={<div className={styles.modalTitle}>{isWithdraw ? 'Remove Liquidity' : 'Add liquidity'}</div>}
       open={isVisible}
       onCancel={onClose}
       footer={null}
       className={styles.depositModal}
       width={600}
     >
-      <div style={{ width: '100%' }}>
+      <div style={{ width: '100%', height:'100%' }}>
         <h5>Redirection to external website</h5>
         <p>
           The website or web pages to which you are redirected are not owned by
@@ -85,9 +87,9 @@ export const ProductModal: React.FC<ProductModalProps> = ({
             className={styles.modalIcon}
           />
           <div className={styles.modalContent}>
-            <span className={styles.modalTitle}>Deposit on Balancer</span>
+            <span className={styles.modalTitle}>{isWithdraw ? 'Withdraw': 'Deposit'} on Balancer</span>
             <p className={styles.modalDescription}>
-              Continue to Balancer&apos;s website to deposit your assets.
+              Continue to Balancer&apos;s website to {isWithdraw ? 'withdraw' : 'deposit'} your assets.
             </p>
           </div>
           <ExternalLink className={styles.externalLinkIcon} />

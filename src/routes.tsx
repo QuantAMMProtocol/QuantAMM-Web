@@ -13,6 +13,7 @@ import { CompanyPage } from './features/documentation/company';
 import { ContactCompany } from './features/documentation/landing/desktop/contactCompany';
 import TermsOfService from './features/documentation/landing/termsOfService';
 import { SafeHavenFactSheet } from './features/documentation/factSheets/safeHaven';
+import InegligibleUser from './features/documentation/landing/IneligableUserLanding';
 
 const BASE_ROUTE = '/';
 
@@ -66,6 +67,10 @@ export const routes = createBrowserRouter([
       {
         path: ROUTES.COMPANY,
         element: <CompanyPage />,
+      },
+      {
+        path: ROUTES.INELIGIBLEUSER,
+        element: <InegligibleUser />,
       },
       {
         path: ROUTES.RESEARCH,

@@ -11,15 +11,19 @@ import {
   setLoadingProducts,
   loadProducts,
   setTotalPools,
+  setAcceptedTermsAndConditions,
 } from './productExplorerSlice';
 import { ProductExplorerError } from './productExplorerError';
 import { ProductItemGrid } from './productItem';
+import TermsOfServiceGateModal from '../documentation/landing/termsOfServiceModal';
 
 export const ProductExplorer = () => {
+  const dispatch = useAppDispatch();
   const [horizontalView, setHorizontalView] = useState(true);
 
+  const handleGateClose = () => dispatch(setAcceptedTermsAndConditions(true));
+
   const isDark = useAppSelector(selectTheme);
-  const dispatch = useAppDispatch();
   const {
     data: filterList,
     isLoading: isLoadingFilters,
@@ -56,6 +60,11 @@ export const ProductExplorer = () => {
   }, [productCount, dispatch]);
 
   return (
+    <>
+    <TermsOfServiceGateModal
+      tosUrl="https://quantamm.fi/tos"
+      onClose={handleGateClose}
+    />
     <Layout style={{ minHeight: '100vh', padding: 12 }}>
       {productMapError ? (
         <ProductExplorerError />
@@ -69,5 +78,8 @@ export const ProductExplorer = () => {
         </>
       )}
     </Layout>
+    </>
+    
   );
 };
+

@@ -228,6 +228,7 @@ export const ProductItemWide: FC<ProductItemProps> = ({ product }) => {
           </Row>
         </ProductItemBackground>
         <ProductModal
+          isWithdraw={false}
           isVisible={!!productModalUrl}
           onClose={hideProductModal}
           url={productModalUrl}

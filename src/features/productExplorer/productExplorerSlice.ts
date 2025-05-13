@@ -119,7 +119,7 @@ export const selectProductById = (
   return products[id];
 };
 
-export const acceptedTermsAndConditions = (state: RootState) =>
+export const selectAcceptedTermsAndConditions = (state: RootState) =>
   state.productExplorer.acceptedTermsAndConditions;
 
 export const selectLoadingProducts = (state: RootState) =>
@@ -270,6 +270,7 @@ export const {
   setPageSize,
   setPage,
   setTotalPools,
+  setAcceptedTermsAndConditions,
 } = productExplorerSlice.actions;
 
 export default productExplorerSlice.reducer;

@@ -17,6 +17,7 @@ export const ProductDetailNav: FC<ProductDetailNavProps> = ({ product }) => {
   const [productModalUrl, setProductModalUrl] = useState<string | undefined>(
     undefined
   );
+  const [isWithdraw, setIsWithdraw] = useState(false);
 
   useEffect(() => {
     setTargetOffset(window.innerHeight / 2);
@@ -73,12 +74,16 @@ export const ProductDetailNav: FC<ProductDetailNavProps> = ({ product }) => {
             <Button
               type="primary"
               style={{ marginRight: 8 }}
-              onClick={() => showProductModal(addLiquidityBalancerPoolUrl)}
+              onClick={() => {showProductModal(addLiquidityBalancerPoolUrl);
+                setIsWithdraw(false);
+              }}
             >
               Deposit
             </Button>
             <Button
-              onClick={() => showProductModal(removeLiquidityBalancerPoolUrl)}
+              onClick={() => {showProductModal(removeLiquidityBalancerPoolUrl);
+                setIsWithdraw(true);}
+              }
             >
               Withdraw
             </Button>
@@ -86,6 +91,7 @@ export const ProductDetailNav: FC<ProductDetailNavProps> = ({ product }) => {
         </div>
       </Affix>
       <ProductModal
+        isWithdraw={isWithdraw}
         isVisible={!!productModalUrl}
         onClose={hideProductModal}
         url={productModalUrl}
