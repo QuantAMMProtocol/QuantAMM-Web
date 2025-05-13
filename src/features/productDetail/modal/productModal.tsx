@@ -3,6 +3,8 @@ import React, { useCallback, useState } from 'react';
 import { ExternalLink } from 'lucide-react';
 
 import styles from './productModal.module.scss';
+import { useAppSelector } from '../../../app/hooks';
+import { selectAcceptedTermsAndConditions } from '../../productExplorer/productExplorerSlice';
 
 interface ProductModalProps {
   isVisible: boolean;
@@ -17,6 +19,9 @@ export const ProductModal: React.FC<ProductModalProps> = ({
   url,
   onClose,
 }) => {
+  const acceptedTerms = useAppSelector(
+    selectAcceptedTermsAndConditions
+  );
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | undefined>(
     undefined
   );
@@ -78,7 +83,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({
           onClick={handleClick}
           className={styles.modalButton}
           size="large"
-          disabled={!understandExternalWebsite}
+          disabled={!understandExternalWebsite || !acceptedTerms}
           style={{marginTop: '20px'}}
         >
           <img

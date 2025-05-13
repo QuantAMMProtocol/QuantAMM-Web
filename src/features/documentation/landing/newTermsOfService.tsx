@@ -301,10 +301,8 @@ const TermsOfService: React.FC = () => {
             provided for information purposes and directed only at investment
             professionals (as defined under the Financial Services and Markets
             Act 2000 (Financial Promotion) Order 2005 as amended from time to
-            time). It is not intended for use by, or directed at, retail
-            customers or any person who does not have professional experience in
-            matters relating to investment in cryptocurrencies and DeFi
-            protocols. Neither the Issuer nor its products are authorised or
+            time). UK professionals are not permitted to use the Site to interact with or deposit into QuantAMM
+            product. Neither the Issuer nor its products are authorised or
             regulated by the UK Financial Conduct Authority.
           </Paragraph>
           <Title level={3}>5. PROHIBITED ACTIVITY</Title>
