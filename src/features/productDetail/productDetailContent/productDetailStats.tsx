@@ -46,6 +46,7 @@ export const ProductDetailStats: FC<ProductDetailStatsProps> = ({
           ) : (
             <ProductDetailTable
               simulationRunBreakdown={product.simulationRunBreakdown}
+              productId= {product.address}
             />
           )}
         </Col>

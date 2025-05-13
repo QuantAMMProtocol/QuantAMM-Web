@@ -19,6 +19,7 @@ interface ProductSimulationRunBreakdown {
   productId: string;
 }
 
+
 export const productExplorerSlice = createSlice({
   name: 'productExplorerSlice',
   initialState: productExplorerInitialState,
@@ -169,6 +170,10 @@ export const selectBenchmarkMetricKeyNames = (state: RootState) => {
   return state.productExplorer.benchmarkMetricThresholds.map((element) => {
     return element.key;
   });
+};
+
+export const selectQuantammSetPools = (state: RootState) => {
+  return state.productExplorer.quantammSetPools;
 };
 
 export const selectLoadingSimulationRunBreakdown = (

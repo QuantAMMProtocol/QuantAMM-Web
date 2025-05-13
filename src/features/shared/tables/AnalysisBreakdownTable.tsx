@@ -6,20 +6,25 @@ import { useAppSelector } from '../../../app/hooks';
 import { selectAgGridTheme } from '../../themes/themeSlice';
 import { SimulationRunBreakdown } from '../../simulationResults/simulationResultSummaryModels';
 import { getAnalysisSummary } from './AnalysisBreakdownTableHelpers';
+import { selectQuantammSetPools } from '../../productExplorer/productExplorerSlice';
 
 const { Title } = Typography;
 
 interface AnalysisBreakdownTableProps {
   simulationRunBreakdowns: SimulationRunBreakdown[];
   height?: number;
+  productId?: string;
 }
 
 export const AnalysisBreakdownTable: FC<AnalysisBreakdownTableProps> = ({
   simulationRunBreakdowns,
   height = 700,
+  productId,
 }) => {
   const darkThemeAg = useAppSelector(selectAgGridTheme);
   const gridRef = useRef<AgGridReact>(null);
+
+  const quantAMMSetPools = useAppSelector(selectQuantammSetPools);
 
   const [finAnalysisColDefs] = useState<ColDef[]>([
     { colId: 'updateRule', field: 'updateRule', headerName: 'Update Rule' },
@@ -143,7 +148,7 @@ export const AnalysisBreakdownTable: FC<AnalysisBreakdownTableProps> = ({
           >
             <Row>
               <Col span={20}>
-                <h4>Metric Raw Values</h4>
+                <h4>{quantAMMSetPools[productId ?? ''] ? 'Simulated Backtest Metric Values' : 'Metric Raw Values'}</h4>
               </Col>
               <Col span={4} style={{ textAlign: 'right' }}>
                 <Button

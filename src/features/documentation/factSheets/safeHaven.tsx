@@ -601,7 +601,7 @@ export function SafeHavenFactSheet() {
             <p style={{ textAlign: 'center' }}>
               A safe haven is an investment that is expected to retain or
               increase in value during times of global turbulence. Examples of
-              safe,havens include gold, U.S. Treasury bonds, and certain
+              safe havens include gold, U.S. Treasury bonds, and certain
               currencies like the United States Dollar. Bitcoin is also
               considered a potential safe haven asset due to its limited supply
               and decentralized nature, which can provide a hedge against

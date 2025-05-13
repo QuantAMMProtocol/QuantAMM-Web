@@ -4,16 +4,19 @@ import { SimulationRunBreakdown } from '../../../simulationResults/simulationRes
 
 interface ProductDetailTableProps {
   simulationRunBreakdown?: SimulationRunBreakdown;
+  productId?: string;
 }
 
 export const ProductDetailTable: FC<ProductDetailTableProps> = ({
   simulationRunBreakdown,
+  productId,
 }) => {
   return (
     <>
       {simulationRunBreakdown && (
         <AnalysisBreakdownTable
           simulationRunBreakdowns={[simulationRunBreakdown]}
+          productId={productId}
         />
       )}
     </>

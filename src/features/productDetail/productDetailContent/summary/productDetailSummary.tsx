@@ -10,6 +10,7 @@ import {
   selectLoadingSimulationRunBreakdown,
   selectProductById,
   selectProducts,
+  selectQuantammSetPools,
   selectReturnAnalysisByProductId,
   selectReturnMetricThresholds,
   setProductSimulationRunBreakdown,
@@ -58,11 +59,6 @@ interface ProductDetailSummaryProps {
 
 const defaultBenchmark = Benchmark.HODL;
 
-const ADDRESS_POOL_MAP: Record<string, Pool> = {
-  '0x6b61d8680c4f9e560c8306807908553f95c749c5': 'safeHavenBTFAugTest',
-};
-
-
 export const ProductDetailSummary: FC<ProductDetailSummaryProps> = ({
   product,
   loadingSimulationRunBreakdown,
@@ -86,6 +82,8 @@ export const ProductDetailSummary: FC<ProductDetailSummaryProps> = ({
   const [comparingBenchmark, setComparingBenchmark] = useState<string | null>(
     null
   );
+
+  const quantAMMSetPools = useAppSelector(selectQuantammSetPools);
 
   const loadingOtherProductSimulationRunBreakdown = useAppSelector((state) =>
     selectLoadingSimulationRunBreakdown(state, comparingProductId?.id ?? '')
@@ -246,10 +244,10 @@ export const ProductDetailSummary: FC<ProductDetailSummaryProps> = ({
   const [loadingBreakdowns, setLoadingBreakdowns] = useState(true);
 
   const addressKey = product.address?.toLowerCase() ?? '';
-  const specialPoolKey = ADDRESS_POOL_MAP[addressKey];
+  const specialPoolKey = quantAMMSetPools[addressKey];
 
   useEffect(() => {
-    const pools = Object.values(ADDRESS_POOL_MAP);
+    const pools = Object.values(quantAMMSetPools);
     const loadAll = async () => {
       setLoadingBreakdowns(true);
       const entries = await Promise.all(
