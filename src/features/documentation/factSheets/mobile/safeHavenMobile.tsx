@@ -1385,7 +1385,7 @@ export function SafeHavenFactSheetMobile() {
                       </Tooltip>
                     </Col>
                     <Col span={24}>
-                      <Tooltip title="Memory days is a conversion of the lambda setting to a more understandable unit of the number of day of prices used in the strategy">
+                      <Tooltip title="Memory days is a conversion of the lambda setting to a more understandable unit of the number of days of prices used in the strategy">
                         <p>
                           Memory Days:{'  '} <InfoCircleOutlined />
                         </p>
@@ -1405,12 +1405,11 @@ export function SafeHavenFactSheetMobile() {
                   <Row>
                     <Col span={24}>
                       <p>
-                        The following represent different forms of the lambda
-                        setting used for different tooling
+                        How strongly does the strategy react to price changes? This is the strategy aggressiveness.
                       </p>
                     </Col>
                     <Col span={24}>
-                      <Tooltip title="Otherwise known as k_per_day. This is the maximum % weight change per day the strategy can suggest prior to MEV guardrails being applied">
+                      <Tooltip title="Otherwise known as k_per_day. This is the multiplier applied to the strategy signal to get the weight change per day">
                         <p>
                           Aggressiveness: {'  '} <InfoCircleOutlined />
                         </p>

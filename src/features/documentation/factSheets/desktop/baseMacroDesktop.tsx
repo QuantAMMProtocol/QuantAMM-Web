@@ -596,13 +596,13 @@ export function BaseMacroFactSheetDesktop() {
               style={{ width: '30%', height: 'auto' }}
             />
             <h1 style={{ textAlign: 'center', margin: 0 }}>
-              The BASE Macro BTF
+              The Base Macro BTF
             </h1>
             <p style={{ textAlign: 'center' }}>
-              BASE is one of the pioneering chains for DeFi. It is a layer 2
+              Base is one of the pioneering chains for DeFi. It is a layer 2
               solution built on the Ethereum blockchain, designed to provide
               faster and cheaper transactions while maintaining the security and
-              decentralization of Ethereum. BASE is designed to be a platform
+              decentralization of Ethereum. Base is designed to be a platform
               for building decentralized applications (dApps) and smart
               contracts, enabling developers to create innovative solutions in
               the DeFi space.
@@ -1154,7 +1154,7 @@ export function BaseMacroFactSheetDesktop() {
                         strategy.
                       </p>
                       <p>
-                        Given BASE&apos;s age and the age of certain tokens
+                        Given Base&apos;s age and the age of certain tokens
                         within the BTF. Training and test periods are liminted.
                       </p>
                     </Col>
@@ -1368,28 +1368,28 @@ export function BaseMacroFactSheetDesktop() {
                           Lambda:{'  '} <InfoCircleOutlined />
                         </p>
                         <Tag style={{ margin: '5px' }}>
-                          cbBTC - 0.811035769801363300
+                          cbBTC - 0.9784309018144351
                         </Tag>
                         <Tag style={{ margin: '5px' }}>
-                          AERO - 0.781490597023096500
+                          AERO - 0.9925922273835435
                         </Tag>
                         <Tag style={{ margin: '5px' }}>
-                          USDC - 0.289524066401247700
+                          USDC - 0.6009182385585357
                         </Tag>
                         <Tag style={{ margin: '5px' }}>
-                          WETH - 0.289524066401247700
+                          WETH - 0.2679511251319175
                         </Tag>
                       </Tooltip>
                     </Col>
                     <Col span={24}>
-                      <Tooltip title="Memory days is a conversion of the lambda setting to a more understandable unit of the number of day of prices used in the strategy">
+                      <Tooltip title="Memory days is a conversion of the lambda setting to a more understandable unit of the number of days of prices used in the strategy">
                         <p>
                           Memory Days:{'  '} <InfoCircleOutlined />
                         </p>
-                        <Tag style={{ margin: '5px' }}>cbBTC - 17.93552717</Tag>
-                        <Tag style={{ margin: '5px' }}>AERO - 15.31974493</Tag>
-                        <Tag style={{ margin: '5px' }}>USDC - 3.38396553</Tag>
-                        <Tag style={{ margin: '5px' }}>WETH - 3.38396553</Tag>
+                        <Tag style={{ margin: '5px' }}>cbBTC - 167.272730</Tag>
+                        <Tag style={{ margin: '5px' }}>AERO - 365.0</Tag>
+                        <Tag style={{ margin: '5px' }}>USDC - 7.684642</Tag>
+                        <Tag style={{ margin: '5px' }}>WETH - 3.200556</Tag>
                       </Tooltip>
                     </Col>
                   </Row>
@@ -1403,19 +1403,18 @@ export function BaseMacroFactSheetDesktop() {
                   <Row>
                     <Col span={24}>
                       <p>
-                        The following represent different forms of the lambda
-                        setting used for different tooling
+                        How strongly does the strategy react to price changes? This is the strategy aggressiveness.
                       </p>
                     </Col>
                     <Col span={24}>
-                      <Tooltip title="Otherwise known as k_per_day. This is the maximum % weight change per day the strategy can suggest prior to MEV guardrails being applied">
+                      <Tooltip title="Otherwise known as k_per_day. This is the multiplier applied to the strategy signal to get the weight change per day">
                         <p>
                           Aggressiveness: {'  '} <InfoCircleOutlined />
                         </p>
-                        <Tag style={{ margin: '5px' }}>cbBTC - 77.55380713</Tag>
-                        <Tag style={{ margin: '5px' }}>AERO - 52.65723196</Tag>
-                        <Tag style={{ margin: '5px' }}>USDC - 75.62990544</Tag>
-                        <Tag style={{ margin: '5px' }}>WETH - 75.62990544</Tag>
+                        <Tag style={{ margin: '5px' }}>cbBTC - 5.608611948</Tag>
+                        <Tag style={{ margin: '5px' }}>AERO - 43.81829052</Tag>
+                        <Tag style={{ margin: '5px' }}>USDC - 7.015760734</Tag>
+                        <Tag style={{ margin: '5px' }}>WETH - 39.89684253</Tag>
                       </Tooltip>
                     </Col>
                     <Col span={24}>
@@ -1424,16 +1423,16 @@ export function BaseMacroFactSheetDesktop() {
                           k:{'  '} <InfoCircleOutlined />
                         </p>
                         <Tag style={{ margin: '5px' }}>
-                          cbBTC - 1390.9684145267538
+                          cbBTC - 938.167832
                         </Tag>
                         <Tag style={{ margin: '5px' }}>
-                          AERO - 806.6953621597771
+                          AERO - 15993.676043
                         </Tag>
                         <Tag style={{ margin: '5px' }}>
-                          USDC - 255.92899333099183
+                          USDC - 306.592966
                         </Tag>
                         <Tag style={{ margin: '5px' }}>
-                          WETH - 255.92899333099183
+                          WETH - 22.454340
                         </Tag>
                       </Tooltip>
                     </Col>
@@ -1457,10 +1456,8 @@ export function BaseMacroFactSheetDesktop() {
                         <p>
                           Exponent:{'  '} <InfoCircleOutlined />
                         </p>
-                        <Tag style={{ margin: '5px' }}>
-                          BTC - 1.5312327931176639
-                        </Tag>
-                        <Tag style={{ margin: '5px' }}>AERO - 1</Tag>
+                        <Tag style={{ margin: '5px' }}>cbBTC - 1</Tag>
+                        <Tag style={{ margin: '5px' }}>AERO - 2.4705463110202333</Tag>
                         <Tag style={{ margin: '5px' }}>USDC - 1</Tag>
                         <Tag style={{ margin: '5px' }}>WETH - 1</Tag>
                       </Tooltip>
