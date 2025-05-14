@@ -1,8 +1,47 @@
 import { Col, Row, Tag, Typography } from "antd";
+import { ROUTES } from "../../../../routesEnum";
+import { useNavigate } from "react-router-dom";
 
 const { Title } = Typography;
 
 export function BannerMobile(){
+  const productData = [
+    {
+      title: 'Safe Haven',
+      imgSrc: '/assets/safe_haven_BTF_icon_mono.png',
+      description: ['The doomsday BTF', 'Bitcoin, PAXOS Gold, USDC'],
+      status: 'LIVE',
+      opacity: 1,
+      focus: true,
+      route: '/factsheet/' + ROUTES.SAFEHAVENFACTSHEET,
+    },
+    {
+      title: 'BASE Macro',
+      imgSrc: '/assets/baseMacro_mono.png',
+      description: ['BASE is a pivotal DeFi L2', 'A BTF with key BASE mega caps'],
+      status: 'Launching next week!',
+      opacity: 0.8,
+      focus: true,
+      route: '/factsheet/' + ROUTES.BASEMACROFACTSHEET,
+    },
+    {
+      title: 'Super Sonic Momentum',
+      imgSrc: '/assets/sonic_BTF_icon.png',
+      description: ['The sonic ecosystem basket', 'Mega Caps with Yield Focus'],
+      status: 'Coming Soon',
+      opacity: 0.4,
+      focus: false,
+      route: undefined,
+    },
+  ];
+
+  const navigate = useNavigate();
+
+  const handleNavigation = (route: string | undefined) => {
+    if (route) {
+      navigate(route);
+    }
+  };
     return <div
     style={{
       height: '100vh',
@@ -46,111 +85,47 @@ export function BannerMobile(){
             padding: '5px 0',
           }}
         >
-          <Tag
-                style={{ width: '100%', margin: '5px', textAlign: 'center' }}
-              >
-                <Row style={{ margin: 0, padding: 0 }}>
-                  <Col span={24}>
-                    <div
-                      style={{
-                        height: '10%',
-                      }}
-                    >
-                      <img
-                        src="/assets/safe_haven_BTF_icon_mono.png"
-                        style={{ width: '10%', height: 'auto', marginTop:'5px' }}
-                      />
-                    </div>
-                  </Col>
-                  <Col span={24}>
-                    <h5 style={{ margin: 0 }}>The Safe Haven</h5>
-                    <p
-                      style={{
-                        margin: '5px',
-                        paddingLeft: '5px',
-                        paddingRight: '5px',
-                        textAlign: 'center',
-                        whiteSpace: 'pre-wrap',
-                      }}
-                    >
-                      Follow trends of BTC, Gold and T-Bills.
-                    </p>
-                  </Col>
-                </Row>
-              </Tag>
-
-              <Tag
-                style={{ width: '100%', margin: '5px', textAlign: 'center' }}
-              >
-                <Row style={{ margin: 0, padding: 0 }}>
-                  <Col span={24}>
-                    <div
-                      style={{
-                        height: '10%'
-                      }}
-                    >
-                      <img
-                        src="/assets/RWA_mono.png"
-                        style={{ width: '10%', height: 'auto', marginTop:'5px' }}
-                      />
-                    </div>
-                  </Col>
-                  <Col span={24}>
-                    <h5 style={{ margin: 0 }}>The RWA Agnostic</h5>
-                    <p
-                      style={{
-                        margin: '5px',
-                        paddingLeft: '5px',
-                        paddingRight: '5px',
-                        whiteSpace: 'pre-wrap',
-                      }}
-                    >
-                      Get RWA exposure by tracking RWA issuers.
-                    </p>
-                  </Col>
-                </Row>
-              </Tag>
-              <Tag
-                style={{ width: '100%', margin: '5px', textAlign: 'center' }}
-              >
-                <Row style={{ margin: 0, padding: 0 }}>
-                  <Col span={24}>
-                    <div
-                      style={{
-                        height: '10%',
-                      }}
-                    >
-                      <img
-                        src="/assets/sonic_BTF_icon.png"
-                        style={{ width: '10%', height: 'auto', marginTop:'5px' }}
-                      />
-                    </div>
-                  </Col>
-                  <Col span={24}>
-                    <div
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'center',
-                        height: '100%',
-                      }}
-                    >
-                      <h5 style={{ margin: 0, textAlign: 'center' }}>
-                        Super Sonic Momentum
-                      </h5>
-                      <p
-                        style={{
-                          margin: 0,
-                          textAlign: 'center',
-                          whiteSpace: 'pre-wrap',
-                        }}
-                      >
-                        Combining Sonic yield and trend following
-                      </p>
-                    </div>
-                  </Col>
-                </Row>
-              </Tag>
+            {productData.map((product, index) => (
+            <Tag
+              key={index}
+              onClick={() => handleNavigation(product.route)}
+              style={{
+              width: '100%',
+              margin: '5px',
+              textAlign: 'center',
+              opacity: product.opacity,
+              }}
+            >
+              <Row style={{ margin: 0, padding: 0 }}>
+              <Col span={24}>
+                <div
+                style={{
+                  height: '10%',
+                }}
+                >
+                <img
+                  src={product.imgSrc}
+                  style={{ width: '10%', height: 'auto', marginTop: '5px' }}
+                />
+                </div>
+              </Col>
+              <Col span={24}>
+                <h5 style={{ margin: 0 }}>{product.title + ' (' + product.status + ')'}</h5>
+                <p
+                style={{
+                  margin: '5px',
+                  paddingLeft: '5px',
+                  paddingRight: '5px',
+                  textAlign: 'center',
+                  whiteSpace: 'pre-wrap',
+                }}
+                >
+                {product.description.join('\n')}
+                </p>
+              </Col>
+              </Row>
+            </Tag>
+            ))}
         </div>
     </div>
   </div>

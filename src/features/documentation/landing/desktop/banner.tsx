@@ -6,10 +6,13 @@ import { SimulationResultMarketValueChart } from '../../../simulationResults/vis
 import { SimulationRunBreakdown } from '../../../simulationResults/simulationResultSummaryModels';
 import { useEffect, useState } from 'react';
 import { getBreakdown, Pool } from '../../../../services/breakdownService';
+import { ROUTES } from '../../../../routesEnum';
+import { useNavigate } from 'react-router-dom';
 
 const { Title } = Typography;
 
 export function Banner() {
+  const navigate = useNavigate();
   const [breakdowns, setBreakdowns] = useState<SimulationRunBreakdown[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const productData = [
@@ -17,21 +20,21 @@ export function Banner() {
       title: 'Safe Haven',
       imgSrc: '/assets/safe_haven_BTF_icon_mono.png',
       description: ['The doomsday BTF', 'Bitcoin, PAXOS Gold, USDC'],
-      status: 'Launching May 2025',
+      status: 'LIVE',
       opacity: 1,
       imgWidth: '90%',
       focus: true,
-      route: undefined,
+      route: '/factsheet/' + ROUTES.SAFEHAVENFACTSHEET,
     },
     {
-      title: 'RWA Issuers',
-      imgSrc: '/assets/RWA_mono.png',
-      description: ['RWAs are the future', 'Track RWA issuers'],
-      status: 'Coming Soon',
-      opacity: 0.4,
-      imgWidth: '80%',
-      focus: false,
-      route: undefined,
+      title: 'BASE Macro',
+      imgSrc: '/assets/baseMacro_mono.png',
+      description: ['BASE is a pivotal DeFi L2', 'A BTF with key BASE mega caps'],
+      status: 'Launching next week!',
+      opacity: 0.8,
+      imgWidth: '100%',
+      focus: true,
+      route: '/factsheet/' + ROUTES.BASEMACROFACTSHEET,
     },
     {
       title: 'Super Sonic Momentum',
@@ -70,7 +73,7 @@ export function Banner() {
 
   const handleNavigation = (route: string | undefined) => {
     if (route) {
-      window.location.href = route;
+      navigate(route);
     }
   };
 

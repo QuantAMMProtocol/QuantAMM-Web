@@ -567,7 +567,11 @@ const getMaybeQuantAmmWeightedParams = (
 const getStrategy = (pool: GqlPoolMinimal): Strategy => {
   const quantAmmWeightedParams = getMaybeQuantAmmWeightedParams(pool);
   //API can be changed but in the meantime safe haven can be coded here
-  if(pool.address.toLowerCase() == '0x6b61d8680c4f9e560c8306807908553f95c749c5'){
+  if (
+    pool.address.toLowerCase() ==
+      '0x6b61d8680c4f9e560c8306807908553f95c749c5' ||
+    pool.address.toLowerCase() == '0xb4161aeA25bd6c5c8590ad50deb4ca752532f05d'
+  ) {
     return 'POWER_CHANNEL';
   }
 

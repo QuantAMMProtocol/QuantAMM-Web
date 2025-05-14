@@ -12,8 +12,9 @@ import { Research } from './features/documentation/research';
 import { CompanyPage } from './features/documentation/company';
 import { ContactCompany } from './features/documentation/landing/desktop/contactCompany';
 import TermsOfService from './features/documentation/landing/newTermsOfService';
-import { SafeHavenFactSheet } from './features/documentation/factSheets/safeHaven';
 import InegligibleUser from './features/documentation/landing/IneligableUserLanding';
+import SafeHavenFactSheet from './features/documentation/factSheets/safeHaven';
+import BaseMacroFactSheet from './features/documentation/factSheets/baseMacro';
 
 const BASE_ROUTE = '/';
 
@@ -59,6 +60,10 @@ export const routes = createBrowserRouter([
       {
         path: 'factsheet/' + ROUTES.SAFEHAVENFACTSHEET,
         element:<SafeHavenFactSheet />,
+      },
+      {
+        path: 'factsheet/' + ROUTES.BASEMACROFACTSHEET,
+        element:<BaseMacroFactSheet />,
       },
       {
         path: ROUTES.EXAMPLES,
