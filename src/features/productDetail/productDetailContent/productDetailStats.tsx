@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { Col, Grid, Row, Spin } from 'antd';
 import { useAppSelector } from '../../../app/hooks';
 import { Product } from '../../../models';
-import { selectLoadingSimulationRunBreakdown } from '../../productExplorer/productExplorerSlice';
+import { selectLoadingJsonBreakdown, selectLoadingSimulationRunBreakdown } from '../../productExplorer/productExplorerSlice';
 import { ProductDetailSummary } from './summary/productDetailSummary';
 import { ProductDetailTable } from './components/productDetailTable';
 
@@ -15,6 +15,8 @@ interface ProductDetailStatsProps {
 export const ProductDetailStats: FC<ProductDetailStatsProps> = ({
   product,
 }) => {
+  const loadingBreakdowns = useAppSelector(selectLoadingJsonBreakdown);
+  
   const loadingSimulationRunBreakdown = useAppSelector((state) =>
     selectLoadingSimulationRunBreakdown(state, product.id)
   );
@@ -41,11 +43,12 @@ export const ProductDetailStats: FC<ProductDetailStatsProps> = ({
             paddingLeft: 12,
           }}
         >
-          {loadingSimulationRunBreakdown ? (
+          {loadingSimulationRunBreakdown || loadingBreakdowns ? (
             <Spin />
           ) : (
             <ProductDetailTable
               simulationRunBreakdown={product.simulationRunBreakdown}
+              productId= {product.address}
             />
           )}
         </Col>

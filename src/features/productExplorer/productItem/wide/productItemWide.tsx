@@ -16,6 +16,7 @@ import { ProductItemBackground } from '../productItemBackground';
 import { ProductItemApr } from './productItemApr';
 
 import styles from './productItemWide.module.scss';
+import { selectAcceptedTermsAndConditions } from '../../productExplorerSlice';
 
 const { Text } = Typography;
 
@@ -25,6 +26,10 @@ interface ProductItemProps {
 
 export const ProductItemWide: FC<ProductItemProps> = ({ product }) => {
   const isDarkTheme = useAppSelector(selectTheme);
+
+  const acceptedTerms = useAppSelector(
+    selectAcceptedTermsAndConditions
+  );
 
   const [productModalUrl, setProductModalUrl] = useState<string | undefined>(
     undefined
@@ -220,6 +225,7 @@ export const ProductItemWide: FC<ProductItemProps> = ({ product }) => {
                   size="small"
                   type="primary"
                   onClick={() => showProductModal()}
+                  disabled={!acceptedTerms}
                 >
                   deposit
                 </Button>
@@ -228,6 +234,7 @@ export const ProductItemWide: FC<ProductItemProps> = ({ product }) => {
           </Row>
         </ProductItemBackground>
         <ProductModal
+          isWithdraw={false}
           isVisible={!!productModalUrl}
           onClose={hideProductModal}
           url={productModalUrl}

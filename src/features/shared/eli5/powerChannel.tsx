@@ -15,7 +15,7 @@ export const PowerChannel = () => {
       </Title>
       <p>
         <Text strong style={{ color: 'var(--secondary-text-color)' }}>
-          Noise is unpredictable and you can get caught out:{' '}
+          Intra-day noise is unpredictable and you can get caught out:{' '}
         </Text>
         Broad market movements can be more predictable than &quot;technical
         analysis&quot; day trading. Avoid day trading and move for the medium /
@@ -32,7 +32,6 @@ export const PowerChannel = () => {
         <Text strong style={{ color: 'var(--secondary-text-color)' }}>
           Act big if the price moves outside of your noise thresholds:{' '}
         </Text>
-        FOMO into a mooning consituent or exit a freefalling one.
       </p>
       <p>
         <Text strong style={{ color: 'var(--secondary-text-color)' }}>
@@ -46,9 +45,8 @@ export const PowerChannel = () => {
           moves aggressively to capture the movement.
         </p>
         <p>
-          Modelling has shown this is a particularly good approach for small cap
-          tokens and coins that can suddenly moon but whose day to day prices
-          are erratic.
+          This works well if one constituent is moving more erratically than another, you might want 
+          to penalise those erratic movements.
         </p>
       </p>
     </>
