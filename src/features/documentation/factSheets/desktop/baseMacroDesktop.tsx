@@ -1288,7 +1288,7 @@ export function BaseMacroFactSheetDesktop() {
                     <WeightChangeOverTimeGraph
                       simulationRunBreakdown={breakdowns.baseMacroBTFAugTrain}
                       overrideChartTheme="ag-default-dark"
-                      overrideXAxisInterval={22}
+                      overrideXAxisInterval={1}
                     />
                     <h5>Cumulative performance over time</h5>
                     <SimulationResultMarketValueChart
@@ -1312,7 +1312,7 @@ export function BaseMacroFactSheetDesktop() {
                         'Balancer Weighted': 'Traditional DEX',
                       }}
                       overrideNagivagtion={false}
-                      overrideXAxisInterval={22}
+                      overrideXAxisInterval={1}
                       forceViewResults={true}
                     />
                   </div>
