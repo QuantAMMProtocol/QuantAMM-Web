@@ -595,13 +595,13 @@ export function BaseMacroFactSheetMobile() {
               style={{ width: '30%', height: 'auto' }}
             />
             <h1 style={{ textAlign: 'center', margin: 0 }}>
-              The Base Macro BTF
+              The BASE Macro BTF
             </h1>
             <p style={{ textAlign: 'center' }}>
-              Base is one of the pioneering chains for DeFi. It is a layer 2
+              BASE is one of the pioneering chains for DeFi. It is a layer 2
               solution built on the Ethereum blockchain, designed to provide
               faster and cheaper transactions while maintaining the security and
-              decentralization of Ethereum. Base is designed to be a platform
+              decentralization of Ethereum. BASE is designed to be a platform
               for building decentralized applications (dApps) and smart
               contracts, enabling developers to create innovative solutions in
               the DeFi space.
@@ -611,8 +611,8 @@ export function BaseMacroFactSheetMobile() {
         <Col span={24}>
           <h4>BTF Objective</h4>
           <p>
-            The Base Macro BTF provides exposure to some of the megal cap tokens
-            on Base. The BTF is was trained on more bullish market conditions.
+            The BASE Macro BTF provides exposure to some of the megal cap tokens
+            on BASE. The BTF is was trained on more bullish market conditions.
           </p>
           <h4>Responsive Strategy Objective</h4>
           <p>
@@ -1119,9 +1119,9 @@ export function BaseMacroFactSheetMobile() {
                             accepted stablecoin in the crypto ecosystem.
                           </p>
                           <p>
-                            AERO is a Base native DeFi token. While this token
+                            AERO is a BASE native DeFi token. While this token
                             carries potential protocol risk and higher
-                            volatility, it is a key native token of the Base
+                            volatility, it is a key native token of the BASE
                             ecosystem.
                           </p>
                         </Col>
@@ -1155,7 +1155,7 @@ export function BaseMacroFactSheetMobile() {
                         strategy.
                       </p>
                       <p>
-                        Given Base's age and the age of certain tokens within
+                        Given BASE's age and the age of certain tokens within
                         the BTF. Training and test periods are liminted.
                       </p>
                     </Col>
