@@ -19,6 +19,7 @@ interface ProductSimulationRunBreakdown {
   productId: string;
 }
 
+
 export const productExplorerSlice = createSlice({
   name: 'productExplorerSlice',
   initialState: productExplorerInitialState,
@@ -52,6 +53,9 @@ export const productExplorerSlice = createSlice({
     ) => {
       state.poolDetailSelectedGraphRange = action.payload;
     },
+    setAcceptedTermsAndConditions: (state, action: PayloadAction<boolean>) => {
+      state.acceptedTermsAndConditions = action.payload;
+    },
     setFilters: (state, action: PayloadAction<FilterPayload>) => {
       state.loadingProducts = true;
       state.productMap = {};
@@ -82,6 +86,9 @@ export const productExplorerSlice = createSlice({
     },
     setSortingDirection: (state, action: PayloadAction<SortingDirection>) => {
       state.sortingDirection = action.payload;
+    },
+    setLoadingJsonProductSimulations: (state, action: PayloadAction<boolean>) => {
+      state.loadingJsonProductSimulations = action.payload;
     },
     setOverrideTab: (state, action: PayloadAction<OverrideTab | undefined>) => {
       state.overrideTab = action.payload;
@@ -115,6 +122,9 @@ export const selectProductById = (
 ): Product | undefined => {
   return products[id];
 };
+
+export const selectAcceptedTermsAndConditions = (state: RootState) =>
+  state.productExplorer.acceptedTermsAndConditions;
 
 export const selectLoadingProducts = (state: RootState) =>
   state.productExplorer.loadingProducts;
@@ -165,10 +175,19 @@ export const selectBenchmarkMetricKeyNames = (state: RootState) => {
   });
 };
 
+export const selectQuantammSetPools = (state: RootState) => {
+  return state.productExplorer.quantammSetPools;
+};
+
 export const selectLoadingSimulationRunBreakdown = (
   state: RootState,
   productId: string
 ) => state.productExplorer.loadingSimulationRunBreakdown[productId];
+
+export const selectLoadingJsonBreakdown = (
+  state: RootState
+) => state.productExplorer.loadingJsonProductSimulations;
+
 
 export const selectReturnAnalysisByProductId = (
   state: RootState,
@@ -209,7 +228,6 @@ export const selectBenchmarkAnalysisByProductId = (
   return null;
 };
 
-// TODO: temporary function, should come from the backend
 const getMetricKey = (metricName: string) => {
   return metricName.toLowerCase().replace(/ /g, '_');
 };
@@ -265,6 +283,8 @@ export const {
   setPageSize,
   setPage,
   setTotalPools,
+  setAcceptedTermsAndConditions,
+  setLoadingJsonProductSimulations,
 } = productExplorerSlice.actions;
 
 export default productExplorerSlice.reducer;

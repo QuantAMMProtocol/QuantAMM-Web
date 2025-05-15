@@ -1,12 +1,11 @@
 import { FC } from 'react';
-import { Col, Grid, Row, Spin, Typography } from 'antd';
+import { Col, Grid, Row, Spin } from 'antd';
 import { useAppSelector } from '../../../app/hooks';
 import { Product } from '../../../models';
-import { selectLoadingSimulationRunBreakdown } from '../../productExplorer/productExplorerSlice';
+import { selectLoadingJsonBreakdown, selectLoadingSimulationRunBreakdown } from '../../productExplorer/productExplorerSlice';
 import { ProductDetailSummary } from './summary/productDetailSummary';
 import { ProductDetailTable } from './components/productDetailTable';
 
-const { Title } = Typography;
 const { useBreakpoint } = Grid;
 
 interface ProductDetailStatsProps {
@@ -16,6 +15,8 @@ interface ProductDetailStatsProps {
 export const ProductDetailStats: FC<ProductDetailStatsProps> = ({
   product,
 }) => {
+  const loadingBreakdowns = useAppSelector(selectLoadingJsonBreakdown);
+  
   const loadingSimulationRunBreakdown = useAppSelector((state) =>
     selectLoadingSimulationRunBreakdown(state, product.id)
   );
@@ -31,18 +32,7 @@ export const ProductDetailStats: FC<ProductDetailStatsProps> = ({
       />
 
       <Row id="details" style={{ marginTop: 20 }}>
-        <Col
-          span={24}
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'start',
-            paddingLeft: 8,
-            borderBottom: '1px solid var(--primary-lighter)',
-          }}
-        >
-          <Title level={4}>Details</Title>
-        </Col>
+        
         <Col
           span={24}
           style={{
@@ -53,11 +43,12 @@ export const ProductDetailStats: FC<ProductDetailStatsProps> = ({
             paddingLeft: 12,
           }}
         >
-          {loadingSimulationRunBreakdown ? (
+          {loadingSimulationRunBreakdown || loadingBreakdowns ? (
             <Spin />
           ) : (
             <ProductDetailTable
               simulationRunBreakdown={product.simulationRunBreakdown}
+              productId= {product.address}
             />
           )}
         </Col>

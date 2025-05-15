@@ -26,11 +26,11 @@ export function FAQ() {
               someone to buy the BTC off you.
             </p>
             <p>
-              If done right offering a price is more efficient as you dont pay
+              If done right offering a price is more efficient as you don&apos;t pay fees
               fees or slippage to an exchange
             </p>
             <p>
-              It also removes considerable protocol complexity as you dont need
+              It also removes considerable protocol complexity as you don&apos;t need
               a complex trade execution layer so the BTF can run fully on-chain.
               This means you don&apos;t have to trust an unknown manager to
               trade
@@ -114,8 +114,8 @@ export function FAQ() {
             </p>
             <p>No Custodian. No Fuss.</p>
             <p>
-              QuantAMM is built using Balancer V3. Your deposits are safe in
-              Balancer V3s state of the art vault.
+              QuantAMM is built using Balancer V3. Your deposits have the safety of
+              Balancer V3&apos;s state of the art vault.
             </p>
           </div>
           <div hidden={eli5 != 'Crypto Native'}>
@@ -133,7 +133,7 @@ export function FAQ() {
               be transferred to you.
             </p>
             <p>
-              Balancer V3 is a non custodian AMM with a centralised vault that
+              Balancer V3 is a non custodial AMM with a vault that
               is heavily audited.
             </p>
           </div>
@@ -167,7 +167,7 @@ export function FAQ() {
             <p>
               BTFs are Balancer AMM pools. Retail swappers can still swap on the
               pools earning you swap fees on top of your BTF capital
-              appreciation. If a constituent is yield bearing then that value is
+              performance. If a constituent is yield bearing then that value is
               captured inside the BTF. Incentives are also provided and can be
               seen on the pool exploration pages.
             </p>
@@ -445,7 +445,7 @@ export function FAQ() {
                   Crypto Native
                 </Radio.Button>
                 <Radio.Button value={'Quant'}>
-                  Quant Mathematical
+                  Quant
                 </Radio.Button>
                 </Radio.Group>
               </Form.Item>

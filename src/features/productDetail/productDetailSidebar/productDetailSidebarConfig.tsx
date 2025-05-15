@@ -20,10 +20,6 @@ export const ProductDetailSidebarConfig: FC<
         side="right"
         text={String(product.decimals)}
       />
-
-      <ProductDetailSidebarElement side="left" text="Has Dynamic Swap Fee" />
-      <ProductDetailSidebarElement side="right" text="TODO" />
-
       <ProductDetailSidebarElement
         side="left"
         text="Static Swap Fee Percentage"
@@ -38,10 +34,6 @@ export const ProductDetailSidebarConfig: FC<
         side="right"
         text={product.dynamicData?.isPaused ? 'true' : 'false'}
       />
-
-      <ProductDetailSidebarElement side="left" text="Pause Window End Time" />
-      <ProductDetailSidebarElement side="right" text="TODO" />
-
       <ProductDetailSidebarElement
         side="left"
         text="Is Pool in Recovery Mode"

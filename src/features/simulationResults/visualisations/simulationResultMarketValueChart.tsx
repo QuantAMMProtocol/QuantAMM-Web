@@ -129,10 +129,11 @@ export function SimulationResultMarketValueChart(props: BreakdownProps) {
 
   return (
     <div>
-      <Divider className={styles.simResultDividers}>
-        Simulated Pool Holding $ over time
-      </Divider>
-
+      <div hidden={props.hideTitle}>
+        <Divider className={styles.simResultDividers}>
+          {props.overrideTitle ?? 'Simulated Pool Holding $ over time'}
+        </Divider>
+      </div>
       <Row>
         <Col span={24}>
           <Row className={styles.marketValueChart}>

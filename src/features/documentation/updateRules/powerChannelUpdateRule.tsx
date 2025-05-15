@@ -4,8 +4,11 @@ import { useState } from 'react';
 import { useAppSelector } from '../../../app/hooks';
 import { selectAvailableUpdateRules } from '../../simulationRunConfiguration/simulationRunConfigurationSlice';
 import { Eli5 } from '../../shared';
-
-export function PowerChannelUpdateRule() {
+interface DocProps {
+  hideTitle?: boolean;
+  hideImage?: boolean;
+}
+export function PowerChannelUpdateRule(props: DocProps) {
   const [eli5, setEli5] = useState('ELI5');
   const rules = useAppSelector(selectAvailableUpdateRules);
 
@@ -17,10 +20,12 @@ export function PowerChannelUpdateRule() {
           <Col style={{ padding: 10 }} span={23}>
             <Row>
               <Col span={24}>
-                <h1>QuantAMM Update Rule: Power Channel</h1>
+                <div hidden={props.hideTitle}>
+                  <h1>QuantAMM Update Rule: Power Channel</h1>
+                </div>
               </Col>
               <Col span={24}>
-                <Form.Item style={{ marginTop: '5px' }}>
+                <Form.Item style={{ marginTop: '5px', marginBottom: '0px' }}>
                   <Radio.Group
                     size="small"
                     value={eli5}
@@ -31,7 +36,7 @@ export function PowerChannelUpdateRule() {
                     </Radio.Button>
                     <Radio.Button value={'ELI5'}>ELI5</Radio.Button>
                     <Radio.Button value={'Quant'}>
-                      Quant Mathematical
+                      Quant
                     </Radio.Button>
                   </Radio.Group>
                 </Form.Item>
@@ -39,7 +44,7 @@ export function PowerChannelUpdateRule() {
             </Row>
             <Row>
               <Col span={24}>
-                <div hidden={eli5 != 'ELI5'}>
+                <div hidden={eli5 != 'ELI5' || props.hideImage}>
                   <Row>
                     <Col span={8}>
                       <img
@@ -53,6 +58,13 @@ export function PowerChannelUpdateRule() {
                       />
                     </Col>
                     <Col span={16}>
+                      <Eli5 strategy="POWER_CHANNEL" />
+                    </Col>
+                  </Row>
+                </div>
+                <div hidden={eli5 != 'ELI5' || (eli5 == 'ELI5' && !props.hideImage)}>
+                  <Row>
+                    <Col span={24}>
                       <Eli5 strategy="POWER_CHANNEL" />
                     </Col>
                   </Row>

@@ -1,19 +1,74 @@
-import { Col, Row } from 'antd';
+import { Col, Radio, Row, Form } from 'antd';
 import { MathJax, MathJaxContext } from 'better-react-mathjax';
-import { Fade } from 'react-awesome-reveal';
+import { useState } from 'react';
+interface OptionalProps {
+  hideTitle?: boolean;
+  fixedEL15?: boolean;
+}
 
-export function QuantAMMPoolDescription() {
+export function QuantAMMPoolDescription(props: OptionalProps) {
+  const [eli5, setEli5] = useState('ELI5');
+
   return (
     <MathJaxContext>
       <Row>
-        <Col span={4}></Col>
-        <Col span={16}>
-          <Row style={{ padding: 20 }}>
+        <Col span={2}></Col>
+        <Col span={20}>
+          <Row>
             <Col span={24}>
-              <h2>QuantAMM&apos;s time-varying trading function</h2>
+              <div hidden={props.hideTitle}>
+                <h2>QuantAMM&apos;s time-varying trading function</h2>
+              </div>
             </Col>
             <Col span={24}>
-              <Fade>
+              <div hidden={props.fixedEL15}>
+              <Form.Item style={{ marginTop: '5px' }}>
+                <Radio.Group
+                  size="small"
+                  value={eli5}
+                  onChange={(e) => setEli5(e.target.value)}
+                >
+                  <Radio.Button disabled={true}>
+                    User Knowledge Level:{' '}
+                  </Radio.Button>
+                  <Radio.Button value={'ELI5'}>ELI5</Radio.Button>
+                  <Radio.Button value={'Quant'}>
+                    Quant
+                  </Radio.Button>
+                </Radio.Group>
+              </Form.Item>
+              </div>
+            </Col>
+            <div hidden={eli5 != 'ELI5'}>
+              <h3>How vaults and indexes normally work</h3>
+              <p>
+                Crypto vaults usually involve an off-chain manager who decides
+                periodically to trade on DEX venues to rebalance holdings within
+                the vault to what the manager thinks the vault should hold.
+                Older index protocols paused the vaults and rebalanced manually.
+                Newer indexes rebalance with on-chain auctions however these are
+                also prone to failure and expensive.
+              </p>
+              <h3>How Automated Market Makers work</h3>
+              <p>
+                Automated market makers usually provide a venue for traders to
+                swap one token for another at an automated price. The holdings
+                within the liquidity pool are kept at constant equal weights.
+              </p>
+              <h3 style={{ color: 'var(--secondary-text-color)' }}>How QuantAMM BTFs work</h3>
+              <p style={{ color: 'var(--secondary-text-color)' }}>
+                QuantAMM BTFs are automated market maker pools. However instead
+                of offering a competitive market price, BTFs offer a slightly
+                off market price. The aim of this off market price is to allow
+                traders to rebalance the holdings in the direction of the off
+                market drift. How is the off market price decided? On-chain,
+                automatic rules determine what weights the pool should hold
+                given market movements. This means that QuantAMM BTFs can run index and vault like
+                rebalancing continuously and efficiently.
+              </p>
+            </div>
+            <div hidden={eli5 == 'ELI5'}>
+              <Col span={24}>
                 <p>
                   <span>QuantAMM updates</span>
                   <MathJax inline>{' \\(\\mathbf{w}\\) '}</MathJax>
@@ -97,20 +152,16 @@ export function QuantAMMPoolDescription() {
                   3. the constant access to the protocol and thus one’s staked
                   liquidity.
                 </p>
-              </Fade>
-            </Col>
-            <Col span={24}>
-              <Fade>
+              </Col>
+              <Col span={24}>
                 <span>
                   <h2>
                     QuantAMM LPs do not have to suffer Impermanent Loss: they
                     can see their portfolio increase in value
                   </h2>
                 </span>
-              </Fade>
-            </Col>
-            <Col span={24}>
-              <Fade>
+              </Col>
+              <Col span={24}>
                 <p>
                   In the previous situation we considered the case of constant
                   weights with changing market prices. We will now consider how
@@ -205,11 +256,11 @@ export function QuantAMMPoolDescription() {
                     capital.
                   </b>
                 </p>
-              </Fade>
-            </Col>
+              </Col>
+            </div>
           </Row>
         </Col>
-        <Col span={4}></Col>
+        <Col span={2}></Col>
       </Row>
     </MathJaxContext>
   );

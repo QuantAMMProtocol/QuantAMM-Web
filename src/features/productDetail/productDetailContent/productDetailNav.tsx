@@ -5,18 +5,25 @@ import { getBalancerPoolUrl } from '../../../utils';
 import { ProductModal } from '../modal/productModal';
 
 import styles from './productDetailNav.module.scss';
+import { useAppSelector } from '../../../app/hooks';
+import { selectAcceptedTermsAndConditions } from '../../productExplorer/productExplorerSlice';
 
 interface ProductDetailNavProps {
   product: Product;
 }
 
 export const ProductDetailNav: FC<ProductDetailNavProps> = ({ product }) => {
+
+  const acceptedTermsAndConditions = useAppSelector(
+    selectAcceptedTermsAndConditions
+  );
   const [targetOffset, setTargetOffset] = useState<number | undefined>(
     undefined
   );
   const [productModalUrl, setProductModalUrl] = useState<string | undefined>(
     undefined
   );
+  const [isWithdraw, setIsWithdraw] = useState(false);
 
   useEffect(() => {
     setTargetOffset(window.innerHeight / 2);
@@ -73,12 +80,18 @@ export const ProductDetailNav: FC<ProductDetailNavProps> = ({ product }) => {
             <Button
               type="primary"
               style={{ marginRight: 8 }}
-              onClick={() => showProductModal(addLiquidityBalancerPoolUrl)}
+              onClick={() => {showProductModal(addLiquidityBalancerPoolUrl);
+                setIsWithdraw(false);
+              }}
+              disabled={!acceptedTermsAndConditions}
             >
               Deposit
             </Button>
             <Button
-              onClick={() => showProductModal(removeLiquidityBalancerPoolUrl)}
+              onClick={() => {showProductModal(removeLiquidityBalancerPoolUrl);
+                setIsWithdraw(true);}
+              }
+              disabled={!acceptedTermsAndConditions}
             >
               Withdraw
             </Button>
@@ -86,6 +99,7 @@ export const ProductDetailNav: FC<ProductDetailNavProps> = ({ product }) => {
         </div>
       </Affix>
       <ProductModal
+        isWithdraw={isWithdraw}
         isVisible={!!productModalUrl}
         onClose={hideProductModal}
         url={productModalUrl}

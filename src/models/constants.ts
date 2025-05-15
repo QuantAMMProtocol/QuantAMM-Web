@@ -243,6 +243,19 @@ export const benchmarkMetricThresholds = [
       'Jensen’s Alpha is a risk-adjusted measure of return. It is calculated as the excess return over the benchmark over the expected return based on the Capital Asset Pricing Model (CAPM). The higher the Jensen’s Alpha, the better the risk-adjusted return.',
   },
   {
+    key: "Annualized Jensen's Alpha (%)",
+    veryLow: 0,
+    veryLowColor: 'rgba(166, 0, 0, 0.6)',
+    low: 0.5,
+    lowColor: 'rgba(220, 109, 6, 0.6)',
+    medium: 2,
+    mediumColor: 'rgba(240, 228, 6, 0.6)',
+    high: 4,
+    highColor: 'rgba(2, 189, 46, 0.6)',
+    tooltipDescription:
+      'Jensen’s Alpha is a risk-adjusted measure of return. It is calculated as the excess return over the benchmark over the expected return based on the Capital Asset Pricing Model (CAPM). The higher the Jensen’s Alpha, the better the risk-adjusted return.',
+  },
+  {
     key: 'Beta',
     veryLow: 0.75,
     veryLowColor: 'rgba(166, 0, 0, 0.6)',

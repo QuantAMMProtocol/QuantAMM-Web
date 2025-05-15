@@ -6,6 +6,7 @@ import {
   QuantAmmWeightedParams,
 } from '../__generated__/graphql-types';
 import { SimulationRunBreakdown } from '../features/simulationResults/simulationResultSummaryModels';
+import { Pool } from '../services/breakdownService';
 
 export type BalancerTokenType =
   | 'COMPOSABLE_STABLE'
@@ -170,9 +171,11 @@ export interface FinancialMetricThresholds {
 }
 
 export interface ProductExplorer {
+  acceptedTermsAndConditions:boolean;
   loadingProducts: boolean;
   loadingFilters: boolean;
   loadingError: boolean;
+  loadingJsonProductSimulations:boolean;
   loadingSimulationRunBreakdown: Record<string, boolean>;
   asOfUnixTime: number;
   blockIndex: number;
@@ -190,6 +193,7 @@ export interface ProductExplorer {
   pageSize: number;
   page: number;
   totalPools?: number;
+  quantammSetPools:Record<string, Pool>
 }
 
 export interface ProductMetric {

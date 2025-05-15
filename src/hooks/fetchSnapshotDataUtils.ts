@@ -144,10 +144,17 @@ export const getTimeSeriesDataForProductList = (
   tokenPricesMap: Record<
     string,
     Record<string, Pick<GqlHistoricalTokenPriceEntry, 'timestamp' | 'price'>[]>
-  >
+  >,
+  isQuantAMMSetPool: Record<string,string>
 ): ProductTimeSeriesData[] => {
   return Object.values(productMap).map((product) => {
-    const snapshots = poolSnapshotsMap[`poolSnapshot_${product.id}`] || [];
+    let snapshots = poolSnapshotsMap[`poolSnapshot_${product.address}`];
+    if (isQuantAMMSetPool[product.address]) {
+      //TODO make pool specific and not hardcoded
+      //because of gauges and integration tests launch date != creation date
+      //this sets the true launch date for quantamm initial products
+      snapshots = snapshots.filter((x) => x.timestamp >= 1747180800);
+    }
     const hodlAmounts = snapshots[0]?.amounts;
     const initialTotalShares =
       snapshots[0]?.totalShares > 0
@@ -211,9 +218,16 @@ export const getTimeSeriesDataForProduct = (
   tokenPricesMap: Record<
     string,
     Record<string, Pick<GqlHistoricalTokenPriceEntry, 'timestamp' | 'price'>[]>
-  >
+  >,
+  isQuantAMMSetPool: boolean
 ): ProductTimeSeriesData => {
-  const snapshots = poolSnapshotsMap[`poolSnapshot_${pool.poolGetPool?.id}`];
+  let snapshots = poolSnapshotsMap[`poolSnapshot_${pool.poolGetPool?.id}`];
+  if (isQuantAMMSetPool) {
+    //TODO make pool specific and not hardcoded
+    //because of gauges and integration tests launch date != creation date
+    //this sets the true launch date for quantamm initial products
+    snapshots = snapshots.filter((x) => x.timestamp >= 1747180800);
+  }
   let hodlAmounts: number[] | undefined;
 
   const initialTotalShares =

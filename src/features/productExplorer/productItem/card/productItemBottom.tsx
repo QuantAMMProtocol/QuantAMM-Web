@@ -52,6 +52,7 @@ export const ProductItemBottom: FC<ProductItemBottomProps> = ({ product }) => {
         </div>
       </Col>
       <ProductModal
+        isWithdraw={false}
         isVisible={!!productModalUrl}
         onClose={hideProductModal}
         url={productModalUrl}

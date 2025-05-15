@@ -6,45 +6,45 @@ import { SimulationResultMarketValueChart } from '../../../simulationResults/vis
 import { SimulationRunBreakdown } from '../../../simulationResults/simulationResultSummaryModels';
 import { useEffect, useState } from 'react';
 import { getBreakdown, Pool } from '../../../../services/breakdownService';
+import { ROUTES } from '../../../../routesEnum';
+import { useNavigate } from 'react-router-dom';
 
 const { Title } = Typography;
 
 export function Banner() {
+  const navigate = useNavigate();
   const [breakdowns, setBreakdowns] = useState<SimulationRunBreakdown[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const productData = [
     {
-      title: 'The RWA Agnostic',
-      imgSrc: '/assets/RWA_mono.png',
-      description: [
-        'RWAs are the future',
-        'Track RWA issuers.',
-      ],
-      status: 'Coming Soon',
-      opacity: 0.4,
-      imgWidth: '80%',
-      focus:false
-    },
-    {
-      title: 'The Safe Haven',
+      title: 'Safe Haven',
       imgSrc: '/assets/safe_haven_BTF_icon_mono.png',
-      description: ['The doomsday BTF.', 'Bitcoin, PAXOS Gold, Dollar (USDC)'],
-      status: 'Launching [Date]',
+      description: ['The doomsday BTF', 'Bitcoin, PAXOS Gold, USDC'],
+      status: 'LIVE',
       opacity: 1,
       imgWidth: '90%',
-      focus:true
+      focus: true,
+      route: '/factsheet/' + ROUTES.SAFEHAVENFACTSHEET,
+    },
+    {
+      title: 'BASE Macro',
+      imgSrc: '/assets/baseMacro_mono.png',
+      description: ['BASE is a pivotal DeFi L2', 'A BTF with key BASE mega caps'],
+      status: 'Launching next week!',
+      opacity: 0.8,
+      imgWidth: '100%',
+      focus: true,
+      route: '/factsheet/' + ROUTES.BASEMACROFACTSHEET,
     },
     {
       title: 'Super Sonic Momentum',
       imgSrc: '/assets/sonic_BTF_icon.png',
-      description: [
-        'The sonic ecosystem basket.',
-        'Mega Cap Yield Focus'
-      ],
+      description: ['The sonic ecosystem basket', 'Mega Caps with Yield Focus'],
       status: 'Coming Soon',
       opacity: 0.4,
       imgWidth: '80%',
-      focus:false
+      focus: false,
+      route: undefined,
     },
   ];
 
@@ -61,11 +61,21 @@ export function Banner() {
     };
 
     if (loading) {
-      loadBreakdowns(['safeHavenBTF2025Test', 'safeHavenCFMM2025Test', 'safeHavenHodl2025Test'] as Pool[])
+      loadBreakdowns([
+        'safeHavenBTF2025Test',
+        'safeHavenCFMM2025Test',
+        'safeHavenHodl2025Test',
+      ] as Pool[])
         .catch(console.error)
         .finally(() => setLoading(false));
     }
   }, [loading]);
+
+  const handleNavigation = (route: string | undefined) => {
+    if (route) {
+      navigate(route);
+    }
+  };
 
   return (
     <Parallax
@@ -170,6 +180,7 @@ export function Banner() {
               {productData.map((tag, index) => (
                 <Tag
                   key={index}
+                  onClick={() => handleNavigation(tag.route)}
                   style={{
                     width: '100%',
                     margin: '5px',
@@ -177,6 +188,23 @@ export function Banner() {
                     border: 'transparent',
                     backgroundColor: 'transparent',
                     opacity: tag.opacity,
+                    cursor: tag.route ? 'pointer' : 'default',
+                    transition: 'box-shadow 0.3s ease-in-out',
+                    boxShadow: tag.route
+                      ? '0 0 0px rgba(255, 255, 255, 0)'
+                      : 'none',
+                  }}
+                  onMouseEnter={(e) => {
+                    if (tag.route) {
+                      (e.currentTarget as HTMLElement).style.boxShadow =
+                        '0 0 10px rgba(255, 255, 255, 0.8)';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (tag.route) {
+                      (e.currentTarget as HTMLElement).style.boxShadow =
+                        '0 0 0px rgba(255, 255, 255, 0)';
+                    }
                   }}
                 >
                   <Row style={{ margin: 0, padding: 0 }}>
@@ -304,7 +332,7 @@ export function Banner() {
                 'HODL': '#52ad80',
               }}
               overrideSeriesName={{
-                "Power Channel": 'QuantAMM',
+                "Power Channel": 'SAFE HAVEN BTF',
                 'Balancer Weighted' : 'Traditional DEX'
               }}
             />

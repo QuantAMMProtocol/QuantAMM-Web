@@ -106,6 +106,7 @@ export function SimulationRunMvSummaryBreakdown(props: BreakdownProps) {
 
     return original;
   };
+  
   const getResultSummary = (): FlatResultSummaryBreakdown[] => {
     const results: FlatResultSummaryBreakdown[] = [];
 

@@ -7,9 +7,11 @@ import {
 import { ProductExplorer } from '../../models/productModels';
 
 export const productExplorerInitialState: ProductExplorer = {
+  acceptedTermsAndConditions:false,
   loadingProducts: true,
   loadingFilters: true,
   loadingError: false,
+  loadingJsonProductSimulations: false,
   loadingSimulationRunBreakdown: {},
   asOfUnixTime: 0,
   blockIndex: 0,
@@ -26,4 +28,8 @@ export const productExplorerInitialState: ProductExplorer = {
   benchmarkMetricThresholds,
   pageSize: INITIAL_LOAD_POOLS_COUNT,
   page: INITIAL_PAGE,
+  quantammSetPools: {
+    '0x6b61d8680c4f9e560c8306807908553f95c749c5': 'safeHavenBTFAugTest',
+    '0xb4161AeA25BD6C5c8590aD50deB4Ca752532F05D': 'baseMacroBTFAugTest',
+  }
 };

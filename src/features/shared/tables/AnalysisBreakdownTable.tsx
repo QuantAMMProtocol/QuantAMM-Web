@@ -1,23 +1,30 @@
 import { FC, useMemo, useRef, useState } from 'react';
 import { ColDef, GridOptions, SideBarDef } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
-import { Button } from 'antd';
+import { Button, Col, Row, Typography } from 'antd';
 import { useAppSelector } from '../../../app/hooks';
 import { selectAgGridTheme } from '../../themes/themeSlice';
 import { SimulationRunBreakdown } from '../../simulationResults/simulationResultSummaryModels';
 import { getAnalysisSummary } from './AnalysisBreakdownTableHelpers';
+import { selectQuantammSetPools } from '../../productExplorer/productExplorerSlice';
+
+const { Title } = Typography;
 
 interface AnalysisBreakdownTableProps {
   simulationRunBreakdowns: SimulationRunBreakdown[];
   height?: number;
+  productId?: string;
 }
 
 export const AnalysisBreakdownTable: FC<AnalysisBreakdownTableProps> = ({
   simulationRunBreakdowns,
   height = 700,
+  productId,
 }) => {
   const darkThemeAg = useAppSelector(selectAgGridTheme);
   const gridRef = useRef<AgGridReact>(null);
+
+  const quantAMMSetPools = useAppSelector(selectQuantammSetPools);
 
   const [finAnalysisColDefs] = useState<ColDef[]>([
     { colId: 'updateRule', field: 'updateRule', headerName: 'Update Rule' },
@@ -119,13 +126,48 @@ export const AnalysisBreakdownTable: FC<AnalysisBreakdownTableProps> = ({
 
   return (
     <div style={{ width: '100%' }}>
-      <div style={{ display: 'flex', justifyContent: 'end', padding: 10 }}>
-        <Button onClick={handleDownloadCSV}>Download CSV</Button>
-      </div>
+      <Row>
+        <Col
+          span={24}
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'start',
+            paddingLeft: 8,
+            borderBottom: '1px solid var(--primary-lighter)',
+          }}
+        >
+          <Title
+            level={4}
+            style={{
+              width: '100%',
+              marginBottom: 0,
+              paddingLeft: 8,
+              paddingTop: 8,
+            }}
+          >
+            <Row>
+              <Col span={20}>
+                <h4>{quantAMMSetPools[productId ?? ''] ? 'Simulated Backtest Metric Values' : 'Metric Raw Values'}</h4>
+              </Col>
+              <Col span={4} style={{ textAlign: 'right' }}>
+                <Button
+                  type="primary"
+                  size="small"
+                  onClick={handleDownloadCSV}
+                  style={{ marginTop: 20 }}
+                >
+                  Download CSV
+                </Button>
+              </Col>
+            </Row>
+          </Title>
+        </Col>
+      </Row>
       <div
         id="details"
         className={darkThemeAg}
-        style={{ height, width: '100%' }}
+        style={{ height, width: '100%', marginTop: 10 }}
       >
         <AgGridReact
           ref={gridRef}

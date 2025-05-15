@@ -9,7 +9,8 @@ import { ProductDetailContent } from './productDetailContent';
 import { ProductDetailSidebar } from './productDetailSidebar';
 import { Benchmark } from '../../models';
 import { selectTheme } from '../themes/themeSlice';
-import { loadProducts } from '../productExplorer/productExplorerSlice';
+import { loadProducts, setAcceptedTermsAndConditions } from '../productExplorer/productExplorerSlice';
+import TermsOfServiceGateModal from '../documentation/landing/termsOfServiceModal';
 
 export const ProductDetail = () => {
   const { chain, id } = useParams();
@@ -17,8 +18,10 @@ export const ProductDetail = () => {
   const dispatch = useAppDispatch();
   const isDark = useAppSelector(selectTheme);
 
+  const handleGateClose = () => dispatch(setAcceptedTermsAndConditions(true));
+  
   const { product, productLoading, productError } = useFetchProductData(
-    id!,
+    id!.toLowerCase(),
     chain as GqlChain
   );
 
@@ -38,14 +41,21 @@ export const ProductDetail = () => {
   }, [product, productLoading, dispatch]);
 
   return (
+    <>
+      <TermsOfServiceGateModal
+        tosUrl="https://quantamm.fi/tos"
+        onClose={handleGateClose}
+      />
     <Layout style={{ minHeight: '100vh', padding: 20 }}>
       {productLoading && <Spin />}
       {!productLoading && !productError && !!id && (
         <Layout>
-          <ProductDetailSidebar id={id} isDark={isDark} />
-          <ProductDetailContent id={id} />
+          <ProductDetailSidebar id={id.toLowerCase()} isDark={isDark} />
+          <ProductDetailContent id={id.toLowerCase()} />
         </Layout>
       )}
     </Layout>
+    </>
+    
   );
 };

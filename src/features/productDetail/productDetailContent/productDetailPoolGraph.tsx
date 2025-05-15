@@ -5,6 +5,7 @@ import {
   AgNumberAxisOptions,
   AgTimeAxisOptions,
   AgTooltipRendererResult,
+  time
 } from 'ag-charts-community';
 import { Col, Row, Typography } from 'antd';
 import { getTime } from 'date-fns';
@@ -25,7 +26,6 @@ import {
 import { ProductDetailGraphTimeRangeSelector } from './components/productDetailGraphTimeRangeSelector';
 
 import styles from './productDetailPoolGraph.module.scss';
-
 const { Title } = Typography;
 
 export interface Marker {
@@ -223,6 +223,52 @@ export const ProductDetailPoolGraph: FC<ProductDetailPoolGraphProps> = ({
     return [...getFirstAxisSeries(), ...getSecondarySeries()];
   }, [getFirstAxisSeries, getSecondarySeries]);
 
+  const getAxesFormat = useMemo(() => {
+    const timeSeriesData = product.timeSeries ?? [];
+    const filteredData = timeSeriesData.filter((dataPoint) =>
+      filterByTimeRange(dataPoint.timestamp, selectedTimeRange)
+    );
+
+    const totalDuration =
+      filteredData.length > 0
+        ? getTime(filteredData[filteredData.length - 1].timestamp) -
+          getTime(filteredData[0].timestamp)
+        : 0;
+
+    const oneDay = 24 * 60 * 60 * 1000;
+    const oneMonth = 30 * oneDay;
+
+    if (totalDuration <= oneMonth) {
+      return '%d %b %Y'; // Format for shorter timeframes (e.g., days)
+    } else {
+      return '%b %Y'; // Format for longer timeframes (e.g., months and years)
+    }
+  }, [product.timeSeries, selectedTimeRange]);
+  const getIntervalStep = useMemo(() => {
+    const timeSeriesData = product.timeSeries ?? [];
+    const filteredData = timeSeriesData.filter((dataPoint) =>
+      filterByTimeRange(dataPoint.timestamp, selectedTimeRange)
+    );
+
+    const totalDuration =
+      filteredData.length > 0
+        ? (getTime(filteredData[filteredData.length - 1].timestamp) -
+          getTime(filteredData[0].timestamp)) * 1000
+        : 0;
+
+    const maxDataPoints = 30;
+    const oneDay = 24 * 60 * 60 * 1000;
+
+    if (totalDuration <= maxDataPoints * oneDay) {
+      console.log('Daily steps');
+      return time.day.every(1); // Daily steps
+    } else {
+      console.log('Monthly steps');
+      const interval = Math.ceil(totalDuration / (maxDataPoints * oneDay));
+      return time.day.every(interval); // Adjusted interval to fit max data points
+    }
+  }, [product.timeSeries, selectedTimeRange]);
+
   const getAxes = useCallback((): (
     | AgNumberAxisOptions
     | AgTimeAxisOptions
@@ -231,7 +277,15 @@ export const ProductDetailPoolGraph: FC<ProductDetailPoolGraphProps> = ({
       {
         type: 'time',
         position: 'bottom',
-        nice: false,
+        nice: true,
+        label: {
+          format: getAxesFormat,
+        },  
+        interval: {
+          step: getIntervalStep,
+        },
+        max: getTime(product.timeSeries?.[product.timeSeries.length - 2]?.timestamp ?? 0) * 1000,
+        min: getTime(product.timeSeries?.[0]?.timestamp ?? 0) * 1000,
       },
       {
         type: 'number',
@@ -267,7 +321,7 @@ export const ProductDetailPoolGraph: FC<ProductDetailPoolGraphProps> = ({
     }
 
     return result;
-  }, [getSecondarySeries, selectedSecondAxis, product, selectedTimeRange]);
+  }, [getAxesFormat, getIntervalStep, product.timeSeries, getSecondarySeries, selectedTimeRange, selectedSecondAxis]);
 
   return (
     <Row id="graph">
@@ -302,6 +356,9 @@ export const ProductDetailPoolGraph: FC<ProductDetailPoolGraphProps> = ({
                 axes: getAxes(),
                 data: getData(timeseriesAnalysis ?? []),
                 series: getSeries(),
+                padding:{
+                  right: 50,
+                },
                 legend: {
                   enabled: true,
                   position: 'top',

@@ -21,7 +21,7 @@ export function ContactCompany(){
       style={{ width: '100px', height: 'auto' }}
     />
     <Title level={3}>Contact Us</Title>
-    <p>Email: info@quantamm.fi</p>
-    <p>Twitter: @QuantAMMDefi</p>
+    <p>Email: <a href="mailto:info@quantamm.fi">info@quantamm.fi</a></p>
+    <p>Twitter: <a href="https://x.com/QuantAMMDeFi">@QuantAMMDefi</a></p>
   </div>
 }
