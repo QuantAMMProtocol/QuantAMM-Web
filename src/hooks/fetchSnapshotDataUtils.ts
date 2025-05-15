@@ -144,10 +144,14 @@ export const getTimeSeriesDataForProductList = (
   tokenPricesMap: Record<
     string,
     Record<string, Pick<GqlHistoricalTokenPriceEntry, 'timestamp' | 'price'>[]>
-  >
+  >,
+  isQuantAMMSetPool: boolean
 ): ProductTimeSeriesData[] => {
   return Object.values(productMap).map((product) => {
-    const snapshots = poolSnapshotsMap[`poolSnapshot_${product.id}`] || [];
+    let snapshots = poolSnapshotsMap[`poolSnapshot_${product.address}`];
+    if (isQuantAMMSetPool) {
+      snapshots = snapshots.filter((x) => x.timestamp >= 1747180800);
+    }
     const hodlAmounts = snapshots[0]?.amounts;
     const initialTotalShares =
       snapshots[0]?.totalShares > 0
@@ -211,9 +215,14 @@ export const getTimeSeriesDataForProduct = (
   tokenPricesMap: Record<
     string,
     Record<string, Pick<GqlHistoricalTokenPriceEntry, 'timestamp' | 'price'>[]>
-  >
+  >,
+  isQuantAMMSetPool: boolean
 ): ProductTimeSeriesData => {
-  const snapshots = poolSnapshotsMap[`poolSnapshot_${pool.poolGetPool?.id}`];
+  let snapshots = poolSnapshotsMap[`poolSnapshot_${pool.poolGetPool?.id}`];
+  if (isQuantAMMSetPool) {
+    //TODO launch date should really be per pool
+    snapshots = snapshots.filter((x) => x.timestamp >= 1747180800);
+  }
   let hodlAmounts: number[] | undefined;
 
   const initialTotalShares =
