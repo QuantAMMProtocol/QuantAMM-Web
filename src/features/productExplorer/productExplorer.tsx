@@ -48,7 +48,6 @@ export const ProductExplorer = () => {
       dispatch(setLoadingProducts());
     }
     if (!productMapLoading && productMap && !productMapError) {
-      console.log('Product Map:', productMap);
       dispatch(loadProducts(productMap));
     }
   }, [productMap, productMapLoading, productMapError, dispatch]);

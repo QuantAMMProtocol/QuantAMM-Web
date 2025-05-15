@@ -12,7 +12,6 @@ interface ProductDetailSidebarStrategySummaryProps {
 export const ProductDetailSidebarStrategySummary: FC<
   ProductDetailSidebarStrategySummaryProps
 > = ({ product }) => {
-  console.log("product strategy", product.strategy);
   return (
     <>
       <ProductDetailSidebarElement

@@ -553,7 +553,6 @@ export function BaseMacroFactSheetDesktop() {
         .catch(console.error)
         .finally(() => {
           setLoading(false);
-          console.log('Breakdowns loaded:', breakdowns);
         });
     }
   }, [loading, breakdowns]);
@@ -753,7 +752,7 @@ export function BaseMacroFactSheetDesktop() {
                   alignItems: 'center',
                 }}
               >
-                <span>SIMULATED COMPOSITION OVER TIME</span>
+                <span>BACKTEST COMPOSITION</span>
                 <Radio.Group
                   onChange={(e) => setPeriod(e.target.value)}
                   value={period}
@@ -1402,11 +1401,6 @@ export function BaseMacroFactSheetDesktop() {
                 >
                   <Row>
                     <Col span={24}>
-                      <p>
-                        How strongly does the strategy react to price changes? This is the strategy aggressiveness.
-                      </p>
-                    </Col>
-                    <Col span={24}>
                       <Tooltip title="Otherwise known as k_per_day. This is the multiplier applied to the strategy signal to get the weight change per day">
                         <p>
                           Aggressiveness: {'  '} <InfoCircleOutlined />
@@ -1445,12 +1439,6 @@ export function BaseMacroFactSheetDesktop() {
                   style={{ margin: '5px', height: '57vh' }}
                 >
                   <Row>
-                    <Col span={24}>
-                      <p>
-                        The following represent different forms of the lambda
-                        setting used for different tooling
-                      </p>
-                    </Col>
                     <Col span={24}>
                       <Tooltip title="The exponent is a variable used in the power channel strategy that dictate how big a price change has to be before the strategy starts to notice it. It is the primary difference between other strategies like momentum.">
                         <p>

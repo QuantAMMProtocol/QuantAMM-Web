@@ -553,7 +553,6 @@ export function BaseMacroFactSheetMobile() {
         .catch(console.error)
         .finally(() => {
           setLoading(false);
-          console.log('Breakdowns loaded:', breakdowns);
         });
     }
   }, [loading, breakdowns]);
@@ -579,7 +578,8 @@ export function BaseMacroFactSheetMobile() {
   return (
     <div>
       <Row>
-        <Col span={24}>
+        <Col span={1}></Col>
+        <Col span={22}>
           <div
             style={{
               display: 'flex',
@@ -608,7 +608,9 @@ export function BaseMacroFactSheetMobile() {
             </p>
           </div>
         </Col>
-        <Col span={24}>
+        <Col span={1}></Col>
+        <Col span={1}></Col>
+        <Col span={22}>
           <h4>BTF Objective</h4>
           <p>
             The BASE Macro BTF provides exposure to some of the megal cap tokens
@@ -632,6 +634,7 @@ export function BaseMacroFactSheetMobile() {
             can be affected by macro economic factors and global events.
           </p>
         </Col>
+        <Col span={1}></Col>
       </Row>
       <Row>
         <Col span={1}></Col>
@@ -640,7 +643,7 @@ export function BaseMacroFactSheetMobile() {
         </Col>
         <Col span={1}></Col>
       </Row>
-      <Row style={{ height: '45vh' }}>
+      <Row style={{ height: '140vh' }}>
         <Col span={1}></Col>
         <Col span={22}>
           <Row style={{ height: '100%' }}>
@@ -742,7 +745,8 @@ export function BaseMacroFactSheetMobile() {
           </Row>
         </Col>
         <Col span={1}></Col>
-        <Col span={22}>
+        <Col span={1}></Col>
+        <Col span={22} style={{ marginTop: '20px' }}>
           <Card
             title={
               <div
@@ -750,28 +754,29 @@ export function BaseMacroFactSheetMobile() {
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'center',
+                  marginTop: '10px',
                 }}
               >
-                <span>SIMULATED COMPOSITION OVER TIME</span>
-                <Radio.Group
-                  onChange={(e) => setPeriod(e.target.value)}
-                  value={period}
-                  buttonStyle="solid"
-                  size="small"
-                >
-                  <Radio.Button value="AugTest">
-                    Test Period: Aug24-Apr25
-                  </Radio.Button>
-                  <Radio.Button value="2025Test">
-                    Test Period: Jan-Apr25
-                  </Radio.Button>
-                </Radio.Group>
+                <span>BACKTEST COMPOSITION</span>
               </div>
             }
             style={{ height: '100%' }}
           >
+          <Radio.Group
+            onChange={(e) => setPeriod(e.target.value)}
+            value={period}
+            buttonStyle="solid"
+            size="small"
+          >
+            <Radio.Button value="AugTest">
+              Test Period: Aug24-Apr25
+            </Radio.Button>
+            <Radio.Button value="2025Test">
+              Test Period: Jan-Apr25
+            </Radio.Button>
+          </Radio.Group>
             <Row>
-              <Col span={24} style={{ paddingTop: '30px' }}>
+              <Col span={24} style={{ marginTop: '30px' }}>
                 <WeightChangeOverTimeGraph
                   simulationRunBreakdown={breakdowns[baseMacroBTF]}
                   overrideChartTheme="ag-default-dark"
@@ -806,23 +811,23 @@ export function BaseMacroFactSheetMobile() {
                 }}
               >
                 <span>SIMULATED BTF TOTAL $ VALUE OVER TIME</span>
-                <Radio.Group
-                  onChange={(e) => setPeriod(e.target.value)}
-                  value={period}
-                  buttonStyle="solid"
-                  size="small"
-                >
-                  <Radio.Button value="AugTest">
-                    Test Period: Aug24-Apr25
-                  </Radio.Button>
-                  <Radio.Button value="2025Test">
-                    Test Period: Jan-Apr25
-                  </Radio.Button>
-                </Radio.Group>
               </div>
             }
             style={{ margin: '5px' }}
           >
+          <Radio.Group
+            onChange={(e) => setPeriod(e.target.value)}
+            value={period}
+            buttonStyle="solid"
+            size="small"
+          >
+            <Radio.Button value="AugTest">
+              Test Period: Aug24-Apr25
+            </Radio.Button>
+            <Radio.Button value="2025Test">
+              Test Period: Jan-Apr25
+            </Radio.Button>
+          </Radio.Group>
             <div hidden={loading}>
               <SimulationResultMarketValueChart
                 hideTitle={true}
@@ -860,7 +865,7 @@ export function BaseMacroFactSheetMobile() {
         </Col>
         <Col span={1}></Col>
       </Row>
-      <Row style={{ height: '80vh' }}>
+      <Row style={{ height: '170vh' }}>
         <Col span={1}></Col>
         <Col span={22}>
           <Row>
@@ -945,23 +950,24 @@ export function BaseMacroFactSheetMobile() {
                     }}
                   >
                     <span>SIMULATED FINANCIAL METRICS</span>
-                    <Radio.Group
-                      onChange={(e) => setPeriod(e.target.value)}
-                      value={period}
-                      buttonStyle="solid"
-                      size="small"
-                    >
-                      <Radio.Button value="AugTest">
-                        Test Period: Aug24-Apr25
-                      </Radio.Button>
-                      <Radio.Button value="2025Test">
-                        Test Period: Jan-Apr25
-                      </Radio.Button>
-                    </Radio.Group>
                   </div>
                 }
                 style={{ margin: '5px' }}
               >
+              <Radio.Group
+                onChange={(e) => setPeriod(e.target.value)}
+                value={period}
+                buttonStyle="solid"
+                size="small"
+                style={{ marginBottom: '10px' }}
+              >
+                <Radio.Button value="AugTest">
+                  Test Period: Aug24-Apr25
+                </Radio.Button>
+                <Radio.Button value="2025Test">
+                  Test Period: Jan-Apr25
+                </Radio.Button>
+              </Radio.Group>
                 <AnalysisSimplifiedBreakdownTable
                   simulationRunBreakdowns={
                     loading
@@ -1014,7 +1020,7 @@ export function BaseMacroFactSheetMobile() {
         </Col>
         <Col span={1}></Col>
       </Row>
-      <Row style={{ height: '130vh' }}>
+      <Row style={{ height: '260vh' }}>
         <Col span={1}></Col>
         <Col span={22}>
           <Row style={{ height: '130vh' }}>
@@ -1135,7 +1141,7 @@ export function BaseMacroFactSheetMobile() {
         </Col>
         <Col span={1}></Col>
         <Col span={1}></Col>
-        <Col span={22}>
+        <Col span={22} style={{ marginTop: '20px' }}>
           <Card style={{ height: '130vh', overflowY: 'auto' }} title={'Risks'}>
             <Row>
               <Col span={12}>
@@ -1155,7 +1161,7 @@ export function BaseMacroFactSheetMobile() {
                         strategy.
                       </p>
                       <p>
-                        Given BASE's age and the age of certain tokens within
+                        Given BASE&apos;s age and the age of certain tokens within
                         the BTF. Training and test periods are liminted.
                       </p>
                     </Col>
@@ -1289,7 +1295,7 @@ export function BaseMacroFactSheetMobile() {
                     <WeightChangeOverTimeGraph
                       simulationRunBreakdown={breakdowns.baseMacroBTFAugTrain}
                       overrideChartTheme="ag-default-dark"
-                      overrideXAxisInterval={22}
+                      overrideXAxisInterval={1}
                     />
                     <h5>Cumulative performance over time</h5>
                     <SimulationResultMarketValueChart
@@ -1313,7 +1319,7 @@ export function BaseMacroFactSheetMobile() {
                         'Balancer Weighted': 'Traditional DEX',
                       }}
                       overrideNagivagtion={false}
-                      overrideXAxisInterval={22}
+                      overrideXAxisInterval={1}
                       forceViewResults={true}
                     />
                   </div>
@@ -1325,7 +1331,7 @@ export function BaseMacroFactSheetMobile() {
         <Col span={1}></Col>
         <Col span={1}></Col>
         <Col span={22}>
-          <Card title={'Parameters Selected'} style={{ height: '130vh' }}>
+          <Card title={'Parameters Selected'} style={{ height: '130vh', marginTop: '20px' }}>
             <Row>
               <Col span={12}>
                 <Card
@@ -1404,11 +1410,6 @@ export function BaseMacroFactSheetMobile() {
                 >
                   <Row>
                     <Col span={24}>
-                      <p>
-                        How strongly does the strategy react to price changes? This is the strategy aggressiveness.
-                      </p>
-                    </Col>
-                    <Col span={24}>
                       <Tooltip title="Otherwise known as k_per_day. This is the multiplier applied to the strategy signal to get the weight change per day">
                         <p>
                           Aggressiveness: {'  '} <InfoCircleOutlined />
@@ -1447,12 +1448,6 @@ export function BaseMacroFactSheetMobile() {
                   style={{ margin: '5px', height: '57vh' }}
                 >
                   <Row>
-                    <Col span={24}>
-                      <p>
-                        The following represent different forms of the lambda
-                        setting used for different tooling
-                      </p>
-                    </Col>
                     <Col span={24}>
                       <Tooltip title="The exponent is a variable used in the power channel strategy that dictate how big a price change has to be before the strategy starts to notice it. It is the primary difference between other strategies like momentum.">
                         <p>

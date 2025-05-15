@@ -36,12 +36,10 @@ export const ProductDetail = () => {
 
   useEffect(() => {
     if (product && !productLoading) {
-      console.log('Product:', product);
       dispatch(loadProducts({ [product.id]: product }));
     }
   }, [product, productLoading, dispatch]);
 
-  console.log('Product:', product);
   return (
     <>
       <TermsOfServiceGateModal

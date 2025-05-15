@@ -553,7 +553,6 @@ export function SafeHavenFactSheetDesktop() {
         .catch(console.error)
         .finally(() => {
           setLoading(false);
-          console.log('Breakdowns loaded:', breakdowns);
         });
     }
   }, [loading, breakdowns]);
@@ -651,7 +650,24 @@ export function SafeHavenFactSheetDesktop() {
         <Col span={10}>
           <Row style={{ height: '100%' }}>
             <Col span={24}>
-              <Card title="GENERAL DETAILS" style={{ height: '100%' }}>
+              <Card
+                title=<div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}
+                >
+                  <span>GENERAL DETAILS</span>
+                  <Button 
+                  size='small'
+                  type="primary"
+                  href="https://quantamm.fi/product-explorer/MAINNET/0x6b61d8680c4f9e560c8306807908553f95c749c5">
+                    View Live Pool Details
+                  </Button>
+                </div>
+                style={{ height: '100%' }}
+              >
                 <Row>
                   <Col span={2}></Col>
                   <Col span={10}>
@@ -1396,11 +1412,6 @@ export function SafeHavenFactSheetDesktop() {
                 >
                   <Row>
                     <Col span={24}>
-                      <p>
-                        How strongly does the strategy react to price changes? This is the strategy aggressiveness.
-                      </p>
-                    </Col>
-                    <Col span={24}>
                       <Tooltip title="Otherwise known as k_per_day. This is the multiplier applied to the strategy signal to get the weight change per day">
                         <p>
                           Aggressiveness: {'  '} <InfoCircleOutlined />
@@ -1435,12 +1446,6 @@ export function SafeHavenFactSheetDesktop() {
                   style={{ margin: '5px', height: '57vh' }}
                 >
                   <Row>
-                    <Col span={24}>
-                      <p>
-                        The following represent different forms of the lambda
-                        setting used for different tooling
-                      </p>
-                    </Col>
                     <Col span={24}>
                       <Tooltip title="The exponent is a variable used in the power channel strategy that dictate how big a price change has to be before the strategy starts to notice it. It is the primary difference between other strategies like momentum.">
                         <p>

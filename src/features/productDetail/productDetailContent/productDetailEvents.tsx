@@ -72,12 +72,9 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = ({
         width: 180,
 
         valueFormatter: (params: ValueFormatterParams) => {
-          console.log('params', params);
           const { value, node } = params;
           // if it's a group row, or no valid numeric timestamp, just render blank (or return the group key)
           if (node?.group ?? typeof value !== 'number') {
-            console.log('value', value);
-            console.log('node', node);
             return '';
           }
           // otherwise it's a real timestamp
