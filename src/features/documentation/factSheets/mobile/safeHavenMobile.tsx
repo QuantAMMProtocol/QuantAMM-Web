@@ -1,4 +1,4 @@
-import { Button, Card, Col, Collapse, Row, Tag, Tooltip } from 'antd';
+import { Button, Card, Col, Collapse, Row, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
 import { useMemo } from 'react';
 import { Radio } from 'antd';
@@ -10,6 +10,8 @@ import { SimulationResultMarketValueChart } from '../../../simulationResults/vis
 import { AnalysisSimplifiedBreakdownTable } from '../../../simulationResults/breakdowns/simulationRunPerformanceSimpleTable';
 import { MathJax, MathJaxContext } from 'better-react-mathjax';
 import { InfoCircleOutlined } from '@ant-design/icons';
+import { useAppSelector } from '../../../../app/hooks';
+import { selectTheme } from '../../../themes/themeSlice';
 
 export function SafeHavenFactSheetMobile() {
   const [breakdowns, setBreakdowns] = useState<
@@ -17,6 +19,8 @@ export function SafeHavenFactSheetMobile() {
   >({});
   const [loading, setLoading] = useState<boolean>(true);
   const [faqEli5, setFAQEli5] = useState('ELI5');
+
+  const isDarkTheme = useAppSelector(selectTheme);
 
   const items = [
     {
@@ -38,14 +42,14 @@ export function SafeHavenFactSheetMobile() {
               someone to buy the BTC off you.
             </p>
             <p>
-              If done right offering a price is more efficient as you don&apos;t pay fees
-              fees or slippage to an exchange
+              If done right offering a price is more efficient as you don&apos;t
+              pay fees fees or slippage to an exchange
             </p>
             <p>
-              It also removes considerable protocol complexity as you don&apos;t need
-              a complex trade execution layer so the BTF can run fully on-chain.
-              This means you don&apos;t have to trust an unknown manager to
-              trade
+              It also removes considerable protocol complexity as you don&apos;t
+              need a complex trade execution layer so the BTF can run fully
+              on-chain. This means you don&apos;t have to trust an unknown
+              manager to trade
             </p>
           </div>
           <div hidden={faqEli5 != 'Crypto Native'}>
@@ -126,8 +130,8 @@ export function SafeHavenFactSheetMobile() {
             </p>
             <p>No Custodian. No Fuss.</p>
             <p>
-              QuantAMM is built using Balancer V3. Your deposits have the safety of
-              Balancer V3&apos;s state of the art vault.
+              QuantAMM is built using Balancer V3. Your deposits have the safety
+              of Balancer V3&apos;s state of the art vault.
             </p>
           </div>
           <div hidden={faqEli5 != 'Crypto Native'}>
@@ -145,8 +149,8 @@ export function SafeHavenFactSheetMobile() {
               be transferred to you.
             </p>
             <p>
-              Balancer V3 is a non custodial AMM with a vault that
-              is heavily audited.
+              Balancer V3 is a non custodial AMM with a vault that is heavily
+              audited.
             </p>
           </div>
           <div hidden={faqEli5 != 'Quant'}>
@@ -656,82 +660,173 @@ export function SafeHavenFactSheetMobile() {
                   <Col span={2}></Col>
                   <Col span={10}>
                     <Col span={24}>
-                      <Tag
-                        style={{ margin: 10, color: '#c7b283', width: '80%' }}
+                      <Button
+                        size="small"
+                        style={{ margin: 10, width: '80%' }}
                         color="primary"
+                        disabled={true}
                       >
                         Deployment Links
-                      </Tag>
+                      </Button>
                     </Col>
                     <Col span={24}>
-                      <Tag style={{ margin: 10, width: '80%' }} color="primary">
-                        Pool Factory Contract
-                      </Tag>
+                      <Button
+                        size="small"
+                        style={{ margin: 10, width: '80%' }}
+                        color="primary"
+                      >
+                        <a href="https://etherscan.io/address/0xD5c43063563f9448cE822789651662cA7DcD5773">
+                          Pool Factory Contract
+                        </a>
+                      </Button>
                     </Col>
                     <Col span={24}>
-                      <Tag style={{ margin: 10, width: '80%' }} color="primary">
-                        Strategy Runner Contract
-                      </Tag>
+                      <Button
+                        size="small"
+                        style={{ margin: 10, width: '80%' }}
+                        color="primary"
+                      >
+                        <a href="https://etherscan.io/address/0x8Ca4e2a74B84c1feb9ADe19A0Ce0bFcd57e3f6F7">
+                          Strategy Runner Contract
+                        </a>
+                      </Button>
                     </Col>
                     <Col span={24}>
-                      <Tag style={{ margin: 10, width: '80%' }} color="primary">
-                        Chainlink BTC Oracle
-                      </Tag>
+                      <Button
+                        size="small"
+                        style={{ margin: 10, width: '80%' }}
+                        color="primary"
+                      >
+                        <a href="https://etherscan.io/address/0x62B9eC6A5BBEBe4F5C5f46C8A8880df857004295">
+                          Strategy Contract
+                        </a>
+                      </Button>
                     </Col>
                     <Col span={24}>
-                      <Tag style={{ margin: 10, width: '80%' }} color="primary">
-                        Chainlink PAXG Oracle
-                      </Tag>
+                      <Button
+                        size="small"
+                        style={{ margin: 10, width: '80%' }}
+                        color="primary"
+                      >
+                        <a href="https://etherscan.io/address/0xF4030086522a5bEEa4988F8cA5B36dbC97BeE88c">
+                          Chainlink BTC Oracle
+                        </a>
+                      </Button>
                     </Col>
                     <Col span={24}>
-                      <Tag style={{ margin: 10, width: '80%' }} color="primary">
-                        Chainlink USDC Oracle
-                      </Tag>
+                      <Button
+                        size="small"
+                        style={{ margin: 10, width: '80%' }}
+                        color="primary"
+                      >
+                        <a href="https://etherscan.io/address/0x9944D86CEB9160aF5C5feB251FD671923323f8C3">
+                          Chainlink PAXG Oracle
+                        </a>
+                      </Button>
                     </Col>
                     <Col span={24}>
-                      <Tag style={{ margin: 10, width: '80%' }} color="primary">
-                        Chainlink Automation Task
-                      </Tag>
+                      <Button
+                        size="small"
+                        style={{ margin: 10, width: '80%' }}
+                        color="primary"
+                      >
+                        <a href="https://etherscan.io/address/0x8fFfFfd4AfB6115b954Bd326cbe7B4BA576818f6">
+                          Chainlink USDC Oracle
+                        </a>
+                      </Button>
                     </Col>
                   </Col>
                   <Col span={10}>
                     <Col span={24}>
-                      <Tag
-                        style={{ margin: 10, width: '80%', color: '#c7b283' }}
-                        color="primary"
+                      <h5
+                        style={{
+                          margin: 10,
+                          width: '80%',
+                          textAlign: 'center',
+                        }}
                       >
                         Fixed Settings
-                      </Tag>
+                      </h5>
                     </Col>
                     <Col span={24}>
-                      <Tag style={{ margin: 10, width: '80%' }} color="primary">
+                      <Button
+                        size="small"
+                        style={{ margin: 10, width: '80%' }}
+                        color="primary"
+                        disabled={true}
+                      >
                         Strategy Interval: 24H
-                      </Tag>
+                      </Button>
                     </Col>
                     <Col span={24}>
-                      <Tag style={{ margin: 10, width: '80%' }} color="primary">
+                      <Button
+                        size="small"
+                        style={{
+                          margin: 10,
+                          width: '80%',
+                          backgroundColor: 'transparent',
+                          color: 'var(--tooltip-text-color)',
+                        }}
+                        disabled={true}
+                      >
                         Strategy: Power Channel
-                      </Tag>
+                      </Button>
                     </Col>
                     <Col span={24}>
-                      <Tag style={{ margin: 10, width: '80%' }} color="primary">
+                      <Button
+                        size="small"
+                        style={{
+                          margin: 10,
+                          width: '80%',
+                          backgroundColor: 'transparent',
+                          color: 'var(--tooltip-text-color)',
+                        }}
+                        disabled={true}
+                      >
                         Staleness Limit: 24H
-                      </Tag>
+                      </Button>
                     </Col>
                     <Col span={24}>
-                      <Tag style={{ margin: 10, width: '80%' }} color="primary">
+                      <Button
+                        size="small"
+                        style={{
+                          margin: 10,
+                          width: '80%',
+                          backgroundColor: 'transparent',
+                          color: 'var(--tooltip-text-color)',
+                        }}
+                        disabled={true}
+                      >
                         Swap Fee: 2%
-                      </Tag>
+                      </Button>
                     </Col>
                     <Col span={24}>
-                      <Tag style={{ margin: 10, width: '80%' }} color="primary">
+                      <Button
+                        size="small"
+                        style={{
+                          margin: 10,
+                          width: '80%',
+                          backgroundColor: 'transparent',
+                          color: 'var(--tooltip-text-color)',
+                        }}
+                        disabled={true}
+                      >
                         Withdrawal Fee: 0%
-                      </Tag>
+                      </Button>
                     </Col>
                     <Col span={24}>
-                      <Tag style={{ margin: 10, width: '80%' }} color="primary">
+                      <Button
+                        size="small"
+                        style={{
+                          margin: 10,
+                          width: '80%',
+                          backgroundColor: 'transparent',
+                          color: 'var(--tooltip-text-color)',
+                        }}
+                        disabled={true}
+                      >
                         Streaming Fee: 0%
-                      </Tag>
+                      </Button>
                     </Col>
                   </Col>
                   <Col span={2}></Col>
@@ -774,7 +869,7 @@ export function SafeHavenFactSheetMobile() {
               <Col span={24} style={{ paddingTop: '30px' }}>
                 <WeightChangeOverTimeGraph
                   simulationRunBreakdown={breakdowns[safeHavenBTF]}
-                  overrideChartTheme="ag-default-dark"
+                  overrideChartTheme={isDarkTheme ? "ag-default-dark" : "ag-default"}
                   overrideXAxisInterval={xAxisMonthInterval}
                 />
               </Col>
@@ -894,7 +989,10 @@ export function SafeHavenFactSheetMobile() {
               >
                 <Collapse
                   defaultActiveKey={['1']}
-                  style={{ width: '100%', backgroundColor: '#162536' }}
+                  style={{
+                    width: '100%',
+                    backgroundColor: isDarkTheme ? '#162536' : '#fff',
+                  }}
                   accordion
                   items={items}
                   size="small"
@@ -1291,7 +1389,7 @@ export function SafeHavenFactSheetMobile() {
                     <h5>Constituent weights over time</h5>
                     <WeightChangeOverTimeGraph
                       simulationRunBreakdown={breakdowns.safeHavenBTFAugTrain}
-                      overrideChartTheme="ag-default-dark"
+                      overrideChartTheme={isDarkTheme ? "ag-default-dark" : "ag-default"}
                       overrideXAxisInterval={22}
                     />
                     <h5>Cumulative performance over time</h5>
@@ -1372,15 +1470,27 @@ export function SafeHavenFactSheetMobile() {
                         <p>
                           Lambda:{'  '} <InfoCircleOutlined />
                         </p>
-                        <Tag style={{ margin: '5px' }}>
+                        <Button
+                          size="small"
+                          disabled={true}
+                          style={{ margin: '5px' }}
+                        >
                           BTC - 0.811035769801363300
-                        </Tag>
-                        <Tag style={{ margin: '5px' }}>
+                        </Button>
+                        <Button
+                          size="small"
+                          disabled={true}
+                          style={{ margin: '5px' }}
+                        >
                           PAXG - 0.781490597023096500
-                        </Tag>
-                        <Tag style={{ margin: '5px' }}>
+                        </Button>
+                        <Button
+                          size="small"
+                          disabled={true}
+                          style={{ margin: '5px' }}
+                        >
                           USDC - 0.289524066401247700
-                        </Tag>
+                        </Button>
                       </Tooltip>
                     </Col>
                     <Col span={24}>
@@ -1388,9 +1498,27 @@ export function SafeHavenFactSheetMobile() {
                         <p>
                           Memory Days:{'  '} <InfoCircleOutlined />
                         </p>
-                        <Tag style={{ margin: '5px' }}>BTC - 17.93552717</Tag>
-                        <Tag style={{ margin: '5px' }}>PAXG - 15.31974493</Tag>
-                        <Tag style={{ margin: '5px' }}>USDC - 3.38396553</Tag>
+                        <Button
+                          size="small"
+                          disabled={true}
+                          style={{ margin: '5px' }}
+                        >
+                          BTC - 17.93552717
+                        </Button>
+                        <Button
+                          size="small"
+                          disabled={true}
+                          style={{ margin: '5px' }}
+                        >
+                          PAXG - 15.31974493
+                        </Button>
+                        <Button
+                          size="small"
+                          disabled={true}
+                          style={{ margin: '5px' }}
+                        >
+                          USDC - 3.38396553
+                        </Button>
                       </Tooltip>
                     </Col>
                   </Row>
@@ -1407,9 +1535,27 @@ export function SafeHavenFactSheetMobile() {
                         <p>
                           Aggressiveness: {'  '} <InfoCircleOutlined />
                         </p>
-                        <Tag style={{ margin: '5px' }}>BTC - 77.55380713</Tag>
-                        <Tag style={{ margin: '5px' }}>PAXG - 52.65723196</Tag>
-                        <Tag style={{ margin: '5px' }}>USDC - 75.62990544</Tag>
+                        <Button
+                          size="small"
+                          disabled={true}
+                          style={{ margin: '5px' }}
+                        >
+                          BTC - 77.55380713
+                        </Button>
+                        <Button
+                          size="small"
+                          disabled={true}
+                          style={{ margin: '5px' }}
+                        >
+                          PAXG - 52.65723196
+                        </Button>
+                        <Button
+                          size="small"
+                          disabled={true}
+                          style={{ margin: '5px' }}
+                        >
+                          USDC - 75.62990544
+                        </Button>
                       </Tooltip>
                     </Col>
                     <Col span={24}>
@@ -1417,15 +1563,27 @@ export function SafeHavenFactSheetMobile() {
                         <p>
                           k:{'  '} <InfoCircleOutlined />
                         </p>
-                        <Tag style={{ margin: '5px' }}>
+                        <Button
+                          size="small"
+                          disabled={true}
+                          style={{ margin: '5px' }}
+                        >
                           BTC - 1390.9684145267538
-                        </Tag>
-                        <Tag style={{ margin: '5px' }}>
+                        </Button>
+                        <Button
+                          size="small"
+                          disabled={true}
+                          style={{ margin: '5px' }}
+                        >
                           PAXG - 806.6953621597771
-                        </Tag>
-                        <Tag style={{ margin: '5px' }}>
+                        </Button>
+                        <Button
+                          size="small"
+                          disabled={true}
+                          style={{ margin: '5px' }}
+                        >
                           USDC - 255.92899333099183
-                        </Tag>
+                        </Button>
                       </Tooltip>
                     </Col>
                   </Row>
@@ -1442,11 +1600,27 @@ export function SafeHavenFactSheetMobile() {
                         <p>
                           Exponent:{'  '} <InfoCircleOutlined />
                         </p>
-                        <Tag style={{ margin: '5px' }}>
+                        <Button
+                          size="small"
+                          disabled={true}
+                          style={{ margin: '5px' }}
+                        >
                           BTC - 1.5312327931176639
-                        </Tag>
-                        <Tag style={{ margin: '5px' }}>PAXG - 1</Tag>
-                        <Tag style={{ margin: '5px' }}>USDC - 1</Tag>
+                        </Button>
+                        <Button
+                          size="small"
+                          disabled={true}
+                          style={{ margin: '5px' }}
+                        >
+                          PAXG - 1
+                        </Button>
+                        <Button
+                          size="small"
+                          disabled={true}
+                          style={{ margin: '5px' }}
+                        >
+                          USDC - 1
+                        </Button>
                       </Tooltip>
                     </Col>
                   </Row>

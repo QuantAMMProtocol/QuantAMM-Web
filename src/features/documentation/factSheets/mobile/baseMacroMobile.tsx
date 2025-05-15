@@ -1,4 +1,4 @@
-import { Button, Card, Col, Collapse, Row, Tag, Tooltip } from 'antd';
+import { Button, Card, Col, Collapse, Row, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
 import { useMemo } from 'react';
 import { Radio } from 'antd';
@@ -10,6 +10,8 @@ import { SimulationResultMarketValueChart } from '../../../simulationResults/vis
 import { AnalysisSimplifiedBreakdownTable } from '../../../simulationResults/breakdowns/simulationRunPerformanceSimpleTable';
 import { MathJax, MathJaxContext } from 'better-react-mathjax';
 import { InfoCircleOutlined } from '@ant-design/icons';
+import { useAppSelector } from '../../../../app/hooks';
+import { selectTheme } from '../../../themes/themeSlice';
 
 export function BaseMacroFactSheetMobile() {
   const [breakdowns, setBreakdowns] = useState<
@@ -18,6 +20,7 @@ export function BaseMacroFactSheetMobile() {
   const [loading, setLoading] = useState<boolean>(true);
   const [faqEli5, setFAQEli5] = useState('ELI5');
 
+  const isDarkTheme = useAppSelector(selectTheme);
   const items = [
     {
       key: '1',
@@ -38,14 +41,14 @@ export function BaseMacroFactSheetMobile() {
               someone to buy the BTC off you.
             </p>
             <p>
-              If done right offering a price is more efficient as you don&apos;t pay fees
-              fees or slippage to an exchange
+              If done right offering a price is more efficient as you don&apos;t
+              pay fees fees or slippage to an exchange
             </p>
             <p>
-              It also removes considerable protocol complexity as you don&apos;t need
-              a complex trade execution layer so the BTF can run fully on-chain.
-              This means you don&apos;t have to trust an unknown manager to
-              trade
+              It also removes considerable protocol complexity as you don&apos;t
+              need a complex trade execution layer so the BTF can run fully
+              on-chain. This means you don&apos;t have to trust an unknown
+              manager to trade
             </p>
           </div>
           <div hidden={faqEli5 != 'Crypto Native'}>
@@ -126,8 +129,8 @@ export function BaseMacroFactSheetMobile() {
             </p>
             <p>No Custodian. No Fuss.</p>
             <p>
-              QuantAMM is built using Balancer V3. Your deposits have the safety of
-              Balancer V3&apos;s state of the art vault.
+              QuantAMM is built using Balancer V3. Your deposits have the safety
+              of Balancer V3&apos;s state of the art vault.
             </p>
           </div>
           <div hidden={faqEli5 != 'Crypto Native'}>
@@ -145,8 +148,8 @@ export function BaseMacroFactSheetMobile() {
               be transferred to you.
             </p>
             <p>
-              Balancer V3 is a non custodial AMM with a vault that
-              is heavily audited.
+              Balancer V3 is a non custodial AMM with a vault that is heavily
+              audited.
             </p>
           </div>
           <div hidden={faqEli5 != 'Quant'}>
@@ -653,89 +656,191 @@ export function BaseMacroFactSheetMobile() {
                   <Col span={2}></Col>
                   <Col span={20}>
                     <Col span={24}>
-                      <Tag
-                        style={{ margin: 10, color: '#c7b283', width: '80%' }}
-                        color="primary"
+                      <h5
+                        style={{
+                          margin: 10,
+                          width: '80%',
+                          textAlign: 'center',
+                        }}
                       >
                         Deployment Links
-                      </Tag>
+                      </h5>
                     </Col>
                     <Col span={24}>
-                      <Tag style={{ margin: 10, width: '80%' }} color="primary">
-                        Pool Factory Contract
-                      </Tag>
+                      <Button
+                        size="small"
+                        style={{ margin: 10, width: '80%' }}
+                        color="primary"
+                      >
+                        <a href="https://basescan.org/address/0x62B9eC6A5BBEBe4F5C5f46C8A8880df857004295">
+                          Pool Factory Contract
+                        </a>
+                      </Button>
                     </Col>
                     <Col span={24}>
-                      <Tag style={{ margin: 10, width: '80%' }} color="primary">
-                        Strategy Runner Contract
-                      </Tag>
+                      <Button
+                        size="small"
+                        style={{ margin: 10, width: '80%' }}
+                        color="primary"
+                      >
+                        <a href="https://basescan.org/address/0x4FFE46130bCBb16BF5EDc4bBaa06f158921764C2">
+                          Strategy Contract
+                        </a>
+                      </Button>
                     </Col>
                     <Col span={24}>
-                      <Tag style={{ margin: 10, width: '80%' }} color="primary">
-                        Chainlink cbBTC Oracle
-                      </Tag>
+                      <Button
+                        size="small"
+                        style={{ margin: 10, width: '80%' }}
+                        color="primary"
+                      >
+                        <a href="https://basescan.org/address/0x8Ca4e2a74B84c1feb9ADe19A0Ce0bFcd57e3f6F7">
+                          Strategy Runner Contract
+                        </a>
+                      </Button>
                     </Col>
                     <Col span={24}>
-                      <Tag style={{ margin: 10, width: '80%' }} color="primary">
-                        Chainlink USDC Oracle
-                      </Tag>
+                      <Button
+                        size="small"
+                        style={{ margin: 10, width: '80%' }}
+                        color="primary"
+                      >
+                        <a href="https://basescan.org/address/0x64c911996D3c6aC71f9b455B1E8E7266BcbD848F">
+                          Chainlink cbBTC Oracle
+                        </a>
+                      </Button>
                     </Col>
                     <Col span={24}>
-                      <Tag style={{ margin: 10, width: '80%' }} color="primary">
-                        Chainlink AERO Oracle
-                      </Tag>
+                      <Button
+                        size="small"
+                        style={{ margin: 10, width: '80%' }}
+                        color="primary"
+                      >
+                        <a href="https://basescan.org/address/0x7e860098F58bBFC8648a4311b374B1D669a2bc6B">
+                          Chainlink USDC Oracle
+                        </a>
+                      </Button>
                     </Col>
                     <Col span={24}>
-                      <Tag style={{ margin: 10, width: '80%' }} color="primary">
-                        Chainlink WETH Oracle
-                      </Tag>
+                      <Button
+                        size="small"
+                        style={{ margin: 10, width: '80%' }}
+                        color="primary"
+                      >
+                        <a href="https://basescan.org/address/0x4EC5970fC728C5f65ba413992CD5fF6FD70fcfF0">
+                          Chainlink AERO Oracle
+                        </a>
+                      </Button>
                     </Col>
                     <Col span={24}>
-                      <Tag style={{ margin: 10, width: '80%' }} color="primary">
-                        Chainlink Automation Task
-                      </Tag>
+                      <Button
+                        size="small"
+                        style={{ margin: 10, width: '80%' }}
+                        color="primary"
+                      >
+                        <a href="https://basescan.org/address/0x71041dddad3595F9CEd3DcCFBe3D1F4b0a16Bb70">
+                          Chainlink WETH Oracle
+                        </a>
+                      </Button>
                     </Col>
                   </Col>
                   <Col span={2}></Col>
                   <Col span={2}></Col>
                   <Col span={20}>
                     <Col span={24}>
-                      <Tag
-                        style={{ margin: 10, width: '80%', color: '#c7b283' }}
-                        color="primary"
+                      <h5
+                        style={{
+                          margin: 10,
+                          width: '80%',
+                          textAlign: 'center',
+                        }}
                       >
                         Fixed Settings
-                      </Tag>
+                      </h5>
                     </Col>
                     <Col span={24}>
-                      <Tag style={{ margin: 10, width: '80%' }} color="primary">
+                      <Button
+                        size="small"
+                        style={{
+                          margin: 10,
+                          width: '80%',
+                          backgroundColor: 'transparent',
+                          color: 'var(--tooltip-text-color)',
+                        }}
+                        disabled={true}
+                      >
                         Strategy Interval: 24H
-                      </Tag>
+                      </Button>
                     </Col>
                     <Col span={24}>
-                      <Tag style={{ margin: 10, width: '80%' }} color="primary">
+                      <Button
+                        size="small"
+                        style={{
+                          margin: 10,
+                          width: '80%',
+                          backgroundColor: 'transparent',
+                          color: 'var(--tooltip-text-color)',
+                        }}
+                        disabled={true}
+                      >
                         Strategy: Power Channel
-                      </Tag>
+                      </Button>
                     </Col>
                     <Col span={24}>
-                      <Tag style={{ margin: 10, width: '80%' }} color="primary">
+                      <Button
+                        size="small"
+                        style={{
+                          margin: 10,
+                          width: '80%',
+                          backgroundColor: 'transparent',
+                          color: 'var(--tooltip-text-color)',
+                        }}
+                        disabled={true}
+                      >
                         Staleness Limit: 24H
-                      </Tag>
+                      </Button>
                     </Col>
                     <Col span={24}>
-                      <Tag style={{ margin: 10, width: '80%' }} color="primary">
+                      <Button
+                        size="small"
+                        style={{
+                          margin: 10,
+                          width: '80%',
+                          backgroundColor: 'transparent',
+                          color: 'var(--tooltip-text-color)',
+                        }}
+                        disabled={true}
+                      >
                         Swap Fee: 0.3%
-                      </Tag>
+                      </Button>
                     </Col>
                     <Col span={24}>
-                      <Tag style={{ margin: 10, width: '80%' }} color="primary">
+                      <Button
+                        size="small"
+                        style={{
+                          margin: 10,
+                          width: '80%',
+                          backgroundColor: 'transparent',
+                          color: 'var(--tooltip-text-color)',
+                        }}
+                        disabled={true}
+                      >
                         Withdrawal Fee: 0%
-                      </Tag>
+                      </Button>
                     </Col>
                     <Col span={24}>
-                      <Tag style={{ margin: 10, width: '80%' }} color="primary">
+                      <Button
+                        size="small"
+                        style={{
+                          margin: 10,
+                          width: '80%',
+                          backgroundColor: 'transparent',
+                          color: 'var(--tooltip-text-color)',
+                        }}
+                        disabled={true}
+                      >
                         Streaming Fee: 0%
-                      </Tag>
+                      </Button>
                     </Col>
                   </Col>
                   <Col span={2}></Col>
@@ -762,24 +867,24 @@ export function BaseMacroFactSheetMobile() {
             }
             style={{ height: '100%' }}
           >
-          <Radio.Group
-            onChange={(e) => setPeriod(e.target.value)}
-            value={period}
-            buttonStyle="solid"
-            size="small"
-          >
-            <Radio.Button value="AugTest">
-              Test Period: Aug24-Apr25
-            </Radio.Button>
-            <Radio.Button value="2025Test">
-              Test Period: Jan-Apr25
-            </Radio.Button>
-          </Radio.Group>
+            <Radio.Group
+              onChange={(e) => setPeriod(e.target.value)}
+              value={period}
+              buttonStyle="solid"
+              size="small"
+            >
+              <Radio.Button value="AugTest">
+                Test Period: Aug24-Apr25
+              </Radio.Button>
+              <Radio.Button value="2025Test">
+                Test Period: Jan-Apr25
+              </Radio.Button>
+            </Radio.Group>
             <Row>
               <Col span={24} style={{ marginTop: '30px' }}>
                 <WeightChangeOverTimeGraph
                   simulationRunBreakdown={breakdowns[baseMacroBTF]}
-                  overrideChartTheme="ag-default-dark"
+                  overrideChartTheme={isDarkTheme ? "ag-default-dark" : "ag-default"}
                   overrideXAxisInterval={xAxisMonthInterval}
                 />
               </Col>
@@ -815,19 +920,19 @@ export function BaseMacroFactSheetMobile() {
             }
             style={{ margin: '5px' }}
           >
-          <Radio.Group
-            onChange={(e) => setPeriod(e.target.value)}
-            value={period}
-            buttonStyle="solid"
-            size="small"
-          >
-            <Radio.Button value="AugTest">
-              Test Period: Aug24-Apr25
-            </Radio.Button>
-            <Radio.Button value="2025Test">
-              Test Period: Jan-Apr25
-            </Radio.Button>
-          </Radio.Group>
+            <Radio.Group
+              onChange={(e) => setPeriod(e.target.value)}
+              value={period}
+              buttonStyle="solid"
+              size="small"
+            >
+              <Radio.Button value="AugTest">
+                Test Period: Aug24-Apr25
+              </Radio.Button>
+              <Radio.Button value="2025Test">
+                Test Period: Jan-Apr25
+              </Radio.Button>
+            </Radio.Group>
             <div hidden={loading}>
               <SimulationResultMarketValueChart
                 hideTitle={true}
@@ -899,7 +1004,10 @@ export function BaseMacroFactSheetMobile() {
               >
                 <Collapse
                   defaultActiveKey={['1']}
-                  style={{ width: '100%', backgroundColor: '#162536' }}
+                  style={{
+                    width: '100%',
+                    backgroundColor: isDarkTheme ? '#162536' : '#fff',
+                  }}
                   accordion
                   items={items}
                   size="small"
@@ -954,20 +1062,20 @@ export function BaseMacroFactSheetMobile() {
                 }
                 style={{ margin: '5px' }}
               >
-              <Radio.Group
-                onChange={(e) => setPeriod(e.target.value)}
-                value={period}
-                buttonStyle="solid"
-                size="small"
-                style={{ marginBottom: '10px' }}
-              >
-                <Radio.Button value="AugTest">
-                  Test Period: Aug24-Apr25
-                </Radio.Button>
-                <Radio.Button value="2025Test">
-                  Test Period: Jan-Apr25
-                </Radio.Button>
-              </Radio.Group>
+                <Radio.Group
+                  onChange={(e) => setPeriod(e.target.value)}
+                  value={period}
+                  buttonStyle="solid"
+                  size="small"
+                  style={{ marginBottom: '10px' }}
+                >
+                  <Radio.Button value="AugTest">
+                    Test Period: Aug24-Apr25
+                  </Radio.Button>
+                  <Radio.Button value="2025Test">
+                    Test Period: Jan-Apr25
+                  </Radio.Button>
+                </Radio.Group>
                 <AnalysisSimplifiedBreakdownTable
                   simulationRunBreakdowns={
                     loading
@@ -1161,8 +1269,8 @@ export function BaseMacroFactSheetMobile() {
                         strategy.
                       </p>
                       <p>
-                        Given BASE&apos;s age and the age of certain tokens within
-                        the BTF. Training and test periods are liminted.
+                        Given BASE&apos;s age and the age of certain tokens
+                        within the BTF. Training and test periods are liminted.
                       </p>
                     </Col>
                   </Row>
@@ -1294,7 +1402,7 @@ export function BaseMacroFactSheetMobile() {
                     <h5>Constituent weights over time</h5>
                     <WeightChangeOverTimeGraph
                       simulationRunBreakdown={breakdowns.baseMacroBTFAugTrain}
-                      overrideChartTheme="ag-default-dark"
+                      overrideChartTheme={isDarkTheme ? "ag-default-dark" : "ag-default"}
                       overrideXAxisInterval={1}
                     />
                     <h5>Cumulative performance over time</h5>
@@ -1331,7 +1439,10 @@ export function BaseMacroFactSheetMobile() {
         <Col span={1}></Col>
         <Col span={1}></Col>
         <Col span={22}>
-          <Card title={'Parameters Selected'} style={{ height: '130vh', marginTop: '20px' }}>
+          <Card
+            title={'Parameters Selected'}
+            style={{ height: '130vh', marginTop: '20px' }}
+          >
             <Row>
               <Col span={12}>
                 <Card
@@ -1375,18 +1486,34 @@ export function BaseMacroFactSheetMobile() {
                         <p>
                           Lambda:{'  '} <InfoCircleOutlined />
                         </p>
-                        <Tag style={{ margin: '5px' }}>
+                        <Button
+                          size="small"
+                          disabled={true}
+                          style={{ margin: '5px' }}
+                        >
                           cbBTC - 0.9784309018144351
-                        </Tag>
-                        <Tag style={{ margin: '5px' }}>
+                        </Button>
+                        <Button
+                          size="small"
+                          disabled={true}
+                          style={{ margin: '5px' }}
+                        >
                           AERO - 0.9925922273835435
-                        </Tag>
-                        <Tag style={{ margin: '5px' }}>
+                        </Button>
+                        <Button
+                          size="small"
+                          disabled={true}
+                          style={{ margin: '5px' }}
+                        >
                           USDC - 0.6009182385585357
-                        </Tag>
-                        <Tag style={{ margin: '5px' }}>
+                        </Button>
+                        <Button
+                          size="small"
+                          disabled={true}
+                          style={{ margin: '5px' }}
+                        >
                           WETH - 0.2679511251319175
-                        </Tag>
+                        </Button>
                       </Tooltip>
                     </Col>
                     <Col span={24}>
@@ -1394,10 +1521,34 @@ export function BaseMacroFactSheetMobile() {
                         <p>
                           Memory Days:{'  '} <InfoCircleOutlined />
                         </p>
-                        <Tag style={{ margin: '5px' }}>cbBTC - 167.272730</Tag>
-                        <Tag style={{ margin: '5px' }}>AERO - 365.0</Tag>
-                        <Tag style={{ margin: '5px' }}>USDC - 7.684642</Tag>
-                        <Tag style={{ margin: '5px' }}>WETH - 3.200556</Tag>
+                        <Button
+                          size="small"
+                          disabled={true}
+                          style={{ margin: '5px' }}
+                        >
+                          cbBTC - 167.272730
+                        </Button>
+                        <Button
+                          size="small"
+                          disabled={true}
+                          style={{ margin: '5px' }}
+                        >
+                          AERO - 365.0
+                        </Button>
+                        <Button
+                          size="small"
+                          disabled={true}
+                          style={{ margin: '5px' }}
+                        >
+                          USDC - 7.684642
+                        </Button>
+                        <Button
+                          size="small"
+                          disabled={true}
+                          style={{ margin: '5px' }}
+                        >
+                          WETH - 3.200556
+                        </Button>
                       </Tooltip>
                     </Col>
                   </Row>
@@ -1414,10 +1565,34 @@ export function BaseMacroFactSheetMobile() {
                         <p>
                           Aggressiveness: {'  '} <InfoCircleOutlined />
                         </p>
-                        <Tag style={{ margin: '5px' }}>cbBTC - 5.608611948</Tag>
-                        <Tag style={{ margin: '5px' }}>AERO - 43.81829052</Tag>
-                        <Tag style={{ margin: '5px' }}>USDC - 7.015760734</Tag>
-                        <Tag style={{ margin: '5px' }}>WETH - 39.89684253</Tag>
+                        <Button
+                          size="small"
+                          disabled={true}
+                          style={{ margin: '5px' }}
+                        >
+                          cbBTC - 5.608611948
+                        </Button>
+                        <Button
+                          size="small"
+                          disabled={true}
+                          style={{ margin: '5px' }}
+                        >
+                          AERO - 43.81829052
+                        </Button>
+                        <Button
+                          size="small"
+                          disabled={true}
+                          style={{ margin: '5px' }}
+                        >
+                          USDC - 7.015760734
+                        </Button>
+                        <Button
+                          size="small"
+                          disabled={true}
+                          style={{ margin: '5px' }}
+                        >
+                          WETH - 39.89684253
+                        </Button>
                       </Tooltip>
                     </Col>
                     <Col span={24}>
@@ -1425,18 +1600,34 @@ export function BaseMacroFactSheetMobile() {
                         <p>
                           k:{'  '} <InfoCircleOutlined />
                         </p>
-                        <Tag style={{ margin: '5px' }}>
+                        <Button
+                          size="small"
+                          disabled={true}
+                          style={{ margin: '5px' }}
+                        >
                           cbBTC - 938.167832
-                        </Tag>
-                        <Tag style={{ margin: '5px' }}>
+                        </Button>
+                        <Button
+                          size="small"
+                          disabled={true}
+                          style={{ margin: '5px' }}
+                        >
                           AERO - 15993.676043
-                        </Tag>
-                        <Tag style={{ margin: '5px' }}>
+                        </Button>
+                        <Button
+                          size="small"
+                          disabled={true}
+                          style={{ margin: '5px' }}
+                        >
                           USDC - 306.592966
-                        </Tag>
-                        <Tag style={{ margin: '5px' }}>
+                        </Button>
+                        <Button
+                          size="small"
+                          disabled={true}
+                          style={{ margin: '5px' }}
+                        >
                           WETH - 22.454340
-                        </Tag>
+                        </Button>
                       </Tooltip>
                     </Col>
                   </Row>
@@ -1453,10 +1644,34 @@ export function BaseMacroFactSheetMobile() {
                         <p>
                           Exponent:{'  '} <InfoCircleOutlined />
                         </p>
-                        <Tag style={{ margin: '5px' }}>cbBTC - 1</Tag>
-                        <Tag style={{ margin: '5px' }}>AERO - 2.4705463110202333</Tag>
-                        <Tag style={{ margin: '5px' }}>USDC - 1</Tag>
-                        <Tag style={{ margin: '5px' }}>WETH - 1</Tag>
+                        <Button
+                          size="small"
+                          disabled={true}
+                          style={{ margin: '5px' }}
+                        >
+                          cbBTC - 1
+                        </Button>
+                        <Button
+                          size="small"
+                          disabled={true}
+                          style={{ margin: '5px' }}
+                        >
+                          AERO - 2.4705463110202333
+                        </Button>
+                        <Button
+                          size="small"
+                          disabled={true}
+                          style={{ margin: '5px' }}
+                        >
+                          USDC - 1
+                        </Button>
+                        <Button
+                          size="small"
+                          disabled={true}
+                          style={{ margin: '5px' }}
+                        >
+                          WETH - 1
+                        </Button>
                       </Tooltip>
                     </Col>
                   </Row>

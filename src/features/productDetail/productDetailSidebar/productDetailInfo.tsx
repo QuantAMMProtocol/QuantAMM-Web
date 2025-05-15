@@ -1,6 +1,6 @@
 import { CSSProperties, FC, useMemo } from 'react';
 import { CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons';
-import { Collapse, CollapseProps, Typography } from 'antd';
+import { Button, Collapse, CollapseProps, Typography } from 'antd';
 import { Product } from '../../../models';
 import { ProductDetailSidebarOverview } from './productDetailSidebarOverview';
 import { ProductDetailSidebarPoolInfo } from './productDetailSidebarPoolInfo';
@@ -12,9 +12,13 @@ import sharedStyles from '../../../shared.module.scss';
 
 import styles from './productDetailSidebar.module.scss';
 import { useAppSelector } from '../../../app/hooks';
-import { selectProductDetailSelectedTimeRange } from '../../productExplorer/productExplorerSlice';
+import {
+  selectProductDetailSelectedTimeRange,
+  selectQuantammSetPools,
+} from '../../productExplorer/productExplorerSlice';
 import { ProductDetailSidebarStrategySummary } from './productDetailSidebarStrategySummary';
 import { ProductDetailSidebarPerformanceGraph } from './productDetailSidebarIPerformanceGraph';
+import { useNavigate } from 'react-router-dom';
 
 const { Title } = Typography;
 
@@ -27,6 +31,9 @@ export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({ product }) => {
     background: 'transparent',
     border: 'none',
   };
+
+  const quantAMMSetPools = useAppSelector(selectQuantammSetPools);
+  const navigate = useNavigate();
 
   const selectedTimeRange = useAppSelector(
     selectProductDetailSelectedTimeRange
@@ -113,6 +120,20 @@ export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({ product }) => {
               ({selectedTimeRange})
             </span>
           </div>
+          {quantAMMSetPools[product.id] ? (
+            <div
+              style={{ display: 'flex', alignItems: 'center', marginTop: 10 }}
+            >
+              <Button
+                size="small"
+                onClick={() => navigate('/factsheet/' + product.address)}
+              >
+                View Factsheet
+              </Button>
+            </div>
+          ) : (
+            <></>
+          )}
         </div>
       ),
       style: panelStyle,
