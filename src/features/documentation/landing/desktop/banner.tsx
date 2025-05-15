@@ -29,7 +29,7 @@ export function Banner() {
     {
       title: 'BASE Macro',
       imgSrc: '/assets/baseMacro_mono.png',
-      description: ['BASE is a pivotal DeFi L2', 'A BTF with key BASE mega caps'],
+      description: ['BASE is a pivotal DeFi L2', 'A BTF with key Base mega caps'],
       status: 'Launching next week!',
       opacity: 0.8,
       imgWidth: '100%',
@@ -160,8 +160,8 @@ export function Banner() {
             position: 'relative',
           }}
         >
-          <Col span={4}></Col>
-          <Col span={6} style={{ paddingTop: '6vh' }}>
+          <Col span={3}></Col>
+          <Col span={7} style={{ paddingTop: '6vh' }}>
             <motion.div
               initial={{ opacity: 0, scale: 0 }}
               animate={{ opacity: 1, scale: 1 }}
