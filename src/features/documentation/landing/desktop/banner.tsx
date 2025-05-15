@@ -29,8 +29,8 @@ export function Banner() {
     {
       title: 'BASE Macro',
       imgSrc: '/assets/baseMacro_mono.png',
-      description: ['BASE is a pivotal DeFi L2', 'A BTF with key Base mega caps'],
-      status: 'Launching next week!',
+      description: ['BASE is a pivotal DeFi L2', 'A BTF with key BASE mega caps'],
+      status: 'Launching soon!',
       opacity: 0.8,
       imgWidth: '100%',
       focus: true,

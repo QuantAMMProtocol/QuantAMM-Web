@@ -660,14 +660,11 @@ export function SafeHavenFactSheetMobile() {
                   <Col span={2}></Col>
                   <Col span={10}>
                     <Col span={24}>
-                      <Button
-                        size="small"
-                        style={{ margin: 10, width: '80%' }}
-                        color="primary"
-                        disabled={true}
+                      <h5
+                        style={{ margin: 10, width: '80%', textAlign: 'center' }}
                       >
                         Deployment Links
-                      </Button>
+                      </h5>
                     </Col>
                     <Col span={24}>
                       <Button

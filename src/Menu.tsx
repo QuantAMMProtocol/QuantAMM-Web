@@ -1,6 +1,6 @@
 import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Menu, Switch, MenuProps, Button, Grid, Tooltip } from 'antd';
+import { Menu, Switch, MenuProps, Button, Grid } from 'antd';
 import {
   RadarChartOutlined,
   LineChartOutlined,
@@ -36,6 +36,7 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
   );
   const dispatch = useAppDispatch();
   const isDark = useAppSelector(selectTheme);
+
 
   const location = useLocation();
 
@@ -204,19 +205,16 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
         label: 'Terms of Service',
       },
       {
-        key: 'product-explorer',
+        key: ROUTES.PRODUCT_EXPLORER + "/MAINNET/" + ROUTES.SAFEHAVENFACTSHEET,
         label: '',
         icon: (
-            <Tooltip title="Coming Soon">
             <Button
               type="primary"
               size="small"
               style={{ width: '100%', color: 'var(--main-background)' }}
-              disabled={true} // temporary before launch
             >
-              Launch App
+              View Safe Haven 
             </Button>
-            </Tooltip>
         ),
       },
     ];

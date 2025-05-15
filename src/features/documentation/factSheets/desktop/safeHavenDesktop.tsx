@@ -651,7 +651,7 @@ export function SafeHavenFactSheetDesktop() {
         </Col>
         <Col span={1}></Col>
       </Row>
-      <Row style={{ height: '45vh' }}>
+      <Row style={{ height: '50vh' }}>
         <Col span={1}></Col>
         <Col span={10}>
           <Row style={{ height: '100%' }}>
