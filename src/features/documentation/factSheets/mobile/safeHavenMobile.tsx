@@ -1,5 +1,5 @@
 import { Button, Card, Col, Collapse, Row, Tooltip } from 'antd';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useMemo } from 'react';
 import { Radio } from 'antd';
 import { SimulationRunBreakdown } from '../../../simulationResults/simulationResultSummaryModels';
@@ -7,11 +7,14 @@ import { getBreakdown, Pool } from '../../../../services/breakdownService';
 import { WeightChangeOverTimeGraph } from '../../../shared/graphs/weightChangeOverTime';
 import { PowerChannelUpdateRule } from '../../updateRules/powerChannelUpdateRule';
 import { SimulationResultMarketValueChart } from '../../../simulationResults/visualisations/simulationResultMarketValueChart';
-import { AnalysisSimplifiedBreakdownTable } from '../../../simulationResults/breakdowns/simulationRunPerformanceSimpleTable';
 import { MathJax, MathJaxContext } from 'better-react-mathjax';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { useAppSelector } from '../../../../app/hooks';
 import { selectTheme } from '../../../themes/themeSlice';
+import {
+  benchmarkMetricThresholds,
+  returnMetricThresholds,
+} from '../../../../models/constants';
 
 export function SafeHavenFactSheetMobile() {
   const [breakdowns, setBreakdowns] = useState<
@@ -19,7 +22,6 @@ export function SafeHavenFactSheetMobile() {
   >({});
   const [loading, setLoading] = useState<boolean>(true);
   const [faqEli5, setFAQEli5] = useState('ELI5');
-
   const isDarkTheme = useAppSelector(selectTheme);
 
   const items = [
@@ -523,6 +525,7 @@ export function SafeHavenFactSheetMobile() {
       ),
     },
   ];
+
   useEffect(() => {
     const loadBreakdowns = async (
       poolNames: Pool[]
@@ -565,7 +568,39 @@ export function SafeHavenFactSheetMobile() {
   const safeHavenBTF = useMemo(() => `safeHavenBTF${period}`, [period]);
   const safeHavenCFMM = useMemo(() => `safeHavenCFMM${period}`, [period]);
   const safeHavenHODL = useMemo(() => `safeHavenHodl${period}`, [period]);
+  const visibleMetrics: [string, string][] = [
+    ['return', 'Absolute Return (%)'],
+    ['return', 'Annualized Sharpe Ratio'],
+    ['return', 'Annualized Sortino Ratio'],
+    ['return', 'Annualized Information Ratio'],
+    ['benchmark', 'Total Capture Ratio'],
+    ['benchmark', "Annualized Jensen's Alpha (%)"],
+  ];
 
+  const getColorFor = useCallback((metric: string, value: number | null) => {
+    if (value == null) return undefined;
+    const t = [...returnMetricThresholds, ...benchmarkMetricThresholds].find(
+      (x) => x.key === metric
+    );
+    if (!t) return undefined;
+
+    const { veryLow, low, medium, high } = t;
+    const ascending = high > medium;
+    if (ascending) {
+      if (value >= high) return t.highColor;
+      if (value >= medium) return t.mediumColor;
+      if (value >= low) return t.lowColor;
+      if (value >= veryLow) return t.veryLowColor;
+      return '#610000';
+    } else {
+      if (value <= high) return t.highColor;
+      if (value <= medium) return t.mediumColor;
+      if (value <= low) return t.lowColor;
+      if (value <= veryLow) return t.veryLowColor;
+      return '#01ec38';
+    }
+    return undefined;
+  }, []);
   const xAxisMonthInterval = useMemo(() => {
     switch (period) {
       case 'AugTest':
@@ -650,18 +685,22 @@ export function SafeHavenFactSheetMobile() {
         </Col>
         <Col span={1}></Col>
       </Row>
-      <Row style={{ height: '100vh' }}>
+      <Row style={{ height: '130vh' }}>
         <Col span={1}></Col>
         <Col span={22}>
-          <Row style={{ height: '100%' }}>
+          <Row style={{ height: '90vh' }}>
             <Col span={24}>
-              <Card title="GENERAL DETAILS" style={{ height: '100%' }}>
+              <Card title="GENERAL DETAILS" style={{ height: '90vh' }}>
                 <Row>
-                  <Col span={2}></Col>
-                  <Col span={10}>
+                  <Col span={1}></Col>
+                  <Col span={22}>
                     <Col span={24}>
                       <h5
-                        style={{ margin: 10, width: '80%', textAlign: 'center' }}
+                        style={{
+                          margin: 10,
+                          width: '80%',
+                          textAlign: 'center',
+                        }}
                       >
                         Deployment Links
                       </h5>
@@ -733,7 +772,9 @@ export function SafeHavenFactSheetMobile() {
                       </Button>
                     </Col>
                   </Col>
-                  <Col span={10}>
+                  <Col span={1}></Col>
+                  <Col span={1}></Col>
+                  <Col span={22}>
                     <Col span={24}>
                       <h5
                         style={{
@@ -826,7 +867,7 @@ export function SafeHavenFactSheetMobile() {
                       </Button>
                     </Col>
                   </Col>
-                  <Col span={2}></Col>
+                  <Col span={1}></Col>
                 </Row>
               </Card>
             </Col>
@@ -847,7 +888,7 @@ export function SafeHavenFactSheetMobile() {
                 <span>SIMULATED BACK TEST COMPOSITION OVER TIME</span>
               </div>
             }
-            style={{ height: '100%' }}
+            style={{ height: '100%', marginTop: '15px' }}
           >
             <Radio.Group
               onChange={(e) => setPeriod(e.target.value)}
@@ -866,7 +907,9 @@ export function SafeHavenFactSheetMobile() {
               <Col span={24} style={{ paddingTop: '30px' }}>
                 <WeightChangeOverTimeGraph
                   simulationRunBreakdown={breakdowns[safeHavenBTF]}
-                  overrideChartTheme={isDarkTheme ? "ag-default-dark" : "ag-default"}
+                  overrideChartTheme={
+                    isDarkTheme ? 'ag-default-dark' : 'ag-default'
+                  }
                   overrideXAxisInterval={xAxisMonthInterval}
                 />
               </Col>
@@ -876,12 +919,10 @@ export function SafeHavenFactSheetMobile() {
         <Col span={1}></Col>
       </Row>
 
-      <Row>
+      <Row style={{ marginTop: '20px' }}>
         <Col span={1}></Col>
         <Col span={22}>
-          <h1 style={{ marginLeft: '10px' }}>
-            SIMULATED CUMULATIVE PERFORMANCE
-          </h1>
+          <h1 style={{ marginLeft: '10px' }}>SIMULATED PERFORMANCE</h1>
         </Col>
         <Col span={1}></Col>
       </Row>
@@ -898,23 +939,23 @@ export function SafeHavenFactSheetMobile() {
                 }}
               >
                 <span>SIMULATED BTF TOTAL $ VALUE OVER TIME</span>
-                <Radio.Group
-                  onChange={(e) => setPeriod(e.target.value)}
-                  value={period}
-                  buttonStyle="solid"
-                  size="small"
-                >
-                  <Radio.Button value="AugTest">
-                    Test Period: Aug24-Apr25
-                  </Radio.Button>
-                  <Radio.Button value="2025Test">
-                    Test Period: Jan-Apr25
-                  </Radio.Button>
-                </Radio.Group>
               </div>
             }
             style={{ margin: '5px' }}
           >
+            <Radio.Group
+              onChange={(e) => setPeriod(e.target.value)}
+              value={period}
+              buttonStyle="solid"
+              size="small"
+            >
+              <Radio.Button value="AugTest">
+                Test Period: Aug24-Apr25
+              </Radio.Button>
+              <Radio.Button value="2025Test">
+                Test Period: Jan-Apr25
+              </Radio.Button>
+            </Radio.Group>
             <div hidden={loading}>
               <SimulationResultMarketValueChart
                 hideTitle={true}
@@ -967,28 +1008,29 @@ export function SafeHavenFactSheetMobile() {
                     }}
                   >
                     <span>QUANTAMM REBALANCING</span>
-                    <Radio.Group
-                      size="small"
-                      buttonStyle="solid"
-                      value={faqEli5}
-                      onChange={(e) => setFAQEli5(e.target.value)}
-                      style={{ fontWeight: 'normal' }}
-                    >
-                      <Radio.Button value="ELI5">ELI5</Radio.Button>
-                      <Radio.Button value="Crypto Native">
-                        Crypto Native
-                      </Radio.Button>
-                      <Radio.Button value="Quant">Quant</Radio.Button>
-                    </Radio.Group>
                   </div>
                 }
                 style={{ height: '100vh', overflowY: 'auto' }}
               >
+                <Radio.Group
+                  size="small"
+                  buttonStyle="solid"
+                  value={faqEli5}
+                  onChange={(e) => setFAQEli5(e.target.value)}
+                  style={{ fontWeight: 'normal' }}
+                >
+                  <Radio.Button value="ELI5">ELI5</Radio.Button>
+                  <Radio.Button value="Crypto Native">
+                    Crypto Native
+                  </Radio.Button>
+                  <Radio.Button value="Quant">Quant</Radio.Button>
+                </Radio.Group>
                 <Collapse
                   defaultActiveKey={['1']}
                   style={{
                     width: '100%',
                     backgroundColor: isDarkTheme ? '#162536' : '#fff',
+                    marginTop: '20px',
                   }}
                   accordion
                   items={items}
@@ -1001,7 +1043,7 @@ export function SafeHavenFactSheetMobile() {
         <Col span={1}></Col>
         <Col span={1}></Col>
         <Col span={22}>
-          <Row>
+          <Row style={{ marginTop: '20px' }}>
             <Col span={24} style={{ height: '100%' }}>
               <Card
                 title="SAFE HAVEN WEIGHT STRATEGY"
@@ -1015,7 +1057,7 @@ export function SafeHavenFactSheetMobile() {
         </Col>
         <Col span={1}></Col>
       </Row>
-      <Row>
+      <Row style={{ marginTop: '20px' }}>
         <Col span={1}></Col>
         <Col span={22}>
           <h1 style={{ marginLeft: '10px' }}>
@@ -1058,28 +1100,102 @@ export function SafeHavenFactSheetMobile() {
                     Test Period: Jan-Apr25
                   </Radio.Button>
                 </Radio.Group>
-                <AnalysisSimplifiedBreakdownTable
-                  simulationRunBreakdowns={
-                    loading
-                      ? []
-                      : [
-                          breakdowns[safeHavenBTF],
-                          breakdowns[safeHavenCFMM],
-                          breakdowns[safeHavenHODL],
-                        ]
-                  }
-                  visibleMetrics={[
-                    'Absolute Return (%)',
-                    'Annualized Sharpe Ratio',
-                    'Annualized Sortino Ratio',
-                    'Annualized Information Ratio',
-                    'Total Capture Ratio',
-                    "Annualized Jensen's Alpha (%)",
-                  ]}
-                  height={300}
-                />
+                {visibleMetrics.map(([category, metric]) => (
+                  <div key={metric} style={{ marginBottom: '20px' }}>
+                    <h4>{metric}</h4>
+                    <Row>
+                      <Col span={24}>
+                        <span>BTF:</span>{' '}
+                        <span
+                          style={{
+                            color: getColorFor(
+                              metric,
+                              breakdowns[
+                                safeHavenBTF
+                              ]?.simulationRunResultAnalysis?.[
+                                `${category}_analysis` as
+                                  | 'return_analysis'
+                                  | 'benchmark_analysis'
+                              ]?.find((x) => x.metricName == metric)
+                                ?.metricValue ?? 0
+                            ),
+                          }}
+                        >
+                          {loading
+                            ? 'Loading...'
+                            : breakdowns[
+                                safeHavenBTF
+                              ]?.simulationRunResultAnalysis?.[
+                                `${category}_analysis` as
+                                  | 'return_analysis'
+                                  | 'benchmark_analysis'
+                              ]?.find((x) => x.metricName == metric)
+                                ?.metricValue ?? 'N/A'}
+                        </span>
+                      </Col>
+                      <Col span={24}>
+                        <span>CFMM:</span>{' '}
+                        <span
+                          style={{
+                            color: getColorFor(
+                              metric,
+                              breakdowns[
+                                safeHavenCFMM
+                              ]?.simulationRunResultAnalysis?.[
+                                `${category}_analysis` as
+                                  | 'return_analysis'
+                                  | 'benchmark_analysis'
+                              ]?.find((x) => x.metricName == metric)
+                                ?.metricValue ?? 0
+                            ),
+                          }}
+                        >
+                          {loading
+                            ? 'Loading...'
+                            : breakdowns[
+                                safeHavenCFMM
+                              ]?.simulationRunResultAnalysis?.[
+                                `${category}_analysis` as
+                                  | 'return_analysis'
+                                  | 'benchmark_analysis'
+                              ]?.find((x) => x.metricName == metric)
+                                ?.metricValue ?? 'N/A'}
+                        </span>
+                      </Col>
+                      <Col span={24}>
+                        <span>HODL:</span>{' '}
+                        <span
+                          style={{
+                            color: getColorFor(
+                              metric,
+                              breakdowns[
+                                safeHavenHODL
+                              ]?.simulationRunResultAnalysis?.[
+                                `${category}_analysis` as
+                                  | 'return_analysis'
+                                  | 'benchmark_analysis'
+                              ]?.find((x) => x.metricName == metric)
+                                ?.metricValue ?? 0
+                            ),
+                          }}
+                        >
+                          {loading
+                            ? 'Loading...'
+                            : breakdowns[
+                                safeHavenHODL
+                              ].simulationRunResultAnalysis?.[
+                                `${category}_analysis` as
+                                  | 'return_analysis'
+                                  | 'benchmark_analysis'
+                              ]?.find((x) => x.metricName == metric)
+                                ?.metricValue ?? 'N/A'}
+                        </span>
+                      </Col>
+                    </Row>
+                  </div>
+                ))}
                 <Row>
-                  <Col span={10}>
+                  <Col span={24}>
                     <span>
                       R(f) ={' '}
                       <a
@@ -1092,7 +1208,7 @@ export function SafeHavenFactSheetMobile() {
                       </a>
                     </span>
                   </Col>
-                  <Col span={10}>
+                  <Col span={24}>
                     <span>R(b) = HODL</span>
                   </Col>
                 </Row>
@@ -1110,19 +1226,23 @@ export function SafeHavenFactSheetMobile() {
         </Col>
         <Col span={1}></Col>
       </Row>
-      <Row style={{ height: '260vh' }}>
+      <Row style={{ height: '500vh' }}>
         <Col span={1}></Col>
         <Col span={22}>
-          <Row style={{ height: '130vh' }}>
+          <Row style={{ height: '250vh' }}>
             <Col span={24}>
               <Card
                 title="Advantages"
-                style={{ height: '130vh', overflowY: 'auto' }}
+                style={{ height: '250vh', overflowY: 'auto' }}
               >
                 <Row>
-                  <Col span={12}>
+                  <Col span={24}>
                     <Card
-                      style={{ margin: '5px', height: '57vh' }}
+                      style={{
+                        margin: '5px',
+                        height: '57vh',
+                        overflowY: 'auto',
+                      }}
                       title={'Advanced Infrastructure'}
                     >
                       <Row>
@@ -1148,9 +1268,13 @@ export function SafeHavenFactSheetMobile() {
                       </Row>
                     </Card>
                   </Col>
-                  <Col span={12}>
+                  <Col span={24}>
                     <Card
-                      style={{ margin: '5px', height: '57vh' }}
+                      style={{
+                        margin: '5px',
+                        height: '57vh',
+                        overflowY: 'auto',
+                      }}
                       title={'Responsive Strategies'}
                     >
                       <Row>
@@ -1178,10 +1302,14 @@ export function SafeHavenFactSheetMobile() {
                       </Row>
                     </Card>
                   </Col>
-                  <Col span={12}>
+                  <Col span={24}>
                     <Card
                       title="Secure Balancer Vault"
-                      style={{ margin: '5px', height: '57vh' }}
+                      style={{
+                        margin: '5px',
+                        height: '57vh',
+                        overflowY: 'auto',
+                      }}
                     >
                       <Row>
                         <Col span={24}>
@@ -1202,10 +1330,14 @@ export function SafeHavenFactSheetMobile() {
                       </Row>
                     </Card>
                   </Col>
-                  <Col span={12}>
+                  <Col span={24}>
                     <Card
                       title="Cross asset baskets"
-                      style={{ margin: '5px', height: '57vh' }}
+                      style={{
+                        margin: '5px',
+                        height: '57vh',
+                        overflowY: 'auto',
+                      }}
                     >
                       <Row>
                         <Col span={24}>
@@ -1231,113 +1363,119 @@ export function SafeHavenFactSheetMobile() {
           </Row>
         </Col>
         <Col span={1}></Col>
-        <Col span={1}></Col>
-        <Col span={22}>
-          <Card style={{ height: '130vh', overflowY: 'auto' }} title={'Risks'}>
-            <Row>
-              <Col span={12}>
-                <Card
-                  style={{ margin: '5px', height: '57vh' }}
-                  title={'Directional Strategies'}
-                >
-                  <Row>
-                    <Col span={24}>
-                      <p>
-                        Having visible strategies with known parameters is
-                        advantageous as you can model risk and performance in
-                        all the ways traditional finance is used to. However
-                        they do take positions based on their interpretation of
-                        markets. This is a directional position that will incur
-                        risk and loss of capital if the market moves against the
-                        strategy.
-                      </p>
-                      <p>
-                        As bitcoin is a volatile asset, even though it can be
-                        considered a safe haven asset, investing in a BTF
-                        introduces unique risk.
-                      </p>
-                    </Col>
-                  </Row>
-                </Card>
-              </Col>
-              <Col span={12}>
-                <Card
-                  style={{ margin: '5px', height: '57vh' }}
-                  title={'AMM Mathematics'}
-                >
-                  <Row>
-                    <Col span={24}>
-                      <p>
-                        Automated market makers have some unique risks if a
-                        constituent goes to 0 in a depeg scenario.
-                      </p>
-                      <p>
-                        The pools rebalance automatically causing a potential
-                        complete loss of funds
-                      </p>
-                      <p>
-                        Balancer V3 has modern features such as pausing a pool
-                        to mitigate this however a loss in such as is dependant
-                        on timing of any intervention. If a pool is paused or in
-                        a recovery state you can still withdraw the underlying
-                        assets at a proportional quantity to your LP tokens.
-                      </p>
-                    </Col>
-                  </Row>
-                </Card>
-              </Col>
-              <Col span={12}>
-                <Card
-                  title="Contract Risk"
-                  style={{ margin: '5px', height: '57vh' }}
-                >
-                  <Row>
-                    <Col span={24}>
-                      <p>
-                        Blockchain technologies run on largely immutable
-                        contracts. There are always risks that there is an issue
-                        or a deviation from expected behaviour in the code. This
-                        could range from minor deviations of intended logic to
-                        capital loss.
-                      </p>
-                      <p>
-                        QuantAMM has performed private audits of the codebase as
-                        well as competition based audits. Balancer has also
-                        performed the same and has large bug bounties to
-                        incentivise identification of any issues.
-                      </p>
-                    </Col>
-                  </Row>
-                </Card>
-              </Col>
-              <Col span={12}>
-                <Card
-                  title="Oracle / Data Manipulation"
-                  style={{ margin: '5px', height: '57vh' }}
-                >
-                  <Row>
-                    <Col span={24}>
-                      <p>
-                        Re-weightings rely on price data. This data has to be
-                        correct for the strategy to run.
-                      </p>
-                      <p>
-                        Chainlink is an oracle provider that provides data
-                        integrity through proof of consensus. This oracle
-                        network is the insitutional standard for on-chain data
-                        and is resilient to manipulation. QuantAMM strategies
-                        also rely on smoothing of data and work in terms of
-                        days. This also provides a level of protection at the
-                        algorthmic layer.
-                      </p>
-                    </Col>
-                  </Row>
-                </Card>
-              </Col>
-            </Row>
-          </Card>
-        </Col>
-        <Col span={1}></Col>
+        <Row>
+          <Col span={1}></Col>
+          <Col span={22} style={{ height: '250vh' }}>
+            <Card
+              style={{ height: '250vh', overflowY: 'auto' }}
+              title={'Risks'}
+            >
+              <Row>
+                <Col span={24}>
+                  <Card
+                    style={{ margin: '5px', height: '57vh', overflowY: 'auto' }}
+                    title={'Directional Strategies'}
+                  >
+                    <Row>
+                      <Col span={24}>
+                        <p>
+                          Having visible strategies with known parameters is
+                          advantageous as you can model risk and performance in
+                          all the ways traditional finance is used to. However
+                          they do take positions based on their interpretation
+                          of markets. This is a directional position that will
+                          incur risk and loss of capital if the market moves
+                          against the strategy.
+                        </p>
+                        <p>
+                          As bitcoin is a volatile asset, even though it can be
+                          considered a safe haven asset, investing in a BTF
+                          introduces unique risk.
+                        </p>
+                      </Col>
+                    </Row>
+                  </Card>
+                </Col>
+                <Col span={24}>
+                  <Card
+                    style={{ margin: '5px', height: '57vh', overflowY: 'auto' }}
+                    title={'AMM Mathematics'}
+                  >
+                    <Row>
+                      <Col span={24}>
+                        <p>
+                          Automated market makers have some unique risks if a
+                          constituent goes to 0 in a depeg scenario.
+                        </p>
+                        <p>
+                          The pools rebalance automatically causing a potential
+                          complete loss of funds
+                        </p>
+                        <p>
+                          Balancer V3 has modern features such as pausing a pool
+                          to mitigate this however a loss in such as is
+                          dependant on timing of any intervention. If a pool is
+                          paused or in a recovery state you can still withdraw
+                          the underlying assets at a proportional quantity to
+                          your LP tokens.
+                        </p>
+                      </Col>
+                    </Row>
+                  </Card>
+                </Col>
+                <Col span={24}>
+                  <Card
+                    title="Contract Risk"
+                    style={{ margin: '5px', height: '57vh', overflowY: 'auto' }}
+                  >
+                    <Row>
+                      <Col span={24}>
+                        <p>
+                          Blockchain technologies run on largely immutable
+                          contracts. There are always risks that there is an
+                          issue or a deviation from expected behaviour in the
+                          code. This could range from minor deviations of
+                          intended logic to capital loss.
+                        </p>
+                        <p>
+                          QuantAMM has performed private audits of the codebase
+                          as well as competition based audits. Balancer has also
+                          performed the same and has large bug bounties to
+                          incentivise identification of any issues.
+                        </p>
+                      </Col>
+                    </Row>
+                  </Card>
+                </Col>
+                <Col span={24}>
+                  <Card
+                    title="Oracle / Data Manipulation"
+                    style={{ margin: '5px', height: '57vh', overflowY: 'auto' }}
+                  >
+                    <Row>
+                      <Col span={24}>
+                        <p>
+                          Re-weightings rely on price data. This data has to be
+                          correct for the strategy to run.
+                        </p>
+                        <p>
+                          Chainlink is an oracle provider that provides data
+                          integrity through proof of consensus. This oracle
+                          network is the insitutional standard for on-chain data
+                          and is resilient to manipulation. QuantAMM strategies
+                          also rely on smoothing of data and work in terms of
+                          days. This also provides a level of protection at the
+                          algorthmic layer.
+                        </p>
+                      </Col>
+                    </Row>
+                  </Card>
+                </Col>
+              </Row>
+            </Card>
+          </Col>
+          <Col span={1}></Col>
+        </Row>
       </Row>
       <Row>
         <Col span={1}></Col>
@@ -1386,7 +1524,9 @@ export function SafeHavenFactSheetMobile() {
                     <h5>Constituent weights over time</h5>
                     <WeightChangeOverTimeGraph
                       simulationRunBreakdown={breakdowns.safeHavenBTFAugTrain}
-                      overrideChartTheme={isDarkTheme ? "ag-default-dark" : "ag-default"}
+                      overrideChartTheme={
+                        isDarkTheme ? 'ag-default-dark' : 'ag-default'
+                      }
                       overrideXAxisInterval={22}
                     />
                     <h5>Cumulative performance over time</h5>
@@ -1423,9 +1563,12 @@ export function SafeHavenFactSheetMobile() {
         <Col span={1}></Col>
         <Col span={1}></Col>
         <Col span={22}>
-          <Card title={'Parameters Selected'} style={{ height: '130vh' }}>
+          <Card
+            title={'Parameters Selected'}
+            style={{ height: '130vh', marginTop: '20px' }}
+          >
             <Row>
-              <Col span={12}>
+              <Col span={24}>
                 <Card
                   style={{ margin: '5px', height: '57vh' }}
                   title={
@@ -1452,7 +1595,7 @@ export function SafeHavenFactSheetMobile() {
                   </Row>
                 </Card>
               </Col>
-              <Col span={12}>
+              <Col span={24}>
                 <Card
                   style={{ margin: '5px', height: '57vh' }}
                   title={
@@ -1521,7 +1664,7 @@ export function SafeHavenFactSheetMobile() {
                   </Row>
                 </Card>
               </Col>
-              <Col span={12}>
+              <Col span={24}>
                 <Card
                   title="Aggressiveness"
                   style={{ margin: '5px', height: '57vh' }}
@@ -1586,7 +1729,7 @@ export function SafeHavenFactSheetMobile() {
                   </Row>
                 </Card>
               </Col>
-              <Col span={12}>
+              <Col span={24}>
                 <Card
                   title="Exponent"
                   style={{ margin: '5px', height: '57vh' }}

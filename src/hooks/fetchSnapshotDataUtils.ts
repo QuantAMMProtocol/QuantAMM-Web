@@ -153,9 +153,12 @@ export const getTimeSeriesDataForProductList = (
       //TODO make pool specific and not hardcoded
       //because of gauges and integration tests launch date != creation date
       //this sets the true launch date for quantamm initial products
-      snapshots = snapshots.filter((x) => x.timestamp >= 1747180800);
+      snapshots = snapshots.filter((x) => x.timestamp >= 1747267200);
     }
     const hodlAmounts = snapshots[0]?.amounts;
+    console.log(snapshots);
+    console.log(tokenPricesMap); 
+
     const initialTotalShares =
       snapshots[0]?.totalShares > 0
         ? snapshots[0]?.totalShares
@@ -222,12 +225,17 @@ export const getTimeSeriesDataForProduct = (
   isQuantAMMSetPool: boolean
 ): ProductTimeSeriesData => {
   let snapshots = poolSnapshotsMap[`poolSnapshot_${pool.poolGetPool?.id}`];
+  
   if (isQuantAMMSetPool) {
     //TODO make pool specific and not hardcoded
     //because of gauges and integration tests launch date != creation date
     //this sets the true launch date for quantamm initial products
-    snapshots = snapshots.filter((x) => x.timestamp >= 1747180800);
+    snapshots = snapshots.filter((x) => x.timestamp >= 1747267200);
   }
+
+  console.log("snapshots", snapshots);
+  console.log("token prices", tokenPricesMap); 
+
   let hodlAmounts: number[] | undefined;
 
   const initialTotalShares =
