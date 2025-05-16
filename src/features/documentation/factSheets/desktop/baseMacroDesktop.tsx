@@ -598,10 +598,10 @@ export function BaseMacroFactSheetDesktop() {
               style={{ width: '30%', height: 'auto' }}
             />
             <h1 style={{ textAlign: 'center', margin: 0 }}>
-              The BASE Macro BTF
+              The Base Macro BTF
             </h1>
             <p style={{ textAlign: 'center' }}>
-              BASE is one of the pioneering chains for DeFi. It is a layer 2
+              Base is one of the pioneering chains for DeFi. It is a layer 2
               solution built on the Ethereum blockchain, designed to provide
               faster and cheaper transactions while maintaining the security and
               decentralization of Ethereum. Base is designed to be a platform

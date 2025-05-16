@@ -27,9 +27,9 @@ export function Banner() {
       route: '/factsheet/' + ROUTES.SAFEHAVENFACTSHEET,
     },
     {
-      title: 'BASE Macro',
+      title: 'Base Macro',
       imgSrc: '/assets/baseMacro_mono.png',
-      description: ['BASE is a pivotal DeFi L2', 'A BTF with key BASE mega caps'],
+      description: ['Base is a pivotal DeFi L2', 'A BTF with key Base mega caps'],
       status: 'Launching soon!',
       opacity: 0.8,
       imgWidth: '100%',
