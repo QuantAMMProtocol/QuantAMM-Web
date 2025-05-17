@@ -1,7 +1,8 @@
 import { Grid } from 'antd';
 
-import { SafeHavenFactSheetMobile } from './mobile/safeHavenMobile';
-import { SafeHavenFactSheetDesktop } from './desktop/safeHavenDesktop';
+import { FactSheetDesktop } from './desktop/factsheetDesktop';
+import { safeHavenFactsheetData } from './factsheetData';
+import { FactSheetMobile } from './mobile/factsheetMobile';
 
 const { useBreakpoint } = Grid;
 
@@ -11,7 +12,7 @@ export default function SafeHavenFactSheet() {
 
   return (
     <>
-      {isMobile ? <SafeHavenFactSheetMobile /> : <SafeHavenFactSheetDesktop />}
+      {isMobile ? <FactSheetMobile model={safeHavenFactsheetData} /> : <FactSheetDesktop model={safeHavenFactsheetData} />}
     </>
   );
 }
