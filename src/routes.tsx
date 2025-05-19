@@ -15,6 +15,8 @@ import TermsOfService from './features/documentation/landing/newTermsOfService';
 import InegligibleUser from './features/documentation/landing/IneligableUserLanding';
 import SafeHavenFactSheet from './features/documentation/factSheets/safeHaven';
 import BaseMacroFactSheet from './features/documentation/factSheets/baseMacro';
+import { SafeHavenSimulatorExample } from './features/documentation/safeHavenSimView';
+import { BaseMacroSimulatorExample } from './features/documentation/baseMacroSimView';
 
 const BASE_ROUTE = '/';
 
@@ -60,6 +62,14 @@ export const routes = createBrowserRouter([
       {
         path: 'factsheet/' + ROUTES.SAFEHAVENFACTSHEET,
         element:<SafeHavenFactSheet />,
+      },
+      {
+        path: 'factsheet/example/' + ROUTES.SAFEHAVENFACTSHEET,
+        element:<SafeHavenSimulatorExample />,
+      },
+      {
+        path: 'factsheet/example/' + ROUTES.BASEMACROFACTSHEET,
+        element:<BaseMacroSimulatorExample />,
       },
       {
         path: 'factsheet/' + ROUTES.BASEMACROFACTSHEET,

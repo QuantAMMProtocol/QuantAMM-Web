@@ -1,6 +1,7 @@
 import { Grid } from 'antd';
-import { BaseMacroFactSheetDesktop } from './desktop/baseMacroDesktop';
-import { BaseMacroFactSheetMobile } from './mobile/baseMacroMobile';
+import { FactSheetMobile } from './mobile/factsheetMobile';
+import { FactSheetDesktop } from './desktop/factsheetDesktop';
+import { baseMacroFactsheetData } from './baseMacroFactsheetData';
 
 const { useBreakpoint } = Grid;
 
@@ -10,7 +11,7 @@ export default function BaseMacroFactSheet() {
 
   return (
     <>
-      {isMobile ? <BaseMacroFactSheetMobile /> : <BaseMacroFactSheetDesktop />}
+      {isMobile ? <FactSheetMobile model={baseMacroFactsheetData} /> : <FactSheetDesktop model={baseMacroFactsheetData} />}
     </>
   );
 }

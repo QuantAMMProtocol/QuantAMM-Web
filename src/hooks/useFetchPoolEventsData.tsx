@@ -46,7 +46,7 @@ export const useFetchPoolEventsData = ({
       //TODO make pool specific and not hardcoded
       //because of gauges and integration tests launch date != creation date
       //this sets the true launch date for quantamm initial products
-    })).filter(x => !isQuantammSetPool[poolId] || x.timestamp >= 1747180800),
+    })).filter(x => !isQuantammSetPool[poolId] || x.timestamp >= 1747267200),
     loading,
     error: error ?? new ApolloError({ errorMessage: 'Unknown error' }),
   };

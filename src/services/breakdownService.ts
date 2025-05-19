@@ -42,6 +42,15 @@ export type Pool =
   | 'safeHavenHodl2025Test'
   | 'safeHavenHodlAugTest'
   | 'safeHavenHodlAugTrain'
+  | 'safeHavenBTF2025TestFull'
+  | 'safeHavenBTFAugTestFull'
+  | 'safeHavenBTFAugTrainFull'
+  | 'safeHavenCFMM2025TestFull'
+  | 'safeHavenCFMMAugTestFull'
+  | 'safeHavenCFMMAugTrainFull'
+  | 'safeHavenHodl2025TestFull'
+  | 'safeHavenHodlAugTestFull'
+  | 'safeHavenHodlAugTrainFull'
   | 'baseMacroBTF2025Test'
   | 'baseMacroBTFAugTest'
   | 'baseMacroBTFAugTrain'
@@ -50,7 +59,16 @@ export type Pool =
   | 'baseMacroCFMMAugTrain'
   | 'baseMacroHodl2025Test'
   | 'baseMacroHodlAugTest'
-  | 'baseMacroHodlAugTrain';;
+  | 'baseMacroHodlAugTrain'
+  | 'baseMacroBTF2025TestFull'
+  | 'baseMacroBTFAugTestFull'
+  | 'baseMacroBTFAugTrainFull'
+  | 'baseMacroCFMM2025TestFull'
+  | 'baseMacroCFMMAugTestFull'
+  | 'baseMacroCFMMAugTrainFull'
+  | 'baseMacroHodl2025TestFull'
+  | 'baseMacroHodlAugTestFull'
+  | 'baseMacroHodlAugTrainFull';
 
 // Helper to convert MessagePack data to breakdown DTO
 export const convertBreakdownDtoToBreakdown = (
@@ -146,6 +164,15 @@ export const getBreakdown = async (
     safeHavenHodl2025Test: '/prerun_sims/SAFE_HAVEN_HODL_2025_TEST.msgpack',
     safeHavenHodlAugTest: '/prerun_sims/SAFE_HAVEN_HODL_AUG_TEST.msgpack',
     safeHavenHodlAugTrain: '/prerun_sims/SAFE_HAVEN_HODL_AUG_TRAIN.msgpack',
+    safeHavenBTF2025TestFull: '/prerun_sims/SAFE_HAVEN_BTF_2025_TEST_FULL.msgpack',
+    safeHavenBTFAugTestFull: '/prerun_sims/SAFE_HAVEN_BTF_AUG_TEST_FULL.msgpack',
+    safeHavenBTFAugTrainFull: '/prerun_sims/SAFE_HAVEN_BTF_AUG_TRAIN_FULL.msgpack',
+    safeHavenCFMM2025TestFull: '/prerun_sims/SAFE_HAVEN_CFMM_2025_TEST_FULL.msgpack',
+    safeHavenCFMMAugTestFull: '/prerun_sims/SAFE_HAVEN_CFMM_AUG_TEST_FULL.msgpack',
+    safeHavenCFMMAugTrainFull: '/prerun_sims/SAFE_HAVEN_CFMM_AUG_TRAIN_FULL.msgpack',
+    safeHavenHodl2025TestFull: '/prerun_sims/SAFE_HAVEN_HODL_2025_TEST_FULL.msgpack',
+    safeHavenHodlAugTestFull: '/prerun_sims/SAFE_HAVEN_HODL_AUG_TEST_FULL.msgpack',
+    safeHavenHodlAugTrainFull: '/prerun_sims/SAFE_HAVEN_HODL_AUG_TRAIN_FULL.msgpack',
     baseMacroBTF2025Test: '/prerun_sims/BASE_MACRO_BTF_2025_TEST.msgpack',
     baseMacroBTFAugTest: '/prerun_sims/BASE_MACRO_BTF_AUG_TEST.msgpack',
     baseMacroBTFAugTrain: '/prerun_sims/BASE_MACRO_BTF_AUG_TRAIN.msgpack',
@@ -155,6 +182,15 @@ export const getBreakdown = async (
     baseMacroHodl2025Test: '/prerun_sims/BASE_MACRO_HODL_2025_TEST.msgpack',
     baseMacroHodlAugTest: '/prerun_sims/BASE_MACRO_HODL_AUG_TEST.msgpack',
     baseMacroHodlAugTrain: '/prerun_sims/BASE_MACRO_HODL_AUG_TRAIN.msgpack',
+    baseMacroBTF2025TestFull: '/prerun_sims/BASE_MACRO_BTF_2025_TEST_FULL.msgpack',
+    baseMacroBTFAugTestFull: '/prerun_sims/BASE_MACRO_BTF_AUG_TEST_FULL.msgpack',
+    baseMacroBTFAugTrainFull: '/prerun_sims/BASE_MACRO_BTF_AUG_TRAIN_FULL.msgpack',
+    baseMacroCFMM2025TestFull: '/prerun_sims/BASE_MACRO_CFMM_2025_TEST_FULL.msgpack',
+    baseMacroCFMMAugTestFull: '/prerun_sims/BASE_MACRO_CFMM_AUG_TEST_FULL.msgpack',
+    baseMacroCFMMAugTrainFull: '/prerun_sims/BASE_MACRO_CFMM_AUG_TRAIN_FULL.msgpack',
+    baseMacroHodl2025TestFull: '/prerun_sims/BASE_MACRO_HODL_2025_TEST_FULL.msgpack',
+    baseMacroHodlAugTestFull: '/prerun_sims/BASE_MACRO_HODL_AUG_TEST_FULL.msgpack',
+    baseMacroHodlAugTrainFull: '/prerun_sims/BASE_MACRO_HODL_AUG_TRAIN_FULL.msgpack',
   };
 
   const poolFilePath = poolFileMapping[poolName];
