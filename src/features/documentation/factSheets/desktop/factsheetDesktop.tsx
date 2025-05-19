@@ -13,6 +13,7 @@ import { useAppSelector } from '../../../../app/hooks';
 import { selectTheme } from '../../../themes/themeSlice';
 import { FactsheetModel } from '../factsheetModel';
 import { FAQItems } from '../../landing/faqItems';
+import ButtonGroup from 'antd/es/button/button-group';
 
 interface FactsheetDesktopProps {
   model: FactsheetModel;
@@ -182,17 +183,28 @@ export function FactSheetDesktop(props: FactsheetDesktopProps) {
                     }}
                   >
                     <span>GENERAL DETAILS</span>
+                    <ButtonGroup>
                     <Button
                       size="small"
-                      type="primary"
                       onClick={() =>
                         navigate(
-                          '/product-explorer/MAINNET/0x6b61d8680c4f9e560c8306807908553f95c749c5'
+                          '/factsheet/example/' + props.model.poolId
                         )
                       }
                     >
-                      View Live Pool Details
+                      View Simulation Results
                     </Button>
+                    <Button
+                      size="small"
+                      onClick={() =>
+                        navigate(
+                          '/product-explorer/' + props.model.poolChain + '/' + props.model.poolId
+                        )
+                      }
+                    >
+                      View Live Pool
+                    </Button>
+                    </ButtonGroup>
                   </div>
                 }
                 style={{ height: '100%' }}

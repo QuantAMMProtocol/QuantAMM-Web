@@ -2,6 +2,8 @@ import { FactsheetModel } from './factsheetModel';
 import { PowerChannelUpdateRule } from '../updateRules/powerChannelUpdateRule';
 
 export const baseMacroFactsheetData: FactsheetModel = {
+  poolId: '0xb4161AeA25BD6C5c8590aD50deB4Ca752532F05D',
+  poolChain: 'BASE',
   pools: [
     'baseMacroBTFAugTest',
     'baseMacroCFMMAugTest',

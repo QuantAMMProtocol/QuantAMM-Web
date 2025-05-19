@@ -37,6 +37,8 @@ export interface FactsheetTrainedParamVariation {
 }
 
 export interface FactsheetModel {
+  poolId: string;
+  poolChain:string;
   pools: Pool[];
   factsheetImage: FactsheetImage;
   objective: string;

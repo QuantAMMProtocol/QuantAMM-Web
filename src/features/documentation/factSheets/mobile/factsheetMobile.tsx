@@ -15,6 +15,7 @@ import {
 } from '../../../../models/constants';
 import { FactsheetModel } from '../factsheetModel';
 import { FAQItems } from '../../landing/faqItems';
+import { useNavigate } from 'react-router-dom';
 
 interface FactsheetDesktopProps {
   model: FactsheetModel;
@@ -28,7 +29,8 @@ export function FactSheetMobile(props: FactsheetDesktopProps) {
   const [loading, setLoading] = useState<boolean>(true);
   const [faqEli5, setFAQEli5] = useState('ELI5');
   const isDarkTheme = useAppSelector(selectTheme);
-
+  const navigate = useNavigate();
+  
   useEffect(() => {
     const loadBreakdowns = async (
       poolNames: Pool[]
@@ -197,7 +199,34 @@ export function FactSheetMobile(props: FactsheetDesktopProps) {
         <Col span={22}>
           <Row style={{ height: '90vh' }}>
             <Col span={24}>
-              <Card title="GENERAL DETAILS" style={{ height: '90vh' }}>
+              <Card
+                title={
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <span>GENERAL DETAILS</span>
+                    <Button
+                      size="small"
+                      type="primary"
+                      onClick={() =>
+                        navigate(
+                          '/product-explorer/' +
+                            props.model.poolChain +
+                            '/' +
+                            props.model.poolId
+                        )
+                      }
+                    >
+                      View Live Pool Details
+                    </Button>
+                  </div>
+                }
+                style={{ height: '90vh' }}
+              >
                 <Row>
                   <Col span={1}></Col>
                   <Col span={22}>

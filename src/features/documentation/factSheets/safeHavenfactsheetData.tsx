@@ -2,6 +2,8 @@ import { FactsheetModel } from './factsheetModel';
 import { PowerChannelUpdateRule } from '../updateRules/powerChannelUpdateRule';
 
 export const safeHavenFactsheetData: FactsheetModel = {
+  poolId: '0x6b61d8680c4f9e560c8306807908553f95c749c5',
+  poolChain: 'MAINNET',
   pools: [
     'safeHavenBTFAugTest',
     'safeHavenCFMMAugTest',
