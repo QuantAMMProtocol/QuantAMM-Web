@@ -99,6 +99,11 @@ export function FactSheetDesktop(props: FactsheetDesktopProps) {
       </Radio.Button>
     </Radio.Group>
   );
+
+  const trainXAxisMonthInterval = useMemo(() => {
+    return props.model.xAxisIntervals.get(props.model.trainPeriod);
+  }, [props.model.trainPeriod, props.model.xAxisIntervals]);
+
   const xAxisMonthInterval = useMemo(() => {
     return props.model.xAxisIntervals.get(period);
   }, [period, props.model.xAxisIntervals]);
@@ -592,13 +597,13 @@ export function FactSheetDesktop(props: FactsheetDesktopProps) {
                 <Col span={24}>
                   <div hidden={loading}>
                     <h5>Constituent weights over time</h5>
-                      <WeightChangeOverTimeGraph
-                        simulationRunBreakdown={breakdowns[btfTrain]}
-                        overrideChartTheme={
-                          isDarkTheme ? 'ag-default-dark' : 'ag-default'
-                        }
-                        overrideXAxisInterval={22}
-                      />
+                    <WeightChangeOverTimeGraph
+                      simulationRunBreakdown={breakdowns[btfTrain]}
+                      overrideChartTheme={
+                        isDarkTheme ? 'ag-default-dark' : 'ag-default'
+                      }
+                      overrideXAxisInterval={trainXAxisMonthInterval}
+                    />
                     <h5>Cumulative performance over time</h5>
                     <SimulationResultMarketValueChart
                       hideTitle={true}
@@ -619,7 +624,7 @@ export function FactSheetDesktop(props: FactsheetDesktopProps) {
                         props.model.cumulativePerformanceOverrideSeriesName
                       }
                       overrideNagivagtion={false}
-                      overrideXAxisInterval={22}
+                      overrideXAxisInterval={trainXAxisMonthInterval}
                       forceViewResults={true}
                     />
                   </div>

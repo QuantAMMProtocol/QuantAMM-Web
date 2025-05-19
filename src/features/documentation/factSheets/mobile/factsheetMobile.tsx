@@ -5,7 +5,6 @@ import { Radio } from 'antd';
 import { SimulationRunBreakdown } from '../../../simulationResults/simulationResultSummaryModels';
 import { getBreakdown, Pool } from '../../../../services/breakdownService';
 import { WeightChangeOverTimeGraph } from '../../../shared/graphs/weightChangeOverTime';
-import { PowerChannelUpdateRule } from '../../updateRules/powerChannelUpdateRule';
 import { SimulationResultMarketValueChart } from '../../../simulationResults/visualisations/simulationResultMarketValueChart';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { useAppSelector } from '../../../../app/hooks';
@@ -25,6 +24,7 @@ export function FactSheetMobile(props: FactsheetDesktopProps) {
   const [breakdowns, setBreakdowns] = useState<
     Record<string, SimulationRunBreakdown>
   >({});
+
   const [loading, setLoading] = useState<boolean>(true);
   const [faqEli5, setFAQEli5] = useState('ELI5');
   const isDarkTheme = useAppSelector(selectTheme);
@@ -58,18 +58,25 @@ export function FactSheetMobile(props: FactsheetDesktopProps) {
   }, [loading, breakdowns, props.model.pools]);
 
   const [period, setPeriod] = useState<string>(props.model.defaultPeriod[0]);
+
   const btf = useMemo(
     () => props.model.poolPrefix + `BTF${period}`,
     [period, props.model.poolPrefix]
   );
+
   const cfmm = useMemo(
     () => props.model.poolPrefix + `CFMM${period}`,
     [period, props.model.poolPrefix]
   );
+
   const hodl = useMemo(
     () => props.model.poolPrefix + `Hodl${period}`,
     [period, props.model.poolPrefix]
   );
+
+  const trainXAxisMonthInterval = useMemo(() => {
+    return props.model.xAxisIntervals.get(props.model.trainPeriod);
+  }, [props.model.trainPeriod, props.model.xAxisIntervals]);
 
   const periodSelector = (
     <Radio.Group
@@ -665,7 +672,7 @@ export function FactSheetMobile(props: FactsheetDesktopProps) {
                       overrideChartTheme={
                         isDarkTheme ? 'ag-default-dark' : 'ag-default'
                       }
-                      overrideXAxisInterval={22}
+                      overrideXAxisInterval={trainXAxisMonthInterval}
                     />
                     <h5>Cumulative performance over time</h5>
                     <SimulationResultMarketValueChart
@@ -693,7 +700,7 @@ export function FactSheetMobile(props: FactsheetDesktopProps) {
                         props.model.cumulativePerformanceOverrideSeriesName
                       }
                       overrideNagivagtion={false}
-                      overrideXAxisInterval={22}
+                      overrideXAxisInterval={trainXAxisMonthInterval}
                       forceViewResults={true}
                     />
                   </div>
