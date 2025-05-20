@@ -1,5 +1,5 @@
 import { FC, useMemo, useRef } from 'react';
-import { Button, Col, Row, Spin, Tag, Typography } from 'antd';
+import { Button, Col, Row, Spin, Tag, Tooltip, Typography } from 'antd';
 import {
   GridOptions,
   ICellRendererParams,
@@ -17,6 +17,8 @@ import { useFetchPoolEventsData } from '../../../hooks/useFetchPoolEventsData';
 import { useAppSelector } from '../../../app/hooks';
 import { Product } from '../../../models';
 import { selectAgGridTheme } from '../../themes/themeSlice';
+import { selectQuantammSetPools } from '../../productExplorer/productExplorerSlice';
+import { ROUTES } from '../../../routesEnum';
 
 const { Title } = Typography;
 
@@ -31,6 +33,20 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = ({
 }) => {
   const darkThemeAg = useAppSelector(selectAgGridTheme);
   const gridRef = useRef<AgGridReact>(null);
+  const quantAMMSetPools = useAppSelector(selectQuantammSetPools);
+
+  let goldThreshold = 0;
+  let silverThreshold = 0;
+  let bronzeThreshold = 0;
+
+  if (
+    quantAMMSetPools[product.address] &&
+    product.address == ROUTES.SAFEHAVENFACTSHEET.toLowerCase()
+  ) {
+    goldThreshold = 1748213999;
+    silverThreshold = 1749423599;
+    bronzeThreshold = 1750633199;
+  }
 
   const { poolEvents, loading, error } = useFetchPoolEventsData({
     first: undefined,
@@ -65,6 +81,55 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = ({
 
   const poolEventsColDefs = useMemo(
     () => [
+      {
+        colId: 'badge',
+        headerName: '',
+        width: 40,
+        suppressMenu: true,
+        sortable: false,
+        filter: false,
+        cellRenderer: (params: { data: any }) => {
+          const { data } = params;
+          console.log('data', data);
+          // only for ADD events
+          if (!data || data.type !== 'ADD') return null;
+
+          const ts = data.timestamp as number;
+          let src: string | null = null;
+          let tooltip: string | null = null;
+
+          if (ts < (goldThreshold ?? 0)) {
+            src = '/products/Gold_Badge_sm_ts.png';
+            tooltip = 'Gold Badge';
+          } else if (ts < (silverThreshold ?? 0)) {
+            src = '/products/Silver_Badge_sm_ts.png';
+            tooltip = 'Silver Badge';
+          } else if (ts < (bronzeThreshold ?? 0)) {
+            src = '/products/Bronze_Badge_sm_ts.png';
+            tooltip = 'Bronze Badge';
+          }
+
+          if (!src) {
+            // timestamp ≥ bronze threshold → no badge
+            return null;
+          }
+
+          return (
+            <Tooltip title={tooltip} placement="top">
+              <img
+                src={src}
+                alt="badge"
+                style={{
+                  width: 24,
+                  height: 24,
+                  display: 'block',
+                  margin: '0 auto',
+                }}
+              />
+            </Tooltip>
+          );
+        },
+      },
       {
         colId: 'timestamp',
         field: 'timestamp',
