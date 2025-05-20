@@ -30,7 +30,7 @@ export const safeHavenFactsheetData: FactsheetModel = {
       ],
       [
         'Strategy Runner Contract',
-        'https://etherscan.io/address/0x8Ca4e2a74B84c1feb9ADe19A0Ce0bFcd57e3f6F7',
+        'https://etherscan.io/address/0x21Ae9576a393413D6d91dFE2543dCb548Dbb8748',
       ],
       [
         'Strategy Contract',
