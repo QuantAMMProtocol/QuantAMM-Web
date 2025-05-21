@@ -62,8 +62,8 @@ export const baseMacroFactsheetData: FactsheetModel = {
     ['Withdrawal Fee', '0%'],
     ['Streaming Fee', '0%'],
   ],
-  defaultPeriod: ['AugTest', 'Test Period: Aug24-Apr25'],
-  alternatePeriod: ['2025Test', 'Test Period: Jan-Apr25'],
+  defaultPeriod: ['AugTest', 'Test Period: Aug24-May25'],
+  alternatePeriod: ['2025Test', 'Test Period: Jan-May25'],
   trainPeriod: 'AugTrain',
   poolPrefix: 'baseMacro',
   xAxisIntervals: new Map<string, number>([
