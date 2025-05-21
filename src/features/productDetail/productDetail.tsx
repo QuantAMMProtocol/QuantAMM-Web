@@ -49,6 +49,7 @@ export const ProductDetail = () => {
       <TermsOfServiceGateModal
         tosUrl="https://quantamm.fi/tos"
         onClose={handleGateClose}
+        isMobile={isMobile}
       />
     <Layout style={{ minHeight: '100vh', padding: 20 }}>
       {productLoading && <Spin />}

@@ -19,6 +19,7 @@ export default function LandingPage() {
       <TermsOfServiceGateModal
         tosUrl="https://quantamm.fi/tos"
         onClose={handleGateClose}
+        isMobile={isMobile}
       />
 
       {isMobile ? <LandingPageMobile /> : <LandingPageDesktop />}
