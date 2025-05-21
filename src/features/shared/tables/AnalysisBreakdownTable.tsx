@@ -81,6 +81,8 @@ export const AnalysisBreakdownTable: FC<AnalysisBreakdownTableProps> = ({
         enablePivot: true,
       },
       columnTypes: {
+        // define a number type for numeric columns
+        number: { filter: 'agNumberColumnFilter', sortable: true },
         nonEditableColumn: { editable: false },
       },
       groupDefaultExpanded: 3,

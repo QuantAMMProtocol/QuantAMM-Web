@@ -274,7 +274,6 @@ export const ProductDetailPoolGraph: FC<ProductDetailPoolGraphProps> = ({
       return time.day.every(daysForThreeLabels); // Adjusted for 3 labels on mobile
     }
     if (totalDuration <= maxDataPoints * oneDay) {
-      console.log('Daily steps');
       return time.day.every(1); // Daily steps
     } else {
       console.log('Monthly steps');

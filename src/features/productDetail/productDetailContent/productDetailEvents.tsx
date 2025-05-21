@@ -246,7 +246,7 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = ({
         type: 'number',
       },
     ],
-    [explorerRootUrl, product.chain]
+    [bronzeThreshold, explorerRootUrl, goldThreshold, product.chain, silverThreshold]
   );
 
   const rowData = poolEvents?.map(
@@ -280,10 +280,10 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = ({
         enablePivot: true,
       },
       columnTypes: {
+        number: { filter: 'agNumberColumnFilter', sortable: true },
         nonEditableColumn: { editable: false },
       },
       groupDefaultExpanded: 3,
-      defaultSortModel: [{ colId: 'timestamp', sort: 'asc' }],
     }),
     [poolEventsColDefs]
   );
