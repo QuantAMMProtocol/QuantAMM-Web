@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import {
   Modal,
   Button,
-  Radio,
   Checkbox,
   Alert,
   Space,
@@ -128,7 +127,7 @@ const TermsOfServiceGateModal: React.FC<TermsOfServiceGateModalProps> = ({
     <Space direction="vertical" size="large" style={{ width: '100%' }}>
       <Row>
         <Col span={24}>
-          <p style={{ marginBottom: 0, paddingLeft: 5, textAlign:'center' }}>
+          <p style={{ marginBottom: 0, paddingLeft: 5, textAlign: 'center' }}>
             Select Location:
             <span
               hidden={location != ''}
@@ -144,7 +143,7 @@ const TermsOfServiceGateModal: React.FC<TermsOfServiceGateModalProps> = ({
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             <Button
-            size='small'
+              size="small"
               type={location === 'uk' ? 'primary' : 'default'}
               block
               onClick={() => setLocation('uk')}
@@ -153,7 +152,7 @@ const TermsOfServiceGateModal: React.FC<TermsOfServiceGateModalProps> = ({
               I am accessing from inside the United Kingdom.
             </Button>
             <Button
-            size='small'
+              size="small"
               type={location === 'nonUk' ? 'primary' : 'default'}
               block
               onClick={() => setLocation('nonUk')}
