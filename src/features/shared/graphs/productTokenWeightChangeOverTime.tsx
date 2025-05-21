@@ -12,7 +12,7 @@ import 'ag-charts-enterprise';
 import { format } from 'date-fns';
 import { useAppSelector } from '../../../app/hooks';
 import { selectAgChartTheme } from '../../themes/themeSlice';
-import { Product, ProductPoolConstituents } from '../../../models';
+import { Product, ProductPoolConstituents, TimeSeriesData } from '../../../models';
 import { getChartTimeStepsFromProduct } from './helpers';
 
 interface ProductTokenWeightChangeOverTimeGraphProps {
@@ -26,8 +26,9 @@ interface ProductTokenWeightChangeOverTimeGraphProps {
 
 interface TokenWeightTimeStep {
   dateAsString: string;
+  timeSeriesData: TimeSeriesData;
   timestamp: number;
-  [key: string]: number | string;
+  [key: string]: number | string | TimeSeriesData;
 }
 
 const normalisedTokenName = (token: string) => {
@@ -86,13 +87,27 @@ export const ProductTokenWeightChangeOverTimeGraph: FC<
       const timeStep: TokenWeightTimeStep = {
         dateAsString: format(item.timestamp * 1000, 'yyyy-MM-dd'),
         timestamp: item.timestamp * 1000,
+        timeSeriesData: item,
       };
+      let equalWeightedAmounts: number[] = [];
+      if (isBenchmark) {
+        const totalLiquidity = normalisedTimeSeries[0].amounts.reduce(
+          (sum, amount, index) =>
+        sum +
+        amount * normalisedTimeSeries[0].tokenPrices[filteredConstituents[index].address],
+          0
+        );
 
+        equalWeightedAmounts = filteredConstituents.map((constituent) => {
+          const equalShare = totalLiquidity / filteredConstituents.length;
+          return equalShare / normalisedTimeSeries[0].tokenPrices[constituent.address];
+        });
+      }
       filteredConstituents.forEach(
         (constituent: ProductPoolConstituents, index: number) => {
           if (isBenchmark) {
             timeStep[normalisedTokenName(constituent.coin.toLowerCase())] =
-              normalisedTimeSeries[0].amounts[index] *
+            equalWeightedAmounts[index] *
               item.tokenPrices[constituent.address];
           } else {
             timeStep[normalisedTokenName(constituent.coin.toLowerCase())] =
