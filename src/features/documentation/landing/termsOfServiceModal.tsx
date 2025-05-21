@@ -240,7 +240,7 @@ const TermsOfServiceGateModal: React.FC<TermsOfServiceGateModalProps> = ({
       }}
       destroyOnClose
     >
-      <div style={{ height: isMobile ? '250px' : '500px', overflowY: 'auto' }}>
+      <div style={{ height: isMobile ? '250px' : '400px', overflowY: 'auto' }}>
         {showUkBanner ? (
           <Alert
             type="error"

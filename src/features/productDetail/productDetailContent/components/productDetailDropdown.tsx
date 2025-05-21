@@ -55,7 +55,7 @@ export const ProductDetailDropdown: FC<ProductDetailDropdownProps> = ({
         <Dropdown
           menu={{
             items,
-            selectable: true,
+            selectable: !disabled,
             defaultSelectedKeys: [String(selectedIndex)],
             onClick: handleClick,
             disabled: disabled,
