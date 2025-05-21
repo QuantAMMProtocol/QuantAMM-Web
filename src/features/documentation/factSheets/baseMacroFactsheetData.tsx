@@ -2,7 +2,7 @@ import { FactsheetModel } from './factsheetModel';
 import { PowerChannelUpdateRule } from '../updateRules/powerChannelUpdateRule';
 
 export const baseMacroFactsheetData: FactsheetModel = {
-  poolId: '0xb4161AeA25BD6C5c8590aD50deB4Ca752532F05D',
+  poolId: '0xb4161aea25bd6c5c8590ad50deb4ca752532f05d',
   poolChain: 'BASE',
   pools: [
     'baseMacroBTFAugTest',
@@ -250,7 +250,7 @@ export const baseMacroFactsheetData: FactsheetModel = {
       ),
     },
   ],
-  trainingWindowTitle: 'Training window March 2021 - Aug 2024',
+  trainingWindowTitle: 'Training window April 2024 - August 2024',
   trainingDescription: (
     <>
       <p>
@@ -259,13 +259,13 @@ export const baseMacroFactsheetData: FactsheetModel = {
         prices that get taken into account.
       </p>
       <p>
-        A training period of March 2021-August 2024 was selected and parameters
+        A training period of April 2024-August 2024 was selected and parameters
         were selected using the machine learning technique called: Stochastic
         Gradient Descent. This was performed by the QuantAMM team using the
         QuantAMM simulator framework. A parameter set was selected that
         maximised the Sharpe Ratio of the strategy. This was selected over other
         objectives such as maximising Ulcer or Calmer Ratios as the parameter
-        set showed better test set statistics. Random 1038-day length windows
+        set showed better test set statistics. Random 73-day length windows
         were selected within the training price range and optimisation was
         performed via stochastic gradient descent for 6000 steps with batches of
         6 windows per step.
