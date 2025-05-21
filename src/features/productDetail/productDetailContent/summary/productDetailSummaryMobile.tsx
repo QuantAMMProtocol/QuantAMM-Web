@@ -15,7 +15,6 @@ import {
 } from './utils';
 
 import styles from './productDetailSummary.module.scss';
-
 const { Text } = Typography;
 
 interface ProductDetailSummaryMobileProps {

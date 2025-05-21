@@ -7,7 +7,7 @@ import {
   AgTooltipRendererResult,
   time
 } from 'ag-charts-community';
-import { Col, Row, Typography } from 'antd';
+import { Col, Grid, Row, Typography } from 'antd';
 import { getTime } from 'date-fns';
 import { useAppSelector } from '../../../app/hooks';
 import { Product } from '../../../models';
@@ -48,9 +48,14 @@ interface ProductDetailPoolGraphProps {
   product: Product;
 }
 
+const { useBreakpoint } = Grid;
+
 export const ProductDetailPoolGraph: FC<ProductDetailPoolGraphProps> = ({
   product,
 }) => {
+  const screens = useBreakpoint();
+  const isMobile = !screens.lg && !screens.xl && !screens.xxl;
+  
   const [selectedSecondAxis, setSelectedSecondAxis] = useState<
     ProductDetailDropdownSelectOption[]
   >([]);
@@ -239,11 +244,16 @@ export const ProductDetailPoolGraph: FC<ProductDetailPoolGraphProps> = ({
     const oneMonth = 30 * oneDay;
 
     if (totalDuration <= oneMonth) {
+      if(isMobile) {
+        return '%d/%m/%y'; // Format for mobile devices
+      }
+
       return '%d %b %Y'; // Format for shorter timeframes (e.g., days)
     } else {
       return '%b %Y'; // Format for longer timeframes (e.g., months and years)
     }
-  }, [product.timeSeries, selectedTimeRange]);
+  }, [isMobile, product.timeSeries, selectedTimeRange]);
+
   const getIntervalStep = useMemo(() => {
     const timeSeriesData = product.timeSeries ?? [];
     const filteredData = timeSeriesData.filter((dataPoint) =>
@@ -258,7 +268,11 @@ export const ProductDetailPoolGraph: FC<ProductDetailPoolGraphProps> = ({
 
     const maxDataPoints = 30;
     const oneDay = 24 * 60 * 60 * 1000;
-
+    const daysForThreeLabels = Math.ceil(totalDuration / (3 * oneDay));
+    if (isMobile) {
+      console.log('Mobile steps', daysForThreeLabels);
+      return time.day.every(daysForThreeLabels); // Adjusted for 3 labels on mobile
+    }
     if (totalDuration <= maxDataPoints * oneDay) {
       console.log('Daily steps');
       return time.day.every(1); // Daily steps
@@ -267,7 +281,7 @@ export const ProductDetailPoolGraph: FC<ProductDetailPoolGraphProps> = ({
       const interval = Math.ceil(totalDuration / (maxDataPoints * oneDay));
       return time.day.every(interval); // Adjusted interval to fit max data points
     }
-  }, [product.timeSeries, selectedTimeRange]);
+  }, [isMobile, product.timeSeries, selectedTimeRange]);
 
   const getAxes = useCallback((): (
     | AgNumberAxisOptions

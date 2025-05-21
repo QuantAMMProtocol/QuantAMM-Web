@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { shortenAddress } from '../../../utils';
+import { manualTruncate, shortenAddress } from '../../../utils';
 import { Product } from '../../../models';
 import { ProductDetailSidebarElement } from './productDetailSidebarElement';
 
@@ -30,7 +30,7 @@ export const ProductDetailSidebarOverview: FC<
       />
 
       <ProductDetailSidebarElement side="left" text="Pool name" />
-      <ProductDetailSidebarElement side="right" text={product.name} />
+      <ProductDetailSidebarElement side="right" text={manualTruncate(product.name, 9)} />
 
       <ProductDetailSidebarElement side="left" text="Pool symbol" />
       <ProductDetailSidebarElement side="right" text={product.symbol} />

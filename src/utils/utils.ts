@@ -9,3 +9,16 @@ export const getBalancerPoolUrl = (chain: string, poolId: string): string => {
 
   return `https://balancer.fi/pools/${chain.toLowerCase()}/v3/${poolId}`;
 };
+
+export const manualTruncate = (
+  str: string,
+  maxLength: number
+): string => {
+  if (str.length <= maxLength) {
+    return str;
+  }
+
+  const truncated = str.slice(0, maxLength);
+
+  return truncated + '...';
+}

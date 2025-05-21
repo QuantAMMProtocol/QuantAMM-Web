@@ -140,7 +140,7 @@ export const AnalysisBreakdownTable: FC<AnalysisBreakdownTableProps> = ({
           <Title
             level={4}
             style={{
-              width: '100%',
+              width: '90%',
               marginBottom: 0,
               paddingLeft: 8,
               paddingTop: 8,

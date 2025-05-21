@@ -90,7 +90,6 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = ({
         filter: false,
         cellRenderer: (params: { data: any }) => {
           const { data } = params;
-          console.log('data', data);
           // only for ADD events
           if (!data || data.type !== 'ADD') return null;
 
@@ -335,7 +334,7 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = ({
         <Title
           level={4}
           style={{
-            width: '100%',
+            width: '90%',
             marginBottom: 0,
             paddingLeft: 8,
             paddingTop: 8,
