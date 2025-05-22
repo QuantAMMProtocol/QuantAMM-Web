@@ -21,6 +21,7 @@ export const AnalysisBreakdownTable: FC<AnalysisBreakdownTableProps> = ({
   height = 700,
   productId,
 }) => {
+  console.log('rendering AnalysisBreakdownTable');
   const darkThemeAg = useAppSelector(selectAgGridTheme);
   const gridRef = useRef<AgGridReact>(null);
 

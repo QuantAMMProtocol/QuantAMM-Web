@@ -53,6 +53,7 @@ const { useBreakpoint } = Grid;
 export const ProductDetailPoolGraph: FC<ProductDetailPoolGraphProps> = ({
   product,
 }) => {
+  console.log('rendering graph');
   const screens = useBreakpoint();
   const isMobile = !screens.lg && !screens.xl && !screens.xxl;
   
@@ -269,15 +270,18 @@ export const ProductDetailPoolGraph: FC<ProductDetailPoolGraphProps> = ({
     const maxDataPoints = 30;
     const oneDay = 24 * 60 * 60 * 1000;
     const daysForThreeLabels = Math.ceil(totalDuration / (3 * oneDay));
+    console.log('ismobile', isMobile);
     if (isMobile) {
       console.log('Mobile steps', daysForThreeLabels);
       return time.day.every(daysForThreeLabels); // Adjusted for 3 labels on mobile
     }
     if (totalDuration <= maxDataPoints * oneDay) {
+      console.log('Daily steps');
       return time.day.every(1); // Daily steps
     } else {
       console.log('Monthly steps');
       const interval = Math.ceil(totalDuration / (maxDataPoints * oneDay));
+      console.log('Interval', interval);
       return time.day.every(interval); // Adjusted interval to fit max data points
     }
   }, [isMobile, product.timeSeries, selectedTimeRange]);

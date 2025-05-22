@@ -49,7 +49,7 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = ({
   }
 
   const { poolEvents, loading, error } = useFetchPoolEventsData({
-    first: undefined,
+    first: 1000,
     skip: undefined,
     poolId: product.id,
     chain: product.chain as GqlChain,

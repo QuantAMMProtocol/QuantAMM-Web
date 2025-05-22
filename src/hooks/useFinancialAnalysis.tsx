@@ -147,6 +147,7 @@ export const useFinancialAnalysis = ({
               simulationRunBreakdown: simBreakdown,
             })
           );
+
           if (loadToSimulator) {
             addImportedSimRunResults(simBreakdown);
           }
@@ -157,6 +158,5 @@ export const useFinancialAnalysis = ({
     };
 
     void fetchFinancialAnalysis();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [shouldRun]);
+  }, [benchmark, dispatch, loadToSimulator, product, quantAMMSetPools, runFinancialAnalysis, shouldRun]);
 };
