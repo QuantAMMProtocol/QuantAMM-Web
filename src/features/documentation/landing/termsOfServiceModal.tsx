@@ -184,7 +184,7 @@ const TermsOfServiceGateModal: React.FC<TermsOfServiceGateModalProps> = ({
               </a>{' '}
               and confirm I am not a prohibited user.{' '}
               <span
-                hidden={acceptedTerms}
+                hidden={acceptedTos}
                 style={{
                   margin: 0,
                   padding: 0,
