@@ -20,7 +20,6 @@ import { Product } from '../../../models';
 import { selectAgGridTheme } from '../../themes/themeSlice';
 import { selectQuantammSetPools } from '../../productExplorer/productExplorerSlice';
 import { ROUTES } from '../../../routesEnum';
-import { size } from 'lodash';
 
 const { Title } = Typography;
 
