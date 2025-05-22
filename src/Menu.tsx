@@ -219,7 +219,7 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
       },
 
       {
-        key: ROUTES.PRODUCT_EXPLORER + "/MAINNET/" + ROUTES.BASEMACROFACTSHEET,
+        key: ROUTES.PRODUCT_EXPLORER + "/BASE/" + ROUTES.BASEMACROFACTSHEET,
         label: '',
         icon: (
             <Button
