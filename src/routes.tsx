@@ -45,7 +45,7 @@ export const routes = createBrowserRouter([
             element: <Documentation />,
           },
         ],
-      },/*
+      },
       {
         path: ROUTES.PRODUCT_EXPLORER,
         children: [
@@ -58,7 +58,7 @@ export const routes = createBrowserRouter([
             element: <ProductDetail />,
           },
         ],
-      },*/
+      },
       {
         path: 'factsheet/' + ROUTES.SAFEHAVENFACTSHEET,
         element:<SafeHavenFactSheet />,

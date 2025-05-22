@@ -1,5 +1,6 @@
 import { FC, useMemo, useRef } from 'react';
 import { Button, Col, Row, Spin, Tag, Tooltip, Typography } from 'antd';
+import { WarningOutlined } from '@ant-design/icons';
 import {
   GridOptions,
   ICellRendererParams,
@@ -19,6 +20,7 @@ import { Product } from '../../../models';
 import { selectAgGridTheme } from '../../themes/themeSlice';
 import { selectQuantammSetPools } from '../../productExplorer/productExplorerSlice';
 import { ROUTES } from '../../../routesEnum';
+import { size } from 'lodash';
 
 const { Title } = Typography;
 
@@ -367,10 +369,12 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = ({
           paddingLeft: 12,
         }}
       >
+        
         {loading && !error ? (
           <Spin />
         ) : (
           <div style={{ width: '100%' }}>
+            <WarningOutlined style={{color:'orange'}}/><span style={{color:'orange'}}>{'  '}Balancer&apos;s Event Display API under maintenance. View will return soon. No functionality is affected, only the event view API</span>
             <div
               id="events"
               className={darkThemeAg}
