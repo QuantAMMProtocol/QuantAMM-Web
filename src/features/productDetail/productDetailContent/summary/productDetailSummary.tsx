@@ -304,7 +304,7 @@ export const ProductDetailSummary: FC<ProductDetailSummaryProps> = ({
       <Col span={24} className={styles['product-detail-summary__title']}>
         {specialPoolKey ? 
           <div>
-            <Tooltip title='This pool is new and does not have enough data for most financial metrics. This is a simulated performance metric analysis based on the Aug24-Apr25 period (see factsheet). Once the pool has been running for a while it will become live metrics'>
+            <Tooltip title='This pool is new and does not have enough data for most financial metrics. This is a simulated performance metric analysis based on the test period (see factsheet). Once the pool has been running for a while it will become live metrics'>
             <Title level={4}>Simulated HODL Performance Metric Analysis {'  '} <WarningOutlined type='warning'/> </Title>
             </Tooltip>
           </div> : <Title level={4}>HODL Performance Metric Analysis</Title>}
