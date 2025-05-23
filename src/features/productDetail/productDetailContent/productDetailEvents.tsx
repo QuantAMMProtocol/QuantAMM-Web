@@ -373,7 +373,6 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = ({
           <Spin />
         ) : (
           <div style={{ width: '100%' }}>
-            <WarningOutlined style={{color:'orange'}}/><span style={{color:'orange'}}>{'  '}Balancer&apos;s Event Display API under maintenance. View will return soon. No functionality is affected, only the event view API</span>
             <div
               id="events"
               className={darkThemeAg}
