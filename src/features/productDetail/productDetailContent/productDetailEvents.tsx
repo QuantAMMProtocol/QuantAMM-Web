@@ -1,6 +1,5 @@
 import { FC, useMemo, useRef } from 'react';
 import { Button, Col, Row, Spin, Tag, Tooltip, Typography } from 'antd';
-import { WarningOutlined } from '@ant-design/icons';
 import {
   GridOptions,
   ICellRendererParams,
