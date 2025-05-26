@@ -84,20 +84,24 @@ export const ProductModal: React.FC<ProductModalProps> = ({
           className={styles.modalButton}
           size="large"
           disabled={!understandExternalWebsite || !acceptedTerms}
-          style={{marginTop: '20px'}}
+          style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', width:'100%',alignItems: 'center', textAlign: 'center' }}
         >
           <img
             src="/assets/logo-balancer.png"
             alt="Balancer"
             className={styles.modalIcon}
+            style={{ marginBottom: '10px' }}
           />
-          <div className={styles.modalContent}>
-            <span className={styles.modalTitle}>{isWithdraw ? 'Withdraw': 'Deposit'} on Balancer</span>
-            <p className={styles.modalDescription}>
-              Continue to Balancer&apos;s website to {isWithdraw ? 'withdraw' : 'deposit'} your assets.
+          <div className={styles.modalContent} style={{width: '100%'}}>
+            <span className={styles.modalTitle} style={{textAlign:'center'}}>{isWithdraw ? 'Withdraw' : 'Deposit'} on Balancer</span>
+            <p className={styles.modalDescription} style={{wordWrap: 'break-word', width: '100%', maxWidth: '500px', textAlign:'center', marginBottom:0}}>
+              Continue to Balancer&apos;s website
+            </p>
+            <p style={{wordWrap: 'break-word', width: '100%', textAlign:'center', marginTop:'0'}}>
+              where you can {isWithdraw ? 'withdraw' : 'deposit'} your assets.
             </p>
           </div>
-          <ExternalLink className={styles.externalLinkIcon} />
+          <ExternalLink className={styles.externalLinkIcon} style={{ marginTop: '10px' }} />
         </Button>
       </div>
     </Modal>
