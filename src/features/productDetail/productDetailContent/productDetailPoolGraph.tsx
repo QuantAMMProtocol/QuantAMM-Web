@@ -298,8 +298,12 @@ export const ProductDetailPoolGraph: FC<ProductDetailPoolGraphProps> = ({
         interval: {
           step: getIntervalStep,
         },
-        max: getTime(product.timeSeries?.[product.timeSeries.length - 2]?.timestamp ?? 0) * 1000,
-        min: getTime(product.timeSeries?.[0]?.timestamp ?? 0) * 1000,
+        max: getTime(product.timeSeries?.filter((dataPoint) =>
+                filterByTimeRange(dataPoint.timestamp, selectedTimeRange)
+              )?.[product.timeSeries.length - 2]?.timestamp ?? 0) * 1000,
+        min: getTime(product.timeSeries?.filter((dataPoint) =>
+                filterByTimeRange(dataPoint.timestamp, selectedTimeRange)
+              )?.[0]?.timestamp ?? 0) * 1000,
       },
       {
         type: 'number',
