@@ -390,7 +390,7 @@ export const ProductDetailSummaryDesktop: FC<
       {/* fifth row */}
       {/* first column */}
       <div className={styles['product-detail-summary__item-vertical']}>
-        Pool token weigth over time [%]
+        Pool token weight over time [%]
       </div>
 
       {/* second column */}
