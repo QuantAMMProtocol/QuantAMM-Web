@@ -50,9 +50,9 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = ({
     }
     else if(product.address == ROUTES.BASEMACROFACTSHEET.toLowerCase()){
       srcPrefix = 'Base_Macro_'
-      goldThreshold = 1748213999;//TODO
-      silverThreshold = 1749423599;//TODO
-      bronzeThreshold = 1750633199;//TODO
+      goldThreshold = 1749423599;
+      silverThreshold = 1750633199;
+      bronzeThreshold = 1751756400;
     }
   }
 
