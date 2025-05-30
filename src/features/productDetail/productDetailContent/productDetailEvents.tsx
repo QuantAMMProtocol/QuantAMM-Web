@@ -38,14 +38,22 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = ({
   let goldThreshold = 0;
   let silverThreshold = 0;
   let bronzeThreshold = 0;
-
+  let srcPrefix = 'UNKNOWN';
   if (
-    quantAMMSetPools[product.address] &&
-    product.address == ROUTES.SAFEHAVENFACTSHEET.toLowerCase()
+    quantAMMSetPools[product.address]
   ) {
-    goldThreshold = 1748213999;
-    silverThreshold = 1749423599;
-    bronzeThreshold = 1750633199;
+    if(product.address == ROUTES.SAFEHAVENFACTSHEET.toLowerCase()){
+      srcPrefix = 'Safe_Haven'
+      goldThreshold = 1748213999;
+      silverThreshold = 1749423599;
+      bronzeThreshold = 1750633199;
+    }
+    else if(product.address == ROUTES.BASEMACROFACTSHEET.toLowerCase()){
+      srcPrefix = 'Base_Macro_'
+      goldThreshold = 1748213999;//TODO
+      silverThreshold = 1749423599;//TODO
+      bronzeThreshold = 1750633199;//TODO
+    }
   }
 
   const { poolEvents, loading, error } = useFetchPoolEventsData({
@@ -98,13 +106,13 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = ({
           let tooltip: string | null = null;
 
           if (ts < (goldThreshold ?? 0)) {
-            src = '/products/Gold_Badge_sm_ts.png';
+            src = '/products/'+ srcPrefix +'Gold_sm.png';
             tooltip = 'Gold Badge';
           } else if (ts < (silverThreshold ?? 0)) {
-            src = '/products/Silver_Badge_sm_ts.png';
+            src = '/products/'+ srcPrefix +'Silver_sm.png';
             tooltip = 'Silver Badge';
           } else if (ts < (bronzeThreshold ?? 0)) {
-            src = '/products/Bronze_Badge_sm_ts.png';
+            src = '/products/'+ srcPrefix +'Bronze_sm.png';
             tooltip = 'Bronze Badge';
           }
 
