@@ -43,7 +43,7 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = ({
     quantAMMSetPools[product.address]
   ) {
     if(product.address == ROUTES.SAFEHAVENFACTSHEET.toLowerCase()){
-      srcPrefix = 'Safe_Haven'
+      srcPrefix = 'Safe_Haven_'
       goldThreshold = 1748213999;
       silverThreshold = 1749423599;
       bronzeThreshold = 1750633199;
