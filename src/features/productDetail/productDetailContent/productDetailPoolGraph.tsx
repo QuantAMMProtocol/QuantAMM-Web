@@ -103,6 +103,40 @@ export const ProductDetailPoolGraph: FC<ProductDetailPoolGraphProps> = ({
 
   const getData = useCallback(
     (timeSeries: SimulationResultTimeseries[]) => {
+      const benchmarkTimeSeries = [
+        ...(product.timeSeries ?? []).filter((dataPoint) =>
+          filterByTimeRange(dataPoint.timestamp, selectedTimeRange)
+        ),
+      ];
+
+      const snapshotPriceTotalLiquidity =
+        benchmarkTimeSeries[0]?.tokenPriceArray
+          .map(
+            (x) =>
+              benchmarkTimeSeries[0].amounts[
+                benchmarkTimeSeries[0].tokenPriceArray.indexOf(x)
+              ] * x
+          )
+          .reduce((acc, curr) => acc + curr, 0) ?? 0;
+
+      //snapshot prices are taken at a slightly different time to tokenPriceArray in the db
+      //scaling brings this inline with the tokenPriceArray
+      //have to do share price * total shares as once again total liquidity is not snapped at the same time
+      const snapshotScalingFactor =
+        (benchmarkTimeSeries[0].sharePrice *
+          benchmarkTimeSeries[0].totalShares) /
+        snapshotPriceTotalLiquidity;
+
+      const hodlAmounts =
+        benchmarkTimeSeries[0]?.tokenPriceArray.map(
+          (x) =>
+            snapshotPriceTotalLiquidity /
+            benchmarkTimeSeries[0].amounts.length /
+            x
+        ) ?? [];
+
+      const hodlTotalShares = benchmarkTimeSeries[0]?.totalShares ?? 0;
+
       const firstAxisData = [
         ...(product.timeSeries ?? [])
           .filter((dataPoint) =>
@@ -114,21 +148,7 @@ export const ProductDetailPoolGraph: FC<ProductDetailPoolGraphProps> = ({
             volume: dataPoint.volume24h,
           })),
       ];
-      const benchmarkTimeSeries = [
-        ...(product.timeSeries ?? []).filter((dataPoint) =>
-          filterByTimeRange(dataPoint.timestamp, selectedTimeRange)
-        ),
-      ];
 
-      const hodlAmounts =
-        benchmarkTimeSeries[0]?.tokenPriceArray.map(
-          (x) =>
-            benchmarkTimeSeries[0].totalLiquidity /
-            benchmarkTimeSeries[0].amounts.length /
-            x
-        ) ?? [];
-        
-      const hodlTotalShares = benchmarkTimeSeries[0]?.totalShares ?? 0;
       const benchmarkData = [
         ...benchmarkTimeSeries.map((dataPoint) => {
           let hodlTotalLiquidity = 0;
@@ -141,7 +161,7 @@ export const ProductDetailPoolGraph: FC<ProductDetailPoolGraphProps> = ({
             date: getTime(dataPoint.timestamp) * 1000,
             benchmarkValue:
               benchmarkTimeSeries.length < (product.timeSeries?.length ?? 0)
-                ? hodlTotalLiquidity / hodlTotalShares
+                ? (hodlTotalLiquidity * snapshotScalingFactor) / hodlTotalShares
                 : dataPoint.hodlSharePrice,
           };
         }),
