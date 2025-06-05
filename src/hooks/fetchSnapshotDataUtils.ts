@@ -343,10 +343,11 @@ export const getTimeSeriesDataForProduct = (
       totalLiquidityScalingFactor = hodlTotalLiquidity / totalLiquidity;
     }
 
-    timestep.hodlSharePrice = hodlTotalLiquidity / initialTotalShares;
+    timestep.hodlSharePrice = (hodlTotalLiquidity / initialTotalShares) / (totalLiquidityScalingFactor ?? 1);
 
     timestep.sharePrice =
-      (totalLiquidity / timestep.totalShares) * (totalLiquidityScalingFactor ?? 1);
+      (totalLiquidity / timestep.totalShares)
+
   }
 
   const timeSeriesData: ProductTimeSeriesData = {
