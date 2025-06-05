@@ -5,7 +5,7 @@ import {
   AgNumberAxisOptions,
   AgTimeAxisOptions,
   AgTooltipRendererResult,
-  time
+  time,
 } from 'ag-charts-community';
 import { Col, Grid, Row, Typography } from 'antd';
 import { getTime } from 'date-fns';
@@ -56,7 +56,7 @@ export const ProductDetailPoolGraph: FC<ProductDetailPoolGraphProps> = ({
   console.log('rendering graph');
   const screens = useBreakpoint();
   const isMobile = !screens.lg && !screens.xl && !screens.xxl;
-  
+
   const [selectedSecondAxis, setSelectedSecondAxis] = useState<
     ProductDetailDropdownSelectOption[]
   >([]);
@@ -114,19 +114,39 @@ export const ProductDetailPoolGraph: FC<ProductDetailPoolGraphProps> = ({
             volume: dataPoint.volume24h,
           })),
       ];
-
-      const benchmarkData = [
-        ...(product.timeSeries ?? [])
-          .filter((dataPoint) =>
-            filterByTimeRange(dataPoint.timestamp, selectedTimeRange)
-          )
-          .map((dataPoint) => {
-            return {
-              date: getTime(dataPoint.timestamp) * 1000,
-              benchmarkValue: dataPoint.hodlSharePrice,
-            };
-          }),
+      const benchmarkTimeSeries = [
+        ...(product.timeSeries ?? []).filter((dataPoint) =>
+          filterByTimeRange(dataPoint.timestamp, selectedTimeRange)
+        ),
       ];
+
+      const hodlAmounts =
+        benchmarkTimeSeries[0]?.tokenPriceArray.map(
+          (x) =>
+            benchmarkTimeSeries[0].totalLiquidity /
+            benchmarkTimeSeries[0].amounts.length /
+            x
+        ) ?? [];
+        
+      const hodlTotalShares = benchmarkTimeSeries[0]?.totalShares ?? 0;
+      const benchmarkData = [
+        ...benchmarkTimeSeries.map((dataPoint) => {
+          let hodlTotalLiquidity = 0;
+          for (let j = 0; j < dataPoint.amounts.length; j++) {
+            hodlTotalLiquidity +=
+              hodlAmounts[j] *
+              dataPoint.tokenPrices[product.poolConstituents[j].address];
+          }
+          return {
+            date: getTime(dataPoint.timestamp) * 1000,
+            benchmarkValue:
+              benchmarkTimeSeries.length < (product.timeSeries?.length ?? 0)
+                ? hodlTotalLiquidity / hodlTotalShares
+                : dataPoint.hodlSharePrice,
+          };
+        }),
+      ];
+      console.log('benchmarkData', benchmarkData);
 
       const secondAxisData: { date: number; [key: string]: number }[] = [];
 
@@ -245,7 +265,7 @@ export const ProductDetailPoolGraph: FC<ProductDetailPoolGraphProps> = ({
     const oneMonth = 30 * oneDay;
 
     if (totalDuration <= oneMonth) {
-      if(isMobile) {
+      if (isMobile) {
         return '%d/%m/%y'; // Format for mobile devices
       }
 
@@ -264,7 +284,8 @@ export const ProductDetailPoolGraph: FC<ProductDetailPoolGraphProps> = ({
     const totalDuration =
       filteredData.length > 0
         ? (getTime(filteredData[filteredData.length - 1].timestamp) -
-          getTime(filteredData[0].timestamp)) * 1000
+            getTime(filteredData[0].timestamp)) *
+          1000
         : 0;
 
     const maxDataPoints = 4;
@@ -278,7 +299,7 @@ export const ProductDetailPoolGraph: FC<ProductDetailPoolGraphProps> = ({
       return time.day.every(1); // Daily steps
     } else {
       const interval = Math.ceil(totalDuration / (maxDataPoints * oneDay));
-      
+
       return time.day.every(interval); // Adjusted interval to fit max data points
     }
   }, [isMobile, product.timeSeries, selectedTimeRange]);
@@ -294,16 +315,22 @@ export const ProductDetailPoolGraph: FC<ProductDetailPoolGraphProps> = ({
         nice: true,
         label: {
           format: getAxesFormat,
-        },  
+        },
         interval: {
           step: getIntervalStep,
         },
-        max: getTime(product.timeSeries?.filter((dataPoint) =>
-                filterByTimeRange(dataPoint.timestamp, selectedTimeRange)
-              )?.[product.timeSeries.length - 2]?.timestamp ?? 0) * 1000,
-        min: getTime(product.timeSeries?.filter((dataPoint) =>
-                filterByTimeRange(dataPoint.timestamp, selectedTimeRange)
-              )?.[0]?.timestamp ?? 0) * 1000,
+        max:
+          getTime(
+            product.timeSeries?.filter((dataPoint) =>
+              filterByTimeRange(dataPoint.timestamp, selectedTimeRange)
+            )?.[product.timeSeries.length - 2]?.timestamp ?? 0
+          ) * 1000,
+        min:
+          getTime(
+            product.timeSeries?.filter((dataPoint) =>
+              filterByTimeRange(dataPoint.timestamp, selectedTimeRange)
+            )?.[0]?.timestamp ?? 0
+          ) * 1000,
       },
       {
         type: 'number',
@@ -339,7 +366,14 @@ export const ProductDetailPoolGraph: FC<ProductDetailPoolGraphProps> = ({
     }
 
     return result;
-  }, [getAxesFormat, getIntervalStep, product.timeSeries, getSecondarySeries, selectedTimeRange, selectedSecondAxis]);
+  }, [
+    getAxesFormat,
+    getIntervalStep,
+    product.timeSeries,
+    getSecondarySeries,
+    selectedTimeRange,
+    selectedSecondAxis,
+  ]);
 
   return (
     <Row id="graph">
@@ -374,7 +408,7 @@ export const ProductDetailPoolGraph: FC<ProductDetailPoolGraphProps> = ({
                 axes: getAxes(),
                 data: getData(timeseriesAnalysis ?? []),
                 series: getSeries(),
-                padding:{
+                padding: {
                   right: 50,
                 },
                 legend: {

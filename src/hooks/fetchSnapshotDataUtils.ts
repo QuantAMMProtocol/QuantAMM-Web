@@ -170,11 +170,17 @@ export const getTimeSeriesDataForProductList = (
       const tokenPrices = Object.fromEntries(
         product.poolConstituents.map((token: { address: string }) => {
           const priceData =
-            tokenPricesMap[product.chain]?.[getTokenAddress(token)] || [];
+        tokenPricesMap[product.chain]?.[getTokenAddress(token)] || [];
           const closestPrice = findClosestPrice(priceData, snapshot.timestamp);
           return [token.address, closestPrice];
         })
       );
+
+      const tokenPriceArray = product.poolConstituents.map((token: { address: string }) => {
+        const priceData =
+          tokenPricesMap[product.chain]?.[getTokenAddress(token)] || [];
+        return findClosestPrice(priceData, snapshot.timestamp);
+      });
 
       const amounts = filterOutBptToken(product, snapshot);
 
@@ -189,6 +195,7 @@ export const getTimeSeriesDataForProductList = (
         volume24h: Number(snapshot.volume24h),
         tokenPrices,
         hodlSharePrice: 0,
+        tokenPriceArray: tokenPriceArray,
       };
     });
 
@@ -202,20 +209,12 @@ export const getTimeSeriesDataForProductList = (
     for (let i = 0; i < noZeroPriceTimeSeries.length; i++) {
       const timestep = noZeroPriceTimeSeries[i];
       let hodlTotalLiquidity = 0;
-      let totalLiquidity = 0;
       for (let j = 0; j < timestep.amounts.length; j++) {
         hodlTotalLiquidity +=
           hodlAmounts[j] *
-          timestep.tokenPrices[product.poolConstituents[j].address];
-        
-        totalLiquidity +=
-          timestep.amounts[j] *
-          timestep.tokenPrices[product.poolConstituents[j].address];
+          timestep.tokenPrices[product.poolConstituents[j].address];        
       }
       timestep.hodlSharePrice = hodlTotalLiquidity / initialTotalShares;
-      console.log("shareprice")
-      console.log(totalLiquidity / timestep.totalShares);
-      console.log(timestep.sharePrice);
     }
 
     return {
@@ -243,10 +242,6 @@ export const getTimeSeriesDataForProduct = (
     //this sets the true launch date for quantamm initial products
     snapshots = snapshots.filter((x) => x.timestamp >= 1747267200);
   }
-
-  console.log("snapshots", snapshots);
-  console.log("token prices", tokenPricesMap); 
-
   let hodlAmounts: number[] | undefined;
 
   let initialTotalShares =
@@ -266,6 +261,12 @@ export const getTimeSeriesDataForProduct = (
       })
     );
 
+    const tokenPriceArray = pool.poolGetPool?.poolTokens.map((token: { address: string }) => {
+      const priceData =
+        tokenPricesMap[pool.poolGetPool?.chain]?.[getTokenAddress(token)] || [];
+      return findClosestPrice(priceData, snapshot.timestamp);
+    });
+    
     const amounts = filterOutBptToken(
       {
         id: pool.poolGetPool?.id,
@@ -293,6 +294,7 @@ export const getTimeSeriesDataForProduct = (
       volume24h: Number(snapshot.volume24h),
       tokenPrices,
       hodlSharePrice: 0,
+      tokenPriceArray: tokenPriceArray,
     };
   });
 
@@ -345,7 +347,6 @@ export const getTimeSeriesDataForProduct = (
 
     timestep.sharePrice =
       (totalLiquidity / timestep.totalShares) * (totalLiquidityScalingFactor ?? 1);
-
   }
 
   const timeSeriesData: ProductTimeSeriesData = {
