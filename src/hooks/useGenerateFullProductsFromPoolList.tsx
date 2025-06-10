@@ -51,7 +51,7 @@ export const useGenerateFullProductsFromPoolList = (
         setFullProductsLoading(false);
       }
     }
-  }, [baseProductsData, poolSnapshots, tokenPrices, skip]);
+  }, [baseProductsData, poolSnapshots, tokenPrices, skip, quantammSetPools]);
 
   return {
     fullProductsData,

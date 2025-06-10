@@ -254,7 +254,7 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = ({
         type: 'number',
       },
     ],
-    [bronzeThreshold, explorerRootUrl, goldThreshold, product.chain, silverThreshold]
+    [bronzeThreshold, explorerRootUrl, goldThreshold, product.chain, silverThreshold, srcPrefix]
   );
 
   const rowData = poolEvents?.map(
