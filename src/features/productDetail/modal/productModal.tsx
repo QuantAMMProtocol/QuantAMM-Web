@@ -36,7 +36,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({
   const handleClick = useCallback(() => {
     void runAuditLog({
       request: {
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toLocaleString(undefined, { timeZoneName: 'long' }),
         user: window.location.hostname,
         page: isWithdraw ? 'productDetail-withdraw-redirect' : 'productDetail-deposit-redirect',
         tosAgreement: understandExternalWebsite ? 'accepted' : 'not accepted',

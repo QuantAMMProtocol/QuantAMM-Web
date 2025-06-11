@@ -120,7 +120,7 @@ const TermsOfServiceGateModal: React.FC<TermsOfServiceGateModalProps> = ({
       //async function to run audit log
       void runAuditLog({
         request: {
-          timestamp: new Date().toISOString(),
+          timestamp: new Date().toLocaleString(undefined, { timeZoneName: 'long' }),
           user: window.location.hostname,
           page: page + '-tos-gate',
           isMobile,
@@ -136,7 +136,7 @@ const TermsOfServiceGateModal: React.FC<TermsOfServiceGateModalProps> = ({
       onClose();
       console.log(acceptedTerms);
     } // ✅ Close the modal only
-  }, [location, acceptedTos, continueEnabled, runAuditLog, isMobile, onClose, acceptedTerms]);
+  }, [location, acceptedTos, continueEnabled, runAuditLog, page, isMobile, onClose, acceptedTerms]);
 
   const renderContent = () => (
     <Space direction="vertical" size="large" style={{ width: '100%' }}>
