@@ -50,6 +50,7 @@ export const ProductDetail = () => {
         tosUrl="https://quantamm.fi/tos"
         onClose={handleGateClose}
         isMobile={isMobile}
+        page="productDetail"
       />
     <Layout style={{ minHeight: '100vh', padding: 20 }}>
       {productLoading && <Spin />}
