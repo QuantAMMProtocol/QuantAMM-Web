@@ -6,6 +6,8 @@ import styles from './productModal.module.scss';
 import { useAppSelector } from '../../../app/hooks';
 import { selectAcceptedTermsAndConditions } from '../../productExplorer/productExplorerSlice';
 
+import { useRunAuditLogMutation } from '../../../services/auditLogService';
+
 interface ProductModalProps {
   isVisible: boolean;
   isWithdraw: boolean;
@@ -28,13 +30,23 @@ export const ProductModal: React.FC<ProductModalProps> = ({
 
   const [understandExternalWebsite, setUnderstandExternalWebsite] =
     useState(false);
+  
+  const [runAuditLog] = useRunAuditLogMutation();
 
   const handleClick = useCallback(() => {
+    void runAuditLog({
+      request: {
+        timestamp: new Date().toISOString(),
+        user: window.location.hostname,
+        page: isWithdraw ? 'productDetail-withdraw-redirect' : 'productDetail-deposit-redirect',
+        tosAgreement: understandExternalWebsite ? 'accepted' : 'not accepted',
+      },
+    });
     window.open(url, '_blank');
     clearInterval(intervalId);
     setIntervalId(undefined);
     onClose();
-  }, [intervalId, url, onClose]);
+  }, [runAuditLog, isWithdraw, understandExternalWebsite, url, intervalId, onClose]);
 
   return (
     <Modal

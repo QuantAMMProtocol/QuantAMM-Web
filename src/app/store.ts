@@ -15,6 +15,7 @@ import {
 } from '../services/productRetrievalService';
 import { productExplorerReducer } from '../features';
 import { financialAnalysisService } from '../services/financialAnalysisService';
+import { auditLogService } from '../services/auditLogService';
 
 enableMapSet();
 
@@ -33,6 +34,7 @@ export const store = configureStore({
     [productRetrievalService.reducerPath]: productRetrievalService.reducer,
     [filtersRetrievalService.reducerPath]: filtersRetrievalService.reducer,
     [financialAnalysisService.reducerPath]: financialAnalysisService.reducer,
+    [auditLogService.reducerPath]: auditLogService.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false })
@@ -41,7 +43,8 @@ export const store = configureStore({
       .concat(DocumentationService.middleware)
       .concat(productRetrievalService.middleware)
       .concat(filtersRetrievalService.middleware)
-      .concat(financialAnalysisService.middleware),
+      .concat(financialAnalysisService.middleware)
+      .concat(auditLogService.middleware),
 });
 
 export type AppDispatch = typeof store.dispatch;

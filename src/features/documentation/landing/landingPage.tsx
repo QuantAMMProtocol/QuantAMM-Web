@@ -6,6 +6,7 @@ import LandingPageDesktop from './desktop/landingPageDesktop';
 import { setAcceptedTermsAndConditions } from '../../productExplorer/productExplorerSlice';
 import { useAppDispatch } from '../../../app/hooks';
 
+// 
 const { useBreakpoint } = Grid;
 
 export default function LandingPage() {
@@ -20,6 +21,7 @@ export default function LandingPage() {
         tosUrl="https://quantamm.fi/tos"
         onClose={handleGateClose}
         isMobile={isMobile}
+        page='landingPage'
       />
 
       {isMobile ? <LandingPageMobile /> : <LandingPageDesktop />}

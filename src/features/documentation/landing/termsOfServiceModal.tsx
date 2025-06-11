@@ -16,6 +16,7 @@ import {
 import { useAppSelector } from '../../../app/hooks';
 import { selectAcceptedTermsAndConditions } from '../../productExplorer/productExplorerSlice';
 import { ROUTES } from '../../../routesEnum';
+import { useRunAuditLogMutation } from '../../../services/auditLogService';
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -24,6 +25,7 @@ export interface TermsOfServiceGateModalProps {
   onClose: () => void;
   isUkIp?: boolean;
   isMobile?: boolean;
+  page: string;
 }
 
 type LocationChoice = '' | 'uk' | 'nonUk';
@@ -87,12 +89,13 @@ const TermsOfServiceGateModal: React.FC<TermsOfServiceGateModalProps> = ({
   onClose,
   isUkIp = false,
   isMobile = false,
+  page,
 }) => {
   const acceptedTerms = useAppSelector(selectAcceptedTermsAndConditions);
   const [location, setLocation] = useState<LocationChoice>('');
   const [acceptedTos, setAcceptedTos] = useState(false);
   const [continueEnabled, setContinueEnabled] = useState(false);
-
+  const [runAuditLog] = useRunAuditLogMutation();
   const showUkBanner = isUkIp || location === 'uk';
 
   useEffect(() => {
@@ -113,6 +116,18 @@ const TermsOfServiceGateModal: React.FC<TermsOfServiceGateModalProps> = ({
     } catch {
       /* empty */
     }
+    if (acceptedTos) {
+      //async function to run audit log
+      void runAuditLog({
+        request: {
+          timestamp: new Date().toISOString(),
+          user: window.location.hostname,
+          page: page + '-tos-gate',
+          isMobile,
+          tosAgreement: acceptedTos ? 'accepted' : 'not accepted',
+        },
+      });
+      }
     if (!continueEnabled || location === 'uk') {
       window.location.href = '/' + ROUTES.INELIGIBLEUSER;
     } else {
@@ -121,7 +136,7 @@ const TermsOfServiceGateModal: React.FC<TermsOfServiceGateModalProps> = ({
       onClose();
       console.log(acceptedTerms);
     } // ✅ Close the modal only
-  }, [location, continueEnabled, onClose, acceptedTerms]);
+  }, [location, acceptedTos, continueEnabled, runAuditLog, isMobile, onClose, acceptedTerms]);
 
   const renderContent = () => (
     <Space direction="vertical" size="large" style={{ width: '100%' }}>
