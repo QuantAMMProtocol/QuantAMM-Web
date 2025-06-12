@@ -17,7 +17,7 @@ export default function InegligibleUser() {
             You are not eligible to use this application. Please contact info@quantamm.fi
             for more information.
             </p>
-            <h1>Ineligability is due to a breach of Terms of Service conditions such as the user is from an ineligable location</h1>
+            <h1>Ineligibility is due to a breach of Terms of Service conditions such as the user is from an ineligible location</h1>
             <button
                 onClick={() => window.location.href = '/tos'}
                 style={{

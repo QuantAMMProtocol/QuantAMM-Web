@@ -109,9 +109,6 @@ export const productExplorerSlice = createSlice({
   },
 });
 
-export const selectSimulationRunnerStatus = (state: RootState) =>
-  state.simRunner.simulationRunStatus;
-
 export const selectProducts = (state: RootState) => {
   return state.productExplorer.productMap;
 };

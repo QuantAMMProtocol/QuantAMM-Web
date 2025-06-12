@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Layout, Spin } from 'antd';
+import { Grid, Layout, Spin } from 'antd';
 import { useParams } from 'react-router-dom';
 import { GqlChain } from '../../__generated__/graphql-types';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
@@ -12,9 +12,13 @@ import { selectTheme } from '../themes/themeSlice';
 import { loadProducts, setAcceptedTermsAndConditions } from '../productExplorer/productExplorerSlice';
 import TermsOfServiceGateModal from '../documentation/landing/termsOfServiceModal';
 
+const { useBreakpoint } = Grid;
+
 export const ProductDetail = () => {
   const { chain, id } = useParams();
 
+  const screens = useBreakpoint();
+  const isMobile = !screens.lg && !screens.xl && !screens.xxl;
   const dispatch = useAppDispatch();
   const isDark = useAppSelector(selectTheme);
 
@@ -45,13 +49,15 @@ export const ProductDetail = () => {
       <TermsOfServiceGateModal
         tosUrl="https://quantamm.fi/tos"
         onClose={handleGateClose}
+        isMobile={isMobile}
+        page="productDetail"
       />
     <Layout style={{ minHeight: '100vh', padding: 20 }}>
       {productLoading && <Spin />}
       {!productLoading && !productError && !!id && (
         <Layout>
-          <ProductDetailSidebar id={id.toLowerCase()} isDark={isDark} />
-          <ProductDetailContent id={id.toLowerCase()} />
+          {isMobile ? <></> : <ProductDetailSidebar id={id.toLowerCase()} isDark={isDark} /> }
+          <ProductDetailContent id={id.toLowerCase()} isMobile={isMobile}/>
         </Layout>
       )}
     </Layout>

@@ -164,6 +164,7 @@ export function SimulationRunMvSummaryBreakdown(props: BreakdownProps) {
     },
     columnTypes: {
       nonEditableColumn: { editable: false },
+      
     },
     groupDefaultExpanded: 1,
   };

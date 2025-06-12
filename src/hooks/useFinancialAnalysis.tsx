@@ -1,11 +1,12 @@
 import { useEffect } from 'react';
 import { SerializedError } from '@reduxjs/toolkit';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
-import { useAppDispatch } from '../app/hooks';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { Benchmark, FinancialAnalysisResultDto, Product } from '../models';
 import { useRunFinancialAnalysisMutation } from '../services';
 import {
   loadingSimulationRunBreakdown,
+  selectQuantammSetPools,
   setProductSimulationRunBreakdown,
 } from '../features/productExplorer/productExplorerSlice';
 import { addImportedSimRunResults } from '../features/simulationRunner/simulationRunnerSlice';
@@ -27,7 +28,7 @@ export const useFinancialAnalysis = ({
 }) => {
   const dispatch = useAppDispatch();
   const [runFinancialAnalysis] = useRunFinancialAnalysisMutation();
-
+  const quantAMMSetPools = useAppSelector(selectQuantammSetPools);
   useEffect(() => {
     const fetchFinancialAnalysis = async () => {
       let success: Success | undefined;
@@ -38,7 +39,7 @@ export const useFinancialAnalysis = ({
 
       try {
         dispatch(loadingSimulationRunBreakdown(product.id));
-        if (
+        if (!quantAMMSetPools[product.id] &&
           (product?.timeSeries?.length ?? 0) > 0 &&
           product?.timeSeries?.[0]?.timestamp
         ) {
@@ -146,6 +147,7 @@ export const useFinancialAnalysis = ({
               simulationRunBreakdown: simBreakdown,
             })
           );
+
           if (loadToSimulator) {
             addImportedSimRunResults(simBreakdown);
           }
@@ -156,6 +158,5 @@ export const useFinancialAnalysis = ({
     };
 
     void fetchFinancialAnalysis();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [shouldRun]);
+  }, [benchmark, dispatch, loadToSimulator, product, quantAMMSetPools, runFinancialAnalysis, shouldRun]);
 };

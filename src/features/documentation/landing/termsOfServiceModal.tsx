@@ -1,5 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Modal, Button, Radio, Checkbox, Alert, Space, Typography } from 'antd';
+import {
+  Modal,
+  Button,
+  Checkbox,
+  Alert,
+  Space,
+  Typography,
+  Row,
+  Col,
+} from 'antd';
 import {
   ExclamationCircleOutlined,
   InfoCircleOutlined,
@@ -7,6 +16,7 @@ import {
 import { useAppSelector } from '../../../app/hooks';
 import { selectAcceptedTermsAndConditions } from '../../productExplorer/productExplorerSlice';
 import { ROUTES } from '../../../routesEnum';
+import { useRunAuditLogMutation } from '../../../services/auditLogService';
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -15,62 +25,62 @@ export interface TermsOfServiceGateModalProps {
   onClose: () => void;
   isUkIp?: boolean;
   isMobile?: boolean;
+  page: string;
 }
 
 type LocationChoice = '' | 'uk' | 'nonUk';
 
 const ToSSummary: React.FC = () => (
   <Typography>
+    <InfoCircleOutlined />
     <Title level={5} style={{ marginTop: 0, marginBottom: 8 }}>
       Key points (summary)
     </Title>
     <Paragraph style={{ marginBottom: 8 }}>
-      <ul style={{ paddingLeft: 18 }}>
-        <li>
-          Access to the site and its services is strictly prohibited for users
-          located in or citizens of Restricted Territories, including the United
-          Kingdom, United States, Canada, and other sanctioned jurisdictions,
-          unless explicitly permitted.
-        </li>
-        <li>
-          Use of VPNs or anonymizing tools to bypass access restrictions is
-          forbidden and violates the Terms of Service.
-        </li>
-        <li>
-          <Text strong>Cryptoassets are highly volatile</Text>. You may lose the
-          entire value of your holdings. There is no Financial Services
-          Compensation Scheme (FSCS) or equivalent protection. Risks are
-          numerous and include market, price, currency, liquidity. Conduct your
-          own research into the risks.
-        </li>
-        <li>
-          QuantAMM is an advanced Decentralized Finance (DeFi) platform. This
-          introduces unique smart contract and regulatory risks that may cause
-          you to lose the entire value of your holdings. QuantAMM reserves the
-          right to remove access to the platform at any time and for any reason.
-          QuantAMM cannot remove access to your underlying capital as the
-          platform is non-custodial.
-        </li>
-        <li>
-          QuantAMM does not offer investment advice. Simulations and past
-          performance are not indicative of future results. This site and its
-          materials do not constitute a financial promotion, advertisement, or
-          offer of investment services. Access is limited to eligible users only
-          and does not imply solicitation or regulatory approval.
-        </li>
-        <li>
-          Users are solely responsible for complying with applicable laws, tax
-          obligations, and ensuring they are eligible to use the platform. The
-          platform is non-custodial and users interact directly with smart
-          contracts at their own risk.
-        </li>
-        <li>
-          By using the platform, you agree to indemnify QuantAMM against any
-          claims or losses arising from your activity. QuantAMM’s liability is
-          strictly limited to the fees you have paid in the two months prior to
-          any claim.
-        </li>
-      </ul>
+      <Paragraph>
+        Access to the site and its services is strictly prohibited for users
+        located in or citizens of Restricted Territories, including the United
+        Kingdom, United States, Canada, and other sanctioned jurisdictions,
+        unless explicitly permitted.
+      </Paragraph>
+      <Paragraph>
+        Use of VPNs or anonymizing tools to bypass access restrictions is
+        forbidden and violates the Terms of Service.
+      </Paragraph>
+      <Paragraph>
+        <Text strong>Cryptoassets are highly volatile</Text>. You may lose the
+        entire value of your holdings. There is no Financial Services
+        Compensation Scheme (FSCS) or equivalent protection. Risks are numerous
+        and include market, price, currency, liquidity. Conduct your own
+        research into the risks.
+      </Paragraph>
+      <Paragraph>
+        QuantAMM is an advanced Decentralized Finance (DeFi) platform. This
+        introduces unique smart contract and regulatory risks that may cause you
+        to lose the entire value of your holdings. QuantAMM reserves the right
+        to remove access to the platform at any time and for any reason.
+        QuantAMM cannot remove access to your underlying capital as the platform
+        is non-custodial.
+      </Paragraph>
+      <Paragraph>
+        QuantAMM does not offer investment advice. Simulations and past
+        performance are not indicative of future results. This site and its
+        materials do not constitute a financial promotion, advertisement, or
+        offer of investment services. Access is limited to eligible users only
+        and does not imply solicitation or regulatory approval.
+      </Paragraph>
+      <Paragraph>
+        Users are solely responsible for complying with applicable laws, tax
+        obligations, and ensuring they are eligible to use the platform. The
+        platform is non-custodial and users interact directly with smart
+        contracts at their own risk.
+      </Paragraph>
+      <Paragraph>
+        By using the platform, you agree to indemnify QuantAMM against any
+        claims or losses arising from your activity. QuantAMM’s liability is
+        strictly limited to the fees you have paid in the two months prior to
+        any claim.
+      </Paragraph>
     </Paragraph>
   </Typography>
 );
@@ -79,12 +89,13 @@ const TermsOfServiceGateModal: React.FC<TermsOfServiceGateModalProps> = ({
   onClose,
   isUkIp = false,
   isMobile = false,
+  page,
 }) => {
   const acceptedTerms = useAppSelector(selectAcceptedTermsAndConditions);
   const [location, setLocation] = useState<LocationChoice>('');
   const [acceptedTos, setAcceptedTos] = useState(false);
   const [continueEnabled, setContinueEnabled] = useState(false);
-
+  const [runAuditLog] = useRunAuditLogMutation();
   const showUkBanner = isUkIp || location === 'uk';
 
   useEffect(() => {
@@ -105,6 +116,18 @@ const TermsOfServiceGateModal: React.FC<TermsOfServiceGateModalProps> = ({
     } catch {
       /* empty */
     }
+    if (acceptedTos) {
+      //async function to run audit log
+      void runAuditLog({
+        request: {
+          timestamp: new Date().toLocaleString(undefined, { timeZoneName: 'long' }),
+          user: window.location.hostname,
+          page: page + '-tos-gate',
+          isMobile,
+          tosAgreement: acceptedTos ? 'accepted' : 'not accepted',
+        },
+      });
+      }
     if (!continueEnabled || location === 'uk') {
       window.location.href = '/' + ROUTES.INELIGIBLEUSER;
     } else {
@@ -113,45 +136,107 @@ const TermsOfServiceGateModal: React.FC<TermsOfServiceGateModalProps> = ({
       onClose();
       console.log(acceptedTerms);
     } // ✅ Close the modal only
-  }, [location, continueEnabled, onClose, acceptedTerms]);
+  }, [location, acceptedTos, continueEnabled, runAuditLog, page, isMobile, onClose, acceptedTerms]);
 
   const renderContent = () => (
     <Space direction="vertical" size="large" style={{ width: '100%' }}>
-      <Radio.Group
-        block
-        optionType="button"
-        buttonStyle="solid"
-        value={location}
-        onChange={(e) => {
-          setLocation(e.target.value as LocationChoice);
-        }}
-        style={{ display: 'block' }}
-      >
-        <Radio value="uk">I am accessing from inside the United Kingdom.</Radio>
-        <Radio value="nonUk">
-          I am accessing from outside the United Kingdom.
-        </Radio>
-      </Radio.Group>
-      <Checkbox
-        checked={acceptedTos}
-        onChange={(e) => setAcceptedTos(e.target.checked)}
-      >
-        I have read and accept the{' '}
-        <a
-          href={'https://quantamm.fi/tos'}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Terms of Service
-        </a>{' '}
-        and confirm I am not a prohibited user.
-      </Checkbox>
+      <Row>
+        <Col span={24}>
+          <p style={{ marginBottom: 0, paddingLeft: 5, textAlign: 'center' }}>
+            Select Location:
+            <span
+              hidden={location != ''}
+              style={{
+                margin: 0,
+                padding: 0,
+                color: 'red',
+                textAlign: 'right',
+              }}
+            >
+              *required
+            </span>
+          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            <Button
+              size="small"
+              type={location === 'uk' ? 'primary' : 'default'}
+              block
+              onClick={() => setLocation('uk')}
+              style={{ height: '50px' }}
+            >
+              I am accessing from inside the United Kingdom.
+            </Button>
+            <Button
+              size="small"
+              type={location === 'nonUk' ? 'primary' : 'default'}
+              block
+              onClick={() => setLocation('nonUk')}
+              style={{ height: '50px' }}
+            >
+              I am accessing from outside the United Kingdom.
+            </Button>
+          </div>
 
-      <div style={{ textAlign: 'right' }}>
-        <Button type="primary" disabled={!acceptedTos} onClick={handleContinue}>
-          Continue
-        </Button>
-      </div>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              flexDirection: 'column',
+            }}
+          >
+            <Checkbox
+              style={{ marginTop: 10 }}
+              checked={acceptedTos}
+              onChange={(e) => setAcceptedTos(e.target.checked)}
+            >
+              I have read and accept the{' '}
+              <a
+                href={'https://quantamm.fi/tos'}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Terms of Service
+              </a>{' '}
+              and confirm I am not a prohibited user.{' '}
+              <span
+                hidden={acceptedTos}
+                style={{
+                  margin: 0,
+                  padding: 0,
+                  color: 'red',
+                  textAlign: 'right',
+                }}
+              >
+                *required
+              </span>
+            </Checkbox>
+          </div>
+        </Col>
+        <Col span={24}>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '100%',
+            }}
+          >
+            <Button
+              type="primary"
+              disabled={!acceptedTos || location != ('nonUk' as LocationChoice)}
+              onClick={handleContinue}
+              style={{
+                width: '90%',
+                height: '50px',
+                marginBottom: 20,
+                marginTop: 10,
+              }}
+            >
+              Continue
+            </Button>
+          </div>
+        </Col>
+      </Row>
     </Space>
   );
 
@@ -162,14 +247,14 @@ const TermsOfServiceGateModal: React.FC<TermsOfServiceGateModalProps> = ({
       open={!acceptedTerms}
       footer={null}
       closable={false}
-      width={isMobile ? 360 : 820}
+      width={isMobile ? 360 : 960}
       styles={{
         mask: { backdropFilter: 'blur(8px)' },
-        body: { maxHeight: isMobile ? '80vh' : '70vh', overflowY: 'auto' },
+        body: { maxHeight: isMobile ? '90vh' : '90vh', overflowY: 'auto' },
       }}
       destroyOnClose
     >
-      <div style={{ height: '400px', overflowY: 'auto' }}>
+      <div style={{ height: isMobile ? '250px' : '400px', overflowY: 'auto' }}>
         {showUkBanner ? (
           <Alert
             type="error"
@@ -188,13 +273,7 @@ const TermsOfServiceGateModal: React.FC<TermsOfServiceGateModalProps> = ({
             className="mb-4"
           />
         ) : (
-          <Alert
-            type="info"
-            showIcon
-            icon={<InfoCircleOutlined />}
-            description={<ToSSummary />}
-            className="mb-4"
-          />
+          <Alert type="info" description={<ToSSummary />} className="mb-4" />
         )}
       </div>
       <Paragraph type="secondary" style={{ fontSize: 12 }}>

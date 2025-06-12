@@ -63,6 +63,7 @@ export const ProductExplorer = () => {
     <TermsOfServiceGateModal
       tosUrl="https://quantamm.fi/tos"
       onClose={handleGateClose}
+      page='productExplorer'
     />
     <Layout style={{ minHeight: '100vh', padding: 12 }}>
       {productMapError ? (

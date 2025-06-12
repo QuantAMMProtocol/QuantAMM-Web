@@ -12,6 +12,7 @@ export const MinVariance = () => {
           Hold more of the least volatile constituent
         </Text>
       </Title>
+
       <p>
         <Text strong style={{ color: 'var(--secondary-text-color)' }}>
           Volatility is bad:{' '}
@@ -19,10 +20,14 @@ export const MinVariance = () => {
         If the constituents are not supposed to be volatile, then you really
         should derisk if one is starting to act erratically.
       </p>
+
       <p>
         <Text strong style={{ color: 'var(--secondary-text-color)' }}>
           More Detail:{' '}
         </Text>
+      </p>
+
+      <div style={{ paddingLeft: 16 }}>
         <p>
           Modern Portfolio Theory is a foundational economic theory of asset
           management proposed by Harry Markowitz in 1952. Simply put, the theory
@@ -31,10 +36,10 @@ export const MinVariance = () => {
           reduce the variance of the portfolio as a whole.
         </p>
         <p>
-          A natural fit for this strategy could be stablecoins, you want to have
+          A natural fit for this strategy could be stablecoins—you want to have
           more of the least volatile stable in your portfolio.
         </p>
-      </p>
+      </div>
     </>
   );
 };

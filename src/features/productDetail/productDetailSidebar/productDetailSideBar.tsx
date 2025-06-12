@@ -1,7 +1,5 @@
 import { CSSProperties, FC, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Affix, Button, Layout } from 'antd';
-import { LeftOutlined, TableOutlined } from '@ant-design/icons';
+import { Affix, Layout } from 'antd';
 import { useAppSelector } from '../../../app/hooks';
 import {
   selectProductById,
@@ -70,11 +68,11 @@ export const ProductDetailSidebar: FC<ProductDetailSidebarProps> = ({
             display: brokenBreakpoint && collapsed ? 'none' : 'flex',
           }}
         >
-          <Button type="link">
+          {/*<Button type="link">
             <Link to="..">
               <LeftOutlined /> <TableOutlined />
             </Link>
-          </Button>
+          </Button>*/}
         </div>
       </Affix>
       {product && <ProductDetailInfo product={product} />}

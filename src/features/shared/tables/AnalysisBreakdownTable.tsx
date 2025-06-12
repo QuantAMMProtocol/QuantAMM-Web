@@ -21,6 +21,7 @@ export const AnalysisBreakdownTable: FC<AnalysisBreakdownTableProps> = ({
   height = 700,
   productId,
 }) => {
+  console.log('rendering AnalysisBreakdownTable');
   const darkThemeAg = useAppSelector(selectAgGridTheme);
   const gridRef = useRef<AgGridReact>(null);
 
@@ -81,6 +82,8 @@ export const AnalysisBreakdownTable: FC<AnalysisBreakdownTableProps> = ({
         enablePivot: true,
       },
       columnTypes: {
+        // define a number type for numeric columns
+        number: { filter: 'agNumberColumnFilter', sortable: true },
         nonEditableColumn: { editable: false },
       },
       groupDefaultExpanded: 3,
@@ -140,7 +143,7 @@ export const AnalysisBreakdownTable: FC<AnalysisBreakdownTableProps> = ({
           <Title
             level={4}
             style={{
-              width: '100%',
+              width: '90%',
               marginBottom: 0,
               paddingLeft: 8,
               paddingTop: 8,

@@ -8,12 +8,10 @@ import { AppThunk } from './app/store';
 import { initializeSimulationsToRun } from './features/simulationRunner/simulationRunnerSlice';
 import { useLoadHistoricDailyPricesMutation } from './features/coinData/coinPriceRetrievalService';
 import {
-  CoinComparison,
   CoinPrice,
 } from './features/simulationRunConfiguration/simulationRunConfigModels';
 import { ReturnTimeStep } from './features/simulationResults/simulationResultSummaryModels';
 import {
-  updateCoinLoadStatus,
   updateCoinPriceHistory,
   updateCoinPriceHistoryLoaded,
   updateCoinPriceHistoryLoadedStatus,
@@ -22,6 +20,7 @@ import { AntDesignThemeProvider } from './AntDesignThemeProvider';
 import { MenuComponent } from './Menu';
 
 import style from './app.module.scss';
+import { batch } from 'react-redux';
 
 export interface Success {
   data: CoinPrice[];
@@ -52,62 +51,58 @@ function App() {
   const [loadHistoricPrices] = useLoadHistoricDailyPricesMutation();
 
   const loadPriceHistoryAsync = (): AppThunk => async (dispatch, getState) => {
-    if (
-      !getState().simConfig.coinPriceHistoryLoaded &&
-      getState().simConfig.coinPriceHistoryLoadedStatus == 'pending'
-    ) {
+    const {
+      availableCoins,
+      coinPriceHistoryLoaded,
+      coinPriceHistoryLoadedStatus,
+    } = getState().simConfig;
+
+    if (!coinPriceHistoryLoaded && coinPriceHistoryLoadedStatus === 'pending') {
       dispatch(updateCoinPriceHistoryLoadedStatus('loading'));
-      for (const coin of getState().simConfig.availableCoins) {
-        const response = await loadHistoricPrices({
+
+      // 1) Fire off all the requests in parallel
+      const promises = availableCoins.map(async (coin) => {
+        const data = await loadHistoricPrices({
           coinCode: coin.coinCode,
-        }).catch();
-        dispatch(updateCoinLoadStatus('Daily ' + coin.coinCode + ' prices '));
+        }).unwrap();
 
         const fullPriceMap = new Map<number, CoinPrice>();
+        const timesteps = new Map<number, ReturnTimeStep>();
 
-        const success = response as Success;
-        const data = success.data || [];
-
-        const dailyPriceHistory = data;
-
-        data.forEach((element) => {
-          fullPriceMap.set(element.unix, element);
+        data.forEach((p, i) => {
+          fullPriceMap.set(p.unix, p);
+          const ret = i === 0 ? 0 : p.close / data[i - 1].close - 1;
+          timesteps.set(p.unix, { date: p.date, unix: p.unix, return: ret });
         });
 
-        const timesteps: Map<number, ReturnTimeStep> = new Map<
-          number,
-          ReturnTimeStep
-        >();
+        return {
+          coin,
+          dailyPriceHistory: data,
+          dailyPriceHistoryMap: fullPriceMap,
+          dailyReturns: timesteps,
+        };
+      });
 
-        for (let i = 0; i < dailyPriceHistory.length; i++) {
-          let returnVal = 0;
+      const results = await Promise.all(promises);
 
-          if (i != 0) {
-            returnVal =
-              dailyPriceHistory[i].close / dailyPriceHistory[i - 1].close - 1;
+      batch(() => {
+        results.forEach(
+          ({ coin, dailyPriceHistory, dailyPriceHistoryMap, dailyReturns }) => {
+            dispatch(
+              updateCoinPriceHistory({
+                coinCode: coin.coinCode,
+                coinName: coin.coinName,
+                dailyPriceHistory,
+                dailyPriceHistoryMap,
+                dailyReturns,
+                coinComparisons: new Map(),
+              })
+            );
           }
-
-          timesteps.set(dailyPriceHistory[i].unix, {
-            date: dailyPriceHistory[i].date,
-            unix: dailyPriceHistory[i].unix,
-            return: returnVal,
-          });
-        }
-
-        dispatch(
-          updateCoinPriceHistory({
-            coinCode: coin.coinCode,
-            coinName: coin.coinName,
-            dailyPriceHistory: dailyPriceHistory,
-            dailyPriceHistoryMap: fullPriceMap,
-            dailyReturns: timesteps,
-            coinComparisons: new Map<string, CoinComparison>(),
-          })
         );
-      }
-
-      dispatch(updateCoinPriceHistoryLoaded(true));
-      dispatch(updateCoinPriceHistoryLoadedStatus('loaded'));
+        dispatch(updateCoinPriceHistoryLoaded(true));
+        dispatch(updateCoinPriceHistoryLoadedStatus('loaded'));
+      });
     }
   };
 

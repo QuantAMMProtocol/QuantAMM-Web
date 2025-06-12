@@ -13,6 +13,7 @@ import { ComparableProductSelector } from '../comparableProduct/comparableProduc
 import { getMax, benchmarksDropdownOptions, getMin } from './utils';
 
 import styles from './productDetailSummary.module.scss';
+import { manualTruncate } from '../../../../utils';
 
 const { Text } = Typography;
 
@@ -98,9 +99,11 @@ export const ProductDetailSummaryDesktop: FC<
 
       {/* second column - current product */}
       <div className={styles['product-detail-summary__item']}>
-        <Text style={{ fontSize: 16 }} strong>
-          {product.name}
-        </Text>
+        <Tooltip title={product.name}>
+          <Text style={{ fontSize: 16 }} strong>
+            {manualTruncate(product.name, 10)}
+          </Text>
+        </Tooltip>
       </div>
 
       {/* third column */}
@@ -127,12 +130,14 @@ export const ProductDetailSummaryDesktop: FC<
               styles['product-detail-summary__comparable-product-title']
             }
           >
+        <Tooltip title={comparingProduct.name}>
             <Text
               style={{ fontSize: 16 }}
               onClick={() => onSelectComparableProduct('')}
             >
-              {comparingProduct.name} <CloseOutlined />
+              {manualTruncate(comparingProduct.name, 10)} <CloseOutlined />
             </Text>
+            </Tooltip>
           </div>
         ) : (
           <ComparableProductSelector
@@ -385,7 +390,7 @@ export const ProductDetailSummaryDesktop: FC<
       {/* fifth row */}
       {/* first column */}
       <div className={styles['product-detail-summary__item-vertical']}>
-        Pool token weigth over time [%]
+        Pool token weight over time [%]
       </div>
 
       {/* second column */}

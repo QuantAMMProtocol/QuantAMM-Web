@@ -24,9 +24,10 @@ const { Title } = Typography;
 
 interface ProductDetailInfoProps {
   product: Product;
+  isMobile?: boolean;
 }
 
-export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({ product }) => {
+export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({ product, isMobile }) => {
   const panelStyle: React.CSSProperties = {
     background: 'transparent',
     border: 'none',
@@ -222,15 +223,21 @@ export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({ product }) => {
 
   return (
     <div
-      className={sharedStyles.scrollable}
-      style={{ background: 'transparent' }}
+      className={
+      isMobile
+        ? undefined
+        : sharedStyles.scrollable
+      }
+      style={{
+      background: 'transparent',
+      }}
     >
       <Collapse
-        items={getItems(panelStyle)}
-        defaultActiveKey={['1', '2', '3', '4', '5', '6', '7', '8', '9']}
-        bordered={false}
-        style={{ background: 'transparent', padding: '0' }}
-        size="small"
+      items={getItems(panelStyle)}
+      defaultActiveKey={['1', '2', '3', '4', '5', '6', '7', '8', '9']}
+      bordered={false}
+      style={{ background: 'transparent', padding: '0', }}
+      size="small"
       ></Collapse>
     </div>
   );

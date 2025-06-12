@@ -68,10 +68,10 @@ export const findClosestPrice = (
   const range = 24 * 60 * 60; // 24 hours in seconds
 
   if (!prices) return 0;
-
+  
   for (const priceEntry of prices) {
     const diff = Math.abs(Number(priceEntry.timestamp) - targetTimestamp);
-    if (diff <= range) {
+    if (diff < range) {
       return priceEntry.price;
     }
   }

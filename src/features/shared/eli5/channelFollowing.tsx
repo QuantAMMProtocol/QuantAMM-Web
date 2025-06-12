@@ -42,7 +42,6 @@ export const ChannelFollowing = () => {
         to enact the mean reversion strategy within the channel and the power
         channel strategy outside the channel.
       </p>
-      <p></p>
     </>
   );
 };

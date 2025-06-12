@@ -64,6 +64,7 @@ export interface TimeSeriesData {
   totalSwapVolume: number;
   volume24h: number;
   tokenPrices: Record<string, number>;
+  tokenPriceArray:number[];
   hodlSharePrice: number;
 }
 

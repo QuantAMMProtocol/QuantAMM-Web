@@ -15,7 +15,6 @@ import {
 } from './utils';
 
 import styles from './productDetailSummary.module.scss';
-
 const { Text } = Typography;
 
 interface ProductDetailSummaryMobileProps {
@@ -324,7 +323,7 @@ export const ProductDetailSummaryMobile = ({
       </Card>
       <Divider />
 
-      <Card title="Pool token weigth over time [%]">
+      <Card title="Pool token weight over time [%]">
         <div className={styles['product-detail-summary__card__body']}>
           <div
             className={styles['product-detail-summary__card__graph_container']}

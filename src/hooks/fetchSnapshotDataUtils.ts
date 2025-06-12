@@ -163,15 +163,24 @@ export const getTimeSeriesDataForProductList = (
       snapshots[0]?.totalShares > 0
         ? snapshots[0]?.totalShares
         : DEFAULT_INITIAL_TOTAL_SHARES;
+    
+    console.log("timeseries", snapshots);
+
     const tempTimeSeries = snapshots.map((snapshot: TimeSeriesData) => {
       const tokenPrices = Object.fromEntries(
         product.poolConstituents.map((token: { address: string }) => {
           const priceData =
-            tokenPricesMap[product.chain]?.[getTokenAddress(token)] || [];
+        tokenPricesMap[product.chain]?.[getTokenAddress(token)] || [];
           const closestPrice = findClosestPrice(priceData, snapshot.timestamp);
           return [token.address, closestPrice];
         })
       );
+
+      const tokenPriceArray = product.poolConstituents.map((token: { address: string }) => {
+        const priceData =
+          tokenPricesMap[product.chain]?.[getTokenAddress(token)] || [];
+        return findClosestPrice(priceData, snapshot.timestamp);
+      });
 
       const amounts = filterOutBptToken(product, snapshot);
 
@@ -186,6 +195,7 @@ export const getTimeSeriesDataForProductList = (
         volume24h: Number(snapshot.volume24h),
         tokenPrices,
         hodlSharePrice: 0,
+        tokenPriceArray: tokenPriceArray,
       };
     });
 
@@ -202,7 +212,7 @@ export const getTimeSeriesDataForProductList = (
       for (let j = 0; j < timestep.amounts.length; j++) {
         hodlTotalLiquidity +=
           hodlAmounts[j] *
-          timestep.tokenPrices[product.poolConstituents[j].address];
+          timestep.tokenPrices[product.poolConstituents[j].address];        
       }
       timestep.hodlSharePrice = hodlTotalLiquidity / initialTotalShares;
     }
@@ -232,13 +242,9 @@ export const getTimeSeriesDataForProduct = (
     //this sets the true launch date for quantamm initial products
     snapshots = snapshots.filter((x) => x.timestamp >= 1747267200);
   }
-
-  console.log("snapshots", snapshots);
-  console.log("token prices", tokenPricesMap); 
-
   let hodlAmounts: number[] | undefined;
 
-  const initialTotalShares =
+  let initialTotalShares =
     snapshots[0]?.totalShares > 0
       ? snapshots[0]?.totalShares
       : DEFAULT_INITIAL_TOTAL_SHARES;
@@ -255,6 +261,12 @@ export const getTimeSeriesDataForProduct = (
       })
     );
 
+    const tokenPriceArray = pool.poolGetPool?.poolTokens.map((token: { address: string }) => {
+      const priceData =
+        tokenPricesMap[pool.poolGetPool?.chain]?.[getTokenAddress(token)] || [];
+      return findClosestPrice(priceData, snapshot.timestamp);
+    });
+    
     const amounts = filterOutBptToken(
       {
         id: pool.poolGetPool?.id,
@@ -282,6 +294,7 @@ export const getTimeSeriesDataForProduct = (
       volume24h: Number(snapshot.volume24h),
       tokenPrices,
       hodlSharePrice: 0,
+      tokenPriceArray: tokenPriceArray,
     };
   });
 
@@ -291,16 +304,50 @@ export const getTimeSeriesDataForProduct = (
 
   const noZeroPriceTimeSeries = tempTimeSeries.slice(firstNonZeroPriceIndex);
 
+
+  if (noZeroPriceTimeSeries.length > 0) {
+    const totalLiquidity = noZeroPriceTimeSeries[0].totalLiquidity;
+    const initialSharePrice = noZeroPriceTimeSeries[0].sharePrice;
+
+    hodlAmounts = pool.poolGetPool?.poolTokens.map((token) => {
+      const priceData =
+        tokenPricesMap[pool.poolGetPool?.chain.toUpperCase()]?.[
+          getTokenAddress(token)
+        ] || [];
+      const closestPrice = findClosestPrice(priceData, snapshots[0].timestamp);
+      
+      return totalLiquidity / pool.poolGetPool?.poolTokens.length / closestPrice;
+    });
+
+    if (initialSharePrice > 0) {
+      initialTotalShares = totalLiquidity / initialSharePrice;
+    }
+  }
+  let totalLiquidityScalingFactor: number | undefined;
   // eslint-disable-next-line @typescript-eslint/prefer-for-of
   for (let i = 0; i < noZeroPriceTimeSeries.length; i++) {
     const timestep = noZeroPriceTimeSeries[i];
     let hodlTotalLiquidity = 0;
+    let totalLiquidity = 0;
     for (let j = 0; j < timestep.amounts.length; j++) {
       hodlTotalLiquidity +=
-        hodlAmounts![j] *
-        timestep.tokenPrices[pool.poolGetPool?.poolTokens[j].address];
+      hodlAmounts![j] *
+      timestep.tokenPrices[pool.poolGetPool?.poolTokens[j].address];
+
+      totalLiquidity +=
+      timestep.amounts[j] *
+      timestep.tokenPrices[pool.poolGetPool?.poolTokens[j].address];
     }
-    timestep.hodlSharePrice = hodlTotalLiquidity / initialTotalShares;
+
+    if (i === 0) {
+      totalLiquidityScalingFactor = hodlTotalLiquidity / totalLiquidity;
+    }
+
+    timestep.hodlSharePrice = (hodlTotalLiquidity / initialTotalShares) / (totalLiquidityScalingFactor ?? 1);
+
+    timestep.sharePrice =
+      (totalLiquidity / timestep.totalShares)
+
   }
 
   const timeSeriesData: ProductTimeSeriesData = {
