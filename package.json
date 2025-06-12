@@ -37,6 +37,7 @@
   },
   "dependencies": {
     "@balancer/sdk": "^2.4.0",
+    "@fingerprintjs/fingerprintjs": "^4.6.2",
     "@msgpack/msgpack": "^3.0.0-beta3",
     "@react-spring/parallax": "^9.7.5",
     "ag-charts-community": "^10.2.0",
