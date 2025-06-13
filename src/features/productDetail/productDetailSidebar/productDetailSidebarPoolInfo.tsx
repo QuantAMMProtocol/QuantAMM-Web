@@ -40,14 +40,14 @@ export const ProductDetailSidebarPoolInfo: FC<
       />
       <ProductDetailSidebarElement
         side="right"
-        href={strategyRunnerContractAddresses[product.chain]}
+        href={expolerRootUrl[product.chain] + "/address/" + strategyRunnerContractAddresses[product.chain]}
         target="_blank"
         text="Etherscan"
       />
       <ProductDetailSidebarElement side="left" text="Pool Factory contract" />
       <ProductDetailSidebarElement
         side="right"
-        href={factoryAddress[product.chain]} 
+        href={expolerRootUrl[product.chain] + "/address/" + factoryAddress[product.chain]} 
         target="_blank"
         text="Etherscan"
       />
@@ -97,12 +97,6 @@ export const ProductDetailSidebarPoolInfo: FC<
         text={
           product.enableRemoveLiquidityCustom?.valueOf().toString() ?? 'false'
         }
-      />
-      <ProductDetailSidebarElement side="left" text="Pool Address" />
-      <ProductDetailSidebarElement
-        side="right"
-        text={shortenAddress(product.id)}
-        href={expolerRootUrl[product.chain] + '/address/' + product.address}
       />
       <ProductDetailSidebarElement side="left" text="Creation Date" />
       <ProductDetailSidebarElement side="right" text={product.createTime} />
