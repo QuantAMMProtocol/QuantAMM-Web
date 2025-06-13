@@ -1,6 +1,7 @@
 import { FC, PropsWithChildren, useEffect, useState } from 'react';
 import type { ConfigProviderProps } from 'antd';
 import { ConfigProvider, Grid, theme } from 'antd';
+import { StyleProvider } from '@ant-design/cssinjs';
 import { useAppSelector } from './app/hooks';
 import { selectTheme } from './features/themes/themeSlice';
 
@@ -14,6 +15,7 @@ const darkTheme = {
     colorInfo: '#e6ce97',
     colorBgBase: '#162536',
     colorBgContainer: '#162536',
+    colorBgLayout: '#162536',
     splitColor: '#162536',
     fontFamily: 'Jost',
   },
@@ -28,6 +30,7 @@ const lightTheme = {
     colorInfo: '#3b340d',
     colorBgBase: '#fff',
     colorBgContainer: 'rgb(245, 245, 245)',
+    colorBgLayout: 'rgb(245, 245, 245)',
     fontFamily: 'Jost',
   },
   Menu: {
@@ -69,8 +72,10 @@ export const AntDesignThemeProvider: FC<PropsWithChildren> = ({ children }) => {
   }, [screens]);
 
   return (
-    <ConfigProvider theme={themeConfig} componentSize={componentSize}>
-      {children}
-    </ConfigProvider>
+    <StyleProvider hashPriority="high">
+      <ConfigProvider theme={themeConfig} componentSize={componentSize}>
+        {children}
+      </ConfigProvider>
+    </StyleProvider>
   );
 };
