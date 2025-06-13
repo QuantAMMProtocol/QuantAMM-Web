@@ -145,12 +145,11 @@ const TermsOfServiceGateModal: React.FC<TermsOfServiceGateModalProps> = ({
           <p style={{ marginBottom: 0, paddingLeft: 5, textAlign: 'center' }}>
             Select Location:
             <span
-              hidden={location != ''}
               style={{
-                margin: 0,
-                padding: 0,
-                color: 'red',
-                textAlign: 'right',
+              margin: 0,
+              padding: 0,
+              color: location != '' ? 'transparent' : 'red',
+              textAlign: 'right',
               }}
             >
               *required
@@ -199,11 +198,10 @@ const TermsOfServiceGateModal: React.FC<TermsOfServiceGateModalProps> = ({
               </a>{' '}
               and confirm I am not a prohibited user.{' '}
               <span
-                hidden={acceptedTos}
                 style={{
                   margin: 0,
                   padding: 0,
-                  color: 'red',
+                  color: acceptedTos ? 'transparent' : 'red',
                   textAlign: 'right',
                 }}
               >

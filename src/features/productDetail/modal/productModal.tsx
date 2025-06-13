@@ -1,12 +1,16 @@
 import { Modal, Button, Radio } from 'antd';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { ExternalLink } from 'lucide-react';
+import FingerprintJS, { Agent, GetResult } from '@fingerprintjs/fingerprintjs';
 
 import styles from './productModal.module.scss';
 import { useAppSelector } from '../../../app/hooks';
 import { selectAcceptedTermsAndConditions } from '../../productExplorer/productExplorerSlice';
 
 import { useRunAuditLogMutation } from '../../../services/auditLogService';
+
+// Pre‑load the FingerprintJS agent once per bundle load
+const fpPromise = FingerprintJS.load();
 
 interface ProductModalProps {
   isVisible: boolean;
@@ -21,23 +25,34 @@ export const ProductModal: React.FC<ProductModalProps> = ({
   url,
   onClose,
 }) => {
-  const acceptedTerms = useAppSelector(
-    selectAcceptedTermsAndConditions
-  );
-  const [intervalId, setIntervalId] = useState<NodeJS.Timeout | undefined>(
-    undefined
-  );
+  const acceptedTerms = useAppSelector(selectAcceptedTermsAndConditions);
+  const [intervalId, setIntervalId] = useState<NodeJS.Timeout | undefined>(undefined);
+  const [understandExternalWebsite, setUnderstandExternalWebsite] = useState(false);
+  const [visitorId, setVisitorId] = useState<string | undefined>(undefined);
 
-  const [understandExternalWebsite, setUnderstandExternalWebsite] =
-    useState(false);
-  
+  // Resolve the probabilistic fingerprint once per component mount
+  useEffect(() => {
+    let mounted = true;
+    fpPromise
+      .then((fp: Agent) => fp.get())
+      .then((result: GetResult) => {
+        if (mounted) setVisitorId(result.visitorId);
+      })
+      .catch(() => {
+        if (mounted) setVisitorId(undefined);
+      });
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
   const [runAuditLog] = useRunAuditLogMutation();
 
   const handleClick = useCallback(() => {
     void runAuditLog({
       request: {
         timestamp: new Date().toLocaleString(undefined, { timeZoneName: 'long' }),
-        user: window.location.hostname,
+        user: visitorId ?? 'unknown', // probabilistic fingerprint id
         page: isWithdraw ? 'productDetail-withdraw-redirect' : 'productDetail-deposit-redirect',
         tosAgreement: understandExternalWebsite ? 'accepted' : 'not accepted',
       },
@@ -46,7 +61,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({
     clearInterval(intervalId);
     setIntervalId(undefined);
     onClose();
-  }, [runAuditLog, isWithdraw, understandExternalWebsite, url, intervalId, onClose]);
+  }, [runAuditLog, isWithdraw, understandExternalWebsite, url, intervalId, onClose, visitorId]);
 
   return (
     <Modal
@@ -57,7 +72,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({
       className={styles.depositModal}
       width={600}
     >
-      <div style={{ width: '100%', height:'100%' }}>
+      <div style={{ width: '100%', height: '100%' }}>
         <h5>Redirection to external website</h5>
         <p>
           The website or web pages to which you are redirected are not owned by
@@ -80,11 +95,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({
         </p>
       </div>
       <div className={styles.radioContainer}>
-        <Radio
-          onClick={() =>
-            setUnderstandExternalWebsite(!understandExternalWebsite)}
-          checked={understandExternalWebsite}
-        >
+        <Radio onClick={() => setUnderstandExternalWebsite(!understandExternalWebsite)} checked={understandExternalWebsite}>
           By clicking continue, I agree that I have read and understood the
           disclaimer about the forwarding to external websites.
         </Radio>
@@ -96,20 +107,20 @@ export const ProductModal: React.FC<ProductModalProps> = ({
           className={styles.modalButton}
           size="large"
           disabled={!understandExternalWebsite || !acceptedTerms}
-          style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', width:'100%',alignItems: 'center', textAlign: 'center' }}
+          style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', width: '100%', alignItems: 'center', textAlign: 'center' }}
         >
-          <img
-            src="/assets/logo-balancer.png"
-            alt="Balancer"
-            className={styles.modalIcon}
-            style={{ marginBottom: '10px' }}
-          />
-          <div className={styles.modalContent} style={{width: '100%'}}>
-            <span className={styles.modalTitle} style={{textAlign:'center'}}>{isWithdraw ? 'Withdraw' : 'Deposit'} on Balancer</span>
-            <p className={styles.modalDescription} style={{wordWrap: 'break-word', width: '100%', maxWidth: '500px', textAlign:'center', marginBottom:0}}>
+          <img src="/assets/logo-balancer.png" alt="Balancer" className={styles.modalIcon} style={{ marginBottom: '10px' }} />
+          <div className={styles.modalContent} style={{ width: '100%' }}>
+            <span className={styles.modalTitle} style={{ textAlign: 'center' }}>
+              {isWithdraw ? 'Withdraw' : 'Deposit'} on Balancer
+            </span>
+            <p
+              className={styles.modalDescription}
+              style={{ wordWrap: 'break-word', width: '100%', maxWidth: '500px', textAlign: 'center', marginBottom: 0 }}
+            >
               Continue to Balancer&apos;s website
             </p>
-            <p style={{wordWrap: 'break-word', width: '100%', textAlign:'center', marginTop:'0'}}>
+            <p style={{ wordWrap: 'break-word', width: '100%', textAlign: 'center', marginTop: '0' }}>
               where you can {isWithdraw ? 'withdraw' : 'deposit'} your assets.
             </p>
           </div>
