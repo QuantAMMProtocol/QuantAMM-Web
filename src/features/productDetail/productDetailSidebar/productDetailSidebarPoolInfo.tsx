@@ -1,6 +1,5 @@
 import { FC } from 'react';
 import { Product } from '../../../models';
-import { shortenAddress } from '../../../utils';
 import { ProductDetailSidebarElement } from './productDetailSidebarElement';
 
 import styles from './productDetailInfo.module.scss';
