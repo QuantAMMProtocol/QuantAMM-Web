@@ -168,7 +168,7 @@ export function FactSheetDesktop(props: FactsheetDesktopProps) {
         </Col>
         <Col span={1}></Col>
       </Row>
-      <Row style={{ height: '50vh' }}>
+      <Row style={{ height: '52vh' }}>
         <Col span={1}></Col>
         <Col span={10}>
           <Row style={{ height: '100%' }}>
