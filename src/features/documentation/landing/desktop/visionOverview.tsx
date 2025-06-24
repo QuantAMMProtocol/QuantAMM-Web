@@ -82,9 +82,9 @@ export function VisionOverview({
                     status: 'process',
                   },
                   {
-                    title: 'May 2025',
-                    description: 'QuantAMM Launches BTF',
-                    icon: <LoadingOutlined />,
+                    title: '15th May 2025',
+                    description: 'QuantAMM launches 1st BTF',
+                    icon: <CheckCircleOutlined />,
                     status: 'process',
                   },
                 ]}
