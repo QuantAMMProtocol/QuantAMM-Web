@@ -308,7 +308,7 @@ export function FactSheetMobile(props: FactsheetDesktopProps) {
                   alignItems: 'center',
                 }}
               >
-                <span>SIMULATED BACK TEST COMPOSITION OVER TIME</span>
+                <span>SIMULATED COMPOSITION OVER TIME</span>
               </div>
             }
             style={{ height: '100%', marginTop: '15px' }}
@@ -330,7 +330,7 @@ export function FactSheetMobile(props: FactsheetDesktopProps) {
         <Col span={1}></Col>
       </Row>
 
-      <Row style={{ marginTop: '20px' }}>
+      <Row style={{ marginTop: '100px' }}>
         <Col span={1}></Col>
         <Col span={22}>
           <h1 style={{ marginLeft: '10px' }}>SIMULATED PERFORMANCE</h1>

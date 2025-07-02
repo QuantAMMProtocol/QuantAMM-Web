@@ -1,7 +1,7 @@
 import { Col, Row } from 'antd';
 import { ProductItemBackground } from '../../../productExplorer/productItem/productItemBackground';
 import { Steps } from 'antd';
-import { CheckCircleOutlined, LoadingOutlined } from '@ant-design/icons';
+import { CheckCircleOutlined } from '@ant-design/icons';
 
 interface VisionOverviewProps {
   backgroundColor?: string;
