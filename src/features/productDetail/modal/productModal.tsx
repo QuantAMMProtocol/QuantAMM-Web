@@ -1,6 +1,5 @@
 import { Modal, Button, Radio } from 'antd';
 import React, { useCallback, useState, useEffect } from 'react';
-import { ExternalLink } from 'lucide-react';
 import FingerprintJS, { Agent, GetResult } from '@fingerprintjs/fingerprintjs';
 
 import styles from './productModal.module.scss';
