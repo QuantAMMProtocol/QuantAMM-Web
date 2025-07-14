@@ -1,7 +1,7 @@
 import { Col, Row } from 'antd';
 import { ProductItemBackground } from '../../../productExplorer/productItem/productItemBackground';
 import { Steps } from 'antd';
-import { CheckCircleOutlined, LoadingOutlined } from '@ant-design/icons';
+import { CheckCircleOutlined } from '@ant-design/icons';
 
 interface VisionOverviewProps {
   backgroundColor?: string;
@@ -82,9 +82,9 @@ export function VisionOverview({
                     status: 'process',
                   },
                   {
-                    title: 'May 2025',
-                    description: 'QuantAMM Launches BTF',
-                    icon: <LoadingOutlined />,
+                    title: '15th May 2025',
+                    description: 'QuantAMM launches 1st BTF',
+                    icon: <CheckCircleOutlined />,
                     status: 'process',
                   },
                 ]}

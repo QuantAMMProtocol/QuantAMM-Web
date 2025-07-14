@@ -1,6 +1,5 @@
 import { Modal, Button, Radio } from 'antd';
 import React, { useCallback, useState, useEffect } from 'react';
-import { ExternalLink } from 'lucide-react';
 import FingerprintJS, { Agent, GetResult } from '@fingerprintjs/fingerprintjs';
 
 import styles from './productModal.module.scss';
@@ -109,7 +108,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({
           disabled={!understandExternalWebsite || !acceptedTerms}
           style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', width: '100%', alignItems: 'center', textAlign: 'center' }}
         >
-          <img src="/assets/logo-balancer.png" alt="Balancer" className={styles.modalIcon} style={{ marginBottom: '10px' }} />
+          <img src="/assets/logo-balancer.png" alt="Balancer" className={styles.modalIcon} style={{ marginBottom: '10px', marginTop:'10px' }} />
           <div className={styles.modalContent} style={{ width: '100%' }}>
             <span className={styles.modalTitle} style={{ textAlign: 'center' }}>
               {isWithdraw ? 'Withdraw' : 'Deposit'} on Balancer
@@ -124,7 +123,6 @@ export const ProductModal: React.FC<ProductModalProps> = ({
               where you can {isWithdraw ? 'withdraw' : 'deposit'} your assets.
             </p>
           </div>
-          <ExternalLink className={styles.externalLinkIcon} style={{ marginTop: '10px' }} />
         </Button>
       </div>
     </Modal>

@@ -156,8 +156,6 @@ export const getTimeSeriesDataForProductList = (
       snapshots = snapshots.filter((x) => x.timestamp >= 1747267200);
     }
     const hodlAmounts = snapshots[0]?.amounts;
-    console.log(snapshots);
-    console.log(tokenPricesMap); 
 
     const initialTotalShares =
       snapshots[0]?.totalShares > 0
