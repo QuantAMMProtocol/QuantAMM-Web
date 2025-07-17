@@ -220,8 +220,9 @@ export const ProductTokenWeightChangeOverTimeGraph: FC<
           },
         ],
         series: normalisedAreaSeries,
-        legend: {
-          ...legendOverride,
+        legend: legendOverride ?? {
+          enabled: true,
+          position: 'bottom',
         },
         overlays: {
           noData: {
