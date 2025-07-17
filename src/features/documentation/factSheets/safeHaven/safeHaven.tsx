@@ -1,8 +1,8 @@
 import { Grid } from 'antd';
 
-import { FactSheetDesktop } from './desktop/factsheetDesktop';
+import { FactSheetDesktop } from '../desktop/factsheetDesktop';
 import { safeHavenFactsheetData } from './safeHavenfactsheetData';
-import { FactSheetMobile } from './mobile/factsheetMobile';
+import { FactSheetMobile } from '../mobile/factsheetMobile';
 
 const { useBreakpoint } = Grid;
 

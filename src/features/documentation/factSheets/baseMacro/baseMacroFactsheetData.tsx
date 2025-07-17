@@ -1,52 +1,56 @@
-import { FactsheetModel } from './factsheetModel';
-import { PowerChannelUpdateRule } from '../updateRules/powerChannelUpdateRule';
+import { FactsheetModel } from '../factsheetModel';
+import { PowerChannelUpdateRule } from '../../updateRules/powerChannelUpdateRule';
 
-export const safeHavenFactsheetData: FactsheetModel = {
-  poolId: '0x6b61d8680c4f9e560c8306807908553f95c749c5',
-  poolChain: 'MAINNET',
+export const baseMacroFactsheetData: FactsheetModel = {
+  poolId: '0xb4161aea25bd6c5c8590ad50deb4ca752532f05d',
+  poolChain: 'BASE',
   pools: [
-    'safeHavenBTFAugTest',
-    'safeHavenCFMMAugTest',
-    'safeHavenHodlAugTest',
-    'safeHavenBTFAugTrain',
-    'safeHavenCFMMAugTrain',
-    'safeHavenHodlAugTrain',
-    'safeHavenBTF2025Test',
-    'safeHavenCFMM2025Test',
-    'safeHavenHodl2025Test',
+    'baseMacroBTFAugTest',
+    'baseMacroCFMMAugTest',
+    'baseMacroHodlAugTest',
+    'baseMacroBTFAugTrain',
+    'baseMacroCFMMAugTrain',
+    'baseMacroHodlAugTrain',
+    'baseMacroBTF2025Test',
+    'baseMacroCFMM2025Test',
+    'baseMacroHodl2025Test',
   ],
   factsheetImage: {
-    image: '/assets/safe_haven_BTF_icon_mono.png',
+    image: '/assets/baseMacro_mono.png',
     width: '30%',
-    alt: 'Safe Haven BTF Icon',
+    alt: 'BASE MACRO BTF Icon',
   },
   objective:
-    'The Safe Haven BTF allows for a decentralised, automated and transparent mechanism to allocate to Gold and Bitcoin in a responsive manner that reflects the inherent volatility associated with Bitcoin.',
+    'The Base Macro BTF provides exposure to some of the mega-cap tokens on Base. The BTF was trained on more bullish market conditions.',
   deploymentLinks: {
     contractLinks: [
       [
         'Pool Factory Contract',
-        'https://etherscan.io/address/0xD5c43063563f9448cE822789651662cA7DcD5773',
-      ],
-      [
-        'Strategy Runner Contract',
-        'https://etherscan.io/address/0x21Ae9576a393413D6d91dFE2543dCb548Dbb8748',
+        'https://basescan.org/address/0x62B9eC6A5BBEBe4F5C5f46C8A8880df857004295',
       ],
       [
         'Strategy Contract',
-        'https://etherscan.io/address/0x62B9eC6A5BBEBe4F5C5f46C8A8880df857004295',
+        'https://basescan.org/address/0x4FFE46130bCBb16BF5EDc4bBaa06f158921764C2',
       ],
       [
-        'Chainlink BTC Oracle',
-        'https://etherscan.io/address/0xF4030086522a5bEEa4988F8cA5B36dbC97BeE88c',
+        'Strategy Runner Contract',
+        'https://basescan.org/address/0x8Ca4e2a74B84c1feb9ADe19A0Ce0bFcd57e3f6F7',
       ],
       [
-        'Chainlink PAXG Oracle',
-        'https://etherscan.io/address/0x9944D86CEB9160aF5C5feB251FD671923323f8C3',
+        'Chainlink cbBTC Oracle',
+        'https://basescan.org/address/0x64c911996D3c6aC71f9b455B1E8E7266BcbD848F',
       ],
       [
         'Chainlink USDC Oracle',
-        'https://etherscan.io/address/0x8fFfFfd4AfB6115b954Bd326cbe7B4BA576818f6',
+        'https://basescan.org/address/0x7e860098F58bBFC8648a4311b374B1D669a2bc6B',
+      ],
+      [
+        'Chainlink AERO Oracle',
+        'https://basescan.org/address/0x4EC5970fC728C5f65ba413992CD5fF6FD70fcfF0',
+      ],
+      [
+        'Chainlink WETH Oracle',
+        'https://basescan.org/address/0x71041dddad3595F9CEd3DcCFBe3D1F4b0a16Bb70',
       ],
     ],
   },
@@ -54,35 +58,35 @@ export const safeHavenFactsheetData: FactsheetModel = {
     ['Strategy Interval', '24H'],
     ['Strategy', 'Power Channel'],
     ['Staleness Limit', '24H'],
-    ['Swap Fee', '2%'],
+    ['Swap Fee', '0.03%'],
     ['Withdrawal Fee', '0%'],
     ['Streaming Fee', '0%'],
   ],
-  defaultPeriod: ['AugTest', 'Test Period: Aug24-Apr25'],
-  alternatePeriod: ['2025Test', 'Test Period: Jan-Apr25'],
+  defaultPeriod: ['AugTest', 'Test Period: Aug24-May25'],
+  alternatePeriod: ['2025Test', 'Test Period: Jan-May25'],
   trainPeriod: 'AugTrain',
-  poolPrefix: 'safeHaven',
+  poolPrefix: 'baseMacro',
   xAxisIntervals: new Map<string, number>([
     ['AugTest', 3],
     ['2025Test', 1],
-    ['AugTrain', 22],
+    ['AugTrain', 1],
     ['default', 22],
   ]),
-  mainTitle: 'The Safe Haven BTF',
-  mainDescription: `A safe haven is an investment that is expected to retain or 
-increase in value during times of global turbulence. Examples of 
-safe havens include gold, U.S. Treasury bonds, and certain 
-currencies like the United States Dollar. Bitcoin is also 
-considered a potential safe haven asset due to its limited supply 
-and decentralized nature, which can provide a hedge against 
-inflation and currency devaluation.`,
+  mainTitle: 'The Base Macro BTF',
+  mainDescription: `Base is one of the pioneering chains for DeFi. It is a layer 2
+              solution built on the Ethereum blockchain, designed to provide
+              faster and cheaper transactions while maintaining the security and
+              decentralization of Ethereum. Base is designed to be a platform
+              for building decentralized applications (dApps) and smart
+              contracts, enabling developers to create innovative solutions in
+              the DeFi space.`,
   cumulativePerformanceOverrideSeriesStrokeColor: {
     'Power Channel': '#c7b283',
     'Balancer Weighted': '#528aae',
     HODL: '#52ad80',
   },
   cumulativePerformanceOverrideSeriesName: {
-    'Power Channel': 'SAFE HAVEN BTF',
+    'Power Channel': 'BASE MACRO BTF',
     'Balancer Weighted': 'Traditional DEX',
   },
 
@@ -92,17 +96,17 @@ inflation and currency devaluation.`,
       title: 'Advanced Infrastructure',
       description: (
         <>
-          <p>BTFs are dynamically weighted Balancer V3 DEX pools</p>
+          <p>BTFs are dynamically weighted Balancer V3 DEX pools.</p>
           <p>
             While the rebalancing process of index and ETP products can be an
             inefficient periodic process, the BTF pool offers a price to
             external arbitrageurs that keeps in line with the market price and
-            the current BTF weights. This is one of the tried and tested
+            the current BTF weights. This is one of the tried-and-tested
             innovations of blockchain and requires no complex execution/auction
             and no BTF custodian or governing manager.
           </p>
           <p>
-            This also offers an additional swap fee revenue from noise traders
+            This also offers additional swap fee revenue from noise traders
             and DEX Aggregators.
           </p>
         </>
@@ -112,20 +116,20 @@ inflation and currency devaluation.`,
       title: 'Responsive Strategies',
       description: (
         <>
-          <p>QuantAMM believes in transparency though decentralisation</p>
+          <p>QuantAMM believes in transparency through decentralization.</p>
           <p>
-            The re-weighting strategy and parameters are a visible contract
+            The re-weighting strategy and parameters are visible contracts
             on-chain. No opaque strategy vault managers. Chainlink provides data
             integrity.
           </p>
           <p>
-            Given novel patented technology the re-weighting strategies run
+            Given novel patented technology, the re-weighting strategies run
             cheaply on-chain and daily re-weighting is possible even on L1s such
             as Ethereum Mainnet.
           </p>
           <p>
             This is important given the majority of liquidity depth is still on
-            mainnet
+            mainnet.
           </p>
         </>
       ),
@@ -135,33 +139,32 @@ inflation and currency devaluation.`,
       description: (
         <>
           <p>
-            QuantAMM is a Balancer V3 launch partner. The state of the art
-            Balancer Vault manages all non custodial deposits and withdrawals
+            QuantAMM is a Balancer V3 launch partner. The state-of-the-art
+            Balancer Vault manages all non-custodial deposits and withdrawals
             with advanced disaster recovery features.
           </p>
           <p>
             While QuantAMM has performed competitive and private audits of its
             own, the Balancer Vault has had its own numerous audits, large bug
-            bounties and real-time monitoring. The vault manages all pools on
+            bounties, and real-time monitoring. The vault manages all pools on
             Balancer V3.
           </p>
         </>
       ),
     },
     {
-      title: 'Cross asset baskets',
+      title: 'Cross-Asset Baskets',
       description: (
         <>
           <p>
-            PAXOS tokenisation of gold allows for a combined product that
-            bridges the gap between traditional safe havens and blockchain based
-            safe havens.
+            USDC provides a stablecoin that is the most widely used in DeFi. It
+            is the most liquid and widely accepted stablecoin in the crypto
+            ecosystem.
           </p>
           <p>
-            With an automatically rebalancing BTF that provides you with a
-            transferable pool LP token, you can own a token that will be
-            redeemable with the proportional weights and value of the underlying
-            assets. All non custodial and on-chain.
+            AERO is a Base native DeFi token. While this token carries potential
+            protocol risk and higher volatility, it is a key native token of the
+            Base ecosystem.
           </p>
         </>
       ),
@@ -175,13 +178,13 @@ inflation and currency devaluation.`,
           <p>
             Having visible strategies with known parameters is advantageous as
             you can model risk and performance in all the ways traditional
-            finance is used to. However they do take positions based on their
+            finance is used to. However, they do take positions based on their
             interpretation of markets. This is a directional position that will
             incur risk and loss of capital if the market moves against the
             strategy.
           </p>
           <p>
-            As bitcoin is a volatile asset, even though it can be considered a
+            As Bitcoin is a volatile asset, even though it can be considered a
             safe haven asset, investing in a BTF introduces unique risk.
           </p>
         </>
@@ -196,13 +199,13 @@ inflation and currency devaluation.`,
             to 0 in a depeg scenario.
           </p>
           <p>
-            The pools rebalance automatically causing a potential complete loss
+            The pools rebalance automatically, causing a potential complete loss
             of funds.
           </p>
           <p>
             Balancer V3 has modern features such as pausing a pool to mitigate
-            this however a loss in such as is dependant on timing of any
-            intervention. If a pool is paused or in a recovery state you can
+            this; however, a loss in such a case is dependent on the timing of any
+            intervention. If a pool is paused or in a recovery state, you can
             still withdraw the underlying assets at a proportional quantity to
             your LP tokens.
           </p>
@@ -216,13 +219,13 @@ inflation and currency devaluation.`,
           <p>
             Blockchain technologies run on largely immutable contracts. There
             are always risks that there is an issue or a deviation from expected
-            behaviour in the code. This could range from minor deviations of
+            behavior in the code. This could range from minor deviations of
             intended logic to capital loss.
           </p>
           <p>
             QuantAMM has performed private audits of the codebase as well as
-            competition based audits. Balancer has also performed the same and
-            has large bug bounties to incentivise identification of any issues.
+            competition-based audits. Balancer has also performed the same and
+            has large bug bounties to incentivize identification of any issues.
           </p>
         </>
       ),
@@ -247,7 +250,7 @@ inflation and currency devaluation.`,
       ),
     },
   ],
-  trainingWindowTitle: 'Training window March 2021 - Aug 2024',
+  trainingWindowTitle: 'Training Window April 2024 - August 2024',
   trainingDescription: (
     <>
       <p>
@@ -256,14 +259,14 @@ inflation and currency devaluation.`,
         prices that get taken into account.
       </p>
       <p>
-        A training period of March 2021-August 2024 was selected and parameters
-        were selected using the machine learning technique called: Stochastic
+        A training period of April 2024-August 2024 was selected, and parameters
+        were chosen using the machine learning technique called Stochastic
         Gradient Descent. This was performed by the QuantAMM team using the
         QuantAMM simulator framework. A parameter set was selected that
-        maximised the Sharpe Ratio of the strategy. This was selected over other
-        objectives such as maximising Ulcer or Calmer Ratios as the parameter
-        set showed better test set statistics. Random 1038-day length windows
-        were selected within the training price range and optimisation was
+        maximized the Sharpe Ratio of the strategy. This was selected over other
+        objectives such as maximizing Ulcer or Calmar Ratios as the parameter
+        set showed better test set statistics. Random 73-day length windows
+        were selected within the training price range, and optimization was
         performed via stochastic gradient descent for 6000 steps with batches of
         6 windows per step.
       </p>
@@ -295,9 +298,10 @@ inflation and currency devaluation.`,
           tooltip:
             'Lambda is the parameter used in the gradient estimators for the power channel. This is the on-chain value stored in the contracts.',
           value: [
-            'BTC - 0.811035769801363300',
-            'PAXG - 0.781490597023096500',
-            'USDC - 0.289524066401247700',
+            'cbBTC - 0.9784309018144351',
+            'AERO - 0.9925922273835435',
+            'USDC - 0.6009182385585357',
+            'WETH - 0.2679511251319175',
           ],
         },
         {
@@ -305,9 +309,10 @@ inflation and currency devaluation.`,
           tooltip:
             'Memory days is a conversion of the lambda setting to a more understandable unit of the number of days of prices used in the strategy.',
           value: [
-            'BTC - 17.93552717',
-            'PAXG - 15.31974493',
-            'USDC - 3.38396553',
+            'cbBTC - 167.272730',
+            'AERO - 365.0',
+            'USDC - 7.684642',
+            'WETH - 3.200556',
           ],
         },
       ],
@@ -320,9 +325,10 @@ inflation and currency devaluation.`,
           tooltip:
             'Otherwise known as k_per_day. This is the multiplier applied to the strategy signal to get the weight change per day.',
           value: [
-            'BTC - 77.55380713',
-            'PAXG - 52.65723196',
-            'USDC - 75.62990544',
+            'cbBTC - 5.608611948',
+            'AERO - 43.81829052',
+            'USDC - 7.015760734',
+            'WETH - 39.89684253',
           ],
         },
         {
@@ -330,9 +336,10 @@ inflation and currency devaluation.`,
           tooltip:
             'k is the on-chain value stored in the contracts and is the exact parameter used in the strategy calculations.',
           value: [
-            'BTC - 1390.9684145267538',
-            'PAXG - 806.6953621597771',
-            'USDC - 255.92899333099183',
+            'cbBTC - 938.167832',
+            'AERO - 15993.676043',
+            'USDC - 306.592966',
+            'WETH - 22.454340',
           ],
         },
       ],
@@ -343,8 +350,13 @@ inflation and currency devaluation.`,
         {
           name: 'Exponent',
           tooltip:
-            'The exponent is a variable used in the power channel strategy that dictate how big a price change has to be before the strategy starts to notice it. It is the primary difference between other strategies like momentum.',
-          value: ['BTC - 1.5312327931176639', 'PAXG - 1', 'USDC - 1'],
+            'The exponent is a variable used in the power channel strategy that dictates how big a price change has to be before the strategy starts to notice it. It is the primary difference between other strategies like momentum.',
+          value: [
+            'cbBTC - 1',
+            'AERO - 2.4705463110202333',
+            'USDC - 1',
+            'WETH - 1',
+          ],
         },
       ],
     },

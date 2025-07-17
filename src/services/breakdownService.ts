@@ -68,7 +68,25 @@ export type Pool =
   | 'baseMacroCFMMAugTrainFull'
   | 'baseMacroHodl2025TestFull'
   | 'baseMacroHodlAugTestFull'
-  | 'baseMacroHodlAugTrainFull';
+  | 'baseMacroHodlAugTrainFull'
+  | 'sonicMacroBTF2025Test'
+  | 'sonicMacroBTFAugTest'
+  | 'sonicMacroBTFAugTrain'
+  | 'sonicMacroCFMM2025Test'
+  | 'sonicMacroCFMMAugTest'
+  | 'sonicMacroCFMMAugTrain'
+  | 'sonicMacroHodl2025Test'
+  | 'sonicMacroHodlAugTest'
+  | 'sonicMacroHodlAugTrain'
+  | 'sonicMacroBTF2025TestFull'
+  | 'sonicMacroBTFAugTestFull'
+  | 'sonicMacroBTFAugTrainFull'
+  | 'sonicMacroCFMM2025TestFull'
+  | 'sonicMacroCFMMAugTestFull'
+  | 'sonicMacroCFMMAugTrainFull'
+  | 'sonicMacroHodl2025TestFull'
+  | 'sonicMacroHodlAugTestFull'
+  | 'sonicMacroHodlAugTrainFull';
 
 // Helper to convert MessagePack data to breakdown DTO
 export const convertBreakdownDtoToBreakdown = (
@@ -191,6 +209,24 @@ export const getBreakdown = async (
     baseMacroHodl2025TestFull: '/prerun_sims/BASE_MACRO_HODL_2025_TEST_FULL.msgpack',
     baseMacroHodlAugTestFull: '/prerun_sims/BASE_MACRO_HODL_AUG_TEST_FULL.msgpack',
     baseMacroHodlAugTrainFull: '/prerun_sims/BASE_MACRO_HODL_AUG_TRAIN_FULL.msgpack',
+    sonicMacroBTF2025Test: '/prerun_sims/BASE_MACRO_BTF_2025_TEST.msgpack',
+    sonicMacroBTFAugTest: '/prerun_sims/BASE_MACRO_BTF_AUG_TEST.msgpack',
+    sonicMacroBTFAugTrain: '/prerun_sims/BASE_MACRO_BTF_AUG_TRAIN.msgpack',
+    sonicMacroCFMM2025Test: '/prerun_sims/BASE_MACRO_CFMM_2025_TEST.msgpack',
+    sonicMacroCFMMAugTest: '/prerun_sims/BASE_MACRO_CFMM_AUG_TEST.msgpack',
+    sonicMacroCFMMAugTrain: '/prerun_sims/BASE_MACRO_CFMM_AUG_TRAIN.msgpack',
+    sonicMacroHodl2025Test: '/prerun_sims/BASE_MACRO_HODL_2025_TEST.msgpack',
+    sonicMacroHodlAugTest: '/prerun_sims/BASE_MACRO_HODL_AUG_TEST.msgpack',
+    sonicMacroHodlAugTrain: '/prerun_sims/BASE_MACRO_HODL_AUG_TRAIN.msgpack',
+    sonicMacroBTF2025TestFull: '/prerun_sims/BASE_MACRO_BTF_2025_TEST_FULL.msgpack',
+    sonicMacroBTFAugTestFull: '/prerun_sims/BASE_MACRO_BTF_AUG_TEST_FULL.msgpack',
+    sonicMacroBTFAugTrainFull: '/prerun_sims/BASE_MACRO_BTF_AUG_TRAIN_FULL.msgpack',
+    sonicMacroCFMM2025TestFull: '/prerun_sims/BASE_MACRO_CFMM_2025_TEST_FULL.msgpack',
+    sonicMacroCFMMAugTestFull: '/prerun_sims/BASE_MACRO_CFMM_AUG_TEST_FULL.msgpack',
+    sonicMacroCFMMAugTrainFull: '/prerun_sims/BASE_MACRO_CFMM_AUG_TRAIN_FULL.msgpack',
+    sonicMacroHodl2025TestFull: '/prerun_sims/BASE_MACRO_HODL_2025_TEST_FULL.msgpack',
+    sonicMacroHodlAugTestFull: '/prerun_sims/BASE_MACRO_HODL_AUG_TEST_FULL.msgpack',
+    sonicMacroHodlAugTrainFull: '/prerun_sims/BASE_MACRO_HODL_AUG_TRAIN_FULL.msgpack',
   };
 
   const poolFilePath = poolFileMapping[poolName];

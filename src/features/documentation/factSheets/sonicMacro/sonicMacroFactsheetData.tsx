@@ -1,62 +1,62 @@
-import { FactsheetModel } from './factsheetModel';
-import { PowerChannelUpdateRule } from '../updateRules/powerChannelUpdateRule';
+import { FactsheetModel } from '../factsheetModel';
+import { ChannelFollowingUpdateRule } from '../../updateRules/channelFollowing';
 
-export const baseMacroFactsheetData: FactsheetModel = {
-  poolId: '0xb4161aea25bd6c5c8590ad50deb4ca752532f05d',
-  poolChain: 'BASE',
+export const sonicMacroFactsheetData: FactsheetModel = {
+  poolId: '0x74dc857d5567a3b087e79b96b91cdc8099b2fa34',
+  poolChain: 'SONIC',
   pools: [
-    'baseMacroBTFAugTest',
-    'baseMacroCFMMAugTest',
-    'baseMacroHodlAugTest',
-    'baseMacroBTFAugTrain',
-    'baseMacroCFMMAugTrain',
-    'baseMacroHodlAugTrain',
-    'baseMacroBTF2025Test',
-    'baseMacroCFMM2025Test',
-    'baseMacroHodl2025Test',
+    'sonicMacroBTFAugTest',
+    'sonicMacroCFMMAugTest',
+    'sonicMacroHodlAugTest',
+    'sonicMacroBTFAugTrain',
+    'sonicMacroCFMMAugTrain',
+    'sonicMacroHodlAugTrain',
+    'sonicMacroBTF2025Test',
+    'sonicMacroCFMM2025Test',
+    'sonicMacroHodl2025Test',
   ],
   factsheetImage: {
-    image: '/assets/baseMacro_mono.png',
+    image: '/assets/sonicMacro_mono.png',
     width: '30%',
-    alt: 'BASE MACRO BTF Icon',
+    alt: 'SONIC MACRO BTF Icon',
   },
   objective:
-    'The Base Macro BTF provides exposure to some of the megal cap tokens on Base. The BTF is was trained on more bullish market conditions.',
+    'The Sonic Macro BTF provides exposure to some of the mega cap tokens on Sonic. The BTF was trained on more bullish market conditions.',
   deploymentLinks: {
     contractLinks: [
       [
         'Pool Factory Contract',
-        'https://basescan.org/address/0x62B9eC6A5BBEBe4F5C5f46C8A8880df857004295',
+        'https://sonicscan.org/address/0x62B9eC6A5BBEBe4F5C5f46C8A8880df857004295',
       ],
       [
         'Strategy Contract',
-        'https://basescan.org/address/0x4FFE46130bCBb16BF5EDc4bBaa06f158921764C2',
+        'https://sonicscan.org/address/0x4FFE46130bCBb16BF5EDc4bBaa06f158921764C2',
       ],
       [
         'Strategy Runner Contract',
-        'https://basescan.org/address/0x8Ca4e2a74B84c1feb9ADe19A0Ce0bFcd57e3f6F7',
+        'https://sonicscan.org/address/0x8Ca4e2a74B84c1feb9ADe19A0Ce0bFcd57e3f6F7',
       ],
       [
-        'Chainlink cbBTC Oracle',
-        'https://basescan.org/address/0x64c911996D3c6aC71f9b455B1E8E7266BcbD848F',
+        'Chainlink scBTC Oracle',
+        'https://sonicscan.org/address/0x64c911996D3c6aC71f9b455B1E8E7266BcbD848F',
       ],
       [
         'Chainlink USDC Oracle',
-        'https://basescan.org/address/0x7e860098F58bBFC8648a4311b374B1D669a2bc6B',
+        'https://sonicscan.org/address/0x7e860098F58bBFC8648a4311b374B1D669a2bc6B',
       ],
       [
-        'Chainlink AERO Oracle',
-        'https://basescan.org/address/0x4EC5970fC728C5f65ba413992CD5fF6FD70fcfF0',
+        'Chainlink S Oracle',
+        'https://sonicscan.org/address/0x4EC5970fC728C5f65ba413992CD5fF6FD70fcfF0',
       ],
       [
-        'Chainlink WETH Oracle',
-        'https://basescan.org/address/0x71041dddad3595F9CEd3DcCFBe3D1F4b0a16Bb70',
+        'Chainlink scETH Oracle',
+        'https://sonicscan.org/address/0x71041dddad3595F9CEd3DcCFBe3D1F4b0a16Bb70',
       ],
     ],
   },
   fixedSettings: [
     ['Strategy Interval', '24H'],
-    ['Strategy', 'Power Channel'],
+    ['Strategy', 'Mean Reversion Channel'],
     ['Staleness Limit', '24H'],
     ['Swap Fee', '0.03%'],
     ['Withdrawal Fee', '0%'],
@@ -65,32 +65,32 @@ export const baseMacroFactsheetData: FactsheetModel = {
   defaultPeriod: ['AugTest', 'Test Period: Aug24-May25'],
   alternatePeriod: ['2025Test', 'Test Period: Jan-May25'],
   trainPeriod: 'AugTrain',
-  poolPrefix: 'baseMacro',
+  poolPrefix: 'sonicMacro',
   xAxisIntervals: new Map<string, number>([
     ['AugTest', 3],
     ['2025Test', 1],
     ['AugTrain', 1],
     ['default', 22],
   ]),
-  mainTitle: 'The Base Macro BTF',
-  mainDescription: `Base is one of the pioneering chains for DeFi. It is a layer 2
+  mainTitle: 'The Sonic Macro BTF',
+  mainDescription: `Sonic is one of the pioneering chains for DeFi. It is a layer 2
               solution built on the Ethereum blockchain, designed to provide
               faster and cheaper transactions while maintaining the security and
-              decentralization of Ethereum. Base is designed to be a platform
+              decentralization of Ethereum. Sonic is designed to be a platform
               for building decentralized applications (dApps) and smart
               contracts, enabling developers to create innovative solutions in
               the DeFi space.`,
   cumulativePerformanceOverrideSeriesStrokeColor: {
-    'Power Channel': '#c7b283',
+    'Channel Following': '#c7b283',
     'Balancer Weighted': '#528aae',
     HODL: '#52ad80',
   },
   cumulativePerformanceOverrideSeriesName: {
-    'Power Channel': 'BASE MACRO BTF',
+    'Channel Following': 'SONIC MACRO BTF',
     'Balancer Weighted': 'Traditional DEX',
   },
 
-  updateRule: <PowerChannelUpdateRule hideTitle={true} hideImage={true} />,
+  updateRule: <ChannelFollowingUpdateRule hideTitle={true} hideImage={true} />,
   advantages: [
     {
       title: 'Advanced Infrastructure',
@@ -116,7 +116,7 @@ export const baseMacroFactsheetData: FactsheetModel = {
       title: 'Responsive Strategies',
       description: (
         <>
-          <p>QuantAMM believes in transparency though decentralisation</p>
+          <p>QuantAMM believes in transparency through decentralisation</p>
           <p>
             The re-weighting strategy and parameters are a visible contract
             on-chain. No opaque strategy vault managers. Chainlink provides data
@@ -139,8 +139,8 @@ export const baseMacroFactsheetData: FactsheetModel = {
       description: (
         <>
           <p>
-            QuantAMM is a Balancer V3 launch partner. The state of the art
-            Balancer Vault manages all non custodial deposits and withdrawals
+            QuantAMM is a Balancer V3 launch partner. The state-of-the-art
+            Balancer Vault manages all non-custodial deposits and withdrawals
             with advanced disaster recovery features.
           </p>
           <p>
@@ -153,7 +153,7 @@ export const baseMacroFactsheetData: FactsheetModel = {
       ),
     },
     {
-      title: 'Cross asset baskets',
+      title: 'Cross Asset Baskets',
       description: (
         <>
           <p>
@@ -162,9 +162,9 @@ export const baseMacroFactsheetData: FactsheetModel = {
             ecosystem.
           </p>
           <p>
-            AERO is a Base native DeFi token. While this token carries potential
+            S is a Sonic native DeFi token. While this token carries potential
             protocol risk and higher volatility, it is a key native token of the
-            Base ecosystem.
+            Sonic ecosystem.
           </p>
         </>
       ),
@@ -178,7 +178,7 @@ export const baseMacroFactsheetData: FactsheetModel = {
           <p>
             Having visible strategies with known parameters is advantageous as
             you can model risk and performance in all the ways traditional
-            finance is used to. However they do take positions based on their
+            finance is used to. However, they do take positions based on their
             interpretation of markets. This is a directional position that will
             incur risk and loss of capital if the market moves against the
             strategy.
@@ -204,10 +204,10 @@ export const baseMacroFactsheetData: FactsheetModel = {
           </p>
           <p>
             Balancer V3 has modern features such as pausing a pool to mitigate
-            this however a loss in such as is dependant on timing of any
-            intervention. If a pool is paused or in a recovery state you can
-            still withdraw the underlying assets at a proportional quantity to
-            your LP tokens.
+            this; however, a loss in such a scenario is dependent on the timing
+            of any intervention. If a pool is paused or in a recovery state, you
+            can still withdraw the underlying assets at a proportional quantity
+            to your LP tokens.
           </p>
         </>
       ),
@@ -223,9 +223,10 @@ export const baseMacroFactsheetData: FactsheetModel = {
             intended logic to capital loss.
           </p>
           <p>
-            QuantAMM has performed private audits of the codebase as well as
-            competition based audits. Balancer has also performed the same and
-            has large bug bounties to incentivise identification of any issues.
+            QuantAMM has performed private audits of the code as well as
+            competitive third-party audits. Balancer has also performed the same
+            and has large bug bounties to incentivise identification of any
+            issues.
           </p>
         </>
       ),
@@ -272,21 +273,15 @@ export const baseMacroFactsheetData: FactsheetModel = {
       </p>
     </>
   ),
+  
   trainedParameters: [
     {
-      name: 'Multi-block MEV',
+      name: 'Memory Days',
       variations: [
         {
-          name: 'Guard Rails',
-          tooltip:
-            'Absolute minimum weight guard rails of 10% and 3% were tested. The final guard rail chosen was 3%.',
-          value: ['3%'],
-        },
-        {
-          name: 'Speed Limit',
-          tooltip:
-            'The speed limit weights can change in one day (epsilon max) was selected to be 0.432. The speed limit is tied to a maximum trade size of 10% of pool constituent reserves.',
-          value: ['0.432'],
+          name: 'Memory Days',
+          tooltip: 'Memory days is the number of days of prices used in the strategy.',
+          value: ['BTC - 50.35461604', 'ETH - 5.03696308', 'S - 15.77315714', 'USDC - 7.05245484'],
         },
       ],
     },
@@ -295,24 +290,12 @@ export const baseMacroFactsheetData: FactsheetModel = {
       variations: [
         {
           name: 'Lambda',
-          tooltip:
-            'Lambda is the parameter used in the gradient estimators for the power channel. This is the on-chain value stored in the contracts.',
+          tooltip: 'Lambda is the parameter used in the gradient estimators for the mean reversion channel.',
           value: [
-            'cbBTC - 0.9784309018144351',
-            'AERO - 0.9925922273835435',
-            'USDC - 0.6009182385585357',
-            'WETH - 0.2679511251319175',
-          ],
-        },
-        {
-          name: 'Memory Days',
-          tooltip:
-            'Memory days is a conversion of the lambda setting to a more understandable unit of the number of days of prices used in the strategy.',
-          value: [
-            'cbBTC - 167.272730',
-            'AERO - 365.0',
-            'USDC - 7.684642',
-            'WETH - 3.200556',
+            'BTC - 0.929563018539273',
+            'ETH - 0.4479412201204208',
+            'S - 0.7872516012227267',
+            'USDC - 0.5721879593136455',
           ],
         },
       ],
@@ -321,25 +304,13 @@ export const baseMacroFactsheetData: FactsheetModel = {
       name: 'Aggressiveness',
       variations: [
         {
-          name: 'Aggressiveness',
-          tooltip:
-            'Otherwise known as k_per_day. This is the multiplier applied to the strategy signal to get the weight change per day.',
-          value: [
-            'cbBTC - 5.608611948',
-            'AERO - 43.81829052',
-            'USDC - 7.015760734',
-            'WETH - 39.89684253',
-          ],
-        },
-        {
           name: 'k',
-          tooltip:
-            'k is the on-chain value stored in the contracts and is the exact parameter used in the strategy calculations.',
+          tooltip: 'k is the on-chain value stored in the contracts and is the exact parameter used in the strategy calculations.',
           value: [
-            'cbBTC - 938.167832',
-            'AERO - 15993.676043',
-            'USDC - 306.592966',
-            'WETH - 22.454340',
+            'BTC - 2601.9593723570410',
+            'ETH - 89.055850228512313',
+            'S - 593.90077382313598',
+            'USDC - 93.130867147542816',
           ],
         },
       ],
@@ -349,13 +320,57 @@ export const baseMacroFactsheetData: FactsheetModel = {
       variations: [
         {
           name: 'Exponent',
-          tooltip:
-            'The exponent is a variable used in the power channel strategy that dictate how big a price change has to be before the strategy starts to notice it. It is the primary difference between other strategies like momentum.',
+          tooltip: 'The exponent is a variable used in the mean reversion channel strategy that dictates how big a price change has to be before the strategy starts to notice it.',
           value: [
-            'cbBTC - 1',
-            'AERO - 2.4705463110202333',
-            'USDC - 1',
-            'WETH - 1',
+            'BTC - 0.7832038911979993',
+            'ETH - 2.3558801968659950',
+            'S - 0.8443489840649794',
+            'USDC - 1.0686318158089472',
+          ],
+        },
+      ],
+    },
+    {
+      name: 'Width',
+      variations: [
+        {
+          name: 'Width',
+          tooltip: 'Width is the parameter that defines the channel width for the mean reversion strategy.',
+          value: [
+            'BTC - 0.0086388441051054223',
+            'ETH - 0.010606898165675289',
+            'S - 0.016622246139525294',
+            'USDC - 0.00090359323501604781',
+          ],
+        },
+      ],
+    },
+    {
+      name: 'Amplitude',
+      variations: [
+        {
+          name: 'Amplitude',
+          tooltip: 'Amplitude is the parameter that defines the oscillation amplitude for the mean reversion strategy.',
+          value: [
+            'BTC - 0.074853775497883593',
+            'ETH - 0.0027628351279059180',
+            'S - 0.011037321655782598',
+            'USDC - 0.072324601375887462',
+          ],
+        },
+      ],
+    },
+    {
+      name: 'Pre-exp Scaling',
+      variations: [
+        {
+          name: 'Pre-exp Scaling',
+          tooltip: 'Pre-exp scaling is the parameter used for scaling before exponentiation in the strategy calculations.',
+          value: [
+            'BTC - 0.0002015493093145',
+            'ETH - 0.0002238654967055',
+            'S - 0.0002970276828945',
+            'USDC - 0.0015731331098663',
           ],
         },
       ],
