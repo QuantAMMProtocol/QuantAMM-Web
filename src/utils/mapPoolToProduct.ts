@@ -567,18 +567,21 @@ const getMaybeQuantAmmWeightedParams = (
 const getStrategy = (pool: GqlPoolMinimal): Strategy => {
   const quantAmmWeightedParams = getMaybeQuantAmmWeightedParams(pool);
   console.log(pool.address)
-  //API can be changed but in the meantime safe haven can be coded here
+  //API can be changed but in the meantime can be coded here
   if (
     pool.address.toLowerCase() ==
       '0x6b61d8680c4f9e560c8306807908553f95c749c5' ||
-    pool.address.toLowerCase() == '0xb4161aea25bd6c5c8590ad50deb4ca752532f05d'||
-    pool.address.toLowerCase() == '0x74dc857d5567a3b087e79b96b91cdc8099b2fa34'
+    pool.address.toLowerCase() == '0xb4161aea25bd6c5c8590ad50deb4ca752532f05d'
   ) {
     console.log("powerchannelfixed")
     return 'POWER_CHANNEL';
   }
-
-  if (quantAmmWeightedParams) {
+  else if (pool.address.toLowerCase() == '0x74dc857d5567a3b087e79b96b91cdc8099b2fa34'){
+    return 'CHANNEL_FOLLOWING';
+  }
+    
+    
+    if (quantAmmWeightedParams) {
     const { details } = quantAmmWeightedParams;
     return details
       ?.find((detail) => detail.name === 'updateRuleName')
