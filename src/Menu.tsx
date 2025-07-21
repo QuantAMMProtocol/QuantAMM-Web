@@ -231,6 +231,20 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
             </Button>
         ),
       },
+
+      {
+        key: ROUTES.PRODUCT_EXPLORER + "/SONIC/" + ROUTES.SONICMACROFACTSHEET,
+        label: '',
+        icon: (
+            <Button
+              type="primary"
+              size="small"
+              style={{ width: '100%', color: 'var(--main-background)' }}
+            >
+              View Base Macro 
+            </Button>
+        ),
+      },
     ];
   }
 

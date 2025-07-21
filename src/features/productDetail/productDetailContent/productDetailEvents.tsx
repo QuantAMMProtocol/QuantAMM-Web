@@ -69,6 +69,7 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = ({
       MAINNET: 'https://etherscan.io',
       BASE: 'https://basescan.org',
       ARBITRUM: 'https://arbiscan.io',
+      SONIC:'https://sonicscan.org/',
     }),
     []
   );

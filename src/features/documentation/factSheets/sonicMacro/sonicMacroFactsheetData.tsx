@@ -16,7 +16,7 @@ export const sonicMacroFactsheetData: FactsheetModel = {
     'sonicMacroHodl2025Test',
   ],
   factsheetImage: {
-    image: '/assets/sonicMacro_mono.png',
+    image: '/assets/sonic_macro_BTF.png',
     width: '30%',
     alt: 'SONIC MACRO BTF Icon',
   },
@@ -26,37 +26,37 @@ export const sonicMacroFactsheetData: FactsheetModel = {
     contractLinks: [
       [
         'Pool Factory Contract',
-        'https://sonicscan.org/address/0x62B9eC6A5BBEBe4F5C5f46C8A8880df857004295',
+        'https://sonicscan.org/address/0x60006d255569b36a3d494e83D182b57acd04D484',
       ],
       [
         'Strategy Contract',
-        'https://sonicscan.org/address/0x4FFE46130bCBb16BF5EDc4bBaa06f158921764C2',
+        'https://sonicscan.org/address/0x18Bd2de107C70222f1cd9796F9aB01458A85d7a7',
       ],
       [
         'Strategy Runner Contract',
-        'https://sonicscan.org/address/0x8Ca4e2a74B84c1feb9ADe19A0Ce0bFcd57e3f6F7',
+        'https://sonicscan.org/address/0xD5c43063563f9448cE822789651662cA7DcD5773',
       ],
       [
         'Chainlink scBTC Oracle',
-        'https://sonicscan.org/address/0x64c911996D3c6aC71f9b455B1E8E7266BcbD848F',
+        'https://sonicscan.org/address/0x8905b91b301677e674cF964Fbc4Ac3844EF79620',
       ],
       [
         'Chainlink USDC Oracle',
-        'https://sonicscan.org/address/0x7e860098F58bBFC8648a4311b374B1D669a2bc6B',
+        'https://sonicscan.org/address/0x6f2bD10b9b17E80e5BCd49158890561f053Ed2EB',
       ],
       [
         'Chainlink S Oracle',
-        'https://sonicscan.org/address/0x4EC5970fC728C5f65ba413992CD5fF6FD70fcfF0',
+        'https://sonicscan.org/address/0x62B9eC6A5BBEBe4F5C5f46C8A8880df857004295',
       ],
       [
         'Chainlink scETH Oracle',
-        'https://sonicscan.org/address/0x71041dddad3595F9CEd3DcCFBe3D1F4b0a16Bb70',
+        'https://sonicscan.org/address/0x4FFE46130bCBb16BF5EDc4bBaa06f158921764C2',
       ],
     ],
   },
   fixedSettings: [
     ['Strategy Interval', '24H'],
-    ['Strategy', 'Mean Reversion Channel'],
+    ['Strategy', 'Channel Following'],
     ['Staleness Limit', '24H'],
     ['Swap Fee', '0.03%'],
     ['Withdrawal Fee', '0%'],
@@ -73,7 +73,7 @@ export const sonicMacroFactsheetData: FactsheetModel = {
     ['default', 22],
   ]),
   mainTitle: 'The Sonic Macro BTF',
-  mainDescription: `Sonic is one of the pioneering chains for DeFi. It is a layer 2
+  mainDescription: `Sonic is one of the pioneering chains for DeFi. It is a layer 1
               solution built on the Ethereum blockchain, designed to provide
               faster and cheaper transactions while maintaining the security and
               decentralization of Ethereum. Sonic is designed to be a platform
@@ -290,7 +290,7 @@ export const sonicMacroFactsheetData: FactsheetModel = {
       variations: [
         {
           name: 'Lambda',
-          tooltip: 'Lambda is the parameter used in the gradient estimators for the mean reversion channel.',
+          tooltip: 'Lambda is the parameter used in the gradient estimators for the channel following.',
           value: [
             'BTC - 0.929563018539273',
             'ETH - 0.4479412201204208',
@@ -320,7 +320,7 @@ export const sonicMacroFactsheetData: FactsheetModel = {
       variations: [
         {
           name: 'Exponent',
-          tooltip: 'The exponent is a variable used in the mean reversion channel strategy that dictates how big a price change has to be before the strategy starts to notice it.',
+          tooltip: 'The exponent is a variable used in the channel following strategy that dictates how big a price change has to be before the strategy starts to notice it.',
           value: [
             'BTC - 0.7832038911979993',
             'ETH - 2.3558801968659950',

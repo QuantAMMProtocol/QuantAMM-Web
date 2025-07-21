@@ -5,7 +5,7 @@ import { sonicMacroFactsheetData } from './sonicMacroFactsheetData';
 
 const { useBreakpoint } = Grid;
 
-export default function BaseMacroFactSheet() {
+export default function SonicMacroFactSheet() {
   const screens = useBreakpoint();
   const isMobile = !screens.lg && !screens.xl && !screens.xxl;
 

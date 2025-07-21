@@ -29,6 +29,7 @@ export const ProductDetailSidebarPoolInfo: FC<
     MAINNET: "https://etherscan.io",
     BASE: "https://basescan.org",
     ARBITRUM: "https://arbiscan.io",
+    SONIC:'https://sonicscan.org/',
   };
 
   return (
@@ -41,14 +42,14 @@ export const ProductDetailSidebarPoolInfo: FC<
         side="right"
         href={expolerRootUrl[product.chain] + "/address/" + strategyRunnerContractAddresses[product.chain]}
         target="_blank"
-        text="Etherscan"
+        text="Contract"
       />
       <ProductDetailSidebarElement side="left" text="Pool Factory contract" />
       <ProductDetailSidebarElement
         side="right"
         href={expolerRootUrl[product.chain] + "/address/" + factoryAddress[product.chain]} 
         target="_blank"
-        text="Etherscan"
+        text="Contract"
       />
       <ProductDetailSidebarElement
         side="left"
