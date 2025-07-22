@@ -29,7 +29,7 @@ export function BannerMobile(){
       route: '/factsheet/' + ROUTES.BASEMACROFACTSHEET,
     },
     {
-      title: 'Super Sonic Momentum',
+      title: 'Sonic Macro',
       imgSrc: sonicMacroFactsheetData.factsheetImage.image,
       description: ['The sonic ecosystem basket', 'Mega Caps with Yield Focus'],
       status: 'LIVE',

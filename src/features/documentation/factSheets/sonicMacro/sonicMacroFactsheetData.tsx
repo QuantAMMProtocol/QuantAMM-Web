@@ -101,10 +101,6 @@ export const sonicMacroFactsheetData: FactsheetModel = {
             innovations of blockchain and requires no complex execution/auction
             and no BTF custodian or governing manager.
           </p>
-          <p>
-            This also offers an additional swap fee revenue from noise traders
-            and DEX Aggregators.
-          </p>
         </>
       ),
     },
@@ -120,12 +116,7 @@ export const sonicMacroFactsheetData: FactsheetModel = {
           </p>
           <p>
             Given novel patented technology the re-weighting strategies run
-            cheaply on-chain and daily re-weighting is possible even on L1s such
-            as Ethereum Mainnet.
-          </p>
-          <p>
-            This is important given the majority of liquidity depth is still on
-            mainnet
+            cheaply on-chain and daily re-weighting is possible even on L1s.
           </p>
         </>
       ),

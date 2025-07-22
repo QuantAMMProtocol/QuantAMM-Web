@@ -65,6 +65,13 @@ export function ChannelFollowingUpdateRule(props: DocProps) {
                     </Col>
                   </Row>
                 </div>
+                <div hidden={eli5 != 'ELI5' || (eli5 == 'ELI5' && !props.hideImage)}>
+                  <Row>
+                    <Col span={24}>
+                      <Eli5 strategy="CHANNEL_FOLLOWING" />
+                    </Col>
+                  </Row>
+                </div>
                 <div hidden={eli5 == 'ELI5' || (eli5 == 'ELI5' && !props.hideImage)}>
                   <h3>Summary</h3>
                   <p>

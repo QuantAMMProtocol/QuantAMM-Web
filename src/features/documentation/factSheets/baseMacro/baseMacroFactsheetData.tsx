@@ -105,10 +105,6 @@ export const baseMacroFactsheetData: FactsheetModel = {
             innovations of blockchain and requires no complex execution/auction
             and no BTF custodian or governing manager.
           </p>
-          <p>
-            This also offers additional swap fee revenue from noise traders
-            and DEX Aggregators.
-          </p>
         </>
       ),
     },
