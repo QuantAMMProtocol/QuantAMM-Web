@@ -70,10 +70,9 @@ export const sonicMacroFactsheetData: FactsheetModel = {
   ]),
   mainTitle: 'The Sonic Macro BTF',
   mainDescription: `Sonic is one of the pioneering chains for DeFi. It is a layer 1
-              solution built on the Ethereum blockchain, designed to provide
-              faster and cheaper transactions while maintaining the security and
-              decentralization of Ethereum. Sonic is designed to be a platform
-              for building decentralized applications (dApps) and smart
+              solution and is EVM compatible, designed to provide
+              faster and cheaper transactions than other layer 1s. Sonic is designed
+              to be a platform for building decentralized applications (dApps) and smart
               contracts, enabling developers to create innovative solutions in
               the DeFi space.`,
   cumulativePerformanceOverrideSeriesStrokeColor: {
@@ -149,9 +148,8 @@ export const sonicMacroFactsheetData: FactsheetModel = {
             ecosystem.
           </p>
           <p>
-            S is a Sonic native DeFi token. While this token carries potential
-            protocol risk and higher volatility, it is a key native token of the
-            Sonic ecosystem.
+            S is the Sonic native token. While this token carries potential
+            protocol risk and higher volatility, it is key token of the Sonic ecosystem.
           </p>
         </>
       ),
@@ -171,7 +169,7 @@ export const sonicMacroFactsheetData: FactsheetModel = {
             strategy.
           </p>
           <p>
-            As bitcoin is a volatile asset, even though it can be considered a
+            As Bitcoin is a volatile asset, even though it can be considered a
             safe haven asset, investing in a BTF introduces unique risk.
           </p>
         </>
@@ -242,7 +240,7 @@ export const sonicMacroFactsheetData: FactsheetModel = {
   trainingDescription: (
     <>
       <p>
-        The power channel strategy has parameters that determine how aggressive
+        The channel followingstrategy has parameters that determine how aggressive
         a strategy re-weights to different assets as well as the memory of
         prices that get taken into account.
       </p>
