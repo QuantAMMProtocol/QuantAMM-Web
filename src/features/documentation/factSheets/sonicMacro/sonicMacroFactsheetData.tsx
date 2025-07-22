@@ -240,7 +240,7 @@ export const sonicMacroFactsheetData: FactsheetModel = {
   trainingDescription: (
     <>
       <p>
-        The channel followingstrategy has parameters that determine how aggressive
+        The channel following strategy has parameters that determine how aggressive
         a strategy re-weights to different assets as well as the memory of
         prices that get taken into account.
       </p>
