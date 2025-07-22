@@ -95,9 +95,10 @@ export function FactSheetDesktop(props: FactsheetDesktopProps) {
       <Radio.Button value={props.model.defaultPeriod[0]}>
         {props.model.defaultPeriod[1]}
       </Radio.Button>
+      {props.model.alternatePeriod[0] != '' ? 
       <Radio.Button value={props.model.alternatePeriod[0]}>
         {props.model.alternatePeriod[1]}
-      </Radio.Button>
+      </Radio.Button> : <></>}
     </Radio.Group>
   );
 
@@ -478,9 +479,11 @@ export function FactSheetDesktop(props: FactsheetDesktopProps) {
                       <Radio.Button value={props.model.defaultPeriod[0]}>
                         {props.model.defaultPeriod[1]}
                       </Radio.Button>
-                      <Radio.Button value={props.model.alternatePeriod[0]}>
-                        {props.model.alternatePeriod[1]}
-                      </Radio.Button>
+                      {props.model.alternatePeriod[0] != '' ? 
+                        <Radio.Button value={props.model.alternatePeriod[0]}>
+                          {props.model.alternatePeriod[1]}
+                        </Radio.Button> : <></>
+                      }
                     </Radio.Group>
                   </div>
                 }

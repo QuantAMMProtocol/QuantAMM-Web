@@ -5,15 +5,12 @@ export const sonicMacroFactsheetData: FactsheetModel = {
   poolId: '0x74dc857d5567a3b087e79b96b91cdc8099b2fa34',
   poolChain: 'SONIC',
   pools: [
-    'sonicMacroBTFAugTest',
-    'sonicMacroCFMMAugTest',
-    'sonicMacroHodlAugTest',
     'sonicMacroBTFAugTrain',
     'sonicMacroCFMMAugTrain',
     'sonicMacroHodlAugTrain',
-    'sonicMacroBTF2025Test',
-    'sonicMacroCFMM2025Test',
-    'sonicMacroHodl2025Test',
+    'sonicMacroBTFAprilTest',
+    'sonicMacroCFMMAprilTest',
+    'sonicMacroHodlAprilTest',
   ],
   factsheetImage: {
     image: '/assets/sonic_macro_BTF.png',
@@ -62,14 +59,13 @@ export const sonicMacroFactsheetData: FactsheetModel = {
     ['Withdrawal Fee', '0%'],
     ['Streaming Fee', '0%'],
   ],
-  defaultPeriod: ['AugTest', 'Test Period: Aug24-May25'],
-  alternatePeriod: ['2025Test', 'Test Period: Jan-May25'],
+  defaultPeriod: ['AprilTest', 'Test Period: Apr-Jul25'],
+  alternatePeriod: ['', ''],
   trainPeriod: 'AugTrain',
   poolPrefix: 'sonicMacro',
   xAxisIntervals: new Map<string, number>([
-    ['AugTest', 3],
-    ['2025Test', 1],
-    ['AugTrain', 1],
+    ['AprilTest', 1],
+    ['AugTrain', 14],
     ['default', 22],
   ]),
   mainTitle: 'The Sonic Macro BTF',
@@ -251,7 +247,7 @@ export const sonicMacroFactsheetData: FactsheetModel = {
       ),
     },
   ],
-  trainingWindowTitle: 'Training window April 2024 - August 2024',
+  trainingWindowTitle: 'Training window Jan 2023 - March 2025',
   trainingDescription: (
     <>
       <p>
@@ -260,7 +256,7 @@ export const sonicMacroFactsheetData: FactsheetModel = {
         prices that get taken into account.
       </p>
       <p>
-        A training period of April 2024-August 2024 was selected and parameters
+        A training period of Jan 2023 - March 2025 was selected and parameters
         were selected using the machine learning technique called: Stochastic
         Gradient Descent. This was performed by the QuantAMM team using the
         QuantAMM simulator framework. A parameter set was selected that

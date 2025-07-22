@@ -241,7 +241,7 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
               size="small"
               style={{ width: '100%', color: 'var(--main-background)' }}
             >
-              View Base Macro 
+              View Sonic Macro 
             </Button>
         ),
       },

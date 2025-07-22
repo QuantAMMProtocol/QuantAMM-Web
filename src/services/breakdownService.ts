@@ -69,23 +69,17 @@ export type Pool =
   | 'baseMacroHodl2025TestFull'
   | 'baseMacroHodlAugTestFull'
   | 'baseMacroHodlAugTrainFull'
-  | 'sonicMacroBTF2025Test'
-  | 'sonicMacroBTFAugTest'
+  | 'sonicMacroBTFAprilTest'
   | 'sonicMacroBTFAugTrain'
-  | 'sonicMacroCFMM2025Test'
-  | 'sonicMacroCFMMAugTest'
+  | 'sonicMacroCFMMAprilTest'
   | 'sonicMacroCFMMAugTrain'
-  | 'sonicMacroHodl2025Test'
-  | 'sonicMacroHodlAugTest'
+  | 'sonicMacroHodlAprilTest'
   | 'sonicMacroHodlAugTrain'
-  | 'sonicMacroBTF2025TestFull'
-  | 'sonicMacroBTFAugTestFull'
+  | 'sonicMacroBTFAprilTestFull'
   | 'sonicMacroBTFAugTrainFull'
-  | 'sonicMacroCFMM2025TestFull'
-  | 'sonicMacroCFMMAugTestFull'
+  | 'sonicMacroCFMMAprilTestFull'
   | 'sonicMacroCFMMAugTrainFull'
-  | 'sonicMacroHodl2025TestFull'
-  | 'sonicMacroHodlAugTestFull'
+  | 'sonicMacroHodlAprilTestFull'
   | 'sonicMacroHodlAugTrainFull';
 
 // Helper to convert MessagePack data to breakdown DTO
@@ -209,23 +203,17 @@ export const getBreakdown = async (
     baseMacroHodl2025TestFull: '/prerun_sims/BASE_MACRO_HODL_2025_TEST_FULL.msgpack',
     baseMacroHodlAugTestFull: '/prerun_sims/BASE_MACRO_HODL_AUG_TEST_FULL.msgpack',
     baseMacroHodlAugTrainFull: '/prerun_sims/BASE_MACRO_HODL_AUG_TRAIN_FULL.msgpack',
-    sonicMacroBTF2025Test: '/prerun_sims/SONIC_MACRO_BTF_APRIL_TEST.msgpack',
-    sonicMacroBTFAugTest: '/prerun_sims/SONIC_MACRO_BTF_APRIL_TEST.msgpack',
+    sonicMacroBTFAprilTest: '/prerun_sims/SONIC_MACRO_BTF_APRIL_TEST.msgpack',
     sonicMacroBTFAugTrain: '/prerun_sims/SONIC_MACRO_BTF_APRIL_TRAIN.msgpack',
-    sonicMacroCFMM2025Test: '/prerun_sims/SONIC_MACRO_CFMM_APRIL_TEST.msgpack',
-    sonicMacroCFMMAugTest: '/prerun_sims/SONIC_MACRO_CFMM_APRIL_TEST.msgpack',
+    sonicMacroCFMMAprilTest: '/prerun_sims/SONIC_MACRO_CFMM_APRIL_TEST.msgpack',
     sonicMacroCFMMAugTrain: '/prerun_sims/SONIC_MACRO_CFMM_APRIL_TRAIN.msgpack',
-    sonicMacroHodl2025Test: '/prerun_sims/SONIC_MACRO_HODL_APRIL_TEST.msgpack',
-    sonicMacroHodlAugTest: '/prerun_sims/SONIC_MACRO_HODL_APRIL_TEST.msgpack',
+    sonicMacroHodlAprilTest: '/prerun_sims/SONIC_MACRO_HODL_APRIL_TEST.msgpack',
     sonicMacroHodlAugTrain: '/prerun_sims/SONIC_MACRO_HODL_APRIL_TRAIN.msgpack',
-    sonicMacroBTF2025TestFull: '/prerun_sims/SONIC_MACRO_BTF_APRIL_TEST_FULL.msgpack',
-    sonicMacroBTFAugTestFull: '/prerun_sims/SONIC_MACRO_BTF_APRIL_TEST_FULL.msgpack',
+    sonicMacroBTFAprilTestFull: '/prerun_sims/SONIC_MACRO_BTF_APRIL_TEST_FULL.msgpack',
     sonicMacroBTFAugTrainFull: '/prerun_sims/SONIC_MACRO_BTF_APRIL_TRAIN_FULL.msgpack',
-    sonicMacroCFMM2025TestFull: '/prerun_sims/SONIC_MACRO_CFMM_APRIL_TEST_FULL.msgpack',
-    sonicMacroCFMMAugTestFull: '/prerun_sims/SONIC_MACRO_CFMM_APRIL_TEST_FULL.msgpack',
+    sonicMacroCFMMAprilTestFull: '/prerun_sims/SONIC_MACRO_CFMM_APRIL_TEST_FULL.msgpack',
     sonicMacroCFMMAugTrainFull: '/prerun_sims/SONIC_MACRO_CFMM_APRIL_TRAIN_FULL.msgpack',
-    sonicMacroHodl2025TestFull: '/prerun_sims/SONIC_MACRO_HODL_APRIL_TEST_FULL.msgpack',
-    sonicMacroHodlAugTestFull: '/prerun_sims/SONIC_MACRO_HODL_APRIL_TEST_FULL.msgpack',
+    sonicMacroHodlAprilTestFull: '/prerun_sims/SONIC_MACRO_HODL_APRIL_TEST_FULL.msgpack',
     sonicMacroHodlAugTrainFull: '/prerun_sims/SONIC_MACRO_HODL_APRIL_TRAIN_FULL.msgpack',
   };
 

@@ -18,6 +18,7 @@ import BaseMacroFactSheet from './features/documentation/factSheets/baseMacro/ba
 import { SafeHavenSimulatorExample } from './features/documentation/safeHavenSimView';
 import { BaseMacroSimulatorExample } from './features/documentation/baseMacroSimView';
 import SonicMacroFactSheet from './features/documentation/factSheets/sonicMacro/sonicMacro';
+import { SonicMacroSimulatorExample } from './features/documentation/sonicMacroSimView';
 
 const BASE_ROUTE = '/';
 
@@ -71,6 +72,10 @@ export const routes = createBrowserRouter([
       {
         path: 'factsheet/example/' + ROUTES.BASEMACROFACTSHEET,
         element:<BaseMacroSimulatorExample />,
+      },
+      {
+        path: 'factsheet/example/' + ROUTES.SONICMACROFACTSHEET,
+        element:<SonicMacroSimulatorExample />,
       },
       {
         path: 'factsheet/' + ROUTES.BASEMACROFACTSHEET,
