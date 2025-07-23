@@ -7,7 +7,7 @@ import {
 
 export const ConfigInitialState: SimulationRunConfig = {
   startDate: '2024-01-01 00:00:00',
-  endDate: '2025-04-16 23:59:00',
+  endDate: '2025-07-01 23:59:00',
   coinLoadStatus: [],
   coinPriceHistoryLoadedStatus: 'pending',
   simulationSimplifiedIncludeLvrRuns: false,
