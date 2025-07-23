@@ -90,9 +90,10 @@ export function FactSheetMobile(props: FactsheetDesktopProps) {
       <Radio.Button value={props.model.defaultPeriod[0]}>
         {props.model.defaultPeriod[1]}
       </Radio.Button>
+      {props.model.alternatePeriod[0] != '' ? 
       <Radio.Button value={props.model.alternatePeriod[0]}>
         {props.model.alternatePeriod[1]}
-      </Radio.Button>
+      </Radio.Button> : <></>}
     </Radio.Group>
   );
 
@@ -743,7 +744,7 @@ export function FactSheetMobile(props: FactsheetDesktopProps) {
         <Col span={22}>
           <Card
             title={'Parameters Selected'}
-            style={{ height: '130vh', marginTop: '20px' }}
+            style={{ height: 'auto', marginTop: '20px' }}
           >
             <Row>
               {props.model.trainedParameters.map((parameter, index) => (

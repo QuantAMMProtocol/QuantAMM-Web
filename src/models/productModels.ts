@@ -28,6 +28,7 @@ export type ChainType =
   | 'BASE'
   | 'ARBITRUM'
   | 'MAINNET'
+  | 'SONIC'
   | 'AVALANCHE'
   | 'FANTOM'
   | 'GNOSIS'

@@ -68,7 +68,19 @@ export type Pool =
   | 'baseMacroCFMMAugTrainFull'
   | 'baseMacroHodl2025TestFull'
   | 'baseMacroHodlAugTestFull'
-  | 'baseMacroHodlAugTrainFull';
+  | 'baseMacroHodlAugTrainFull'
+  | 'sonicMacroBTFAprilTest'
+  | 'sonicMacroBTFAugTrain'
+  | 'sonicMacroCFMMAprilTest'
+  | 'sonicMacroCFMMAugTrain'
+  | 'sonicMacroHodlAprilTest'
+  | 'sonicMacroHodlAugTrain'
+  | 'sonicMacroBTFAprilTestFull'
+  | 'sonicMacroBTFAugTrainFull'
+  | 'sonicMacroCFMMAprilTestFull'
+  | 'sonicMacroCFMMAugTrainFull'
+  | 'sonicMacroHodlAprilTestFull'
+  | 'sonicMacroHodlAugTrainFull';
 
 // Helper to convert MessagePack data to breakdown DTO
 export const convertBreakdownDtoToBreakdown = (
@@ -191,6 +203,18 @@ export const getBreakdown = async (
     baseMacroHodl2025TestFull: '/prerun_sims/BASE_MACRO_HODL_2025_TEST_FULL.msgpack',
     baseMacroHodlAugTestFull: '/prerun_sims/BASE_MACRO_HODL_AUG_TEST_FULL.msgpack',
     baseMacroHodlAugTrainFull: '/prerun_sims/BASE_MACRO_HODL_AUG_TRAIN_FULL.msgpack',
+    sonicMacroBTFAprilTest: '/prerun_sims/SONIC_MACRO_BTF_APRIL_TEST.msgpack',
+    sonicMacroBTFAugTrain: '/prerun_sims/SONIC_MACRO_BTF_APRIL_TRAIN.msgpack',
+    sonicMacroCFMMAprilTest: '/prerun_sims/SONIC_MACRO_CFMM_APRIL_TEST.msgpack',
+    sonicMacroCFMMAugTrain: '/prerun_sims/SONIC_MACRO_CFMM_APRIL_TRAIN.msgpack',
+    sonicMacroHodlAprilTest: '/prerun_sims/SONIC_MACRO_HODL_APRIL_TEST.msgpack',
+    sonicMacroHodlAugTrain: '/prerun_sims/SONIC_MACRO_HODL_APRIL_TRAIN.msgpack',
+    sonicMacroBTFAprilTestFull: '/prerun_sims/SONIC_MACRO_BTF_APRIL_TEST_FULL.msgpack',
+    sonicMacroBTFAugTrainFull: '/prerun_sims/SONIC_MACRO_BTF_APRIL_TRAIN_FULL.msgpack',
+    sonicMacroCFMMAprilTestFull: '/prerun_sims/SONIC_MACRO_CFMM_APRIL_TEST_FULL.msgpack',
+    sonicMacroCFMMAugTrainFull: '/prerun_sims/SONIC_MACRO_CFMM_APRIL_TRAIN_FULL.msgpack',
+    sonicMacroHodlAprilTestFull: '/prerun_sims/SONIC_MACRO_HODL_APRIL_TEST_FULL.msgpack',
+    sonicMacroHodlAugTrainFull: '/prerun_sims/SONIC_MACRO_HODL_APRIL_TRAIN_FULL.msgpack',
   };
 
   const poolFilePath = poolFileMapping[poolName];
