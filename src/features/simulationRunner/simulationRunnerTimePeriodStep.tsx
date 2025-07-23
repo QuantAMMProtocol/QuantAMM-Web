@@ -133,8 +133,8 @@ export function SimulationRunnerTimePeriodStep() {
   const disabledDate = (current: any) => {
     // Can not select days before today and today
     return (
-      current < dayjs('2020-11-20', 'YYYY-MM-DD') ||
-      current > dayjs('2025-04-24', 'YYYY-MM-DD')
+      current < dayjs('2021-11-20', 'YYYY-MM-DD') ||
+      current > dayjs('2025-07-02', 'YYYY-MM-DD')
     );
   };
 

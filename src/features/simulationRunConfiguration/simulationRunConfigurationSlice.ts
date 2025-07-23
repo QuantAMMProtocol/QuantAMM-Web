@@ -921,7 +921,7 @@ export const maxInitialPoolConstituentAvailableDate = (state: RootState) => {
     }
   });
   if (defaultEndDate == 0) {
-    defaultEndDate = new Date('2025-04-16').getTime() / 1000;
+    defaultEndDate = new Date('2025-07-01').getTime() / 1000;
   }
 
   return new Date(defaultEndDate * 1000).toISOString().split('T')[0];
