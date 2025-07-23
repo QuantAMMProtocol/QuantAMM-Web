@@ -6,6 +6,7 @@ query GetPoolJoinExits($poolIds: [String!]) {
         BASE
         ARBITRUM
         MAINNET
+        SONIC
         SEPOLIA
         OPTIMISM
         GNOSIS

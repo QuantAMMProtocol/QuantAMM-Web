@@ -390,7 +390,7 @@ export const ProductDetailSummaryDesktop: FC<
       {/* fifth row */}
       {/* first column */}
       <div className={styles['product-detail-summary__item-vertical']}>
-        Pool token weight over time [%]
+        Pool Weights [%]
       </div>
 
       {/* second column */}
@@ -399,7 +399,6 @@ export const ProductDetailSummaryDesktop: FC<
           <ProductTokenWeightChangeOverTimeGraph
             product={product}
             yAxisOverride={{ label: { enabled: false } }}
-            legendOverride={{ enabled: false }}
           />
         </div>
       </div>
@@ -411,7 +410,6 @@ export const ProductDetailSummaryDesktop: FC<
             product={product}
             isBenchmark={true}
             yAxisOverride={{ label: { enabled: false } }}
-            legendOverride={{ enabled: false }}
           />
         </div>
       </div>
@@ -423,7 +421,6 @@ export const ProductDetailSummaryDesktop: FC<
             <ProductTokenWeightChangeOverTimeGraph
               product={comparingProduct}
               yAxisOverride={{ label: { enabled: false } }}
-              legendOverride={{ enabled: false }}
             />
           </div>
         </div>

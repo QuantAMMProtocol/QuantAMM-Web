@@ -5,7 +5,12 @@ import { useAppSelector } from '../../../app/hooks';
 import { selectAvailableUpdateRules } from '../../simulationRunConfiguration/simulationRunConfigurationSlice';
 import { Eli5 } from '../../shared';
 
-export function ChannelFollowingUpdateRule() {
+interface DocProps {
+  hideTitle?: boolean;
+  hideImage?: boolean;
+}
+
+export function ChannelFollowingUpdateRule(props: DocProps) {
   const [eli5, setEli5] = useState('ELI5');
   const rules = useAppSelector(selectAvailableUpdateRules);
 
@@ -17,7 +22,9 @@ export function ChannelFollowingUpdateRule() {
           <Col style={{ padding: 10 }} span={23}>
             <Row>
               <Col span={24}>
-                <h1>QuantAMM Update Rule: Channel Following</h1>
+                <div hidden={props.hideTitle}>
+                  <h1>QuantAMM Update Rule: Channel Following</h1>
+                </div>
               </Col>
               <Col span={24}>
                 <Form.Item style={{ marginTop: '5px' }}>
@@ -30,16 +37,14 @@ export function ChannelFollowingUpdateRule() {
                       User Knowledge Level:{' '}
                     </Radio.Button>
                     <Radio.Button value={'ELI5'}>ELI5</Radio.Button>
-                    <Radio.Button value={'Quant'}>
-                      Quant
-                    </Radio.Button>
+                    <Radio.Button value={'Quant'}>Quant</Radio.Button>
                   </Radio.Group>
                 </Form.Item>
               </Col>
             </Row>
             <Row>
               <Col span={24} style={{ padding: 10 }}>
-                <div hidden={eli5 != 'ELI5'}>
+                <div hidden={eli5 != 'ELI5'|| props.hideImage}>
                   <Row>
                     <Col span={8}>
                       <img
@@ -60,7 +65,14 @@ export function ChannelFollowingUpdateRule() {
                     </Col>
                   </Row>
                 </div>
-                <div hidden={eli5 == 'ELI5'}>
+                <div hidden={eli5 != 'ELI5' || (eli5 == 'ELI5' && !props.hideImage)}>
+                  <Row>
+                    <Col span={24}>
+                      <Eli5 strategy="CHANNEL_FOLLOWING" />
+                    </Col>
+                  </Row>
+                </div>
+                <div hidden={eli5 == 'ELI5' || (eli5 == 'ELI5' && !props.hideImage)}>
                   <h3>Summary</h3>
                   <p>
                     Often associated with weighted moving averages, this
