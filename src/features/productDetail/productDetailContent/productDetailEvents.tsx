@@ -54,6 +54,12 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = ({
       silverThreshold = 1750633199;
       bronzeThreshold = 1751756400;
     }
+    else if(product.address == ROUTES.SONICMACROFACTSHEET.toLowerCase()){
+      srcPrefix = 'Sonic_Macro_'
+      goldThreshold = 1754434800;
+      silverThreshold = 1755644400;
+      bronzeThreshold = 1756854000;
+    }
   }
 
   const { poolEvents, loading, error } = useFetchPoolEventsData({
