@@ -8,6 +8,10 @@ import { useEffect, useState } from 'react';
 import { getBreakdown, Pool } from '../../../../services/breakdownService';
 import { ROUTES } from '../../../../routesEnum';
 import { useNavigate } from 'react-router-dom';
+import { sonicMacroFactsheetData } from '../../factSheets/sonicMacro/sonicMacroFactsheetData';
+import { baseMacroFactsheetData } from '../../factSheets/baseMacro/baseMacroFactsheetData';
+import { safeHavenFactsheetData } from '../../factSheets/safeHaven/safeHavenfactsheetData';
+
 
 const { Title } = Typography;
 
@@ -18,7 +22,7 @@ export function Banner() {
   const productData = [
     {
       title: 'Safe Haven',
-      imgSrc: '/assets/safe_haven_BTF_icon_mono.png',
+      imgSrc: safeHavenFactsheetData.factsheetImage.image,
       description: ['The doomsday BTF', 'Bitcoin, PAXOS Gold, USDC'],
       status: 'LIVE',
       opacity: 1,
@@ -28,7 +32,7 @@ export function Banner() {
     },
     {
       title: 'Base Macro',
-      imgSrc: '/assets/baseMacro_mono.png',
+      imgSrc: baseMacroFactsheetData.factsheetImage.image,
       description: ['Base is a pivotal DeFi L2', 'A BTF with key Base mega caps'],
       status: 'LIVE',
       opacity: 1,
@@ -37,14 +41,14 @@ export function Banner() {
       route: '/factsheet/' + ROUTES.BASEMACROFACTSHEET,
     },
     {
-      title: 'Super Sonic Momentum',
-      imgSrc: '/assets/sonic_BTF_icon.png',
+      title: 'Sonic Macro',
+      imgSrc: sonicMacroFactsheetData.factsheetImage.image,
       description: ['The sonic ecosystem basket', 'Mega Caps with Yield Focus'],
-      status: 'Coming Soon',
-      opacity: 0.4,
+      status: 'LIVE',
+      opacity: 1,
       imgWidth: '80%',
-      focus: false,
-      route: undefined,
+      focus: true,
+      route: '/factsheet/' + ROUTES.SONICMACROFACTSHEET,
     },
   ];
 

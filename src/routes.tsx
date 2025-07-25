@@ -13,10 +13,12 @@ import { CompanyPage } from './features/documentation/company';
 import { ContactCompany } from './features/documentation/landing/desktop/contactCompany';
 import TermsOfService from './features/documentation/landing/newTermsOfService';
 import InegligibleUser from './features/documentation/landing/IneligableUserLanding';
-import SafeHavenFactSheet from './features/documentation/factSheets/safeHaven';
-import BaseMacroFactSheet from './features/documentation/factSheets/baseMacro';
+import SafeHavenFactSheet from './features/documentation/factSheets/safeHaven/safeHaven';
+import BaseMacroFactSheet from './features/documentation/factSheets/baseMacro/baseMacro';
 import { SafeHavenSimulatorExample } from './features/documentation/safeHavenSimView';
 import { BaseMacroSimulatorExample } from './features/documentation/baseMacroSimView';
+import SonicMacroFactSheet from './features/documentation/factSheets/sonicMacro/sonicMacro';
+import { SonicMacroSimulatorExample } from './features/documentation/sonicMacroSimView';
 
 const BASE_ROUTE = '/';
 
@@ -72,8 +74,16 @@ export const routes = createBrowserRouter([
         element:<BaseMacroSimulatorExample />,
       },
       {
+        path: 'factsheet/example/' + ROUTES.SONICMACROFACTSHEET,
+        element:<SonicMacroSimulatorExample />,
+      },
+      {
         path: 'factsheet/' + ROUTES.BASEMACROFACTSHEET,
         element:<BaseMacroFactSheet />,
+      },
+      {
+        path: 'factsheet/' + ROUTES.SONICMACROFACTSHEET,
+        element:<SonicMacroFactSheet />,
       },
       {
         path: ROUTES.EXAMPLES,

@@ -7,7 +7,7 @@ import {
 
 export const ConfigInitialState: SimulationRunConfig = {
   startDate: '2024-01-01 00:00:00',
-  endDate: '2025-04-16 23:59:00',
+  endDate: '2025-07-01 23:59:00',
   coinLoadStatus: [],
   coinPriceHistoryLoadedStatus: 'pending',
   simulationSimplifiedIncludeLvrRuns: false,
@@ -1457,6 +1457,23 @@ export const ConfigInitialState: SimulationRunConfig = {
     {
       coinName: 'AAVE',
       coinCode: 'AAVE',
+      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
+      coinComparisons: new Map<string, CoinComparison>(),
+      dailyPriceHistory: [
+        {
+          date: '2020-01-01 00:00:00:00',
+          unix: 1234,
+          open: 1234,
+          high: 1234,
+          low: 1234,
+          close: 1234,
+        },
+      ],
+      dailyReturns: new Map<number, ReturnTimeStep>(),
+    },
+    {
+      coinName: 'SONIC',
+      coinCode: 'S',
       dailyPriceHistoryMap: new Map<number, CoinPrice>(),
       coinComparisons: new Map<string, CoinComparison>(),
       dailyPriceHistory: [

@@ -19,6 +19,7 @@ export const ProductDetailSidebarOverview: FC<
     MAINNET: "https://etherscan.io",
     BASE: "https://basescan.org",
     ARBITRUM: "https://arbiscan.io",
+    SONIC: 'https://sonicscan.org',
   };
   return (
     <div className={styles['product-detail-info__container']}>

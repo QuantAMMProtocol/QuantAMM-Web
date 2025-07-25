@@ -95,9 +95,10 @@ export function FactSheetDesktop(props: FactsheetDesktopProps) {
       <Radio.Button value={props.model.defaultPeriod[0]}>
         {props.model.defaultPeriod[1]}
       </Radio.Button>
+      {props.model.alternatePeriod[0] != '' ? 
       <Radio.Button value={props.model.alternatePeriod[0]}>
         {props.model.alternatePeriod[1]}
-      </Radio.Button>
+      </Radio.Button> : <></>}
     </Radio.Group>
   );
 
@@ -478,9 +479,11 @@ export function FactSheetDesktop(props: FactsheetDesktopProps) {
                       <Radio.Button value={props.model.defaultPeriod[0]}>
                         {props.model.defaultPeriod[1]}
                       </Radio.Button>
-                      <Radio.Button value={props.model.alternatePeriod[0]}>
-                        {props.model.alternatePeriod[1]}
-                      </Radio.Button>
+                      {props.model.alternatePeriod[0] != '' ? 
+                        <Radio.Button value={props.model.alternatePeriod[0]}>
+                          {props.model.alternatePeriod[1]}
+                        </Radio.Button> : <></>
+                      }
                     </Radio.Group>
                   </div>
                 }
@@ -647,46 +650,46 @@ export function FactSheetDesktop(props: FactsheetDesktopProps) {
         </Col>
         <Col span={1}></Col>
         <Col span={11}>
-          <Card title={'Parameters Selected'} style={{ height: '130vh' }}>
+            <Card title={'Parameters Selected'} style={{ height: 'auto' }}>
             <Row>
               {props.model.trainedParameters.map((parameter, index) => (
-                <Col span={12} key={index}>
-                  <Card
-                    style={{ margin: '5px', height: '57vh' }}
-                    title={
-                      <Tooltip
-                        title={`The following represent different forms of the ${parameter.name} setting used for different tooling.`}
-                      >
-                        {parameter.name}
-                      </Tooltip>
-                    }
+              <Col span={12} key={index}>
+                <Card
+                style={{ margin: '5px' }}
+                title={
+                  <Tooltip
+                  title={`The following represent different forms of the ${parameter.name} setting used for different tooling.`}
                   >
-                    <Row>
-                      {parameter.variations.map((variation, variationIndex) => (
-                        <Col span={24} key={variationIndex}>
-                          <Tooltip title={variation.tooltip}>
-                            <p>
-                              {variation.name}:{'  '} <InfoCircleOutlined />
-                            </p>
-                            {variation.value.map((val, valIndex) => (
-                              <Button
-                                size="small"
-                                disabled={true}
-                                style={{ margin: '5px' }}
-                                key={valIndex}
-                              >
-                                {val}
-                              </Button>
-                            ))}
-                          </Tooltip>
-                        </Col>
-                      ))}
-                    </Row>
-                  </Card>
-                </Col>
+                  {parameter.name}
+                  </Tooltip>
+                }
+                >
+                <Row>
+                  {parameter.variations.map((variation, variationIndex) => (
+                  <Col span={24} key={variationIndex}>
+                    <Tooltip title={variation.tooltip}>
+                    <p>
+                      {variation.name}:{'  '} <InfoCircleOutlined />
+                    </p>
+                    {variation.value.map((val, valIndex) => (
+                      <Button
+                      size="small"
+                      disabled={true}
+                      style={{ margin: '5px' }}
+                      key={valIndex}
+                      >
+                      {val}
+                      </Button>
+                    ))}
+                    </Tooltip>
+                  </Col>
+                  ))}
+                </Row>
+                </Card>
+              </Col>
               ))}
             </Row>
-          </Card>
+            </Card>
         </Col>
         <Col span={1}></Col>
       </Row>

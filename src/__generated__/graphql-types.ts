@@ -3444,7 +3444,7 @@ export type GetHistoricalPricesQueryResult = Apollo.QueryResult<GetHistoricalPri
 export const GetPoolJoinExitsDocument = gql`
     query GetPoolJoinExits($poolIds: [String!]) {
   poolGetJoinExits(
-    where: {poolIdIn: $poolIds, chainIn: [BASE, ARBITRUM, MAINNET, SEPOLIA, OPTIMISM, GNOSIS, FANTOM, ZKEVM, POLYGON, AVALANCHE]}
+    where: {poolIdIn: $poolIds, chainIn: [BASE, ARBITRUM, MAINNET, SONIC, SEPOLIA, OPTIMISM, GNOSIS, FANTOM, ZKEVM, POLYGON, AVALANCHE]}
   ) {
     chain
     id
