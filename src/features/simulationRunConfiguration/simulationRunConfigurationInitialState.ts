@@ -215,6 +215,16 @@ export const ConfigInitialState: SimulationRunConfig = {
           minValue: '0.0',
           maxValue: '1.0',
         },
+        {
+          factorName: 'noise_trader_ratio',
+          factorDisplayName: 'Noise/Arb Ratio',
+          factorDescription:
+            'CowAMM shows how noise can be a multiplier of arb volume. This is that multiplier',
+          applicableCoins: [],
+          factorValue: '0.0',
+          minValue: '0.0',
+          maxValue: '10.0',
+        },
       ],
       applicablePoolTypes: ['CowAMM Weighted'],
     },
