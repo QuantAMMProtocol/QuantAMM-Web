@@ -6,6 +6,9 @@ export const getBalancerPoolUrl = (chain: string, poolId: string): string => {
   if (chain === 'MAINNET') {
     return `https://balancer.fi/pools/ethereum/v3/${poolId}`;
   }
+  else if(chain == 'SONIC'){
+    return `https://beets.fi/pools/sonic/v3/${poolId}`
+  }
 
   return `https://balancer.fi/pools/${chain.toLowerCase()}/v3/${poolId}`;
 };
