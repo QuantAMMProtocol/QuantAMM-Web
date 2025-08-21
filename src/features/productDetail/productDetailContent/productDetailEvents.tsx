@@ -10,8 +10,7 @@ import { AgGridReact } from 'ag-grid-react';
 import { format } from 'date-fns';
 import {
   GqlChain,
-  GqlPoolEvent,
-  GqlPoolEventsDataRange,
+  GqlPoolEvent
 } from '../../../__generated__/graphql-types';
 import { useFetchPoolEventsData } from '../../../hooks/useFetchPoolEventsData';
 import { useAppSelector } from '../../../app/hooks';
@@ -25,8 +24,6 @@ const { Title } = Typography;
 interface ProductDetailEventsProps {
   product: Product;
 }
-
-const range = GqlPoolEventsDataRange.NinetyDays;
 
 export const ProductDetailEvents: FC<ProductDetailEventsProps> = ({
   product,
@@ -66,8 +63,7 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = ({
     first: 1000,
     skip: undefined,
     poolId: product.id,
-    chain: product.chain as GqlChain,
-    range,
+    chain: product.chain as GqlChain
   });
 
   const explorerRootUrl: Record<string, string> = useMemo(
