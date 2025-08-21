@@ -11,7 +11,6 @@ import { format } from 'date-fns';
 import {
   GqlChain,
   GqlPoolEvent,
-  GqlPoolEventsDataRange,
 } from '../../../__generated__/graphql-types';
 import { useFetchPoolEventsData } from '../../../hooks/useFetchPoolEventsData';
 import { useAppSelector } from '../../../app/hooks';
@@ -25,8 +24,6 @@ const { Title } = Typography;
 interface ProductDetailEventsProps {
   product: Product;
 }
-
-const range = GqlPoolEventsDataRange.NinetyDays;
 
 export const ProductDetailEvents: FC<ProductDetailEventsProps> = ({
   product,
@@ -67,7 +64,6 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = ({
     skip: undefined,
     poolId: product.id,
     chain: product.chain as GqlChain,
-    range,
   });
 
   const explorerRootUrl: Record<string, string> = useMemo(

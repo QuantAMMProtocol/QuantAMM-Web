@@ -2,7 +2,6 @@ import { ApolloError } from '@apollo/client';
 import {
   GqlChain,
   GqlPoolEvent,
-  GqlPoolEventsDataRange,
   useGetPoolEventsQuery,
 } from '../__generated__/graphql-types';
 import { useAppSelector } from '../app/hooks';
@@ -13,13 +12,11 @@ export const useFetchPoolEventsData = ({
   skip,
   poolId,
   chain,
-  range,
 }: {
   first: number | undefined;
   skip: number | undefined;
   poolId: string;
   chain: GqlChain;
-  range: GqlPoolEventsDataRange;
 }): {
   poolEvents: GqlPoolEvent[];
   loading: boolean;
@@ -33,7 +30,6 @@ export const useFetchPoolEventsData = ({
       where: {
         poolIdIn: [poolId],
         chainIn: [chain],
-        range: range,
       },
     },
   });
