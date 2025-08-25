@@ -1,85 +1,38 @@
 import { Parallax, ParallaxLayer } from '@react-spring/parallax';
-import { Col, Row, Tag, Tooltip } from 'antd';
+import { Col, Row } from 'antd';
 import { Typography } from 'antd';
 import { motion } from 'framer-motion';
-import { SimulationResultMarketValueChart } from '../../../simulationResults/visualisations/simulationResultMarketValueChart';
-import { SimulationRunBreakdown } from '../../../simulationResults/simulationResultSummaryModels';
-import { useEffect, useState } from 'react';
-import { getBreakdown, Pool } from '../../../../services/breakdownService';
 import { ROUTES } from '../../../../routesEnum';
-import { useNavigate } from 'react-router-dom';
 import { sonicMacroFactsheetData } from '../../factSheets/sonicMacro/sonicMacroFactsheetData';
-import { baseMacroFactsheetData } from '../../factSheets/baseMacro/baseMacroFactsheetData';
-import { safeHavenFactsheetData } from '../../factSheets/safeHaven/safeHavenfactsheetData';
-
+import { BannerProductSection } from './bannerProductSection';
+import { CURRENT_LIVE_FACTSHEETS } from '../../factSheets/liveFactsheets';
 
 const { Title } = Typography;
 
 export function Banner() {
-  const navigate = useNavigate();
-  const [breakdowns, setBreakdowns] = useState<SimulationRunBreakdown[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const productData = [
+  const productData = CURRENT_LIVE_FACTSHEETS.factsheets.map((factsheet) => ({
+    title: factsheet.iconTitle,
+    imgSrc: factsheet.factsheetImage.image,
+    description: factsheet.iconDescription,
+    status: factsheet.status,
+      opacity: factsheet.iconOpacity,
+      imgWidth: '30%',
+      focus: factsheet.iconFocus,
+      route: '/factsheet/' + factsheet.poolId,
+    }));
+
+    //stub
+    productData.push(
     {
-      title: 'Safe Haven',
-      imgSrc: safeHavenFactsheetData.factsheetImage.image,
-      description: ['The doomsday BTF', 'Bitcoin, PAXOS Gold, USDC'],
-      status: 'LIVE',
-      opacity: 1,
-      imgWidth: '90%',
-      focus: true,
-      route: '/factsheet/' + ROUTES.SAFEHAVENFACTSHEET,
-    },
-    {
-      title: 'Base Macro',
-      imgSrc: baseMacroFactsheetData.factsheetImage.image,
-      description: ['Base is a pivotal DeFi L2', 'A BTF with key Base mega caps'],
-      status: 'LIVE',
-      opacity: 1,
-      imgWidth: '100%',
-      focus: true,
-      route: '/factsheet/' + ROUTES.BASEMACROFACTSHEET,
-    },
-    {
-      title: 'Sonic Macro',
+      title: 'TradFi',
       imgSrc: sonicMacroFactsheetData.factsheetImage.image,
       description: ['The sonic ecosystem basket', 'Mega Caps with Yield Focus'],
       status: 'LIVE',
       opacity: 1,
-      imgWidth: '80%',
+      imgWidth: '30%',
       focus: true,
       route: '/factsheet/' + ROUTES.SONICMACROFACTSHEET,
-    },
-  ];
-
-  useEffect(() => {
-    const loadBreakdowns = async (
-      poolNames: Pool[]
-    ): Promise<SimulationRunBreakdown[]> => {
-      setLoading(true);
-      const fetchedBreakdowns = await Promise.all(
-        poolNames.map((poolName) => getBreakdown(poolName))
-      );
-      setBreakdowns(fetchedBreakdowns);
-      return fetchedBreakdowns;
-    };
-
-    if (loading) {
-      loadBreakdowns([
-        'safeHavenBTF2025Test',
-        'safeHavenCFMM2025Test',
-        'safeHavenHodl2025Test',
-      ] as Pool[])
-        .catch(console.error)
-        .finally(() => setLoading(false));
-    }
-  }, [loading]);
-
-  const handleNavigation = (route: string | undefined) => {
-    if (route) {
-      navigate(route);
-    }
-  };
+    });
 
   return (
     <Parallax
@@ -164,184 +117,23 @@ export function Banner() {
             position: 'relative',
           }}
         >
-          <Col span={4}></Col>
-          <Col span={6} style={{ paddingTop: '6vh' }}>
-            <motion.div
-              initial={{ opacity: 0, scale: 0 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{
-                duration: 3,
-                delay: 1.2,
-                scale: { type: 'spring', visualDuration: 3, bounce: 0.1 },
-              }}
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'flex-end',
-                height: '100%',
-              }}
-            >
-              {productData.map((tag, index) => (
-                <Tag
-                  key={index}
-                  onClick={() => handleNavigation(tag.route)}
-                  style={{
-                    width: '100%',
-                    margin: '5px',
-                    textAlign: 'center',
-                    border: 'transparent',
-                    backgroundColor: 'transparent',
-                    opacity: tag.opacity,
-                    cursor: tag.route ? 'pointer' : 'default',
-                    transition: 'box-shadow 0.3s ease-in-out',
-                    boxShadow: tag.route
-                      ? '0 0 0px rgba(255, 255, 255, 0)'
-                      : 'none',
-                  }}
-                  onMouseEnter={(e) => {
-                    if (tag.route) {
-                      (e.currentTarget as HTMLElement).style.boxShadow =
-                        '0 0 10px rgba(255, 255, 255, 0.8)';
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (tag.route) {
-                      (e.currentTarget as HTMLElement).style.boxShadow =
-                        '0 0 0px rgba(255, 255, 255, 0)';
-                    }
-                  }}
-                >
-                  <Row style={{ margin: 0, padding: 0 }}>
-                    <Col span={4}>
-                      <div
-                        style={{
-                          height: '100%',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }}
-                      >
-                        <img
-                          src={tag.imgSrc}
-                          style={{ width: tag.imgWidth, height: 'auto' }}
-                          alt={tag.title}
-                        />
-                      </div>
-                    </Col>
-                    <Col span={20}>
-                      <div
-                        style={{
-                          display: 'flex',
-                          flexDirection: 'column',
-                          justifyContent: 'center',
-                          height: '100%',
-                        }}
-                      >
-                        <h3 style={{ margin: '5px', textAlign: 'left' }}>
-                          {tag.title + ' - ' + tag.status}
-                        </h3>
-                        {tag.description.map((desc, i) => (
-                          <p
-                            key={i}
-                            style={{
-                              textAlign: 'left',
-                              margin: 0,
-                              paddingLeft: '5px',
-                            }}
-                          >
-                            {desc}
-                          </p>
-                        ))}
-                      </div>
-                    </Col>
-                  </Row>
-                </Tag>
-              ))}
-            </motion.div>
-          </Col>
-          <Col span={4}>
-            <motion.div
-              initial={{ opacity: 0, scale: 0 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{
-                duration: 3,
-                delay: 1.2,
-                scale: { type: 'spring', visualDuration: 3, bounce: 0.1 },
-              }}
-              style={{ height: '100%' }}
-            >
-              <div
-                style={{
-                  height: '100%',
-                  display: 'flex',
-                  alignItems: 'flex-end',
-                  flexDirection: 'column',
-                }}
-              >
-                <Row
-                  style={{
-                    height: '100%',
-                    alignItems: 'center',
-                    marginTop: '30px',
-                  }}
-                >
-                  <Col span={8}></Col>
-                  <Col span={8}>
-                    <Tooltip
-                      title={
-                        <>
-                          <span style={{ textAlign: 'center', width: '100%' }}>
-                            Built on Balancer V3
-                          </span>
-                          <br />
-                          <span style={{ textAlign: 'center' }}>
-                            Secured by Chainlink
-                          </span>
-                        </>
-                      }
-                    >
-                      <img
-                        loading="lazy"
-                        style={{ width: '100%', height: 'auto' }}
-                        src="/background/Balancerv3CL.png"
-                      />
-                    </Tooltip>
-                  </Col>
-                  <Col span={8}></Col>
-                </Row>
-              </div>
-            </motion.div>
-          </Col>
-          <Col
-            span={9}
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'flex-end',
-              marginLeft: '-20px',
-            }}
-          >
-            <SimulationResultMarketValueChart
-              breakdowns={breakdowns}
-              forceViewResults={true}
-              overrideHeight={220}
-              overrideXAxisInterval={1}
-              overrideYAxisMax={11000000}
-              overrideYAxisMin={85000000}
-              overrideYAxisInterval={[9000000, 11000000]}
-              overrideNagivagtion={false}
-              overrideSeriesStrokeColor={{
-                "Power Channel": '#c7b283',
-                'Balancer Weighted': '#528aae',
-                'HODL': '#52ad80',
-              }}
-              overrideSeriesName={{
-                "Power Channel": 'SAFE HAVEN BTF',
-                'Balancer Weighted' : 'Traditional DEX'
-              }}
+          <Col span={2}></Col>
+          <Col span={10} style={{ paddingTop: '6vh' }}>
+            <BannerProductSection
+              productData={productData.slice(
+                0,
+                Math.floor(productData.length / 2)
+              )}
             />
           </Col>
-          <Col span={1}></Col>
+          <Col span={10} style={{ paddingTop: '6vh' }}>
+            <BannerProductSection
+              productData={productData.slice(
+                Math.floor(productData.length / 2)
+              )}
+            />
+          </Col>
+          <Col span={2}></Col>
         </Row>
       </ParallaxLayer>
     </Parallax>

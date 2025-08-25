@@ -1,8 +1,9 @@
 import { FactsheetModel } from '../factsheetModel';
 import { PowerChannelUpdateRule } from '../../updateRules/powerChannelUpdateRule';
+import { ROUTES } from '../../../../routesEnum';
 
 export const baseMacroFactsheetData: FactsheetModel = {
-  poolId: '0xb4161aea25bd6c5c8590ad50deb4ca752532f05d',
+  poolId: ROUTES.BASEMACROFACTSHEET,
   poolChain: 'BASE',
   pools: [
     'baseMacroBTFAugTest',
@@ -20,8 +21,7 @@ export const baseMacroFactsheetData: FactsheetModel = {
     width: '30%',
     alt: 'BASE MACRO BTF Icon',
   },
-  objective:
-    'The Base Macro BTF provides exposure to some of the mega-cap tokens on Base. The BTF was trained on more bullish market conditions.',
+  objective: 'The Base Macro BTF provides exposure to some of the mega-cap tokens on Base. The BTF was trained on more bullish market conditions.',
   deploymentLinks: {
     contractLinks: [
       [
@@ -274,14 +274,12 @@ export const baseMacroFactsheetData: FactsheetModel = {
       variations: [
         {
           name: 'Guard Rails',
-          tooltip:
-            'Absolute minimum weight guard rails of 10% and 3% were tested. The final guard rail chosen was 3%.',
+          tooltip: 'Absolute minimum weight guard rails of 10% and 3% were tested. The final guard rail chosen was 3%.',
           value: ['3%'],
         },
         {
           name: 'Speed Limit',
-          tooltip:
-            'The speed limit weights can change in one day (epsilon max) was selected to be 0.432. The speed limit is tied to a maximum trade size of 10% of pool constituent reserves.',
+          tooltip: 'The speed limit weights can change in one day (epsilon max) was selected to be 0.432. The speed limit is tied to a maximum trade size of 10% of pool constituent reserves.',
           value: ['0.432'],
         },
       ],
@@ -291,8 +289,7 @@ export const baseMacroFactsheetData: FactsheetModel = {
       variations: [
         {
           name: 'Lambda',
-          tooltip:
-            'Lambda is the parameter used in the gradient estimators for the power channel. This is the on-chain value stored in the contracts.',
+          tooltip: 'Lambda is the parameter used in the gradient estimators for the power channel. This is the on-chain value stored in the contracts.',
           value: [
             'cbBTC - 0.9784309018144351',
             'AERO - 0.9925922273835435',
@@ -302,8 +299,7 @@ export const baseMacroFactsheetData: FactsheetModel = {
         },
         {
           name: 'Memory Days',
-          tooltip:
-            'Memory days is a conversion of the lambda setting to a more understandable unit of the number of days of prices used in the strategy.',
+          tooltip: 'Memory days is a conversion of the lambda setting to a more understandable unit of the number of days of prices used in the strategy.',
           value: [
             'cbBTC - 167.272730',
             'AERO - 365.0',
@@ -318,8 +314,7 @@ export const baseMacroFactsheetData: FactsheetModel = {
       variations: [
         {
           name: 'Aggressiveness',
-          tooltip:
-            'Otherwise known as k_per_day. This is the multiplier applied to the strategy signal to get the weight change per day.',
+          tooltip: 'Otherwise known as k_per_day. This is the multiplier applied to the strategy signal to get the weight change per day.',
           value: [
             'cbBTC - 5.608611948',
             'AERO - 43.81829052',
@@ -329,8 +324,7 @@ export const baseMacroFactsheetData: FactsheetModel = {
         },
         {
           name: 'k',
-          tooltip:
-            'k is the on-chain value stored in the contracts and is the exact parameter used in the strategy calculations.',
+          tooltip: 'k is the on-chain value stored in the contracts and is the exact parameter used in the strategy calculations.',
           value: [
             'cbBTC - 938.167832',
             'AERO - 15993.676043',
@@ -345,8 +339,7 @@ export const baseMacroFactsheetData: FactsheetModel = {
       variations: [
         {
           name: 'Exponent',
-          tooltip:
-            'The exponent is a variable used in the power channel strategy that dictates how big a price change has to be before the strategy starts to notice it. It is the primary difference between other strategies like momentum.',
+          tooltip: 'The exponent is a variable used in the power channel strategy that dictates how big a price change has to be before the strategy starts to notice it. It is the primary difference between other strategies like momentum.',
           value: [
             'cbBTC - 1',
             'AERO - 2.4705463110202333',
@@ -357,4 +350,12 @@ export const baseMacroFactsheetData: FactsheetModel = {
       ],
     },
   ],
+  iconTitle: 'Base Macro',
+  iconDescription: [
+        'Base is a pivotal DeFi L2',
+        'A BTF with key Base mega caps',
+      ],
+  status: 'LIVE',
+  iconOpacity: 1,
+  iconFocus: true,
 };
