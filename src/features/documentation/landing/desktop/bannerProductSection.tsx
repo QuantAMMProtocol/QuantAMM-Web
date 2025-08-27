@@ -14,7 +14,7 @@ interface ProductBannerProp {
   productExplorerRoute: string;
 }
 
-interface ProductBannerProps {
+export interface ProductBannerProps {
   productData: ProductBannerProp[];
 }
 
@@ -209,12 +209,16 @@ export function BannerProductSection(props: ProductBannerProps) {
                 </Col>
                 <Col span={24}>
                   <Row justify="center" gutter={10} style={{ marginTop: 10 }}>
-                    <Col flex="0 0 auto">
-                      <Button
-                        onClick={() => handleNavigation(tag.factsheetRoute)}
-                        size="small"
-                        style={{
-                          padding: '6px 12px',
+                    <Col flex="0 0 auto"
+            xs={24}
+            sm={24}
+            md={24}
+          >
+            <Button
+              onClick={() => handleNavigation(tag.factsheetRoute)}
+              size="small"
+              style={{
+                padding: '6px 12px',
                           borderRadius: 6,
                           border: '1px solid rgba(255,255,255,0.25)',
                           background: 'rgba(255,255,255,0.05)',
@@ -227,7 +231,10 @@ export function BannerProductSection(props: ProductBannerProps) {
                         View Factsheet
                       </Button>
                     </Col>
-                    <Col flex="0 0 auto">
+                    <Col flex="0 0 auto"
+            xs={24}
+            sm={24}
+            md={24}>
                       <Button
                         onClick={() => handleNavigation(tag.productExplorerRoute)}
                         size="small"

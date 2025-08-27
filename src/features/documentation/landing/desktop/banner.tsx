@@ -2,39 +2,11 @@ import { Parallax, ParallaxLayer } from '@react-spring/parallax';
 import { Col, Row } from 'antd';
 import { Typography } from 'antd';
 import { motion } from 'framer-motion';
-import { ROUTES } from '../../../../routesEnum';
-import { sonicMacroFactsheetData } from '../../factSheets/sonicMacro/sonicMacroFactsheetData';
-import { BannerProductSection } from './bannerProductSection';
-import { CURRENT_LIVE_FACTSHEETS } from '../../factSheets/liveFactsheets';
+import { BannerProductSection, ProductBannerProps } from './bannerProductSection';
 
 const { Title } = Typography;
 
-export function Banner() {
-  const productData = CURRENT_LIVE_FACTSHEETS.factsheets.map((factsheet) => ({
-    title: factsheet.iconTitle,
-    imgSrc: factsheet.factsheetImage.image,
-    description: factsheet.iconDescription,
-    status: factsheet.status,
-    opacity: factsheet.iconOpacity,
-    imgWidth: '30%',
-    focus: factsheet.iconFocus,
-    factsheetRoute: '/factsheet/' + ROUTES.SONICMACROFACTSHEET,
-    productExplorerRoute: ROUTES.PRODUCT_EXPLORER + '/' + factsheet.poolChain.toUpperCase() + '/' + ROUTES.SONICMACROFACTSHEET,
-  }));
-
-  //stub
-  productData.push({
-    title: 'TradFi',
-    imgSrc: sonicMacroFactsheetData.factsheetImage.image,
-    description: ['The sonic ecosystem basket', 'Mega Caps with Yield Focus'],
-    status: 'LIVE',
-    opacity: 1,
-    imgWidth: '30%',
-    focus: true,
-    factsheetRoute: '/factsheet/' + ROUTES.SONICMACROFACTSHEET,
-    productExplorerRoute: ROUTES.PRODUCT_EXPLORER + '/MAINNET/'+ ROUTES.SONICMACROFACTSHEET,
-  });
-
+export function Banner(props: ProductBannerProps) {
   return (
     <Parallax
       pages={1}
@@ -120,7 +92,7 @@ export function Banner() {
           }}
         >
           <Col md={22} lg={22} xl={20}>
-            <BannerProductSection productData={productData} />
+            <BannerProductSection productData={props.productData} />
           </Col>
         </Row>
       </ParallaxLayer>

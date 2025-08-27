@@ -5,6 +5,9 @@ import { LandingPageMobile } from './mobile/landingPageMobile';
 import LandingPageDesktop from './desktop/landingPageDesktop';
 import { setAcceptedTermsAndConditions } from '../../productExplorer/productExplorerSlice';
 import { useAppDispatch } from '../../../app/hooks';
+import { CURRENT_LIVE_FACTSHEETS } from '../factSheets/liveFactsheets';
+import { ROUTES } from '../../../routesEnum';
+import { sonicMacroFactsheetData } from '../factSheets/sonicMacro/sonicMacroFactsheetData';
 
 // 
 const { useBreakpoint } = Grid;
@@ -15,6 +18,31 @@ export default function LandingPage() {
   const dispatch = useAppDispatch();
   const handleGateClose = () => dispatch(setAcceptedTermsAndConditions(true));
 
+  const productData = CURRENT_LIVE_FACTSHEETS.factsheets.map((factsheet) => ({
+    title: factsheet.iconTitle,
+    imgSrc: factsheet.factsheetImage.image,
+    description: factsheet.iconDescription,
+    status: factsheet.status,
+    opacity: factsheet.iconOpacity,
+    imgWidth: '30%',
+    focus: factsheet.iconFocus,
+    factsheetRoute: '/factsheet/' + ROUTES.SONICMACROFACTSHEET,
+    productExplorerRoute: ROUTES.PRODUCT_EXPLORER + '/' + factsheet.poolChain.toUpperCase() + '/' + ROUTES.SONICMACROFACTSHEET,
+  }));
+
+  //stub
+  productData.push({
+    title: 'TradFi',
+    imgSrc: sonicMacroFactsheetData.factsheetImage.image,
+    description: ['The sonic ecosystem basket', 'Mega Caps with Yield Focus'],
+    status: 'LIVE',
+    opacity: 1,
+    imgWidth: '30%',
+    focus: true,
+    factsheetRoute: '/factsheet/' + ROUTES.SONICMACROFACTSHEET,
+    productExplorerRoute: ROUTES.PRODUCT_EXPLORER + '/MAINNET/'+ ROUTES.SONICMACROFACTSHEET,
+  });
+  
   return (
     <>
       <TermsOfServiceGateModal
@@ -24,7 +52,7 @@ export default function LandingPage() {
         page='landingPage'
       />
 
-      {isMobile ? <LandingPageMobile /> : <LandingPageDesktop />}
+      {isMobile ? <LandingPageMobile productData={productData} /> : <LandingPageDesktop productData={productData}/>}
     </>
   );
 }

@@ -1,6 +1,6 @@
 import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Menu, Switch, MenuProps, Button, Grid } from 'antd';
+import { Menu, Switch, MenuProps, Grid } from 'antd';
 import {
   RadarChartOutlined,
   LineChartOutlined,
