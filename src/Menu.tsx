@@ -16,6 +16,7 @@ import { ROUTES } from './routesEnum';
 import style from './app.module.scss';
 
 import { useLocation } from 'react-router-dom'; // add this at the top
+import { CURRENT_LIVE_FACTSHEETS } from './features/documentation/factSheets/liveFactsheets';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -36,7 +37,6 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
   );
   const dispatch = useAppDispatch();
   const isDark = useAppSelector(selectTheme);
-
 
   const location = useLocation();
 
@@ -130,7 +130,7 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
             key: 'tos',
             label: 'Terms of Service',
             icon: <LineChartOutlined />,
-          }
+          },
         ],
         style: { marginLeft: 'auto' }, // Align to the right
       },
@@ -138,6 +138,7 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
   }
 
   function getItems(): MenuItem[] {
+    const liveProducts = CURRENT_LIVE_FACTSHEETS;
     return [
       {
         key: 'home',
@@ -149,6 +150,28 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
             style={{ width: '150px', marginTop: '5px' }}
           />
         ),
+      },
+      {
+        key: 'view-products',
+        label: 'View Products',
+        type: 'submenu',
+        style: { marginLeft: 'auto' }, // Align to the right
+        children: liveProducts.factsheets.map((product) => ({
+          key:
+            ROUTES.PRODUCT_EXPLORER +
+            '/' +
+            product.poolChain +
+            '/' +
+            product.poolId,
+          label: `View ${product.iconTitle}`,
+          icon: (
+            <img
+              src={product.factsheetImage.image}
+              alt={product.iconTitle}
+              style={{ width: '16px', height: '16px' }}
+            />
+          ),
+        })),
       },
       {
         key: 'About',
@@ -166,7 +189,6 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
             icon: <LineChartOutlined />,
           },
         ],
-        style: { marginLeft: 'auto' }, // Align to the right
       },
       {
         key: 'Education',
@@ -203,47 +225,6 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
       {
         key: 'tos',
         label: 'Terms of Service',
-      },
-      {
-        key: ROUTES.PRODUCT_EXPLORER + "/MAINNET/" + ROUTES.SAFEHAVENFACTSHEET,
-        label: '',
-        icon: (
-            <Button
-              type="primary"
-              size="small"
-              style={{ width: '100%', color: 'var(--main-background)' }}
-            >
-              View Safe Haven 
-            </Button>
-        ),
-      },
-
-      {
-        key: ROUTES.PRODUCT_EXPLORER + "/BASE/" + ROUTES.BASEMACROFACTSHEET,
-        label: '',
-        icon: (
-            <Button
-              type="primary"
-              size="small"
-              style={{ width: '100%', color: 'var(--main-background)' }}
-            >
-              View Base Macro 
-            </Button>
-        ),
-      },
-
-      {
-        key: ROUTES.PRODUCT_EXPLORER + "/SONIC/" + ROUTES.SONICMACROFACTSHEET,
-        label: '',
-        icon: (
-            <Button
-              type="primary"
-              size="small"
-              style={{ width: '100%', color: 'var(--main-background)' }}
-            >
-              View Sonic Macro 
-            </Button>
-        ),
       },
     ];
   }

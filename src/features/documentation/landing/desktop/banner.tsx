@@ -15,24 +15,25 @@ export function Banner() {
     imgSrc: factsheet.factsheetImage.image,
     description: factsheet.iconDescription,
     status: factsheet.status,
-      opacity: factsheet.iconOpacity,
-      imgWidth: '30%',
-      focus: factsheet.iconFocus,
-      route: '/factsheet/' + factsheet.poolId,
-    }));
+    opacity: factsheet.iconOpacity,
+    imgWidth: '30%',
+    focus: factsheet.iconFocus,
+    factsheetRoute: '/factsheet/' + ROUTES.SONICMACROFACTSHEET,
+    productExplorerRoute: ROUTES.PRODUCT_EXPLORER + '/' + factsheet.poolChain.toUpperCase() + '/' + ROUTES.SONICMACROFACTSHEET,
+  }));
 
-    //stub
-    productData.push(
-    {
-      title: 'TradFi',
-      imgSrc: sonicMacroFactsheetData.factsheetImage.image,
-      description: ['The sonic ecosystem basket', 'Mega Caps with Yield Focus'],
-      status: 'LIVE',
-      opacity: 1,
-      imgWidth: '30%',
-      focus: true,
-      route: '/factsheet/' + ROUTES.SONICMACROFACTSHEET,
-    });
+  //stub
+  productData.push({
+    title: 'TradFi',
+    imgSrc: sonicMacroFactsheetData.factsheetImage.image,
+    description: ['The sonic ecosystem basket', 'Mega Caps with Yield Focus'],
+    status: 'LIVE',
+    opacity: 1,
+    imgWidth: '30%',
+    focus: true,
+    factsheetRoute: '/factsheet/' + ROUTES.SONICMACROFACTSHEET,
+    productExplorerRoute: ROUTES.PRODUCT_EXPLORER + '/MAINNET/'+ ROUTES.SONICMACROFACTSHEET,
+  });
 
   return (
     <Parallax
@@ -111,29 +112,16 @@ export function Banner() {
       </ParallaxLayer>
       <ParallaxLayer speed={0.04} factor={1}>
         <Row
-          id="mission boxes"
+          id="featured"
+          justify="center"
           style={{
-            paddingTop: '53vh',
+            paddingTop: '58vh',
             position: 'relative',
           }}
         >
-          <Col span={2}></Col>
-          <Col span={10} style={{ paddingTop: '6vh' }}>
-            <BannerProductSection
-              productData={productData.slice(
-                0,
-                Math.floor(productData.length / 2)
-              )}
-            />
+          <Col md={22} lg={22} xl={20}>
+            <BannerProductSection productData={productData} />
           </Col>
-          <Col span={10} style={{ paddingTop: '6vh' }}>
-            <BannerProductSection
-              productData={productData.slice(
-                Math.floor(productData.length / 2)
-              )}
-            />
-          </Col>
-          <Col span={2}></Col>
         </Row>
       </ParallaxLayer>
     </Parallax>
