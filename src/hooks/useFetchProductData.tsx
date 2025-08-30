@@ -26,7 +26,6 @@ export const useFetchProductData = (id: string, chain: GqlChain) => {
 
   useEffect(() => {
     if (!loading && !error && productData?.id && productData.id != '') {
-      console.log('Setting product state with new data:', productData);
       setProduct((prev) => {
         if (prev && shallowEqual(prev, productData)) {
           return prev;

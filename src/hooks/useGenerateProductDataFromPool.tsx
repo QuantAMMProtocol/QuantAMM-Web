@@ -60,12 +60,12 @@ export const useGenerateProductDataFromPool = (
               tokenPricesMap,
               setPool
             );
-          console.log('timeSeriesData', timeSeriesData);
+
           const generatedProduct: Product = getProductFromPool(
             poolData,
             timeSeriesData
           );
-          console.log('generatedProduct', generatedProduct);
+          
           setProductData(generatedProduct);
         } catch (error) {
           console.error(

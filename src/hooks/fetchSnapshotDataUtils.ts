@@ -161,8 +161,6 @@ export const getTimeSeriesDataForProductList = (
       snapshots[0]?.totalShares > 0
         ? snapshots[0]?.totalShares
         : DEFAULT_INITIAL_TOTAL_SHARES;
-    
-    console.log("timeseries", snapshots);
 
     const tempTimeSeries = snapshots.map((snapshot: TimeSeriesData) => {
       const tokenPrices = Object.fromEntries(

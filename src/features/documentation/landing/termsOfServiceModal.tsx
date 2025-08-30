@@ -131,12 +131,9 @@ const TermsOfServiceGateModal: React.FC<TermsOfServiceGateModalProps> = ({
     if (!continueEnabled || location === 'uk') {
       window.location.href = '/' + ROUTES.INELIGIBLEUSER;
     } else {
-      console.log('Accepted terms:', entry);
-
       onClose();
-      console.log(acceptedTerms);
     } // ✅ Close the modal only
-  }, [location, acceptedTos, continueEnabled, runAuditLog, page, isMobile, onClose, acceptedTerms]);
+  }, [location, acceptedTos, continueEnabled, runAuditLog, page, isMobile, onClose]);
 
   const renderContent = () => (
     <Space direction="vertical" size="large" style={{ width: '100%' }}>

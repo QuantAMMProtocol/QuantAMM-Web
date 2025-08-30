@@ -13,8 +13,6 @@ interface ProductDetailNavProps {
 }
 
 function ProductDetailNavInternal({ productId, chain }: ProductDetailNavProps) {
-  console.log('Rendering ProductDetailNav with productId:', productId);
-
   const acceptedTermsAndConditions = useAppSelector(
     selectAcceptedTermsAndConditions
   );

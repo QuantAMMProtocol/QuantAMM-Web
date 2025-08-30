@@ -26,7 +26,6 @@ export const useFinancialAnalysis = ({
   loadToSimulator: boolean;
   shouldRun: boolean;
 }) => {
-  console.log('Initializing financial analysis...');
   const dispatch = useAppDispatch();
   const [runFinancialAnalysis] = useRunFinancialAnalysisMutation();
 
@@ -41,18 +40,11 @@ export const useFinancialAnalysis = ({
       if (!product || !shouldRun) {
         return;
       }
-
-      console.log('Checking financial analysis conditions...');
-
       try {
         const ts = product?.timeSeries ?? [];
         const hasValidTs = ts.length > 0 && !!ts[0]?.timestamp;
 
         if (!hasCacheForProduct && hasValidTs) {
-          console.log(
-            'Dispatching loadingSimulationRunBreakdown for product:',
-            product.id
-          );
           dispatch(loadingSimulationRunBreakdown(product.id));
         }
 
@@ -61,7 +53,6 @@ export const useFinancialAnalysis = ({
           (product?.timeSeries?.length ?? 0) > 0 &&
           product?.timeSeries?.[0]?.timestamp
         ) {
-          console.log('Running financial analysis for product:', product.id);
           product?.timeSeries[product?.timeSeries.length - 1].timestamp;
 
           const portfolioReturns = product?.timeSeries?.map((step, i) => {

@@ -24,7 +24,6 @@ export const ProductModal: React.FC<ProductModalProps> = ({
   url,
   onClose,
 }) => {
-  console.log('Rendering ProductModal');
   const acceptedTerms = useAppSelector(selectAcceptedTermsAndConditions);
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | undefined>(
     undefined

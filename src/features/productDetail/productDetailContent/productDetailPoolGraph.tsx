@@ -45,8 +45,6 @@ function formatUsd(n: number) {
 const ProductDetailPoolGraphImpl: FC<ProductDetailPoolGraphImplProps> = ({
   productId,
 }) => {
-  console.log('rendering graph');
-
   const screens = useBreakpoint();
   const isMobile = !screens.lg && !screens.xl && !screens.xxl;
 

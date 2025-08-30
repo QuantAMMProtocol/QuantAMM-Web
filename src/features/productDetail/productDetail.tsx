@@ -17,7 +17,6 @@ import TermsOfServiceGateModal from '../documentation/landing/termsOfServiceModa
 const { useBreakpoint } = Grid;
 
 export const ProductDetail = () => {
-  console.log('Rendering ProductDetail component');
   const { chain, id } = useParams();
 
   const screens = useBreakpoint();
