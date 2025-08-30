@@ -28,7 +28,12 @@ export const useGenerateProductDataFromPool = (
   const quantammSetPools = useAppSelector(selectQuantammSetPools);
 
   useEffect(() => {
-    if (!isLoadingPools && !poolError && poolData) {
+    if (
+      !isLoadingPools &&
+      !poolError &&
+      poolData?.poolGetPool?.id &&
+      poolData?.poolGetPool?.id != ''
+    ) {
       const fetchData = async () => {
         setLoading(true);
         try {
@@ -47,15 +52,15 @@ export const useGenerateProductDataFromPool = (
 
           const tokenPricesMap = getTokenPriceMap(pricesResponses);
           const setPool = quantammSetPools[pool.id] != undefined;
-          
+
           const timeSeriesData: ProductTimeSeriesData =
             getTimeSeriesDataForProduct(
               poolData,
               poolSnapshotsMap,
-              tokenPricesMap, 
+              tokenPricesMap,
               setPool
             );
-            console.log('timeSeriesData', timeSeriesData);
+          console.log('timeSeriesData', timeSeriesData);
           const generatedProduct: Product = getProductFromPool(
             poolData,
             timeSeriesData

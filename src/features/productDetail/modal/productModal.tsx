@@ -24,9 +24,13 @@ export const ProductModal: React.FC<ProductModalProps> = ({
   url,
   onClose,
 }) => {
+  console.log('Rendering ProductModal');
   const acceptedTerms = useAppSelector(selectAcceptedTermsAndConditions);
-  const [intervalId, setIntervalId] = useState<NodeJS.Timeout | undefined>(undefined);
-  const [understandExternalWebsite, setUnderstandExternalWebsite] = useState(false);
+  const [intervalId, setIntervalId] = useState<NodeJS.Timeout | undefined>(
+    undefined
+  );
+  const [understandExternalWebsite, setUnderstandExternalWebsite] =
+    useState(false);
   const [visitorId, setVisitorId] = useState<string | undefined>(undefined);
 
   // Resolve the probabilistic fingerprint once per component mount
@@ -50,9 +54,13 @@ export const ProductModal: React.FC<ProductModalProps> = ({
   const handleClick = useCallback(() => {
     void runAuditLog({
       request: {
-        timestamp: new Date().toLocaleString(undefined, { timeZoneName: 'long' }),
+        timestamp: new Date().toLocaleString(undefined, {
+          timeZoneName: 'long',
+        }),
         user: visitorId ?? 'unknown', // probabilistic fingerprint id
-        page: isWithdraw ? 'productDetail-withdraw-redirect' : 'productDetail-deposit-redirect',
+        page: isWithdraw
+          ? 'productDetail-withdraw-redirect'
+          : 'productDetail-deposit-redirect',
         tosAgreement: understandExternalWebsite ? 'accepted' : 'not accepted',
       },
     });
@@ -60,11 +68,23 @@ export const ProductModal: React.FC<ProductModalProps> = ({
     clearInterval(intervalId);
     setIntervalId(undefined);
     onClose();
-  }, [runAuditLog, isWithdraw, understandExternalWebsite, url, intervalId, onClose, visitorId]);
+  }, [
+    runAuditLog,
+    isWithdraw,
+    understandExternalWebsite,
+    url,
+    intervalId,
+    onClose,
+    visitorId,
+  ]);
 
   return (
     <Modal
-      title={<div className={styles.modalTitle}>{isWithdraw ? 'Remove Liquidity' : 'Add liquidity'}</div>}
+      title={
+        <div className={styles.modalTitle}>
+          {isWithdraw ? 'Remove Liquidity' : 'Add liquidity'}
+        </div>
+      }
       open={isVisible}
       onCancel={onClose}
       footer={null}
@@ -77,24 +97,29 @@ export const ProductModal: React.FC<ProductModalProps> = ({
           The website or web pages to which you are redirected are not owned by
           QuantAMM. QuantAMM therefore shall not be held liable for any
           information, data, details, explanations and representations
-          (hereinafter referred to as &quot;Information&quot;) provided on such websites,
-          in particular not for damages that may result from the use of this
-          Information for your own investment decisions. Price and performance
-          data on the websites of QuantAMM may differ from the price information
-          on the websites of the respective online brokers or banks.
+          (hereinafter referred to as &quot;Information&quot;) provided on such
+          websites, in particular not for damages that may result from the use
+          of this Information for your own investment decisions. Price and
+          performance data on the websites of QuantAMM may differ from the price
+          information on the websites of the respective online brokers or banks.
         </p>
 
         <p>
           The information on the websites to which you are redirected is the
           sole responsibility of their providers. The offers you find on the
-          providers&apos; websites are expressly not directed at persons in countries
-          that prohibit the provision or retrieval of the content posted
-          therein. Each user is responsible for finding out about any
+          providers&apos; websites are expressly not directed at persons in
+          countries that prohibit the provision or retrieval of the content
+          posted therein. Each user is responsible for finding out about any
           restrictions before accessing the websites and complying with them.
         </p>
       </div>
       <div className={styles.radioContainer}>
-        <Radio onClick={() => setUnderstandExternalWebsite(!understandExternalWebsite)} checked={understandExternalWebsite}>
+        <Radio
+          onClick={() =>
+            setUnderstandExternalWebsite(!understandExternalWebsite)
+          }
+          checked={understandExternalWebsite}
+        >
           By clicking continue, I agree that I have read and understood the
           disclaimer about the forwarding to external websites.
         </Radio>
@@ -106,20 +131,45 @@ export const ProductModal: React.FC<ProductModalProps> = ({
           className={styles.modalButton}
           size="large"
           disabled={!understandExternalWebsite || !acceptedTerms}
-          style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', width: '100%', alignItems: 'center', textAlign: 'center' }}
+          style={{
+            marginTop: '20px',
+            display: 'flex',
+            flexDirection: 'column',
+            width: '100%',
+            alignItems: 'center',
+            textAlign: 'center',
+          }}
         >
-          <img src="/assets/logo-balancer.png" alt="Balancer" className={styles.modalIcon} style={{ marginBottom: '10px', marginTop:'10px' }} />
+          <img
+            src="/assets/logo-balancer.png"
+            alt="Balancer"
+            className={styles.modalIcon}
+            style={{ marginBottom: '10px', marginTop: '10px' }}
+          />
           <div className={styles.modalContent} style={{ width: '100%' }}>
             <span className={styles.modalTitle} style={{ textAlign: 'center' }}>
               {isWithdraw ? 'Withdraw' : 'Deposit'} on Balancer
             </span>
             <p
               className={styles.modalDescription}
-              style={{ wordWrap: 'break-word', width: '100%', maxWidth: '500px', textAlign: 'center', marginBottom: 0 }}
+              style={{
+                wordWrap: 'break-word',
+                width: '100%',
+                maxWidth: '500px',
+                textAlign: 'center',
+                marginBottom: 0,
+              }}
             >
               Continue to Balancer&apos;s website
             </p>
-            <p style={{ wordWrap: 'break-word', width: '100%', textAlign: 'center', marginTop: '0' }}>
+            <p
+              style={{
+                wordWrap: 'break-word',
+                width: '100%',
+                textAlign: 'center',
+                marginTop: '0',
+              }}
+            >
               where you can {isWithdraw ? 'withdraw' : 'deposit'} your assets.
             </p>
           </div>

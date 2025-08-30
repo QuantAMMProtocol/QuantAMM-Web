@@ -1,6 +1,6 @@
-import { FC, useMemo, useRef } from 'react';
+import { FC, memo, useCallback, useMemo, useRef } from 'react';
 import { Button, Col, Row, Spin, Tag, Tooltip, Typography } from 'antd';
-import {
+import type {
   GridOptions,
   ICellRendererParams,
   SideBarDef,
@@ -8,89 +8,104 @@ import {
 } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { format } from 'date-fns';
-import {
-  GqlChain,
-  GqlPoolEvent
-} from '../../../__generated__/graphql-types';
-import { useFetchPoolEventsData } from '../../../hooks/useFetchPoolEventsData';
+
 import { useAppSelector } from '../../../app/hooks';
-import { Product } from '../../../models';
-import { selectAgGridTheme } from '../../themes/themeSlice';
-import { selectQuantammSetPools } from '../../productExplorer/productExplorerSlice';
+import {
+  selectAgGridTheme,
+} from '../../themes/themeSlice';
+import {
+  selectProductById,
+  selectQuantammSetPools,
+} from '../../productExplorer/productExplorerSlice';
+
 import { ROUTES } from '../../../routesEnum';
+import type { GqlChain, GqlPoolEvent } from '../../../__generated__/graphql-types';
+import { useFetchPoolEventsData } from '../../../hooks/useFetchPoolEventsData';
 
 const { Title } = Typography;
 
-interface ProductDetailEventsProps {
-  product: Product;
+type ProductDetailEventsProps = {
+  /** Pool/product id (primitive) */
+  productId: string;
+  /** Chain to query (primitive) */
+  chain: GqlChain;
+};
+
+// Utility: middle truncation for addresses / tx hashes
+function truncateMiddle(
+  text: string,
+  startChars = 6,
+  endChars = 6,
+  ellipsis = '....'
+): string {
+  if (!text || text.length <= startChars + endChars) return text;
+  return `${text.slice(0, startChars)}${ellipsis}${text.slice(text.length - endChars)}`;
 }
 
-export const ProductDetailEvents: FC<ProductDetailEventsProps> = ({
-  product,
-}) => {
+export const ProductDetailEvents: FC<ProductDetailEventsProps> = memo(function ProductDetailEventsImpl({
+  productId,
+  chain,
+}: ProductDetailEventsProps) {
   const darkThemeAg = useAppSelector(selectAgGridTheme);
-  const gridRef = useRef<AgGridReact>(null);
+  const gridRef = useRef<AgGridReact<GqlPoolEvent>>(null);
+
+  // Narrow product selection (for features that require address)
+  const product = useAppSelector((s) => selectProductById(s, productId));
+  const productAddress = product?.address?.toLowerCase() ?? '';
+
+  // Quant AMM pools registry used for badge thresholds
   const quantAMMSetPools = useAppSelector(selectQuantammSetPools);
 
-  let goldThreshold = 0;
-  let silverThreshold = 0;
-  let bronzeThreshold = 0;
-  let srcPrefix = 'UNKNOWN';
-  if (
-    quantAMMSetPools[product.address]
-  ) {
-    if(product.address == ROUTES.SAFEHAVENFACTSHEET.toLowerCase()){
-      srcPrefix = 'Safe_Haven_'
-      goldThreshold = 1748213999;
-      silverThreshold = 1749423599;
-      bronzeThreshold = 1750633199;
-    }
-    else if(product.address == ROUTES.BASEMACROFACTSHEET.toLowerCase()){
-      srcPrefix = 'Base_Macro_'
-      goldThreshold = 1749423599;
-      silverThreshold = 1750633199;
-      bronzeThreshold = 1751756400;
-    }
-    else if(product.address == ROUTES.SONICMACROFACTSHEET.toLowerCase()){
-      srcPrefix = 'Sonic_Macro_'
-      goldThreshold = 1754434800;
-      silverThreshold = 1755644400;
-      bronzeThreshold = 1756854000;
-    }
-  }
-
+  
+  // Fetch events (primitive deps only)
   const { poolEvents, loading, error } = useFetchPoolEventsData({
     first: 1000,
     skip: undefined,
-    poolId: product.id,
-    chain: product.chain as GqlChain
+    poolId: productId,
+    chain,
   });
 
-  const explorerRootUrl: Record<string, string> = useMemo(
-    () => ({
+  // Stable block explorer base by chain
+  const explorerBase = useMemo(() => {
+    const roots: Record<string, string> = {
       MAINNET: 'https://etherscan.io',
       BASE: 'https://basescan.org',
       ARBITRUM: 'https://arbiscan.io',
-      SONIC:'https://sonicscan.org',
-    }),
-    []
-  );
+      SONIC: 'https://sonicscan.org',
+    };
+    return roots[String(chain).toUpperCase()] ?? 'https://etherscan.io';
+  }, [chain]);
 
-  function truncateMiddle(
-    text: string,
-    startChars = 6,
-    endChars = 6,
-    ellipsis = '....'
-  ): string {
-    if ((text?.length ?? 0) <= startChars + endChars) {
-      return text;
+  // Badge thresholds / prefix (depends on this product and registry)
+  const { goldThreshold, silverThreshold, bronzeThreshold, srcPrefix } = useMemo(() => {
+    let gold = 0;
+    let silver = 0;
+    let bronze = 0;
+    let prefix = 'UNKNOWN';
+
+    if (productAddress && quantAMMSetPools[productAddress]) {
+      if (productAddress === ROUTES.SAFEHAVENFACTSHEET.toLowerCase()) {
+        prefix = 'Safe_Haven_';
+        gold = 1748213999;
+        silver = 1749423599;
+        bronze = 1750633199;
+      } else if (productAddress === ROUTES.BASEMACROFACTSHEET.toLowerCase()) {
+        prefix = 'Base_Macro_';
+        gold = 1749423599;
+        silver = 1750633199;
+        bronze = 1751756400;
+      } else if (productAddress === ROUTES.SONICMACROFACTSHEET.toLowerCase()) {
+        prefix = 'Sonic_Macro_';
+        gold = 1754434800;
+        silver = 1755644400;
+        bronze = 1756854000;
+      }
     }
-    const start = text.slice(0, startChars);
-    const end = text.slice(text.length - endChars);
-    return `${start}${ellipsis}${end}`;
-  }
+    return { goldThreshold: gold, silverThreshold: silver, bronzeThreshold: bronze, srcPrefix: prefix };
+  }, [productAddress, quantAMMSetPools]);
 
-  const poolEventsColDefs = useMemo(
+  // Column definitions (memoized; closures capture only stable primitives)
+  const columnDefs = useMemo(
     () => [
       {
         colId: 'badge',
@@ -101,40 +116,31 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = ({
         filter: false,
         cellRenderer: (params: { data: any }) => {
           const { data } = params;
-          // only for ADD events
-          if (!data || data.type !== 'ADD') return null;
+          if (!data || data.type !== 'ADD') return null; // only ADD events
 
-          const ts = data.timestamp as number;
+          const ts: number = data.timestamp;
           let src: string | null = null;
           let tooltip: string | null = null;
 
-          if (ts < (goldThreshold ?? 0)) {
-            src = '/products/'+ srcPrefix +'Gold_sm.png';
+          if (ts < goldThreshold) {
+            src = `/products/${srcPrefix}Gold_sm.png`;
             tooltip = 'Gold Badge';
-          } else if (ts < (silverThreshold ?? 0)) {
-            src = '/products/'+ srcPrefix +'Silver_sm.png';
+          } else if (ts < silverThreshold) {
+            src = `/products/${srcPrefix}Silver_sm.png`;
             tooltip = 'Silver Badge';
-          } else if (ts < (bronzeThreshold ?? 0)) {
-            src = '/products/'+ srcPrefix +'Bronze_sm.png';
+          } else if (ts < bronzeThreshold) {
+            src = `/products/${srcPrefix}Bronze_sm.png`;
             tooltip = 'Bronze Badge';
           }
 
-          if (!src) {
-            // timestamp ≥ bronze threshold → no badge
-            return null;
-          }
+          if (!src) return null; // ≥ bronze → no badge
 
           return (
             <Tooltip title={tooltip} placement="top">
               <img
                 src={src}
                 alt="badge"
-                style={{
-                  width: 24,
-                  height: 24,
-                  display: 'block',
-                  margin: '0 auto',
-                }}
+                style={{ width: 24, height: 24, display: 'block', margin: '0 auto' }}
               />
             </Tooltip>
           );
@@ -145,14 +151,9 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = ({
         field: 'timestamp',
         headerName: 'Timestamp',
         width: 180,
-
         valueFormatter: (params: ValueFormatterParams) => {
           const { value, node } = params;
-          // if it's a group row, or no valid numeric timestamp, just render blank (or return the group key)
-          if (node?.group ?? typeof value !== 'number') {
-            return '';
-          }
-          // otherwise it's a real timestamp
+          if (node?.group || typeof value !== 'number') return '';
           return format(value * 1000, 'dd-MM-yy HH:mm:ss');
         },
         enableRowGroup: true,
@@ -162,52 +163,31 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = ({
         colId: 'valueUSD',
         field: 'valueUSD',
         headerName: 'Value',
-        width: 100,
-        valueFormatter: (params: { value: any }) => {
-          if (
-            params.value === null ||
-            params.value === undefined ||
-            isNaN(params.value)
-          ) {
-            return '';
-          }
-
+        width: 110,
+        valueFormatter: (p: { value: unknown }) => {
+          const v = Number(p.value);
+          if (!Number.isFinite(v)) return '';
           return new Intl.NumberFormat('en-US', {
             style: 'currency',
             currency: 'USD',
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
-          }).format(Number(params.value));
+          }).format(v);
         },
-        cellStyle: { textAlign: 'right' },
+        cellStyle: { textAlign: 'right' as const },
       },
       {
         colId: 'sender',
         field: 'sender',
         headerName: 'Sender',
-        width: 140,
+        width: 160,
         enableRowGroup: true,
         cellRenderer: (params: ICellRendererParams) => {
-          const base = explorerRootUrl[product.chain];
-          const url = `${base}/address/${params.value}`;
+          const url = `${explorerBase}/address/${params.value}`;
           return (
-            <Tag
-              style={{
-                width: '100%',
-                display: 'flex',
-                justifyContent: 'center',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
-              }}
-            >
-              <a
-                href={url}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ textAlign: 'center' }}
-              >
-                {truncateMiddle(params.value)}
+            <Tag style={{ width: '100%', display: 'flex', justifyContent: 'center', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              <a href={url} target="_blank" rel="noopener noreferrer" style={{ textAlign: 'center' }}>
+                {truncateMiddle(String(params.value))}
               </a>
             </Tag>
           );
@@ -217,32 +197,14 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = ({
         colId: 'tx',
         field: 'tx',
         headerName: 'Tx',
-        width: 140,
+        width: 160,
         enableRowGroup: true,
-        // also link to the tx page
         cellRenderer: (params: ICellRendererParams) => {
-          const base = explorerRootUrl[product.chain];
-          const url = `${base}/tx/${params.value}`;
+          const url = `${explorerBase}/tx/${params.value}`;
           return (
-            <Tag
-              style={{
-                width: '100%',
-                display: 'flex',
-                justifyContent: 'center',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
-              }}
-            >
-              <a
-                href={url}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  textAlign: 'center',
-                }}
-              >
-                {truncateMiddle(params.value)}
+            <Tag style={{ width: '100%', display: 'flex', justifyContent: 'center', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              <a href={url} target="_blank" rel="noopener noreferrer" style={{ textAlign: 'center' }}>
+                {truncateMiddle(String(params.value))}
               </a>
             </Tag>
           );
@@ -257,32 +219,30 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = ({
         type: 'number',
       },
     ],
-    [bronzeThreshold, explorerRootUrl, goldThreshold, product.chain, silverThreshold, srcPrefix]
+    [bronzeThreshold, explorerBase, goldThreshold, silverThreshold, srcPrefix]
   );
 
-  const rowData = poolEvents?.map(
-    ({
-      blockNumber,
-      id,
-      sender,
-      timestamp,
-      tx,
-      type,
-      valueUSD,
-    }: GqlPoolEvent) => ({
-      timestamp,
-      id,
-      blockNumber,
-      type,
-      sender,
-      tx,
-      valueUSD,
-    })
+  // Row data derived from GraphQL response
+  const rowData = useMemo(
+    () =>
+      (poolEvents ?? []).map(
+        ({ blockNumber, id, sender, timestamp, tx, type, valueUSD }: GqlPoolEvent) => ({
+          id,
+          blockNumber,
+          type,
+          sender,
+          tx,
+          timestamp,
+          valueUSD,
+        })
+      ),
+    [poolEvents]
   );
 
-  const poolEventsGridOptions: GridOptions = useMemo(
+  // Grid options (stable)
+  const gridOptions: GridOptions = useMemo(
     () => ({
-      columnDefs: poolEventsColDefs,
+      columnDefs,
       rowHeight: 26,
       defaultColDef: {
         filter: 'agTextColumnFilter',
@@ -296,39 +256,46 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = ({
       },
       groupDefaultExpanded: 3,
     }),
-    [poolEventsColDefs]
+    [columnDefs]
   );
 
-  const sideBar: SideBarDef = {
-    toolPanels: [
-      {
-        id: 'columns',
-        labelDefault: 'Columns',
-        labelKey: 'columns',
-        iconKey: 'columns',
-        toolPanel: 'agColumnsToolPanel',
-        minWidth: 100,
-        maxWidth: 300,
-        width: 200,
-      },
-      {
-        id: 'filters',
-        labelDefault: 'Filters',
-        labelKey: 'filters',
-        iconKey: 'filter',
-        toolPanel: 'agFiltersToolPanel',
-        minWidth: 100,
-        maxWidth: 300,
-        width: 200,
-      },
-    ],
-    position: 'right',
-    defaultToolPanel: 'none',
-  };
+  // Side bar (stable)
+  const sideBar: SideBarDef = useMemo(
+    () => ({
+      toolPanels: [
+        {
+          id: 'columns',
+          labelDefault: 'Columns',
+          labelKey: 'columns',
+          iconKey: 'columns',
+          toolPanel: 'agColumnsToolPanel',
+          minWidth: 100,
+          maxWidth: 300,
+          width: 200,
+        },
+        {
+          id: 'filters',
+          labelDefault: 'Filters',
+          labelKey: 'filters',
+          iconKey: 'filter',
+          toolPanel: 'agFiltersToolPanel',
+          minWidth: 100,
+          maxWidth: 300,
+          width: 200,
+        },
+      ],
+      position: 'right',
+      defaultToolPanel: 'none',
+    }),
+    []
+  );
 
-  const handleDownloadCSV = () => {
+  // CSV export handler (stable)
+  const handleDownloadCSV = useCallback(() => {
     gridRef.current?.api?.exportDataAsCsv();
-  };
+  }, []);
+
+  const showSpinner = loading && !error && rowData.length === 0;
 
   return (
     <Row id="events" style={{ marginTop: 20 }}>
@@ -344,12 +311,7 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = ({
       >
         <Title
           level={4}
-          style={{
-            width: '90%',
-            marginBottom: 0,
-            paddingLeft: 8,
-            paddingTop: 8,
-          }}
+          style={{ width: '90%', marginBottom: 0, paddingLeft: 8, paddingTop: 8 }}
         >
           <Row>
             <Col span={20}>
@@ -368,31 +330,29 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = ({
           </Row>
         </Title>
       </Col>
+
       <Col
         span={24}
         style={{
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          marginTop: '20px',
+          marginTop: 20,
           paddingLeft: 12,
         }}
       >
-        
-        {loading && !error ? (
+        {showSpinner ? (
           <Spin />
+        ) : error && rowData.length === 0 ? (
+          <div>Failed to load events.</div>
         ) : (
           <div style={{ width: '100%' }}>
-            <div
-              id="events"
-              className={darkThemeAg}
-              style={{ height: 700, width: '100%' }}
-            >
+            <div className={darkThemeAg} style={{ height: 700, width: '100%' }}>
               <AgGridReact
-                rowData={rowData}
-                gridOptions={poolEventsGridOptions}
-                columnDefs={poolEventsColDefs}
                 ref={gridRef}
+                rowData={rowData}
+                gridOptions={gridOptions}
+                columnDefs={columnDefs}
                 sideBar={sideBar}
               />
             </div>
@@ -401,4 +361,4 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = ({
       </Col>
     </Row>
   );
-};
+});

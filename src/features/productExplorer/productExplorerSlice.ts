@@ -19,7 +19,6 @@ interface ProductSimulationRunBreakdown {
   productId: string;
 }
 
-
 export const productExplorerSlice = createSlice({
   name: 'productExplorerSlice',
   initialState: productExplorerInitialState,
@@ -87,7 +86,10 @@ export const productExplorerSlice = createSlice({
     setSortingDirection: (state, action: PayloadAction<SortingDirection>) => {
       state.sortingDirection = action.payload;
     },
-    setLoadingJsonProductSimulations: (state, action: PayloadAction<boolean>) => {
+    setLoadingJsonProductSimulations: (
+      state,
+      action: PayloadAction<boolean>
+    ) => {
       state.loadingJsonProductSimulations = action.payload;
     },
     setOverrideTab: (state, action: PayloadAction<OverrideTab | undefined>) => {
@@ -114,10 +116,10 @@ export const selectProducts = (state: RootState) => {
 };
 
 export const selectProductById = (
-  products: ProductMap,
+  state: RootState,
   id: string
 ): Product | undefined => {
-  return products[id];
+  return state.productExplorer.productMap[id];
 };
 
 export const selectAcceptedTermsAndConditions = (state: RootState) =>
@@ -181,10 +183,8 @@ export const selectLoadingSimulationRunBreakdown = (
   productId: string
 ) => state.productExplorer.loadingSimulationRunBreakdown[productId];
 
-export const selectLoadingJsonBreakdown = (
-  state: RootState
-) => state.productExplorer.loadingJsonProductSimulations;
-
+export const selectLoadingJsonBreakdown = (state: RootState) =>
+  state.productExplorer.loadingJsonProductSimulations;
 
 export const selectReturnAnalysisByProductId = (
   state: RootState,

@@ -10,7 +10,6 @@ import {
   selectLoadingJsonBreakdown,
   selectLoadingSimulationRunBreakdown,
   selectProductById,
-  selectProducts,
   selectQuantammSetPools,
   selectReturnAnalysisByProductId,
   selectReturnMetricThresholds,
@@ -22,7 +21,10 @@ import { useFetchProductData } from '../../../../hooks/useFetchProductData';
 import { useFinancialAnalysis } from '../../../../hooks/useFinancialAnalysis';
 import { ProductDetailSummaryDesktop } from './productDetailSummaryDesktop';
 import { ProductDetailSummaryMobile } from './productDetailSummaryMobile';
-import { SimulationRunBreakdown, SimulationRunMetric } from '../../../simulationResults/simulationResultSummaryModels';
+import {
+  SimulationRunBreakdown,
+  SimulationRunMetric,
+} from '../../../simulationResults/simulationResultSummaryModels';
 
 import styles from './productDetailSummary.module.scss';
 import { getBreakdown, Pool } from '../../../../services/breakdownService';
@@ -239,15 +241,21 @@ export const ProductDetailSummary: FC<ProductDetailSummaryProps> = ({
   );
 
   useEffect(() => {
-    if (productData) {
+    if (productData && comparingProductId?.id) {
       dispatch(loadProducts({ [productData.id]: productData }));
     }
-  }, [productData, dispatch]);
+  }, [productData, dispatch, comparingProductId?.id]);
 
-  const [breakdowns, setBreakdowns] = useState<Record<Pool, SimulationRunBreakdown>>({} as Record<Pool, SimulationRunBreakdown>);
-  
+  const [breakdowns, setBreakdowns] = useState<
+    Record<Pool, SimulationRunBreakdown>
+  >({} as Record<Pool, SimulationRunBreakdown>);
+
   const addressKey = product.address?.toLowerCase() ?? '';
   const specialPoolKey = quantAMMSetPools[addressKey];
+
+  const existingReturnAnalysis = useAppSelector((state) =>
+    selectReturnAnalysisByProductId(state, product.id)
+  );
 
   useEffect(() => {
     const pools = Object.values(quantAMMSetPools);
@@ -256,24 +264,37 @@ export const ProductDetailSummary: FC<ProductDetailSummaryProps> = ({
       const entries = await Promise.all(
         pools.map(async (pool) => [pool, await getBreakdown(pool)] as const)
       );
-      setBreakdowns(Object.fromEntries(entries) as Record<Pool, SimulationRunBreakdown>);
+      setBreakdowns(
+        Object.fromEntries(entries) as Record<Pool, SimulationRunBreakdown>
+      );
       setLoadingJsonProductSimulations(false);
     };
     void loadAll();
   }, [quantAMMSetPools]);
 
   useEffect(() => {
-    if (specialPoolKey && !loadingBreakdowns && breakdowns[specialPoolKey]) {
+    if (!specialPoolKey || loadingBreakdowns) return;
+    const b = breakdowns[specialPoolKey];
+    if (!b) return;
+    if (!existingReturnAnalysis || existingReturnAnalysis.length === 0) {
       dispatch(
         setProductSimulationRunBreakdown({
           productId: product.id,
-          simulationRunBreakdown: breakdowns[specialPoolKey],
+          simulationRunBreakdown: b,
         })
       );
     }
-  }, [specialPoolKey, loadingBreakdowns, breakdowns, product, dispatch]);
+  }, [
+    specialPoolKey,
+    loadingBreakdowns,
+    breakdowns,
+    product.id,
+    dispatch,
+    existingReturnAnalysis,
+  ]);
 
-  const hasTimeSeries = Array.isArray(product.timeSeries) && product.timeSeries.length > 0;
+  const hasTimeSeries =
+    Array.isArray(product.timeSeries) && product.timeSeries.length > 0;
   const shouldRun = hasTimeSeries && !specialPoolKey;
   useFinancialAnalysis({
     product,
@@ -282,9 +303,8 @@ export const ProductDetailSummary: FC<ProductDetailSummaryProps> = ({
     shouldRun,
   });
 
-  const comparingProduct = selectProductById(
-    useAppSelector(selectProducts),
-    comparingProductId?.id ?? ''
+  const comparingProduct = useAppSelector((state) =>
+    selectProductById(state, comparingProductId?.id ?? '')
   );
 
   useEffect(() => {
@@ -302,12 +322,18 @@ export const ProductDetailSummary: FC<ProductDetailSummaryProps> = ({
   return (
     <Row id="summary" style={{ marginTop: 20 }}>
       <Col span={24} className={styles['product-detail-summary__title']}>
-        {specialPoolKey ? 
+        {specialPoolKey ? (
           <div>
-            <Tooltip title='This pool is new and does not have enough data for most financial metrics. This is a simulated performance metric analysis based on the test period (see factsheet). Once the pool has been running for a while it will become live metrics'>
-            <Title level={4}>Simulated HODL Performance Metric Analysis {'  '} <WarningOutlined type='warning'/> </Title>
+            <Tooltip title="This pool is new and does not have enough data for most financial metrics. This is a simulated performance metric analysis based on the test period (see factsheet). Once the pool has been running for a while it will become live metrics">
+              <Title level={4}>
+                Simulated HODL Performance Metric Analysis {'  '}{' '}
+                <WarningOutlined type="warning" />{' '}
+              </Title>
             </Tooltip>
-          </div> : <Title level={4}>HODL Performance Metric Analysis</Title>}
+          </div>
+        ) : (
+          <Title level={4}>HODL Performance Metric Analysis</Title>
+        )}
       </Col>
       <Col span={24}>
         <div className={styles['product-detail-summary__container']}>

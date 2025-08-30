@@ -1,6 +1,5 @@
-import { FC, useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { Affix, Anchor, Button } from 'antd';
-import { Product } from '../../../models';
 import { getBalancerPoolUrl } from '../../../utils';
 import { ProductModal } from '../modal/productModal';
 
@@ -9,10 +8,12 @@ import { useAppSelector } from '../../../app/hooks';
 import { selectAcceptedTermsAndConditions } from '../../productExplorer/productExplorerSlice';
 
 interface ProductDetailNavProps {
-  product: Product;
+  productId: string;
+  chain: string;
 }
 
-export const ProductDetailNav: FC<ProductDetailNavProps> = ({ product }) => {
+function ProductDetailNavInternal({ productId, chain }: ProductDetailNavProps) {
+  console.log('Rendering ProductDetailNav with productId:', productId);
 
   const acceptedTermsAndConditions = useAppSelector(
     selectAcceptedTermsAndConditions
@@ -37,7 +38,7 @@ export const ProductDetailNav: FC<ProductDetailNavProps> = ({ product }) => {
     setProductModalUrl(undefined);
   };
 
-  const baseBalancerUrl = getBalancerPoolUrl(product.chain, product.id);
+  const baseBalancerUrl = getBalancerPoolUrl(chain, productId);
   const addLiquidityBalancerPoolUrl = `${baseBalancerUrl}/add-liquidity`;
   const removeLiquidityBalancerPoolUrl = `${baseBalancerUrl}/remove-liquidity`;
 
@@ -80,7 +81,8 @@ export const ProductDetailNav: FC<ProductDetailNavProps> = ({ product }) => {
             <Button
               type="primary"
               style={{ marginRight: 8 }}
-              onClick={() => {showProductModal(addLiquidityBalancerPoolUrl);
+              onClick={() => {
+                showProductModal(addLiquidityBalancerPoolUrl);
                 setIsWithdraw(false);
               }}
               disabled={!acceptedTermsAndConditions}
@@ -88,9 +90,10 @@ export const ProductDetailNav: FC<ProductDetailNavProps> = ({ product }) => {
               Deposit
             </Button>
             <Button
-              onClick={() => {showProductModal(removeLiquidityBalancerPoolUrl);
-                setIsWithdraw(true);}
-              }
+              onClick={() => {
+                showProductModal(removeLiquidityBalancerPoolUrl);
+                setIsWithdraw(true);
+              }}
               disabled={!acceptedTermsAndConditions}
             >
               Withdraw
@@ -106,4 +109,6 @@ export const ProductDetailNav: FC<ProductDetailNavProps> = ({ product }) => {
       />
     </>
   );
-};
+}
+
+export const ProductDetailNav = memo(ProductDetailNavInternal);

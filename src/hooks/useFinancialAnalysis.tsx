@@ -26,9 +26,14 @@ export const useFinancialAnalysis = ({
   loadToSimulator: boolean;
   shouldRun: boolean;
 }) => {
+  console.log('Initializing financial analysis...');
   const dispatch = useAppDispatch();
   const [runFinancialAnalysis] = useRunFinancialAnalysisMutation();
-  const quantAMMSetPools = useAppSelector(selectQuantammSetPools);
+
+  const hasCacheForProduct = useAppSelector(
+    (s) => !!selectQuantammSetPools(s)[product?.id ?? '']
+  );
+
   useEffect(() => {
     const fetchFinancialAnalysis = async () => {
       let success: Success | undefined;
@@ -37,12 +42,26 @@ export const useFinancialAnalysis = ({
         return;
       }
 
+      console.log('Checking financial analysis conditions...');
+
       try {
-        dispatch(loadingSimulationRunBreakdown(product.id));
-        if (!quantAMMSetPools[product.id] &&
+        const ts = product?.timeSeries ?? [];
+        const hasValidTs = ts.length > 0 && !!ts[0]?.timestamp;
+
+        if (!hasCacheForProduct && hasValidTs) {
+          console.log(
+            'Dispatching loadingSimulationRunBreakdown for product:',
+            product.id
+          );
+          dispatch(loadingSimulationRunBreakdown(product.id));
+        }
+
+        if (
+          !hasCacheForProduct &&
           (product?.timeSeries?.length ?? 0) > 0 &&
           product?.timeSeries?.[0]?.timestamp
         ) {
+          console.log('Running financial analysis for product:', product.id);
           product?.timeSeries[product?.timeSeries.length - 1].timestamp;
 
           const portfolioReturns = product?.timeSeries?.map((step, i) => {
@@ -58,7 +77,7 @@ export const useFinancialAnalysis = ({
             const hodl_return =
               (step.hodlSharePrice - prevStep?.hodlSharePrice) /
               prevStep?.hodlSharePrice;
-            
+
             return [step.timestamp * 1000, portfolio_return, hodl_return];
           });
 
@@ -149,7 +168,7 @@ export const useFinancialAnalysis = ({
           );
 
           if (loadToSimulator) {
-            addImportedSimRunResults(simBreakdown);
+            dispatch(addImportedSimRunResults(simBreakdown));
           }
         }
       } catch (error) {
@@ -158,5 +177,14 @@ export const useFinancialAnalysis = ({
     };
 
     void fetchFinancialAnalysis();
-  }, [benchmark, dispatch, loadToSimulator, product, quantAMMSetPools, runFinancialAnalysis, shouldRun]);
+  }, [
+    benchmark,
+    loadToSimulator,
+    shouldRun,
+    hasCacheForProduct,
+    product?.id,
+    product?.timeSeries?.length,
+    runFinancialAnalysis,
+    dispatch,
+  ]);
 };

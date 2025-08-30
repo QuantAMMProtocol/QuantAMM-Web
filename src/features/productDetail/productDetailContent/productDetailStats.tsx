@@ -1,58 +1,93 @@
-import { FC } from 'react';
+// productDetailStats.tsx
+import { FC, memo } from 'react';
 import { Col, Grid, Row, Spin } from 'antd';
 import { useAppSelector } from '../../../app/hooks';
-import { Product } from '../../../models';
-import { selectLoadingJsonBreakdown, selectLoadingSimulationRunBreakdown } from '../../productExplorer/productExplorerSlice';
+import {
+  selectLoadingJsonBreakdown,
+  selectLoadingSimulationRunBreakdown,
+  selectProductById,
+} from '../../productExplorer/productExplorerSlice';
 import { ProductDetailSummary } from './summary/productDetailSummary';
 import { ProductDetailTable } from './components/productDetailTable';
 
 const { useBreakpoint } = Grid;
 
 interface ProductDetailStatsProps {
-  product: Product;
+  productId: string;
 }
 
-export const ProductDetailStats: FC<ProductDetailStatsProps> = ({
-  product,
+const ProductDetailStatsInternal: FC<ProductDetailStatsProps> = ({
+  productId,
 }) => {
+  const screens = useBreakpoint();
+  const isMobile = !screens.lg && !screens.xl && !screens.xxl;
+  const product = useAppSelector((state) =>
+    selectProductById(state, productId)
+  );
   const loadingBreakdowns = useAppSelector(selectLoadingJsonBreakdown);
-  
   const loadingSimulationRunBreakdown = useAppSelector((state) =>
-    selectLoadingSimulationRunBreakdown(state, product.id)
+    selectLoadingSimulationRunBreakdown(state, productId)
   );
 
-  const screens = useBreakpoint();
-
-  return (
-    <>
-      <ProductDetailSummary
-        product={product}
-        loadingSimulationRunBreakdown={loadingSimulationRunBreakdown}
-        isMobile={!screens.lg && !screens.xl && !screens.xxl}
-      />
-
+  if (!product) {
+    return (
       <Row id="details" style={{ marginTop: 20 }}>
-        
         <Col
           span={24}
           style={{
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            marginTop: '20px',
+            marginTop: 20,
             paddingLeft: 12,
           }}
         >
-          {loadingSimulationRunBreakdown || loadingBreakdowns ? (
+          <Spin />
+        </Col>
+      </Row>
+    );
+  }
+
+  const hasBreakdown =
+    !!product.simulationRunBreakdown &&
+    Object.keys(product.simulationRunBreakdown).length > 0;
+
+  const isLoadingForThisProduct =
+    !hasBreakdown && (loadingSimulationRunBreakdown || loadingBreakdowns);
+
+  return (
+    <>
+      <ProductDetailSummary
+        product={product}
+        loadingSimulationRunBreakdown={loadingSimulationRunBreakdown}
+        isMobile={isMobile}
+      />
+
+      <Row id="details" style={{ marginTop: 20 }}>
+        <Col
+          span={24}
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginTop: 20,
+            paddingLeft: 12,
+          }}
+        >
+          {isLoadingForThisProduct ? (
             <Spin />
-          ) : (
+          ) : hasBreakdown ? (
             <ProductDetailTable
               simulationRunBreakdown={product.simulationRunBreakdown}
-              productId= {product.address}
+              productId={product.address ?? productId}
             />
+          ) : (
+            <div>No breakdown data available.</div>
           )}
         </Col>
       </Row>
     </>
   );
 };
+
+export const ProductDetailStats = memo(ProductDetailStatsInternal);

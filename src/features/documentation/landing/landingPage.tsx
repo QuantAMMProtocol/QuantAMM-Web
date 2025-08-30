@@ -9,12 +9,12 @@ import { CURRENT_LIVE_FACTSHEETS } from '../factSheets/liveFactsheets';
 import { ROUTES } from '../../../routesEnum';
 import { sonicMacroFactsheetData } from '../factSheets/sonicMacro/sonicMacroFactsheetData';
 
-// 
+//
 const { useBreakpoint } = Grid;
 
 export default function LandingPage() {
-  const screens   = useBreakpoint();
-  const isMobile  = !screens.lg && !screens.xl && !screens.xxl;
+  const screens = useBreakpoint();
+  const isMobile = !screens.lg && !screens.xl && !screens.xxl;
   const dispatch = useAppDispatch();
   const handleGateClose = () => dispatch(setAcceptedTermsAndConditions(true));
 
@@ -26,8 +26,13 @@ export default function LandingPage() {
     opacity: factsheet.iconOpacity,
     imgWidth: '30%',
     focus: factsheet.iconFocus,
-    factsheetRoute: '/factsheet/' + ROUTES.SONICMACROFACTSHEET,
-    productExplorerRoute: ROUTES.PRODUCT_EXPLORER + '/' + factsheet.poolChain.toUpperCase() + '/' + ROUTES.SONICMACROFACTSHEET,
+    factsheetRoute: '/factsheet/' + factsheet.poolId,
+    productExplorerRoute:
+      ROUTES.PRODUCT_EXPLORER +
+      '/' +
+      factsheet.poolChain.toUpperCase() +
+      '/' +
+      factsheet.poolId,
   }));
 
   //stub
@@ -40,20 +45,24 @@ export default function LandingPage() {
     imgWidth: '30%',
     focus: true,
     factsheetRoute: '/factsheet/' + ROUTES.SONICMACROFACTSHEET,
-    productExplorerRoute: ROUTES.PRODUCT_EXPLORER + '/MAINNET/'+ ROUTES.SONICMACROFACTSHEET,
+    productExplorerRoute:
+      ROUTES.PRODUCT_EXPLORER + '/MAINNET/' + ROUTES.SONICMACROFACTSHEET,
   });
-  
+
   return (
     <>
       <TermsOfServiceGateModal
         tosUrl="https://quantamm.fi/tos"
         onClose={handleGateClose}
         isMobile={isMobile}
-        page='landingPage'
+        page="landingPage"
       />
 
-      {isMobile ? <LandingPageMobile productData={productData} /> : <LandingPageDesktop productData={productData}/>}
+      {isMobile ? (
+        <LandingPageMobile productData={productData} />
+      ) : (
+        <LandingPageDesktop productData={productData} />
+      )}
     </>
   );
 }
-
