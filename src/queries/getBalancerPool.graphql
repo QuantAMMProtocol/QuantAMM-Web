@@ -1,5 +1,5 @@
 query GetPoolById($id: String!, $chain: GqlChain!) {
-  poolGetPool(id: $id, chain: $chain, tagNotIn: [ "BLACK_LISTED" ]) {
+  poolGetPool(id: $id, chain: $chain) {
     __typename
     address
     chain
