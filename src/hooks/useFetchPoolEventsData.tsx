@@ -28,7 +28,7 @@ export const useFetchPoolEventsData = ({
       first,
       skip,
       where: {
-        poolIdIn: [poolId],
+        poolId: poolId,
         chainIn: [chain],
       },
     },
