@@ -10,7 +10,7 @@ import {
   getTimeSeriesDataForProduct,
   getTokenAddress,
   getTokenPriceMap,
-  getTokenPrices,
+  getHistoricalTokenPrices,
 } from './fetchSnapshotDataUtils';
 import { useAppSelector } from '../app/hooks';
 import { selectQuantammSetPools } from '../features/productExplorer/productExplorerSlice';
@@ -48,7 +48,7 @@ export const useGenerateProductDataFromPool = (
             (token) => `${pool.chain}:${getTokenAddress(token)}`
           );
 
-          const pricesResponses = await getTokenPrices(tokens);
+          const pricesResponses = await getHistoricalTokenPrices(tokens);
 
           const tokenPricesMap = getTokenPriceMap(pricesResponses);
           const setPool = quantammSetPools[pool.id] != undefined;

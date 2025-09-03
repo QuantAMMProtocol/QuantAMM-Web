@@ -7,6 +7,7 @@ import {
   GqlPoolMinimal,
   GqlPoolSnapshotDataRange,
   GqlTokenChartDataRange,
+  GqlTokenPrice,
 } from '../__generated__/graphql-types';
 import {
   Product,
@@ -54,6 +55,15 @@ export const getTokenAddress = (token: { address: string }) => {
   return token.address;
 };
 
+// Gather all unique chains
+export const getChains = (pools: GqlPoolMinimal[]) => {
+  const chainSet = new Set<string>();
+  pools.forEach((pool) => {
+    chainSet.add(pool.chain);
+  });
+  return Array.from(chainSet);
+};
+
 // Gather all unique tokens
 export const getTokens = (pools: GqlPoolMinimal[]) => {
   const tokenSet = new Set<string>();
@@ -65,8 +75,27 @@ export const getTokens = (pools: GqlPoolMinimal[]) => {
 
   return Array.from(tokenSet);
 };
+export const getCurrentTokenPrices = async (
+  chains: string[]
+): Promise<
+  ApolloQueryResult<{ tokenGetCurrentPrices: GqlTokenPrice[] }>[]
+> => {
+  const pricesResponses = await Promise.all(
+    chains.map((chain) => {
+      const query = {
+        query: gql`
+          ${generateTokenPricesQuery([], chain as GqlChain, GqlTokenChartDataRange.All)}
+        `,
+      };
 
-export const getTokenPrices = async (
+      return apolloClient.query(query);
+    })
+  );
+
+  return pricesResponses;
+};
+
+export const getHistoricalTokenPrices = async (
   tokens: string[]
 ): Promise<
   ApolloQueryResult<{ tokenGetHistoricalPrices: GqlHistoricalTokenPrice[] }>[]
@@ -96,7 +125,6 @@ export const getTokenPrices = async (
 
   return pricesResponses;
 };
-
 export const getTokenPriceMap = (
   pricesResponses: ApolloQueryResult<{
     tokenGetHistoricalPrices: GqlHistoricalTokenPrice[];

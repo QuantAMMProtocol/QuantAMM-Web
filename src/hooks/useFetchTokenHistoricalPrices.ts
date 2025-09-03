@@ -6,11 +6,11 @@ import {
 } from '../__generated__/graphql-types';
 import {
   getTokenPriceMap,
-  getTokenPrices,
+  getHistoricalTokenPrices,
   getTokens,
 } from './fetchSnapshotDataUtils';
 
-export const useFetchTokenPrices = (
+export const useFetchTokenHistoricalPrices = (
   poolData: GetPoolsQuery,
   { skip }: { skip: boolean }
 ) => {
@@ -34,7 +34,7 @@ export const useFetchTokenPrices = (
       }
 
       const tokens = getTokens(poolData.poolGetPools as GqlPoolMinimal[]);
-      const pricesResponses = await getTokenPrices(tokens);
+      const pricesResponses = await getHistoricalTokenPrices(tokens);
 
       const tokenPricesMap = getTokenPriceMap(pricesResponses);
 
