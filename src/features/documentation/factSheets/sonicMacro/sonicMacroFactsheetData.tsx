@@ -4,6 +4,7 @@ import { ROUTES } from '../../../../routesEnum';
 
 export const sonicMacroFactsheetData: FactsheetModel = {
   poolId: ROUTES.SONICMACROFACTSHEET,
+  inceptionLpPrice:3023,
   poolChain: 'SONIC',
   pools: [
     'sonicMacroBTFAugTrain',

@@ -16,6 +16,7 @@ import {
 import { productExplorerReducer } from '../features';
 import { financialAnalysisService } from '../services/financialAnalysisService';
 import { auditLogService } from '../services/auditLogService';
+import currentPricesSliceReducer from '../features/coinData/coinCurrentPriceSlice';
 
 enableMapSet();
 
@@ -26,6 +27,7 @@ export const store = configureStore({
     simRunner: simulationRunnerReducer,
     simResults: simulationResultsReducer,
     productExplorer: productExplorerReducer,
+    currentPrices: currentPricesSliceReducer,
     theme: themeReducer,
 
     [simulationRunnerService.reducerPath]: simulationRunnerService.reducer,

@@ -26,6 +26,9 @@ export default function LandingPage() {
     opacity: factsheet.iconOpacity,
     imgWidth: '30%',
     focus: factsheet.iconFocus,
+    poolId: factsheet.poolId,
+    poolChain: factsheet.poolChain,
+    inceptionLpPrice: factsheet.inceptionLpPrice,
     factsheetRoute: '/factsheet/' + factsheet.poolId,
     productExplorerRoute:
       ROUTES.PRODUCT_EXPLORER +
@@ -44,9 +47,12 @@ export default function LandingPage() {
     opacity: 1,
     imgWidth: '30%',
     focus: true,
+    poolId: ROUTES.SONICMACROFACTSHEET,
+    poolChain: sonicMacroFactsheetData.poolChain,
     factsheetRoute: '/factsheet/' + ROUTES.SONICMACROFACTSHEET,
     productExplorerRoute:
       ROUTES.PRODUCT_EXPLORER + '/MAINNET/' + ROUTES.SONICMACROFACTSHEET,
+    inceptionLpPrice: sonicMacroFactsheetData.inceptionLpPrice,
   });
 
   return (

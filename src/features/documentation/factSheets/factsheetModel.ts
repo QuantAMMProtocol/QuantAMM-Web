@@ -37,6 +37,7 @@ export interface FactsheetTrainedParamVariation {
 }
 
 export interface FactsheetModel {
+  inceptionLpPrice:number;
   mainTitle: string;
   mainDescription: string;
   iconTitle:string;

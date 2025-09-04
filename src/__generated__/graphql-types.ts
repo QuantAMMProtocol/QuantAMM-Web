@@ -3449,7 +3449,7 @@ export type GetPoolsSummaryQueryVariables = Exact<{
 }>;
 
 
-export type GetPoolsSummaryQuery = { __typename?: 'Query', poolGetPools: Array<{ __typename: 'GqlPoolMinimal', chain: GqlChain, name: string, id: string }> };
+export type GetPoolsSummaryQuery = { __typename?: 'Query', poolGetPools: Array<{ __typename: 'GqlPoolMinimal', chain: GqlChain, name: string, id: string, dynamicData: { __typename?: 'GqlPoolDynamicData', totalLiquidity: any, volume24h: any } }> };
 
 
 export const GetPoolByIdDocument = gql`
@@ -3827,6 +3827,10 @@ export const GetPoolsSummaryDocument = gql`
     chain
     name
     id
+    dynamicData {
+      totalLiquidity
+      volume24h
+    }
   }
 }
     `;

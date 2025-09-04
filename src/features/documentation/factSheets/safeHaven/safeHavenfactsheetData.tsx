@@ -4,6 +4,7 @@ import { ROUTES } from '../../../../routesEnum';
 
 export const safeHavenFactsheetData: FactsheetModel = {
   poolId: ROUTES.SAFEHAVENFACTSHEET,
+  inceptionLpPrice: 15582.16,
   poolChain: 'MAINNET',
   pools: [
     'safeHavenBTFAugTest',

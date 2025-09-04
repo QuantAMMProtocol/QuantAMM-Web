@@ -4,6 +4,7 @@ import { ROUTES } from '../../../../routesEnum';
 
 export const baseMacroFactsheetData: FactsheetModel = {
   poolId: ROUTES.BASEMACROFACTSHEET,
+  inceptionLpPrice:29310.05,
   poolChain: 'BASE',
   pools: [
     'baseMacroBTFAugTest',
