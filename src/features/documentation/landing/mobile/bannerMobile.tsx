@@ -9,7 +9,7 @@ export function BannerMobile(props: ProductBannerProps) {
     <>
     <div
       style={{
-        height: '80vh',
+        height: '85vh',
         backgroundImage: 'url(./background/Hourglass_Dune_80.png)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
@@ -37,7 +37,7 @@ export function BannerMobile(props: ProductBannerProps) {
           EARNING FEES AND YIELD
         </p>
       </div>
-      <div style={{ marginTop: '35vh', height: '90vh', width: '100%' }}>
+      <div style={{ marginTop: '35vh', height: '95vh', width: '100%' }}>
         <div
           style={{
             display: 'flex',
