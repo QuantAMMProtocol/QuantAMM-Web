@@ -240,7 +240,10 @@ export function BannerProductSection({ productData }: ProductBannerProps) {
                           </div>
                         }
                       >
-                        <h5 style={{ margin: 0 }}>{tag.title.toUpperCase()}</h5>
+                        <h5 style={{ margin: 0 }}>
+                          {tag.title.toUpperCase()}
+                          {tag.status !== 'LIVE' && ' (COMING SOON)'}
+                        </h5>
                       </Tooltip>
                     </Col>
                     <Col span={24}>
