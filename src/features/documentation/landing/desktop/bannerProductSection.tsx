@@ -229,7 +229,7 @@ export function BannerProductSection({ productData }: ProductBannerProps) {
                     </Col>
                     <Col span={24}>
                       <Tooltip
-                        placement="right"
+                        placement="top"
                         title={
                           <div>
                             {tag.description.map((d: string, i: number) => (
@@ -360,6 +360,7 @@ export function BannerProductSection({ productData }: ProductBannerProps) {
                           <Button
                             onClick={() => handleNavigation(tag.factsheetRoute)}
                             size="small"
+                            disabled={tag.status !== 'LIVE'}
                             style={{
                               padding: '6px 12px',
                               borderRadius: 6,
@@ -368,7 +369,7 @@ export function BannerProductSection({ productData }: ProductBannerProps) {
                               color: '#fff',
                               fontSize: '0.78rem',
                               lineHeight: 1,
-                              cursor: 'pointer',
+                              cursor: tag.status !== 'LIVE' ? 'not-allowed' :   'pointer',
                             }}
                           >
                             View Factsheet
@@ -380,6 +381,7 @@ export function BannerProductSection({ productData }: ProductBannerProps) {
                               handleNavigation(tag.productExplorerRoute)
                             }
                             size="small"
+                            disabled={tag.status !== 'LIVE'}
                             style={{
                               padding: '6px 12px',
                               borderRadius: 6,
@@ -391,7 +393,7 @@ export function BannerProductSection({ productData }: ProductBannerProps) {
                               fontWeight: 600,
                               fontSize: '0.78rem',
                               lineHeight: 1,
-                              cursor: 'pointer',
+                              cursor: tag.status !== 'LIVE' ? 'not-allowed' :   'pointer',
                             }}
                           >
                             View Live Pool
