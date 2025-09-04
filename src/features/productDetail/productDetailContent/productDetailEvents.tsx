@@ -24,22 +24,11 @@ import { useFetchPoolEventsData } from '../../../hooks/useFetchPoolEventsData';
 
 const { Title } = Typography;
 
-type ProductDetailEventsProps = {
+interface ProductDetailEventsProps {
   /** Pool/product id (primitive) */
   productId: string;
   /** Chain to query (primitive) */
   chain: GqlChain;
-};
-
-// Utility: middle truncation for addresses / tx hashes
-function truncateMiddle(
-  text: string,
-  startChars = 6,
-  endChars = 6,
-  ellipsis = '....'
-): string {
-  if (!text || text.length <= startChars + endChars) return text;
-  return `${text.slice(0, startChars)}${ellipsis}${text.slice(text.length - endChars)}`;
 }
 
 export const ProductDetailEvents: FC<ProductDetailEventsProps> = memo(function ProductDetailEventsImpl({
@@ -75,6 +64,20 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = memo(function P
     };
     return roots[String(chain).toUpperCase()] ?? 'https://etherscan.io';
   }, [chain]);
+
+  function truncateMiddle(
+    text: string,
+    startChars = 6,
+    endChars = 6,
+    ellipsis = '....'
+  ): string {
+    if ((text?.length ?? 0) <= startChars + endChars) {
+      return text;
+    }
+    const start = text.slice(0, startChars);
+    const end = text.slice(text.length - endChars);
+    return `${start}${ellipsis}${end}`;
+  }
 
   // Badge thresholds / prefix (depends on this product and registry)
   const { goldThreshold, silverThreshold, bronzeThreshold, srcPrefix } = useMemo(() => {
@@ -153,7 +156,7 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = memo(function P
         width: 180,
         valueFormatter: (params: ValueFormatterParams) => {
           const { value, node } = params;
-          if (node?.group || typeof value !== 'number') return '';
+          if (node?.group ?? typeof value !== 'number') return '';
           return format(value * 1000, 'dd-MM-yy HH:mm:ss');
         },
         enableRowGroup: true,
