@@ -13,6 +13,7 @@ import {
 import { FilterPayload, updateFilters } from '../../utils/filters';
 import { SimulationRunBreakdown } from '../simulationResults/simulationResultSummaryModels';
 import { productExplorerInitialState } from './productExplorerInitialState';
+import { deleteCookie, setCookie, TOS_COOKIE } from './cookieUtils';
 
 interface ProductSimulationRunBreakdown {
   simulationRunBreakdown: SimulationRunBreakdown;
@@ -54,6 +55,11 @@ export const productExplorerSlice = createSlice({
     },
     setAcceptedTermsAndConditions: (state, action: PayloadAction<boolean>) => {
       state.acceptedTermsAndConditions = action.payload;
+      if (action.payload) {
+        setCookie(TOS_COOKIE, '1');
+      } else {
+        deleteCookie(TOS_COOKIE);
+      }
     },
     setFilters: (state, action: PayloadAction<FilterPayload>) => {
       state.loadingProducts = true;
