@@ -8,7 +8,10 @@ import type {
 } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { format } from 'date-fns';
-import { GqlChain, GqlPoolEvent } from '../../../__generated__/graphql-types';
+import {
+  GqlChain,
+  GqlPoolEvent,
+} from '../../../__generated__/graphql-types';
 import { useFetchPoolEventsData } from '../../../hooks/useFetchPoolEventsData';
 import { useAppSelector } from '../../../app/hooks';
 import { selectAgGridTheme } from '../../themes/themeSlice';
