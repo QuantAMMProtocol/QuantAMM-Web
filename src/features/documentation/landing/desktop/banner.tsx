@@ -32,7 +32,7 @@ export function Banner(props: ProductBannerProps) {
           factor={1}
           style={{
             height: '95vh',
-            backgroundImage: 'url(./background/Hourglass_Dune_80.png)',
+            backgroundImage: 'url(./background/Hourglass_Dune_80.avif)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             position: 'relative',

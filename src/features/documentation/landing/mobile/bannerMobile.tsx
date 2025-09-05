@@ -10,7 +10,7 @@ export function BannerMobile(props: ProductBannerProps) {
     <div
       style={{
         height: '85vh',
-        backgroundImage: 'url(./background/Hourglass_Dune_80.png)',
+        backgroundImage: 'url(./background/Hourglass_Dune_80.avif)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         display: 'flex',
