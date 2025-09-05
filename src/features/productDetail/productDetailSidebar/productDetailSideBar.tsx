@@ -1,10 +1,7 @@
 import { CSSProperties, FC, useMemo, useState } from 'react';
 import { Affix, Layout } from 'antd';
 import { useAppSelector } from '../../../app/hooks';
-import {
-  selectProductById,
-  selectProducts,
-} from '../../productExplorer/productExplorerSlice';
+import { selectProductById } from '../../productExplorer/productExplorerSlice';
 import { ProductDetailInfo } from './productDetailInfo';
 import styles from './productDetailSidebar.module.scss';
 
@@ -21,7 +18,7 @@ export const ProductDetailSidebar: FC<ProductDetailSidebarProps> = ({
 }) => {
   const [collapsed, setCollapsed] = useState<boolean>(true);
   const [brokenBreakpoint, setBrokenBreakpoint] = useState<boolean>(true);
-  const product = selectProductById(useAppSelector(selectProducts), id);
+  const product = useAppSelector((state) => selectProductById(state, id));
 
   const style: CSSProperties = useMemo(() => {
     if (brokenBreakpoint) {

@@ -1,8 +1,10 @@
 import { FactsheetModel } from '../factsheetModel';
 import { PowerChannelUpdateRule } from '../../updateRules/powerChannelUpdateRule';
+import { ROUTES } from '../../../../routesEnum';
 
 export const safeHavenFactsheetData: FactsheetModel = {
-  poolId: '0x6b61d8680c4f9e560c8306807908553f95c749c5',
+  poolId: ROUTES.SAFEHAVENFACTSHEET,
+  inceptionLpPrice: 15582.16,
   poolChain: 'MAINNET',
   pools: [
     'safeHavenBTFAugTest',
@@ -20,8 +22,7 @@ export const safeHavenFactsheetData: FactsheetModel = {
     width: '30%',
     alt: 'Safe Haven BTF Icon',
   },
-  objective:
-    'The Safe Haven BTF allows for a decentralised, automated and transparent mechanism to allocate to Gold and Bitcoin in a responsive manner that reflects the inherent volatility associated with Bitcoin.',
+  objective: 'The Safe Haven BTF allows for a decentralised, automated and transparent mechanism to allocate to Gold and Bitcoin in a responsive manner that reflects the inherent volatility associated with Bitcoin.',
   deploymentLinks: {
     contractLinks: [
       [
@@ -271,14 +272,12 @@ inflation and currency devaluation.`,
       variations: [
         {
           name: 'Guard Rails',
-          tooltip:
-            'Absolute minimum weight guard rails of 10% and 3% were tested. The final guard rail chosen was 3%.',
+          tooltip: 'Absolute minimum weight guard rails of 10% and 3% were tested. The final guard rail chosen was 3%.',
           value: ['3%'],
         },
         {
           name: 'Speed Limit',
-          tooltip:
-            'The speed limit weights can change in one day (epsilon max) was selected to be 0.432. The speed limit is tied to a maximum trade size of 10% of pool constituent reserves.',
+          tooltip: 'The speed limit weights can change in one day (epsilon max) was selected to be 0.432. The speed limit is tied to a maximum trade size of 10% of pool constituent reserves.',
           value: ['0.432'],
         },
       ],
@@ -288,8 +287,7 @@ inflation and currency devaluation.`,
       variations: [
         {
           name: 'Lambda',
-          tooltip:
-            'Lambda is the parameter used in the gradient estimators for the power channel. This is the on-chain value stored in the contracts.',
+          tooltip: 'Lambda is the parameter used in the gradient estimators for the power channel. This is the on-chain value stored in the contracts.',
           value: [
             'BTC - 0.811035769801363300',
             'PAXG - 0.781490597023096500',
@@ -298,8 +296,7 @@ inflation and currency devaluation.`,
         },
         {
           name: 'Memory Days',
-          tooltip:
-            'Memory days is a conversion of the lambda setting to a more understandable unit of the number of days of prices used in the strategy.',
+          tooltip: 'Memory days is a conversion of the lambda setting to a more understandable unit of the number of days of prices used in the strategy.',
           value: [
             'BTC - 17.93552717',
             'PAXG - 15.31974493',
@@ -313,8 +310,7 @@ inflation and currency devaluation.`,
       variations: [
         {
           name: 'Aggressiveness',
-          tooltip:
-            'Otherwise known as k_per_day. This is the multiplier applied to the strategy signal to get the weight change per day.',
+          tooltip: 'Otherwise known as k_per_day. This is the multiplier applied to the strategy signal to get the weight change per day.',
           value: [
             'BTC - 77.55380713',
             'PAXG - 52.65723196',
@@ -323,8 +319,7 @@ inflation and currency devaluation.`,
         },
         {
           name: 'k',
-          tooltip:
-            'k is the on-chain value stored in the contracts and is the exact parameter used in the strategy calculations.',
+          tooltip: 'k is the on-chain value stored in the contracts and is the exact parameter used in the strategy calculations.',
           value: [
             'BTC - 1390.9684145267538',
             'PAXG - 806.6953621597771',
@@ -338,11 +333,15 @@ inflation and currency devaluation.`,
       variations: [
         {
           name: 'Exponent',
-          tooltip:
-            'The exponent is a variable used in the power channel strategy that dictate how big a price change has to be before the strategy starts to notice it. It is the primary difference between other strategies like momentum.',
+          tooltip: 'The exponent is a variable used in the power channel strategy that dictate how big a price change has to be before the strategy starts to notice it. It is the primary difference between other strategies like momentum.',
           value: ['BTC - 1.5312327931176639', 'PAXG - 1', 'USDC - 1'],
         },
       ],
     },
   ],
+  iconTitle: 'Safe Haven',
+  iconDescription: ['The doomsday BTF', 'Bitcoin, PAXOS Gold, USDC'],
+  status: 'LIVE',
+  iconOpacity: 1,
+  iconFocus: true,
 };

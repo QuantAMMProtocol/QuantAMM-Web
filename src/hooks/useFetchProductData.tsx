@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 import { GqlChain, useGetPoolByIdQuery } from '../__generated__/graphql-types';
 import { Product } from '../models';
 import { useGenerateProductDataFromPool } from './useGenerateProductDataFromPool';
+import { shallowEqual } from 'react-redux';
 
 export const useFetchProductData = (id: string, chain: GqlChain) => {
   const [product, setProduct] = useState<Product | null>(null);
-
   const {
     data: poolData,
     loading: isLoadingPools,
@@ -15,7 +15,7 @@ export const useFetchProductData = (id: string, chain: GqlChain) => {
       id,
       chain,
     },
-    skip: !id || !chain,
+    skip: !id || !chain || id == '',
   });
 
   const { productData, error, loading } = useGenerateProductDataFromPool(
@@ -25,10 +25,15 @@ export const useFetchProductData = (id: string, chain: GqlChain) => {
   );
 
   useEffect(() => {
-    if (!loading && !error && productData) {
-      setProduct(productData);
+    if (!loading && !error && productData?.id && productData.id != '') {
+      setProduct((prev) => {
+        if (prev && shallowEqual(prev, productData)) {
+          return prev;
+        }
+        return productData;
+      });
     }
-  }, [productData, loading, error]);
+  }, [loading, error, productData]);
 
   return {
     product,

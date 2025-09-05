@@ -13,15 +13,19 @@ import {
   ExclamationCircleOutlined,
   InfoCircleOutlined,
 } from '@ant-design/icons';
-import { useAppSelector } from '../../../app/hooks';
-import { selectAcceptedTermsAndConditions } from '../../productExplorer/productExplorerSlice';
+import { useAppSelector, useAppDispatch } from '../../../app/hooks';
+import {
+  selectAcceptedTermsAndConditions,
+  setAcceptedTermsAndConditions,
+} from '../../productExplorer/productExplorerSlice';
 import { ROUTES } from '../../../routesEnum';
 import { useRunAuditLogMutation } from '../../../services/auditLogService';
+import { LOC_COOKIE, setCookie } from '../../productExplorer/cookieUtils';
 
 const { Title, Paragraph, Text } = Typography;
 
 export interface TermsOfServiceGateModalProps {
-  tosUrl: string;
+  tosUrl?: string;
   onClose: () => void;
   isUkIp?: boolean;
   isMobile?: boolean;
@@ -30,6 +34,7 @@ export interface TermsOfServiceGateModalProps {
 
 type LocationChoice = '' | 'uk' | 'nonUk';
 
+// ---------- (Existing modal content preserved) ----------
 const ToSSummary: React.FC = () => (
   <Typography>
     <InfoCircleOutlined />
@@ -86,57 +91,64 @@ const ToSSummary: React.FC = () => (
 );
 
 const TermsOfServiceGateModal: React.FC<TermsOfServiceGateModalProps> = ({
+  tosUrl,
   onClose,
   isUkIp = false,
   isMobile = false,
   page,
 }) => {
+  const dispatch = useAppDispatch();
   const acceptedTerms = useAppSelector(selectAcceptedTermsAndConditions);
   const [location, setLocation] = useState<LocationChoice>('');
   const [acceptedTos, setAcceptedTos] = useState(false);
   const [continueEnabled, setContinueEnabled] = useState(false);
   const [runAuditLog] = useRunAuditLogMutation();
   const showUkBanner = isUkIp || location === 'uk';
+  const tosHref = tosUrl ?? 'https://quantamm.fi/tos';
 
   useEffect(() => {
-    if (location === 'nonUk') {
-      setContinueEnabled(true);
-    } else {
-      setContinueEnabled(false);
-    }
+    setContinueEnabled(location === 'nonUk');
   }, [location]);
 
   const handleContinue = useCallback(() => {
-    const entry = {
-      ts: Date.now(),
-      location,
-    };
     try {
+      const entry = { ts: Date.now(), location };
       sessionStorage.setItem('quantamm-gate', JSON.stringify(entry));
     } catch {
-      /* empty */
+      /* no-op */
     }
-    if (acceptedTos) {
-      //async function to run audit log
-      void runAuditLog({
-        request: {
-          timestamp: new Date().toLocaleString(undefined, { timeZoneName: 'long' }),
-          user: window.location.hostname,
-          page: page + '-tos-gate',
-          isMobile,
-          tosAgreement: acceptedTos ? 'accepted' : 'not accepted',
-        },
-      });
-      }
+
+    setCookie(LOC_COOKIE, location || '');
+
+    void runAuditLog({
+      request: {
+        timestamp: new Date().toLocaleString(undefined, {
+          timeZoneName: 'long',
+        }),
+        user: window.location.hostname,
+        page: page + '-tos-gate',
+        isMobile,
+        tosAgreement: acceptedTerms ? 'accepted' : 'not accepted',
+      },
+    });
+
     if (!continueEnabled || location === 'uk') {
       window.location.href = '/' + ROUTES.INELIGIBLEUSER;
-    } else {
-      console.log('Accepted terms:', entry);
+      return;
+    }
 
-      onClose();
-      console.log(acceptedTerms);
-    } // ✅ Close the modal only
-  }, [location, acceptedTos, continueEnabled, runAuditLog, page, isMobile, onClose, acceptedTerms]);
+    dispatch(setAcceptedTermsAndConditions(true));
+    onClose();
+  }, [
+    location,
+    runAuditLog,
+    page,
+    isMobile,
+    acceptedTerms,
+    continueEnabled,
+    dispatch,
+    onClose,
+  ]);
 
   const renderContent = () => (
     <Space direction="vertical" size="large" style={{ width: '100%' }}>
@@ -146,10 +158,10 @@ const TermsOfServiceGateModal: React.FC<TermsOfServiceGateModalProps> = ({
             Select Location:
             <span
               style={{
-              margin: 0,
-              padding: 0,
-              color: location != '' ? 'transparent' : 'red',
-              textAlign: 'right',
+                margin: 0,
+                padding: 0,
+                color: location !== '' ? 'transparent' : 'red',
+                textAlign: 'right',
               }}
             >
               *required
@@ -189,11 +201,7 @@ const TermsOfServiceGateModal: React.FC<TermsOfServiceGateModalProps> = ({
               onChange={(e) => setAcceptedTos(e.target.checked)}
             >
               I have read and accept the{' '}
-              <a
-                href={'https://quantamm.fi/tos'}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <a href={tosHref} target="_blank" rel="noopener noreferrer">
                 Terms of Service
               </a>{' '}
               and confirm I am not a prohibited user.{' '}
@@ -210,6 +218,7 @@ const TermsOfServiceGateModal: React.FC<TermsOfServiceGateModalProps> = ({
             </Checkbox>
           </div>
         </Col>
+
         <Col span={24}>
           <div
             style={{
@@ -221,7 +230,7 @@ const TermsOfServiceGateModal: React.FC<TermsOfServiceGateModalProps> = ({
           >
             <Button
               type="primary"
-              disabled={!acceptedTos || location != ('nonUk' as LocationChoice)}
+              disabled={!acceptedTos || location !== 'nonUk'}
               onClick={handleContinue}
               style={{
                 width: '90%',
@@ -274,13 +283,15 @@ const TermsOfServiceGateModal: React.FC<TermsOfServiceGateModalProps> = ({
           <Alert type="info" description={<ToSSummary />} className="mb-4" />
         )}
       </div>
+
       <Paragraph type="secondary" style={{ fontSize: 12 }}>
         This summary does <Text underline>not</Text> replace the{' '}
-        <a href={'https://quantamm.fi/tos'} style={{ fontWeight: 'bold' }}>
+        <a href={tosHref} style={{ fontWeight: 'bold' }}>
           full Terms of Service
         </a>
         . Please read the complete document before proceeding.
       </Paragraph>
+
       {renderContent()}
     </Modal>
   );

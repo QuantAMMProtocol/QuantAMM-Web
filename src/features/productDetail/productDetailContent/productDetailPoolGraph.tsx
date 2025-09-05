@@ -1,59 +1,50 @@
-import { FC, useCallback, useMemo, useState } from 'react';
+// productDetailPoolGraph.tsx
+import { FC, memo, useCallback, useMemo, useState } from 'react';
 import { AgCharts } from 'ag-charts-react';
-import {
+import type {
   AgCartesianSeriesOptions,
   AgNumberAxisOptions,
   AgTimeAxisOptions,
   AgTooltipRendererResult,
-  time,
 } from 'ag-charts-community';
-import { Col, Grid, Row, Typography } from 'antd';
-import { getTime } from 'date-fns';
+import { Grid, Row, Col } from 'antd';
+
+import styles from './productDetailPoolGraph.module.scss';
+
 import { useAppSelector } from '../../../app/hooks';
-import { Product } from '../../../models';
 import { selectAgChartTheme } from '../../themes/themeSlice';
-import { SimulationResultTimeseries } from '../../simulationRunner/simulationRunnerDtos';
 import {
-  selectLoadingSimulationRunBreakdown,
+  selectProductById,
   selectProductDetailSelectedTimeRange,
+  selectLoadingSimulationRunBreakdown,
   selectTimeseriesAnalysisByProductId,
 } from '../../productExplorer/productExplorerSlice';
-import { filterByTimeRange } from './helpers';
+
 import {
   ProductDetailDropdownSelect,
   ProductDetailDropdownSelectOption,
 } from './components/productDetailDropdownSelect';
 import { ProductDetailGraphTimeRangeSelector } from './components/productDetailGraphTimeRangeSelector';
-
-import styles from './productDetailPoolGraph.module.scss';
-const { Title } = Typography;
-
-export interface Marker {
-  enabled: boolean;
-}
-
-export interface SeriesConfig {
-  xKey: string;
-  yKey: string;
-  yName: string;
-  data: number[];
-  marker: Marker;
-}
-
-export interface SeriesToShow {
-  fees?: boolean;
-}
-
-interface ProductDetailPoolGraphProps {
-  product: Product;
-}
+import { filterByTimeRange } from './helpers';
 
 const { useBreakpoint } = Grid;
 
-export const ProductDetailPoolGraph: FC<ProductDetailPoolGraphProps> = ({
-  product,
+interface ProductDetailPoolGraphImplProps {
+  productId: string;
+}
+
+function formatUsd(n: number) {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(Number(n));
+}
+
+const ProductDetailPoolGraphImpl: FC<ProductDetailPoolGraphImplProps> = ({
+  productId,
 }) => {
-  console.log('rendering graph');
   const screens = useBreakpoint();
   const isMobile = !screens.lg && !screens.xl && !screens.xxl;
 
@@ -62,36 +53,44 @@ export const ProductDetailPoolGraph: FC<ProductDetailPoolGraphProps> = ({
   >([]);
 
   const chartTheme = useAppSelector(selectAgChartTheme);
-
   const selectedTimeRange = useAppSelector(
     selectProductDetailSelectedTimeRange
   );
-
-  const loadingSimulationRunBreakdown = useAppSelector((state) =>
-    selectLoadingSimulationRunBreakdown(state, product.id)
+  const loadingSimulationRunBreakdown = useAppSelector((s) =>
+    selectLoadingSimulationRunBreakdown(s, productId)
   );
 
-  const timeseriesAnalysis = useAppSelector((state) =>
-    selectTimeseriesAnalysisByProductId(state, product.id)
+  const product = useAppSelector((s) => selectProductById(s, productId));
+  const productName = product?.name ?? '';
+  const timeSeries = useMemo(
+    () => product?.timeSeries ?? [],
+    [product?.timeSeries]
   );
 
-  const availableSecondAxisSeries = useMemo(() => {
-    return (
-      timeseriesAnalysis?.map((element) => {
-        return {
-          value: element.metricKey,
-          label: element.metricName,
-        };
-      }) ?? []
+  const constituents = useMemo(
+    () => product?.poolConstituents ?? [],
+    [product?.poolConstituents]
+  );
+  const timeseriesAnalysis = useAppSelector((s) =>
+    selectTimeseriesAnalysisByProductId(s, productId)
+  );
+
+  const availableSecondAxisSeries: ProductDetailDropdownSelectOption[] =
+    useMemo(
+      () =>
+        (timeseriesAnalysis ?? []).map((a) => ({
+          value: a.metricKey,
+          label: a.metricName,
+        })),
+      [timeseriesAnalysis]
     );
-  }, [timeseriesAnalysis]);
 
   const handleSecondAxisChange = useCallback(
     (selectedItems: string[]) => {
       if (selectedItems.length > 0) {
         setSelectedSecondAxis(
-          availableSecondAxisSeries.filter((item) =>
-            selectedItems.includes(item.value)
+          availableSecondAxisSeries.filter((opt) =>
+            selectedItems.includes(opt.value)
           )
         );
       } else {
@@ -101,115 +100,114 @@ export const ProductDetailPoolGraph: FC<ProductDetailPoolGraphProps> = ({
     [availableSecondAxisSeries]
   );
 
-  const getData = useCallback(
-    (timeSeries: SimulationResultTimeseries[]) => {
-      const benchmarkTimeSeries = [
-        ...(product.timeSeries ?? []).filter((dataPoint) =>
-          filterByTimeRange(dataPoint.timestamp, selectedTimeRange)
-        ),
-      ];
+  const tsLen = timeSeries.length;
 
-      const snapshotPriceTotalLiquidity =
-        benchmarkTimeSeries[0]?.tokenPriceArray
-          .map(
-            (x) =>
-              benchmarkTimeSeries[0].amounts[
-                benchmarkTimeSeries[0].tokenPriceArray.indexOf(x)
-              ] * x
-          )
-          .reduce((acc, curr) => acc + curr, 0) ?? 0;
-
-      //snapshot prices are taken at a slightly different time to tokenPriceArray in the db
-      //scaling brings this inline with the tokenPriceArray
-      //have to do share price * total shares as once again total liquidity is not snapped at the same time
-      const snapshotScalingFactor =
-        (benchmarkTimeSeries[0].sharePrice *
-          benchmarkTimeSeries[0].totalShares) /
-        snapshotPriceTotalLiquidity;
-
-      const hodlAmounts =
-        benchmarkTimeSeries[0]?.tokenPriceArray.map(
-          (x) =>
-            snapshotPriceTotalLiquidity /
-            benchmarkTimeSeries[0].amounts.length /
-            x
-        ) ?? [];
-
-      const hodlTotalShares = benchmarkTimeSeries[0]?.totalShares ?? 0;
-
-      const firstAxisData = [
-        ...(product.timeSeries ?? [])
-          .filter((dataPoint) =>
-            filterByTimeRange(dataPoint.timestamp, selectedTimeRange)
-          )
-          .map((dataPoint) => ({
-            date: getTime(dataPoint.timestamp) * 1000,
-            value: dataPoint.sharePrice,
-            volume: dataPoint.volume24h,
-          })),
-      ];
-
-      const benchmarkData = [
-        ...benchmarkTimeSeries.map((dataPoint) => {
-          let hodlTotalLiquidity = 0;
-          for (let j = 0; j < dataPoint.amounts.length; j++) {
-            hodlTotalLiquidity +=
-              hodlAmounts[j] *
-              dataPoint.tokenPrices[product.poolConstituents[j].address];
-          }
-          return {
-            date: getTime(dataPoint.timestamp) * 1000,
-            benchmarkValue:
-              benchmarkTimeSeries.length < (product.timeSeries?.length ?? 0)
-                ? (hodlTotalLiquidity * snapshotScalingFactor) / hodlTotalShares
-                : dataPoint.hodlSharePrice,
-          };
-        }),
-      ];
-      console.log('benchmarkData', benchmarkData);
-
-      const secondAxisData: { date: number; [key: string]: number }[] = [];
-
-      timeSeries
-        .filter((dataPoint) =>
-          selectedSecondAxis.some((item) => item.value === dataPoint.metricKey)
-        )
-        .forEach((dataPoint) => {
-          dataPoint.timeSteps
-            .filter((timeStep) =>
-              filterByTimeRange(timeStep.unix, selectedTimeRange)
-            )
-            .forEach((timeStep) => {
-              secondAxisData.push({
-                date: getTime(timeStep.unix) * 1000,
-                [dataPoint.metricKey]: timeStep.timeStepTotal,
-              });
-            });
-        });
-      return [...firstAxisData, ...benchmarkData, ...secondAxisData];
-    },
-    [product, selectedSecondAxis, selectedTimeRange]
+  const filteredTs = useMemo(
+    () =>
+      timeSeries.filter((pt) =>
+        filterByTimeRange(pt.timestamp, selectedTimeRange)
+      ),
+    [timeSeries, selectedTimeRange]
   );
 
-  const getFirstAxisSeries = useCallback(
-    (): AgCartesianSeriesOptions[] => [
+  const chartData: ({
+    date: number;
+    value?: number;
+    volume?: number;
+    benchmarkValue?: number;
+  } & Record<string, number>)[] = useMemo(() => {
+    if (!filteredTs.length) return [];
+
+    const base = filteredTs.map((dp) => ({
+      date: dp.timestamp * 1000,
+      value: dp.sharePrice,
+      volume: dp.volume24h,
+    }));
+
+    let benchmarkData: { date: number; benchmarkValue: number }[] = [];
+    const hasTokenArrays =
+      Array.isArray(filteredTs[0].tokenPriceArray) &&
+      filteredTs[0].tokenPriceArray.length > 0 &&
+      Array.isArray(filteredTs[0].amounts) &&
+      filteredTs[0].amounts.length > 0;
+
+    if (hasTokenArrays) {
+      const t0 = filteredTs[0];
+      const snapshotPriceTotalLiquidity =
+        (t0.tokenPriceArray ?? [])
+          .map((x, i) => (t0.amounts?.[i] ?? 0) * x)
+          .reduce((acc, curr) => acc + curr, 0) ?? 0;
+
+      const hodlAmounts =
+        (t0.tokenPriceArray ?? []).map(
+          (x, _i, arr) => snapshotPriceTotalLiquidity / (arr.length || 1) / x
+        ) ?? [];
+
+      const hodlTotalShares = t0.totalShares ?? 0;
+      const snapshotScalingFactor =
+        (t0.sharePrice * (t0.totalShares ?? 1)) /
+        (snapshotPriceTotalLiquidity || 1);
+
+      benchmarkData = filteredTs.map((dp) => {
+        let hodlTotalLiquidity = 0;
+        for (let j = 0; j < (dp.amounts?.length ?? 0); j++) {
+          const tokenAddr = constituents[j]?.address;
+          const px = tokenAddr ? dp.tokenPrices[tokenAddr] : undefined;
+          if (px != null) {
+            hodlTotalLiquidity += (hodlAmounts[j] ?? 0) * px;
+          }
+        }
+        return {
+          date: dp.timestamp * 1000,
+          benchmarkValue:
+            filteredTs.length < tsLen
+              ? (hodlTotalLiquidity * snapshotScalingFactor) /
+                (hodlTotalShares || 1)
+              : dp.hodlSharePrice,
+        };
+      });
+    } else {
+      benchmarkData = filteredTs.map((dp) => ({
+        date: dp.timestamp * 1000,
+        benchmarkValue: dp.hodlSharePrice,
+      }));
+    }
+
+    const secondAxisRows: { date: number; [k: string]: number }[] = [];
+    (timeseriesAnalysis ?? []).forEach((metric) => {
+      if (!selectedSecondAxis.find((m) => m.value === metric.metricKey)) return;
+      metric.timeSteps
+        .filter((ts) => filterByTimeRange(ts.unix, selectedTimeRange))
+        .forEach((ts) => {
+          secondAxisRows.push({
+            date: ts.unix * 1000,
+            [metric.metricKey]: ts.timeStepTotal,
+          });
+        });
+    });
+
+    return [...base, ...benchmarkData, ...secondAxisRows];
+  }, [
+    filteredTs,
+    selectedTimeRange,
+    selectedSecondAxis,
+    timeseriesAnalysis,
+    constituents,
+    tsLen,
+  ]);
+
+  const firstAxisSeries: AgCartesianSeriesOptions[] = useMemo(
+    () => [
       {
         type: 'line',
         xKey: 'date',
         yKey: 'value',
-        yName: product.name + ' ($)',
+        yName: `${productName} ($)`,
         connectMissingData: false,
         tooltip: {
-          renderer: (params): string | AgTooltipRendererResult => {
-            return {
-              content: new Intl.NumberFormat('en-US', {
-                style: 'currency',
-                currency: 'USD',
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              }).format(Number(params.datum.value)),
-            };
-          },
+          renderer: (p): string | AgTooltipRendererResult => ({
+            content: formatUsd(p.datum.value),
+          }),
         },
       },
       {
@@ -218,16 +216,9 @@ export const ProductDetailPoolGraph: FC<ProductDetailPoolGraphProps> = ({
         yKey: 'volume',
         yName: 'Volume 24H',
         tooltip: {
-          renderer: (params): string | AgTooltipRendererResult => {
-            return {
-              content: new Intl.NumberFormat('en-US', {
-                style: 'currency',
-                currency: 'USD',
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              }).format(Number(params.datum.volume)),
-            };
-          },
+          renderer: (p): string | AgTooltipRendererResult => ({
+            content: formatUsd(p.datum.volume),
+          }),
         },
       },
       {
@@ -237,169 +228,149 @@ export const ProductDetailPoolGraph: FC<ProductDetailPoolGraphProps> = ({
         yName: 'HODL Value ($)',
         connectMissingData: false,
         tooltip: {
-          renderer: (params): string | AgTooltipRendererResult => {
-            return {
-              content: new Intl.NumberFormat('en-US', {
-                style: 'currency',
-                currency: 'USD',
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              }).format(Number(params.datum.benchmarkValue)),
-            };
-          },
+          renderer: (p): string | AgTooltipRendererResult => ({
+            content: formatUsd(p.datum.benchmarkValue),
+          }),
         },
       },
     ],
-    [product]
+    [productName]
   );
 
-  const getSecondarySeries = useCallback(
-    (): AgCartesianSeriesOptions[] =>
-      selectedSecondAxis.map((element) => ({
-        type: 'line',
-        xKey: 'date',
-        yKey: element.value,
-        yName: element.label,
-        connectMissingData: false,
-      })),
+  const secondaryAxisSeries: AgCartesianSeriesOptions[] = useMemo(
+    () =>
+      selectedSecondAxis.map(
+        (s): AgCartesianSeriesOptions => ({
+          type: 'line',
+          xKey: 'date',
+          yKey: s.value,
+          yName: s.label,
+          connectMissingData: false,
+        })
+      ),
     [selectedSecondAxis]
   );
 
-  const getSeries = useCallback((): AgCartesianSeriesOptions[] => {
-    return [...getFirstAxisSeries(), ...getSecondarySeries()];
-  }, [getFirstAxisSeries, getSecondarySeries]);
+  const series: AgCartesianSeriesOptions[] = useMemo(
+    () => [...firstAxisSeries, ...secondaryAxisSeries],
+    [firstAxisSeries, secondaryAxisSeries]
+  );
+  // ---- time helpers (ms) ----
+  const HOUR = 60 * 60 * 1000;
+  const DAY = 24 * HOUR;
+  const WEEK = 7 * DAY;
+  const MONTH = 30 * DAY;
 
-  const getAxesFormat = useMemo(() => {
-    const timeSeriesData = product.timeSeries ?? [];
-    const filteredData = timeSeriesData.filter((dataPoint) =>
-      filterByTimeRange(dataPoint.timestamp, selectedTimeRange)
-    );
-
-    const totalDuration =
-      filteredData.length > 0
-        ? getTime(filteredData[filteredData.length - 1].timestamp) -
-          getTime(filteredData[0].timestamp)
-        : 0;
-
-    const oneDay = 24 * 60 * 60 * 1000;
-    const oneMonth = 30 * oneDay;
-
-    if (totalDuration <= oneMonth) {
-      if (isMobile) {
-        return '%d/%m/%y'; // Format for mobile devices
+  const getTimeAxisIntervalStepMs = useCallback(
+    (range: string | undefined, spanMs: number): number => {
+      switch (range) {
+        case '1D':
+          return 6 * HOUR;
+        case '1W':
+          return DAY;
+        case '1M':
+          return 2 * DAY;
+        case '3M':
+          return WEEK;
+        case '6M':
+          return 2 * WEEK;
+        case 'YTD':
+        case '1Y':
+          return MONTH;
+        case 'ALL':
+          return Math.max(MONTH, Math.round(spanMs / 12));
+        default: {
+          if (spanMs <= 10 * DAY) return DAY;
+          if (spanMs <= 90 * DAY) return WEEK;
+          if (spanMs <= 180 * DAY) return 2 * WEEK;
+          if (spanMs <= 540 * DAY) return MONTH;
+          return 3 * MONTH;
+        }
       }
+    },
+    [DAY, HOUR, MONTH, WEEK]
+  );
 
-      return '%d %b %Y'; // Format for shorter timeframes (e.g., days)
-    } else {
-      return '%b %Y'; // Format for longer timeframes (e.g., months and years)
-    }
-  }, [isMobile, product.timeSeries, selectedTimeRange]);
+  const totalSpanMs = useMemo(() => {
+    if (filteredTs.length < 2) return 0;
+    const first = filteredTs[0].timestamp * 1000;
+    const last = filteredTs[filteredTs.length - 1].timestamp * 1000;
+    return last - first;
+  }, [filteredTs]);
 
-  const getIntervalStep = useMemo(() => {
-    const timeSeriesData = product.timeSeries ?? [];
-    const filteredData = timeSeriesData.filter((dataPoint) =>
-      filterByTimeRange(dataPoint.timestamp, selectedTimeRange)
-    );
+  const timeIntervalStepMs = useMemo(
+    () => getTimeAxisIntervalStepMs(selectedTimeRange, totalSpanMs),
+    [getTimeAxisIntervalStepMs, selectedTimeRange, totalSpanMs]
+  );
 
-    const totalDuration =
-      filteredData.length > 0
-        ? (getTime(filteredData[filteredData.length - 1].timestamp) -
-            getTime(filteredData[0].timestamp)) *
-          1000
-        : 0;
+  const timeLabelFormat = useMemo(() => {
+    if (!totalSpanMs) return '%b %Y';
+    return totalSpanMs <= 90 * DAY
+      ? isMobile
+        ? '%d/%m/%y'
+        : '%d %b %Y'
+      : '%b %Y';
+  }, [totalSpanMs, DAY, isMobile]);
+  const axes: (AgNumberAxisOptions | AgTimeAxisOptions)[] = useMemo(() => {
+    const maxVol = filteredTs.length
+      ? Math.max(...filteredTs.map((d) => d.volume24h ?? 0))
+      : 0;
 
-    const maxDataPoints = 4;
-    const oneDay = 24 * 60 * 60 * 1000;
-    const daysForThreeLabels = Math.ceil(totalDuration / (3 * oneDay));
-    if (isMobile) {
-      return time.day.every(daysForThreeLabels); // Adjusted for 3 labels on mobile
-    }
-
-    if (totalDuration <= maxDataPoints * oneDay) {
-      return time.day.every(1); // Daily steps
-    } else {
-      const interval = Math.ceil(totalDuration / (maxDataPoints * oneDay));
-
-      return time.day.every(interval); // Adjusted interval to fit max data points
-    }
-  }, [isMobile, product.timeSeries, selectedTimeRange]);
-
-  const getAxes = useCallback((): (
-    | AgNumberAxisOptions
-    | AgTimeAxisOptions
-  )[] => {
-    const result: (AgNumberAxisOptions | AgTimeAxisOptions)[] = [
+    const base: (AgNumberAxisOptions | AgTimeAxisOptions)[] = [
       {
         type: 'time',
         position: 'bottom',
         nice: true,
-        label: {
-          format: getAxesFormat,
-        },
-        interval: {
-          step: getIntervalStep,
-        },
-        max:
-          getTime(
-            product.timeSeries?.filter((dataPoint) =>
-              filterByTimeRange(dataPoint.timestamp, selectedTimeRange)
-            )?.[product.timeSeries.length - 2]?.timestamp ?? 0
-          ) * 1000,
-        min:
-          getTime(
-            product.timeSeries?.filter((dataPoint) =>
-              filterByTimeRange(dataPoint.timestamp, selectedTimeRange)
-            )?.[0]?.timestamp ?? 0
-          ) * 1000,
+        label: { format: timeLabelFormat },
+        interval: { step: timeIntervalStepMs },
       },
+      { type: 'number', position: 'left', keys: ['benchmarkValue', 'value'] },
       {
         type: 'number',
         position: 'left',
-        keys: ['benchmarkValue', 'value'],
-      },
-      {
-        type: 'number',
-        position: 'left',
-        max:
-          Math.max(
-            ...(product.timeSeries ?? [])
-              .filter((dataPoint) =>
-                filterByTimeRange(dataPoint.timestamp, selectedTimeRange)
-              )
-              .map((dataPoint) => dataPoint.volume24h)
-          ) * 2,
+        max: maxVol * 2,
         keys: ['volume'],
-        label: {
-          enabled: false,
-        },
+        label: { enabled: false },
       },
     ];
 
-    const secondaryAxisSeries = getSecondarySeries();
-
-    if (secondaryAxisSeries.length > 0) {
-      result.push({
+    if (selectedSecondAxis.length > 0) {
+      base.push({
         type: 'number',
         position: 'right',
-        keys: selectedSecondAxis.map((item) => item.value),
+        keys: selectedSecondAxis.map((s) => s.value),
       });
     }
+    return base;
+  }, [filteredTs, selectedSecondAxis, timeLabelFormat, timeIntervalStepMs]);
 
-    return result;
-  }, [
-    getAxesFormat,
-    getIntervalStep,
-    product.timeSeries,
-    getSecondarySeries,
-    selectedTimeRange,
-    selectedSecondAxis,
-  ]);
+  const options = useMemo(
+    () => ({
+      height: 400,
+      navigator: { enabled: false, height: 5, spacing: 6 },
+      padding: { right: 50 },
+      data: chartData,
+      series,
+      axes,
+      theme: {
+        baseTheme: chartTheme,
+        overrides: {
+          common: { background: { fill: 'transparent' } },
+          line: {
+            series: {
+              cursor: 'crosshair',
+              marker: { enabled: false },
+            },
+          },
+        },
+      },
+    }),
+    [chartData, series, axes, chartTheme]
+  );
 
+  // Render
   return (
     <Row id="graph">
-      <Col span={24} className={styles['product-detail-graph__title']}>
-        <Title level={4}>Graph</Title>
-      </Col>
       <Col span={24}>
         <div className={styles['product-detail-graph-container']}>
           <div className={styles['product-detail-graph__top-right']}>
@@ -417,49 +388,7 @@ export const ProductDetailPoolGraph: FC<ProductDetailPoolGraphProps> = ({
             </div>
           </div>
           <div className={styles['product-detail-graph__mid']}>
-            <AgCharts
-              options={{
-                height: 400,
-                navigator: {
-                  enabled: false,
-                  height: 5,
-                  spacing: 6,
-                },
-                axes: getAxes(),
-                data: getData(timeseriesAnalysis ?? []),
-                series: getSeries(),
-                padding: {
-                  right: 50,
-                },
-                legend: {
-                  enabled: true,
-                  position: 'top',
-                },
-                overlays: {
-                  noData: {
-                    text: 'No data',
-                  },
-                },
-                theme: {
-                  baseTheme: chartTheme,
-                  overrides: {
-                    common: {
-                      background: {
-                        fill: 'transparent',
-                      },
-                    },
-                    line: {
-                      series: {
-                        cursor: 'crosshair',
-                        marker: {
-                          enabled: false,
-                        },
-                      },
-                    },
-                  },
-                },
-              }}
-            />
+            <AgCharts options={options} />
           </div>
           <div className={styles['product-detail-graph__bottom-left']}>
             {/* empty */}
@@ -470,3 +399,5 @@ export const ProductDetailPoolGraph: FC<ProductDetailPoolGraphProps> = ({
     </Row>
   );
 };
+
+export const ProductDetailPoolGraph = memo(ProductDetailPoolGraphImpl);

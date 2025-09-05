@@ -18,5 +18,9 @@ query GetPoolsSummary(
     chain
     name
     id
+    dynamicData {
+      totalLiquidity
+      volume24h
+    }
   }
 }

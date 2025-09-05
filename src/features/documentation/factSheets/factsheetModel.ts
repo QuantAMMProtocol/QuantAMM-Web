@@ -37,6 +37,14 @@ export interface FactsheetTrainedParamVariation {
 }
 
 export interface FactsheetModel {
+  inceptionLpPrice:number;
+  mainTitle: string;
+  mainDescription: string;
+  iconTitle:string;
+  iconDescription:string[];
+  status: string;
+  iconOpacity: number;
+  iconFocus: boolean;
   poolId: string;
   poolChain:string;
   pools: Pool[];
@@ -47,8 +55,6 @@ export interface FactsheetModel {
   trainPeriod: string;
   poolPrefix: string;
   xAxisIntervals: Map<string, number>;
-  mainTitle: string;
-  mainDescription: string;
   cumulativePerformanceOverrideSeriesStrokeColor?: Dictionary<string>;
   cumulativePerformanceOverrideSeriesName?: Dictionary<string>;
   updateRule: JSX.Element;

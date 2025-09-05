@@ -17,7 +17,7 @@ import {
 import { FilterMap, INITIAL_PAGE, ProductMap } from '../models';
 import { useGenerateBaseProductsFromPoolList } from './useGenerateBaseProductsFromPoolList';
 import { useFetchSnapshotData } from './useFetchSnapshotData';
-import { useFetchTokenPrices } from './useFetchTokenPrices';
+import { useFetchTokenHistoricalPrices } from './useFetchTokenHistoricalPrices';
 import { useGenerateFullProductsFromPoolList } from './useGenerateFullProductsFromPoolList';
 import { ApolloError } from '@apollo/client';
 import { SerializedError } from '@reduxjs/toolkit';
@@ -111,7 +111,7 @@ export const useFetchProductListData = (
   );
 
   // fetch the token prices for the pool data
-  const { tokenPrices, tokenPricesLoading } = useFetchTokenPrices(poolData!, {
+  const { tokenPrices, tokenPricesLoading } = useFetchTokenHistoricalPrices(poolData!, {
     skip: IS_STUB_DATA,
   });
 

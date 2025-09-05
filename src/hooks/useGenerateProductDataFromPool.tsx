@@ -10,7 +10,7 @@ import {
   getTimeSeriesDataForProduct,
   getTokenAddress,
   getTokenPriceMap,
-  getTokenPrices,
+  getHistoricalTokenPrices,
 } from './fetchSnapshotDataUtils';
 import { useAppSelector } from '../app/hooks';
 import { selectQuantammSetPools } from '../features/productExplorer/productExplorerSlice';
@@ -28,7 +28,12 @@ export const useGenerateProductDataFromPool = (
   const quantammSetPools = useAppSelector(selectQuantammSetPools);
 
   useEffect(() => {
-    if (!isLoadingPools && !poolError && poolData) {
+    if (
+      !isLoadingPools &&
+      !poolError &&
+      poolData?.poolGetPool?.id &&
+      poolData?.poolGetPool?.id != ''
+    ) {
       const fetchData = async () => {
         setLoading(true);
         try {
@@ -43,24 +48,24 @@ export const useGenerateProductDataFromPool = (
             (token) => `${pool.chain}:${getTokenAddress(token)}`
           );
 
-          const pricesResponses = await getTokenPrices(tokens);
+          const pricesResponses = await getHistoricalTokenPrices(tokens);
 
           const tokenPricesMap = getTokenPriceMap(pricesResponses);
           const setPool = quantammSetPools[pool.id] != undefined;
-          
+
           const timeSeriesData: ProductTimeSeriesData =
             getTimeSeriesDataForProduct(
               poolData,
               poolSnapshotsMap,
-              tokenPricesMap, 
+              tokenPricesMap,
               setPool
             );
-            console.log('timeSeriesData', timeSeriesData);
+
           const generatedProduct: Product = getProductFromPool(
             poolData,
             timeSeriesData
           );
-          console.log('generatedProduct', generatedProduct);
+          
           setProductData(generatedProduct);
         } catch (error) {
           console.error(

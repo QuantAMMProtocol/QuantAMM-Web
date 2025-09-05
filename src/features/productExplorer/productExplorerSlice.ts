@@ -13,12 +13,12 @@ import {
 import { FilterPayload, updateFilters } from '../../utils/filters';
 import { SimulationRunBreakdown } from '../simulationResults/simulationResultSummaryModels';
 import { productExplorerInitialState } from './productExplorerInitialState';
+import { deleteCookie, setCookie, TOS_COOKIE } from './cookieUtils';
 
 interface ProductSimulationRunBreakdown {
   simulationRunBreakdown: SimulationRunBreakdown;
   productId: string;
 }
-
 
 export const productExplorerSlice = createSlice({
   name: 'productExplorerSlice',
@@ -55,6 +55,11 @@ export const productExplorerSlice = createSlice({
     },
     setAcceptedTermsAndConditions: (state, action: PayloadAction<boolean>) => {
       state.acceptedTermsAndConditions = action.payload;
+      if (action.payload) {
+        setCookie(TOS_COOKIE, '1');
+      } else {
+        deleteCookie(TOS_COOKIE);
+      }
     },
     setFilters: (state, action: PayloadAction<FilterPayload>) => {
       state.loadingProducts = true;
@@ -87,7 +92,10 @@ export const productExplorerSlice = createSlice({
     setSortingDirection: (state, action: PayloadAction<SortingDirection>) => {
       state.sortingDirection = action.payload;
     },
-    setLoadingJsonProductSimulations: (state, action: PayloadAction<boolean>) => {
+    setLoadingJsonProductSimulations: (
+      state,
+      action: PayloadAction<boolean>
+    ) => {
       state.loadingJsonProductSimulations = action.payload;
     },
     setOverrideTab: (state, action: PayloadAction<OverrideTab | undefined>) => {
@@ -114,10 +122,10 @@ export const selectProducts = (state: RootState) => {
 };
 
 export const selectProductById = (
-  products: ProductMap,
+  state: RootState,
   id: string
 ): Product | undefined => {
-  return products[id];
+  return state.productExplorer.productMap[id];
 };
 
 export const selectAcceptedTermsAndConditions = (state: RootState) =>
@@ -181,10 +189,8 @@ export const selectLoadingSimulationRunBreakdown = (
   productId: string
 ) => state.productExplorer.loadingSimulationRunBreakdown[productId];
 
-export const selectLoadingJsonBreakdown = (
-  state: RootState
-) => state.productExplorer.loadingJsonProductSimulations;
-
+export const selectLoadingJsonBreakdown = (state: RootState) =>
+  state.productExplorer.loadingJsonProductSimulations;
 
 export const selectReturnAnalysisByProductId = (
   state: RootState,

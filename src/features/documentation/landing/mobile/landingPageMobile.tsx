@@ -5,12 +5,13 @@ import { VisionOverviewMobile } from './visionOverviewMobile';
 import { TimelineMobile } from './timelineMobile';
 import { ContactCompanyMobile } from './contactCompany';
 import { StrategySummaryMobile } from './strategySummaryMobile';
+import { ProductBannerProps } from '../desktop/bannerProductSection';
 
-export function LandingPageMobile() {
+export function LandingPageMobile(props: ProductBannerProps) {
   
   return (
     <div style={{ width: '100%', padding: '10px', textAlign: 'center' }}>
-      <BannerMobile />
+      <BannerMobile productData={props.productData} />
       <QuantAMMExplainerMobile />
       <StrategySummaryMobile />
       <ResearchExplorerMobile />

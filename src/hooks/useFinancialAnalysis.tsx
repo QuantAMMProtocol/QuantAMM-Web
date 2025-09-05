@@ -28,7 +28,11 @@ export const useFinancialAnalysis = ({
 }) => {
   const dispatch = useAppDispatch();
   const [runFinancialAnalysis] = useRunFinancialAnalysisMutation();
-  const quantAMMSetPools = useAppSelector(selectQuantammSetPools);
+
+  const hasCacheForProduct = useAppSelector(
+    (s) => !!selectQuantammSetPools(s)[product?.id ?? '']
+  );
+
   useEffect(() => {
     const fetchFinancialAnalysis = async () => {
       let success: Success | undefined;
@@ -36,10 +40,16 @@ export const useFinancialAnalysis = ({
       if (!product || !shouldRun) {
         return;
       }
-
       try {
-        dispatch(loadingSimulationRunBreakdown(product.id));
-        if (!quantAMMSetPools[product.id] &&
+        const ts = product?.timeSeries ?? [];
+        const hasValidTs = ts.length > 0 && !!ts[0]?.timestamp;
+
+        if (!hasCacheForProduct && hasValidTs) {
+          dispatch(loadingSimulationRunBreakdown(product.id));
+        }
+
+        if (
+          !hasCacheForProduct &&
           (product?.timeSeries?.length ?? 0) > 0 &&
           product?.timeSeries?.[0]?.timestamp
         ) {
@@ -58,7 +68,7 @@ export const useFinancialAnalysis = ({
             const hodl_return =
               (step.hodlSharePrice - prevStep?.hodlSharePrice) /
               prevStep?.hodlSharePrice;
-            
+
             return [step.timestamp * 1000, portfolio_return, hodl_return];
           });
 
@@ -149,7 +159,7 @@ export const useFinancialAnalysis = ({
           );
 
           if (loadToSimulator) {
-            addImportedSimRunResults(simBreakdown);
+            dispatch(addImportedSimRunResults(simBreakdown));
           }
         }
       } catch (error) {
@@ -158,5 +168,14 @@ export const useFinancialAnalysis = ({
     };
 
     void fetchFinancialAnalysis();
-  }, [benchmark, dispatch, loadToSimulator, product, quantAMMSetPools, runFinancialAnalysis, shouldRun]);
+  }, [
+    benchmark,
+    loadToSimulator,
+    shouldRun,
+    hasCacheForProduct,
+    product?.id,
+    product?.timeSeries?.length,
+    runFinancialAnalysis,
+    dispatch,
+  ]);
 };

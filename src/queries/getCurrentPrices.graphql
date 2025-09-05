@@ -1,0 +1,10 @@
+query GetCurrentPrices(
+  $chains: [GqlChain!]!
+) {
+  tokenGetCurrentPrices(
+    chains: $chains
+  ) {
+    address
+    price
+  }
+}

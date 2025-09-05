@@ -8,10 +8,10 @@ import { ResearchExplorer } from './researchExplorer';
 import { VisionOverview } from './visionOverview';
 import { ContactCompany } from './contactCompany';
 import { FAQ } from './faq';
+import { ProductBannerProps } from './bannerProductSection';
 
 const items: { component: React.ComponentType; style: React.CSSProperties }[] =
   [
-    { component: Banner, style: { backgroundColor: 'white' } },
     {
       component: QuantAmmExplainer,
       style: {
@@ -75,7 +75,7 @@ const items: { component: React.ComponentType; style: React.CSSProperties }[] =
     },
   ];
 
-export function LandingPageDesktop() {
+export function LandingPageDesktop(props: ProductBannerProps) {
   return (
     <div
       style={{
@@ -84,6 +84,9 @@ export function LandingPageDesktop() {
         padding: '0',
       }}
     >
+      <Row key={'banner'} style={{backgroundColor: 'white'}}>
+        <Banner productData={props.productData} />
+      </Row>
       {items.map(({ component, style }, index) => (
         <Row key={index} style={style}>
           {createElement(component)}

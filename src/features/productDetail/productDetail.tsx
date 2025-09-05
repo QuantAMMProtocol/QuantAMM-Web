@@ -1,15 +1,17 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Grid, Layout, Spin } from 'antd';
 import { useParams } from 'react-router-dom';
 import { GqlChain } from '../../__generated__/graphql-types';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { useFinancialAnalysis } from '../../hooks/useFinancialAnalysis';
 import { useFetchProductData } from '../../hooks/useFetchProductData';
 import { ProductDetailContent } from './productDetailContent';
 import { ProductDetailSidebar } from './productDetailSidebar';
-import { Benchmark } from '../../models';
 import { selectTheme } from '../themes/themeSlice';
-import { loadProducts, setAcceptedTermsAndConditions } from '../productExplorer/productExplorerSlice';
+import {
+  loadProducts,
+  selectProductById,
+  setAcceptedTermsAndConditions,
+} from '../productExplorer/productExplorerSlice';
 import TermsOfServiceGateModal from '../documentation/landing/termsOfServiceModal';
 
 const { useBreakpoint } = Grid;
@@ -23,26 +25,53 @@ export const ProductDetail = () => {
   const isDark = useAppSelector(selectTheme);
 
   const handleGateClose = () => dispatch(setAcceptedTermsAndConditions(true));
-  
+
   const { product, productLoading, productError } = useFetchProductData(
     id!.toLowerCase(),
     chain as GqlChain
   );
 
-  useFinancialAnalysis({
-    product: product!,
-    benchmark: Benchmark.HODL,
-    loadToSimulator: false,
-    shouldRun: product?.timeSeries?.length
-      ? product.timeSeries.length > 0
-      : false,
-  });
+  const productInStore = useAppSelector((s) =>
+    product ? selectProductById(s, product.id) : undefined
+  );
+
+  const productSig = useMemo(() => {
+    if (!product) return '';
+    const ts = product.timeSeries ?? [];
+    const last = ts[ts.length - 1];
+    return [product.id, ts.length, last?.timestamp, last?.sharePrice].join('|');
+  }, [
+    product?.id,
+    product?.timeSeries?.length,
+    product?.timeSeries?.[product?.timeSeries?.length - 1]?.timestamp,
+    product?.timeSeries?.[product?.timeSeries?.length - 1]?.sharePrice,
+  ]);
+
+  const storeSig = useMemo(() => {
+    if (!productInStore) return '';
+    const ts = productInStore.timeSeries ?? [];
+    const last = ts[ts.length - 1];
+    return [
+      productInStore.id,
+      ts.length,
+      last?.timestamp,
+      last?.sharePrice,
+    ].join('|');
+  }, [
+    productInStore?.id,
+    productInStore?.timeSeries?.length,
+    productInStore?.timeSeries?.[productInStore?.timeSeries?.length - 1]
+      ?.timestamp,
+    productInStore?.timeSeries?.[productInStore?.timeSeries?.length - 1]
+      ?.sharePrice,
+  ]);
 
   useEffect(() => {
-    if (product && !productLoading) {
+    if (!product || productLoading) return;
+    if (productSig !== storeSig) {
       dispatch(loadProducts({ [product.id]: product }));
     }
-  }, [product, productLoading, dispatch]);
+  }, [dispatch, product, productLoading, productSig, storeSig]);
 
   return (
     <>
@@ -52,16 +81,19 @@ export const ProductDetail = () => {
         isMobile={isMobile}
         page="productDetail"
       />
-    <Layout style={{ minHeight: '100vh', padding: 20 }}>
-      {productLoading && <Spin />}
-      {!productLoading && !productError && !!id && (
-        <Layout>
-          {isMobile ? <></> : <ProductDetailSidebar id={id.toLowerCase()} isDark={isDark} /> }
-          <ProductDetailContent id={id.toLowerCase()} isMobile={isMobile}/>
-        </Layout>
-      )}
-    </Layout>
+      <Layout style={{ minHeight: '100vh', padding: 20 }}>
+        {productLoading && <Spin />}
+        {!productLoading && !productError && !!id && (
+          <Layout>
+            {isMobile ? (
+              <></>
+            ) : (
+              <ProductDetailSidebar id={id.toLowerCase()} isDark={isDark} />
+            )}
+            <ProductDetailContent id={id.toLowerCase()} isMobile={isMobile} />
+          </Layout>
+        )}
+      </Layout>
     </>
-    
   );
 };
