@@ -1,12 +1,14 @@
 import { Typography } from 'antd';
 import { BannerProductSection } from '../desktop/bannerProductSection';
 import { ProductBannerProps } from '../desktop/bannerProductSection';
+import { CurrentPricePollingGate } from '../../../coinData/coinCurrentPricesPolling';
 
 const { Title } = Typography;
 
 export function BannerMobile(props: ProductBannerProps) {
   return (
-    <>
+    <>      
+    <CurrentPricePollingGate />    
     <div
       style={{
         height: '85vh',
