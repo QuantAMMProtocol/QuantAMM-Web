@@ -260,9 +260,16 @@ const ProductDetailPoolGraphImpl: FC<ProductDetailPoolGraphImplProps> = ({
   const DAY = 24 * HOUR;
   const WEEK = 7 * DAY;
   const MONTH = 30 * DAY;
-
   const getTimeAxisIntervalStepMs = useCallback(
     (range: string | undefined, spanMs: number): number => {
+      const maxDataPoints = 4;
+      const oneDay = DAY;
+
+      if (isMobile) {
+        const daysForThreeLabels = Math.ceil(spanMs / (3 * oneDay));
+        return daysForThreeLabels * oneDay; // Adjusted for 3 labels on mobile
+      }
+
       switch (range) {
         case '1D':
           return 6 * HOUR;
@@ -280,15 +287,16 @@ const ProductDetailPoolGraphImpl: FC<ProductDetailPoolGraphImplProps> = ({
         case 'ALL':
           return Math.max(MONTH, Math.round(spanMs / 12));
         default: {
-          if (spanMs <= 10 * DAY) return DAY;
-          if (spanMs <= 90 * DAY) return WEEK;
-          if (spanMs <= 180 * DAY) return 2 * WEEK;
-          if (spanMs <= 540 * DAY) return MONTH;
-          return 3 * MONTH;
+          if (spanMs <= maxDataPoints * oneDay) {
+            return oneDay; // Daily steps
+          } else {
+            const interval = Math.ceil(spanMs / (maxDataPoints * oneDay));
+            return interval * oneDay; // Adjusted interval to fit max data points
+          }
         }
       }
     },
-    [DAY, HOUR, MONTH, WEEK]
+    [DAY, HOUR, MONTH, WEEK, isMobile]
   );
 
   const totalSpanMs = useMemo(() => {
