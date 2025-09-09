@@ -6,8 +6,6 @@ import { GqlHistoricalTokenPriceEntry } from '../__generated__/graphql-types';
 import { ProductTimeSeriesData, TimeSeriesData, ProductMap } from '../models';
 import { getFullProductsFromSnapshots } from '../utils/mapPoolToProduct';
 import { getTimeSeriesDataForProductList } from './fetchSnapshotDataUtils';
-import { useAppSelector } from '../app/hooks';
-import { selectQuantammSetPools } from '../features/productExplorer/productExplorerSlice';
 
 export const useGenerateFullProductsFromPoolList = (
   baseProductsData: ProductMap,
@@ -24,7 +22,6 @@ export const useGenerateFullProductsFromPoolList = (
   const [fullProductsError, setFullProductsError] = useState<
     FetchBaseQueryError | SerializedError | ApolloError | undefined
   >(undefined);
-  const quantammSetPools = useAppSelector(selectQuantammSetPools);
 
   useEffect(() => {
     if (baseProductsData && poolSnapshots && tokenPrices && !skip) {
@@ -34,8 +31,7 @@ export const useGenerateFullProductsFromPoolList = (
           getTimeSeriesDataForProductList(
             baseProductsData,
             poolSnapshots,
-            tokenPrices,
-            quantammSetPools
+            tokenPrices
           );
 
         const productsData: ProductMap = getFullProductsFromSnapshots(
@@ -51,7 +47,7 @@ export const useGenerateFullProductsFromPoolList = (
         setFullProductsLoading(false);
       }
     }
-  }, [baseProductsData, poolSnapshots, tokenPrices, skip, quantammSetPools]);
+  }, [baseProductsData, poolSnapshots, tokenPrices, skip]);
 
   return {
     fullProductsData,

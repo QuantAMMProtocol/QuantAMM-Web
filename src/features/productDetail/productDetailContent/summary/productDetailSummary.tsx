@@ -10,7 +10,6 @@ import {
   selectLoadingJsonBreakdown,
   selectLoadingSimulationRunBreakdown,
   selectProductById,
-  selectQuantammSetPools,
   selectReturnAnalysisByProductId,
   selectReturnMetricThresholds,
   setLoadingJsonProductSimulations,
@@ -28,6 +27,7 @@ import {
 
 import styles from './productDetailSummary.module.scss';
 import { getBreakdown, Pool } from '../../../../services/breakdownService';
+import { CURRENT_LIVE_FACTSHEETS } from '../../../documentation/factSheets/liveFactsheets';
 
 const { Title } = Typography;
 
@@ -87,7 +87,7 @@ export const ProductDetailSummary: FC<ProductDetailSummaryProps> = ({
     null
   );
 
-  const quantAMMSetPools = useAppSelector(selectQuantammSetPools);
+  const live_pools = CURRENT_LIVE_FACTSHEETS;
 
   const loadingBreakdowns = useAppSelector(selectLoadingJsonBreakdown);
 
@@ -251,14 +251,14 @@ export const ProductDetailSummary: FC<ProductDetailSummaryProps> = ({
   >({} as Record<Pool, SimulationRunBreakdown>);
 
   const addressKey = product.address?.toLowerCase() ?? '';
-  const specialPoolKey = quantAMMSetPools[addressKey];
+  const specialPoolKey = live_pools.factsheets.find(x => x.poolId == addressKey)?.targetPoolJson ?? '';
 
   const existingReturnAnalysis = useAppSelector((state) =>
     selectReturnAnalysisByProductId(state, product.id)
   );
 
   useEffect(() => {
-    const pools = Object.values(quantAMMSetPools);
+    const pools = Object.values(live_pools.factsheets.map(x => x.targetPoolJson));
     const loadAll = async () => {
       setLoadingJsonProductSimulations(true);
       const entries = await Promise.all(
@@ -270,7 +270,7 @@ export const ProductDetailSummary: FC<ProductDetailSummaryProps> = ({
       setLoadingJsonProductSimulations(false);
     };
     void loadAll();
-  }, [quantAMMSetPools]);
+  }, [live_pools.factsheets]);
 
   useEffect(() => {
     if (!specialPoolKey || loadingBreakdowns) return;

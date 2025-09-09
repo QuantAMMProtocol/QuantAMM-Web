@@ -4,7 +4,6 @@ import { Button, Collapse, CollapseProps, Typography } from 'antd';
 import { Product } from '../../../models';
 import { ProductDetailSidebarOverview } from './productDetailSidebarOverview';
 import { ProductDetailSidebarPoolInfo } from './productDetailSidebarPoolInfo';
-// import { ProductDetailSidebarOverviewGraph } from './productDetailSidebarIOverviewGraph';
 import { ProductDetailSidebarCompositionGraph } from './productDetailSidebarICompositionGraph';
 import { ProductDetailSidebarSocials } from './productDetailSidebarSocials';
 
@@ -12,13 +11,11 @@ import sharedStyles from '../../../shared.module.scss';
 
 import styles from './productDetailSidebar.module.scss';
 import { useAppSelector } from '../../../app/hooks';
-import {
-  selectProductDetailSelectedTimeRange,
-  selectQuantammSetPools,
-} from '../../productExplorer/productExplorerSlice';
+import { selectProductDetailSelectedTimeRange } from '../../productExplorer/productExplorerSlice';
 import { ProductDetailSidebarStrategySummary } from './productDetailSidebarStrategySummary';
 import { ProductDetailSidebarPerformanceGraph } from './productDetailSidebarIPerformanceGraph';
 import { useNavigate } from 'react-router-dom';
+import { CURRENT_LIVE_FACTSHEETS } from '../../documentation/factSheets/liveFactsheets';
 
 const { Title } = Typography;
 
@@ -27,13 +24,17 @@ interface ProductDetailInfoProps {
   isMobile?: boolean;
 }
 
-export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({ product, isMobile }) => {
+export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({
+  product,
+  isMobile,
+}) => {
   const panelStyle: React.CSSProperties = {
     background: 'transparent',
     border: 'none',
   };
 
-  const quantAMMSetPools = useAppSelector(selectQuantammSetPools);
+  const live_pools = CURRENT_LIVE_FACTSHEETS;
+
   const navigate = useNavigate();
 
   const selectedTimeRange = useAppSelector(
@@ -121,7 +122,7 @@ export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({ product, isMobil
               ({selectedTimeRange})
             </span>
           </div>
-          {quantAMMSetPools[product.id] ? (
+          {live_pools.factsheets.find((x) => x.poolId == product.id) ? (
             <div
               style={{ display: 'flex', alignItems: 'center', marginTop: 10 }}
             >
@@ -223,21 +224,17 @@ export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({ product, isMobil
 
   return (
     <div
-      className={
-      isMobile
-        ? undefined
-        : sharedStyles.scrollable
-      }
+      className={isMobile ? undefined : sharedStyles.scrollable}
       style={{
-      background: 'transparent',
+        background: 'transparent',
       }}
     >
       <Collapse
-      items={getItems(panelStyle)}
-      defaultActiveKey={['1', '2', '3', '4', '5', '6', '7', '8', '9']}
-      bordered={false}
-      style={{ background: 'transparent', padding: '0', }}
-      size="small"
+        items={getItems(panelStyle)}
+        defaultActiveKey={['1', '2', '3', '4', '5', '6', '7', '8', '9']}
+        bordered={false}
+        style={{ background: 'transparent', padding: '0' }}
+        size="small"
       ></Collapse>
     </div>
   );

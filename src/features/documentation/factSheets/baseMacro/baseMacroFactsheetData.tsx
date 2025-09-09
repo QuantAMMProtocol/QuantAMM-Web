@@ -22,6 +22,12 @@ export const baseMacroFactsheetData: FactsheetModel = {
     width: '30%',
     alt: 'BASE MACRO BTF Icon',
   },
+  depositorBadges: {
+    prefix:'Base_Macro_',
+    gold:1749423599,
+    silver:1750633199,
+    bronze:1751756400
+  },
   objective: 'The Base Macro BTF provides exposure to some of the mega-cap tokens on Base. The BTF was trained on more bullish market conditions.',
   deploymentLinks: {
     contractLinks: [
@@ -359,4 +365,6 @@ export const baseMacroFactsheetData: FactsheetModel = {
   status: 'LIVE',
   iconOpacity: 1,
   iconFocus: true,
+  targetPoolJson:'baseMacroBTFAugTest',
+  launchUnixTimestamp:undefined
 };

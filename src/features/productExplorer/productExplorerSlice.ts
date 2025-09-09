@@ -180,10 +180,6 @@ export const selectBenchmarkMetricKeyNames = (state: RootState) => {
   });
 };
 
-export const selectQuantammSetPools = (state: RootState) => {
-  return state.productExplorer.quantammSetPools;
-};
-
 export const selectLoadingSimulationRunBreakdown = (
   state: RootState,
   productId: string
