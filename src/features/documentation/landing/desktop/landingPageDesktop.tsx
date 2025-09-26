@@ -9,6 +9,7 @@ import { VisionOverview } from './visionOverview';
 import { ContactCompany } from './contactCompany';
 import { FAQ } from './faq';
 import { ProductBannerProps } from './bannerProductSection';
+import HyperSurgeHook from './hyperSurgeHook';
 
 const items: { component: React.ComponentType; style: React.CSSProperties }[] =
   [
@@ -16,6 +17,16 @@ const items: { component: React.ComponentType; style: React.CSSProperties }[] =
       component: QuantAmmExplainer,
       style: {
         backgroundColor: '#FFFEF2',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100vh',
+      },
+    },
+    {
+      component: HyperSurgeHook,
+      style: {
+        backgroundColor: 'white',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
