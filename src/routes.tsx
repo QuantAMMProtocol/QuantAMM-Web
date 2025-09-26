@@ -19,6 +19,7 @@ import { SafeHavenSimulatorExample } from './features/documentation/safeHavenSim
 import { BaseMacroSimulatorExample } from './features/documentation/baseMacroSimView';
 import SonicMacroFactSheet from './features/documentation/factSheets/sonicMacro/sonicMacro';
 import { SonicMacroSimulatorExample } from './features/documentation/sonicMacroSimView';
+import { SimulationRunnerStacked } from './features/simulationRunner/simulationRunnerStacked';
 
 const BASE_ROUTE = '/';
 
@@ -111,7 +112,7 @@ export const routes = createBrowserRouter([
       },
       {
         path: ROUTES.SIMULATION_RUNNER,
-        element: <SimulationRunner />,
+        element: <SimulationRunnerStacked />,
       },
       {
         path: ROUTES.SIMULATION_COMPARER,
