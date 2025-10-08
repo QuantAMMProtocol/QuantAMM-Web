@@ -39,6 +39,8 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
   const isDark = useAppSelector(selectTheme);
 
   const location = useLocation();
+  
+  const liveProducts = CURRENT_LIVE_FACTSHEETS;
 
   useEffect(() => {
     const newPath = location.pathname.split('/')[1] || ROUTES.HOME;
@@ -86,59 +88,31 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
         ),
       },
       {
-        key: 'Education',
-        label: '',
+        key: 'view-products',
+        label: 'View Products',
         type: 'submenu',
-        icon: <MenuOutlined />,
-        children: [
-          {
-            key: 'Company',
-            label: 'Company',
-            icon: <FireOutlined />,
-          },
-          {
-            key: 'contact',
-            label: 'Contact',
-            icon: <LineChartOutlined />,
-          },
-          {
-            key: 'research',
-            label: 'Research',
-            icon: <FireOutlined />,
-          },
-          {
-            key: 'documentation',
-            label: 'Documentation',
-            icon: <FireOutlined />,
-          },
-          {
-            key: 'simulation-runner',
-            label: 'Historical Simulator',
-            icon: <LineChartOutlined />,
-          },
-          {
-            key: 'simulation-results-comparer',
-            label: 'Multi-run Simulation Results Comparer',
-            icon: <RadarChartOutlined />,
-          },
-          {
-            key: 'coins',
-            label: 'Simulation Price Data',
-            icon: <LineChartOutlined />,
-          },
-          {
-            key: 'tos',
-            label: 'Terms of Service',
-            icon: <LineChartOutlined />,
-          },
-        ],
         style: { marginLeft: 'auto' }, // Align to the right
+        children: liveProducts.factsheets.map((product) => ({
+          key:
+            ROUTES.PRODUCT_EXPLORER +
+            '/' +
+            product.poolChain +
+            '/' +
+            product.poolId,
+          label: `View ${product.iconTitle}`,
+          icon: (
+            <img
+              src={product.factsheetImage.image}
+              alt={product.iconTitle}
+              style={{ width: '16px', height: '16px' }}
+            />
+          ),
+        })),
       },
     ];
   }
 
   function getItems(): MenuItem[] {
-    const liveProducts = CURRENT_LIVE_FACTSHEETS;
     return [
       {
         key: 'home',
