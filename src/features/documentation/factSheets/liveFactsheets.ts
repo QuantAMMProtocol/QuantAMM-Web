@@ -9,8 +9,8 @@ interface LiveFactsheets{
 
 export const CURRENT_LIVE_FACTSHEETS: LiveFactsheets = {
     factsheets: [
-        sonicMacroFactsheetData,
         baseMacroFactsheetData,
         safeHavenFactsheetData,
+        sonicMacroFactsheetData,
     ],
 };
