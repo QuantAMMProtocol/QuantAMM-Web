@@ -162,7 +162,7 @@ export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({
     {
       key: '1',
       label: '',
-      children: <ProductDetailSidebarOverview product={product} />,
+      children: <ProductDetailSidebarOverview product={product} isMobile={isMobile} />,
       style: panelStyle,
       showArrow: false,
       styles: {
@@ -174,7 +174,7 @@ export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({
     {
       key: '2',
       label: 'Pool Info',
-      children: <ProductDetailSidebarPoolInfo product={product} />,
+      children: <ProductDetailSidebarPoolInfo product={product} isMobile={isMobile}/>,
       style: panelStyle,
       styles: {
         header: {
