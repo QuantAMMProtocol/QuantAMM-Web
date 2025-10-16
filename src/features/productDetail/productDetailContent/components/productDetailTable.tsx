@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useMemo, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import { Card, Collapse, Descriptions, Divider, Empty, Tag, Typography, Select } from 'antd';
 import { AnalysisBreakdownTable } from '../../../shared/tables';
 import { SimulationRunBreakdown } from '../../../simulationResults/simulationResultSummaryModels';

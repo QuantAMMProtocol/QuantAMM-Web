@@ -1,26 +1,27 @@
-import { FC, memo, useCallback, useEffect, useMemo, useRef } from 'react';
+import { FC, memo, useEffect, useMemo, useRef } from 'react';
 import { Button, Col, Row, Spin, Tag, Tooltip, Typography, Empty } from 'antd';
 import type {
   GridOptions,
   ICellRendererParams,
-  SideBarDef,
   ValueFormatterParams,
 } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { format } from 'date-fns';
-import { AgCharts } from 'ag-charts-enterprise';
-import type {
-  AgChartOptions,
-  AgHeatmapSeriesItemStylerParams,
-  AgHeatmapSeriesStyle,
-} from 'ag-charts-enterprise';
-
-import { GqlChain, GqlPoolEvent } from '../../../__generated__/graphql-types';
+import {
+  GqlChain,
+  GqlPoolEvent,
+  GqlPoolEventType,
+} from '../../../__generated__/graphql-types';
 import { useFetchPoolEventsData } from '../../../hooks/useFetchPoolEventsData';
 import { useAppSelector } from '../../../app/hooks';
 import { selectAgChartTheme, selectAgGridTheme } from '../../themes/themeSlice';
 import { selectProductById } from '../../productExplorer/productExplorerSlice';
 import { CURRENT_LIVE_FACTSHEETS } from '../../documentation/factSheets/liveFactsheets';
+import {
+  AgChartOptions,
+  AgCharts,
+  AgHeatmapSeriesStyle,
+} from 'ag-charts-enterprise';
 
 const { Title } = Typography;
 
@@ -100,7 +101,6 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = memo(
           sortable: false,
           filter: false,
           cellRenderer: (p: ICellRendererParams) => {
-            // ... unchanged badge renderer
             const val = Number(p.data?.valueUSD ?? 0);
             let level: 'gold' | 'silver' | 'bronze' | null = null;
             if (val >= goldThreshold) level = 'gold';
@@ -134,10 +134,7 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = memo(
           enableRowGroup: true,
           valueFormatter: (p: ValueFormatterParams) =>
             p.value
-              ? format(
-                  new Date(Number(p.value) * 1000),
-                  'yyyy-MM-dd HH:mm:ss'
-                )
+              ? format(new Date(Number(p.value) * 1000), 'yyyy-MM-dd HH:mm:ss')
               : '',
         },
         {
@@ -275,47 +272,99 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = memo(
       [columnDefs]
     );
 
-    /* --------------------- MOBILE HEATMAP (tokenIn × tokenOut) -------------------- */
+    // -------------------- MOBILE HEATMAP DATA (with deterministic ordering) --------------------
+    interface HeatDatum {
+      tokenIn: string;
+      tokenOut: string;
+      usd: number;
+    }
 
-    // Use token addresses as keys; chart axes/tooltips map them to pool constituent coin strings.
-    type HeatDatum = { tokenIn: string; tokenOut: string; usd: number };
+    const { heatmapData, xDomain, yDomain } = useMemo(() => {
+      // 1) Build address->coin map and canonical domain (pool constituent order by coin name)
+      const constituents = (product?.poolConstituents ?? []).filter(
+        (c) => c?.address
+      );
+      const addrToCoin = new Map(
+        constituents.map((c) => [
+          String(c.address).toLowerCase(),
+          String(c.coin ?? c.address),
+        ])
+      );
+      const canonicalCoinOrder = constituents.map((c) =>
+        String(c.coin ?? c.address)
+      );
 
-    const normAddr = (a?: string) => {
-      const v = String(a ?? '').trim();
-      return /^0x[a-fA-F0-9]{40}$/.test(v) ? v.toLowerCase() : '';
-    };
+      // 2) Aggregate USD by (coinIn, coinOut)
+      const normAddr = (a?: string) => {
+        const v = String(a ?? '').trim();
+        return /^0x[a-fA-F0-9]{40}$/.test(v) ? v.toLowerCase() : '';
+      };
 
-    // Aggregate valueUSD per (tokenIn, tokenOut) pair using normalized addresses.
-    const heatmapData: HeatDatum[] = useMemo(() => {
       const acc = new Map<string, number>();
-
       for (const ev of poolEvents ?? []) {
-        if (ev.type !== 'SWAP') continue;
+        if (ev.type !== ('SWAP' as GqlPoolEventType)) continue;
 
-        const tokenInAddr = normAddr((ev as any)?.tokenIn?.address);
-        const tokenOutAddr = normAddr((ev as any)?.tokenOut?.address);
-        if (!tokenInAddr || !tokenOutAddr) continue;
+        const inAddr = normAddr((ev as any)?.tokenIn?.address);
+        const outAddr = normAddr((ev as any)?.tokenOut?.address);
+        if (!inAddr || !outAddr) continue;
+
+        const coinIn = addrToCoin.get(inAddr) ?? inAddr;   // fallback retains data
+        const coinOut = addrToCoin.get(outAddr) ?? outAddr;
 
         const usd = Number(ev.valueUSD ?? 0);
         if (!Number.isFinite(usd) || usd <= 0) continue;
 
-        const key = `${tokenInAddr}__${tokenOutAddr}`;
+        const key = `${coinIn}__${coinOut}`;
         acc.set(key, (acc.get(key) ?? 0) + usd);
       }
 
-      return Array.from(acc, ([key, usd]) => {
+      const heatmapData: HeatDatum[] = Array.from(acc, ([key, usd]) => {
         const [tokenIn, tokenOut] = key.split('__');
         return { tokenIn, tokenOut, usd };
       });
-    }, [poolEvents]);
 
+      // 3) Build domain: pool order first, then any extras in first-seen order (NO alpha sort)
+      const present = new Set<string>([
+        ...heatmapData.map((d) => d.tokenIn),
+        ...heatmapData.map((d) => d.tokenOut),
+      ]);
+
+      const base = canonicalCoinOrder.filter((name) => present.has(name));
+      const seen = new Set(base);
+      const extras: string[] = [];
+      for (const d of heatmapData) {
+        if (!seen.has(d.tokenIn)) {
+          seen.add(d.tokenIn);
+          extras.push(d.tokenIn);
+        }
+        if (!seen.has(d.tokenOut)) {
+          seen.add(d.tokenOut);
+          extras.push(d.tokenOut);
+        }
+      }
+      const domain = [...base, ...extras];
+
+      // 4) Sort rows by domain order: tokenIn primary, tokenOut secondary
+      const indexBy = new Map(domain.map((d, i) => [d, i]));
+      const idx = (k: string) =>
+        indexBy.has(k) ? (indexBy.get(k)!) : Number.MAX_SAFE_INTEGER;
+
+      heatmapData.sort((a, b) => {
+        const ai = idx(a.tokenIn);
+        const bi = idx(b.tokenIn);
+        if (ai !== bi) return ai - bi;
+        return idx(a.tokenOut) - idx(b.tokenOut);
+      });
+
+      return { heatmapData, xDomain: domain, yDomain: domain };
+    }, [poolEvents, product?.poolConstituents]);
+
+    console.log('heatmapData', heatmapData, xDomain, yDomain);
     const chartElRef = useRef<HTMLDivElement | null>(null);
     const chartRef = useRef<ReturnType<typeof AgCharts.create> | null>(null);
 
     // --- itemStyler (unchanged)
-    function itemStyler(
-      params: AgHeatmapSeriesItemStylerParams
-    ): AgHeatmapSeriesStyle | undefined {
+    function itemStyler(params: any): AgHeatmapSeriesStyle | undefined {
       const { datum, colorKey = 'usd', highlighted, fill } = params;
 
       const v = Number(datum[colorKey]);
@@ -342,10 +391,11 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = memo(
             g = data[1],
             b = data[2];
 
-          // linearize for smoother brighten
           const toLin = (u: number) => {
             const s = u / 255;
-            return s <= 0.04045 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
+            return s <= 0.04045
+              ? s / 12.92
+              : Math.pow((s + 0.055) / 1.055, 2.4);
           };
           const toSrgb = (l: number) => {
             const s =
@@ -390,27 +440,6 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = memo(
       };
     }
 
-    // -------- NEW: lock category ordering on both axes ----------
-    function buildHeatmapDomains(
-      data: HeatDatum[],
-      canonicalOrderAddrs: string[]
-    ) {
-      const uniq = <T,>(arr: T[]) => Array.from(new Set(arr));
-      const present = new Set<string>([
-        ...data.map((d) => d.tokenIn),
-        ...data.map((d) => d.tokenOut),
-      ]);
-
-      const base = canonicalOrderAddrs.filter((a) => present.has(a));
-      const seen = new Set(base);
-      const extrasIn = data.map((d) => d.tokenIn).filter((a) => !seen.has(a));
-      const extrasOut = data.map((d) => d.tokenOut).filter((a) => !seen.has(a));
-      const extras = uniq([...extrasIn, ...extrasOut]);
-
-      const domain = [...base, ...extras];
-      return { xDomain: domain, yDomain: domain };
-    }
-
     useEffect(() => {
       const container = chartElRef.current;
 
@@ -438,25 +467,18 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = memo(
         return name;
       };
 
-      // NEW: canonical order from pool constituents (lower-cased addresses).
-      const canonical = (product?.poolConstituents ?? [])
-        .map((c) => String(c.address || '').toLowerCase())
-        .filter(Boolean);
-
-      const { xDomain, yDomain } = buildHeatmapDomains(heatmapData, canonical);
-
       const options: AgChartOptions = {
         container,
         data: heatmapData,
         theme: {
-          baseTheme: chartTheme, // keep using Redux-provided theme
+          baseTheme: chartTheme,
           overrides: {
             heatmap: {
               series: {
                 colorRange: ['#f96103ff', '#599707ff'],
                 strokeWidth: 0.4,
                 strokeOpacity: 0.5,
-              },
+              } as AgHeatmapSeriesStyle,
             },
           },
         },
@@ -471,11 +493,9 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = memo(
             yName: 'Token Out',
             colorKey: 'usd',
             colorName: 'USD',
-
-            // NEW: lock both axes to the same canonical order
+            // ensure axes follow the same canonical order used for sorting
             xDomain,
             yDomain,
-
             // (rest unchanged)
             colourRange: ['green', 'red'],
             label: {
@@ -529,8 +549,7 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = memo(
             label: {
               formatter: ({ value }: { value: number }) => {
                 const v = Number(value) || 0;
-                if (v >= 1_000_000)
-                  return `$${(v / 1_000_000).toFixed(1)}m`;
+                if (v >= 1_000_000) return `$${(v / 1_000_000).toFixed(1)}m`;
                 if (v >= 1_000) return `$${(v / 1_000).toFixed(0)}k`;
                 return `$${v.toFixed(0)}`;
               },
@@ -553,7 +572,7 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = memo(
           chartRef.current = null;
         }
       };
-    }, [isMobile, heatmapData, product?.poolConstituents, chartTheme]);
+    }, [isMobile, heatmapData, xDomain, yDomain, product?.poolConstituents, chartTheme]);
 
     const showSpinner = loading && !error && rowData.length === 0;
 
@@ -572,10 +591,17 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = memo(
         >
           <Title
             level={4}
-            style={{ width: '90%', marginBottom: 0, paddingLeft: 8, paddingTop: 8 }}
+            style={{
+              width: '90%',
+              marginBottom: 0,
+              paddingLeft: 8,
+              paddingTop: 8,
+            }}
           >
             <Row>
-              <Col span={20}><h4 hidden={isMobile}>Events</h4></Col>
+              <Col span={20}>
+                <h4 hidden={isMobile}>Events</h4>
+              </Col>
               {!isMobile && (
                 <Col span={4} style={{ textAlign: 'right' }}>
                   <Button
@@ -616,13 +642,21 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = memo(
                 <div
                   ref={chartElRef}
                   id="myChart"
-                  style={{ width: '100%', height: 520, background: 'transparent', borderRadius: 16 }}
+                  style={{
+                    width: '100%',
+                    height: 520,
+                    background: 'transparent',
+                    borderRadius: 16,
+                  }}
                 />
               )}
             </div>
           ) : (
             <div style={{ width: '100%' }}>
-              <div className={darkThemeAg} style={{ height: 700, width: '100%' }}>
+              <div
+                className={darkThemeAg}
+                style={{ height: 700, width: '100%' }}
+              >
                 <AgGridReact
                   ref={gridRef}
                   rowData={rowData}
@@ -630,8 +664,26 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = memo(
                   columnDefs={columnDefs}
                   sideBar={{
                     toolPanels: [
-                      { id: 'columns', labelDefault: 'Columns', labelKey: 'columns', iconKey: 'columns', toolPanel: 'agColumnsToolPanel', minWidth: 100, maxWidth: 300, width: 200 },
-                      { id: 'filters', labelDefault: 'Filters', labelKey: 'filters', iconKey: 'filter', toolPanel: 'agFiltersToolPanel', minWidth: 100, maxWidth: 300, width: 200 },
+                      {
+                        id: 'columns',
+                        labelDefault: 'Columns',
+                        labelKey: 'columns',
+                        iconKey: 'columns',
+                        toolPanel: 'agColumnsToolPanel',
+                        minWidth: 100,
+                        maxWidth: 300,
+                        width: 200,
+                      },
+                      {
+                        id: 'filters',
+                        labelDefault: 'Filters',
+                        labelKey: 'filters',
+                        iconKey: 'filter',
+                        toolPanel: 'agFiltersToolPanel',
+                        minWidth: 100,
+                        maxWidth: 300,
+                        width: 200,
+                      },
                     ],
                     position: 'right',
                     defaultToolPanel: 'none',

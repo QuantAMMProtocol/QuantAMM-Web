@@ -3,9 +3,6 @@ import { Product } from '../../../models';
 import { Eli5 } from '../../shared';
 import { ProductDetailSidebarElement } from './productDetailSidebarElement';
 import { CURRENT_LIVE_FACTSHEETS } from '../../documentation/factSheets/liveFactsheets';
-
-import styles from './productDetailInfo.module.scss';
-import Title from 'antd/es/typography/Title';
 import { Collapse } from 'antd';
 
 interface ProductDetailSidebarStrategySummaryProps {
