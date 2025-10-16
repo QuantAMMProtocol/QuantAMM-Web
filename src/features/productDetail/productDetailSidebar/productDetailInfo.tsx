@@ -162,7 +162,9 @@ export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({
     {
       key: '1',
       label: '',
-      children: <ProductDetailSidebarOverview product={product} isMobile={isMobile} />,
+      children: (
+        <ProductDetailSidebarOverview product={product} isMobile={isMobile} />
+      ),
       style: panelStyle,
       showArrow: false,
       styles: {
@@ -173,8 +175,11 @@ export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({
     },
     {
       key: '2',
-      label: 'Pool Info',
-      children: <ProductDetailSidebarPoolInfo product={product} isMobile={isMobile}/>,
+      showArrow: !isMobile,
+      label: !isMobile ? 'Pool Info' : '',
+      children: (
+        <ProductDetailSidebarPoolInfo product={product} isMobile={isMobile} />
+      ),
       style: panelStyle,
       styles: {
         header: {
@@ -184,7 +189,7 @@ export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({
     },
     {
       key: '5',
-      label: 'About Pool Type',
+      label: !isMobile ? 'About Pool Type' : '',
       children: <ProductDetailSidebarStrategySummary product={product} />,
       style: panelStyle,
       showArrow: false,
@@ -194,6 +199,7 @@ export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({
         },
       },
     },
+
     {
       key: '4',
       label: 'Pool Composition',
@@ -204,13 +210,18 @@ export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({
           padding: '0',
         },
       },
-    },
-    {
-      key: '7',
-      label: 'Socials',
-      children: <ProductDetailSidebarSocials />,
-      style: panelStyle,
-    },
+    } as const,
+
+    ...(!isMobile
+      ? [
+          {
+            key: '7',
+            label: 'Socials',
+            children: <ProductDetailSidebarSocials />,
+            style: panelStyle,
+          },
+        ]
+      : []),
   ];
 
   function performanceSummaryColour(): string {

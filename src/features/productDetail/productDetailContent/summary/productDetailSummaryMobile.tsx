@@ -1,29 +1,25 @@
+// productDetailSummaryMobile.tsx
 import { useMemo, useState } from 'react';
-import { Card, Collapse, Divider, Typography } from 'antd';
+import { Card, Collapse, Divider, Tooltip, Typography } from 'antd';
+import { InfoCircleOutlined } from '@ant-design/icons';
 import { FinancialMetricThresholds, Product } from '../../../../models';
 import { SimulationRunMetric } from '../../../simulationResults/simulationResultSummaryModels';
-import { ProductDetailDropdown } from '../components/productDetailDropdown';
 import {
   ProductTokenWeightChangeOverTimeGraph,
   ReturnDistributionGraph,
 } from '../../../shared/graphs';
 import { ComparableProductSelector } from '../comparableProduct/comparableProductSelector';
-import {
-  getThresholdColor,
-  getThresholdPostscript,
-  benchmarksDropdownOptions,
-} from './utils';
+import { getThresholdColor, getThresholdPostscript } from './utils';
 
-import styles from './productDetailSummary.module.scss';
 const { Text } = Typography;
 
 interface ProductDetailSummaryMobileProps {
   product: Product;
   loadingSimulationRunBreakdown: boolean;
   loadingOtherProductSimulationRunBreakdown: boolean;
-  returnAnalysisDropdownOptions: { label: string; key: number }[];
+  returnAnalysisDropdownOptions: { label: string; key: number }[]; // kept for props compatibility
   returnAnalysisThresholds: FinancialMetricThresholds[];
-  benchmarkReturnAnalysisDropdownOptions: { label: string; key: number }[];
+  benchmarkReturnAnalysisDropdownOptions: { label: string; key: number }[]; // kept for props compatibility
   benchmarkReturnAnalysisThresholds: FinancialMetricThresholds[];
   selectedReturnAnalysis: SimulationRunMetric | undefined;
   selectedBenchmarkReturnAnalysis: SimulationRunMetric | undefined;
@@ -32,41 +28,137 @@ interface ProductDetailSummaryMobileProps {
   comparingProductReturnAnalysis?: SimulationRunMetric[] | null;
   comparingProductBenchmarkAnalysis?: SimulationRunMetric[] | null;
   onSelectComparableProduct: (poolId: string) => void;
-  handleBenchmarkChange: (key: string) => void;
-  handleReturnAnalysisChange: (key: string) => void;
-  handleBenchmarkAnalysisChange: (key: string) => void;
+  handleBenchmarkChange: (key: string) => void; // kept for props compatibility
+  handleReturnAnalysisChange: (key: string) => void; // kept for props compatibility
+  handleBenchmarkAnalysisChange: (key: string) => void; // kept for props compatibility
 }
 
-const CardTitle = ({
-  dropdownOptions,
-  loadingSimulationRunBreakdown,
-  loadingOtherProductSimulationRunBreakdown,
-  handleChange,
-}: {
-  dropdownOptions: { label: string; key: number }[];
-  loadingSimulationRunBreakdown: boolean;
-  loadingOtherProductSimulationRunBreakdown: boolean;
-  handleChange: (key: string) => void;
-}) => {
-  return (
-    <ProductDetailDropdown
-      items={dropdownOptions}
-      isLoading={
-        loadingSimulationRunBreakdown &&
-        loadingOtherProductSimulationRunBreakdown
-      }
-      onChangeItem={handleChange}
-    />
-  );
+/* --------------------------- Helpers (UI + formatting) --------------------------- */
+
+// A tiny color util to add alpha to hex/rgb strings. Falls back softly if unknown.
+function withAlpha(color: string, alpha: number) {
+  if (!color) return `rgba(255,255,255,${alpha * 0.06})`;
+  if (color.startsWith('#')) {
+    const hex = color.replace('#', '');
+    const bigint = parseInt(
+      hex.length === 3
+        ? hex
+            .split('')
+            .map((c) => c + c)
+            .join('')
+        : hex.slice(0, 6),
+      16
+    );
+    const r = (bigint >> 16) & 255;
+    const g = (bigint >> 8) & 255;
+    const b = bigint & 255;
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  }
+  if (color.startsWith('rgb')) {
+    const nums = color.match(/\d+(\.\d+)?/g) || ['0', '0', '0'];
+    const [r, g, b] = nums.map(Number);
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  }
+  // named colors → let browser parse via a temp element
+  const el = document.createElement('canvas').getContext('2d');
+  if (el) {
+    el.fillStyle = color as any;
+    const parsed = el.fillStyle?.toString() ?? '';
+    if (parsed.startsWith('#')) return withAlpha(parsed, alpha);
+  }
+
+  return `rgba(255,255,255,${alpha * 0.06})`;
+}
+
+// Title tooltip copy for common metrics; fallback if not found.
+const METRIC_DESCRIPTIONS: Record<string, string> = {
+  'Annualized Sharpe Ratio':
+    'Risk-adjusted return. Higher is better. Annualizes the Sharpe ratio based on simulated returns.',
+  'Annualized Jensen’s Alpha (%)':
+    'Excess return over the expected return predicted by CAPM. Annualized; positive is better.',
 };
+
+// Render a single labeled row (name on left, coloured value card on right)
+function ValueRow({
+  label,
+  value,
+  gradeColor,
+  gradeText,
+}: {
+  label: string;
+  value: number | string | undefined | null;
+  gradeColor: string;
+  gradeText: string; // e.g., "(VERY GOOD)"
+}) {
+  const safeNum =
+    typeof value === 'number' ? value : value == null ? NaN : Number(value);
+
+  const display = Number.isFinite(safeNum) ? safeNum.toFixed(2) : 'N/A';
+
+  // Strip wrapping parens and title-case a bit for the tooltip
+  const gradeClean = gradeText.replace(/[()]/g, '').trim();
+
+  return (
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: '1fr auto',
+        alignItems: 'center',
+        gap: 12,
+        padding: '8px 2px',
+        borderBottom: '1px solid rgba(255,255,255,0.08)',
+      }}
+    >
+      <Text strong style={{ fontSize: 15, overflowWrap: 'anywhere' }}>
+        {label}
+      </Text>
+
+      <Tooltip title={gradeClean}>
+        <Card
+          size="small"
+          bordered
+          style={{
+            minWidth: 92,
+            borderRadius: 12,
+            borderColor: gradeColor,
+            background: withAlpha(gradeColor, 0.15),
+            paddingInline: 8,
+          }}
+          bodyStyle={{
+            padding: '6px 10px',
+            textAlign: 'right' as const,
+          }}
+        >
+          <Text strong style={{ color: gradeColor, fontSize: 14 }}>
+            {display}
+          </Text>
+        </Card>
+      </Tooltip>
+    </div>
+  );
+}
+
+// Compact metric header with tooltip + info icon
+function MetricHeader({ name }: { name: string }) {
+  const desc =
+    METRIC_DESCRIPTIONS[name] || 'Metric computed from simulation results.';
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+      <Tooltip title={desc}>
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+          <Text strong style={{ fontSize: 16 }}>
+            {name}
+          </Text>
+          <InfoCircleOutlined style={{ fontSize: 14, opacity: 0.8 }} />
+        </span>
+      </Tooltip>
+    </div>
+  );
+}
 
 export const ProductDetailSummaryMobile = ({
   product,
-  loadingSimulationRunBreakdown,
-  loadingOtherProductSimulationRunBreakdown,
-  returnAnalysisDropdownOptions,
   returnAnalysisThresholds,
-  benchmarkReturnAnalysisDropdownOptions,
   benchmarkReturnAnalysisThresholds,
   selectedReturnAnalysis,
   selectedBenchmarkReturnAnalysis,
@@ -74,9 +166,6 @@ export const ProductDetailSummaryMobile = ({
   comparingProductLoading,
   comparingProductReturnAnalysis,
   comparingProductBenchmarkAnalysis,
-  handleBenchmarkChange,
-  handleReturnAnalysisChange,
-  handleBenchmarkAnalysisChange,
   onSelectComparableProduct,
 }: ProductDetailSummaryMobileProps) => {
   const [isCompareProductOpen, setIsCompareProductOpen] = useState(true);
@@ -86,248 +175,54 @@ export const ProductDetailSummaryMobile = ({
     setIsCompareProductOpen(false);
   };
 
-  const currentReturnAnalysisLabel: string = useMemo(() => {
-    return (
-      returnAnalysisDropdownOptions.find(
-        (x) => x.label === (selectedReturnAnalysis?.metricName ?? '')
-      )?.label ?? ''
-    );
-  }, [returnAnalysisDropdownOptions, selectedReturnAnalysis]);
+  // Resolve the active labels from provided selection (parent determines the two metrics)
+  const currentReturnAnalysisLabel = useMemo(
+    () => selectedReturnAnalysis?.metricName ?? 'Annualized Sharpe Ratio',
+    [selectedReturnAnalysis]
+  );
 
-  const currentBenchmarkAnalysisLabel: string = useMemo(() => {
-    return (
-      benchmarkReturnAnalysisDropdownOptions.find(
-        (x) => x.label === (selectedBenchmarkReturnAnalysis?.metricName ?? '')
-      )?.label ?? ''
-    );
-  }, [benchmarkReturnAnalysisDropdownOptions, selectedBenchmarkReturnAnalysis]);
+  const currentBenchmarkAnalysisLabel = useMemo(
+    () =>
+      selectedBenchmarkReturnAnalysis?.metricName ??
+      'Annualized Jensen’s Alpha (%)',
+    [selectedBenchmarkReturnAnalysis]
+  );
+
+  // Colors + grade text for the three entities per card
+  const repr = (
+    thresholds: FinancialMetricThresholds[],
+    metricName: string,
+    v: number
+  ) => ({
+    color: getThresholdColor(thresholds, metricName, v),
+    grade: getThresholdPostscript(thresholds, metricName, v), // "(VERY GOOD)" etc.
+  });
 
   return (
     <div>
-      <Collapse
-        items={[
-          {
-            key: '1',
-            label: 'Compare Product',
-            children: (
-              <ComparableProductSelector
-                onSelect={handleSelectComparableProduct}
-                comparingProductLoading={comparingProductLoading}
-              />
-            ),
-          },
-        ]}
-        onChange={() => {
-          setIsCompareProductOpen((prev) => !prev);
-        }}
-        defaultActiveKey={['1']}
-        activeKey={isCompareProductOpen ? ['1'] : []}
-      />
-
-      <Card
-        className={styles['product-detail-summary__card']}
-        title={
-          <CardTitle
-            {...{
-              dropdownOptions: returnAnalysisDropdownOptions,
-              loadingSimulationRunBreakdown,
-              loadingOtherProductSimulationRunBreakdown,
-              handleChange: handleReturnAnalysisChange,
-            }}
-          />
-        }
-        bordered={true}
-      >
-        <div className={styles['product-detail-summary__card__body']}>
-          <div className={styles['product-detail-summary__key_container']}>
-            <Text style={{ fontSize: 16 }} strong>
-              {product.name}
-            </Text>
-          </div>
-          <div className={styles['product-detail-summary__value_container']}>
-            <Text
-              strong
-              style={{
-                color: getThresholdColor(
-                  returnAnalysisThresholds,
-                  currentReturnAnalysisLabel,
-                  selectedReturnAnalysis?.metricValue ?? 0
-                ),
-              }}
-            >
-              {(selectedReturnAnalysis?.metricValue ?? 0).toFixed(2)}{' '}
-              {getThresholdPostscript(
-                returnAnalysisThresholds,
-                currentReturnAnalysisLabel,
-                selectedReturnAnalysis?.metricValue ?? 0
-              )}
-            </Text>
-          </div>
-          <div className={styles['product-detail-summary__key_container']}>
-            <ProductDetailDropdown
-              items={benchmarksDropdownOptions}
-              onChangeItem={handleBenchmarkChange}
-            />
-          </div>
-          <div className={styles['product-detail-summary__value_container']}>
-            <Text
-              strong
-              style={{
-                color: getThresholdColor(
-                  returnAnalysisThresholds,
-                  currentReturnAnalysisLabel,
-                  selectedReturnAnalysis?.metricValue ?? 0
-                ),
-              }}
-            >
-              {Number(selectedBenchmarkReturnAnalysis?.metricValue?.toFixed(2))}{' '}
-              {getThresholdPostscript(
-                returnAnalysisThresholds,
-                currentReturnAnalysisLabel,
-                selectedReturnAnalysis?.metricValue ?? 0
-              )}
-            </Text>
-          </div>
-          <div className={styles['product-detail-summary__key_container']}>
-            <Text style={{ fontSize: 16 }} strong>
-              {comparingProduct?.name}
-            </Text>
-          </div>
-          <div className={styles['product-detail-summary__value_container']}>
-            {comparingProduct && (
-              <Text
-                strong
-                style={{
-                  color: getThresholdColor(
-                    returnAnalysisThresholds,
-                    currentReturnAnalysisLabel,
-                    comparingProductReturnAnalysis?.find(
-                      (x) => x.metricName == selectedReturnAnalysis?.metricName
-                    )?.metricValue ?? 0
-                  ),
-                }}
-              >
-                {Number(
-                  comparingProductReturnAnalysis
-                    ?.find(
-                      (x) => x.metricName == selectedReturnAnalysis?.metricName
-                    )
-                    ?.metricValue?.toFixed(2)
-                )}{' '}
-                {getThresholdPostscript(
-                  returnAnalysisThresholds,
-                  currentReturnAnalysisLabel,
-                  comparingProductReturnAnalysis?.find(
-                    (x) => x.metricName == selectedReturnAnalysis?.metricName
-                  )?.metricValue ?? 0
-                )}
-              </Text>
-            )}
-          </div>
-        </div>
-      </Card>
-      <Divider />
-      <Card
-        className={styles['product-detail-summary__card']}
-        title={
-          <CardTitle
-            {...{
-              dropdownOptions: benchmarkReturnAnalysisDropdownOptions,
-              loadingSimulationRunBreakdown,
-              loadingOtherProductSimulationRunBreakdown,
-              handleChange: handleBenchmarkAnalysisChange,
-            }}
-          />
-        }
-        bordered={true}
-      >
-        <div className={styles['product-detail-summary__card__body']}>
-          <div className={styles['product-detail-summary__key_container']}>
-            <Text style={{ fontSize: 16 }} strong>
-              {product.name}
-            </Text>
-          </div>
-          <div className={styles['product-detail-summary__value_container']}>
-            <Text
-              strong
-              style={{
-                color: getThresholdColor(
-                  benchmarkReturnAnalysisThresholds,
-                  currentBenchmarkAnalysisLabel,
-                  selectedBenchmarkReturnAnalysis?.metricValue ?? 0
-                ),
-              }}
-            >
-              {Number(selectedBenchmarkReturnAnalysis?.metricValue?.toFixed(2))}{' '}
-              {getThresholdPostscript(
-                benchmarkReturnAnalysisThresholds,
-                currentBenchmarkAnalysisLabel,
-                selectedBenchmarkReturnAnalysis?.metricValue ?? 0
-              )}
-            </Text>
-          </div>
-          <div className={styles['product-detail-summary__key_container']}>
-            <ProductDetailDropdown
-              items={benchmarksDropdownOptions}
-              onChangeItem={handleBenchmarkChange}
-            />
-          </div>
-          <div className={styles['product-detail-summary__value_container']}>
-            N/A
-          </div>
-          <div className={styles['product-detail-summary__key_container']}>
-            {comparingProduct && (
-              <Text style={{ fontSize: 16 }} strong>
-                {comparingProduct?.name}
-              </Text>
-            )}
-          </div>
-          <div className={styles['product-detail-summary__value_container']}>
-            {comparingProduct && (
-              <Text
-                strong
-                style={{
-                  color: getThresholdColor(
-                    benchmarkReturnAnalysisThresholds,
-                    currentBenchmarkAnalysisLabel,
-                    comparingProductBenchmarkAnalysis?.find(
-                      (x) =>
-                        x.metricName ==
-                        selectedBenchmarkReturnAnalysis?.metricName
-                    )?.metricValue ?? 0
-                  ),
-                }}
-              >
-                {Number(
-                  comparingProductBenchmarkAnalysis
-                    ?.find(
-                      (x) =>
-                        x.metricName ==
-                        selectedBenchmarkReturnAnalysis?.metricName
-                    )
-                    ?.metricValue?.toFixed(2)
-                )}{' '}
-                {getThresholdPostscript(
-                  benchmarkReturnAnalysisThresholds,
-                  currentBenchmarkAnalysisLabel,
-                  comparingProductBenchmarkAnalysis?.find(
-                    (x) =>
-                      x.metricName ==
-                      selectedBenchmarkReturnAnalysis?.metricName
-                  )?.metricValue ?? 0
-                )}
-              </Text>
-            )}
-          </div>
-        </div>
-      </Card>
-      <Divider />
-
-      <Card title="Pool token weight over time [%]">
-        <div className={styles['product-detail-summary__card__body']}>
-          <div
-            className={styles['product-detail-summary__card__graph_container']}
-          >
+      {/* Hidden because currently live analytics is turned off, comparing factsheet with live is not great */}
+      <div style={{ width: '95%' }} hidden={true}>
+        <Collapse
+          items={[
+            {
+              key: '1',
+              label: 'Compare Product',
+              children: (
+                <ComparableProductSelector
+                  onSelect={handleSelectComparableProduct}
+                  comparingProductLoading={comparingProductLoading}
+                />
+              ),
+            },
+          ]}
+          onChange={() => setIsCompareProductOpen((prev) => !prev)}
+          defaultActiveKey={['1']}
+          activeKey={isCompareProductOpen ? ['1'] : []}
+        />
+      </div>
+      <div style={{ width: '95%', marginTop: 12 }}>
+        <Card title="Pool token weight over time [%]">
+          <div>
             <Text strong>{product.name}</Text>
             <div style={{ height: '100%', width: '100%' }}>
               <ProductTokenWeightChangeOverTimeGraph
@@ -336,10 +231,6 @@ export const ProductDetailSummaryMobile = ({
                 legendOverride={{ enabled: false }}
               />
             </div>
-          </div>
-          <div
-            className={styles['product-detail-summary__card__graph_container']}
-          >
             <Text strong>{product.name}</Text>
             <div style={{ height: '100%', width: '100%' }}>
               <ProductTokenWeightChangeOverTimeGraph
@@ -349,31 +240,182 @@ export const ProductDetailSummaryMobile = ({
                 legendOverride={{ enabled: false }}
               />
             </div>
-          </div>
-          {comparingProduct && (
-            <div
-              className={
-                styles['product-detail-summary__card__graph_container']
-              }
-            >
-              <Text strong>{comparingProduct?.name}</Text>
-              <div style={{ height: '100%', width: '100%' }}>
-                <ProductTokenWeightChangeOverTimeGraph
-                  product={comparingProduct}
-                  yAxisOverride={{ label: { enabled: false } }}
-                  legendOverride={{ enabled: false }}
-                />
+            {comparingProduct && (
+              <div>
+                <Text strong>{comparingProduct?.name}</Text>
+                <div style={{ height: '100%', width: '100%' }}>
+                  <ProductTokenWeightChangeOverTimeGraph
+                    product={comparingProduct}
+                    yAxisOverride={{ label: { enabled: false } }}
+                    legendOverride={{ enabled: false }}
+                  />
+                </div>
               </div>
-            </div>
+            )}
+          </div>
+        </Card>
+      </div>
+      <Card
+        style={{
+          borderRadius: 16,
+          boxShadow: '0 2px 6px rgba(0,0,0,0.25)',
+          marginTop: 12,
+          overflow: 'hidden',
+        }}
+        bordered={false}
+        title={<MetricHeader name={currentReturnAnalysisLabel} />}
+      >
+        <div style={{ padding: '4px 4px 0' }}>
+          {/* Product */}
+          <ValueRow
+            label={product.name}
+            value={selectedReturnAnalysis?.metricValue ?? 0}
+            gradeColor={
+              repr(
+                returnAnalysisThresholds,
+                currentReturnAnalysisLabel,
+                selectedReturnAnalysis?.metricValue ?? 0
+              ).color
+            }
+            gradeText={
+              repr(
+                returnAnalysisThresholds,
+                currentReturnAnalysisLabel,
+                selectedReturnAnalysis?.metricValue ?? 0
+              ).grade
+            }
+          />
+
+          {/* HODL */}
+          <ValueRow
+            label="HODL"
+            value={selectedBenchmarkReturnAnalysis?.metricValue ?? 0}
+            gradeColor={
+              repr(
+                returnAnalysisThresholds,
+                currentReturnAnalysisLabel,
+                selectedReturnAnalysis?.metricValue ?? 0
+              ).color
+            }
+            gradeText={
+              repr(
+                returnAnalysisThresholds,
+                currentReturnAnalysisLabel,
+                selectedReturnAnalysis?.metricValue ?? 0
+              ).grade
+            }
+          />
+
+          {/* Comparing product (optional) */}
+          {comparingProduct && (
+            <ValueRow
+              label={comparingProduct.name}
+              value={
+                comparingProductReturnAnalysis?.find(
+                  (x) => x.metricName == selectedReturnAnalysis?.metricName
+                )?.metricValue ?? 0
+              }
+              gradeColor={
+                repr(
+                  returnAnalysisThresholds,
+                  currentReturnAnalysisLabel,
+                  comparingProductReturnAnalysis?.find(
+                    (x) => x.metricName == selectedReturnAnalysis?.metricName
+                  )?.metricValue ?? 0
+                ).color
+              }
+              gradeText={
+                repr(
+                  returnAnalysisThresholds,
+                  currentReturnAnalysisLabel,
+                  comparingProductReturnAnalysis?.find(
+                    (x) => x.metricName == selectedReturnAnalysis?.metricName
+                  )?.metricValue ?? 0
+                ).grade
+              }
+            />
           )}
         </div>
       </Card>
       <Divider />
-      <Card title="Return distribution">
-        <div className={styles['product-detail-summary__card__body']}>
-          <div
-            className={styles['product-detail-summary__card__graph_container']}
-          >
+      <Card
+        style={{
+          borderRadius: 16,
+          boxShadow: '0 2px 6px rgba(0,0,0,0.25)',
+          overflow: 'hidden',
+        }}
+        bordered={false}
+        title={<MetricHeader name={currentBenchmarkAnalysisLabel} />}
+      >
+        <div style={{ padding: '4px 4px 0' }}>
+          {/* Product */}
+          <ValueRow
+            label={product.name}
+            value={selectedBenchmarkReturnAnalysis?.metricValue ?? 0}
+            gradeColor={
+              repr(
+                benchmarkReturnAnalysisThresholds,
+                currentBenchmarkAnalysisLabel,
+                selectedBenchmarkReturnAnalysis?.metricValue ?? 0
+              ).color
+            }
+            gradeText={
+              repr(
+                benchmarkReturnAnalysisThresholds,
+                currentBenchmarkAnalysisLabel,
+                selectedBenchmarkReturnAnalysis?.metricValue ?? 0
+              ).grade
+            }
+          />
+
+          {/* HODL (explicit N/A in original) */}
+          <ValueRow
+            label="HODL"
+            value={null}
+            gradeColor="rgba(255,255,255,0.5)"
+            gradeText="Not applicable"
+          />
+
+          {/* Comparing product (optional) */}
+          {comparingProduct && (
+            <ValueRow
+              label={comparingProduct.name}
+              value={
+                comparingProductBenchmarkAnalysis?.find(
+                  (x) =>
+                    x.metricName == selectedBenchmarkReturnAnalysis?.metricName
+                )?.metricValue ?? 0
+              }
+              gradeColor={
+                repr(
+                  benchmarkReturnAnalysisThresholds,
+                  currentBenchmarkAnalysisLabel,
+                  comparingProductBenchmarkAnalysis?.find(
+                    (x) =>
+                      x.metricName ==
+                      selectedBenchmarkReturnAnalysis?.metricName
+                  )?.metricValue ?? 0
+                ).color
+              }
+              gradeText={
+                repr(
+                  benchmarkReturnAnalysisThresholds,
+                  currentBenchmarkAnalysisLabel,
+                  comparingProductBenchmarkAnalysis?.find(
+                    (x) =>
+                      x.metricName ==
+                      selectedBenchmarkReturnAnalysis?.metricName
+                  )?.metricValue ?? 0
+                ).grade
+              }
+            />
+          )}
+        </div>
+      </Card>
+      <Divider />
+      <div style={{ width: '95%' }}>
+        <Card title="Return distribution">
+          <div>
             <Text strong>{product.name}</Text>
             <div style={{ height: '100%', width: '100%' }}>
               {product.timeSeries?.length && (
@@ -383,11 +425,7 @@ export const ProductDetailSummaryMobile = ({
                 />
               )}
             </div>
-          </div>
 
-          <div
-            className={styles['product-detail-summary__card__graph_container']}
-          >
             <Text strong>
               {selectedBenchmarkReturnAnalysis?.metricName ??
                 'No benchmark selected'}
@@ -400,30 +438,26 @@ export const ProductDetailSummaryMobile = ({
                 />
               )}
             </div>
-          </div>
 
-          {comparingProduct && (
-            <div
-              className={
-                styles['product-detail-summary__card__graph_container']
-              }
-            >
-              <Text strong>{comparingProduct?.name}</Text>
-              <div style={{ height: '100%', width: '100%' }}>
-                {comparingProduct?.timeSeries?.length && (
-                  <ReturnDistributionGraph
-                    marketValues={
-                      comparingProduct?.timeSeries.map((x) => x.sharePrice) ??
-                      []
-                    }
-                    yAxisOverride={{ title: { enabled: false } }}
-                  />
-                )}
+            {comparingProduct && (
+              <div>
+                <Text strong>{comparingProduct?.name}</Text>
+                <div style={{ height: '100%', width: '100%' }}>
+                  {comparingProduct?.timeSeries?.length && (
+                    <ReturnDistributionGraph
+                      marketValues={
+                        comparingProduct?.timeSeries.map((x) => x.sharePrice) ??
+                        []
+                      }
+                      yAxisOverride={{ title: { enabled: false } }}
+                    />
+                  )}
+                </div>
               </div>
-            </div>
-          )}
-        </div>
-      </Card>
+            )}
+          </div>
+        </Card>
+      </div>
     </div>
   );
 };
