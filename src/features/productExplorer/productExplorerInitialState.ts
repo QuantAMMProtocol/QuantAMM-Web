@@ -21,7 +21,7 @@ function getCookie(name: string): string | null {
 function getCookieBool(name: string, fallback = false): boolean {
   const v = getCookie(name);
   if (v === null) return fallback;
-  console.log('Cookie', name, 'is', v);
+  console.log('Cookie bool', name, 'is', v);
   return v === '1';
 }
 export const productExplorerInitialState: ProductExplorer = {
