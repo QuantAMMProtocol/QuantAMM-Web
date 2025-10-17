@@ -1,6 +1,6 @@
 import { CSSProperties, FC, useMemo } from 'react';
 import { CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons';
-import { Button, Collapse, CollapseProps, Typography } from 'antd';
+import { Button, Col, Collapse, CollapseProps, Row, Typography } from 'antd';
 import { Product } from '../../../models';
 import { ProductDetailSidebarOverview } from './productDetailSidebarOverview';
 import { ProductDetailSidebarPoolInfo } from './productDetailSidebarPoolInfo';
@@ -68,60 +68,66 @@ export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({
       label: '',
       children: (
         <div>
-          <Title
-            className={styles['product-detail-sidebar__top-title']}
-            style={{
-              marginTop: 0,
-              textAlign: 'left',
-              marginRight: 0,
-              color: 'var(--secondary-text-color)',
-            }}
-            level={3}
-          >
-            {product.name}
-          </Title>
-          <div
-            style={{ display: 'flex', alignItems: 'center', marginTop: 10 }}
-          ></div>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Title style={{ margin: 0, textAlign: 'left' }} level={2}>
-              $
-              {product.timeSeries?.[
-                product.timeSeries.length - 1
-              ]?.sharePrice.toFixed(2)}
-            </Title>
-            <span
-              style={{
-                marginLeft: 10,
-                fontSize: '1rem',
-                color: performanceSummaryColour(),
-              }}
-            >
-              {productPerformance && productPerformance < 0 ? (
-                <CaretDownOutlined />
-              ) : (
-                <CaretUpOutlined />
-              )}
-            </span>
-            <span
-              style={{
-                marginLeft: 5,
-                fontSize: '1rem',
-                color: performanceSummaryColour(),
-              }}
-            >
-              {productPerformance ? productPerformance.toFixed(2) : 'N/A'}%
-            </span>
-            <span
-              style={{
-                marginLeft: 5,
-                fontSize: '1rem',
-                color: performanceSummaryColour(),
-              }}
-            >
-              ({selectedTimeRange})
-            </span>
-          </div>
+          <Row>
+            <Col span={24}>
+              <Title
+                className={styles['product-detail-sidebar__top-title']}
+                style={{
+                  marginTop: 0,
+                  textAlign: 'left',
+                  marginRight: 0,
+                  color: 'var(--secondary-text-color)',
+                }}
+                level={3}
+              >
+                {product.name}
+              </Title>
+              <div
+                style={{ display: 'flex', alignItems: 'center', marginTop: 10 }}
+              ></div>
+            </Col>
+            <Col span={24}>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <Title style={{ margin: 0, textAlign: 'left' }} level={2}>
+                  $
+                  {product.timeSeries?.[
+                    product.timeSeries.length - 1
+                  ]?.sharePrice.toFixed(2)}
+                </Title>
+                <span
+                  style={{
+                    marginLeft: 10,
+                    fontSize: '1rem',
+                    color: performanceSummaryColour(),
+                  }}
+                >
+                  {productPerformance && productPerformance < 0 ? (
+                    <CaretDownOutlined />
+                  ) : (
+                    <CaretUpOutlined />
+                  )}
+                </span>
+                <span
+                  style={{
+                    marginLeft: 5,
+                    fontSize: '1rem',
+                    color: performanceSummaryColour(),
+                  }}
+                >
+                  {productPerformance ? productPerformance.toFixed(2) : 'N/A'}%
+                </span>
+                <span
+                  style={{
+                    marginLeft: 5,
+                    fontSize: '1rem',
+                    color: performanceSummaryColour(),
+                  }}
+                >
+                  ({selectedTimeRange})
+                </span>
+              </div>
+            </Col>
+          </Row>
           {live_pools.factsheets.find((x) => x.poolId == product.id) ? (
             <div
               style={{ display: 'flex', alignItems: 'center', marginTop: 10 }}
