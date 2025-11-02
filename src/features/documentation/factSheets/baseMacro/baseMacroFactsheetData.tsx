@@ -1,4 +1,4 @@
-import { FactsheetModel } from '../factsheetModel';
+import { FactsheetModel } from '../../landing/desktop/factsheetModel';
 import { PowerChannelUpdateRule } from '../../updateRules/powerChannelUpdateRule';
 import { ROUTES } from '../../../../routesEnum';
 

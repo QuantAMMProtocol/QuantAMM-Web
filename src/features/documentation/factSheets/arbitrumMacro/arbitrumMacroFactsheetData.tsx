@@ -2,53 +2,53 @@ import { FactsheetModel } from '../../landing/desktop/factsheetModel';
 import { ChannelFollowingUpdateRule } from '../../updateRules/channelFollowing';
 import { ROUTES } from '../../../../routesEnum';
 
-export const sonicMacroFactsheetData: FactsheetModel = {
-  poolId: ROUTES.SONICMACROFACTSHEET,
+export const arbitrumMacroFactsheetData: FactsheetModel = {
+  poolId: ROUTES.ARBITRUMMACROFACTSHEET,
   inceptionLpPrice:3023,
-  poolChain: 'SONIC',
+  poolChain: 'ARBITRUM',
   pools: [
-    'sonicMacroBTFAugTrain',
-    'sonicMacroCFMMAugTrain',
-    'sonicMacroHodlAugTrain',
-    'sonicMacroBTFAprilTest',
-    'sonicMacroCFMMAprilTest',
-    'sonicMacroHodlAprilTest',
+    'arbitrumMacroBTFAugTrain',
+    'arbitrumMacroCFMMAugTrain',
+    'arbitrumMacroHodlAugTrain',
+    'arbitrumMacroBTFAprilTest',
+    'arbitrumMacroCFMMAprilTest',
+    'arbitrumMacroHodlAprilTest',
   ],
   factsheetImage: {
-    image: '/assets/sonic_macro_BTF.png',
+    image: '/assets/arbitrum_macro_BTF.png',
     width: '30%',
-    alt: 'SONIC MACRO BTF Icon',
+    alt: 'ARBITRUM MACRO BTF Icon',
   },
-  objective: 'The Sonic Macro BTF provides exposure to some of the mega cap tokens on Sonic. The BTF was trained on more bullish market conditions.',
+  objective: 'The Arbitrum Macro BTF provides exposure to some of the mega cap tokens on Arbitrum. The BTF was trained on more bullish market conditions.',
   deploymentLinks: {
     contractLinks: [
       [
         'Pool Factory Contract',
-        'https://sonicscan.org/address/0x60006d255569b36a3d494e83D182b57acd04D484',
+        'https://arbitrumscan.org/address/0x60006d255569b36a3d494e83D182b57acd04D484',
       ],
       [
         'Strategy Contract',
-        'https://sonicscan.org/address/0x18Bd2de107C70222f1cd9796F9aB01458A85d7a7',
+        'https://arbitrumscan.org/address/0x18Bd2de107C70222f1cd9796F9aB01458A85d7a7',
       ],
       [
         'Strategy Runner Contract',
-        'https://sonicscan.org/address/0xD5c43063563f9448cE822789651662cA7DcD5773',
+        'https://arbitrumscan.org/address/0xD5c43063563f9448cE822789651662cA7DcD5773',
       ],
       [
         'Chainlink scBTC Oracle',
-        'https://sonicscan.org/address/0x8905b91b301677e674cF964Fbc4Ac3844EF79620',
+        'https://arbitrumscan.org/address/0x8905b91b301677e674cF964Fbc4Ac3844EF79620',
       ],
       [
         'Chainlink USDC Oracle',
-        'https://sonicscan.org/address/0x6f2bD10b9b17E80e5BCd49158890561f053Ed2EB',
+        'https://arbitrumscan.org/address/0x6f2bD10b9b17E80e5BCd49158890561f053Ed2EB',
       ],
       [
-        'Chainlink S Oracle',
-        'https://sonicscan.org/address/0x62B9eC6A5BBEBe4F5C5f46C8A8880df857004295',
+        'Chainlink ARB Oracle',
+        'https://arbitrumscan.org/address/0x62B9eC6A5BBEBe4F5C5f46C8A8880df857004295',
       ],
       [
         'Chainlink scETH Oracle',
-        'https://sonicscan.org/address/0x4FFE46130bCBb16BF5EDc4bBaa06f158921764C2',
+        'https://arbitrumscan.org/address/0x4FFE46130bCBb16BF5EDc4bBaa06f158921764C2',
       ],
     ],
   },
@@ -63,16 +63,16 @@ export const sonicMacroFactsheetData: FactsheetModel = {
   defaultPeriod: ['AprilTest', 'Test Period: Apr-Jul25'],
   alternatePeriod: ['', ''],
   trainPeriod: 'AugTrain',
-  poolPrefix: 'sonicMacro',
+  poolPrefix: 'arbitrumMacro',
   xAxisIntervals: new Map<string, number>([
     ['AprilTest', 1],
     ['AugTrain', 14],
     ['default', 22],
   ]),
-  mainTitle: 'The Sonic Macro BTF',
-  mainDescription: `Sonic is one of the pioneering chains for DeFi. It is a layer 1
+  mainTitle: 'The Arbitrum Macro BTF',
+  mainDescription: `Arbitrum is one of the leading L2s chains for DeFi. It is a layer 1
               solution and is EVM compatible, designed to provide
-              faster and cheaper transactions than other layer 1s. Sonic is designed
+              faster and cheaper transactions than other layer 1s. Arbitrum is designed
               to be a platform for building decentralized applications (dApps) and smart
               contracts, enabling developers to create innovative solutions in
               the DeFi space.`,
@@ -82,7 +82,7 @@ export const sonicMacroFactsheetData: FactsheetModel = {
     HODL: '#52ad80',
   },
   cumulativePerformanceOverrideSeriesName: {
-    'Channel Following': 'SONIC MACRO BTF',
+    'Channel Following': 'ARBITRUM MACRO BTF',
     'Balancer Weighted': 'Traditional DEX',
   },
 
@@ -149,8 +149,8 @@ export const sonicMacroFactsheetData: FactsheetModel = {
             ecosystem.
           </p>
           <p>
-            S is the Sonic native token. While this token carries potential
-            protocol risk and higher volatility, it is key token of the Sonic ecosystem.
+            S is the Arbitrum native token. While this token carries potential
+            protocol risk and higher volatility, it is key token of the Arbitrum ecosystem.
           </p>
         </>
       ),
@@ -267,7 +267,7 @@ export const sonicMacroFactsheetData: FactsheetModel = {
         {
           name: 'Memory Days',
           tooltip: 'Memory days is the number of days of prices used in the strategy.',
-          value: ['BTC - 50.35461604', 'ETH - 5.03696308', 'S - 15.77315714', 'USDC - 7.05245484'],
+          value: ['BTC - 50.35461604', 'ETH - 5.03696308', 'ARB - 15.77315714', 'USDC - 7.05245484'],
         },
       ],
     },
@@ -280,7 +280,7 @@ export const sonicMacroFactsheetData: FactsheetModel = {
           value: [
             'BTC - 0.929563018539273',
             'ETH - 0.4479412201204208',
-            'S - 0.7872516012227267',
+            'ARB - 0.7872516012227267',
             'USDC - 0.5721879593136455',
           ],
         },
@@ -295,7 +295,7 @@ export const sonicMacroFactsheetData: FactsheetModel = {
           value: [
             'BTC - 2601.9593723570410',
             'ETH - 89.055850228512313',
-            'S - 593.90077382313598',
+            'ARB - 593.90077382313598',
             'USDC - 93.130867147542816',
           ],
         },
@@ -310,7 +310,7 @@ export const sonicMacroFactsheetData: FactsheetModel = {
           value: [
             'BTC - 0.7832038911979993',
             'ETH - 2.3558801968659950',
-            'S - 0.8443489840649794',
+            'ARB - 0.8443489840649794',
             'USDC - 1.0686318158089472',
           ],
         },
@@ -325,7 +325,7 @@ export const sonicMacroFactsheetData: FactsheetModel = {
           value: [
             'BTC - 0.0086388441051054223',
             'ETH - 0.010606898165675289',
-            'S - 0.016622246139525294',
+            'ARB - 0.016622246139525294',
             'USDC - 0.00090359323501604781',
           ],
         },
@@ -340,7 +340,7 @@ export const sonicMacroFactsheetData: FactsheetModel = {
           value: [
             'BTC - 0.074853775497883593',
             'ETH - 0.0027628351279059180',
-            'S - 0.011037321655782598',
+            'ARB - 0.011037321655782598',
             'USDC - 0.072324601375887462',
           ],
         },
@@ -355,15 +355,15 @@ export const sonicMacroFactsheetData: FactsheetModel = {
           value: [
             'BTC - 0.0002015493093145',
             'ETH - 0.0002238654967055',
-            'S - 0.0002970276828945',
+            'ARB - 0.0002970276828945',
             'USDC - 0.0015731331098663',
           ],
         },
       ],
     },
   ],
-  iconTitle: 'Sonic Macro',
-  iconDescription: ['The sonic ecosystem basket', 'Mega Caps with Yield Focus'],
+  iconTitle: 'Arbitrum Macro',
+  iconDescription: ['The arbitrum ecosystem basket', 'Mega Caps with Yield Focus'],
   status: 'LIVE',
   iconOpacity: 1,
   iconFocus: true,

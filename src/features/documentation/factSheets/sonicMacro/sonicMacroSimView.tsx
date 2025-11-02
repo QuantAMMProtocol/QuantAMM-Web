@@ -1,12 +1,12 @@
 import { Col, Row, Tabs, Spin } from 'antd';
 import { useState, useEffect } from 'react';
-import { SimulationResultsSummaryStep } from '../simulationResults/simulationResultsSummaryStep';
-import { getBreakdown, Pool } from '../../services/breakdownService';
-import { SimulationRunBreakdown } from '../simulationResults/simulationResultSummaryModels';
+import { SimulationResultsSummaryStep } from '../../../simulationResults/simulationResultsSummaryStep';
+import { getBreakdown, Pool } from '../../../../services/breakdownService';
+import { SimulationRunBreakdown } from '../../../simulationResults/simulationResultSummaryModels';
 
 const { TabPane } = Tabs;
 
-export function SafeHavenSimulatorExample() {
+export function SonicMacroSimulatorExample() {
   const [key, setKey] = useState<string>('2');
   const [breakdowns, setBreakdowns] = useState<SimulationRunBreakdown[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -28,21 +28,15 @@ export function SafeHavenSimulatorExample() {
 
       if (key === '1') {
         poolNames = [
-          'safeHavenBTFAugTrainFull',
-          'safeHavenCFMMAugTrainFull',
-          'safeHavenHodlAugTrainFull'
+          'sonicMacroBTFAugTrainFull',
+          'sonicMacroCFMMAugTrainFull',
+          'sonicMacroHodlAugTrainFull'
         ];
       } else if (key === '2') {
         poolNames = [
-          'safeHavenCFMMAugTestFull',
-          'safeHavenBTFAugTestFull',
-          'safeHavenHodlAugTestFull'
-        ];
-      } else if (key === '3') {
-        poolNames = [
-          'safeHavenBTF2025TestFull',
-          'safeHavenCFMM2025TestFull',
-          'safeHavenHodl2025TestFull'
+          'sonicMacroCFMMAprilTestFull',
+          'sonicMacroBTFAprilTestFull',
+          'sonicMacroHodlAprilTestFull'
         ];
       }
 
@@ -61,7 +55,7 @@ export function SafeHavenSimulatorExample() {
     HODL: '#52ad80',
   }
   const seriesStrokeColor= {
-    'Power Channel': 'SAFE HAVEN BTF',
+    'Power Channel': 'BASE MACRO BTF',
     'Balancer Weighted': 'Traditional DEX',
   }
   return (
@@ -74,7 +68,7 @@ export function SafeHavenSimulatorExample() {
             onChange={(key) => setKey(key)}
             style={{ paddingLeft: 20, paddingRight: 20 }}
           >
-            <TabPane tab="Safe Haven Training Period" key={'1'}>
+            <TabPane tab="Sonic Macro Training Period" key={'1'}>
               {loading ? (
                 <Spin size="large" />
               ) : (
@@ -86,19 +80,7 @@ export function SafeHavenSimulatorExample() {
                 />
               )}
             </TabPane>
-            <TabPane tab="Safe Haven Test Period: Aug 2024 - Apr 2025" key={'2'}>
-              {loading ? (
-                <Spin size="large" />
-              ) : (
-                <SimulationResultsSummaryStep
-                  breakdowns={breakdowns}
-                  forceViewResults={true}
-                  overrideSeriesName= {seriesName}
-                  overrideSeriesStrokeColor= {seriesStrokeColor}
-                />
-              )}
-            </TabPane>
-            <TabPane tab="Safe Haven Test Period: Jan 2025 - Apr 2025" key={'3'}>
+            <TabPane tab="Sonic Macro Test Period: Jan 23 - Mar 2025" key={'2'}>
               {loading ? (
                 <Spin size="large" />
               ) : (

@@ -13,7 +13,7 @@ import {
   benchmarkMetricThresholds,
   returnMetricThresholds,
 } from '../../../../models/constants';
-import { FactsheetModel } from '../factsheetModel';
+import { FactsheetModel } from '../../landing/desktop/factsheetModel';
 import { FAQItems } from '../../landing/faqItems';
 import { useNavigate } from 'react-router-dom';
 

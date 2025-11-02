@@ -1,5 +1,5 @@
 import { baseMacroFactsheetData } from "./baseMacro/baseMacroFactsheetData";
-import { FactsheetModel } from "./factsheetModel";
+import { FactsheetModel } from "../landing/desktop/factsheetModel";
 import { safeHavenFactsheetData } from "./safeHaven/safeHavenfactsheetData";
 import { sonicMacroFactsheetData } from "./sonicMacro/sonicMacroFactsheetData";
 

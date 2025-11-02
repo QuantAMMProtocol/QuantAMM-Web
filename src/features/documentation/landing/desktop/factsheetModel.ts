@@ -1,5 +1,5 @@
 import { Dictionary } from 'lodash';
-import { Pool } from '../../../services/breakdownService';
+import { Pool } from '../../../../services/breakdownService';
 
 export interface FactsheetImage {
   image: string;
