@@ -9,6 +9,7 @@ import { VisionOverview } from './visionOverview';
 import { ContactCompany } from './contactCompany';
 import { FAQ } from './faq';
 import { ProductBannerProps } from './bannerProductSection';
+import { BtfTypes } from './btfTypes';
 
 const items: { component: React.ComponentType; style: React.CSSProperties }[] =
   [
@@ -19,6 +20,15 @@ const items: { component: React.ComponentType; style: React.CSSProperties }[] =
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        height: '100vh',
+      },
+    },
+    {
+      component: BtfTypes,
+      style: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
         height: '100vh',
       },
     },
