@@ -152,7 +152,7 @@ export const arbitrumMacroFactsheetData: FactsheetModel = {
             ecosystem.
           </p>
           <p>
-            S is the Arbitrum native token. While this token carries potential
+            ARB is the Arbitrum native token. While this token carries potential
             protocol risk and higher volatility, it is key token of the Arbitrum ecosystem.
           </p>
         </>
