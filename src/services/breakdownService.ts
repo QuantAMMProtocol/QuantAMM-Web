@@ -81,18 +81,24 @@ export type Pool =
   | 'sonicMacroCFMMAugTrainFull'
   | 'sonicMacroHodlAprilTestFull'
   | 'sonicMacroHodlAugTrainFull'
-  | 'arbitrumMacroBTFAprilTest'
   | 'arbitrumMacroBTFAugTrain'
-  | 'arbitrumMacroCFMMAprilTest'
   | 'arbitrumMacroCFMMAugTrain'
-  | 'arbitrumMacroHodlAprilTest'
   | 'arbitrumMacroHodlAugTrain'
-  | 'arbitrumMacroBTFAprilTestFull'
   | 'arbitrumMacroBTFAugTrainFull'
-  | 'arbitrumMacroCFMMAprilTestFull'
   | 'arbitrumMacroCFMMAugTrainFull'
-  | 'arbitrumMacroHodlAprilTestFull'
-  | 'arbitrumMacroHodlAugTrainFull';
+  | 'arbitrumMacroHodlAugTrainFull'
+  | 'arbitrumMacroCFMMAugTest'
+  | 'arbitrumMacroBTFAugTest'
+  | 'arbitrumMacroHodlAugTest'
+  | 'arbitrumMacroBTF2025Test'
+  | 'arbitrumMacroCFMM2025Test'
+  | 'arbitrumMacroHodl2025Test'
+  | 'arbitrumMacroCFMMAugTestFull'
+  | 'arbitrumMacroBTFAugTestFull'
+  | 'arbitrumMacroHodlAugTestFull'
+  | 'arbitrumMacroBTF2025TestFull'
+  | 'arbitrumMacroCFMM2025TestFull'
+  | 'arbitrumMacroHodl2025TestFull';
 
 // Helper to convert MessagePack data to breakdown DTO
 export const convertBreakdownDtoToBreakdown = (
@@ -227,18 +233,24 @@ export const getBreakdown = async (
     sonicMacroCFMMAugTrainFull: '/prerun_sims/SONIC_MACRO_CFMM_APRIL_TRAIN_FULL.msgpack',
     sonicMacroHodlAprilTestFull: '/prerun_sims/SONIC_MACRO_HODL_APRIL_TEST_FULL.msgpack',
     sonicMacroHodlAugTrainFull: '/prerun_sims/SONIC_MACRO_HODL_APRIL_TRAIN_FULL.msgpack',
-    arbitrumMacroBTFAprilTest: '/prerun_sims/ARBITRUM_MACRO_BTF_APRIL_TEST.msgpack',
     arbitrumMacroBTFAugTrain: '/prerun_sims/ARBITRUM_MACRO_BTF_APRIL_TRAIN.msgpack',
-    arbitrumMacroCFMMAprilTest: '/prerun_sims/ARBITRUM_MACRO_CFMM_APRIL_TEST.msgpack',
     arbitrumMacroCFMMAugTrain: '/prerun_sims/ARBITRUM_MACRO_CFMM_APRIL_TRAIN.msgpack',
-    arbitrumMacroHodlAprilTest: '/prerun_sims/ARBITRUM_MACRO_HODL_APRIL_TEST.msgpack',
     arbitrumMacroHodlAugTrain: '/prerun_sims/ARBITRUM_MACRO_HODL_APRIL_TRAIN.msgpack',
-    arbitrumMacroBTFAprilTestFull: '/prerun_sims/ARBITRUM_MACRO_BTF_APRIL_TEST_FULL.msgpack',
     arbitrumMacroBTFAugTrainFull: '/prerun_sims/ARBITRUM_MACRO_BTF_APRIL_TRAIN_FULL.msgpack',
-    arbitrumMacroCFMMAprilTestFull: '/prerun_sims/ARBITRUM_MACRO_CFMM_APRIL_TEST_FULL.msgpack',
     arbitrumMacroCFMMAugTrainFull: '/prerun_sims/ARBITRUM_MACRO_CFMM_APRIL_TRAIN_FULL.msgpack',
-    arbitrumMacroHodlAprilTestFull: '/prerun_sims/ARBITRUM_MACRO_HODL_APRIL_TEST_FULL.msgpack',
     arbitrumMacroHodlAugTrainFull: '/prerun_sims/ARBITRUM_MACRO_HODL_APRIL_TRAIN_FULL.msgpack',
+    arbitrumMacroCFMMAugTest: '/prerun_sims/ARBITRUM_MACRO_CFMM_AUG_TEST.msgpack',
+    arbitrumMacroBTFAugTest: '/prerun_sims/ARBITRUM_MACRO_BTF_AUG_TEST.msgpack',
+    arbitrumMacroHodlAugTest: '/prerun_sims/ARBITRUM_MACRO_HODL_AUG_TEST.msgpack',
+    arbitrumMacroBTF2025Test: '/prerun_sims/ARBITRUM_MACRO_BTF_2025_TEST.msgpack',
+    arbitrumMacroCFMM2025Test: '/prerun_sims/ARBITRUM_MACRO_CFMM_2025_TEST.msgpack',
+    arbitrumMacroHodl2025Test: '/prerun_sims/ARBITRUM_MACRO_HODL_2025_TEST.msgpack',
+    arbitrumMacroCFMMAugTestFull: '/prerun_sims/ARBITRUM_MACRO_BTF_AUG_TEST_FULL.msgpack',
+    arbitrumMacroBTFAugTestFull: '/prerun_sims/ARBITRUM_MACRO_CFMM_AUG_TEST_FULL.msgpack',
+    arbitrumMacroHodlAugTestFull: '/prerun_sims/ARBITRUM_MACRO_HODL_AUG_TEST_FULL.msgpack',
+    arbitrumMacroBTF2025TestFull: '/prerun_sims/ARBITRUM_MACRO_BTF_2025_TEST_FULL.msgpack',
+    arbitrumMacroCFMM2025TestFull: '/prerun_sims/ARBITRUM_MACRO_CFMM_2025_TEST_FULL.msgpack',
+    arbitrumMacroHodl2025TestFull: '/prerun_sims/ARBITRUM_MACRO_HODL_2025_TEST_FULL.msgpack'
   };
 
   const poolFilePath = poolFileMapping[poolName];

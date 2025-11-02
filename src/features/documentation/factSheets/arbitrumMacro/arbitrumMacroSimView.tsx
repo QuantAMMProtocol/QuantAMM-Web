@@ -61,7 +61,7 @@ export function ArbitrumMacroSimulatorExample() {
     HODL: '#52ad80',
   }
   const seriesStrokeColor= {
-    'Power Channel': 'BASE MACRO BTF',
+    'Power Channel': 'ARBITRUM MACRO BTF',
     'Balancer Weighted': 'Traditional DEX',
   }
   return (
@@ -74,7 +74,7 @@ export function ArbitrumMacroSimulatorExample() {
             onChange={(key) => setKey(key)}
             style={{ paddingLeft: 20, paddingRight: 20 }}
           >
-            <TabPane tab="Base Macro Training Period" key={'1'}>
+            <TabPane tab="Arbitrum Macro Training Period" key={'1'}>
               {loading ? (
                 <Spin size="large" />
               ) : (
@@ -86,7 +86,7 @@ export function ArbitrumMacroSimulatorExample() {
                 />
               )}
             </TabPane>
-            <TabPane tab="Base Macro Test Period: Aug 2024 - Apr 2025" key={'2'}>
+            <TabPane tab="Arbitrum Macro Test Period: Aug 2024 - Apr 2025" key={'2'}>
               {loading ? (
                 <Spin size="large" />
               ) : (
@@ -98,7 +98,7 @@ export function ArbitrumMacroSimulatorExample() {
                 />
               )}
             </TabPane>
-            <TabPane tab="Base Macro Test Period: Jan 2025 - Apr 2025" key={'3'}>
+            <TabPane tab="Arbitrum Macro Test Period: Jan 2025 - Apr 2025" key={'3'}>
               {loading ? (
                 <Spin size="large" />
               ) : (
