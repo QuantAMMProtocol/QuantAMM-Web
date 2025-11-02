@@ -7,7 +7,6 @@ import { setAcceptedTermsAndConditions } from '../../productExplorer/productExpl
 import { useAppDispatch } from '../../../app/hooks';
 import { CURRENT_LIVE_FACTSHEETS } from '../factSheets/liveFactsheets';
 import { ROUTES } from '../../../routesEnum';
-import { sonicMacroFactsheetData } from '../factSheets/sonicMacro/sonicMacroFactsheetData';
 
 //
 const { useBreakpoint } = Grid;
