@@ -39,21 +39,21 @@ export default function LandingPage() {
   }));
 
   //stub
-  productData.push({
-    title: 'TradFi BTF',
-    imgSrc: '/assets/tradFi_BTF.png',
-    description: ['TradFi is coming. Here is a BTF with DeFi companies known to be on the TradFi radar'],
-    status: 'COMING SOON',
-    opacity: 1,
-    imgWidth: '30%',
-    focus: false,
-    poolId: 'badId',
-    poolChain: 'MAINNET',
-    factsheetRoute: '/factsheet/' + ROUTES.SONICMACROFACTSHEET,
-    productExplorerRoute:
-      ROUTES.PRODUCT_EXPLORER + '/MAINNET/' + ROUTES.SONICMACROFACTSHEET,
-    inceptionLpPrice: sonicMacroFactsheetData.inceptionLpPrice,
-  });
+  //productData.push({
+  //  title: 'TradFi BTF',
+  //  imgSrc: '/assets/tradFi_BTF.png',
+  //  description: ['TradFi is coming. Here is a BTF with DeFi companies known to be on the TradFi radar'],
+  //  status: 'COMING SOON',
+  //  opacity: 1,
+  //  imgWidth: '30%',
+  //  focus: false,
+  //  poolId: 'badId',
+  //  poolChain: 'MAINNET',
+  //  factsheetRoute: '/factsheet/' + ROUTES.SONICMACROFACTSHEET,
+  //  productExplorerRoute:
+  //    ROUTES.PRODUCT_EXPLORER + '/MAINNET/' + ROUTES.SONICMACROFACTSHEET,
+  //  inceptionLpPrice: sonicMacroFactsheetData.inceptionLpPrice,
+  //});
 
   return (
     <>
