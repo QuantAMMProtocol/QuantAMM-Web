@@ -18,7 +18,7 @@ export const arbitrumMacroFactsheetData: FactsheetModel = {
     'arbitrumMacroHodl2025Test',
   ],
   factsheetImage: {
-    image: '/assets/truflation_bitcoin_mono.png',
+    image: '/assets/arbMacro_mono.png',
     width: '30%',
     alt: 'ARBITRUM MACRO BTF Icon',
   },
