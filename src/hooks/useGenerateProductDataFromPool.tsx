@@ -12,8 +12,6 @@ import {
   getTokenPriceMap,
   getHistoricalTokenPrices,
 } from './fetchSnapshotDataUtils';
-import { useAppSelector } from '../app/hooks';
-import { selectQuantammSetPools } from '../features/productExplorer/productExplorerSlice';
 
 export const useGenerateProductDataFromPool = (
   poolData?: GetPoolByIdQuery,
@@ -25,7 +23,6 @@ export const useGenerateProductDataFromPool = (
   const [error, setError] = useState<
     FetchBaseQueryError | SerializedError | ApolloError | undefined
   >(undefined);
-  const quantammSetPools = useAppSelector(selectQuantammSetPools);
 
   useEffect(() => {
     if (
@@ -51,21 +48,19 @@ export const useGenerateProductDataFromPool = (
           const pricesResponses = await getHistoricalTokenPrices(tokens);
 
           const tokenPricesMap = getTokenPriceMap(pricesResponses);
-          const setPool = quantammSetPools[pool.id] != undefined;
 
           const timeSeriesData: ProductTimeSeriesData =
             getTimeSeriesDataForProduct(
               poolData,
               poolSnapshotsMap,
-              tokenPricesMap,
-              setPool
+              tokenPricesMap
             );
 
           const generatedProduct: Product = getProductFromPool(
             poolData,
             timeSeriesData
           );
-          
+
           setProductData(generatedProduct);
         } catch (error) {
           console.error(
@@ -91,7 +86,7 @@ export const useGenerateProductDataFromPool = (
     } else {
       setLoading(false);
     }
-  }, [poolData, poolError, isLoadingPools, quantammSetPools]);
+  }, [poolData, poolError, isLoadingPools]);
 
   return {
     productData,

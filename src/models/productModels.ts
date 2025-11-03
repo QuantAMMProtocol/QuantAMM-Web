@@ -6,7 +6,6 @@ import {
   QuantAmmWeightedParams,
 } from '../__generated__/graphql-types';
 import { SimulationRunBreakdown } from '../features/simulationResults/simulationResultSummaryModels';
-import { Pool } from '../services/breakdownService';
 
 export type BalancerTokenType =
   | 'COMPOSABLE_STABLE'
@@ -195,7 +194,6 @@ export interface ProductExplorer {
   pageSize: number;
   page: number;
   totalPools?: number;
-  quantammSetPools:Record<string, Pool>
 }
 
 export interface ProductMetric {

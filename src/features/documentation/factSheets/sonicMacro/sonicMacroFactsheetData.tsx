@@ -19,6 +19,13 @@ export const sonicMacroFactsheetData: FactsheetModel = {
     width: '30%',
     alt: 'SONIC MACRO BTF Icon',
   },
+  launchUnixTimestamp:undefined,
+  depositorBadges: {
+    prefix:'Sonic_Macro_',
+    gold:1754434800,
+    silver:1755644400,
+    bronze:1756854000
+  },
   objective: 'The Sonic Macro BTF provides exposure to some of the mega cap tokens on Sonic. The BTF was trained on more bullish market conditions.',
   deploymentLinks: {
     contractLinks: [
@@ -367,4 +374,5 @@ export const sonicMacroFactsheetData: FactsheetModel = {
   status: 'LIVE',
   iconOpacity: 1,
   iconFocus: true,
+  targetPoolJson:'sonicMacroBTFAprilTest'
 };

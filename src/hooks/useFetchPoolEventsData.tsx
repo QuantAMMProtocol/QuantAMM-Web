@@ -4,8 +4,7 @@ import {
   GqlPoolEvent,
   useGetPoolEventsQuery,
 } from '../__generated__/graphql-types';
-import { useAppSelector } from '../app/hooks';
-import { selectQuantammSetPools } from '../features/productExplorer/productExplorerSlice';
+import { CURRENT_LIVE_FACTSHEETS } from '../features/documentation/factSheets/liveFactsheets';
 
 export const useFetchPoolEventsData = ({
   first,
@@ -22,7 +21,8 @@ export const useFetchPoolEventsData = ({
   loading: boolean;
   error: ApolloError | undefined;
 } => {
-  const isQuantammSetPool = useAppSelector(selectQuantammSetPools);
+  const live_pools = CURRENT_LIVE_FACTSHEETS;
+
   const { data, loading, error } = useGetPoolEventsQuery({
     variables: {
       first,
@@ -40,11 +40,8 @@ export const useFetchPoolEventsData = ({
         ...event,
         logIndex: 0,
         userAddress: '',
-        //TODO make pool specific and not hardcoded
-        //because of gauges and integration tests launch date != creation date
-        //this sets the true launch date for quantamm initial products
       }))
-      .filter((x) => !isQuantammSetPool[poolId] || x.timestamp >= 1747267200),
+      .filter((x) => !live_pools.factsheets.find(x => x.poolId == poolId) || x.timestamp >= (live_pools.factsheets.find(x => x.poolId == poolId)?.launchUnixTimestamp ?? 0)),
     loading,
     error: error,
   };
