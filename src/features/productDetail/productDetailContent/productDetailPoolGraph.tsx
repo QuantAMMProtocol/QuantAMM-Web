@@ -203,6 +203,7 @@ const ProductDetailPoolGraphImpl: FC<ProductDetailPoolGraphImplProps> = ({
         xKey: 'date',
         yKey: 'value',
         yName: `${productName} ($)`,
+        stroke: '#c7b283',
         connectMissingData: false,
         tooltip: {
           renderer: (p): string | AgTooltipRendererResult => ({
@@ -215,6 +216,7 @@ const ProductDetailPoolGraphImpl: FC<ProductDetailPoolGraphImplProps> = ({
         xKey: 'date',
         yKey: 'volume',
         yName: 'Volume 24H',
+        fill: '#f8ba33ff',
         tooltip: {
           renderer: (p): string | AgTooltipRendererResult => ({
             content: formatUsd(p.datum.volume),
@@ -225,6 +227,9 @@ const ProductDetailPoolGraphImpl: FC<ProductDetailPoolGraphImplProps> = ({
         type: 'line',
         xKey: 'date',
         yKey: 'benchmarkValue',
+        stroke: '#528aae',
+        lineDashOffset: 20,
+        lineDash: [4, 4],
         yName: 'HODL Value ($)',
         connectMissingData: false,
         tooltip: {
