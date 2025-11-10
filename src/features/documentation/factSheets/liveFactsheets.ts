@@ -1,8 +1,8 @@
 import { baseMacroFactsheetData } from "./baseMacro/baseMacroFactsheetData";
 import { FactsheetModel } from "../landing/desktop/factsheetModel";
 import { safeHavenFactsheetData } from "./safeHaven/safeHavenfactsheetData";
-import { arbitrumMacroFactsheetData } from "./arbitrumMacro/arbitrumMacroFactsheetData";
 import { truflationBitcoinFactsheetData } from "./truflationBitcoin/truflationBitcoinFactsheetData";
+import { sonicMacroFactsheetData } from "./sonicMacro/sonicMacroFactsheetData";
 
 interface LiveFactsheets{
     factsheets: FactsheetModel[];
@@ -10,9 +10,10 @@ interface LiveFactsheets{
 
 export const CURRENT_LIVE_FACTSHEETS: LiveFactsheets = {
     factsheets: [
-        arbitrumMacroFactsheetData,
-        baseMacroFactsheetData,
+        truflationBitcoinFactsheetData,
         safeHavenFactsheetData,
-        truflationBitcoinFactsheetData
+        baseMacroFactsheetData,
+        sonicMacroFactsheetData
+        
     ],
 };
