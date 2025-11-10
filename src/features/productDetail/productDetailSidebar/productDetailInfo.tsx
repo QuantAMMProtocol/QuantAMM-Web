@@ -1,6 +1,6 @@
 import { CSSProperties, FC, useMemo } from 'react';
 import { CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons';
-import { Button, Collapse, CollapseProps, Typography } from 'antd';
+import { Button, Col, Collapse, CollapseProps, Row, Typography } from 'antd';
 import { Product } from '../../../models';
 import { ProductDetailSidebarOverview } from './productDetailSidebarOverview';
 import { ProductDetailSidebarPoolInfo } from './productDetailSidebarPoolInfo';
@@ -68,60 +68,66 @@ export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({
       label: '',
       children: (
         <div>
-          <Title
-            className={styles['product-detail-sidebar__top-title']}
-            style={{
-              marginTop: 0,
-              textAlign: 'left',
-              marginRight: 0,
-              color: 'var(--secondary-text-color)',
-            }}
-            level={3}
-          >
-            {product.name}
-          </Title>
-          <div
-            style={{ display: 'flex', alignItems: 'center', marginTop: 10 }}
-          ></div>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Title style={{ margin: 0, textAlign: 'left' }} level={2}>
-              $
-              {product.timeSeries?.[
-                product.timeSeries.length - 1
-              ]?.sharePrice.toFixed(2)}
-            </Title>
-            <span
-              style={{
-                marginLeft: 10,
-                fontSize: '1rem',
-                color: performanceSummaryColour(),
-              }}
-            >
-              {productPerformance && productPerformance < 0 ? (
-                <CaretDownOutlined />
-              ) : (
-                <CaretUpOutlined />
-              )}
-            </span>
-            <span
-              style={{
-                marginLeft: 5,
-                fontSize: '1rem',
-                color: performanceSummaryColour(),
-              }}
-            >
-              {productPerformance ? productPerformance.toFixed(2) : 'N/A'}%
-            </span>
-            <span
-              style={{
-                marginLeft: 5,
-                fontSize: '1rem',
-                color: performanceSummaryColour(),
-              }}
-            >
-              ({selectedTimeRange})
-            </span>
-          </div>
+          <Row>
+            <Col span={24}>
+              <Title
+                className={styles['product-detail-sidebar__top-title']}
+                style={{
+                  marginTop: 0,
+                  textAlign: 'left',
+                  marginRight: 0,
+                  color: 'var(--secondary-text-color)',
+                }}
+                level={3}
+              >
+                {product.name}
+              </Title>
+              <div
+                style={{ display: 'flex', alignItems: 'center', marginTop: 10 }}
+              ></div>
+            </Col>
+            <Col span={24}>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <Title style={{ margin: 0, textAlign: 'left' }} level={2}>
+                  $
+                  {product.timeSeries?.[
+                    product.timeSeries.length - 1
+                  ]?.sharePrice.toFixed(2)}
+                </Title>
+                <span
+                  style={{
+                    marginLeft: 10,
+                    fontSize: '1rem',
+                    color: performanceSummaryColour(),
+                  }}
+                >
+                  {productPerformance && productPerformance < 0 ? (
+                    <CaretDownOutlined />
+                  ) : (
+                    <CaretUpOutlined />
+                  )}
+                </span>
+                <span
+                  style={{
+                    marginLeft: 5,
+                    fontSize: '1rem',
+                    color: performanceSummaryColour(),
+                  }}
+                >
+                  {productPerformance ? productPerformance.toFixed(2) : 'N/A'}%
+                </span>
+                <span
+                  style={{
+                    marginLeft: 5,
+                    fontSize: '1rem',
+                    color: performanceSummaryColour(),
+                  }}
+                >
+                  ({selectedTimeRange})
+                </span>
+              </div>
+            </Col>
+          </Row>
           {live_pools.factsheets.find((x) => x.poolId == product.id) ? (
             <div
               style={{ display: 'flex', alignItems: 'center', marginTop: 10 }}
@@ -162,7 +168,9 @@ export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({
     {
       key: '1',
       label: '',
-      children: <ProductDetailSidebarOverview product={product} />,
+      children: (
+        <ProductDetailSidebarOverview product={product} isMobile={isMobile} />
+      ),
       style: panelStyle,
       showArrow: false,
       styles: {
@@ -173,8 +181,11 @@ export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({
     },
     {
       key: '2',
-      label: 'Pool Info',
-      children: <ProductDetailSidebarPoolInfo product={product} />,
+      showArrow: !isMobile,
+      label: !isMobile ? 'Pool Info' : '',
+      children: (
+        <ProductDetailSidebarPoolInfo product={product} isMobile={isMobile} />
+      ),
       style: panelStyle,
       styles: {
         header: {
@@ -184,7 +195,7 @@ export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({
     },
     {
       key: '5',
-      label: 'About Pool Type',
+      label: !isMobile ? 'About Pool Type' : '',
       children: <ProductDetailSidebarStrategySummary product={product} />,
       style: panelStyle,
       showArrow: false,
@@ -194,6 +205,7 @@ export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({
         },
       },
     },
+
     {
       key: '4',
       label: 'Pool Composition',
@@ -204,13 +216,18 @@ export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({
           padding: '0',
         },
       },
-    },
-    {
-      key: '7',
-      label: 'Socials',
-      children: <ProductDetailSidebarSocials />,
-      style: panelStyle,
-    },
+    } as const,
+
+    ...(!isMobile
+      ? [
+          {
+            key: '7',
+            label: 'Socials',
+            children: <ProductDetailSidebarSocials />,
+            style: panelStyle,
+          },
+        ]
+      : []),
   ];
 
   function performanceSummaryColour(): string {

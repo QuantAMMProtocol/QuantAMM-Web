@@ -96,6 +96,7 @@ export enum GqlChain {
   Mainnet = 'MAINNET',
   Mode = 'MODE',
   Optimism = 'OPTIMISM',
+  Plasma = 'PLASMA',
   Polygon = 'POLYGON',
   Sepolia = 'SEPOLIA',
   Sonic = 'SONIC',
@@ -208,6 +209,38 @@ export type GqlLatestSyncedBlocks = {
   poolSyncBlock: Scalars['BigInt']['output'];
   userStakeSyncBlock: Scalars['BigInt']['output'];
   userWalletSyncBlock: Scalars['BigInt']['output'];
+};
+
+export type GqlLoopsData = {
+  __typename?: 'GqlLoopsData';
+  /** Actual TotalSupply of LoopS. */
+  actualSupply: Scalars['String']['output'];
+  /** The total APR for LoopS */
+  apr: Scalars['Float']['output'];
+  /** The amount of stS provided to Aave. */
+  collateralAmount: Scalars['String']['output'];
+  /** The amount of stS provided to Aave in S. */
+  collateralAmountInEth: Scalars['String']['output'];
+  /** The total S debt amount of the position */
+  debtAmount: Scalars['String']['output'];
+  /** The health factor of the Aave position */
+  healthFactor: Scalars['String']['output'];
+  /** The amount of leverage the current position has. */
+  leverage: Scalars['Float']['output'];
+  /** Net Asset Value. The amount of collateral minus the amount of debt. */
+  nav: Scalars['String']['output'];
+  /** The current rate of LoopS against S. */
+  rate: Scalars['String']['output'];
+  /** The current Sonic points multiplier for LoopS */
+  sonicPointsMultiplier: Scalars['String']['output'];
+  /** The current amount of stS supplied to the Aave market */
+  stSAaveMarketSupply: Scalars['String']['output'];
+  /** The current cap on the stS market on Aave */
+  stSAaveMarketSupplyCap: Scalars['String']['output'];
+  /** The health factor that the Aave position should have */
+  targetHealthFactor: Scalars['String']['output'];
+  /** Net Asset Value in USD. */
+  tvl: Scalars['String']['output'];
 };
 
 /** All info on the nested pool if the token is a BPT. It will only support 1 level of nesting. */
@@ -411,7 +444,7 @@ export type GqlPoolApr = {
 /** All APRs for a pool */
 export type GqlPoolAprItem = {
   __typename?: 'GqlPoolAprItem';
-  /** The APR value in % -> 0.2 = 0.2% */
+  /** The APR value in % -> 0.2 = 20% */
   apr: Scalars['Float']['output'];
   /** The id of the APR item */
   id: Scalars['ID']['output'];
@@ -3036,6 +3069,8 @@ export type Query = {
   blocksGetBlocksPerYear: Scalars['Float']['output'];
   latestSyncedBlocks: GqlLatestSyncedBlocks;
   lbpPriceChart?: Maybe<Array<LbpPriceChartData>>;
+  /** Get the LoopS data */
+  loopsGetData: GqlLoopsData;
   /** Getting swap, add and remove events with paging */
   poolEvents: Array<GqlPoolEvent>;
   /**
@@ -3061,7 +3096,7 @@ export type Query = {
   sftmxGetStakingSnapshots: Array<GqlSftmxStakingSnapshot>;
   /** Retrieve the withdrawalrequests from a user */
   sftmxGetWithdrawalRequests: Array<GqlSftmxWithdrawalRequests>;
-  /** Get swap quote from the SOR v2 for the V2 vault */
+  /** Get swap quote from the SOR v2 */
   sorGetSwapPaths: GqlSorGetSwapPaths;
   /** Get the staking data and status for stS */
   stsGetGqlStakedSonicData: GqlStakedSonicData;
@@ -3430,7 +3465,7 @@ export type GetPoolEventsQueryVariables = Exact<{
 }>;
 
 
-export type GetPoolEventsQuery = { __typename?: 'Query', poolEvents: Array<{ __typename?: 'GqlPoolAddRemoveEventV3', id: string, poolId: string, blockNumber: number, blockTimestamp: number, timestamp: number, type: GqlPoolEventType, chain: GqlChain, valueUSD: number, sender: string, tx: string } | { __typename?: 'GqlPoolSwapEventCowAmm', id: string, poolId: string, blockNumber: number, blockTimestamp: number, timestamp: number, type: GqlPoolEventType, chain: GqlChain, valueUSD: number, sender: string, tx: string } | { __typename?: 'GqlPoolSwapEventV3', id: string, poolId: string, blockNumber: number, blockTimestamp: number, timestamp: number, type: GqlPoolEventType, chain: GqlChain, valueUSD: number, sender: string, tx: string }> };
+export type GetPoolEventsQuery = { __typename?: 'Query', poolEvents: Array<{ __typename?: 'GqlPoolAddRemoveEventV3', id: string, poolId: string, blockNumber: number, blockTimestamp: number, timestamp: number, type: GqlPoolEventType, chain: GqlChain, valueUSD: number, sender: string, tx: string } | { __typename?: 'GqlPoolSwapEventCowAmm', id: string, poolId: string, blockNumber: number, blockTimestamp: number, timestamp: number, type: GqlPoolEventType, chain: GqlChain, valueUSD: number, sender: string, tx: string } | { __typename?: 'GqlPoolSwapEventV3', id: string, poolId: string, blockNumber: number, blockTimestamp: number, timestamp: number, type: GqlPoolEventType, chain: GqlChain, valueUSD: number, sender: string, tx: string, tokenIn: { __typename?: 'GqlPoolEventAmount', address: string, amount: string, valueUSD: number }, tokenOut: { __typename?: 'GqlPoolEventAmount', address: string, amount: string, valueUSD: number } }> };
 
 export type GetPoolsCountQueryVariables = Exact<{
   where?: InputMaybe<GqlPoolFilter>;
@@ -3737,6 +3772,18 @@ export const GetPoolEventsDocument = gql`
     valueUSD
     sender
     tx
+    ... on GqlPoolSwapEventV3 {
+      tokenIn {
+        address
+        amount
+        valueUSD
+      }
+      tokenOut {
+        address
+        amount
+        valueUSD
+      }
+    }
   }
 }
     `;

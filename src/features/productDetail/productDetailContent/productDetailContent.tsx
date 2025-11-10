@@ -10,6 +10,7 @@ import { ProductDetailEvents } from './productDetailEvents';
 import sharedStyles from '../../../shared.module.scss';
 import { ProductDetailInfo } from '../productDetailSidebar/productDetailInfo';
 import { GqlChain } from '../../../__generated__/graphql-types';
+import { ProductDetailSidebarSocials } from '../productDetailSidebar/productDetailSidebarSocials';
 
 const { Content } = Layout;
 
@@ -55,9 +56,13 @@ export const ProductDetailContent: FC<ProductDetailContentProps> = ({
                 <ProductDetailEvents
                   productId={product.id}
                   chain={product.chain as GqlChain}
+                  isMobile={isMobile}
                 />
               </Col>
             </Row>
+          </div>
+          <div>
+            <ProductDetailSidebarSocials />
           </div>
         </>
       )}
