@@ -271,7 +271,7 @@ const ProductDetailPoolGraphImpl: FC<ProductDetailPoolGraphImplProps> = ({
       const oneDay = DAY;
 
       if (isMobile) {
-        const daysForThreeLabels = Math.ceil(spanMs / (3 * oneDay));
+        const daysForThreeLabels = Math.ceil(spanMs / (2 * oneDay));
         return daysForThreeLabels * oneDay; // Adjusted for 3 labels on mobile
       }
 
@@ -320,7 +320,7 @@ const ProductDetailPoolGraphImpl: FC<ProductDetailPoolGraphImplProps> = ({
     if (!totalSpanMs) return '%b %Y';
     return totalSpanMs <= 90 * DAY
       ? isMobile
-        ? '%d/%m/%y'
+        ? '%m/%y'
         : '%d %b %Y'
       : '%b %Y';
   }, [totalSpanMs, DAY, isMobile]);

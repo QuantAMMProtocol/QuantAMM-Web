@@ -1,24 +1,30 @@
-import { FC } from 'react';
-import { AnalysisBreakdownTable } from '../../../shared/tables';
+import { FC, memo } from 'react';
 import { SimulationRunBreakdown } from '../../../simulationResults/simulationResultSummaryModels';
 
-interface ProductDetailTableProps {
+import { DesktopTable } from './ProductDetailDesktopTable';
+import { MobileTable } from './ProductDetailMobileTable';
+
+export interface ProductDetailTableProps {
   simulationRunBreakdown?: SimulationRunBreakdown;
   productId?: string;
+  isMobile?: boolean;
 }
 
-export const ProductDetailTable: FC<ProductDetailTableProps> = ({
+export const ProductDetailTable: FC<ProductDetailTableProps> = memo(function ProductDetailTable({
   simulationRunBreakdown,
   productId,
-}) => {
+  isMobile,
+}) {
+  if (!isMobile) {
+    return simulationRunBreakdown ? (
+      <DesktopTable simulationRunBreakdown={simulationRunBreakdown} productId={productId} />
+    ) : null;
+  }
+
   return (
-    <>
-      {simulationRunBreakdown && (
-        <AnalysisBreakdownTable
-          simulationRunBreakdowns={[simulationRunBreakdown]}
-          productId={productId}
-        />
-      )}
-    </>
+    <MobileTable
+      simulationRunBreakdown={simulationRunBreakdown}
+      productId={productId}
+    />
   );
-};
+});

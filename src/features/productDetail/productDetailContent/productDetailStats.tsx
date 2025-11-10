@@ -63,7 +63,7 @@ const ProductDetailStatsInternal: FC<ProductDetailStatsProps> = ({
         isMobile={isMobile}
       />
 
-      <Row id="details" style={{ marginTop: 20 }}>
+      <Row id="details" style={{ marginTop: 20 }} hidden={isMobile}>
         <Col
           span={24}
           style={{
@@ -80,6 +80,7 @@ const ProductDetailStatsInternal: FC<ProductDetailStatsProps> = ({
             <ProductDetailTable
               simulationRunBreakdown={product.simulationRunBreakdown}
               productId={product.address ?? productId}
+              isMobile={isMobile}
             />
           ) : (
             <div>No breakdown data available.</div>
