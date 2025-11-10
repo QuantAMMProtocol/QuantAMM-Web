@@ -1,5 +1,5 @@
 import { Dictionary } from 'lodash';
-import { Pool } from '../../../services/breakdownService';
+import { Pool } from '../../../../services/breakdownService';
 
 export interface FactsheetImage {
   image: string;
@@ -36,6 +36,13 @@ export interface FactsheetTrainedParamVariation {
   value: string[];
 }
 
+export interface DepositorBadges{
+  prefix:string;
+  gold:number;
+  silver:number;
+  bronze:number;
+}
+
 export interface FactsheetModel {
   inceptionLpPrice:number;
   mainTitle: string;
@@ -65,4 +72,7 @@ export interface FactsheetModel {
   trainedParameters: FactsheetTrainedParameters[];
   deploymentLinks: FactsheetDeploymentLinks;
   fixedSettings: [string, string][];
+  depositorBadges:DepositorBadges;
+  targetPoolJson:Pool;
+  launchUnixTimestamp:number | undefined;
 }

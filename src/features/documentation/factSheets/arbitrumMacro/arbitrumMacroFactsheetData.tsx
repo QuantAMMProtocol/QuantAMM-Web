@@ -2,60 +2,56 @@ import { FactsheetModel } from '../../landing/desktop/factsheetModel';
 import { ChannelFollowingUpdateRule } from '../../updateRules/channelFollowing';
 import { ROUTES } from '../../../../routesEnum';
 
-export const sonicMacroFactsheetData: FactsheetModel = {
-  poolId: ROUTES.SONICMACROFACTSHEET,
+export const arbitrumMacroFactsheetData: FactsheetModel = {
+  poolId: ROUTES.ARBITRUMMACROFACTSHEET,
   inceptionLpPrice:3023,
-  poolChain: 'SONIC',
+  poolChain: 'ARBITRUM',
   pools: [
-    'sonicMacroBTFAugTrain',
-    'sonicMacroCFMMAugTrain',
-    'sonicMacroHodlAugTrain',
-    'sonicMacroBTFAprilTest',
-    'sonicMacroCFMMAprilTest',
-    'sonicMacroHodlAprilTest',
+    'arbitrumMacroBTFAugTrain',
+    'arbitrumMacroCFMMAugTrain',
+    'arbitrumMacroHodlAugTrain',
+    'arbitrumMacroCFMMAugTest',
+    'arbitrumMacroBTFAugTest',
+    'arbitrumMacroHodlAugTest',
+    'arbitrumMacroBTF2025Test',
+    'arbitrumMacroCFMM2025Test',
+    'arbitrumMacroHodl2025Test',
   ],
   factsheetImage: {
-    image: '/assets/sonic_macro_BTF.png',
+    image: '/assets/arbMacro_mono.png',
     width: '30%',
-    alt: 'SONIC MACRO BTF Icon',
+    alt: 'ARBITRUM MACRO BTF Icon',
   },
-  launchUnixTimestamp:undefined,
-  depositorBadges: {
-    prefix:'Sonic_Macro_',
-    gold:1754434800,
-    silver:1755644400,
-    bronze:1756854000
-  },
-  objective: 'The Sonic Macro BTF provides exposure to some of the mega cap tokens on Sonic. The BTF was trained on more bullish market conditions.',
+  objective: 'The Arbitrum Macro BTF provides exposure to some of the mega cap tokens on Arbitrum. The BTF was trained on more bullish market conditions.',
   deploymentLinks: {
     contractLinks: [
       [
         'Pool Factory Contract',
-        'https://sonicscan.org/address/0x60006d255569b36a3d494e83D182b57acd04D484',
+        'https://arbitrumscan.org/address/0x60006d255569b36a3d494e83D182b57acd04D484',
       ],
       [
         'Strategy Contract',
-        'https://sonicscan.org/address/0x18Bd2de107C70222f1cd9796F9aB01458A85d7a7',
+        'https://arbitrumscan.org/address/0x18Bd2de107C70222f1cd9796F9aB01458A85d7a7',
       ],
       [
         'Strategy Runner Contract',
-        'https://sonicscan.org/address/0xD5c43063563f9448cE822789651662cA7DcD5773',
+        'https://arbitrumscan.org/address/0xD5c43063563f9448cE822789651662cA7DcD5773',
       ],
       [
         'Chainlink scBTC Oracle',
-        'https://sonicscan.org/address/0x8905b91b301677e674cF964Fbc4Ac3844EF79620',
+        'https://arbitrumscan.org/address/0x8905b91b301677e674cF964Fbc4Ac3844EF79620',
       ],
       [
         'Chainlink USDC Oracle',
-        'https://sonicscan.org/address/0x6f2bD10b9b17E80e5BCd49158890561f053Ed2EB',
+        'https://arbitrumscan.org/address/0x6f2bD10b9b17E80e5BCd49158890561f053Ed2EB',
       ],
       [
-        'Chainlink S Oracle',
-        'https://sonicscan.org/address/0x62B9eC6A5BBEBe4F5C5f46C8A8880df857004295',
+        'Chainlink ARB Oracle',
+        'https://arbitrumscan.org/address/0x62B9eC6A5BBEBe4F5C5f46C8A8880df857004295',
       ],
       [
         'Chainlink scETH Oracle',
-        'https://sonicscan.org/address/0x4FFE46130bCBb16BF5EDc4bBaa06f158921764C2',
+        'https://arbitrumscan.org/address/0x4FFE46130bCBb16BF5EDc4bBaa06f158921764C2',
       ],
     ],
   },
@@ -70,16 +66,16 @@ export const sonicMacroFactsheetData: FactsheetModel = {
   defaultPeriod: ['AprilTest', 'Test Period: Apr-Jul25'],
   alternatePeriod: ['', ''],
   trainPeriod: 'AugTrain',
-  poolPrefix: 'sonicMacro',
+  poolPrefix: 'arbitrumMacro',
   xAxisIntervals: new Map<string, number>([
     ['AprilTest', 1],
     ['AugTrain', 14],
     ['default', 22],
   ]),
-  mainTitle: 'The Sonic Macro BTF',
-  mainDescription: `Sonic is one of the pioneering chains for DeFi. It is a layer 1
+  mainTitle: 'The Arbitrum Macro BTF',
+  mainDescription: `Arbitrum is one of the leading L2s chains for DeFi. It is a layer 1
               solution and is EVM compatible, designed to provide
-              faster and cheaper transactions than other layer 1s. Sonic is designed
+              faster and cheaper transactions than other layer 1s. Arbitrum is designed
               to be a platform for building decentralized applications (dApps) and smart
               contracts, enabling developers to create innovative solutions in
               the DeFi space.`,
@@ -89,7 +85,7 @@ export const sonicMacroFactsheetData: FactsheetModel = {
     HODL: '#52ad80',
   },
   cumulativePerformanceOverrideSeriesName: {
-    'Channel Following': 'SONIC MACRO BTF',
+    'Channel Following': 'ARBITRUM MACRO BTF',
     'Balancer Weighted': 'Traditional DEX',
   },
 
@@ -156,8 +152,8 @@ export const sonicMacroFactsheetData: FactsheetModel = {
             ecosystem.
           </p>
           <p>
-            S is the Sonic native token. While this token carries potential
-            protocol risk and higher volatility, it is key token of the Sonic ecosystem.
+            ARB is the Arbitrum native token. While this token carries potential
+            protocol risk and higher volatility, it is key token of the Arbitrum ecosystem.
           </p>
         </>
       ),
@@ -274,7 +270,12 @@ export const sonicMacroFactsheetData: FactsheetModel = {
         {
           name: 'Memory Days',
           tooltip: 'Memory days is the number of days of prices used in the strategy.',
-          value: ['BTC - 50.35461604', 'ETH - 5.03696308', 'S - 15.77315714', 'USDC - 7.05245484'],
+          value: [
+            'ARB - 0.0225783657',
+            'BTC - 44.0194313',
+            'ETH - 0.0340445146',
+            'USDC - 0.341524734',
+          ],
         },
       ],
     },
@@ -285,10 +286,10 @@ export const sonicMacroFactsheetData: FactsheetModel = {
           name: 'Lambda',
           tooltip: 'Lambda is the parameter used in the gradient estimators for the channel following.',
           value: [
-            'BTC - 0.929563018539273',
-            'ETH - 0.4479412201204208',
-            'S - 0.7872516012227267',
-            'USDC - 0.5721879593136455',
+            'ARB - 0.0000002397926992946897',
+            'BTC - 0.9197115276049956',
+            'ETH - 0.00000082205169707259',
+            'USDC - 0.00082783964938837983',
           ],
         },
       ],
@@ -300,10 +301,10 @@ export const sonicMacroFactsheetData: FactsheetModel = {
           name: 'k',
           tooltip: 'k is the on-chain value stored in the contracts and is the exact parameter used in the strategy calculations.',
           value: [
-            'BTC - 2601.9593723570410',
-            'ETH - 89.055850228512313',
-            'S - 593.90077382313598',
-            'USDC - 93.130867147542816',
+            'ARB - 0.0000095013382493053445',
+            'BTC - 150654832.73345056',
+            'ETH - 0.30311000793106701',
+            'USDC - 0.00024130945438837983',
           ],
         },
       ],
@@ -315,10 +316,10 @@ export const sonicMacroFactsheetData: FactsheetModel = {
           name: 'Exponent',
           tooltip: 'The exponent is a variable used in the channel following strategy that dictates how big a price change has to be before the strategy starts to notice it.',
           value: [
-            'BTC - 0.7832038911979993',
-            'ETH - 2.3558801968659950',
-            'S - 0.8443489840649794',
-            'USDC - 1.0686318158089472',
+            'ARB - 0.2256153584663592',
+            'BTC - 10.6676706071348804',
+            'ETH - 0.0981583587742119',
+            'USDC - 0.0674486828706451',
           ],
         },
       ],
@@ -330,10 +331,10 @@ export const sonicMacroFactsheetData: FactsheetModel = {
           name: 'Width',
           tooltip: 'Width is the parameter that defines the channel width for the mean reversion strategy.',
           value: [
-            'BTC - 0.0086388441051054223',
-            'ETH - 0.010606898165675289',
-            'S - 0.016622246139525294',
-            'USDC - 0.00090359323501604781',
+            'ARB - 0.000002022137814235886',
+            'BTC - 12.633082257097033',
+            'ETH - 0.000000031308252581943735',
+            'USDC - 161.11251893638641',
           ],
         },
       ],
@@ -345,10 +346,10 @@ export const sonicMacroFactsheetData: FactsheetModel = {
           name: 'Amplitude',
           tooltip: 'Amplitude is the parameter that defines the oscillation amplitude for the mean reversion strategy.',
           value: [
-            'BTC - 0.074853775497883593',
-            'ETH - 0.0027628351279059180',
-            'S - 0.011037321655782598',
-            'USDC - 0.072324601375887462',
+            'ARB - 0.0000000053211805246145698',
+            'BTC - 604.39416486194204',
+            'ETH - 0.00000000863533672631810963',
+            'USDC - 0.000000084604335206781063',
           ],
         },
       ],
@@ -360,19 +361,26 @@ export const sonicMacroFactsheetData: FactsheetModel = {
           name: 'Pre-exp Scaling',
           tooltip: 'Pre-exp scaling is the parameter used for scaling before exponentiation in the strategy calculations.',
           value: [
-            'BTC - 0.0002015493093145',
-            'ETH - 0.0002238654967055',
-            'S - 0.0002970276828945',
-            'USDC - 0.0015731331098663',
+            'ARB - 71.02225192700019887',
+            'BTC - 52117.4385457861571922',
+            'ETH - 2.3797122560896820',
+            'USDC - 0.0250140354014435',
           ],
         },
       ],
     },
   ],
-  iconTitle: 'Sonic Macro',
-  iconDescription: ['The sonic ecosystem basket', 'Mega Caps with Yield Focus'],
+  iconTitle: 'Arbitrum Macro',
+  iconDescription: ['The arbitrum ecosystem basket', 'Mega Caps with Yield Focus'],
   status: 'LIVE',
   iconOpacity: 1,
   iconFocus: true,
-  targetPoolJson:'sonicMacroBTFAprilTest'
+  depositorBadges: {
+    prefix:'Safe_Haven_',
+    gold:1748213999,
+    silver:1749423599,
+    bronze:1750633199
+  },
+  targetPoolJson:'safeHavenBTFAugTest',
+  launchUnixTimestamp:1747267200
 };

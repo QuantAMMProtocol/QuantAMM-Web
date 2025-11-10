@@ -80,7 +80,43 @@ export type Pool =
   | 'sonicMacroCFMMAprilTestFull'
   | 'sonicMacroCFMMAugTrainFull'
   | 'sonicMacroHodlAprilTestFull'
-  | 'sonicMacroHodlAugTrainFull';
+  | 'sonicMacroHodlAugTrainFull'
+  | 'arbitrumMacroBTFAugTrain'
+  | 'arbitrumMacroCFMMAugTrain'
+  | 'arbitrumMacroHodlAugTrain'
+  | 'arbitrumMacroBTFAugTrainFull'
+  | 'arbitrumMacroCFMMAugTrainFull'
+  | 'arbitrumMacroHodlAugTrainFull'
+  | 'arbitrumMacroCFMMAugTest'
+  | 'arbitrumMacroBTFAugTest'
+  | 'arbitrumMacroHodlAugTest'
+  | 'arbitrumMacroBTF2025Test'
+  | 'arbitrumMacroCFMM2025Test'
+  | 'arbitrumMacroHodl2025Test'
+  | 'arbitrumMacroCFMMAugTestFull'
+  | 'arbitrumMacroBTFAugTestFull'
+  | 'arbitrumMacroHodlAugTestFull'
+  | 'arbitrumMacroBTF2025TestFull'
+  | 'arbitrumMacroCFMM2025TestFull'
+  | 'arbitrumMacroHodl2025TestFull'  
+  |  'truflationBitcoinBTFAugTrain'
+  |  'truflationBitcoinCFMMAugTrain'
+  |  'truflationBitcoinHodlAugTrain'
+  |  'truflationBitcoinCFMMAugTest'
+  |  'truflationBitcoinBTFAugTest'
+  |  'truflationBitcoinHodlAugTest'
+  |  'truflationBitcoinBTF2025Test'
+  |  'truflationBitcoinCFMM2025Test'
+  |  'truflationBitcoinHodl2025Test'  
+  |  'truflationBitcoinBTFAugTrainFull'
+  |  'truflationBitcoinCFMMAugTrainFull'
+  |  'truflationBitcoinHodlAugTrainFull'
+  |  'truflationBitcoinCFMMAugTestFull'
+  |  'truflationBitcoinBTFAugTestFull'
+  |  'truflationBitcoinHodlAugTestFull'
+  |  'truflationBitcoinBTF2025TestFull'
+  |  'truflationBitcoinCFMM2025TestFull'
+  |  'truflationBitcoinHodl2025TestFull';
 
 // Helper to convert MessagePack data to breakdown DTO
 export const convertBreakdownDtoToBreakdown = (
@@ -215,6 +251,42 @@ export const getBreakdown = async (
     sonicMacroCFMMAugTrainFull: '/prerun_sims/SONIC_MACRO_CFMM_APRIL_TRAIN_FULL.msgpack',
     sonicMacroHodlAprilTestFull: '/prerun_sims/SONIC_MACRO_HODL_APRIL_TEST_FULL.msgpack',
     sonicMacroHodlAugTrainFull: '/prerun_sims/SONIC_MACRO_HODL_APRIL_TRAIN_FULL.msgpack',
+    arbitrumMacroBTFAugTrain: '/prerun_sims/ARBITRUM_MACRO_BTF_APRIL_TRAIN.msgpack',
+    arbitrumMacroCFMMAugTrain: '/prerun_sims/ARBITRUM_MACRO_CFMM_APRIL_TRAIN.msgpack',
+    arbitrumMacroHodlAugTrain: '/prerun_sims/ARBITRUM_MACRO_HODL_APRIL_TRAIN.msgpack',
+    arbitrumMacroBTFAugTrainFull: '/prerun_sims/ARBITRUM_MACRO_BTF_APRIL_TRAIN_FULL.msgpack',
+    arbitrumMacroCFMMAugTrainFull: '/prerun_sims/ARBITRUM_MACRO_CFMM_APRIL_TRAIN_FULL.msgpack',
+    arbitrumMacroHodlAugTrainFull: '/prerun_sims/ARBITRUM_MACRO_HODL_APRIL_TRAIN_FULL.msgpack',
+    arbitrumMacroCFMMAugTest: '/prerun_sims/ARBITRUM_MACRO_CFMM_AUG_TEST.msgpack',
+    arbitrumMacroBTFAugTest: '/prerun_sims/ARBITRUM_MACRO_BTF_AUG_TEST.msgpack',
+    arbitrumMacroHodlAugTest: '/prerun_sims/ARBITRUM_MACRO_HODL_AUG_TEST.msgpack',
+    arbitrumMacroBTF2025Test: '/prerun_sims/ARBITRUM_MACRO_BTF_2025_TEST.msgpack',
+    arbitrumMacroCFMM2025Test: '/prerun_sims/ARBITRUM_MACRO_CFMM_2025_TEST.msgpack',
+    arbitrumMacroHodl2025Test: '/prerun_sims/ARBITRUM_MACRO_HODL_2025_TEST.msgpack',
+    arbitrumMacroCFMMAugTestFull: '/prerun_sims/ARBITRUM_MACRO_BTF_AUG_TEST_FULL.msgpack',
+    arbitrumMacroBTFAugTestFull: '/prerun_sims/ARBITRUM_MACRO_CFMM_AUG_TEST_FULL.msgpack',
+    arbitrumMacroHodlAugTestFull: '/prerun_sims/ARBITRUM_MACRO_HODL_AUG_TEST_FULL.msgpack',
+    arbitrumMacroBTF2025TestFull: '/prerun_sims/ARBITRUM_MACRO_BTF_2025_TEST_FULL.msgpack',
+    arbitrumMacroCFMM2025TestFull: '/prerun_sims/ARBITRUM_MACRO_CFMM_2025_TEST_FULL.msgpack',
+    arbitrumMacroHodl2025TestFull: '/prerun_sims/ARBITRUM_MACRO_HODL_2025_TEST_FULL.msgpack',
+    truflationBitcoinBTFAugTrain:"/prerun_sims/TRUFLATION_BITCOIN_.msgpack",
+    truflationBitcoinCFMMAugTrain:"/prerun_sims/TRUFLATION_BITCOIN_.msgpack",
+    truflationBitcoinHodlAugTrain:"/prerun_sims/TRUFLATION_BITCOIN_.msgpack",
+    truflationBitcoinCFMMAugTest:"/prerun_sims/TRUFLATION_BITCOIN_.msgpack",
+    truflationBitcoinBTFAugTest:"/prerun_sims/TRUFLATION_BITCOIN_.msgpack",
+    truflationBitcoinHodlAugTest:"/prerun_sims/TRUFLATION_BITCOIN_.msgpack",
+    truflationBitcoinBTF2025Test:"/prerun_sims/TRUFLATION_BITCOIN_.msgpack",
+    truflationBitcoinCFMM2025Test:"/prerun_sims/TRUFLATION_BITCOIN_.msgpack",
+    truflationBitcoinHodl2025Test:"/prerun_sims/TRUFLATION_BITCOIN_.msgpack",
+    truflationBitcoinBTFAugTrainFull:"/prerun_sims/TRUFLATION_BITCOIN_.msgpack",
+    truflationBitcoinCFMMAugTrainFull:"/prerun_sims/TRUFLATION_BITCOIN_.msgpack",
+    truflationBitcoinHodlAugTrainFull:"/prerun_sims/TRUFLATION_BITCOIN_.msgpack",
+    truflationBitcoinCFMMAugTestFull:"/prerun_sims/TRUFLATION_BITCOIN_.msgpack",
+    truflationBitcoinBTFAugTestFull:"/prerun_sims/TRUFLATION_BITCOIN_.msgpack",
+    truflationBitcoinHodlAugTestFull:"/prerun_sims/TRUFLATION_BITCOIN_.msgpack",
+    truflationBitcoinBTF2025TestFull:"/prerun_sims/TRUFLATION_BITCOIN_.msgpack",
+    truflationBitcoinCFMM2025TestFull:"/prerun_sims/TRUFLATION_BITCOIN_.msgpack",
+    truflationBitcoinHodl2025TestFull:"/prerun_sims/TRUFLATION_BITCOIN_.msgpack",
   };
 
   const poolFilePath = poolFileMapping[poolName];

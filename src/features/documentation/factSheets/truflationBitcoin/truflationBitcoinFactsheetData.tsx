@@ -2,66 +2,62 @@ import { FactsheetModel } from '../../landing/desktop/factsheetModel';
 import { ChannelFollowingUpdateRule } from '../../updateRules/channelFollowing';
 import { ROUTES } from '../../../../routesEnum';
 
-export const sonicMacroFactsheetData: FactsheetModel = {
-  poolId: ROUTES.SONICMACROFACTSHEET,
+export const truflationBitcoinFactsheetData: FactsheetModel = {
+  poolId: ROUTES.ARBITRUMMACROFACTSHEET,
   inceptionLpPrice:3023,
-  poolChain: 'SONIC',
+  poolChain: 'ARBITRUM',
   pools: [
-    'sonicMacroBTFAugTrain',
-    'sonicMacroCFMMAugTrain',
-    'sonicMacroHodlAugTrain',
-    'sonicMacroBTFAprilTest',
-    'sonicMacroCFMMAprilTest',
-    'sonicMacroHodlAprilTest',
+    'truflationBitcoinBTFAugTrain',
+    'truflationBitcoinCFMMAugTrain',
+    'truflationBitcoinHodlAugTrain',
+    'truflationBitcoinCFMMAugTest',
+    'truflationBitcoinBTFAugTest',
+    'truflationBitcoinHodlAugTest',
+    'truflationBitcoinBTF2025Test',
+    'truflationBitcoinCFMM2025Test',
+    'truflationBitcoinHodl2025Test',
   ],
   factsheetImage: {
-    image: '/assets/sonic_macro_BTF.png',
+    image: '/assets/truflation_bitcoin_mono.png',
     width: '30%',
-    alt: 'SONIC MACRO BTF Icon',
+    alt: 'TRUFLATION BITCOIN BTF Icon',
   },
-  launchUnixTimestamp:undefined,
-  depositorBadges: {
-    prefix:'Sonic_Macro_',
-    gold:1754434800,
-    silver:1755644400,
-    bronze:1756854000
-  },
-  objective: 'The Sonic Macro BTF provides exposure to some of the mega cap tokens on Sonic. The BTF was trained on more bullish market conditions.',
+  objective: 'Truflation has created an inflation based strategy that shows historical correlation with Bitcoin bull runs. This BTF either stays in USDC or gains BTC exposure based on this metric',
   deploymentLinks: {
     contractLinks: [
       [
         'Pool Factory Contract',
-        'https://sonicscan.org/address/0x60006d255569b36a3d494e83D182b57acd04D484',
+        'https://etherscan.org/address/0x60006d255569b36a3d494e83D182b57acd04D484',
       ],
       [
         'Strategy Contract',
-        'https://sonicscan.org/address/0x18Bd2de107C70222f1cd9796F9aB01458A85d7a7',
+        'https://etherscan.org/address/0x18Bd2de107C70222f1cd9796F9aB01458A85d7a7',
       ],
       [
         'Strategy Runner Contract',
-        'https://sonicscan.org/address/0xD5c43063563f9448cE822789651662cA7DcD5773',
+        'https://etherscan.org/address/0xD5c43063563f9448cE822789651662cA7DcD5773',
       ],
       [
         'Chainlink scBTC Oracle',
-        'https://sonicscan.org/address/0x8905b91b301677e674cF964Fbc4Ac3844EF79620',
+        'https://etherscan.org/address/0x8905b91b301677e674cF964Fbc4Ac3844EF79620',
       ],
       [
         'Chainlink USDC Oracle',
-        'https://sonicscan.org/address/0x6f2bD10b9b17E80e5BCd49158890561f053Ed2EB',
+        'https://etherscan.org/address/0x6f2bD10b9b17E80e5BCd49158890561f053Ed2EB',
       ],
       [
-        'Chainlink S Oracle',
-        'https://sonicscan.org/address/0x62B9eC6A5BBEBe4F5C5f46C8A8880df857004295',
+        'Chainlink ARB Oracle',
+        'https://etherscan.org/address/0x62B9eC6A5BBEBe4F5C5f46C8A8880df857004295',
       ],
       [
         'Chainlink scETH Oracle',
-        'https://sonicscan.org/address/0x4FFE46130bCBb16BF5EDc4bBaa06f158921764C2',
+        'https://etherscan.org/address/0x4FFE46130bCBb16BF5EDc4bBaa06f158921764C2',
       ],
     ],
   },
   fixedSettings: [
     ['Strategy Interval', '24H'],
-    ['Strategy', 'Channel Following'],
+    ['Strategy', 'Truflation BTC Regime'],
     ['Staleness Limit', '24H'],
     ['Swap Fee', '0.03%'],
     ['Withdrawal Fee', '0%'],
@@ -70,26 +66,21 @@ export const sonicMacroFactsheetData: FactsheetModel = {
   defaultPeriod: ['AprilTest', 'Test Period: Apr-Jul25'],
   alternatePeriod: ['', ''],
   trainPeriod: 'AugTrain',
-  poolPrefix: 'sonicMacro',
+  poolPrefix: 'truflationBitcoin',
   xAxisIntervals: new Map<string, number>([
     ['AprilTest', 1],
     ['AugTrain', 14],
     ['default', 22],
   ]),
-  mainTitle: 'The Sonic Macro BTF',
-  mainDescription: `Sonic is one of the pioneering chains for DeFi. It is a layer 1
-              solution and is EVM compatible, designed to provide
-              faster and cheaper transactions than other layer 1s. Sonic is designed
-              to be a platform for building decentralized applications (dApps) and smart
-              contracts, enabling developers to create innovative solutions in
-              the DeFi space.`,
+  mainTitle: 'Truflation Bitcoin BTF',
+  mainDescription: `Truflation is a leading provider of alternate daily inflation data that has gained notoriety given its increased accuracy compared to standard truflation data. `,
   cumulativePerformanceOverrideSeriesStrokeColor: {
     'Channel Following': '#c7b283',
     'Balancer Weighted': '#528aae',
     HODL: '#52ad80',
   },
   cumulativePerformanceOverrideSeriesName: {
-    'Channel Following': 'SONIC MACRO BTF',
+    'Channel Following': 'ARBITRUM MACRO BTF',
     'Balancer Weighted': 'Traditional DEX',
   },
 
@@ -117,13 +108,12 @@ export const sonicMacroFactsheetData: FactsheetModel = {
         <>
           <p>QuantAMM believes in transparency through decentralisation</p>
           <p>
-            The re-weighting strategy and parameters are a visible contract
-            on-chain. No opaque strategy vault managers. Chainlink provides data
-            integrity.
+            The re-weighting strategy and parameters are run on Chainlink CRE.
+            The runtime environment is fixed and the workflow cannot be altered without admin permissions.
           </p>
           <p>
-            Given novel patented technology the re-weighting strategies run
-            cheaply on-chain and daily re-weighting is possible even on L1s.
+            Chainlink CRE is institutional grade infrastructure that provides admin control however during
+            standard operations is verified by Chainlink.
           </p>
         </>
       ),
@@ -156,8 +146,8 @@ export const sonicMacroFactsheetData: FactsheetModel = {
             ecosystem.
           </p>
           <p>
-            S is the Sonic native token. While this token carries potential
-            protocol risk and higher volatility, it is key token of the Sonic ecosystem.
+            ARB is the Arbitrum native token. While this token carries potential
+            protocol risk and higher volatility, it is key token of the Arbitrum ecosystem.
           </p>
         </>
       ),
@@ -229,16 +219,16 @@ export const sonicMacroFactsheetData: FactsheetModel = {
       description: (
         <>
           <p>
-            Re-weightings rely on price data. This data has to be correct for
+            Re-weightings rely on inflation data on the TRUF network. This data has to be correct for
             the strategy to run.
           </p>
           <p>
-            Chainlink is an oracle provider that provides data integrity through
-            proof of consensus. This oracle network is the institutional
-            standard for on-chain data and is resilient to manipulation.
-            QuantAMM strategies also rely on smoothing of data and work in terms
-            of days. This also provides a level of protection at the algorithmic
-            layer.
+            TRUF network is a chain that provides inflation data for Truflation. The manipulability
+            of the data source is protected by Truflation and not by QuantAMM. 
+          </p>
+          <p>
+            Manipulation of the inflation data can put the weights into one of 3 regimes however it cannot
+            determine new weights. Those weights are controlled by CRE. 
           </p>
         </>
       ),
@@ -248,9 +238,8 @@ export const sonicMacroFactsheetData: FactsheetModel = {
   trainingDescription: (
     <>
       <p>
-        The channel following strategy has parameters that determine how aggressive
-        a strategy re-weights to different assets as well as the memory of
-        prices that get taken into account.
+        The Truflation BTC strategy has parameters that determine how aggressive
+        a strategy re-weights to different assets as well as when to re-weight.
       </p>
       <p>
         A training period of Jan 2023 - March 2025 was selected and parameters
@@ -269,110 +258,111 @@ export const sonicMacroFactsheetData: FactsheetModel = {
 
   trainedParameters: [
     {
-      name: 'Memory Days',
+      name: 'Slope Length',
       variations: [
         {
-          name: 'Memory Days',
-          tooltip: 'Memory days is the number of days of prices used in the strategy.',
-          value: ['BTC - 50.35461604', 'ETH - 5.03696308', 'S - 15.77315714', 'USDC - 7.05245484'],
+          name: 'Slope Length',
+          tooltip: 'TODO MW',
+          value: ['BTC - 50.35461604'],
         },
       ],
     },
     {
-      name: 'Lambda Settings',
+      name: 'Threshold Up',
       variations: [
         {
-          name: 'Lambda',
-          tooltip: 'Lambda is the parameter used in the gradient estimators for the channel following.',
+          name: 'Threshold Up',
+          tooltip: 'TODO MW',
           value: [
             'BTC - 0.929563018539273',
-            'ETH - 0.4479412201204208',
-            'S - 0.7872516012227267',
-            'USDC - 0.5721879593136455',
           ],
         },
       ],
     },
     {
-      name: 'Aggressiveness',
+      name: 'Threshold Down',
       variations: [
         {
-          name: 'k',
-          tooltip: 'k is the on-chain value stored in the contracts and is the exact parameter used in the strategy calculations.',
+          name: 'Threshold Down',
+          tooltip: 'TODO MW',
           value: [
             'BTC - 2601.9593723570410',
-            'ETH - 89.055850228512313',
-            'S - 593.90077382313598',
-            'USDC - 93.130867147542816',
           ],
         },
       ],
     },
     {
-      name: 'Exponent',
+      name: 'Flat Buffer Up',
       variations: [
         {
-          name: 'Exponent',
-          tooltip: 'The exponent is a variable used in the channel following strategy that dictates how big a price change has to be before the strategy starts to notice it.',
+          name: 'Flat Buffer Up',
+          tooltip: 'TODO MW',
           value: [
             'BTC - 0.7832038911979993',
-            'ETH - 2.3558801968659950',
-            'S - 0.8443489840649794',
-            'USDC - 1.0686318158089472',
           ],
         },
       ],
     },
     {
-      name: 'Width',
+      name: 'Flat Buffer DOWN',
       variations: [
         {
-          name: 'Width',
-          tooltip: 'Width is the parameter that defines the channel width for the mean reversion strategy.',
+          name: 'Flat Buffer DOWN',
+          tooltip: 'TODO MW',
           value: [
             'BTC - 0.0086388441051054223',
-            'ETH - 0.010606898165675289',
-            'S - 0.016622246139525294',
-            'USDC - 0.00090359323501604781',
           ],
         },
       ],
     },
     {
-      name: 'Amplitude',
+      name: 'Confirm Up Days',
       variations: [
         {
-          name: 'Amplitude',
-          tooltip: 'Amplitude is the parameter that defines the oscillation amplitude for the mean reversion strategy.',
+          name: 'Confirm Up Days',
+          tooltip: 'TODO MW',
           value: [
             'BTC - 0.074853775497883593',
-            'ETH - 0.0027628351279059180',
-            'S - 0.011037321655782598',
-            'USDC - 0.072324601375887462',
           ],
         },
       ],
     },
     {
-      name: 'Pre-exp Scaling',
+      name: 'Confirm Down Days',
       variations: [
         {
-          name: 'Pre-exp Scaling',
-          tooltip: 'Pre-exp scaling is the parameter used for scaling before exponentiation in the strategy calculations.',
+          name: 'Confirm Down Days',
+          tooltip: 'TODO MW',
           value: [
             'BTC - 0.0002015493093145',
-            'ETH - 0.0002238654967055',
-            'S - 0.0002970276828945',
-            'USDC - 0.0015731331098663',
+          ],
+        },
+      ],
+    },
+    {
+      name: 'Confirm Flat Days',
+      variations: [
+        {
+          name: 'Confirm Flat Days',
+          tooltip: 'TODO MW',
+          value: [
+            'BTC - 0.0002015493093145',
           ],
         },
       ],
     },
   ],
-  iconTitle: 'Sonic Macro',
-  iconDescription: ['The sonic ecosystem basket', 'Mega Caps with Yield Focus'],
-  status: 'LIVE',
+  iconTitle: 'Truflation Bitcoin',
+  iconDescription: ['Truflation Bitcoin BTF', 'BTC vault curated by Truflation'],
+  status: 'NOV 2025',
   iconOpacity: 1,
   iconFocus: true,
-  targetPoolJson:'sonicMacroBTFAprilTest'
+  depositorBadges: {
+    prefix:'Safe_Haven_',
+    gold:1748213999,
+    silver:1749423599,
+    bronze:1750633199
+  },
+  targetPoolJson:'safeHavenBTFAugTest',
+  launchUnixTimestamp:1747267200
 };

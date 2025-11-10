@@ -1,15 +1,15 @@
 import { useEffect } from 'react';
 import { SerializedError } from '@reduxjs/toolkit';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
-import { useAppDispatch, useAppSelector } from '../app/hooks';
+import { useAppDispatch } from '../app/hooks';
 import { Benchmark, FinancialAnalysisResultDto, Product } from '../models';
 import { useRunFinancialAnalysisMutation } from '../services';
 import {
   loadingSimulationRunBreakdown,
-  selectQuantammSetPools,
   setProductSimulationRunBreakdown,
 } from '../features/productExplorer/productExplorerSlice';
 import { addImportedSimRunResults } from '../features/simulationRunner/simulationRunnerSlice';
+import { CURRENT_LIVE_FACTSHEETS } from '../features/documentation/factSheets/liveFactsheets';
 
 export type Success =
   | { data: FinancialAnalysisResultDto; error?: never }
@@ -28,9 +28,9 @@ export const useFinancialAnalysis = ({
 }) => {
   const dispatch = useAppDispatch();
   const [runFinancialAnalysis] = useRunFinancialAnalysisMutation();
-
-  const hasCacheForProduct = useAppSelector(
-    (s) => !!selectQuantammSetPools(s)[product?.id ?? '']
+  const livePools = CURRENT_LIVE_FACTSHEETS;
+  const hasCacheForProduct = livePools.factsheets.find(
+    (x) => x.poolId == (product?.id ?? '')
   );
 
   useEffect(() => {
@@ -177,5 +177,6 @@ export const useFinancialAnalysis = ({
     product?.timeSeries?.length,
     runFinancialAnalysis,
     dispatch,
+    product,
   ]);
 };

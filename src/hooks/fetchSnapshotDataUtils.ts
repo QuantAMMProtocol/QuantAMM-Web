@@ -22,6 +22,7 @@ import {
   generateTokenPricesQuery,
   filterOutBptToken,
 } from './utils';
+import { CURRENT_LIVE_FACTSHEETS } from '../features/documentation/factSheets/liveFactsheets';
 
 export const DEFAULT_INITIAL_TOTAL_SHARES = 1;
 
@@ -172,17 +173,14 @@ export const getTimeSeriesDataForProductList = (
   tokenPricesMap: Record<
     string,
     Record<string, Pick<GqlHistoricalTokenPriceEntry, 'timestamp' | 'price'>[]>
-  >,
-  isQuantAMMSetPool: Record<string,string>
+  >
 ): ProductTimeSeriesData[] => {
   return Object.values(productMap).map((product) => {
     let snapshots = poolSnapshotsMap[`poolSnapshot_${product.address}`];
-    if (isQuantAMMSetPool[product.address]) {
-      //TODO make pool specific and not hardcoded
-      //because of gauges and integration tests launch date != creation date
-      //this sets the true launch date for quantamm initial products
-      snapshots = snapshots.filter((x) => x.timestamp >= 1747267200);
-    }
+   
+    const live_pools = CURRENT_LIVE_FACTSHEETS;
+    snapshots = snapshots.filter((x) => x.timestamp >= (live_pools.factsheets.find(y => y.poolId == product.id)?.launchUnixTimestamp ?? 0));
+   
     const hodlAmounts = snapshots[0]?.amounts;
 
     const initialTotalShares =
@@ -255,17 +253,13 @@ export const getTimeSeriesDataForProduct = (
   tokenPricesMap: Record<
     string,
     Record<string, Pick<GqlHistoricalTokenPriceEntry, 'timestamp' | 'price'>[]>
-  >,
-  isQuantAMMSetPool: boolean
+  >
 ): ProductTimeSeriesData => {
   let snapshots = poolSnapshotsMap[`poolSnapshot_${pool.poolGetPool?.id}`];
   
-  if (isQuantAMMSetPool) {
-    //TODO make pool specific and not hardcoded
-    //because of gauges and integration tests launch date != creation date
-    //this sets the true launch date for quantamm initial products
-    snapshots = snapshots.filter((x) => x.timestamp >= 1747267200);
-  }
+  const live_pools = CURRENT_LIVE_FACTSHEETS;
+  snapshots = snapshots.filter((x) => x.timestamp >= (live_pools.factsheets.find(y => y.poolId == pool.poolGetPool?.id)?.launchUnixTimestamp ?? 0));
+  
   let hodlAmounts: number[] | undefined;
 
   let initialTotalShares =

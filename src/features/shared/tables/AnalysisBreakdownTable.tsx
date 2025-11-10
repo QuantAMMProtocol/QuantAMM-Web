@@ -6,7 +6,7 @@ import { useAppSelector } from '../../../app/hooks';
 import { selectAgGridTheme } from '../../themes/themeSlice';
 import { SimulationRunBreakdown } from '../../simulationResults/simulationResultSummaryModels';
 import { getAnalysisSummary } from './AnalysisBreakdownTableHelpers';
-import { selectQuantammSetPools } from '../../productExplorer/productExplorerSlice';
+import { CURRENT_LIVE_FACTSHEETS } from '../../documentation/factSheets/liveFactsheets';
 
 const { Title } = Typography;
 
@@ -24,7 +24,7 @@ export const AnalysisBreakdownTable: FC<AnalysisBreakdownTableProps> = ({
   const darkThemeAg = useAppSelector(selectAgGridTheme);
   const gridRef = useRef<AgGridReact>(null);
 
-  const quantAMMSetPools = useAppSelector(selectQuantammSetPools);
+  const livePools = CURRENT_LIVE_FACTSHEETS;
 
   const [finAnalysisColDefs] = useState<ColDef[]>([
     { colId: 'updateRule', field: 'updateRule', headerName: 'Update Rule' },
@@ -150,7 +150,7 @@ export const AnalysisBreakdownTable: FC<AnalysisBreakdownTableProps> = ({
           >
             <Row>
               <Col span={20}>
-                <h4>{quantAMMSetPools[productId ?? ''] ? 'Simulated Backtest Metric Values' : 'Metric Raw Values'}</h4>
+                <h4>{livePools.factsheets.find(x => x.poolId == (productId ?? '')) ? 'Simulated Backtest Metric Values' : 'Metric Raw Values'}</h4>
               </Col>
               <Col span={4} style={{ textAlign: 'right' }}>
                 <Button

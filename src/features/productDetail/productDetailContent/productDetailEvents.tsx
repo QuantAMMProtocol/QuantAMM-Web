@@ -17,10 +17,9 @@ import { useAppSelector } from '../../../app/hooks';
 import { selectAgGridTheme } from '../../themes/themeSlice';
 import {
   selectProductById,
-  selectQuantammSetPools,
 } from '../../productExplorer/productExplorerSlice';
 
-import { ROUTES } from '../../../routesEnum';
+import { CURRENT_LIVE_FACTSHEETS } from '../../documentation/factSheets/liveFactsheets';
 
 const { Title } = Typography;
 
@@ -41,8 +40,7 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = memo(
     const product = useAppSelector((s) => selectProductById(s, productId));
     const productAddress = product?.address?.toLowerCase() ?? '';
 
-    // Quant AMM pools registry used for badge thresholds
-    const quantAMMSetPools = useAppSelector(selectQuantammSetPools);
+    const live_pools = CURRENT_LIVE_FACTSHEETS
 
     // Fetch events (primitive deps only)
     const { poolEvents, loading, error } = useFetchPoolEventsData({
@@ -83,28 +81,12 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = memo(
         let silver = 0;
         let bronze = 0;
         let prefix = 'UNKNOWN';
-
-        if (productAddress && quantAMMSetPools[productAddress]) {
-          if (productAddress === ROUTES.SAFEHAVENFACTSHEET.toLowerCase()) {
-            prefix = 'Safe_Haven_';
-            gold = 1748213999;
-            silver = 1749423599;
-            bronze = 1750633199;
-          } else if (
-            productAddress === ROUTES.BASEMACROFACTSHEET.toLowerCase()
-          ) {
-            prefix = 'Base_Macro_';
-            gold = 1749423599;
-            silver = 1750633199;
-            bronze = 1751756400;
-          } else if (
-            productAddress === ROUTES.SONICMACROFACTSHEET.toLowerCase()
-          ) {
-            prefix = 'Sonic_Macro_';
-            gold = 1754434800;
-            silver = 1755644400;
-            bronze = 1756854000;
-          }
+        const factsheetDepositorBadge = live_pools.factsheets.find(y => y.poolId == productAddress)?.depositorBadges;
+        if (productAddress && factsheetDepositorBadge) {
+            prefix = factsheetDepositorBadge.prefix;
+            gold = factsheetDepositorBadge.gold;
+            silver = factsheetDepositorBadge.silver;
+            bronze = factsheetDepositorBadge.bronze;
         }
         return {
           goldThreshold: gold,
@@ -112,7 +94,7 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = memo(
           bronzeThreshold: bronze,
           srcPrefix: prefix,
         };
-      }, [productAddress, quantAMMSetPools]);
+      }, [live_pools.factsheets, productAddress]);
 
     // Column definitions (memoized; closures capture only stable primitives)
     const columnDefs = useMemo(
