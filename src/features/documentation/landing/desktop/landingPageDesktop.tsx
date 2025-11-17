@@ -1,6 +1,5 @@
 import { createElement } from 'react';
 import { Row } from 'antd';
-import { SimulationRunner } from '../../../simulationRunner/simulationRunner';
 import { Banner } from './banner';
 import { QuantAmmExplainer } from './quantammExplainer';
 import { StrategySummary } from './strategySummary';
