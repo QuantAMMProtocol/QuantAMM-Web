@@ -54,16 +54,6 @@ const items: { component: React.ComponentType; style: React.CSSProperties }[] =
       },
     },
     {
-      component: SimulationRunner,
-      style: {
-        display: 'flex',
-        alignItems: 'center',
-        backgroundColor: '#162536',
-        justifyContent: 'flex-start',
-        marginTop: '10vh',
-      },
-    },
-    {
       component: ContactCompany,
       style: {
         display: 'flex',
