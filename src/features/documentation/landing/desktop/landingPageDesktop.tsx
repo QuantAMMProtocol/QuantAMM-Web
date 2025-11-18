@@ -1,6 +1,5 @@
 import { createElement } from 'react';
 import { Row } from 'antd';
-import { SimulationRunner } from '../../../simulationRunner/simulationRunner';
 import { Banner } from './banner';
 import { QuantAmmExplainer } from './quantammExplainer';
 import { StrategySummary } from './strategySummary';
@@ -51,16 +50,6 @@ const items: { component: React.ComponentType; style: React.CSSProperties }[] =
         backgroundColor: '#162536',
         justifyContent: 'flex-start',
         height: '100vh',
-      },
-    },
-    {
-      component: SimulationRunner,
-      style: {
-        display: 'flex',
-        alignItems: 'center',
-        backgroundColor: '#162536',
-        justifyContent: 'flex-start',
-        marginTop: '10vh',
       },
     },
     {
