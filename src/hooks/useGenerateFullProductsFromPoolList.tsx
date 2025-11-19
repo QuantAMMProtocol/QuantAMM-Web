@@ -24,7 +24,13 @@ export const useGenerateFullProductsFromPoolList = (
   >(undefined);
 
   useEffect(() => {
-    if (baseProductsData && poolSnapshots && tokenPrices && !skip) {
+    if (
+      baseProductsData &&
+      poolSnapshots &&
+      Object.keys(poolSnapshots).length !== 0 &&
+      tokenPrices &&
+      !skip
+    ) {
       setFullProductsLoading(true);
       try {
         const timeSeriesData: ProductTimeSeriesData[] =
@@ -34,6 +40,8 @@ export const useGenerateFullProductsFromPoolList = (
             tokenPrices
           );
 
+        console.log('timeSeriesData:', timeSeriesData);
+
         const productsData: ProductMap = getFullProductsFromSnapshots(
           baseProductsData,
           timeSeriesData
@@ -41,6 +49,7 @@ export const useGenerateFullProductsFromPoolList = (
         setFullProductsLoading(false);
         setFullProductsData(productsData);
       } catch (error) {
+        console.log('Error generating full products from pool list:', error);
         setFullProductsError(
           error as FetchBaseQueryError | SerializedError | ApolloError
         );
