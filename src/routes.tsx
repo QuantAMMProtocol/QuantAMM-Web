@@ -21,6 +21,7 @@ import SonicMacroFactSheet from './features/documentation/factSheets/sonicMacro/
 import { SonicMacroSimulatorExample } from './features/documentation/factSheets/sonicMacro/sonicMacroSimView';
 import AbritrumMacroFactSheet from './features/documentation/factSheets/arbitrumMacro/arbitrumMacro';
 import { ArbitrumMacroSimulatorExample } from './features/documentation/factSheets/arbitrumMacro/arbitrumMacroSimView';
+import { ProductHealthMonitor } from './features/productExplorer/productHealthMonitor';
 
 const BASE_ROUTE = '/';
 
@@ -130,6 +131,10 @@ export const routes = createBrowserRouter([
       {
         path: ROUTES.TOS,
         element: <TermsOfService />,
+      },
+      {
+        path: ROUTES.HEALTH_MONITOR,
+        element: <ProductHealthMonitor />,
       }
     ],
   },

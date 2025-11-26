@@ -34,7 +34,7 @@ export const useFetchProductData = (id: string, chain: GqlChain) => {
       });
     }
   }, [loading, error, productData]);
-
+  console.log('useFetchProductData', { id, chain, product, loading, error });
   return {
     product,
     productLoading: loading,

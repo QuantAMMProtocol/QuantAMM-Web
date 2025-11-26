@@ -249,6 +249,7 @@ const TermsOfServiceGateModal: React.FC<TermsOfServiceGateModalProps> = ({
   );
 
   return (
+    acceptedTerms ? <></> : 
     <Modal
       title={'Access Confirmation'}
       centered
