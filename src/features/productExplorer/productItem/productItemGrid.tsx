@@ -16,6 +16,7 @@ import { ProductItemWide } from './wide/productItemWide';
 import { ProductItemGridHeader } from './productItemGridHeader';
 import { ProductItemLoading } from './card/productItemLoading';
 import { ProductItemWideLoading } from './wide/productItemWideLoading';
+import { StyleProvider } from '@ant-design/cssinjs';
 
 import styles from './productItemGrid.module.scss';
 
@@ -51,6 +52,8 @@ export const ProductItemGrid: FC<ProductItemGridProps> = ({ wide }) => {
   );
 
   return (
+
+    <StyleProvider hashPriority="low">
     <Layout>
       <div className={styles['product-item-grid__header']}>
         <Row
@@ -102,13 +105,13 @@ export const ProductItemGrid: FC<ProductItemGridProps> = ({ wide }) => {
           {!loading &&
             areProductsLoaded &&
             sort(Object.values(products)).map((product) => (
-              <Col xs={wide ? 24 : undefined} key={product.id}>
-                {wide ? (
-                  <ProductItemWide product={product} />
-                ) : (
-                  <ProductItem product={product} />
-                )}
-              </Col>
+                <Col xs={wide ? 24 : undefined} key={product.id}>
+                  {wide ? (
+                    <ProductItemWide product={product} />
+                  ) : (
+                    <ProductItem product={product} />
+                  )}
+                </Col>
             ))}
         </Row>
         {!loading && areProductsLoaded && (
@@ -118,5 +121,6 @@ export const ProductItemGrid: FC<ProductItemGridProps> = ({ wide }) => {
         )}
       </Content>
     </Layout>
+    </StyleProvider>
   );
 };

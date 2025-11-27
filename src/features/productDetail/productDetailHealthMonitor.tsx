@@ -88,7 +88,7 @@ export const ProductDetailHealthMonitor: React.FC<ProductDetailHealthMonitorProp
       currentVolume24h = last.volume24h;
 
       liquidityChange24h =
-        ((last.totalLiquidity - prev.totalLiquidity) / prev.totalLiquidity) * 100;
+        ((last.totalShares - prev.totalShares) / prev.totalShares) * 100;
       volumeChange24h = last.volume24h - prev.volume24h;
     } else if (timeSeries && timeSeries.length === 1) {
       const last = timeSeries[0];
