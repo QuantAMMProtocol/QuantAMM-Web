@@ -15,4 +15,5 @@ export enum ROUTES {
   SONICMACROFACTSHEET = '0x74dc857d5567a3b087e79b96b91cdc8099b2fa34',
   ARBITRUMMACROFACTSHEET = 'TODO',
   INELIGIBLEUSER = 'ineligible-user',
+  HEALTH_MONITOR = 'health-monitor',
 }
