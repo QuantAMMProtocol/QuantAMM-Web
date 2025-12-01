@@ -1,8 +1,8 @@
 import { Col, Row, Tabs, Spin } from 'antd';
 import { useState, useEffect } from 'react';
-import { SimulationResultsSummaryStep } from '../simulationResults/simulationResultsSummaryStep';
-import { getBreakdown, Pool } from '../../services/breakdownService';
-import { SimulationRunBreakdown } from '../simulationResults/simulationResultSummaryModels';
+import { SimulationResultsSummaryStep } from '../../../simulationResults/simulationResultsSummaryStep';
+import { getBreakdown, Pool } from '../../../../services/breakdownService';
+import { SimulationRunBreakdown } from '../../../simulationResults/simulationResultSummaryModels';
 
 const { TabPane } = Tabs;
 

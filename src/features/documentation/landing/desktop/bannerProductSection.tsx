@@ -242,7 +242,7 @@ export function BannerProductSection({ productData }: ProductBannerProps) {
                       >
                         <h5 style={{ margin: 0 }}>
                           {tag.title.toUpperCase()}
-                          {tag.status !== 'LIVE' && ' (COMING SOON)'}
+                          {tag.status !== 'LIVE' && ' ('+ tag.status +')'}
                         </h5>
                       </Tooltip>
                     </Col>

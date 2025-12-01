@@ -11,7 +11,7 @@ import { InfoCircleOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../../../app/hooks';
 import { selectTheme } from '../../../themes/themeSlice';
-import { FactsheetModel } from '../factsheetModel';
+import { FactsheetModel } from '../../landing/desktop/factsheetModel';
 import { FAQItems } from '../../landing/faqItems';
 import ButtonGroup from 'antd/es/button/button-group';
 

@@ -1,10 +1,9 @@
 import { CSSProperties, FC, useMemo } from 'react';
 import { CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons';
-import { Button, Collapse, CollapseProps, Typography } from 'antd';
+import { Button, Col, Collapse, CollapseProps, Row, Typography } from 'antd';
 import { Product } from '../../../models';
 import { ProductDetailSidebarOverview } from './productDetailSidebarOverview';
 import { ProductDetailSidebarPoolInfo } from './productDetailSidebarPoolInfo';
-// import { ProductDetailSidebarOverviewGraph } from './productDetailSidebarIOverviewGraph';
 import { ProductDetailSidebarCompositionGraph } from './productDetailSidebarICompositionGraph';
 import { ProductDetailSidebarSocials } from './productDetailSidebarSocials';
 
@@ -12,13 +11,11 @@ import sharedStyles from '../../../shared.module.scss';
 
 import styles from './productDetailSidebar.module.scss';
 import { useAppSelector } from '../../../app/hooks';
-import {
-  selectProductDetailSelectedTimeRange,
-  selectQuantammSetPools,
-} from '../../productExplorer/productExplorerSlice';
+import { selectProductDetailSelectedTimeRange } from '../../productExplorer/productExplorerSlice';
 import { ProductDetailSidebarStrategySummary } from './productDetailSidebarStrategySummary';
 import { ProductDetailSidebarPerformanceGraph } from './productDetailSidebarIPerformanceGraph';
 import { useNavigate } from 'react-router-dom';
+import { CURRENT_LIVE_FACTSHEETS } from '../../documentation/factSheets/liveFactsheets';
 
 const { Title } = Typography;
 
@@ -27,13 +24,17 @@ interface ProductDetailInfoProps {
   isMobile?: boolean;
 }
 
-export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({ product, isMobile }) => {
+export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({
+  product,
+  isMobile,
+}) => {
   const panelStyle: React.CSSProperties = {
     background: 'transparent',
     border: 'none',
   };
 
-  const quantAMMSetPools = useAppSelector(selectQuantammSetPools);
+  const live_pools = CURRENT_LIVE_FACTSHEETS;
+
   const navigate = useNavigate();
 
   const selectedTimeRange = useAppSelector(
@@ -67,61 +68,67 @@ export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({ product, isMobil
       label: '',
       children: (
         <div>
-          <Title
-            className={styles['product-detail-sidebar__top-title']}
-            style={{
-              marginTop: 0,
-              textAlign: 'left',
-              marginRight: 0,
-              color: 'var(--secondary-text-color)',
-            }}
-            level={3}
-          >
-            {product.name}
-          </Title>
-          <div
-            style={{ display: 'flex', alignItems: 'center', marginTop: 10 }}
-          ></div>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Title style={{ margin: 0, textAlign: 'left' }} level={2}>
-              $
-              {product.timeSeries?.[
-                product.timeSeries.length - 1
-              ]?.sharePrice.toFixed(2)}
-            </Title>
-            <span
-              style={{
-                marginLeft: 10,
-                fontSize: '1rem',
-                color: performanceSummaryColour(),
-              }}
-            >
-              {productPerformance && productPerformance < 0 ? (
-                <CaretDownOutlined />
-              ) : (
-                <CaretUpOutlined />
-              )}
-            </span>
-            <span
-              style={{
-                marginLeft: 5,
-                fontSize: '1rem',
-                color: performanceSummaryColour(),
-              }}
-            >
-              {productPerformance ? productPerformance.toFixed(2) : 'N/A'}%
-            </span>
-            <span
-              style={{
-                marginLeft: 5,
-                fontSize: '1rem',
-                color: performanceSummaryColour(),
-              }}
-            >
-              ({selectedTimeRange})
-            </span>
-          </div>
-          {quantAMMSetPools[product.id] ? (
+          <Row>
+            <Col span={24}>
+              <Title
+                className={styles['product-detail-sidebar__top-title']}
+                style={{
+                  marginTop: 0,
+                  textAlign: 'left',
+                  marginRight: 0,
+                  color: 'var(--secondary-text-color)',
+                }}
+                level={3}
+              >
+                {product.name}
+              </Title>
+              <div
+                style={{ display: 'flex', alignItems: 'center', marginTop: 10 }}
+              ></div>
+            </Col>
+            <Col span={24}>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <Title style={{ margin: 0, textAlign: 'left' }} level={2}>
+                  $
+                  {product.timeSeries?.[
+                    product.timeSeries.length - 1
+                  ]?.sharePrice.toFixed(2)}
+                </Title>
+                <span
+                  style={{
+                    marginLeft: 10,
+                    fontSize: '1rem',
+                    color: performanceSummaryColour(),
+                  }}
+                >
+                  {productPerformance && productPerformance < 0 ? (
+                    <CaretDownOutlined />
+                  ) : (
+                    <CaretUpOutlined />
+                  )}
+                </span>
+                <span
+                  style={{
+                    marginLeft: 5,
+                    fontSize: '1rem',
+                    color: performanceSummaryColour(),
+                  }}
+                >
+                  {productPerformance ? productPerformance.toFixed(2) : 'N/A'}%
+                </span>
+                <span
+                  style={{
+                    marginLeft: 5,
+                    fontSize: '1rem',
+                    color: performanceSummaryColour(),
+                  }}
+                >
+                  ({selectedTimeRange})
+                </span>
+              </div>
+            </Col>
+          </Row>
+          {live_pools.factsheets.find((x) => x.poolId == product.id) ? (
             <div
               style={{ display: 'flex', alignItems: 'center', marginTop: 10 }}
             >
@@ -161,7 +168,9 @@ export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({ product, isMobil
     {
       key: '1',
       label: '',
-      children: <ProductDetailSidebarOverview product={product} />,
+      children: (
+        <ProductDetailSidebarOverview product={product} isMobile={isMobile} />
+      ),
       style: panelStyle,
       showArrow: false,
       styles: {
@@ -172,8 +181,11 @@ export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({ product, isMobil
     },
     {
       key: '2',
-      label: 'Pool Info',
-      children: <ProductDetailSidebarPoolInfo product={product} />,
+      showArrow: !isMobile,
+      label: !isMobile ? 'Pool Info' : '',
+      children: (
+        <ProductDetailSidebarPoolInfo product={product} isMobile={isMobile} />
+      ),
       style: panelStyle,
       styles: {
         header: {
@@ -183,7 +195,7 @@ export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({ product, isMobil
     },
     {
       key: '5',
-      label: 'About Pool Type',
+      label: !isMobile ? 'About Pool Type' : '',
       children: <ProductDetailSidebarStrategySummary product={product} />,
       style: panelStyle,
       showArrow: false,
@@ -193,6 +205,7 @@ export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({ product, isMobil
         },
       },
     },
+
     {
       key: '4',
       label: 'Pool Composition',
@@ -203,13 +216,18 @@ export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({ product, isMobil
           padding: '0',
         },
       },
-    },
-    {
-      key: '7',
-      label: 'Socials',
-      children: <ProductDetailSidebarSocials />,
-      style: panelStyle,
-    },
+    } as const,
+
+    ...(!isMobile
+      ? [
+          {
+            key: '7',
+            label: 'Socials',
+            children: <ProductDetailSidebarSocials />,
+            style: panelStyle,
+          },
+        ]
+      : []),
   ];
 
   function performanceSummaryColour(): string {
@@ -223,21 +241,17 @@ export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({ product, isMobil
 
   return (
     <div
-      className={
-      isMobile
-        ? undefined
-        : sharedStyles.scrollable
-      }
+      className={isMobile ? undefined : sharedStyles.scrollable}
       style={{
-      background: 'transparent',
+        background: 'transparent',
       }}
     >
       <Collapse
-      items={getItems(panelStyle)}
-      defaultActiveKey={['1', '2', '3', '4', '5', '6', '7', '8', '9']}
-      bordered={false}
-      style={{ background: 'transparent', padding: '0', }}
-      size="small"
+        items={getItems(panelStyle)}
+        defaultActiveKey={['1', '2', '3', '4', '5', '6', '7', '8', '9']}
+        bordered={false}
+        style={{ background: 'transparent', padding: '0' }}
+        size="small"
       ></Collapse>
     </div>
   );

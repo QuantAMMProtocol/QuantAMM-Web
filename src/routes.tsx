@@ -15,10 +15,13 @@ import TermsOfService from './features/documentation/landing/newTermsOfService';
 import InegligibleUser from './features/documentation/landing/IneligableUserLanding';
 import SafeHavenFactSheet from './features/documentation/factSheets/safeHaven/safeHaven';
 import BaseMacroFactSheet from './features/documentation/factSheets/baseMacro/baseMacro';
-import { SafeHavenSimulatorExample } from './features/documentation/safeHavenSimView';
-import { BaseMacroSimulatorExample } from './features/documentation/baseMacroSimView';
+import { SafeHavenSimulatorExample } from './features/documentation/factSheets/safeHaven/safeHavenSimView';
+import { BaseMacroSimulatorExample } from './features/documentation/factSheets/baseMacro/baseMacroSimView';
 import SonicMacroFactSheet from './features/documentation/factSheets/sonicMacro/sonicMacro';
-import { SonicMacroSimulatorExample } from './features/documentation/sonicMacroSimView';
+import { SonicMacroSimulatorExample } from './features/documentation/factSheets/sonicMacro/sonicMacroSimView';
+import AbritrumMacroFactSheet from './features/documentation/factSheets/arbitrumMacro/arbitrumMacro';
+import { ArbitrumMacroSimulatorExample } from './features/documentation/factSheets/arbitrumMacro/arbitrumMacroSimView';
+import { ProductHealthMonitor } from './features/productExplorer/productHealthMonitor';
 
 const BASE_ROUTE = '/';
 
@@ -78,12 +81,20 @@ export const routes = createBrowserRouter([
         element:<SonicMacroSimulatorExample />,
       },
       {
+        path: 'factsheet/example/' + ROUTES.ARBITRUMMACROFACTSHEET,
+        element:<ArbitrumMacroSimulatorExample />,
+      },
+      {
         path: 'factsheet/' + ROUTES.BASEMACROFACTSHEET,
         element:<BaseMacroFactSheet />,
       },
       {
         path: 'factsheet/' + ROUTES.SONICMACROFACTSHEET,
         element:<SonicMacroFactSheet />,
+      },
+      {
+        path: 'factsheet/' + ROUTES.ARBITRUMMACROFACTSHEET,
+        element:<AbritrumMacroFactSheet />,
       },
       {
         path: ROUTES.EXAMPLES,
@@ -120,6 +131,10 @@ export const routes = createBrowserRouter([
       {
         path: ROUTES.TOS,
         element: <TermsOfService />,
+      },
+      {
+        path: ROUTES.HEALTH_MONITOR,
+        element: <ProductHealthMonitor />,
       }
     ],
   },

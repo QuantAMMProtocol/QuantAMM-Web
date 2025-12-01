@@ -99,6 +99,7 @@ const TermsOfServiceGateModal: React.FC<TermsOfServiceGateModalProps> = ({
 }) => {
   const dispatch = useAppDispatch();
   const acceptedTerms = useAppSelector(selectAcceptedTermsAndConditions);
+  console.log('acceptedTerms', acceptedTerms);
   const [location, setLocation] = useState<LocationChoice>('');
   const [acceptedTos, setAcceptedTos] = useState(false);
   const [continueEnabled, setContinueEnabled] = useState(false);
@@ -248,6 +249,7 @@ const TermsOfServiceGateModal: React.FC<TermsOfServiceGateModalProps> = ({
   );
 
   return (
+    acceptedTerms ? <></> : 
     <Modal
       title={'Access Confirmation'}
       centered

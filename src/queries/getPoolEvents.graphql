@@ -10,5 +10,17 @@ query GetPoolEvents($first: Int, $skip: Int, $where: GqlPoolEventsFilter) {
     valueUSD
     sender
     tx
+    ... on GqlPoolSwapEventV3 {
+      tokenIn {
+        address,
+        amount,
+        valueUSD
+      }
+      tokenOut {
+        address,
+        amount,
+        valueUSD
+      }
+    }
   }
 }

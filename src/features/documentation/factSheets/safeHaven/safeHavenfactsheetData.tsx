@@ -1,4 +1,4 @@
-import { FactsheetModel } from '../factsheetModel';
+import { FactsheetModel } from '../../landing/desktop/factsheetModel';
 import { PowerChannelUpdateRule } from '../../updateRules/powerChannelUpdateRule';
 import { ROUTES } from '../../../../routesEnum';
 
@@ -344,4 +344,12 @@ inflation and currency devaluation.`,
   status: 'LIVE',
   iconOpacity: 1,
   iconFocus: true,
+  depositorBadges: {
+    prefix:'Safe_Haven_',
+    gold:1748213999,
+    silver:1749423599,
+    bronze:1750633199
+  },
+  targetPoolJson:'safeHavenBTFAugTest',
+  launchUnixTimestamp:1747267200
 };
