@@ -1,28 +1,21 @@
-// btfTypes.tsx
-import React from 'react';
 import {
   Button,
   Card,
   Col,
+  Collapse,
+  Empty,
   Grid,
   Image,
-  Layout,
-  List,
   Row,
   Space,
   Tag,
+  Tooltip,
   Typography,
-  Collapse,
-  Empty,
 } from 'antd';
-import {
-  ArrowRightOutlined,
-  CheckCircleTwoTone,
-} from '@ant-design/icons';
+import { ArrowRightOutlined, CheckCircleTwoTone } from '@ant-design/icons';
 import { ProductItemBackground } from '../../../productExplorer/productItem/productItemBackground';
 
 const { Title, Text, Paragraph } = Typography;
-const { Sider, Content } = Layout;
 const { useBreakpoint } = Grid;
 
 interface VisionOverviewProps {
@@ -34,70 +27,259 @@ interface BtfType {
   type: string;
   partnerImgSrc?: string[];
   description: string;
-  benefits: string; // comma- or period-separated; rendered as tags
+  benefits: [string, string][];
   examples: string;
   exampleImgSrc?: string[];
   exampleLink?: string;
 }
 
-// NOTE: Data preserved from your original component.
+// 4-column set (Managed BTF removed)
 const BTF_TYPES: BtfType[] = [
   {
-    type: 'Smart Contract BTF',
+    type: 'Smart Contract Driven',
     description:
-      'These BTFs are implemented through smart contracts on blockchain platforms, enabling decentralized and automated execution of agreements.',
-    benefits:
-      'Decentralized finance (DeFi), Supply chain management, Digital identity verification',
+      'These BTFs have their re-weighting methodology completely on-chain in smart contracts. Tuning and parameters are fixed on creation allowing for full transparency.',
+    benefits: [
+      [
+        'Decentralized finance (DeFi)',
+        'Transparent on-chain logic, that cannot be edited post-deployment. Non custodial by design.',
+      ],
+      [
+        'Tranparent Strategies',
+        'Abolity to model, simulate and verify the strategy and its tuning parameters prior to deployment.',
+      ],
+      [
+        'Simplicity & Security',
+        'No complex off-chain infrastructure required.',
+      ],
+    ],
     examples: 'Ethereum, Binance Smart Chain, and Polkadot.',
   },
   {
-    type: 'Chainlink CRE Managed BTF',
+    type: 'Chainlink CRE Managed',
     description:
-      'Write Go/Typescript portfolio strategies run and verified by Chainlink.',
-    benefits:
-      'No smart contract development, Ingest any API data source, Verified by Chainlink nodes',
+      'The Chainlink Runtime environment allows you to write Go/Typescript portfolio strategies. These are run in a protected and decentralised manner on the runtime environment.',
+    benefits: [
+      [
+        'No smart contract development',
+        'Easily write and deploy BTFs using familiar programming languages like Go and TypeScript.',
+      ],
+      [
+        'Ingest any API data source',
+        'Bring in data from any API to inform your portfolio strategy.',
+      ],
+      [
+        'Verified by Chainlink nodes',
+        'Decentralized execution and verification by Chainlink nodes bring reliability and consensus.',
+      ],
+    ],
     examples: 'The Bitcoin Inflation tracker BTF by Truflation',
   },
   {
-    type: 'EZKL Zero-Knowledge BTF',
+    type: 'EZKL Zero-Knowledge',
     description:
-      'Run your existing python strategy in a verifiable way on-chain using zero-knowledge proofs.',
-    benefits:
-      'Interoperable with Python, No alpha leakage risk, ZK proofs for mandates & risk limits',
+      'Run your existing python strategy in a verifiable way on-chain using zero-knowledge proofs. No need to convert your python to a web3 language. No alpha leak.',
+    benefits: [
+      [
+        'Interoperable with Python',
+        'Leverage existing Python libraries and codebases for your BTF strategies.',
+      ],
+      [
+        'No alpha leakage risk',
+        'Keep your proprietary strategies private while still providing verifiable proofs of execution.',
+      ],
+      [
+        'ZK proofs for mandates & risk limits',
+        'Enforce complex mandates and risk limits on-chain using zero-knowledge proofs.',
+      ],
+    ],
     examples: 'Coming Soon',
   },
   {
-    type: 'Managed BTF',
+    type: 'Compliant BTF',
     description:
-      'Simply update the weights according to your views. Vault-like BTFs.',
-    benefits:
-      'Simple API for updates, No smart contract development, Fits model-portfolio workflows',
-    examples: 'Coming Soon',
-  },
-  {
-    type: 'Gated BTF',
-    description:
-      'BTFs can be gated either at deposit or at swap to participants you approve.',
-    benefits:
-      'Regulatory-friendly, No co-mingled funds if desired, Allow-list participants',
+      'Using institutional automated compliance engines, these BTFs can enforce KYC/AML and other regulatory requirements on-chain.',
+    benefits: [
+      [
+        'Regulatory-friendly',
+        'Extend and enforce complex regional regulations on-chain.',
+      ],
+      ['No co-mingled funds if desired', 'Retain individual ownership of BTFs'],
+      [
+        'Allow-list participants',
+        'Restrict participation to approved entities to ensure compliance.',
+      ],
+    ],
     examples: 'Coming Soon',
   },
 ];
 
-/**
- * Split benefit text into nice small tags.
- */
-const toBenefitTags = (benefits: string): string[] =>
-  benefits
-    .split(/[.,]/)
-    .map((s) => s.trim())
-    .filter(Boolean);
+// shared values
+const HEADER_MIN_HEIGHT = 88; // enough room for 2-line title + icon
+const DESCRIPTION_MIN_HEIGHT = 130;
+const BENEFITS_MIN_HEIGHT = 96;
+const WHITE_GLOVE_GRADIENT =
+  'linear-gradient(135deg, #2c496b 0%, #365d8a 40%, #1b2f46 100%)';
+const PARTNERSHIP_EMAIL = 'partnerships@quantamm.fi';
+
+function BtfHeader() {
+  return (
+    <div>
+      <Title level={2} style={{ color: 'white', marginBottom: 4 }}>
+        Building the Future: BTF Types
+      </Title>
+      <Text style={{ color: 'rgba(255,255,255,0.85)' }}>
+        Explore the various BTF initiatives shaping tomorrow.
+      </Text>
+    </div>
+  );
+}
+
+interface WhiteGloveCtaProps {
+  variant: 'mobile' | 'desktop';
+}
+
+function WhiteGloveCta({ variant }: WhiteGloveCtaProps) {
+  if (variant === 'mobile') {
+    return (
+      <Card
+        bordered={false}
+        style={{
+          marginTop: 18,
+          borderRadius: 20,
+          background: WHITE_GLOVE_GRADIENT,
+          boxShadow: '0 12px 32px rgba(0,0,0,0.45)',
+        }}
+        bodyStyle={{ padding: 18 }}
+      >
+        <Space direction="vertical" size={8} style={{ width: '100%' }}>
+          <Text
+            strong
+            style={{
+              color: 'rgba(255,255,255,0.9)',
+              fontSize: 12,
+              textTransform: 'uppercase',
+              letterSpacing: 1,
+            }}
+          >
+            White-glove partnership
+          </Text>
+          <Title
+            level={4}
+            style={{
+              color: 'white',
+              margin: 0,
+              lineHeight: 1.2,
+            }}
+          >
+            Design and launch your next BTF with QuantAMM
+          </Title>
+          <Paragraph
+            style={{
+              color: 'rgba(255,255,255,0.9)',
+              marginBottom: 8,
+            }}
+          >
+            QuantAMM offers a white-glove service for partners to use these BTF
+            types. If you&apos;re interested in a specific type, contact us at{' '}
+            <a
+              href={`mailto:${PARTNERSHIP_EMAIL}`}
+              style={{ color: 'inherit', textDecoration: 'underline' }}
+            >
+              {PARTNERSHIP_EMAIL}
+            </a>
+            .
+          </Paragraph>
+          <Button
+            size="large"
+            type="primary"
+            icon={<ArrowRightOutlined />}
+            href={`mailto:${PARTNERSHIP_EMAIL}`}
+          >
+            Email our team
+          </Button>
+        </Space>
+      </Card>
+    );
+  }
+
+  // desktop / tablet variant
+  return (
+    <Card
+      bordered={false}
+      style={{
+        marginTop: 18, // keep it visually close to the cards
+        marginBottom: 4,
+        borderRadius: 24,
+        background: WHITE_GLOVE_GRADIENT,
+        boxShadow: '0 14px 36px rgba(0,0,0,0.5)',
+      }}
+      bodyStyle={{ padding: 22 }}
+    >
+      <Row gutter={[16, 8]} align="middle">
+        <Col xs={24} md={16}>
+          <Text
+            strong
+            style={{
+              color: 'rgba(255,255,255,0.9)',
+              fontSize: 12,
+              textTransform: 'uppercase',
+              letterSpacing: 1,
+            }}
+          >
+            White-glove partnership
+          </Text>
+          <Title
+            level={3}
+            style={{
+              color: 'white',
+              marginTop: 4,
+              marginBottom: 8,
+            }}
+          >
+            Build your next BTF with QuantAMM
+          </Title>
+          <Paragraph
+            style={{
+              color: 'rgba(255,255,255,0.9)',
+              marginBottom: 0,
+              maxWidth: 640,
+            }}
+          >
+            QuantAMM offers a white-glove service for partners to design, launch
+            and operate these BTF types. If you&apos;re interested in a specific
+            type, contact us at{' '}
+            <a
+              href={`mailto:${PARTNERSHIP_EMAIL}`}
+              style={{
+                color: 'inherit',
+                textDecoration: 'underline',
+              }}
+            >
+              {PARTNERSHIP_EMAIL}
+            </a>
+            .
+          </Paragraph>
+        </Col>
+        <Col xs={24} md={8} style={{ textAlign: 'right', marginTop: 8 }}>
+          <Button
+            size="large"
+            type="primary"
+            icon={<ArrowRightOutlined />}
+            href={`mailto:${PARTNERSHIP_EMAIL}`}
+          >
+            Email our team
+          </Button>
+        </Col>
+      </Row>
+    </Card>
+  );
+}
 
 export function BtfTypes({ backgroundColor = '#2c496b' }: VisionOverviewProps) {
   const screens = useBreakpoint();
-  const [activeIndex, setActiveIndex] = React.useState(0);
 
-  // For mobile: render an accordion version of every card
+  // Mobile: accordion interaction
   if (!screens.md) {
     return (
       <Row style={{ height: '100%', width: '100%' }}>
@@ -109,12 +291,7 @@ export function BtfTypes({ backgroundColor = '#2c496b' }: VisionOverviewProps) {
             borderColourOverride=""
           >
             <div style={{ height: '100%', padding: '16px 12px' }}>
-              <Title level={2} style={{ color: 'white', marginBottom: 8 }}>
-                Building the Future: BTF Types
-              </Title>
-              <Text style={{ color: 'rgba(255,255,255,0.85)' }}>
-                Explore the different BTF types and see what each one offers.
-              </Text>
+              <BtfHeader />
 
               <Collapse
                 accordion
@@ -149,46 +326,20 @@ export function BtfTypes({ backgroundColor = '#2c496b' }: VisionOverviewProps) {
                       </Paragraph>
 
                       <Space wrap style={{ marginBottom: 12 }}>
-                        {toBenefitTags(btf.benefits).map((b) => (
-                          <Tag key={b}>{b}</Tag>
+                        {btf.benefits.map((b) => (
+                          <Col key={b[0]} span={24}>
+                            <Tooltip title={b[1]}>
+                              <Tag>{b[0]}</Tag>
+                            </Tooltip>
+                          </Col>
                         ))}
-                      </Space>
-
-                      {btf.partnerImgSrc?.length ? (
-                        <Space wrap style={{ marginBottom: 12 }}>
-                          {btf.partnerImgSrc.map((src, idx) => (
-                            <Image
-                              key={idx}
-                              src={src}
-                              width={24}
-                              height={24}
-                              preview={false}
-                              style={{ objectFit: 'contain' }}
-                            />
-                          ))}
-                        </Space>
-                      ) : null}
-
-                      <Space align="center" style={{ width: '100%' }}>
-                        <Text type="secondary" style={{ flex: 1 }}>
-                          {btf.examples || 'No examples yet'}
-                        </Text>
-                        <Button
-                          type="primary"
-                          size="small"
-                          href={btf.exampleLink}
-                          target={btf.exampleLink ? '_blank' : undefined}
-                          rel={btf.exampleLink ? 'noopener noreferrer' : undefined}
-                          disabled={!btf.exampleLink}
-                          icon={<ArrowRightOutlined />}
-                        >
-                          View
-                        </Button>
                       </Space>
                     </Card>
                   ),
                 }))}
               />
+
+              <WhiteGloveCta variant="mobile" />
             </div>
           </ProductItemBackground>
         </Col>
@@ -196,9 +347,7 @@ export function BtfTypes({ backgroundColor = '#2c496b' }: VisionOverviewProps) {
     );
   }
 
-  // Desktop/tablet layout: left list + right detail
-  const selected = BTF_TYPES[activeIndex];
-
+  // Desktop / tablet: 4 aligned columns
   return (
     <Row style={{ height: '100%', width: '100%' }}>
       <Col span={24} style={{ height: '100%' }}>
@@ -208,233 +357,129 @@ export function BtfTypes({ backgroundColor = '#2c496b' }: VisionOverviewProps) {
           backgroundColourOverride={backgroundColor}
           borderColourOverride=""
         >
-          <Layout
+          <div
             style={{
               height: '100%',
-              background: 'transparent',
-              overflow: 'hidden',
+              padding: 24,
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 24,
             }}
           >
-            <Sider
-              width={300}
-              style={{
-                background: 'transparent',
-                padding: 16,
-                borderRight: '1px solid rgba(255,255,255,0.12)',
-                overflow: 'hidden',
-              }}
-            >
-              <Title level={3} style={{ color: 'white', margin: 0 }}>
-                BTF Types
-              </Title>
-              <Text style={{ color: 'rgba(255,255,255,0.85)' }}>
-                Pick one to learn more
-              </Text>
+            <BtfHeader />
 
+            <div style={{ flex: 1, overflow: 'hidden' }}>
               <div
                 style={{
-                  marginTop: 12,
-                  height: 'calc(100% - 56px)',
+                  height: '100%',
                   overflowY: 'auto',
                   paddingRight: 4,
                 }}
               >
-                <List
-                  dataSource={BTF_TYPES}
-                  split={false}
-                  renderItem={(btf, index) => (
-                    <List.Item
-                      onClick={() => setActiveIndex(index)}
-                      style={{
-                        cursor: 'pointer',
-                        padding: 0,
-                        marginBottom: 12,
-                      }}
-                    >
+                <Row gutter={[16, 16]} align="stretch">
+                  {BTF_TYPES.map((btf) => (
+                    <Col key={btf.type} xs={24} sm={12} md={12} lg={6}>
                       <Card
                         hoverable
-                        onClick={() => setActiveIndex(index)}
-                        bodyStyle={{ padding: 12 }}
+                        bordered={false}
                         style={{
-                          width: '100%',
-                          borderRadius: 12,
-                          border:
-                            index === activeIndex
-                              ? '1px solid #1677ff'
-                              : undefined,
-                          boxShadow:
-                            index === activeIndex
-                              ? '0 0 0 2px rgba(22,119,255,0.15)'
-                              : undefined,
+                          borderRadius: 24,
+                          height: '100%',
                         }}
+                        bodyStyle={{ padding: 24, height: '100%' }}
                       >
-                        <Space align="center">
-                          {btf.typeImgSrc ? (
-                            <Image
-                              src={btf.typeImgSrc}
-                              width={28}
-                              height={28}
-                              preview={false}
-                              style={{ borderRadius: 6, objectFit: 'cover' }}
-                            />
-                          ) : (
-                            <CheckCircleTwoTone twoToneColor="#52c41a" />
-                          )}
-                          <div>
-                            <Text strong>{btf.type}</Text>
-                            <div style={{ lineHeight: 1 }}>
-                              <Text type="secondary" style={{ fontSize: 12 }}>
-                                {toBenefitTags(btf.benefits)[0] || 'Learn more'}
-                              </Text>
+                        <div
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            height: '100%',
+                          }}
+                        >
+                          {/* Header (fixed min height so all titles line up) */}
+                          <div
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: 12,
+                              marginBottom: 16,
+                              minHeight: HEADER_MIN_HEIGHT,
+                            }}
+                          >
+                            {btf.typeImgSrc ? (
+                              <Image
+                                src={btf.typeImgSrc}
+                                width={32}
+                                height={32}
+                                preview={false}
+                                style={{ borderRadius: 8, objectFit: 'cover' }}
+                              />
+                            ) : (
+                              <CheckCircleTwoTone
+                                twoToneColor="#52c41a"
+                                style={{ fontSize: 32 }}
+                              />
+                            )}
+                            <Title level={4} style={{ margin: 0 }}>
+                              {btf.type}
+                            </Title>
+                          </div>
+
+                          {/* Description */}
+                          <div
+                            style={{
+                              minHeight: DESCRIPTION_MIN_HEIGHT,
+                              marginBottom: 16,
+                            }}
+                          >
+                            <Paragraph style={{ marginBottom: 0 }}>
+                              {btf.description}
+                            </Paragraph>
+                          </div>
+
+                          {/* Key benefits */}
+                          <div
+                            style={{
+                              minHeight: BENEFITS_MIN_HEIGHT,
+                              marginBottom: 16,
+                            }}
+                          >
+                            <Text strong>Key benefits</Text>
+                            <div style={{ marginTop: 8 }}>
+                              {btf.benefits.map((b) => (
+                                <Col
+                                  key={b[0]}
+                                  span={24}
+                                  style={{
+                                    marginLeft: '0',
+                                    marginTop: '5px',
+                                    padding: 0,
+                                  }}
+                                >
+                                  <Tooltip title={b[1]}>
+                                    <Tag>{b[0]}</Tag>
+                                  </Tooltip>
+                                </Col>
+                              ))}
                             </div>
                           </div>
-                        </Space>
+                        </div>
                       </Card>
-                    </List.Item>
-                  )}
-                />
+                    </Col>
+                  ))}
+                </Row>
+
+                {BTF_TYPES.length === 0 && (
+                  <Empty
+                    description="No BTF types configured"
+                    image={Empty.PRESENTED_IMAGE_SIMPLE}
+                    style={{ marginTop: 32 }}
+                  />
+                )}
+
+                <WhiteGloveCta variant="desktop" />
               </div>
-            </Sider>
-
-            <Content
-              style={{
-                padding: 16,
-                overflow: 'hidden',
-              }}
-            >
-              <Row style={{ height: '100%' }} gutter={[16, 16]}>
-                <Col span={24} style={{ height: 72 }}>
-                  <Title level={2} style={{ color: 'white', margin: 0 }}>
-                    Building the Future: BTF Types
-                  </Title>
-                  <Text style={{ color: 'rgba(255,255,255,0.85)' }}>
-                    Explore the various BTF initiatives shaping tomorrow.
-                  </Text>
-                </Col>
-
-                <Col span={24} style={{ height: 'calc(100% - 72px)' }}>
-                  <div
-                    style={{
-                      height: '100%',
-                      overflowY: 'auto',
-                      paddingRight: 4,
-                    }}
-                  >
-                    <Card
-                      bordered={false}
-                      style={{
-                        borderRadius: 16,
-                      }}
-                      bodyStyle={{ padding: 20 }}
-                    >
-                      <Space direction="vertical" size={16} style={{ width: '100%' }}>
-                        <Space align="center" size={16}>
-                          {selected?.typeImgSrc ? (
-                            <Image
-                              src={selected.typeImgSrc}
-                              width={40}
-                              height={40}
-                              preview={false}
-                              style={{ borderRadius: 8, objectFit: 'cover' }}
-                            />
-                          ) : (
-                            <CheckCircleTwoTone twoToneColor="#52c41a" style={{ fontSize: 32 }} />
-                          )}
-                          <Title level={3} style={{ margin: 0 }}>
-                            {selected?.type ?? '—'}
-                          </Title>
-                        </Space>
-
-                        {selected ? (
-                          <>
-                            <Paragraph style={{ marginBottom: 0 }}>
-                              {selected.description}
-                            </Paragraph>
-
-                            <div>
-                              <Text strong>Key benefits</Text>
-                              <div style={{ marginTop: 8 }}>
-                                <Space wrap>
-                                  {toBenefitTags(selected.benefits).map((b) => (
-                                    <Tag key={b}>{b}</Tag>
-                                  ))}
-                                </Space>
-                              </div>
-                            </div>
-
-                            {selected.partnerImgSrc?.length ? (
-                              <div>
-                                <Text strong>Partners</Text>
-                                <div style={{ marginTop: 8 }}>
-                                  <Space wrap>
-                                    {selected.partnerImgSrc.map((src, i) => (
-                                      <Image
-                                        key={`partner-${i}`}
-                                        src={src}
-                                        width={28}
-                                        height={28}
-                                        preview={false}
-                                        style={{ objectFit: 'contain' }}
-                                      />
-                                    ))}
-                                  </Space>
-                                </div>
-                              </div>
-                            ) : null}
-
-                            <Row align="middle" gutter={[12, 12]}>
-                              <Col flex="auto">
-                                <Text type="secondary">
-                                  {selected.examples || 'No examples yet'}
-                                </Text>
-                              </Col>
-                              <Col>
-                                <Button
-                                  type="primary"
-                                  icon={<ArrowRightOutlined />}
-                                  href={selected.exampleLink}
-                                  target={selected.exampleLink ? '_blank' : undefined}
-                                  rel={
-                                    selected.exampleLink
-                                      ? 'noopener noreferrer'
-                                      : undefined
-                                  }
-                                  disabled={!selected.exampleLink}
-                                >
-                                  View example
-                                </Button>
-                              </Col>
-                              {selected.exampleImgSrc?.length ? (
-                                <Col span={24}>
-                                  <Space wrap>
-                                    {selected.exampleImgSrc.map((src, i) => (
-                                      <Image
-                                        key={`ex-${i}`}
-                                        src={src}
-                                        width={48}
-                                        height={32}
-                                        preview={false}
-                                        style={{
-                                          borderRadius: 6,
-                                          objectFit: 'cover',
-                                        }}
-                                      />
-                                    ))}
-                                  </Space>
-                                </Col>
-                              ) : null}
-                            </Row>
-                          </>
-                        ) : (
-                          <Empty description="Select a BTF type to view details" />
-                        )}
-                      </Space>
-                    </Card>
-                  </div>
-                </Col>
-              </Row>
-            </Content>
-          </Layout>
+            </div>
+          </div>
         </ProductItemBackground>
       </Col>
     </Row>
