@@ -6,6 +6,7 @@ import { TimelineMobile } from './timelineMobile';
 import { ContactCompanyMobile } from './contactCompany';
 import { StrategySummaryMobile } from './strategySummaryMobile';
 import { ProductBannerProps } from '../desktop/bannerProductSection';
+import { BtfTypesMobile } from './btfTypesMobile';
 
 export function LandingPageMobile(props: ProductBannerProps) {
   
@@ -14,6 +15,7 @@ export function LandingPageMobile(props: ProductBannerProps) {
       <BannerMobile productData={props.productData} />
       <QuantAMMExplainerMobile />
       <StrategySummaryMobile />
+      <BtfTypesMobile />
       <ResearchExplorerMobile />
       <VisionOverviewMobile />
       <TimelineMobile />
