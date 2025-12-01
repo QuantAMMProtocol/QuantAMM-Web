@@ -354,7 +354,7 @@ export const truflationBitcoinFactsheetData: FactsheetModel = {
   ],
   iconTitle: 'Truflation Bitcoin',
   iconDescription: ['Truflation Bitcoin BTF', 'BTC vault curated by Truflation'],
-  status: 'NOV 2025',
+  status: 'DEC 2025',
   iconOpacity: 1,
   iconFocus: true,
   depositorBadges: {
