@@ -75,6 +75,7 @@ export const loadPriceHistoryAsync =
           dailyPriceHistoryMap: fullPriceMap,
           dailyReturns: timesteps,
           coinComparisons: new Map<string, CoinComparison>(),
+          deploymentByChain: coin.deploymentByChain,
         })
       );
     }

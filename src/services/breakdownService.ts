@@ -7,6 +7,7 @@ import {
 import {
   CoinComparison,
   CoinPrice,
+  DeployedToken,
 } from '../features/simulationRunConfiguration/simulationRunConfigModels';
 
 // Declare the Pool type with new possible values
@@ -138,6 +139,7 @@ export const convertBreakdownDtoToBreakdown = (
               dailyPriceHistoryMap: new Map<number, CoinPrice>(),
               dailyReturns: new Map<number, ReturnTimeStep>(),
               coinComparisons: new Map<string, CoinComparison>(),
+              deploymentByChain: new Map<string, DeployedToken>(),
             },
             amount: constituent.amount,
             marketValue: constituent.marketValue,
