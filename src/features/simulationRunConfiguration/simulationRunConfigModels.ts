@@ -64,6 +64,7 @@ export interface UpdateRuleParameter {
   factorValue: string;
   minValue: string;
   maxValue: string;
+  smartContractSortOrder: number;
 }
 
 export interface UpdateRule {

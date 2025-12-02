@@ -672,6 +672,7 @@ export const clonePool = (originalPool: LiquidityPool): LiquidityPool => {
             factorValue: x.factorValue,
             minValue: x.minValue,
             maxValue: x.maxValue,
+            smartContractSortOrder: x.smartContractSortOrder,
             applicableCoins: x.applicableCoins.map((x) => x),
           };
         }
@@ -831,6 +832,7 @@ export const clonePoolFingerPrint = (
             factorValue: x.factorValue,
             minValue: x.minValue,
             maxValue: x.maxValue,
+            smartContractSortOrder: x.smartContractSortOrder,
             applicableCoins: x.applicableCoins.map((x) => x),
           };
         }

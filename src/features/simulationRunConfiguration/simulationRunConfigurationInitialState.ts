@@ -76,6 +76,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '0',
           minValue: '-6',
           maxValue: '5000',
+          smartContractSortOrder: 0,
         },
         {
           factorName: 'memory_days',
@@ -86,6 +87,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '10',
           minValue: '1',
           maxValue: '1095',
+          smartContractSortOrder: 1,
         },
       ],
     },
@@ -215,6 +217,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '1.0',
           minValue: '0.0',
           maxValue: '1.0',
+          smartContractSortOrder: 0,
         },
         {
           factorName: 'noise_trader_ratio',
@@ -225,6 +228,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '0.0',
           minValue: '0.0',
           maxValue: '10.0',
+          smartContractSortOrder: 1,
         },
       ],
       applicablePoolTypes: ['CowAMM Weighted'],
@@ -269,6 +273,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '10',
           minValue: '0',
           maxValue: '200000',
+          smartContractSortOrder: 0,
         },
         {
           factorName: 'beta',
@@ -279,6 +284,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '20',
           minValue: '0',
           maxValue: '200000',
+          smartContractSortOrder: 1,
         },
       ],
       applicablePoolTypes: ['Gyroscope'],
@@ -301,6 +307,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '10',
           minValue: '0',
           maxValue: '200000',
+          smartContractSortOrder: 0,
         },
         {
           factorName: 'beta',
@@ -311,6 +318,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '20',
           minValue: '0',
           maxValue: '200000',
+          smartContractSortOrder: 1,
         },
       ],
       applicablePoolTypes: ['LVR for Gyroscope'],
@@ -333,6 +341,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '10',
           minValue: '0',
           maxValue: '200000',
+          smartContractSortOrder: 0,
         },
         {
           factorName: 'beta',
@@ -343,6 +352,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '20',
           minValue: '0',
           maxValue: '200000',
+          smartContractSortOrder: 1,
         },
       ],
       applicablePoolTypes: ['RVR for Gyroscope'],
@@ -407,6 +417,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '4',
           minValue: '0',
           maxValue: '5000',
+          smartContractSortOrder: 0,
         },
         {
           factorName: 'memory_days',
@@ -417,6 +428,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '10',
           minValue: '1',
           maxValue: '1095',
+          smartContractSortOrder: 1,
         },
       ],
     },
@@ -442,6 +454,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '4',
           minValue: '0',
           maxValue: '5000',
+          smartContractSortOrder: 0,
         },
         {
           factorName: 'memory_days',
@@ -452,6 +465,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '10',
           minValue: '1',
           maxValue: '1095',
+          smartContractSortOrder: 1,
         },
       ],
     },
@@ -480,6 +494,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '12',
           minValue: '0',
           maxValue: '5000',
+          smartContractSortOrder: 0,
         },
         {
           factorName: 'memory_days',
@@ -490,6 +505,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '10',
           minValue: '1',
           maxValue: '1095',
+          smartContractSortOrder: 1,
         },
         {
           factorName: 'exponent',
@@ -500,6 +516,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '2',
           minValue: '0',
           maxValue: '20',
+          smartContractSortOrder: 2,
         },
         {
           factorName: 'amplitude',
@@ -510,6 +527,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '1',
           minValue: '0',
           maxValue: '3000',
+          smartContractSortOrder: 3,
         },
         {
           factorName: 'width',
@@ -519,6 +537,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '1',
           minValue: '0',
           maxValue: '400',
+          smartContractSortOrder: 4,
         },
         {
           factorName: 'pre_exp_scaling',
@@ -528,6 +547,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '0.5',
           minValue: '0',
           maxValue: '400',
+          smartContractSortOrder: 5,
         },
       ],
     },
@@ -550,6 +570,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '12',
           minValue: '-100',
           maxValue: '5000',
+          smartContractSortOrder: 0,
         },
         {
           factorName: 'memory_days_2',
@@ -559,6 +580,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '10',
           minValue: '1',
           maxValue: '1095',
+          smartContractSortOrder: 2,
         },
         {
           factorName: 'memory_days_1',
@@ -568,6 +590,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '30',
           minValue: '1',
           maxValue: '1095',
+          smartContractSortOrder: 3,
         },
       ],
     },
@@ -590,6 +613,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '15.0',
           minValue: '0',
           maxValue: '5000',
+          smartContractSortOrder: 4,
         },
         {
           factorName: 'threshold_up',
@@ -599,6 +623,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '0.0125',
           minValue: '0',
           maxValue: '5000',
+          smartContractSortOrder: 0,
         },
         {
           factorName: 'threshold_down',
@@ -608,6 +633,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '-0.0125',
           minValue: '-5000',
           maxValue: '0',
+          smartContractSortOrder: 0,
         },
         {
           factorName: 'flat_buffer_up',
@@ -617,6 +643,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '0.005',
           minValue: '0',
           maxValue: '5000',
+          smartContractSortOrder: 1,
         },
         {
           factorName: 'flat_buffer_down',
@@ -626,6 +653,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '-0.005',
           minValue: '-5000',
           maxValue: '0',
+          smartContractSortOrder: 1,
         },
         {
           factorName: 'confirm_up_days',
@@ -635,6 +663,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '5',
           minValue: '0',
           maxValue: '5000',
+          smartContractSortOrder: 2,
         },
         {
           factorName: 'confirm_down_days',
@@ -644,6 +673,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '5',
           minValue: '0',
           maxValue: '5000',
+          smartContractSortOrder: 2,
         },
         {
           factorName: 'confirm_flat_days',
@@ -653,6 +683,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '4',
           minValue: '0',
           maxValue: '5000',
+          smartContractSortOrder: 3,
         },
       ],
     },
@@ -681,6 +712,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '12',
           minValue: '0',
           maxValue: '5000',
+          smartContractSortOrder: 1,
         },
         {
           factorName: 'memory_days',
@@ -691,6 +723,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '10',
           minValue: '1',
           maxValue: '1095',
+          smartContractSortOrder: 2,
         },
         {
           factorName: 'exponent',
@@ -701,6 +734,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '2',
           minValue: '0',
           maxValue: '20',
+          smartContractSortOrder: 3,
         },
       ],
     },
@@ -729,6 +763,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '10',
           minValue: '1',
           maxValue: '1095',
+          smartContractSortOrder: 1,
         },
         {
           factorName: 'memory_days_2',
@@ -739,6 +774,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '10',
           minValue: '1',
           maxValue: '1095',
+          smartContractSortOrder: 2,
         },
       ],
     },
@@ -766,6 +802,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '4',
           minValue: '0',
           maxValue: '5000',
+          smartContractSortOrder: 1,
         },
         {
           factorName: 'memory_days',
@@ -776,6 +813,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '10',
           minValue: '1',
           maxValue: '1095',
+          smartContractSortOrder: 2,
         },
       ],
     },
@@ -801,6 +839,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '4',
           minValue: '0',
           maxValue: '5000',
+          smartContractSortOrder: 1,
         },
         {
           factorName: 'memory_days',
@@ -811,6 +850,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '10',
           minValue: '1',
           maxValue: '1095',
+          smartContractSortOrder: 2,
         },
       ],
     },
@@ -839,6 +879,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '12',
           minValue: '0',
           maxValue: '5000',
+          smartContractSortOrder: 1,
         },
         {
           factorName: 'memory_days',
@@ -849,6 +890,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '10',
           minValue: '1',
           maxValue: '1095',
+          smartContractSortOrder: 2,
         },
         {
           factorName: 'exponent',
@@ -859,6 +901,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '2',
           minValue: '0',
           maxValue: '20',
+          smartContractSortOrder: 3,
         },
         {
           factorName: 'amplitude',
@@ -869,6 +912,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '1',
           minValue: '0',
           maxValue: '20',
+          smartContractSortOrder: 4,
         },
         {
           factorName: 'width',
@@ -878,6 +922,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '1',
           minValue: '0',
           maxValue: '400',
+          smartContractSortOrder: 5,
         },
         {
           factorName: 'pre_exp_scaling',
@@ -887,6 +932,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '0.5',
           minValue: '0',
           maxValue: '400',
+          smartContractSortOrder: 6,
         },
       ],
     },
@@ -909,6 +955,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '12',
           minValue: '-100',
           maxValue: '5000',
+          smartContractSortOrder: 1,
         },
         {
           factorName: 'memory_days_2',
@@ -918,6 +965,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '10',
           minValue: '1',
           maxValue: '1095',
+          smartContractSortOrder: 2,
         },
         {
           factorName: 'memory_days_1',
@@ -927,6 +975,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '30',
           minValue: '1',
           maxValue: '1095',
+          smartContractSortOrder: 3,
         },
       ],
     },
@@ -955,6 +1004,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '12',
           minValue: '0',
           maxValue: '5000',
+          smartContractSortOrder: 1,
         },
         {
           factorName: 'memory_days',
@@ -965,6 +1015,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '10',
           minValue: '1',
           maxValue: '1095',
+          smartContractSortOrder: 2,
         },
         {
           factorName: 'exponent',
@@ -975,6 +1026,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '2',
           minValue: '0',
           maxValue: '20',
+          smartContractSortOrder: 3,
         },
       ],
     },
@@ -1003,6 +1055,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '10',
           minValue: '1',
           maxValue: '1095',
+          smartContractSortOrder: 1,
         },
         {
           factorName: 'memory_days_2',
@@ -1013,6 +1066,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '10',
           minValue: '1',
           maxValue: '1095',
+          smartContractSortOrder: 2,
         },
       ],
     },
@@ -1040,6 +1094,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '4',
           minValue: '0',
           maxValue: '5000',
+          smartContractSortOrder: 1,
         },
         {
           factorName: 'memory_days',
@@ -1050,6 +1105,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '10',
           minValue: '1',
           maxValue: '1095',
+          smartContractSortOrder: 2,
         },
       ],
     },
@@ -1075,6 +1131,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '4',
           minValue: '0',
           maxValue: '5000',
+          smartContractSortOrder: 1,
         },
         {
           factorName: 'memory_days',
@@ -1085,6 +1142,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '10',
           minValue: '1',
           maxValue: '1095',
+          smartContractSortOrder: 2,
         },
       ],
     },
@@ -1113,6 +1171,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '12',
           minValue: '0',
           maxValue: '5000',
+          smartContractSortOrder: 1,
         },
         {
           factorName: 'memory_days',
@@ -1123,6 +1182,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '10',
           minValue: '1',
           maxValue: '1095',
+          smartContractSortOrder: 2,
         },
         {
           factorName: 'exponent',
@@ -1133,6 +1193,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '2',
           minValue: '0',
           maxValue: '20',
+          smartContractSortOrder: 3,
         },
         {
           factorName: 'amplitude',
@@ -1143,6 +1204,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '1',
           minValue: '0',
           maxValue: '20',
+          smartContractSortOrder: 4,
         },
         {
           factorName: 'width',
@@ -1152,6 +1214,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '1',
           minValue: '0',
           maxValue: '400',
+          smartContractSortOrder: 5,
         },
         {
           factorName: 'pre_exp_scaling',
@@ -1161,6 +1224,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '0.5',
           minValue: '0',
           maxValue: '400',
+          smartContractSortOrder: 6,
         },
       ],
     },
@@ -1183,6 +1247,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '12',
           minValue: '-100',
           maxValue: '5000',
+          smartContractSortOrder: 1,
         },
         {
           factorName: 'memory_days_2',
@@ -1192,6 +1257,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '10',
           minValue: '1',
           maxValue: '1095',
+          smartContractSortOrder: 2,
         },
         {
           factorName: 'memory_days_1',
@@ -1201,6 +1267,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '30',
           minValue: '1',
           maxValue: '1095',
+          smartContractSortOrder: 3,
         },
       ],
     },
@@ -1229,6 +1296,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '12',
           minValue: '0',
           maxValue: '5000',
+          smartContractSortOrder: 1,
         },
         {
           factorName: 'memory_days',
@@ -1239,6 +1307,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '10',
           minValue: '1',
           maxValue: '1095',
+          smartContractSortOrder: 2,
         },
         {
           factorName: 'exponent',
@@ -1249,6 +1318,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '2',
           minValue: '0',
           maxValue: '20',
+          smartContractSortOrder: 3,
         },
       ],
     },
@@ -1277,6 +1347,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '10',
           minValue: '1',
           maxValue: '1095',
+          smartContractSortOrder: 1,
         },
         {
           factorName: 'memory_days_2',
@@ -1287,6 +1358,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorValue: '10',
           minValue: '1',
           maxValue: '1095',
+          smartContractSortOrder: 2,
         },
       ],
     },
@@ -1975,6 +2047,7 @@ export const ConfigInitialState: SimulationRunConfig = {
             factorValue: '0',
             minValue: '-6',
             maxValue: '5000',
+            smartContractSortOrder: 0,
           },
           {
             factorName: 'memory_days',
@@ -1985,6 +2058,7 @@ export const ConfigInitialState: SimulationRunConfig = {
             factorValue: '1',
             minValue: '1',
             maxValue: '1095',
+            smartContractSortOrder: 0,
           },
         ],
       },
