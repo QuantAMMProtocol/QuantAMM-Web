@@ -2,6 +2,7 @@ import { ReturnTimeStep } from '../simulationResults/simulationResultSummaryMode
 import {
   CoinComparison,
   CoinPrice,
+  DeployedToken,
   SimulationRunConfig,
 } from './simulationRunConfigModels';
 
@@ -578,7 +579,7 @@ export const ConfigInitialState: SimulationRunConfig = {
       updateRuleTrainUrl: 'runTraining',
       applicablePoolTypes: ['QuantAMM'],
       updateRuleResultProfileSummary:
-        "TODO MW explanation of truflation regime strat?",
+        'TODO MW explanation of truflation regime strat?',
       heatmapKeys: [],
       updateRuleParameters: [
         {
@@ -1317,6 +1318,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
+      deploymentByChain: new Map<string, DeployedToken>(),
     },
     {
       coinName: 'Ethereum',
@@ -1334,6 +1336,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
+      deploymentByChain: new Map<string, DeployedToken>(),
     },
     {
       coinName: 'Ripple',
@@ -1351,6 +1354,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
+      deploymentByChain: new Map<string, DeployedToken>(),
     },
     {
       coinName: 'Solana',
@@ -1368,6 +1372,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
+      deploymentByChain: new Map<string, DeployedToken>(),
     },
     {
       coinName: 'Binance',
@@ -1385,6 +1390,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
+      deploymentByChain: new Map<string, DeployedToken>(),
     },
     {
       coinName: 'USDCoin',
@@ -1402,6 +1408,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
+      deploymentByChain: new Map<string, DeployedToken>(),
     },
     {
       coinName: 'DogeCoin',
@@ -1419,6 +1426,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
+      deploymentByChain: new Map<string, DeployedToken>(),
     },
     {
       coinName: 'Cardano',
@@ -1436,6 +1444,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
+      deploymentByChain: new Map<string, DeployedToken>(),
     },
     {
       coinName: 'Tron',
@@ -1453,6 +1462,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
+      deploymentByChain: new Map<string, DeployedToken>(),
     },
     {
       coinName: 'Chainlink',
@@ -1470,6 +1480,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
+      deploymentByChain: new Map<string, DeployedToken>(),
     },
     {
       coinName: 'Avalanche',
@@ -1487,6 +1498,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
+      deploymentByChain: new Map<string, DeployedToken>(),
     },
     {
       coinName: 'Stellar',
@@ -1504,6 +1516,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
+      deploymentByChain: new Map<string, DeployedToken>(),
     },
     {
       coinName: 'Shiba Inu',
@@ -1521,6 +1534,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
+      deploymentByChain: new Map<string, DeployedToken>(),
     },
     {
       coinName: 'Uniswap',
@@ -1538,6 +1552,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
+      deploymentByChain: new Map<string, DeployedToken>(),
     },
     {
       coinName: 'AAVE',
@@ -1555,6 +1570,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
+      deploymentByChain: new Map<string, DeployedToken>(),
     },
     {
       coinName: 'SONIC',
@@ -1572,6 +1588,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
+      deploymentByChain: new Map<string, DeployedToken>(),
     },
     {
       coinName: 'Monero',
@@ -1589,6 +1606,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
+      deploymentByChain: new Map<string, DeployedToken>(),
     },
     {
       coinName: 'Polygon',
@@ -1606,6 +1624,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
+      deploymentByChain: new Map<string, DeployedToken>(),
     },
     {
       coinName: 'Algorand',
@@ -1623,6 +1642,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
+      deploymentByChain: new Map<string, DeployedToken>(),
     },
     {
       coinName: 'Arbitrum',
@@ -1640,6 +1660,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
+      deploymentByChain: new Map<string, DeployedToken>(),
     },
     {
       coinName: 'Filecoin',
@@ -1657,6 +1678,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
+      deploymentByChain: new Map<string, DeployedToken>(),
     },
     {
       coinName: 'Cosmos',
@@ -1674,6 +1696,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
+      deploymentByChain: new Map<string, DeployedToken>(),
     },
     {
       coinName: 'EOS',
@@ -1691,6 +1714,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
+      deploymentByChain: new Map<string, DeployedToken>(),
     },
     {
       coinName: 'Maker DAO',
@@ -1708,6 +1732,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
+      deploymentByChain: new Map<string, DeployedToken>(),
     },
     {
       coinName: 'Lido',
@@ -1725,6 +1750,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
+      deploymentByChain: new Map<string, DeployedToken>(),
     },
     {
       coinName: 'DyDx',
@@ -1742,6 +1768,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
+      deploymentByChain: new Map<string, DeployedToken>(),
     },
     {
       coinName: 'Compound',
@@ -1759,6 +1786,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
+      deploymentByChain: new Map<string, DeployedToken>(),
     },
     {
       coinName: 'Curve',
@@ -1776,6 +1804,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
+      deploymentByChain: new Map<string, DeployedToken>(),
     },
     {
       coinName: 'SushiSwap',
@@ -1793,6 +1822,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
+      deploymentByChain: new Map<string, DeployedToken>(),
     },
     {
       coinName: 'Litecoin',
@@ -1810,6 +1840,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
+      deploymentByChain: new Map<string, DeployedToken>(),
     },
     {
       coinName: 'PAX Gold',
@@ -1827,6 +1858,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
+      deploymentByChain: new Map<string, DeployedToken>(),
     },
   ],
   initialLiquidityPool: {
@@ -1873,6 +1905,7 @@ export const ConfigInitialState: SimulationRunConfig = {
             },
           ],
           dailyReturns: new Map<number, ReturnTimeStep>(),
+          deploymentByChain: new Map<string, DeployedToken>(),
         },
         weight: 50,
         currentPrice: 10,
@@ -1898,6 +1931,7 @@ export const ConfigInitialState: SimulationRunConfig = {
             },
           ],
           dailyReturns: new Map<number, ReturnTimeStep>(),
+          deploymentByChain: new Map<string, DeployedToken>(),
         },
         weight: 50,
         currentPrice: 1,
@@ -1972,6 +2006,7 @@ export const ConfigInitialState: SimulationRunConfig = {
               },
             ],
             dailyReturns: new Map<number, ReturnTimeStep>(),
+            deploymentByChain: new Map<string, DeployedToken>(),
           },
           weight: 33,
           currentPrice: 10,
@@ -1997,6 +2032,7 @@ export const ConfigInitialState: SimulationRunConfig = {
               },
             ],
             dailyReturns: new Map<number, ReturnTimeStep>(),
+            deploymentByChain: new Map<string, DeployedToken>(),
           },
           weight: 33,
           currentPrice: 10,
@@ -2022,6 +2058,7 @@ export const ConfigInitialState: SimulationRunConfig = {
               },
             ],
             dailyReturns: new Map<number, ReturnTimeStep>(),
+            deploymentByChain: new Map<string, DeployedToken>(),
           },
           weight: 33,
           currentPrice: 10,

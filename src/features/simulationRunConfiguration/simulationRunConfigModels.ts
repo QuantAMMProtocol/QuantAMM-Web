@@ -15,6 +15,12 @@ export interface CoinComparison {
   trackingError: number;
 }
 
+export interface DeployedToken{
+  address: string;
+  oracles: Map<string, string>;
+  approvalStatus: boolean;
+}
+
 export interface Coin {
   coinName: string;
   coinCode: string;
@@ -22,6 +28,7 @@ export interface Coin {
   dailyPriceHistoryMap: Map<number, CoinPrice>;
   dailyReturns: Map<number, ReturnTimeStep>;
   coinComparisons: Map<string, CoinComparison>;
+  deploymentByChain: Map<string, DeployedToken>;
 }
 
 export interface CoinDto {
