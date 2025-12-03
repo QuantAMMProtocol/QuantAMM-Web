@@ -11,6 +11,7 @@ import {
 } from '../simulationRunner/simulationRunnerSlice';
 
 import { Button, Col, Divider, InputNumber, Row, Space, Tabs } from 'antd';
+import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
   removeSim,
@@ -23,6 +24,7 @@ import { SimulationResult } from '../simulationRunner/simulationRunnerDtos';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/dist/query';
 import { SimulationRunButton } from './simulationRunButton';
 import { GroupedParameters } from '../simulationRunConfiguration/poolRuleConfiguration';
+import { PoolDeploymentConfigReview } from './simulationDeploymentPreview';
 
 export interface Success {
   data: SimulationResult;
@@ -34,8 +36,6 @@ export interface Failure {
 
 export interface RunSetting {
   pool: LiquidityPool;
-  startDate: number;
-  endDate: number;
 }
 
 const { TabPane } = Tabs;
@@ -51,8 +51,19 @@ export function SimulationRunnerFinalReviewStep() {
   );
   const coinDataLoaded = useAppSelector(selectCoinPriceDataLoaded);
 
+  const [deploymentPreview, setDeploymentPreview] =
+    useState<RunSetting | null>(null);
+
   function onlyUnique(value: string, index: number, self: string[]) {
     return self.indexOf(value) === index;
+  }
+
+  if (deploymentPreview) {
+    return (
+      <PoolDeploymentConfigReview
+        pool={deploymentPreview.pool}
+      />
+    );
   }
 
   return (
@@ -167,17 +178,32 @@ export function SimulationRunnerFinalReviewStep() {
                               </Col>
                               <Col span={4}>
                                 <div style={{ padding: 5 }}>
-                                  <Button
-                                    disabled={
-                                      !coinDataLoaded || runStatusIndex == 2
-                                    }
-                                    type="primary"
-                                    onClick={() => {
-                                      dispatch(removeSim(z.id));
-                                    }}
+                                  <Space
+                                    direction="vertical"
+                                    style={{ width: '100%' }}
                                   >
-                                    Remove
-                                  </Button>
+                                    <Button
+                                      type="default"
+                                      onClick={() =>
+                                        setDeploymentPreview({
+                                          pool: z
+                                        })
+                                      }
+                                    >
+                                      Deployment Preview
+                                    </Button>
+                                    <Button
+                                      disabled={
+                                        !coinDataLoaded || runStatusIndex == 2
+                                      }
+                                      type="primary"
+                                      onClick={() => {
+                                        dispatch(removeSim(z.id));
+                                      }}
+                                    >
+                                      Remove
+                                    </Button>
+                                  </Space>
                                 </div>
                               </Col>
                             </Row>

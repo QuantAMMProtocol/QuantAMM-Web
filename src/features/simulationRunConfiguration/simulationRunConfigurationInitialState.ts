@@ -1,5 +1,7 @@
 import { ReturnTimeStep } from '../simulationResults/simulationResultSummaryModels';
 import {
+  Chain,
+  ChainDeploymentDetails,
   CoinComparison,
   CoinPrice,
   DeployedToken,
@@ -67,6 +69,7 @@ export const ConfigInitialState: SimulationRunConfig = {
       updateRuleRunUrl: 'runSimulation',
       updateRuleTrainUrl: 'runTraining',
       applicablePoolTypes: ['QuantAMM'],
+      chainDeploymentDetails: new Map<Chain, string>(),
       updateRuleParameters: [
         {
           factorName: 'k_per_day',
@@ -81,8 +84,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         {
           factorName: 'memory_days',
           factorDisplayName: 'Memory in days',
-          factorDescription:
-            'Determines how quickly the pool forgets previous data',
+          factorDescription: 'Determines how quickly the pool forgets previous data',
           applicableCoins: [],
           factorValue: '10',
           minValue: '1',
@@ -97,73 +99,63 @@ export const ConfigInitialState: SimulationRunConfig = {
     {
       name: 'HODL',
       mandatoryProperties: [],
-      shortDescription:
-        'Buy and Hold. No AMM. No fees. No impermanent loss. Run this as a benchmark',
+      shortDescription: 'Buy and Hold. No AMM. No fees. No impermanent loss. Run this as a benchmark',
       requiresPoolNumeraire: false,
     },
     {
       name: 'Balancer Weighted',
       mandatoryProperties: [],
-      shortDescription:
-        'The classic, the original, the Balancer Weighted Pool. This pool type is a constant function market maker, which means that the pool will always have liquidity for the assets in the pool. This pool type is the most common and is used in most of the pools on the platform.',
+      shortDescription: 'The classic, the original, the Balancer Weighted Pool. This pool type is a constant function market maker, which means that the pool will always have liquidity for the assets in the pool. This pool type is the most common and is used in most of the pools on the platform.',
       requiresPoolNumeraire: false,
     },
     {
       name: 'LVR for Balancer Weighted',
       mandatoryProperties: [],
-      shortDescription:
-        'The classic, the original, the Balancer Weighted Pool. This pool type is a constant function market maker, which means that the pool will always have liquidity for the assets in the pool. This pool type is the most common and is used in most of the pools on the platform.',
+      shortDescription: 'The classic, the original, the Balancer Weighted Pool. This pool type is a constant function market maker, which means that the pool will always have liquidity for the assets in the pool. This pool type is the most common and is used in most of the pools on the platform.',
       requiresPoolNumeraire: false,
     },
     {
       name: 'RVR for Balancer Weighted',
       mandatoryProperties: [],
-      shortDescription:
-        'The classic, the original, the Balancer Weighted Pool. This pool type is a constant function market maker, which means that the pool will always have liquidity for the assets in the pool. This pool type is the most common and is used in most of the pools on the platform.',
+      shortDescription: 'The classic, the original, the Balancer Weighted Pool. This pool type is a constant function market maker, which means that the pool will always have liquidity for the assets in the pool. This pool type is the most common and is used in most of the pools on the platform.',
       requiresPoolNumeraire: false,
     },
     {
       name: 'QuantAMM',
       mandatoryProperties: ['Update Rule'],
-      shortDescription:
-        'QuantAMM pools dynamically change their weight over time according to a known strategy or update rule. This allows you to appreciate value from the pool holdings not just fees',
+      shortDescription: 'QuantAMM pools dynamically change their weight over time according to a known strategy or update rule. This allows you to appreciate value from the pool holdings not just fees',
       requiresPoolNumeraire: false,
     },
     {
       name: 'LVR for QuantAMM',
       mandatoryProperties: ['Update Rule'],
-      shortDescription:
-        'QuantAMM pools dynamically change their weight over time according to a known strategy or update rule. This allows you to appreciate value from the pool holdings not just fees',
+      shortDescription: 'QuantAMM pools dynamically change their weight over time according to a known strategy or update rule. This allows you to appreciate value from the pool holdings not just fees',
       requiresPoolNumeraire: false,
     },
     {
       name: 'RVR for QuantAMM',
       mandatoryProperties: ['Update Rule'],
-      shortDescription:
-        'QuantAMM pools dynamically change their weight over time according to a known strategy or update rule. This allows you to appreciate value from the pool holdings not just fees',
+      shortDescription: 'QuantAMM pools dynamically change their weight over time according to a known strategy or update rule. This allows you to appreciate value from the pool holdings not just fees',
       requiresPoolNumeraire: false,
     },
     {
       name: 'CowAMM Weighted',
       mandatoryProperties: [],
-      shortDescription:
-        'CowAMM Weighted pools combine CowSwap with AMMs. Batching and averaging trade price means that scalpers get an average price and dont front run you.' +
+      shortDescription: 'CowAMM Weighted pools combine CowSwap with AMMs. Batching and averaging trade price means that scalpers get an average price and dont front run you.' +
         ' This means that with enough retail flow per batch, you pay the market price not the potentially distorted AMM price',
       requiresPoolNumeraire: false,
     },
     {
       name: 'LVR for CowAMM Weighted',
       mandatoryProperties: [],
-      shortDescription:
-        'CowAMM Weighted pools combine CowSwap with AMMs. Batching and averaging trade price means that scalpers get an average price and dont front run you.' +
+      shortDescription: 'CowAMM Weighted pools combine CowSwap with AMMs. Batching and averaging trade price means that scalpers get an average price and dont front run you.' +
         ' This means that with enough retail flow per batch, you pay the market price not the potentially distorted AMM price',
       requiresPoolNumeraire: false,
     },
     {
       name: 'RVR for CowAMM Weighted',
       mandatoryProperties: [],
-      shortDescription:
-        'CowAMM Weighted pools combine CowSwap with AMMs. Batching and averaging trade price means that scalpers get an average price and dont front run you.' +
+      shortDescription: 'CowAMM Weighted pools combine CowSwap with AMMs. Batching and averaging trade price means that scalpers get an average price and dont front run you.' +
         ' This means that with enough retail flow per batch, you pay the market price not the potentially distorted AMM price',
       requiresPoolNumeraire: false,
     },
@@ -193,11 +185,11 @@ export const ConfigInitialState: SimulationRunConfig = {
       updateRuleSimKey: 'hodl',
       updateRuleRunUrl: 'runSimulation',
       updateRuleTrainUrl: undefined,
-      updateRuleResultProfileSummary:
-        'Returns are the change in price relative to the intial reserves',
+      updateRuleResultProfileSummary: 'Returns are the change in price relative to the intial reserves',
       heatmapKeys: [],
       applicablePoolTypes: ['HODL'],
       updateRuleParameters: [],
+      chainDeploymentDetails: new Map<Chain, string>(),
     },
     {
       updateRuleName: 'CowAMM Weighted',
@@ -211,8 +203,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         {
           factorName: 'arb_quality',
           factorDisplayName: 'Solver efficiency',
-          factorDescription:
-            'There can be enough competition between solvers when batching to fully eliminate LVR, however they can also run sub-optimally',
+          factorDescription: 'There can be enough competition between solvers when batching to fully eliminate LVR, however they can also run sub-optimally',
           applicableCoins: [],
           factorValue: '1.0',
           minValue: '0.0',
@@ -222,8 +213,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         {
           factorName: 'noise_trader_ratio',
           factorDisplayName: 'Noise/Arb Ratio',
-          factorDescription:
-            'CowAMM shows how noise can be a multiplier of arb volume. This is that multiplier',
+          factorDescription: 'CowAMM shows how noise can be a multiplier of arb volume. This is that multiplier',
           applicableCoins: [],
           factorValue: '0.0',
           minValue: '0.0',
@@ -232,6 +222,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       applicablePoolTypes: ['CowAMM Weighted'],
+      chainDeploymentDetails: new Map<Chain, string>(),
     },
     {
       updateRuleName: 'LVR - CowAMM Weighted',
@@ -243,6 +234,7 @@ export const ConfigInitialState: SimulationRunConfig = {
       updateRuleTrainUrl: undefined,
       updateRuleParameters: [],
       applicablePoolTypes: ['LVR for CowAMM Weighted'],
+      chainDeploymentDetails: new Map<Chain, string>(),
     },
     {
       updateRuleName: 'RVR - CowAMM Weighted',
@@ -254,6 +246,7 @@ export const ConfigInitialState: SimulationRunConfig = {
       updateRuleTrainUrl: undefined,
       updateRuleParameters: [],
       applicablePoolTypes: ['RVR for CowAMM Weighted'],
+      chainDeploymentDetails: new Map<Chain, string>(),
     },
     {
       updateRuleName: 'Gyroscope',
@@ -267,8 +260,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         {
           factorName: 'alpha',
           factorDisplayName: 'Lower price bound',
-          factorDescription:
-            'Top of the price range (denominated in the numeraire token)',
+          factorDescription: 'Top of the price range (denominated in the numeraire token)',
           applicableCoins: [],
           factorValue: '10',
           minValue: '0',
@@ -278,8 +270,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         {
           factorName: 'beta',
           factorDisplayName: 'Upper price bound',
-          factorDescription:
-            'Top of the price range (denominated in the numeraire token)',
+          factorDescription: 'Top of the price range (denominated in the numeraire token)',
           applicableCoins: [],
           factorValue: '20',
           minValue: '0',
@@ -288,6 +279,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       applicablePoolTypes: ['Gyroscope'],
+      chainDeploymentDetails: new Map<Chain, string>(),
     },
     {
       updateRuleName: 'LVR - Gyroscope',
@@ -301,8 +293,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         {
           factorName: 'alpha',
           factorDisplayName: 'Lower price bound',
-          factorDescription:
-            'Top of the price range (denominated in the numeraire token)',
+          factorDescription: 'Top of the price range (denominated in the numeraire token)',
           applicableCoins: [],
           factorValue: '10',
           minValue: '0',
@@ -312,8 +303,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         {
           factorName: 'beta',
           factorDisplayName: 'Upper price bound',
-          factorDescription:
-            'Top of the price range (denominated in the numeraire token)',
+          factorDescription: 'Top of the price range (denominated in the numeraire token)',
           applicableCoins: [],
           factorValue: '20',
           minValue: '0',
@@ -322,6 +312,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       applicablePoolTypes: ['LVR for Gyroscope'],
+      chainDeploymentDetails: new Map<Chain, string>(),
     },
     {
       updateRuleName: 'RVR - Gyroscope',
@@ -335,8 +326,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         {
           factorName: 'alpha',
           factorDisplayName: 'Lower price bound',
-          factorDescription:
-            'Top of the price range (denominated in the numeraire token)',
+          factorDescription: 'Top of the price range (denominated in the numeraire token)',
           applicableCoins: [],
           factorValue: '10',
           minValue: '0',
@@ -346,8 +336,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         {
           factorName: 'beta',
           factorDisplayName: 'Upper price bound',
-          factorDescription:
-            'Top of the price range (denominated in the numeraire token)',
+          factorDescription: 'Top of the price range (denominated in the numeraire token)',
           applicableCoins: [],
           factorValue: '20',
           minValue: '0',
@@ -356,42 +345,43 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       applicablePoolTypes: ['RVR for Gyroscope'],
+      chainDeploymentDetails: new Map<Chain, string>(),
     },
     {
       updateRuleName: 'Balancer Weighted',
       updateRuleKey: 'balancer',
       updateRuleSimKey: 'balancer',
-      updateRuleResultProfileSummary:
-        'As a constant function market maker balancer suffers from impermanent loss leading to negative returns in almost all circumstances.',
+      updateRuleResultProfileSummary: 'As a constant function market maker balancer suffers from impermanent loss leading to negative returns in almost all circumstances.',
       heatmapKeys: [],
       updateRuleRunUrl: 'runSimulation',
       updateRuleTrainUrl: 'runTraining',
       updateRuleParameters: [],
       applicablePoolTypes: ['Balancer Weighted'],
+      chainDeploymentDetails: new Map<Chain, string>(),
     },
     {
       updateRuleName: 'LVR - Balancer Weighted',
       updateRuleKey: 'lvr__balancer',
       updateRuleSimKey: 'lvr__balancer',
-      updateRuleResultProfileSummary:
-        'As a constant function market maker balancer suffers from impermanent loss leading to negative returns in almost all circumstances.',
+      updateRuleResultProfileSummary: 'As a constant function market maker balancer suffers from impermanent loss leading to negative returns in almost all circumstances.',
       heatmapKeys: [],
       updateRuleRunUrl: 'runSimulation',
       updateRuleTrainUrl: undefined,
       updateRuleParameters: [],
       applicablePoolTypes: ['LVR for Balancer Weighted'],
+      chainDeploymentDetails: new Map<Chain, string>(),
     },
     {
       updateRuleName: 'RVR - Balancer Weighted',
       updateRuleKey: 'rvr__balancer',
       updateRuleSimKey: 'rvr__balancer',
-      updateRuleResultProfileSummary:
-        'As a constant function market maker balancer suffers from impermanent loss leading to negative returns in almost all circumstances.',
+      updateRuleResultProfileSummary: 'As a constant function market maker balancer suffers from impermanent loss leading to negative returns in almost all circumstances.',
       heatmapKeys: [],
       updateRuleRunUrl: 'runSimulation',
       updateRuleTrainUrl: undefined,
       updateRuleParameters: [],
       applicablePoolTypes: ['RVR for Balancer Weighted'],
+      chainDeploymentDetails: new Map<Chain, string>(),
     },
     {
       updateRuleName: 'Momentum',
@@ -400,8 +390,8 @@ export const ConfigInitialState: SimulationRunConfig = {
       updateRuleRunUrl: 'runSimulation',
       updateRuleTrainUrl: 'runTraining',
       applicablePoolTypes: ['QuantAMM'],
-      updateRuleResultProfileSummary:
-        "One gets different returns for different values of κ, which determines how 'aggressive' the pool is, and memory length (in days), which determines how quickly the pool forgets previous data. " +
+      chainDeploymentDetails: new Map<Chain, string>(),
+      updateRuleResultProfileSummary: "One gets different returns for different values of κ, which determines how 'aggressive' the pool is, and memory length (in days), which determines how quickly the pool forgets previous data. " +
         'For good choices, this update rule greatly increases capital over HODL (and thus also Balancer) during breakouts and increases capital during sustained bull runs. ' +
         'This rule works best over long price memories, so sudden crashes are not detected and lose capital faster ' +
         'than HODL. This is not a deal-breaker, however, as the capital gain increases (as demonstrated over a super cycle) are still greater than these sharp losses. ' +
@@ -422,8 +412,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         {
           factorName: 'memory_days',
           factorDisplayName: 'Memory in days',
-          factorDescription:
-            'Determines how quickly the pool forgets previous data',
+          factorDescription: 'Determines how quickly the pool forgets previous data',
           applicableCoins: [],
           factorValue: '10',
           minValue: '1',
@@ -439,8 +428,8 @@ export const ConfigInitialState: SimulationRunConfig = {
       updateRuleRunUrl: 'runSimulation',
       updateRuleTrainUrl: 'runTraining',
       applicablePoolTypes: ['QuantAMM'],
-      updateRuleResultProfileSummary:
-        "One gets different returns for different values of κ, which determines how 'aggressive' the pool is, and memory length (in days), which determines how quickly the pool forgets previous data. " +
+      chainDeploymentDetails: new Map<Chain, string>(),
+      updateRuleResultProfileSummary: "One gets different returns for different values of κ, which determines how 'aggressive' the pool is, and memory length (in days), which determines how quickly the pool forgets previous data. " +
         'Often this rule outperforms other rules in bear runs, which makes this a useful part of ' +
         'a broader portfolio. This rule also benefits from relatively small κ/step sizes, with good results often for log2(κ)' +
         ' around -4 to 4.',
@@ -459,8 +448,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         {
           factorName: 'memory_days',
           factorDisplayName: 'Memory in days',
-          factorDescription:
-            'Determines how quickly the pool forgets previous data',
+          factorDescription: 'Determines how quickly the pool forgets previous data',
           applicableCoins: [],
           factorValue: '10',
           minValue: '1',
@@ -476,8 +464,8 @@ export const ConfigInitialState: SimulationRunConfig = {
       updateRuleRunUrl: 'runSimulation',
       updateRuleTrainUrl: 'runTraining',
       applicablePoolTypes: ['QuantAMM'],
-      updateRuleResultProfileSummary:
-        'The channel following parameters can be divided into three categories' +
+      chainDeploymentDetails: new Map<Chain, string>(),
+      updateRuleResultProfileSummary: 'The channel following parameters can be divided into three categories' +
         '1. Standard Antimomentum parameters to dictate how antimomentum works when price changes are small' +
         '2. Standard Power channel parameters to dictate how power channel works when price changes are large' +
         '3. Parameters dictating the shape of the gaussian function determining when the rule behaves more like antimomentum or power channel' +
@@ -499,8 +487,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         {
           factorName: 'memory_days',
           factorDisplayName: 'Memory in days',
-          factorDescription:
-            'Determines how quickly the pool forgets previous data',
+          factorDescription: 'Determines how quickly the pool forgets previous data',
           applicableCoins: [],
           factorValue: '10',
           minValue: '1',
@@ -510,8 +497,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         {
           factorName: 'exponent',
           factorDisplayName: 'Exponent',
-          factorDescription:
-            'Controls the exponential non-linearity that is applied to the price change signal',
+          factorDescription: 'Controls the exponential non-linearity that is applied to the price change signal',
           applicableCoins: [],
           factorValue: '2',
           minValue: '0',
@@ -521,8 +507,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         {
           factorName: 'amplitude',
           factorDisplayName: 'Amplitude',
-          factorDescription:
-            'Controls the strength of the mean reversion effect within the channel',
+          factorDescription: 'Controls the strength of the mean reversion effect within the channel',
           applicableCoins: [],
           factorValue: '1',
           minValue: '0',
@@ -558,8 +543,8 @@ export const ConfigInitialState: SimulationRunConfig = {
       updateRuleRunUrl: 'runSimulation',
       updateRuleTrainUrl: 'runTraining',
       applicablePoolTypes: ['QuantAMM'],
-      updateRuleResultProfileSummary:
-        'This rule implements a Moving Average Convergence Divergence strategy. It uses two moving averages, one short and one long, and compares their difference to determine a change in pool weights.',
+      chainDeploymentDetails: new Map<Chain, string>(),
+      updateRuleResultProfileSummary: 'This rule implements a Moving Average Convergence Divergence strategy. It uses two moving averages, one short and one long, and compares their difference to determine a change in pool weights.',
       heatmapKeys: [],
       updateRuleParameters: [
         {
@@ -601,8 +586,8 @@ export const ConfigInitialState: SimulationRunConfig = {
       updateRuleRunUrl: 'runSimulation',
       updateRuleTrainUrl: 'runTraining',
       applicablePoolTypes: ['QuantAMM'],
-      updateRuleResultProfileSummary:
-        'TODO MW explanation of truflation regime strat?',
+      chainDeploymentDetails: new Map<Chain, string>(),
+      updateRuleResultProfileSummary: 'TODO MW explanation of truflation regime strat?',
       heatmapKeys: [],
       updateRuleParameters: [
         {
@@ -694,8 +679,8 @@ export const ConfigInitialState: SimulationRunConfig = {
       updateRuleRunUrl: 'runSimulation',
       updateRuleTrainUrl: 'runTraining',
       applicablePoolTypes: ['QuantAMM'],
-      updateRuleResultProfileSummary:
-        "One gets different returns for different values of κ (how 'aggressive' the pool is), memory length in days (how quickly the pool forgets previous data) and exponent. " +
+      chainDeploymentDetails: new Map<Chain, string>(),
+      updateRuleResultProfileSummary: "One gets different returns for different values of κ (how 'aggressive' the pool is), memory length in days (how quickly the pool forgets previous data) and exponent. " +
         'The exponent, when > 1, has the effect of ' +
         'dampening down small weight changes to even smaller values and increasing the effect of larger ' +
         'weight changes. The heatmaps given have exponent = 2. It tends to perform best when a stablecoin is present in the pool. Also note ' +
@@ -717,8 +702,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         {
           factorName: 'memory_days',
           factorDisplayName: 'Memory in days',
-          factorDescription:
-            'Determines how quickly the pool forgets previous data',
+          factorDescription: 'Determines how quickly the pool forgets previous data',
           applicableCoins: [],
           factorValue: '10',
           minValue: '1',
@@ -728,8 +712,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         {
           factorName: 'exponent',
           factorDisplayName: 'Exponent',
-          factorDescription:
-            'Controls the exponential non-linearity that is applied to the price change signal',
+          factorDescription: 'Controls the exponential non-linearity that is applied to the price change signal',
           applicableCoins: [],
           factorValue: '2',
           minValue: '0',
@@ -745,8 +728,8 @@ export const ConfigInitialState: SimulationRunConfig = {
       updateRuleRunUrl: 'runSimulation',
       updateRuleTrainUrl: 'runTraining',
       applicablePoolTypes: ['QuantAMM'],
-      updateRuleResultProfileSummary:
-        "This rules has two memory lengths: 'memory_days', the memory length of the process that " +
+      chainDeploymentDetails: new Map<Chain, string>(),
+      updateRuleResultProfileSummary: "This rules has two memory lengths: 'memory_days', the memory length of the process that " +
         "estimates the inverse variance of returns (needed to calculate the currently-estimated minimum-variance portfolio); and 'mixing_memory_days', the time it takes to get to a new portfolio vector. " +
         'This rule, unsurprisingly as it aims for a minimum-variance portfolio, ' +
         'tends to lead to returns close to 0. This rule makes most sense when a stablecoin is NOT present ' +
@@ -757,8 +740,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         {
           factorName: 'memory_days_1',
           factorDisplayName: 'Variance memory in days',
-          factorDescription:
-            'Determines how quickly the pool forgets previous data when calculating asset variance',
+          factorDescription: 'Determines how quickly the pool forgets previous data when calculating asset variance',
           applicableCoins: [],
           factorValue: '10',
           minValue: '1',
@@ -768,8 +750,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         {
           factorName: 'memory_days_2',
           factorDisplayName: 'Portfolio smoothing memory in days',
-          factorDescription:
-            'Determines how quickly the pool forgets previous data when calculating the overall portfolio',
+          factorDescription: 'Determines how quickly the pool forgets previous data when calculating the overall portfolio',
           applicableCoins: [],
           factorValue: '10',
           minValue: '1',
@@ -785,8 +766,8 @@ export const ConfigInitialState: SimulationRunConfig = {
       updateRuleRunUrl: 'runSimulation',
       updateRuleTrainUrl: 'runTraining',
       applicablePoolTypes: ['LVR for QuantAMM'],
-      updateRuleResultProfileSummary:
-        "One gets different returns for different values of κ, which determines how 'aggressive' the pool is, and memory length (in days), which determines how quickly the pool forgets previous data. " +
+      chainDeploymentDetails: new Map<Chain, string>(),
+      updateRuleResultProfileSummary: "One gets different returns for different values of κ, which determines how 'aggressive' the pool is, and memory length (in days), which determines how quickly the pool forgets previous data. " +
         'For good choices, this update rule greatly increases capital over HODL (and thus also Balancer) during breakouts and increases capital during sustained bull runs. ' +
         'This rule works best over long price memories, so sudden crashes are not detected and lose capital faster ' +
         'than HODL. This is not a deal-breaker, however, as the capital gain increases (as demonstrated over a super cycle) are still greater than these sharp losses. ' +
@@ -807,8 +788,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         {
           factorName: 'memory_days',
           factorDisplayName: 'Memory in days',
-          factorDescription:
-            'Determines how quickly the pool forgets previous data',
+          factorDescription: 'Determines how quickly the pool forgets previous data',
           applicableCoins: [],
           factorValue: '10',
           minValue: '1',
@@ -824,8 +804,8 @@ export const ConfigInitialState: SimulationRunConfig = {
       updateRuleRunUrl: 'runSimulation',
       updateRuleTrainUrl: 'runTraining',
       applicablePoolTypes: ['LVR for QuantAMM'],
-      updateRuleResultProfileSummary:
-        "One gets different returns for different values of κ, which determines how 'aggressive' the pool is, and memory length (in days), which determines how quickly the pool forgets previous data. " +
+      chainDeploymentDetails: new Map<Chain, string>(),
+      updateRuleResultProfileSummary: "One gets different returns for different values of κ, which determines how 'aggressive' the pool is, and memory length (in days), which determines how quickly the pool forgets previous data. " +
         'Often this rule outperforms other rules in bear runs, which makes this a useful part of ' +
         'a broader portfolio. This rule also benefits from relatively small κ/step sizes, with good results often for log2(κ)' +
         ' around -4 to 4.',
@@ -844,8 +824,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         {
           factorName: 'memory_days',
           factorDisplayName: 'Memory in days',
-          factorDescription:
-            'Determines how quickly the pool forgets previous data',
+          factorDescription: 'Determines how quickly the pool forgets previous data',
           applicableCoins: [],
           factorValue: '10',
           minValue: '1',
@@ -861,8 +840,8 @@ export const ConfigInitialState: SimulationRunConfig = {
       updateRuleRunUrl: 'runSimulation',
       updateRuleTrainUrl: 'runTraining',
       applicablePoolTypes: ['LVR for QuantAMM'],
-      updateRuleResultProfileSummary:
-        'The channel following parameters can be divided into three categories' +
+      chainDeploymentDetails: new Map<Chain, string>(),
+      updateRuleResultProfileSummary: 'The channel following parameters can be divided into three categories' +
         '1. Standard Antimomentum parameters to dictate how antimomentum works when price changes are small' +
         '2. Standard Power channel parameters to dictate how power channel works when price changes are large' +
         '3. Parameters dictating the shape of the gaussian function determining when the rule behaves more like antimomentum or power channel' +
@@ -884,8 +863,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         {
           factorName: 'memory_days',
           factorDisplayName: 'Memory in days',
-          factorDescription:
-            'Determines how quickly the pool forgets previous data',
+          factorDescription: 'Determines how quickly the pool forgets previous data',
           applicableCoins: [],
           factorValue: '10',
           minValue: '1',
@@ -895,8 +873,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         {
           factorName: 'exponent',
           factorDisplayName: 'Exponent',
-          factorDescription:
-            'Controls the exponential non-linearity that is applied to the price change signal',
+          factorDescription: 'Controls the exponential non-linearity that is applied to the price change signal',
           applicableCoins: [],
           factorValue: '2',
           minValue: '0',
@@ -906,8 +883,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         {
           factorName: 'amplitude',
           factorDisplayName: 'Amplitude',
-          factorDescription:
-            'Controls the strength of the mean reversion effect within the channel',
+          factorDescription: 'Controls the strength of the mean reversion effect within the channel',
           applicableCoins: [],
           factorValue: '1',
           minValue: '0',
@@ -943,8 +919,8 @@ export const ConfigInitialState: SimulationRunConfig = {
       updateRuleRunUrl: 'runSimulation',
       updateRuleTrainUrl: 'runTraining',
       applicablePoolTypes: ['LVR for QuantAMM'],
-      updateRuleResultProfileSummary:
-        'This rule implements a Moving Average Convergence Divergence strategy. It uses two moving averages, one short and one long, and compares their difference to determine a change in pool weights.',
+      chainDeploymentDetails: new Map<Chain, string>(),
+      updateRuleResultProfileSummary: 'This rule implements a Moving Average Convergence Divergence strategy. It uses two moving averages, one short and one long, and compares their difference to determine a change in pool weights.',
       heatmapKeys: [],
       updateRuleParameters: [
         {
@@ -986,8 +962,8 @@ export const ConfigInitialState: SimulationRunConfig = {
       updateRuleRunUrl: 'runSimulation',
       updateRuleTrainUrl: 'runTraining',
       applicablePoolTypes: ['LVR for QuantAMM'],
-      updateRuleResultProfileSummary:
-        "One gets different returns for different values of κ (how 'aggressive' the pool is), memory length in days (how quickly the pool forgets previous data) and exponent. " +
+      chainDeploymentDetails: new Map<Chain, string>(),
+      updateRuleResultProfileSummary: "One gets different returns for different values of κ (how 'aggressive' the pool is), memory length in days (how quickly the pool forgets previous data) and exponent. " +
         'The exponent, when > 1, has the effect of ' +
         'dampening down small weight changes to even smaller values and increasing the size of larger ' +
         'weight changes. The heatmaps given have exponent = 2. It tends to perform best when a stablecoin is present in the pool. Also note ' +
@@ -1009,8 +985,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         {
           factorName: 'memory_days',
           factorDisplayName: 'Memory in days',
-          factorDescription:
-            'Determines how quickly the pool forgets previous data',
+          factorDescription: 'Determines how quickly the pool forgets previous data',
           applicableCoins: [],
           factorValue: '10',
           minValue: '1',
@@ -1020,8 +995,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         {
           factorName: 'exponent',
           factorDisplayName: 'Exponent',
-          factorDescription:
-            'Controls the exponential non-linearity that is applied to the price change signal',
+          factorDescription: 'Controls the exponential non-linearity that is applied to the price change signal',
           applicableCoins: [],
           factorValue: '2',
           minValue: '0',
@@ -1037,8 +1011,8 @@ export const ConfigInitialState: SimulationRunConfig = {
       updateRuleRunUrl: 'runSimulation',
       updateRuleTrainUrl: 'runTraining',
       applicablePoolTypes: ['LVR for QuantAMM'],
-      updateRuleResultProfileSummary:
-        "This rules has two memory lengths: 'memory_days', the memory length of the process that " +
+      chainDeploymentDetails: new Map<Chain, string>(),
+      updateRuleResultProfileSummary: "This rules has two memory lengths: 'memory_days', the memory length of the process that " +
         "estimates the inverse variance of returns (needed to calculate the currently-estimated minimum-variance portfolio); and 'mixing_memory_days', the time it takes to get to a new portfolio vector. " +
         'This rule, unsurprisingly as it aims for a minimum-variance portfolio, ' +
         'tends to lead to returns close to 0. This rule makes most sense when a stablecoin is NOT present ' +
@@ -1049,8 +1023,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         {
           factorName: 'memory_days_1',
           factorDisplayName: 'Variance memory in days',
-          factorDescription:
-            'Determines how quickly the pool forgets previous data when calculating asset variance',
+          factorDescription: 'Determines how quickly the pool forgets previous data when calculating asset variance',
           applicableCoins: [],
           factorValue: '10',
           minValue: '1',
@@ -1060,8 +1033,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         {
           factorName: 'memory_days_2',
           factorDisplayName: 'Portfolio smoothing memory in days',
-          factorDescription:
-            'Determines how quickly the pool forgets previous data when calculating the overall portfolio',
+          factorDescription: 'Determines how quickly the pool forgets previous data when calculating the overall portfolio',
           applicableCoins: [],
           factorValue: '10',
           minValue: '1',
@@ -1077,8 +1049,8 @@ export const ConfigInitialState: SimulationRunConfig = {
       updateRuleRunUrl: 'runSimulation',
       updateRuleTrainUrl: 'runTraining',
       applicablePoolTypes: ['RVR for QuantAMM'],
-      updateRuleResultProfileSummary:
-        "One gets different returns for different values of κ, which determines how 'aggressive' the pool is, and memory length (in days), which determines how quickly the pool forgets previous data. " +
+      chainDeploymentDetails: new Map<Chain, string>(),
+      updateRuleResultProfileSummary: "One gets different returns for different values of κ, which determines how 'aggressive' the pool is, and memory length (in days), which determines how quickly the pool forgets previous data. " +
         'For good choices, this update rule greatly increases capital over HODL (and thus also Balancer) during breakouts and increases capital during sustained bull runs. ' +
         'This rule works best over long price memories, so sudden crashes are not detected and lose capital faster ' +
         'than HODL. This is not a deal-breaker, however, as the capital gain increases (as demonstrated over a super cycle) are still greater than these sharp losses. ' +
@@ -1099,8 +1071,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         {
           factorName: 'memory_days',
           factorDisplayName: 'Memory in days',
-          factorDescription:
-            'Determines how quickly the pool forgets previous data',
+          factorDescription: 'Determines how quickly the pool forgets previous data',
           applicableCoins: [],
           factorValue: '10',
           minValue: '1',
@@ -1116,8 +1087,8 @@ export const ConfigInitialState: SimulationRunConfig = {
       updateRuleRunUrl: 'runSimulation',
       updateRuleTrainUrl: 'runTraining',
       applicablePoolTypes: ['RVR for QuantAMM'],
-      updateRuleResultProfileSummary:
-        "One gets different returns for different values of κ, which determines how 'aggressive' the pool is, and memory length (in days), which determines how quickly the pool forgets previous data. " +
+      chainDeploymentDetails: new Map<Chain, string>(),
+      updateRuleResultProfileSummary: "One gets different returns for different values of κ, which determines how 'aggressive' the pool is, and memory length (in days), which determines how quickly the pool forgets previous data. " +
         'Often this rule outperforms other rules in bear runs, which makes this a useful part of ' +
         'a broader portfolio. This rule also benefits from relatively small κ/step sizes, with good results often for log2(κ)' +
         ' around -4 to 4.',
@@ -1136,8 +1107,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         {
           factorName: 'memory_days',
           factorDisplayName: 'Memory in days',
-          factorDescription:
-            'Determines how quickly the pool forgets previous data',
+          factorDescription: 'Determines how quickly the pool forgets previous data',
           applicableCoins: [],
           factorValue: '10',
           minValue: '1',
@@ -1153,8 +1123,8 @@ export const ConfigInitialState: SimulationRunConfig = {
       updateRuleRunUrl: 'runSimulation',
       updateRuleTrainUrl: 'runTraining',
       applicablePoolTypes: ['RVR for QuantAMM'],
-      updateRuleResultProfileSummary:
-        'The channel following parameters can be divided into three categories' +
+      chainDeploymentDetails: new Map<Chain, string>(),
+      updateRuleResultProfileSummary: 'The channel following parameters can be divided into three categories' +
         '1. Standard Antimomentum parameters to dictate how antimomentum works when price changes are small' +
         '2. Standard Power channel parameters to dictate how power channel works when price changes are large' +
         '3. Parameters dictating the shape of the gaussian function determining when the rule behaves more like antimomentum or power channel' +
@@ -1176,8 +1146,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         {
           factorName: 'memory_days',
           factorDisplayName: 'Memory in days',
-          factorDescription:
-            'Determines how quickly the pool forgets previous data',
+          factorDescription: 'Determines how quickly the pool forgets previous data',
           applicableCoins: [],
           factorValue: '10',
           minValue: '1',
@@ -1187,8 +1156,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         {
           factorName: 'exponent',
           factorDisplayName: 'Exponent',
-          factorDescription:
-            'Controls the exponential non-linearity that is applied to the price change signal',
+          factorDescription: 'Controls the exponential non-linearity that is applied to the price change signal',
           applicableCoins: [],
           factorValue: '2',
           minValue: '0',
@@ -1198,8 +1166,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         {
           factorName: 'amplitude',
           factorDisplayName: 'Amplitude',
-          factorDescription:
-            'Controls the strength of the mean reversion effect within the channel',
+          factorDescription: 'Controls the strength of the mean reversion effect within the channel',
           applicableCoins: [],
           factorValue: '1',
           minValue: '0',
@@ -1235,8 +1202,8 @@ export const ConfigInitialState: SimulationRunConfig = {
       updateRuleRunUrl: 'runSimulation',
       updateRuleTrainUrl: 'runTraining',
       applicablePoolTypes: ['RVR for QuantAMM'],
-      updateRuleResultProfileSummary:
-        'This rule implements a Moving Average Convergence Divergence strategy. It uses two moving averages, one short and one long, and compares their difference to determine a change in pool weights.',
+      chainDeploymentDetails: new Map<Chain, string>(),
+      updateRuleResultProfileSummary: 'This rule implements a Moving Average Convergence Divergence strategy. It uses two moving averages, one short and one long, and compares their difference to determine a change in pool weights.',
       heatmapKeys: [],
       updateRuleParameters: [
         {
@@ -1278,8 +1245,8 @@ export const ConfigInitialState: SimulationRunConfig = {
       updateRuleRunUrl: 'runSimulation',
       updateRuleTrainUrl: 'runTraining',
       applicablePoolTypes: ['RVR for QuantAMM'],
-      updateRuleResultProfileSummary:
-        "One gets different returns for different values of κ (how 'aggressive' the pool is), memory length in days (how quickly the pool forgets previous data) and exponent. " +
+      chainDeploymentDetails: new Map<Chain, string>(),
+      updateRuleResultProfileSummary: "One gets different returns for different values of κ (how 'aggressive' the pool is), memory length in days (how quickly the pool forgets previous data) and exponent. " +
         'The exponent, when > 1, has the effect of ' +
         'dampening down small weight changes to even smaller values and increasing the size of larger ' +
         'weight changes. The heatmaps given have exponent = 2. It tends to perform best when a stablecoin is present in the pool. Also note ' +
@@ -1301,8 +1268,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         {
           factorName: 'memory_days',
           factorDisplayName: 'Memory in days',
-          factorDescription:
-            'Determines how quickly the pool forgets previous data',
+          factorDescription: 'Determines how quickly the pool forgets previous data',
           applicableCoins: [],
           factorValue: '10',
           minValue: '1',
@@ -1312,8 +1278,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         {
           factorName: 'exponent',
           factorDisplayName: 'Exponent',
-          factorDescription:
-            'Controls the exponential non-linearity that is applied to the price change signal',
+          factorDescription: 'Controls the exponential non-linearity that is applied to the price change signal',
           applicableCoins: [],
           factorValue: '2',
           minValue: '0',
@@ -1329,8 +1294,8 @@ export const ConfigInitialState: SimulationRunConfig = {
       updateRuleRunUrl: 'runSimulation',
       updateRuleTrainUrl: 'runTraining',
       applicablePoolTypes: ['RVR for QuantAMM'],
-      updateRuleResultProfileSummary:
-        "This rules has two memory lengths: 'memory_days', the memory length of the process that " +
+      chainDeploymentDetails: new Map<Chain, string>(),
+      updateRuleResultProfileSummary: "This rules has two memory lengths: 'memory_days', the memory length of the process that " +
         "estimates the inverse variance of returns (needed to calculate the currently-estimated minimum-variance portfolio); and 'mixing_memory_days', the time it takes to get to a new portfolio vector. " +
         'This rule, unsurprisingly as it aims for a minimum-variance portfolio, ' +
         'tends to lead to returns close to 0. This rule makes most sense when a stablecoin is NOT present ' +
@@ -1341,8 +1306,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         {
           factorName: 'memory_days_1',
           factorDisplayName: 'Variance memory in days',
-          factorDescription:
-            'Determines how quickly the pool forgets previous data when calculating asset variance',
+          factorDescription: 'Determines how quickly the pool forgets previous data when calculating asset variance',
           applicableCoins: [],
           factorValue: '10',
           minValue: '1',
@@ -1352,8 +1316,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         {
           factorName: 'memory_days_2',
           factorDisplayName: 'Portfolio smoothing memory in days',
-          factorDescription:
-            'Determines how quickly the pool forgets previous data when calculating the overall portfolio',
+          factorDescription: 'Determines how quickly the pool forgets previous data when calculating the overall portfolio',
           applicableCoins: [],
           factorValue: '10',
           minValue: '1',
@@ -1390,7 +1353,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
-      deploymentByChain: new Map<string, DeployedToken>(),
+      deploymentByChain: new Map<Chain, DeployedToken>(),
     },
     {
       coinName: 'Ethereum',
@@ -1408,7 +1371,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
-      deploymentByChain: new Map<string, DeployedToken>(),
+      deploymentByChain: new Map<Chain, DeployedToken>(),
     },
     {
       coinName: 'Ripple',
@@ -1426,7 +1389,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
-      deploymentByChain: new Map<string, DeployedToken>(),
+      deploymentByChain: new Map<Chain, DeployedToken>(),
     },
     {
       coinName: 'Solana',
@@ -1444,7 +1407,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
-      deploymentByChain: new Map<string, DeployedToken>(),
+      deploymentByChain: new Map<Chain, DeployedToken>(),
     },
     {
       coinName: 'Binance',
@@ -1462,7 +1425,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
-      deploymentByChain: new Map<string, DeployedToken>(),
+      deploymentByChain: new Map<Chain, DeployedToken>(),
     },
     {
       coinName: 'USDCoin',
@@ -1480,7 +1443,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
-      deploymentByChain: new Map<string, DeployedToken>(),
+      deploymentByChain: new Map<Chain, DeployedToken>(),
     },
     {
       coinName: 'DogeCoin',
@@ -1498,7 +1461,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
-      deploymentByChain: new Map<string, DeployedToken>(),
+      deploymentByChain: new Map<Chain, DeployedToken>(),
     },
     {
       coinName: 'Cardano',
@@ -1516,7 +1479,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
-      deploymentByChain: new Map<string, DeployedToken>(),
+      deploymentByChain: new Map<Chain, DeployedToken>(),
     },
     {
       coinName: 'Tron',
@@ -1534,7 +1497,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
-      deploymentByChain: new Map<string, DeployedToken>(),
+      deploymentByChain: new Map<Chain, DeployedToken>(),
     },
     {
       coinName: 'Chainlink',
@@ -1552,7 +1515,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
-      deploymentByChain: new Map<string, DeployedToken>(),
+      deploymentByChain: new Map<Chain, DeployedToken>(),
     },
     {
       coinName: 'Avalanche',
@@ -1570,7 +1533,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
-      deploymentByChain: new Map<string, DeployedToken>(),
+      deploymentByChain: new Map<Chain, DeployedToken>(),
     },
     {
       coinName: 'Stellar',
@@ -1588,7 +1551,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
-      deploymentByChain: new Map<string, DeployedToken>(),
+      deploymentByChain: new Map<Chain, DeployedToken>(),
     },
     {
       coinName: 'Shiba Inu',
@@ -1606,7 +1569,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
-      deploymentByChain: new Map<string, DeployedToken>(),
+      deploymentByChain: new Map<Chain, DeployedToken>(),
     },
     {
       coinName: 'Uniswap',
@@ -1624,7 +1587,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
-      deploymentByChain: new Map<string, DeployedToken>(),
+      deploymentByChain: new Map<Chain, DeployedToken>(),
     },
     {
       coinName: 'AAVE',
@@ -1642,7 +1605,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
-      deploymentByChain: new Map<string, DeployedToken>(),
+      deploymentByChain: new Map<Chain, DeployedToken>(),
     },
     {
       coinName: 'SONIC',
@@ -1660,7 +1623,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
-      deploymentByChain: new Map<string, DeployedToken>(),
+      deploymentByChain: new Map<Chain, DeployedToken>(),
     },
     {
       coinName: 'Monero',
@@ -1678,7 +1641,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
-      deploymentByChain: new Map<string, DeployedToken>(),
+      deploymentByChain: new Map<Chain, DeployedToken>(),
     },
     {
       coinName: 'Polygon',
@@ -1696,7 +1659,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
-      deploymentByChain: new Map<string, DeployedToken>(),
+      deploymentByChain: new Map<Chain, DeployedToken>(),
     },
     {
       coinName: 'Algorand',
@@ -1714,7 +1677,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
-      deploymentByChain: new Map<string, DeployedToken>(),
+      deploymentByChain: new Map<Chain, DeployedToken>(),
     },
     {
       coinName: 'Arbitrum',
@@ -1732,7 +1695,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
-      deploymentByChain: new Map<string, DeployedToken>(),
+      deploymentByChain: new Map<Chain, DeployedToken>(),
     },
     {
       coinName: 'Filecoin',
@@ -1750,7 +1713,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
-      deploymentByChain: new Map<string, DeployedToken>(),
+      deploymentByChain: new Map<Chain, DeployedToken>(),
     },
     {
       coinName: 'Cosmos',
@@ -1768,7 +1731,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
-      deploymentByChain: new Map<string, DeployedToken>(),
+      deploymentByChain: new Map<Chain, DeployedToken>(),
     },
     {
       coinName: 'EOS',
@@ -1786,7 +1749,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
-      deploymentByChain: new Map<string, DeployedToken>(),
+      deploymentByChain: new Map<Chain, DeployedToken>(),
     },
     {
       coinName: 'Maker DAO',
@@ -1804,7 +1767,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
-      deploymentByChain: new Map<string, DeployedToken>(),
+      deploymentByChain: new Map<Chain, DeployedToken>(),
     },
     {
       coinName: 'Lido',
@@ -1822,7 +1785,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
-      deploymentByChain: new Map<string, DeployedToken>(),
+      deploymentByChain: new Map<Chain, DeployedToken>(),
     },
     {
       coinName: 'DyDx',
@@ -1840,7 +1803,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
-      deploymentByChain: new Map<string, DeployedToken>(),
+      deploymentByChain: new Map<Chain, DeployedToken>(),
     },
     {
       coinName: 'Compound',
@@ -1858,7 +1821,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
-      deploymentByChain: new Map<string, DeployedToken>(),
+      deploymentByChain: new Map<Chain, DeployedToken>(),
     },
     {
       coinName: 'Curve',
@@ -1876,7 +1839,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
-      deploymentByChain: new Map<string, DeployedToken>(),
+      deploymentByChain: new Map<Chain, DeployedToken>(),
     },
     {
       coinName: 'SushiSwap',
@@ -1894,7 +1857,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
-      deploymentByChain: new Map<string, DeployedToken>(),
+      deploymentByChain: new Map<Chain, DeployedToken>(),
     },
     {
       coinName: 'Litecoin',
@@ -1912,7 +1875,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
-      deploymentByChain: new Map<string, DeployedToken>(),
+      deploymentByChain: new Map<Chain, DeployedToken>(),
     },
     {
       coinName: 'PAX Gold',
@@ -1930,7 +1893,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         },
       ],
       dailyReturns: new Map<number, ReturnTimeStep>(),
-      deploymentByChain: new Map<string, DeployedToken>(),
+      deploymentByChain: new Map<Chain, DeployedToken>(),
     },
   ],
   initialLiquidityPool: {
@@ -1947,9 +1910,9 @@ export const ConfigInitialState: SimulationRunConfig = {
       updateRuleSimKey: 'hodl',
       updateRuleRunUrl: 'runSimulation',
       applicablePoolTypes: ['HODL'],
+      chainDeploymentDetails: new Map<Chain, string>(),
       updateRuleTrainUrl: undefined,
-      updateRuleResultProfileSummary:
-        'Your return is just the price change (proportional per coin held at the start) of each coin over time',
+      updateRuleResultProfileSummary: 'Your return is just the price change (proportional per coin held at the start) of each coin over time',
       heatmapKeys: [],
       updateRuleParameters: [],
     },
@@ -1977,7 +1940,7 @@ export const ConfigInitialState: SimulationRunConfig = {
             },
           ],
           dailyReturns: new Map<number, ReturnTimeStep>(),
-          deploymentByChain: new Map<string, DeployedToken>(),
+          deploymentByChain: new Map<Chain, DeployedToken>(),
         },
         weight: 50,
         currentPrice: 10,
@@ -2003,7 +1966,7 @@ export const ConfigInitialState: SimulationRunConfig = {
             },
           ],
           dailyReturns: new Map<number, ReturnTimeStep>(),
-          deploymentByChain: new Map<string, DeployedToken>(),
+          deploymentByChain: new Map<Chain, DeployedToken>(),
         },
         weight: 50,
         currentPrice: 1,
@@ -2035,6 +1998,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         updateRuleSimKey: 'momentum',
         updateRuleResultProfileSummary: '',
         applicablePoolTypes: ['QuantAMM'],
+        chainDeploymentDetails: new Map<Chain, string>(),
         heatmapKeys: [],
         updateRuleRunUrl: 'runSimulation',
         updateRuleTrainUrl: 'runTraining',
@@ -2052,8 +2016,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           {
             factorName: 'memory_days',
             factorDisplayName: 'Memory in days',
-            factorDescription:
-              'Determines how quickly the pool forgets previous data',
+            factorDescription: 'Determines how quickly the pool forgets previous data',
             applicableCoins: [],
             factorValue: '1',
             minValue: '1',
@@ -2080,7 +2043,7 @@ export const ConfigInitialState: SimulationRunConfig = {
               },
             ],
             dailyReturns: new Map<number, ReturnTimeStep>(),
-            deploymentByChain: new Map<string, DeployedToken>(),
+            deploymentByChain: new Map<Chain, DeployedToken>(),
           },
           weight: 33,
           currentPrice: 10,
@@ -2106,7 +2069,7 @@ export const ConfigInitialState: SimulationRunConfig = {
               },
             ],
             dailyReturns: new Map<number, ReturnTimeStep>(),
-            deploymentByChain: new Map<string, DeployedToken>(),
+            deploymentByChain: new Map<Chain, DeployedToken>(),
           },
           weight: 33,
           currentPrice: 10,
@@ -2132,7 +2095,7 @@ export const ConfigInitialState: SimulationRunConfig = {
               },
             ],
             dailyReturns: new Map<number, ReturnTimeStep>(),
-            deploymentByChain: new Map<string, DeployedToken>(),
+            deploymentByChain: new Map<Chain, DeployedToken>(),
           },
           weight: 33,
           currentPrice: 10,
@@ -2156,32 +2119,28 @@ export const ConfigInitialState: SimulationRunConfig = {
       {
         name: 'base_lr',
         value: '0.8',
-        description:
-          'The initial learning rate at the start of the training process.',
+        description: 'The initial learning rate at the start of the training process.',
         minValue: '0.00001',
         maxValue: '5',
       },
       {
         name: 'optimiser',
         value: 'sgd',
-        description:
-          "The choice of which optimisation algorithm to use. Default is stochastic gradient descent ('sgd'). Other options include 'adam' and 'rmsprop' (provided by optax).",
+        description: "The choice of which optimisation algorithm to use. Default is stochastic gradient descent ('sgd'). Other options include 'adam' and 'rmsprop' (provided by optax).",
         minValue: '',
         maxValue: '',
       },
       {
         name: 'decay_lr_ratio',
         value: '0.8',
-        description:
-          "the ratio by which to decay the learning rate on plateau (we multiply the current learning rate by a chosen factor if the training objective doesn't improve).",
+        description: "the ratio by which to decay the learning rate on plateau (we multiply the current learning rate by a chosen factor if the training objective doesn't improve).",
         minValue: '0.00001',
         maxValue: '0.999',
       },
       {
         name: 'decay_lr_plateau',
         value: '0.5',
-        description:
-          "By default decay the learning rate on plateau (we multiply the current learning rate by a chosen factor if the training objective doesn't improve). This setting chooses how many iteration we have to wait for with no improvement before applying this reduction. ",
+        description: "By default decay the learning rate on plateau (we multiply the current learning rate by a chosen factor if the training objective doesn't improve). This setting chooses how many iteration we have to wait for with no improvement before applying this reduction. ",
         minValue: '0.00001',
         maxValue: '0.999',
       },
@@ -2209,37 +2168,34 @@ export const ConfigInitialState: SimulationRunConfig = {
       {
         name: 'n_iterations',
         value: '1',
-        description:
-          'The total number of training steps to take in the training of the update rule.',
+        description: 'The total number of training steps to take in the training of the update rule.',
         minValue: '1',
         maxValue: '10',
       },
       {
         name: 'n_cycles',
         value: '1',
-        description:
-          "The number of subdivisions of the overall duration of historic training data to create for iterative training-test splits. Ie n_cycles=2 for a year of training data would mean training is first done on the first 6 months of the training data, testing on the following 6 months, followed by training (using the previous parameter values for initialisation) on the second 6 months of data. Only used in 'iterative_train_on_historic_data' runner.",
+        description: "The number of subdivisions of the overall duration of historic training data to create for iterative training-test splits. Ie n_cycles=2 for a year of training data would mean training is first done on the first 6 months of the training data, testing on the following 6 months, followed by training (using the previous parameter values for initialisation) on the second 6 months of data. Only used in 'iterative_train_on_historic_data' runner.",
         minValue: '1',
         maxValue: '10',
       },
       {
         name: 'return_val',
         value: '0.8',
-        description:
-          'The proportion of the training data to use for validation (ie not training).',
+        description: 'The proportion of the training data to use for validation (ie not training).',
         minValue: '',
         maxValue: '',
       },
       {
         name: 'maximum_change',
         value: '0.1',
-        description:
-          ' The maximum change in any parameter value per training step.',
+        description: ' The maximum change in any parameter value per training step.',
         minValue: '',
         maxValue: '',
       },
     ],
   },
+  chainDeploymentDetails: new Map<Chain, ChainDeploymentDetails>(),
 };
 
 export const tokenList = [
