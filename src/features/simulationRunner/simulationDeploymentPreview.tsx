@@ -1,6 +1,7 @@
 import styles from '../simulationResults/simulationResultSummary.module.css';
 
 import {
+  Chain,
   DeployedToken,
   LiquidityPool,
   UpdateRuleParameter,
@@ -13,11 +14,12 @@ import {
   Input,
   InputNumber,
   Row,
+  Select,
   Space,
   Switch,
   Typography,
 } from 'antd';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const { Text } = Typography;
 
@@ -218,7 +220,7 @@ export function PoolDeploymentConfigReview({
     }));
   };
 
-  const [targetChain, setTargetChain] = useState<string>('');
+  const [targetChain, setTargetChain] = useState<Chain>(Chain.Ethereum);
 
   const [deploymentInput, setDeploymentInput] =
     useState<LocalQuantAMMDeploymentInputParams>({
@@ -346,16 +348,6 @@ export function PoolDeploymentConfigReview({
     });
   };
 
-  const handleTokenAddressChange = (
-    coinCode: string,
-    address: string
-  ) => {
-    upsertLocalDeploymentToken(coinCode, (prev) => ({
-      address,
-      oracleAddresses: prev?.oracleAddresses ?? {},
-    }));
-  };
-
   const handleOracleAddressChange = (
     coinCode: string,
     wrapperName: string,
@@ -380,45 +372,51 @@ export function PoolDeploymentConfigReview({
         >
           {/* Simulation & Pool Overview */}
           <Divider>Simulation &amp; Pool Overview</Divider>
-          <Space direction="vertical" style={{ width: '100%' }}>
-            <Input
-              addonBefore="Target Chain"
+            <Space direction="vertical" style={{ width: '100%' }}>
+            <Select
+              style={{ width: '100%' }}
               value={targetChain}
-              onChange={(e) => setTargetChain(e.target.value)}
-              placeholder="e.g. mainnet, sepolia, arbitrum..."
+              onChange={(value) => setTargetChain(value as Chain)}
+              options={Object.values(Chain).map((c) => ({
+              label: String(c),
+              value: c,
+              }))}
+              placeholder="Select target chain"
             />
 
             <Divider orientation="left">Pool Constituents</Divider>
             {pool.poolConstituents.map((poolCoin, index) => (
               <Row
-                key={`${poolCoin.coin.coinCode}-${index}`}
-                gutter={[8, 8]}
+              key={`${poolCoin.coin.coinCode}-${index}`}
+              gutter={[8, 8]}
               >
-                <Col span={6}>
-                  <Input
-                    addonBefore="Coin"
-                    value={`${poolCoin.coin.coinName} (${poolCoin.coin.coinCode})`}
-                    disabled
-                  />
-                </Col>
-                <Col span={14}>
-                  <Input
-                    addonBefore={targetChain + " Address"}
-                    value={`${poolCoin.coin.deploymentByChain.get(targetChain)?.address ?? 'UNKNOWN'}`}
-                    disabled
-                  />
-                </Col>
-                <Col span={4}>
-                  <InputNumber
-                    style={{ width: '100%' }}
-                    addonBefore="Target Weight"
-                    value={poolCoin.weight ?? 0}
-                    disabled
-                  />
-                </Col>
+              <Col span={6}>
+                <Input
+                addonBefore="Coin"
+                value={`${poolCoin.coin.coinName} (${poolCoin.coin.coinCode})`}
+                disabled
+                />
+              </Col>
+              <Col span={14}>
+                <Input
+                addonBefore={String(targetChain) + ' Address'}
+                value={`${
+                  poolCoin.coin.deploymentByChain.get(targetChain)?.address ?? 'UNKNOWN'
+                }`}
+                disabled
+                />
+              </Col>
+              <Col span={4}>
+                <InputNumber
+                style={{ width: '100%' }}
+                addonBefore="Target Weight"
+                value={poolCoin.weight ?? 0}
+                disabled
+                />
+              </Col>
               </Row>
             ))}
-          </Space>
+            </Space>
 
           {/* Deployment parameters shared across scripts */}
           <Divider>Deployment Parameters (input.ts / index.ts)</Divider>

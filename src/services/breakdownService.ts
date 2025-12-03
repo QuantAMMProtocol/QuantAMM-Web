@@ -5,6 +5,7 @@ import {
   SimulationRunBreakdownDto,
 } from '../features/simulationResults/simulationResultSummaryModels';
 import {
+  Chain,
   CoinComparison,
   CoinPrice,
   DeployedToken,
@@ -139,7 +140,7 @@ export const convertBreakdownDtoToBreakdown = (
               dailyPriceHistoryMap: new Map<number, CoinPrice>(),
               dailyReturns: new Map<number, ReturnTimeStep>(),
               coinComparisons: new Map<string, CoinComparison>(),
-              deploymentByChain: new Map<string, DeployedToken>(),
+              deploymentByChain: new Map<Chain, DeployedToken>(),
             },
             amount: constituent.amount,
             marketValue: constituent.marketValue,

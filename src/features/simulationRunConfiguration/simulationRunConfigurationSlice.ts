@@ -623,6 +623,7 @@ export const clonePool = (originalPool: LiquidityPool): LiquidityPool => {
       updateRuleRunUrl: originalPool.updateRule.updateRuleRunUrl,
       updateRuleTrainUrl: originalPool.updateRule.updateRuleTrainUrl,
       applicablePoolTypes: originalPool.updateRule.applicablePoolTypes,
+      chainDeploymentDetails: originalPool.updateRule.chainDeploymentDetails,
       updateRuleResultProfileSummary:
         originalPool.updateRule.updateRuleResultProfileSummary,
       heatmapKeys: originalPool.updateRule.heatmapKeys,
@@ -783,6 +784,7 @@ export const clonePoolFingerPrint = (
       updateRuleRunUrl: originalPool.updateRule.updateRuleRunUrl,
       updateRuleTrainUrl: originalPool.updateRule.updateRuleTrainUrl,
       applicablePoolTypes: originalPool.updateRule.applicablePoolTypes,
+      chainDeploymentDetails: originalPool.updateRule.chainDeploymentDetails,
       updateRuleResultProfileSummary:
         originalPool.updateRule.updateRuleResultProfileSummary,
       heatmapKeys: originalPool.updateRule.heatmapKeys,
