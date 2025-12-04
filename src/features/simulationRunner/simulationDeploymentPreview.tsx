@@ -20,11 +20,16 @@ import {
   Typography,
 } from 'antd';
 import { useEffect, useState } from 'react';
+import { selectChainDeploymentSettings } from '../simulationRunConfiguration/simulationRunConfigurationSlice';
+import { useAppSelector } from '../../app/hooks';
+import { SimulationResultAnalysisDto } from './simulationRunnerDtos';
+import { to18Decimals } from '../simulationRunConfiguration/simulationUtils';
 
 const { Text } = Typography;
 
 export interface PoolDeploymentConfigReviewProps {
   pool: LiquidityPool;
+  initialisationData?: SimulationResultAnalysisDto;
 }
 
 // Front-end representation of the Hardhat QuantAMMDeploymentInputParams
@@ -66,7 +71,6 @@ interface LocalCreationNewPoolParams {
   poolHooksContract: string;
   enableDonation: boolean;
   disableUnbalancedLiquidity: boolean;
-  salt: string;
   initialWeights: string;
   poolSettings: LocalPoolSettings;
   initialMovingAverages: string;
@@ -120,14 +124,15 @@ function buildRuleParametersString(pool: LiquidityPool): string {
       // Coin-specific overrides
       param.applicableCoins.forEach((liquidityPoolCoin) => {
         const coinCode = liquidityPoolCoin.coin.coinCode;
-        const value = liquidityPoolCoin.factorValue ?? param.factorValue;
+        const rawValue = liquidityPoolCoin.factorValue ?? param.factorValue;
+        const value = to18Decimals(Number(rawValue));
         row.valuesByCoin[coinCode] = value;
       });
     } else {
       // Applies to all coins – fill any missing values
       tokenCodes.forEach((coinCode) => {
         if (!(coinCode in row.valuesByCoin)) {
-          row.valuesByCoin[coinCode] = param.factorValue;
+          row.valuesByCoin[coinCode] = to18Decimals(Number(param.factorValue));
         }
       });
     }
@@ -152,6 +157,7 @@ function buildRuleParametersString(pool: LiquidityPool): string {
 
 export function PoolDeploymentConfigReview({
   pool,
+  initialisationData
 }: PoolDeploymentConfigReviewProps) {
   // Permission bitmasks (as per your comment)
   const MASK_POOL_PERFORM_UPDATE = 1;
@@ -183,6 +189,8 @@ export function PoolDeploymentConfigReview({
     },
   ];
 
+  const chainDeploymentSettings = useAppSelector(selectChainDeploymentSettings);
+
   const [registryMaskSelections, setRegistryMaskSelections] = useState<
     number[]
   >([]);
@@ -203,7 +211,7 @@ export function PoolDeploymentConfigReview({
 
   const [targetChain, setTargetChain] = useState<Chain>(Chain.Ethereum);
 
-  const [deploymentInput, setDeploymentInput] =
+  const [deploymentInput] =
     useState<LocalQuantAMMDeploymentInputParams>({
       Vault: '',
       PauseWindowDuration: null,
@@ -218,11 +226,10 @@ export function PoolDeploymentConfigReview({
     normalizedWeights: pool.poolConstituents
       .map((poolCoin) => (poolCoin.weight ?? 0).toString())
       .join(', '),
-    swapFeePercentage: '',
-    poolHooksContract: '',
+    swapFeePercentage: '0.003',
+    poolHooksContract: 'NONE',
     enableDonation: false,
     disableUnbalancedLiquidity: false,
-    salt: '',
     initialWeights: '',
     poolSettings: {
       assets: pool.poolConstituents
@@ -231,9 +238,9 @@ export function PoolDeploymentConfigReview({
       rule: pool.updateRule.updateRuleName,
       updateInterval: null,
       lambda: '',
-      epsilonMax: '',
-      absoluteWeightGuardRail: '',
-      maxTradeSizeRatio: '',
+      epsilonMax: '0.432',
+      absoluteWeightGuardRail: '0.03',
+      maxTradeSizeRatio: '0.1',
       // initialise from update rule parameters in smart-contract order
       ruleParameters: buildRuleParametersString(pool),
       poolManager: '',
@@ -272,19 +279,6 @@ export function PoolDeploymentConfigReview({
       };
     });
   }, [pool.poolConstituents, targetChain]);
-
-  const handleDeploymentInputChange = (
-    key: keyof LocalQuantAMMDeploymentInputParams,
-    value: string | number | null
-  ) => {
-    setDeploymentInput((prev) => ({
-      ...prev,
-      [key]:
-        typeof prev[key] === 'number'
-          ? (value as number | null)
-          : (value as string),
-    }));
-  };
 
   const handlePoolParamChange = (
     key: keyof LocalCreationNewPoolParams,
@@ -332,22 +326,13 @@ export function PoolDeploymentConfigReview({
 
             <Divider orientation="left">Pool Constituents</Divider>
             <Row gutter={[8, 8]}>
-                  <Col span={3}>
-                    Token Code
-                  </Col>
-                  <Col span={8}>
-                    Token {targetChain} Address
-                  </Col>
-                  <Col span={8}>
-                    Oracle Address
-                  </Col>
-                  <Col span={5}>
-                    Approval Status
-                  </Col>
-                </Row>
+              <Col span={3}>Token Code</Col>
+              <Col span={8}>Token {targetChain} Address</Col>
+              <Col span={8}>Oracle Address</Col>
+              <Col span={5}>Approval Status</Col>
+            </Row>
             {pool.poolConstituents.map((poolCoin, index) => (
               <>
-                
                 <Row key={`${poolCoin.coin.coinCode}-${index}`} gutter={[8, 8]}>
                   <Col span={3}>
                     <Input value={`${poolCoin.coin.coinCode}`} disabled />
@@ -386,7 +371,6 @@ export function PoolDeploymentConfigReview({
               </>
             ))}
           </Space>
-
           {/* Deployment parameters shared across scripts */}
           <Divider>Deployment Parameters (input.ts / index.ts)</Divider>
 
@@ -396,43 +380,42 @@ export function PoolDeploymentConfigReview({
           <Space direction="vertical" style={{ width: '100%' }}>
             <Input
               addonBefore="Vault"
-              value={deploymentInput.Vault}
-              onChange={(e) =>
-                handleDeploymentInputChange('Vault', e.target.value)
+              value={
+                chainDeploymentSettings?.get(targetChain)
+                  ?.balancerVaultAddress ?? 'NOT DEPLOYED'
               }
+              readOnly
+              disabled
+            />
+            <Input
+              addonBefore="UpdateWeightRunner"
+              value={
+                chainDeploymentSettings?.get(targetChain)
+                  ?.updateWeightRunnerAddress ?? 'NOT DEPLOYED'
+              }
+              readOnly
+              disabled
+            />
+            <Input
+              addonBefore="QuantAMM Pool Factory"
+              value={
+                chainDeploymentSettings?.get(targetChain)
+                  ?.quantammWeightedPoolFactoryAddress ?? 'NOT DEPLOYED'
+              }
+              readOnly
+              disabled
             />
             <InputNumber
+              type="number"
               style={{ width: '100%' }}
               addonBefore="PauseWindowDuration"
               value={deploymentInput.PauseWindowDuration}
               onChange={(value) =>
-                handleDeploymentInputChange('PauseWindowDuration', value)
+                (deploymentInput.PauseWindowDuration = value)
               }
             />
-            <Input
-              addonBefore="UpdateWeightRunner"
-              value={deploymentInput.UpdateWeightRunner}
-              onChange={(e) =>
-                handleDeploymentInputChange(
-                  'UpdateWeightRunner',
-                  e.target.value
-                )
-              }
-            />
-            <Input
-              addonBefore="FactoryVersion"
-              value={deploymentInput.FactoryVersion}
-              onChange={(e) =>
-                handleDeploymentInputChange('FactoryVersion', e.target.value)
-              }
-            />
-            <Input
-              addonBefore="PoolVersion"
-              value={deploymentInput.PoolVersion}
-              onChange={(e) =>
-                handleDeploymentInputChange('PoolVersion', e.target.value)
-              }
-            />
+            <Input addonBefore="FactoryVersion" value="v1" readOnly disabled />
+            <Input addonBefore="PoolVersion" value="v1" />
           </Space>
 
           {/* Creation / pool params */}
@@ -450,14 +433,6 @@ export function PoolDeploymentConfigReview({
               value={poolParams.symbol}
               onChange={(e) => handlePoolParamChange('symbol', e.target.value)}
             />
-            <Input
-              addonBefore="normalizedWeights"
-              value={poolParams.normalizedWeights}
-              onChange={(e) =>
-                handlePoolParamChange('normalizedWeights', e.target.value)
-              }
-            />
-
             <Divider orientation="left">Swap &amp; Hooks</Divider>
             <Input
               addonBefore="swapFeePercentage"
@@ -500,56 +475,24 @@ export function PoolDeploymentConfigReview({
                 </Space>
               </Col>
             </Row>
-            <Input
-              addonBefore="salt"
-              value={poolParams.salt}
-              onChange={(e) => handlePoolParamChange('salt', e.target.value)}
-            />
-
             <Divider orientation="left">Initial State</Divider>
             <Input
               addonBefore="_initialWeights"
-              value={poolParams.initialWeights}
-              onChange={(e) =>
-                handlePoolParamChange('initialWeights', e.target.value)
-              }
+              value={initialisationData?.final_weights?.join(", ") ?? "UNKNOWN"}
             />
             <Input
               addonBefore="_initialMovingAverages"
-              value={poolParams.initialMovingAverages}
-              onChange={(e) =>
-                handlePoolParamChange('initialMovingAverages', e.target.value)
-              }
+              value={initialisationData?.readouts.strings.ewma.join(", ") ?? "UNKNOWN"}
             />
             <Input
               addonBefore="_initialIntermediateValues"
-              value={poolParams.initialIntermediateValues}
-              onChange={(e) =>
-                handlePoolParamChange(
-                  'initialIntermediateValues',
-                  e.target.value
-                )
-              }
+              value={initialisationData?.readouts.strings.running_a.join(", ") ?? "UNKNOWN"}
             />
             <Input
               addonBefore="_oracleStalenessThreshold"
-              value={poolParams.oracleStalenessThreshold}
-              onChange={(e) =>
-                handlePoolParamChange(
-                  'oracleStalenessThreshold',
-                  e.target.value
-                )
-              }
+              value={initialisationData?.jax_parameters.chunk_period[0] ?? "UNKNOWN"}
             />
-
             <Divider orientation="left">Pool Settings</Divider>
-            <Input
-              addonBefore="assets"
-              value={poolParams.poolSettings.assets}
-              onChange={(e) =>
-                handlePoolSettingsChange('assets', e.target.value)
-              }
-            />
             <Input
               addonBefore="rule"
               value={poolParams.poolSettings.rule}
@@ -558,23 +501,13 @@ export function PoolDeploymentConfigReview({
             <InputNumber
               style={{ width: '100%' }}
               addonBefore="updateInterval"
-              value={poolParams.poolSettings.updateInterval}
-              onChange={(value) =>
-                handlePoolSettingsChange('updateInterval', value)
-              }
+              value={initialisationData?.jax_parameters.chunk_period[0] ?? "UNKNOWN"}
             />
             <Input
               addonBefore="lambda"
               value={poolParams.poolSettings.lambda}
               onChange={(e) =>
                 handlePoolSettingsChange('lambda', e.target.value)
-              }
-            />
-            <Input
-              addonBefore="epsilonMax"
-              value={poolParams.poolSettings.epsilonMax}
-              onChange={(e) =>
-                handlePoolSettingsChange('epsilonMax', e.target.value)
               }
             />
             <Input

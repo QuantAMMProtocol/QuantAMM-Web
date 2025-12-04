@@ -88,6 +88,18 @@ export interface SimulationResultAnalysisDto {
   return_analysis: SimulationRunMetric[];
   benchmark_analysis: SimulationRunMetric[];
   return_timeseries_analysis: SimulationResultTimeseries[];
+  final_weights: number[];
+  final_weights_strings: string[];
+  final_unix_timestamp: number;
+  jax_parameters: Record<string, number[]>;
+  smart_contract_parameters: {
+    values: Record<string, number[]>;
+    strings: Record<string, string[]>;
+  };
+  readouts: {
+    values: Record<string, number[]>;
+    strings: Record<string, string[]>;
+  };
 }
 
 export interface SimulationResultTimeseries {

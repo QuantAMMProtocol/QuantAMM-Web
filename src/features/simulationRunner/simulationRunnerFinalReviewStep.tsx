@@ -11,7 +11,6 @@ import {
 } from '../simulationRunner/simulationRunnerSlice';
 
 import { Button, Col, Divider, InputNumber, Row, Space, Tabs } from 'antd';
-import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
   removeSim,
@@ -24,7 +23,6 @@ import { SimulationResult } from '../simulationRunner/simulationRunnerDtos';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/dist/query';
 import { SimulationRunButton } from './simulationRunButton';
 import { GroupedParameters } from '../simulationRunConfiguration/poolRuleConfiguration';
-import { PoolDeploymentConfigReview } from './simulationDeploymentPreview';
 
 export interface Success {
   data: SimulationResult;
@@ -51,20 +49,10 @@ export function SimulationRunnerFinalReviewStep() {
   );
   const coinDataLoaded = useAppSelector(selectCoinPriceDataLoaded);
 
-  const [deploymentPreview, setDeploymentPreview] =
-    useState<RunSetting | null>(null);
-
   function onlyUnique(value: string, index: number, self: string[]) {
     return self.indexOf(value) === index;
   }
 
-  if (deploymentPreview) {
-    return (
-      <PoolDeploymentConfigReview
-        pool={deploymentPreview.pool}
-      />
-    );
-  }
 
   return (
     <Row className={styles.simRunSection}>
@@ -182,16 +170,6 @@ export function SimulationRunnerFinalReviewStep() {
                                     direction="vertical"
                                     style={{ width: '100%' }}
                                   >
-                                    <Button
-                                      type="default"
-                                      onClick={() =>
-                                        setDeploymentPreview({
-                                          pool: z
-                                        })
-                                      }
-                                    >
-                                      Deployment Preview
-                                    </Button>
                                     <Button
                                       disabled={
                                         !coinDataLoaded || runStatusIndex == 2

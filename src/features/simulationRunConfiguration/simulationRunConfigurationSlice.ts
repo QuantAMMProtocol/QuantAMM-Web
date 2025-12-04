@@ -1005,4 +1005,8 @@ export const selectPoolTypeDefaultUpdateRule = (
   }
 };
 
+export const selectChainDeploymentSettings = (state: RootState) =>
+  state.simConfig.chainDeploymentDetails;
+
+
 export default simConfigurationSlice.reducer;
