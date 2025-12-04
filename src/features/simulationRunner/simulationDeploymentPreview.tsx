@@ -76,15 +76,6 @@ interface LocalCreationNewPoolParams {
   poolDetails: string;
 }
 
-type LocalOracleMap = Record<string, string>;
-
-interface LocalDeployedTokenState {
-  address: string;
-  oracleAddresses: LocalOracleMap;
-}
-
-type LocalDeploymentTokenStateMap = Record<string, LocalDeployedTokenState>;
-
 function getDeploymentForChain(
   coinDeploymentByChain: Map<string, DeployedToken> | undefined,
   targetChain: string
@@ -106,11 +97,8 @@ function getDeploymentForChain(
  * Each row is rendered as: [v1, v2, ...] // factorName
  */
 function buildRuleParametersString(pool: LiquidityPool): string {
-  const tokenCodes = pool.poolConstituents.map(
-    (c) => c.coin.coinCode
-  );
-  const params: UpdateRuleParameter[] =
-    pool.updateRule.updateRuleParameters;
+  const tokenCodes = pool.poolConstituents.map((c) => c.coin.coinCode);
+  const params: UpdateRuleParameter[] = pool.updateRule.updateRuleParameters;
 
   interface Row {
     factorName: string;
@@ -120,22 +108,19 @@ function buildRuleParametersString(pool: LiquidityPool): string {
   const rowsByOrder: Record<number, Row> = {};
 
   params.forEach((param) => {
-    const sortOrder =
-      param.smartContractSortOrder ?? 0;
+    const sortOrder = param.smartContractSortOrder ?? 0;
 
     const existingRow = rowsByOrder[sortOrder];
-    const row: Row =
-      existingRow ?? {
-        factorName: param.factorName,
-        valuesByCoin: {},
-      };
+    const row: Row = existingRow ?? {
+      factorName: param.factorName,
+      valuesByCoin: {},
+    };
 
     if (param.applicableCoins && param.applicableCoins.length > 0) {
       // Coin-specific overrides
       param.applicableCoins.forEach((liquidityPoolCoin) => {
         const coinCode = liquidityPoolCoin.coin.coinCode;
-        const value =
-          liquidityPoolCoin.factorValue ?? param.factorValue;
+        const value = liquidityPoolCoin.factorValue ?? param.factorValue;
         row.valuesByCoin[coinCode] = value;
       });
     } else {
@@ -198,21 +183,17 @@ export function PoolDeploymentConfigReview({
     },
   ];
 
-  const [registryMaskSelections, setRegistryMaskSelections] =
-    useState<number[]>([]);
-  const handleRegistryPermissionsChange = (
-    values: (string | number)[]
-  ) => {
+  const [registryMaskSelections, setRegistryMaskSelections] = useState<
+    number[]
+  >([]);
+  const handleRegistryPermissionsChange = (values: (string | number)[]) => {
     const numericValues = values.map((v) =>
       typeof v === 'number' ? v : parseInt(String(v), 10)
     );
     setRegistryMaskSelections(numericValues);
 
     // Bitwise OR of all selected mask values
-    const combined = numericValues.reduce(
-      (acc, v) => (acc | v),
-      0
-    );
+    const combined = numericValues.reduce((acc, v) => acc | v, 0);
 
     setPoolParams((prev) => ({
       ...prev,
@@ -264,14 +245,11 @@ export function PoolDeploymentConfigReview({
     poolDetails: '',
   });
 
-  const [localDeploymentTokens, setLocalDeploymentTokens] =
-    useState<LocalDeploymentTokenStateMap>({});
-
   // Whenever targetChain changes, hydrate token addresses from deploymentByChain
   useEffect(() => {
     setPoolParams((prev) => {
-      const updatedTokens: LocalTokenConfig[] =
-        pool.poolConstituents.map((poolCoin, index) => {
+      const updatedTokens: LocalTokenConfig[] = pool.poolConstituents.map(
+        (poolCoin, index) => {
           const coin = poolCoin.coin;
           const deployedToken = getDeploymentForChain(
             coin.deploymentByChain,
@@ -280,14 +258,13 @@ export function PoolDeploymentConfigReview({
 
           return {
             id: `${coin.coinCode}-${index}`,
-            displayName:
-              `${coin.coinName} (${coin.coinCode})`,
-            token:
-              (deployedToken ? deployedToken.address : ''),
+            displayName: `${coin.coinName} (${coin.coinCode})`,
+            token: deployedToken ? deployedToken.address : '',
             rateProvider: '',
             tokenType: 0,
           };
-        });
+        }
+      );
 
       return {
         ...prev,
@@ -335,88 +312,80 @@ export function PoolDeploymentConfigReview({
     }));
   };
 
-  const upsertLocalDeploymentToken = (
-    coinCode: string,
-    updater: (
-      prev: LocalDeployedTokenState | undefined
-    ) => LocalDeployedTokenState
-  ) => {
-    setLocalDeploymentTokens((prev) => {
-      const next = { ...prev };
-      next[coinCode] = updater(prev[coinCode]);
-      return next;
-    });
-  };
-
-  const handleOracleAddressChange = (
-    coinCode: string,
-    wrapperName: string,
-    address: string
-  ) => {
-    upsertLocalDeploymentToken(coinCode, (prev) => ({
-      address: prev?.address ?? '',
-      oracleAddresses: {
-        ...(prev?.oracleAddresses ?? {}),
-        [wrapperName]: address,
-      },
-    }));
-  };
-
   return (
     <Row className={styles.simRunSection} gutter={[24, 24]}>
       <Col span={24}>
-        <Space
-          direction="vertical"
-          style={{ width: '100%' }}
-          size="large"
-        >
+        <Space direction="vertical" style={{ width: '100%' }} size="large">
           {/* Simulation & Pool Overview */}
           <Divider>Simulation &amp; Pool Overview</Divider>
-            <Space direction="vertical" style={{ width: '100%' }}>
+          <Space direction="vertical" style={{ width: '100%' }}>
             <Select
               style={{ width: '100%' }}
               value={targetChain}
               onChange={(value) => setTargetChain(value as Chain)}
               options={Object.values(Chain).map((c) => ({
-              label: String(c),
-              value: c,
+                label: String(c),
+                value: c,
               }))}
               placeholder="Select target chain"
             />
 
             <Divider orientation="left">Pool Constituents</Divider>
+            <Row gutter={[8, 8]}>
+                  <Col span={3}>
+                    Token Code
+                  </Col>
+                  <Col span={8}>
+                    Token {targetChain} Address
+                  </Col>
+                  <Col span={8}>
+                    Oracle Address
+                  </Col>
+                  <Col span={5}>
+                    Approval Status
+                  </Col>
+                </Row>
             {pool.poolConstituents.map((poolCoin, index) => (
-              <Row
-              key={`${poolCoin.coin.coinCode}-${index}`}
-              gutter={[8, 8]}
-              >
-              <Col span={6}>
-                <Input
-                addonBefore="Coin"
-                value={`${poolCoin.coin.coinName} (${poolCoin.coin.coinCode})`}
-                disabled
-                />
-              </Col>
-              <Col span={14}>
-                <Input
-                addonBefore={String(targetChain) + ' Address'}
-                value={`${
-                  poolCoin.coin.deploymentByChain.get(targetChain)?.address ?? 'UNKNOWN'
-                }`}
-                disabled
-                />
-              </Col>
-              <Col span={4}>
-                <InputNumber
-                style={{ width: '100%' }}
-                addonBefore="Target Weight"
-                value={poolCoin.weight ?? 0}
-                disabled
-                />
-              </Col>
-              </Row>
+              <>
+                
+                <Row key={`${poolCoin.coin.coinCode}-${index}`} gutter={[8, 8]}>
+                  <Col span={3}>
+                    <Input value={`${poolCoin.coin.coinCode}`} disabled />
+                  </Col>
+                  <Col span={8}>
+                    <Input
+                      value={`${
+                        poolCoin.coin.deploymentByChain.get(targetChain)
+                          ?.address ?? 'UNKNOWN'
+                      }`}
+                      disabled
+                    />
+                  </Col>
+                  <Col span={8}>
+                    <Input
+                      value={
+                        poolCoin.coin.deploymentByChain
+                          .get(targetChain)
+                          ?.oracles.get('Chainlink') ?? 'UNKNOWN'
+                      }
+                      disabled
+                    />
+                  </Col>
+                  <Col span={5}>
+                    <Input
+                      value={
+                        poolCoin.coin.deploymentByChain.get(targetChain)
+                          ?.approvalStatus
+                          ? 'APPROVED'
+                          : 'REQUIRES APPROVAL'
+                      }
+                      disabled
+                    />
+                  </Col>
+                </Row>
+              </>
             ))}
-            </Space>
+          </Space>
 
           {/* Deployment parameters shared across scripts */}
           <Divider>Deployment Parameters (input.ts / index.ts)</Divider>
@@ -429,10 +398,7 @@ export function PoolDeploymentConfigReview({
               addonBefore="Vault"
               value={deploymentInput.Vault}
               onChange={(e) =>
-                handleDeploymentInputChange(
-                  'Vault',
-                  e.target.value
-                )
+                handleDeploymentInputChange('Vault', e.target.value)
               }
             />
             <InputNumber
@@ -440,10 +406,7 @@ export function PoolDeploymentConfigReview({
               addonBefore="PauseWindowDuration"
               value={deploymentInput.PauseWindowDuration}
               onChange={(value) =>
-                handleDeploymentInputChange(
-                  'PauseWindowDuration',
-                  value
-                )
+                handleDeploymentInputChange('PauseWindowDuration', value)
               }
             />
             <Input
@@ -460,20 +423,14 @@ export function PoolDeploymentConfigReview({
               addonBefore="FactoryVersion"
               value={deploymentInput.FactoryVersion}
               onChange={(e) =>
-                handleDeploymentInputChange(
-                  'FactoryVersion',
-                  e.target.value
-                )
+                handleDeploymentInputChange('FactoryVersion', e.target.value)
               }
             />
             <Input
               addonBefore="PoolVersion"
               value={deploymentInput.PoolVersion}
               onChange={(e) =>
-                handleDeploymentInputChange(
-                  'PoolVersion',
-                  e.target.value
-                )
+                handleDeploymentInputChange('PoolVersion', e.target.value)
               }
             />
           </Space>
@@ -486,25 +443,18 @@ export function PoolDeploymentConfigReview({
             <Input
               addonBefore="Pool Name"
               value={poolParams.name}
-              onChange={(e) =>
-                handlePoolParamChange('name', e.target.value)
-              }
+              onChange={(e) => handlePoolParamChange('name', e.target.value)}
             />
             <Input
               addonBefore="Symbol"
               value={poolParams.symbol}
-              onChange={(e) =>
-                handlePoolParamChange('symbol', e.target.value)
-              }
+              onChange={(e) => handlePoolParamChange('symbol', e.target.value)}
             />
             <Input
               addonBefore="normalizedWeights"
               value={poolParams.normalizedWeights}
               onChange={(e) =>
-                handlePoolParamChange(
-                  'normalizedWeights',
-                  e.target.value
-                )
+                handlePoolParamChange('normalizedWeights', e.target.value)
               }
             />
 
@@ -513,20 +463,14 @@ export function PoolDeploymentConfigReview({
               addonBefore="swapFeePercentage"
               value={poolParams.swapFeePercentage}
               onChange={(e) =>
-                handlePoolParamChange(
-                  'swapFeePercentage',
-                  e.target.value
-                )
+                handlePoolParamChange('swapFeePercentage', e.target.value)
               }
             />
             <Input
               addonBefore="poolHooksContract"
               value={poolParams.poolHooksContract}
               onChange={(e) =>
-                handlePoolParamChange(
-                  'poolHooksContract',
-                  e.target.value
-                )
+                handlePoolParamChange('poolHooksContract', e.target.value)
               }
             />
             <Row gutter={[16, 16]}>
@@ -536,10 +480,7 @@ export function PoolDeploymentConfigReview({
                   <Switch
                     checked={poolParams.enableDonation}
                     onChange={(checked) =>
-                      handlePoolParamChange(
-                        'enableDonation',
-                        checked
-                      )
+                      handlePoolParamChange('enableDonation', checked)
                     }
                   />
                 </Space>
@@ -562,9 +503,7 @@ export function PoolDeploymentConfigReview({
             <Input
               addonBefore="salt"
               value={poolParams.salt}
-              onChange={(e) =>
-                handlePoolParamChange('salt', e.target.value)
-              }
+              onChange={(e) => handlePoolParamChange('salt', e.target.value)}
             />
 
             <Divider orientation="left">Initial State</Divider>
@@ -572,20 +511,14 @@ export function PoolDeploymentConfigReview({
               addonBefore="_initialWeights"
               value={poolParams.initialWeights}
               onChange={(e) =>
-                handlePoolParamChange(
-                  'initialWeights',
-                  e.target.value
-                )
+                handlePoolParamChange('initialWeights', e.target.value)
               }
             />
             <Input
               addonBefore="_initialMovingAverages"
               value={poolParams.initialMovingAverages}
               onChange={(e) =>
-                handlePoolParamChange(
-                  'initialMovingAverages',
-                  e.target.value
-                )
+                handlePoolParamChange('initialMovingAverages', e.target.value)
               }
             />
             <Input
@@ -614,58 +547,39 @@ export function PoolDeploymentConfigReview({
               addonBefore="assets"
               value={poolParams.poolSettings.assets}
               onChange={(e) =>
-                handlePoolSettingsChange(
-                  'assets',
-                  e.target.value
-                )
+                handlePoolSettingsChange('assets', e.target.value)
               }
             />
             <Input
               addonBefore="rule"
               value={poolParams.poolSettings.rule}
-              onChange={(e) =>
-                handlePoolSettingsChange(
-                  'rule',
-                  e.target.value
-                )
-              }
+              onChange={(e) => handlePoolSettingsChange('rule', e.target.value)}
             />
             <InputNumber
               style={{ width: '100%' }}
               addonBefore="updateInterval"
               value={poolParams.poolSettings.updateInterval}
               onChange={(value) =>
-                handlePoolSettingsChange(
-                  'updateInterval',
-                  value
-                )
+                handlePoolSettingsChange('updateInterval', value)
               }
             />
             <Input
               addonBefore="lambda"
               value={poolParams.poolSettings.lambda}
               onChange={(e) =>
-                handlePoolSettingsChange(
-                  'lambda',
-                  e.target.value
-                )
+                handlePoolSettingsChange('lambda', e.target.value)
               }
             />
             <Input
               addonBefore="epsilonMax"
               value={poolParams.poolSettings.epsilonMax}
               onChange={(e) =>
-                handlePoolSettingsChange(
-                  'epsilonMax',
-                  e.target.value
-                )
+                handlePoolSettingsChange('epsilonMax', e.target.value)
               }
             />
             <Input
               addonBefore="absoluteWeightGuardRail"
-              value={
-                poolParams.poolSettings.absoluteWeightGuardRail
-              }
+              value={poolParams.poolSettings.absoluteWeightGuardRail}
               onChange={(e) =>
                 handlePoolSettingsChange(
                   'absoluteWeightGuardRail',
@@ -675,14 +589,9 @@ export function PoolDeploymentConfigReview({
             />
             <Input
               addonBefore="maxTradeSizeRatio"
-              value={
-                poolParams.poolSettings.maxTradeSizeRatio
-              }
+              value={poolParams.poolSettings.maxTradeSizeRatio}
               onChange={(e) =>
-                handlePoolSettingsChange(
-                  'maxTradeSizeRatio',
-                  e.target.value
-                )
+                handlePoolSettingsChange('maxTradeSizeRatio', e.target.value)
               }
             />
 
@@ -697,10 +606,7 @@ export function PoolDeploymentConfigReview({
                 rows={4}
                 value={poolParams.poolSettings.ruleParameters}
                 onChange={(e) =>
-                  handlePoolSettingsChange(
-                    'ruleParameters',
-                    e.target.value
-                  )
+                  handlePoolSettingsChange('ruleParameters', e.target.value)
                 }
               />
             </Space>
@@ -708,88 +614,12 @@ export function PoolDeploymentConfigReview({
               addonBefore="poolManager"
               value={poolParams.poolSettings.poolManager}
               onChange={(e) =>
-                handlePoolSettingsChange(
-                  'poolManager',
-                  e.target.value
-                )
+                handlePoolSettingsChange('poolManager', e.target.value)
               }
             />
 
-            <Divider orientation="left">
-              Oracles &amp; Wrappers (per token)
-            </Divider>
-            {pool.poolConstituents.map((poolCoin) => {
-              const coin = poolCoin.coin;
-              const coinCode = coin.coinCode;
-              const wrapperName =
-                targetChain && coinCode
-                  ? `${targetChain}DataFeed${coinCode}`
-                  : '';
-
-              const deployedToken = getDeploymentForChain(
-                coin.deploymentByChain,
-                targetChain
-              );
-
-              let deployedOracleAddress = '';
-              if (deployedToken && wrapperName) {
-                try {
-                  const fromMap =
-                    deployedToken.oracles.get(wrapperName);
-                  if (fromMap) {
-                    deployedOracleAddress = fromMap;
-                  }
-                } catch {
-                  // ignore map access issues
-                }
-              }
-
-              const localState = localDeploymentTokens[coinCode];
-              const localOracleAddress =
-                wrapperName &&
-                localState?.oracleAddresses[wrapperName];
-
-              const oracleAddress =
-                localOracleAddress ?? deployedOracleAddress ?? '';
-
-              return (
-                <Row
-                  key={`oracle-${coinCode}`}
-                  gutter={[8, 8]}
-                >
-                  <Col span={10}>
-                    <Input
-                      addonBefore="Wrapper Name"
-                      value={wrapperName}
-                      disabled
-                      placeholder="targetChainDataFeedTOKEN"
-                    />
-                  </Col>
-                  <Col span={14}>
-                    <Input
-                      addonBefore="Oracle Address"
-                      value={oracleAddress}
-                      onChange={(e) =>
-                        handleOracleAddressChange(
-                          coinCode,
-                          wrapperName,
-                          e.target.value
-                        )
-                      }
-                    />
-                  </Col>
-                </Row>
-              );
-            })}
-
-            <Divider orientation="left">
-              Registry Permissions (bitmask)
-            </Divider>
-            <Space
-              direction="vertical"
-              style={{ width: '100%' }}
-              size="middle"
-            >
+            <Divider orientation="left">Registry Permissions (bitmask)</Divider>
+            <Space direction="vertical" style={{ width: '100%' }} size="middle">
               <Checkbox.Group
                 options={REGISTRY_PERMISSION_OPTIONS}
                 value={registryMaskSelections}
@@ -805,10 +635,7 @@ export function PoolDeploymentConfigReview({
               addonBefore="poolDetails"
               value={poolParams.poolDetails}
               onChange={(e) =>
-                handlePoolParamChange(
-                  'poolDetails',
-                  e.target.value
-                )
+                handlePoolParamChange('poolDetails', e.target.value)
               }
             />
           </Space>

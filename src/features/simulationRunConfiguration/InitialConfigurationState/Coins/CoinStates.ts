@@ -1,5 +1,5 @@
 // Independent exportable coin state constants
-import { Coin, CoinPrice } from '../../simulationRunConfigModels';
+import { Chain, Coin, CoinPrice, DeployedToken } from '../../simulationRunConfigModels';
 
 const defaultCoinPrice: CoinPrice = {
   date: '2020-01-01 00:00:00:00',
@@ -17,7 +17,48 @@ export const BITCOIN: Coin = {
   coinComparisons: new Map<string, any>(),
   dailyPriceHistory: [defaultCoinPrice],
   dailyReturns: new Map<number, any>(),
-  deploymentByChain: new Map<any, any>(),
+  deploymentByChain: new Map<Chain, DeployedToken>([
+    [
+      Chain.Ethereum,
+      {
+        address: '0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599',
+        oracles: new Map<string, string>([
+          ['Chainlink', '0x966ed29C73F1BDA6061834C04413C9460FC2E47f'],
+        ]),
+        approvalStatus: true,
+      } as DeployedToken,
+    ],
+    [
+      Chain.Base,
+      {
+        address: '0xcbB7C0000aB88B473b1f5aFd9ef808440eed33Bf',
+        oracles: new Map<string, string>([
+          ['Chainlink', '0x34eF06b7b54F6928AB9B3b8149f9C652e54faB53'],
+        ]),
+        approvalStatus: true,
+      } as DeployedToken,
+    ],
+    [
+      Chain.Arbitrum,
+      {
+        address: '0x2f2a2543b76a4166549f7aab2e75bef0aefc5b0f',
+        oracles: new Map<string, string>([
+          ['Chainlink', '0x34eF06b7b54F6928AB9B3b8149f9C652e54faB53'],
+        ]),
+        approvalStatus: true,
+      } as DeployedToken,
+    ],
+    [
+      Chain.Sonic,
+      {
+        address: '0xbb30e76d9bb2cc9631f7fc5eb8e87b5aff32bfbd',
+        oracles: new Map<string, string>([
+          ['Chainlink', '0x8905b91b301677e674cF964Fbc4Ac3844EF79620'],
+        ]),
+        approvalStatus: true,
+      } as DeployedToken,
+    ],
+  ]),
 };
 
 export const ETHEREUM: Coin = {
@@ -27,7 +68,48 @@ export const ETHEREUM: Coin = {
   coinComparisons: new Map<string, any>(),
   dailyPriceHistory: [defaultCoinPrice],
   dailyReturns: new Map<number, any>(),
-  deploymentByChain: new Map<any, any>(),
+  deploymentByChain: new Map<Chain, DeployedToken>([
+    [
+      Chain.Ethereum,
+      {
+        address: '0x1234567890abcdef1234567890abcdef12345678',
+        oracles: new Map<string, string>([
+          ['Chainlink', '0x34eF06b7b54F6928AB9B3b8149f9C652e54faB53'],
+        ]),
+        approvalStatus: true,
+      } as DeployedToken,
+    ],
+    [
+      Chain.Base,
+      {
+        address: '0x4200000000000000000000000000000000000006',
+        oracles: new Map<string, string>([
+          ['Chainlink', '0x966ed29C73F1BDA6061834C04413C9460FC2E47f'],
+        ]),
+        approvalStatus: true,
+      } as DeployedToken,
+    ],
+    [
+      Chain.Arbitrum,
+      {
+        address: '0x82af49447d8a07e3bd95bd0d56f35241523fbab1',
+        oracles: new Map<string, string>([
+          ['Chainlink', '0x966ed29C73F1BDA6061834C04413C9460FC2E47f'],
+        ]),
+        approvalStatus: true,
+      } as DeployedToken,
+    ],
+    [
+      Chain.Sonic,
+      {
+        address: '0x50c42deacd8fc9773493ed674b675be577f2634b',
+        oracles: new Map<string, string>([
+          ['Chainlink', '0x4FFE46130bCBb16BF5EDc4bBaa06f158921764C2'],
+        ]),
+        approvalStatus: true,
+      } as DeployedToken,
+    ],
+  ]),
 };
 
 export const RIPPLE: Coin = {
@@ -37,7 +119,7 @@ export const RIPPLE: Coin = {
   coinComparisons: new Map<string, any>(),
   dailyPriceHistory: [defaultCoinPrice],
   dailyReturns: new Map<number, any>(),
-  deploymentByChain: new Map<any, any>(),
+  deploymentByChain: new Map<Chain, DeployedToken>(),
 };
 
 export const SOLANA: Coin = {
@@ -47,7 +129,7 @@ export const SOLANA: Coin = {
   coinComparisons: new Map<string, any>(),
   dailyPriceHistory: [defaultCoinPrice],
   dailyReturns: new Map<number, any>(),
-  deploymentByChain: new Map<any, any>(),
+  deploymentByChain: new Map<Chain, DeployedToken>(),
 };
 
 export const BINANCE: Coin = {
@@ -57,7 +139,7 @@ export const BINANCE: Coin = {
   coinComparisons: new Map<string, any>(),
   dailyPriceHistory: [defaultCoinPrice],
   dailyReturns: new Map<number, any>(),
-  deploymentByChain: new Map<any, any>(),
+  deploymentByChain: new Map<Chain, DeployedToken>(),
 };
 
 export const USDCOIN: Coin = {
@@ -67,7 +149,48 @@ export const USDCOIN: Coin = {
   coinComparisons: new Map<string, any>(),
   dailyPriceHistory: [defaultCoinPrice],
   dailyReturns: new Map<number, any>(),
-  deploymentByChain: new Map<any, any>(),
+  deploymentByChain: new Map<Chain, DeployedToken>([
+    [
+      Chain.Ethereum,
+      {
+        address: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
+        oracles: new Map<string, string>([
+          ['Chainlink', '0x966ed29C73F1BDA6061834C04413C9460FC2E47f'],
+        ]),
+        approvalStatus: true,
+      } as DeployedToken,
+    ],
+    [
+      Chain.Base,
+      {
+        address: '0x833589fcd6edb6e08f4c7c32d4f71b54bda02913',
+        oracles: new Map<string, string>([
+          ['Chainlink', '0xaAFB604Dc5c7D178e767eD576cA9aa6D48B350C2'],
+        ]),
+        approvalStatus: true,
+      } as DeployedToken,
+    ],
+    [
+      Chain.Arbitrum,
+      {
+        address: '0xaf88d065e77c8cc2239327c5edb3a432268e5831',
+        oracles: new Map<string, string>([
+          ['Chainlink', '0xaAFB604Dc5c7D178e767eD576cA9aa6D48B350C2'],
+        ]),
+        approvalStatus: true,
+      } as DeployedToken,
+    ],
+    [
+      Chain.Sonic,
+      {
+        address: '0x29219dd400f2bf60e5a23d13be72b486d4038894',
+        oracles: new Map<string, string>([
+          ['Chainlink', '0x8905b91b301677e674cF964Fbc4Ac3844EF79620'],
+        ]),
+        approvalStatus: true,
+      } as DeployedToken,
+    ],
+  ]),
 };
 
 export const DOGECOIN: Coin = {
@@ -77,7 +200,7 @@ export const DOGECOIN: Coin = {
   coinComparisons: new Map<string, any>(),
   dailyPriceHistory: [defaultCoinPrice],
   dailyReturns: new Map<number, any>(),
-  deploymentByChain: new Map<any, any>(),
+  deploymentByChain: new Map<Chain, DeployedToken>(),
 };
 
 export const CARDANO: Coin = {
@@ -87,7 +210,7 @@ export const CARDANO: Coin = {
   coinComparisons: new Map<string, any>(),
   dailyPriceHistory: [defaultCoinPrice],
   dailyReturns: new Map<number, any>(),
-  deploymentByChain: new Map<any, any>(),
+  deploymentByChain: new Map<Chain, DeployedToken>(),
 };
 
 export const TRON: Coin = {
@@ -97,7 +220,7 @@ export const TRON: Coin = {
   coinComparisons: new Map<string, any>(),
   dailyPriceHistory: [defaultCoinPrice],
   dailyReturns: new Map<number, any>(),
-  deploymentByChain: new Map<any, any>(),
+  deploymentByChain: new Map<Chain, DeployedToken>(),
 };
 
 export const CHAINLINK: Coin = {
@@ -107,7 +230,7 @@ export const CHAINLINK: Coin = {
   coinComparisons: new Map<string, any>(),
   dailyPriceHistory: [defaultCoinPrice],
   dailyReturns: new Map<number, any>(),
-  deploymentByChain: new Map<any, any>(),
+  deploymentByChain: new Map<Chain, DeployedToken>(),
 };
 
 export const AVALANCHE: Coin = {
@@ -117,7 +240,7 @@ export const AVALANCHE: Coin = {
   coinComparisons: new Map<string, any>(),
   dailyPriceHistory: [defaultCoinPrice],
   dailyReturns: new Map<number, any>(),
-  deploymentByChain: new Map<any, any>(),
+  deploymentByChain: new Map<Chain, DeployedToken>(),
 };
 
 export const STELLAR: Coin = {
@@ -127,7 +250,7 @@ export const STELLAR: Coin = {
   coinComparisons: new Map<string, any>(),
   dailyPriceHistory: [defaultCoinPrice],
   dailyReturns: new Map<number, any>(),
-  deploymentByChain: new Map<any, any>(),
+  deploymentByChain: new Map<Chain, DeployedToken>(),
 };
 
 export const SHIBA_INU: Coin = {
@@ -137,7 +260,7 @@ export const SHIBA_INU: Coin = {
   coinComparisons: new Map<string, any>(),
   dailyPriceHistory: [defaultCoinPrice],
   dailyReturns: new Map<number, any>(),
-  deploymentByChain: new Map<any, any>(),
+  deploymentByChain: new Map<Chain, DeployedToken>(),
 };
 
 export const UNISWAP: Coin = {
@@ -147,7 +270,7 @@ export const UNISWAP: Coin = {
   coinComparisons: new Map<string, any>(),
   dailyPriceHistory: [defaultCoinPrice],
   dailyReturns: new Map<number, any>(),
-  deploymentByChain: new Map<any, any>(),
+  deploymentByChain: new Map<Chain, DeployedToken>(),
 };
 
 export const AAVE: Coin = {
@@ -157,7 +280,24 @@ export const AAVE: Coin = {
   coinComparisons: new Map<string, any>(),
   dailyPriceHistory: [defaultCoinPrice],
   dailyReturns: new Map<number, any>(),
-  deploymentByChain: new Map<any, any>(),
+  deploymentByChain: new Map<Chain, DeployedToken>([
+    [
+      Chain.Ethereum,
+      {
+        address: '0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9',
+        oracles: new Map<string, string>(),
+        approvalStatus: false,
+      } as DeployedToken,
+    ],
+    [
+      Chain.Base,
+      {
+        address: '0x63706e401c06ac8513145b7687a14804d17f814b',
+        oracles: new Map<string, string>(),
+        approvalStatus: false,
+      } as DeployedToken,
+    ],
+  ]),
 };
 
 export const SONIC: Coin = {
@@ -167,7 +307,18 @@ export const SONIC: Coin = {
   coinComparisons: new Map<string, any>(),
   dailyPriceHistory: [defaultCoinPrice],
   dailyReturns: new Map<number, any>(),
-  deploymentByChain: new Map<any, any>(),
+  deploymentByChain: new Map<Chain, DeployedToken>([
+    [
+      Chain.Sonic,
+      {
+        address: '0x039e2fb66102314ce7b64ce5ce3e5183bc94ad38',
+        oracles: new Map<string, string>([
+          ['Chainlink', '0xabcdefabcdefabcdefabcdefabcdefabcdefabcd'],
+        ]),
+        approvalStatus: true,
+      } as DeployedToken,
+    ],
+  ]),
 };
 
 export const MONERO: Coin = {
@@ -177,7 +328,7 @@ export const MONERO: Coin = {
   coinComparisons: new Map<string, any>(),
   dailyPriceHistory: [defaultCoinPrice],
   dailyReturns: new Map<number, any>(),
-  deploymentByChain: new Map<any, any>(),
+  deploymentByChain: new Map<Chain, DeployedToken>(),
 };
 
 export const POLYGON: Coin = {
@@ -187,7 +338,28 @@ export const POLYGON: Coin = {
   coinComparisons: new Map<string, any>(),
   dailyPriceHistory: [defaultCoinPrice],
   dailyReturns: new Map<number, any>(),
-  deploymentByChain: new Map<any, any>(),
+  deploymentByChain: new Map<Chain, DeployedToken>(),
+};
+
+export const AERODROME: Coin = {
+  coinName: 'Aerodrome',
+  coinCode: 'AERO',
+  dailyPriceHistoryMap: new Map<number, any>(),
+  coinComparisons: new Map<string, any>(),
+  dailyPriceHistory: [defaultCoinPrice],
+  dailyReturns: new Map<number, any>(),
+  deploymentByChain: new Map<Chain, DeployedToken>([
+    [
+      Chain.Base,
+      {
+        address: '0x940181a94a35a4569e4529a3cdfb74e38fd98631',
+        oracles: new Map<string, string>([
+          ['Chainlink', '0x18Bd2de107C70222f1cd9796F9aB01458A85d7a7'],
+        ]),
+        approvalStatus: true,
+      } as DeployedToken,
+    ],
+  ]),
 };
 
 export const ALGORAND: Coin = {
@@ -197,7 +369,7 @@ export const ALGORAND: Coin = {
   coinComparisons: new Map<string, any>(),
   dailyPriceHistory: [defaultCoinPrice],
   dailyReturns: new Map<number, any>(),
-  deploymentByChain: new Map<any, any>(),
+  deploymentByChain: new Map<Chain, DeployedToken>(),
 };
 
 export const ARBITRUM: Coin = {
@@ -207,7 +379,7 @@ export const ARBITRUM: Coin = {
   coinComparisons: new Map<string, any>(),
   dailyPriceHistory: [defaultCoinPrice],
   dailyReturns: new Map<number, any>(),
-  deploymentByChain: new Map<any, any>(),
+  deploymentByChain: new Map<Chain, DeployedToken>(),
 };
 
 export const FILECOIN: Coin = {
@@ -217,7 +389,7 @@ export const FILECOIN: Coin = {
   coinComparisons: new Map<string, any>(),
   dailyPriceHistory: [defaultCoinPrice],
   dailyReturns: new Map<number, any>(),
-  deploymentByChain: new Map<any, any>(),
+  deploymentByChain: new Map<Chain, DeployedToken>(),
 };
 
 export const COSMOS: Coin = {
@@ -227,7 +399,7 @@ export const COSMOS: Coin = {
   coinComparisons: new Map<string, any>(),
   dailyPriceHistory: [defaultCoinPrice],
   dailyReturns: new Map<number, any>(),
-  deploymentByChain: new Map<any, any>(),
+  deploymentByChain: new Map<Chain, DeployedToken>(),
 };
 
 export const EOS: Coin = {
@@ -237,7 +409,7 @@ export const EOS: Coin = {
   coinComparisons: new Map<string, any>(),
   dailyPriceHistory: [defaultCoinPrice],
   dailyReturns: new Map<number, any>(),
-  deploymentByChain: new Map<any, any>(),
+  deploymentByChain: new Map<Chain, DeployedToken>(),
 };
 
 export const MAKER_DAO: Coin = {
@@ -247,7 +419,7 @@ export const MAKER_DAO: Coin = {
   coinComparisons: new Map<string, any>(),
   dailyPriceHistory: [defaultCoinPrice],
   dailyReturns: new Map<number, any>(),
-  deploymentByChain: new Map<any, any>(),
+  deploymentByChain: new Map<Chain, DeployedToken>(),
 };
 
 export const LIDO: Coin = {
@@ -257,7 +429,7 @@ export const LIDO: Coin = {
   coinComparisons: new Map<string, any>(),
   dailyPriceHistory: [defaultCoinPrice],
   dailyReturns: new Map<number, any>(),
-  deploymentByChain: new Map<any, any>(),
+  deploymentByChain: new Map<Chain, DeployedToken>(),
 };
 
 export const DYDX: Coin = {
@@ -267,7 +439,7 @@ export const DYDX: Coin = {
   coinComparisons: new Map<string, any>(),
   dailyPriceHistory: [defaultCoinPrice],
   dailyReturns: new Map<number, any>(),
-  deploymentByChain: new Map<any, any>(),
+  deploymentByChain: new Map<Chain, DeployedToken>(),
 };
 
 export const COMPOUND: Coin = {
@@ -277,7 +449,7 @@ export const COMPOUND: Coin = {
   coinComparisons: new Map<string, any>(),
   dailyPriceHistory: [defaultCoinPrice],
   dailyReturns: new Map<number, any>(),
-  deploymentByChain: new Map<any, any>(),
+  deploymentByChain: new Map<Chain, DeployedToken>(),
 };
 
 export const CURVE: Coin = {
@@ -287,7 +459,7 @@ export const CURVE: Coin = {
   coinComparisons: new Map<string, any>(),
   dailyPriceHistory: [defaultCoinPrice],
   dailyReturns: new Map<number, any>(),
-  deploymentByChain: new Map<any, any>(),
+  deploymentByChain: new Map<Chain, DeployedToken>(),
 };
 
 export const SUSHISWAP: Coin = {
@@ -297,7 +469,7 @@ export const SUSHISWAP: Coin = {
   coinComparisons: new Map<string, any>(),
   dailyPriceHistory: [defaultCoinPrice],
   dailyReturns: new Map<number, any>(),
-  deploymentByChain: new Map<any, any>(),
+  deploymentByChain: new Map<Chain, DeployedToken>(),
 };
 
 export const LITECOIN: Coin = {
@@ -307,7 +479,7 @@ export const LITECOIN: Coin = {
   coinComparisons: new Map<string, any>(),
   dailyPriceHistory: [defaultCoinPrice],
   dailyReturns: new Map<number, any>(),
-  deploymentByChain: new Map<any, any>(),
+  deploymentByChain: new Map<Chain, DeployedToken>(),
 };
 
 export const PAX_GOLD: Coin = {
@@ -317,5 +489,16 @@ export const PAX_GOLD: Coin = {
   coinComparisons: new Map<string, any>(),
   dailyPriceHistory: [defaultCoinPrice],
   dailyReturns: new Map<number, any>(),
-  deploymentByChain: new Map<any, any>(),
+  deploymentByChain: new Map<Chain, DeployedToken>([
+    [
+      Chain.Ethereum,
+      {
+        address: '0x45804880de22913dafe09f4980848ece6ecbaf78',
+        oracles: new Map<string, string>([
+          ['Chainlink', '0xaAFB604Dc5c7D178e767eD576cA9aa6D48B350C2'],
+        ]),
+        approvalStatus: true,
+      } as DeployedToken,
+    ],
+  ]),
 };

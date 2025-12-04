@@ -483,7 +483,29 @@ export const ConfigInitialState: SimulationRunConfig = {
       },
     ],
   },
-  chainDeploymentDetails: new Map<Chain, ChainDeploymentDetails>(),
+  chainDeploymentDetails: new Map<Chain, ChainDeploymentDetails>([
+    // Stubbed entries; fill in real deployment details as needed
+    [Chain.Ethereum, {
+      updateWeightRunnerAddress:'0x21Ae9576a393413D6d91dFE2543dCb548Dbb8748',
+      balancerVaultAddress:'0xbA1333333333a1BA1108E8412f11850A5C319bA9',
+      quantammWeightedPoolFactoryAddress:'0xD5c43063563f9448cE822789651662cA7DcD5773',
+    } as ChainDeploymentDetails],
+    [Chain.Arbitrum, {
+      updateWeightRunnerAddress:'0x8Ca4e2a74B84c1feb9ADe19A0Ce0bFcd57e3f6F7',
+      balancerVaultAddress:'0xbA1333333333a1BA1108E8412f11850A5C319bA9',
+      quantammWeightedPoolFactoryAddress:'0x62B9eC6A5BBEBe4F5C5f46C8A8880df857004295',
+    } as ChainDeploymentDetails],
+    [Chain.Base, {
+      updateWeightRunnerAddress:'0x8Ca4e2a74B84c1feb9ADe19A0Ce0bFcd57e3f6F7',
+      balancerVaultAddress:'0xbA1333333333a1BA1108E8412f11850A5C319bA9',
+      quantammWeightedPoolFactoryAddress:'0x62B9eC6A5BBEBe4F5C5f46C8A8880df857004295',
+    } as ChainDeploymentDetails],
+    [Chain.Sonic, {
+      updateWeightRunnerAddress:'0xD5c43063563f9448cE822789651662cA7DcD5773',
+      balancerVaultAddress:'0xbA1333333333a1BA1108E8412f11850A5C319bA9',
+      quantammWeightedPoolFactoryAddress:'0x60006d255569b36a3d494e83D182b57acd04D484',
+    } as ChainDeploymentDetails],
+  ]),
 };
 
 export const tokenList = [
