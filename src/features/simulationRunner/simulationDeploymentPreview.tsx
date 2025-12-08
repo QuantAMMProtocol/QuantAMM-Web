@@ -19,11 +19,14 @@ import {
   Switch,
   Typography,
 } from 'antd';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { selectChainDeploymentSettings } from '../simulationRunConfiguration/simulationRunConfigurationSlice';
 import { useAppSelector } from '../../app/hooks';
 import { SimulationResultAnalysisDto } from './simulationRunnerDtos';
-import { to18Decimals } from '../simulationRunConfiguration/simulationUtils';
+import {
+  sortTokenAddresses,
+  to18Decimals,
+} from '../simulationRunConfiguration/simulationUtils';
 
 const { Text } = Typography;
 
@@ -157,7 +160,7 @@ function buildRuleParametersString(pool: LiquidityPool): string {
 
 export function PoolDeploymentConfigReview({
   pool,
-  initialisationData
+  initialisationData,
 }: PoolDeploymentConfigReviewProps) {
   // Permission bitmasks (as per your comment)
   const MASK_POOL_PERFORM_UPDATE = 1;
@@ -211,14 +214,13 @@ export function PoolDeploymentConfigReview({
 
   const [targetChain, setTargetChain] = useState<Chain>(Chain.Ethereum);
 
-  const [deploymentInput] =
-    useState<LocalQuantAMMDeploymentInputParams>({
-      Vault: '',
-      PauseWindowDuration: null,
-      UpdateWeightRunner: '',
-      FactoryVersion: '',
-      PoolVersion: '',
-    });
+  const [deploymentInput] = useState<LocalQuantAMMDeploymentInputParams>({
+    Vault: '',
+    PauseWindowDuration: null,
+    UpdateWeightRunner: '',
+    FactoryVersion: '',
+    PoolVersion: '',
+  });
 
   const [poolParams, setPoolParams] = useState<LocalCreationNewPoolParams>({
     name: pool.name,
@@ -251,6 +253,48 @@ export function PoolDeploymentConfigReview({
     poolRegistry: '',
     poolDetails: '',
   });
+
+  const sortedTokenAddresses = useMemo(() => {
+    const addresses = pool.poolConstituents
+      .map(
+        (pc) =>
+          getDeploymentForChain(pc.coin.deploymentByChain, targetChain)
+            ?.address ?? ''
+      )
+      .filter((addr) => addr && addr.length > 0);
+    return sortTokenAddresses(addresses);
+  }, [pool.poolConstituents, targetChain]);
+
+  const oracleAddressesMatrixString = useMemo(() => {
+    // Tokens in pool order
+    const tokenDeployments = pool.poolConstituents.map((pc) =>
+      getDeploymentForChain(pc.coin.deploymentByChain, targetChain)
+    );
+
+    // Collect union of oracle names across all tokens
+    const oracleNameSet = new Set<string>();
+    tokenDeployments.forEach((dt) => {
+      dt?.oracles?.forEach((_, oracleName) => oracleNameSet.add(oracleName));
+    });
+
+    // Deterministic order: sort oracle names alphabetically
+    const oracleNames = Array.from(oracleNameSet).sort((a, b) =>
+      a.localeCompare(b)
+    );
+
+    // Build rows: each row is per-oracle, ordered by pool token order
+    const rows = oracleNames.map((oracleName) => {
+      const perTokenAddresses = tokenDeployments.map((dt) => {
+        const addr = dt?.oracles?.get(oracleName) ?? '';
+        return addr;
+      });
+      return `[${perTokenAddresses.join(', ')}] // ${oracleName}`;
+    });
+
+    if (rows.length === 0) return '[]';
+
+    return `[${rows.join(',')}]`;
+  }, [pool.poolConstituents, targetChain]);
 
   // Whenever targetChain changes, hydrate token addresses from deploymentByChain
   useEffect(() => {
@@ -326,50 +370,81 @@ export function PoolDeploymentConfigReview({
 
             <Divider orientation="left">Pool Constituents</Divider>
             <Row gutter={[8, 8]}>
-              <Col span={3}>Token Code</Col>
+              <Col span={2}>Token Code</Col>
               <Col span={8}>Token {targetChain} Address</Col>
               <Col span={8}>Oracle Address</Col>
-              <Col span={5}>Approval Status</Col>
+              <Col span={3}>Approved</Col>
+              <Col span={3}>Order</Col>
             </Row>
-            {pool.poolConstituents.map((poolCoin, index) => (
-              <>
-                <Row key={`${poolCoin.coin.coinCode}-${index}`} gutter={[8, 8]}>
-                  <Col span={3}>
-                    <Input value={`${poolCoin.coin.coinCode}`} disabled />
-                  </Col>
-                  <Col span={8}>
-                    <Input
-                      value={`${
-                        poolCoin.coin.deploymentByChain.get(targetChain)
-                          ?.address ?? 'UNKNOWN'
-                      }`}
-                      disabled
-                    />
-                  </Col>
-                  <Col span={8}>
-                    <Input
-                      value={
-                        poolCoin.coin.deploymentByChain
-                          .get(targetChain)
-                          ?.oracles.get('Chainlink') ?? 'UNKNOWN'
-                      }
-                      disabled
-                    />
-                  </Col>
-                  <Col span={5}>
-                    <Input
-                      value={
-                        poolCoin.coin.deploymentByChain.get(targetChain)
-                          ?.approvalStatus
-                          ? 'APPROVED'
-                          : 'REQUIRES APPROVAL'
-                      }
-                      disabled
-                    />
-                  </Col>
-                </Row>
-              </>
-            ))}
+            {pool.poolConstituents
+              .slice()
+              .sort((a, b) => {
+              const aAddr =
+                getDeploymentForChain(a.coin.deploymentByChain, targetChain)
+                ?.address ?? '';
+              const bAddr =
+                getDeploymentForChain(b.coin.deploymentByChain, targetChain)
+                ?.address ?? '';
+              return (
+                sortedTokenAddresses.indexOf(aAddr) -
+                sortedTokenAddresses.indexOf(bAddr)
+              );
+              })
+              .map((poolCoin, index) => (
+              <Row key={`${poolCoin.coin.coinCode}-${index}`} gutter={[8, 8]}>
+                <Col span={2}>
+                <Input value={`${poolCoin.coin.coinCode}`} disabled />
+                </Col>
+                <Col span={8}>
+                <Input
+                  value={
+                  getDeploymentForChain(
+                    poolCoin.coin.deploymentByChain,
+                    targetChain
+                  )?.address ?? 'UNKNOWN'
+                  }
+                  disabled
+                />
+                </Col>
+                <Col span={8}>
+                <Input
+                  value={
+                  getDeploymentForChain(
+                    poolCoin.coin.deploymentByChain,
+                    targetChain
+                  )?.oracles.get('Chainlink') ?? 'UNKNOWN'
+                  }
+                  disabled
+                />
+                </Col>
+                <Col span={3}>
+                <Input
+                  value={
+                  getDeploymentForChain(
+                    poolCoin.coin.deploymentByChain,
+                    targetChain
+                  )?.approvalStatus
+                    ? 'APPROVED'
+                    : 'NOT APPROVED'
+                  }
+                  disabled
+                />
+                </Col>
+                <Col span={3}>
+                <Input
+                  value={
+                  sortedTokenAddresses.indexOf(
+                    getDeploymentForChain(
+                    poolCoin.coin.deploymentByChain,
+                    targetChain
+                    )?.address ?? ''
+                  )
+                  }
+                  disabled
+                />
+                </Col>
+              </Row>
+              ))}
           </Space>
           {/* Deployment parameters shared across scripts */}
           <Divider>Deployment Parameters (input.ts / index.ts)</Divider>
@@ -478,19 +553,27 @@ export function PoolDeploymentConfigReview({
             <Divider orientation="left">Initial State</Divider>
             <Input
               addonBefore="_initialWeights"
-              value={initialisationData?.final_weights?.join(", ") ?? "UNKNOWN"}
+              value={initialisationData?.final_weights?.join(', ') ?? 'UNKNOWN'}
             />
             <Input
               addonBefore="_initialMovingAverages"
-              value={initialisationData?.readouts.strings.ewma.join(", ") ?? "UNKNOWN"}
+              value={
+                initialisationData?.readouts.strings.ewma.join(', ') ??
+                'UNKNOWN'
+              }
             />
             <Input
               addonBefore="_initialIntermediateValues"
-              value={initialisationData?.readouts.strings.running_a.join(", ") ?? "UNKNOWN"}
+              value={
+                initialisationData?.readouts.strings.running_a.join(', ') ??
+                'UNKNOWN'
+              }
             />
             <Input
               addonBefore="_oracleStalenessThreshold"
-              value={initialisationData?.jax_parameters.chunk_period[0] ?? "UNKNOWN"}
+              value={
+                initialisationData?.jax_parameters.chunk_period[0] ?? 'UNKNOWN'
+              }
             />
             <Divider orientation="left">Pool Settings</Divider>
             <Input
@@ -501,7 +584,9 @@ export function PoolDeploymentConfigReview({
             <InputNumber
               style={{ width: '100%' }}
               addonBefore="updateInterval"
-              value={initialisationData?.jax_parameters.chunk_period[0] ?? "UNKNOWN"}
+              value={
+                initialisationData?.jax_parameters.chunk_period[0] ?? 'UNKNOWN'
+              }
             />
             <Input
               addonBefore="lambda"

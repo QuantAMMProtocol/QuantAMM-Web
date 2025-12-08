@@ -44,3 +44,27 @@ export function to18Decimals(value: number): string {
 
   return sign + combined;
 }
+
+/**
+ * Sort an array of Ethereum addresses in ascending order,
+ * mimicking the Solidity bubble sort:
+ *
+ * if (tokens[j] > tokens[j + 1]) { swap }
+ */
+export function sortTokenAddresses(addresses: string[]): string[] {
+  // Make a shallow copy so we don't mutate the original
+  const tokens = [...addresses];
+
+  for (let i = 0; i < tokens.length - 1; ++i) {
+    for (let j = 0; j < tokens.length - i - 1; ++j) {
+      // Compare as lowercase hex strings; same length, so lexicographic === numeric order
+      if (tokens[j].toLowerCase() > tokens[j + 1].toLowerCase()) {
+        const tmp = tokens[j];
+        tokens[j] = tokens[j + 1];
+        tokens[j + 1] = tmp;
+      }
+    }
+  }
+
+  return tokens;
+}
