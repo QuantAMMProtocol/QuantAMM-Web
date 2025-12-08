@@ -77,16 +77,24 @@ import {
   PowerChannelState,
   RvrPowerChannelState,
 } from './InitialConfigurationState/UpdateRules/powerChannelState';
-import { TruflationBtcRegimeState } from './InitialConfigurationState/UpdateRules/TruflationBtcRegimeState';
 import {
   Chain,
   ChainDeploymentDetails,
   SimulationRunConfig,
 } from './simulationRunConfigModels';
 
+const formatYesterdaysEnd = (): string => {
+  const d = new Date();
+  d.setDate(d.getDate() - 1);
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, '0');
+  const dd = String(d.getDate()).padStart(2, '0');
+  return `${yyyy}-${mm}-${dd} 23:59:00`;
+};
+
 export const ConfigInitialState: SimulationRunConfig = {
   startDate: '2024-01-01 00:00:00',
-  endDate: '2025-07-01 23:59:00',
+  endDate: formatYesterdaysEnd(),
   coinLoadStatus: [],
   coinPriceHistoryLoadedStatus: 'pending',
   simulationSimplifiedIncludeLvrRuns: false,
@@ -245,7 +253,6 @@ export const ConfigInitialState: SimulationRunConfig = {
     AntiMomentumState,
     ChannelFollowingState,
     DifferenceMomentumState,
-    TruflationBtcRegimeState,
     PowerChannelState,
     MinimumVarianceState,
     LvrMomentumState,

@@ -132,9 +132,10 @@ const handleDownloadGas = (
 export function SimulationRunnerTimePeriodStep() {
   const disabledDate = (current: any) => {
     // Can not select days before today and today
+    const yesterdayStr = dayjs().subtract(1, 'day').format('YYYY-MM-DD'); // Can not select days before today and today
     return (
       current < dayjs('2021-11-20', 'YYYY-MM-DD') ||
-      current > dayjs('2025-07-02', 'YYYY-MM-DD')
+      current > dayjs(yesterdayStr, 'YYYY-MM-DD')
     );
   };
 

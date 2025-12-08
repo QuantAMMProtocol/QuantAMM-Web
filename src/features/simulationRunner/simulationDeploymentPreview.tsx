@@ -4,7 +4,6 @@ import {
   Chain,
   DeployedToken,
   LiquidityPool,
-  UpdateRuleParameter,
 } from '../simulationRunConfiguration/simulationRunConfigModels';
 
 import {
@@ -24,8 +23,9 @@ import { selectChainDeploymentSettings } from '../simulationRunConfiguration/sim
 import { useAppSelector } from '../../app/hooks';
 import { SimulationResultAnalysisDto } from './simulationRunnerDtos';
 import {
+  buildRuleParametersString,
+  reorderReadoutStringArray,
   sortTokenAddresses,
-  to18Decimals,
 } from '../simulationRunConfiguration/simulationUtils';
 
 const { Text } = Typography;
@@ -98,66 +98,6 @@ function getDeploymentForChain(
   }
 }
 
-/**
- * Build a ruleParameters string (for input.ts) from the pool's update rule parameters.
- * Rows are ordered by smartContractSortOrder and each row is ordered by pool token order.
- * Each row is rendered as: [v1, v2, ...] // factorName
- */
-function buildRuleParametersString(pool: LiquidityPool): string {
-  const tokenCodes = pool.poolConstituents.map((c) => c.coin.coinCode);
-  const params: UpdateRuleParameter[] = pool.updateRule.updateRuleParameters;
-
-  interface Row {
-    factorName: string;
-    valuesByCoin: Record<string, string>;
-  }
-
-  const rowsByOrder: Record<number, Row> = {};
-
-  params.forEach((param) => {
-    const sortOrder = param.smartContractSortOrder ?? 0;
-
-    const existingRow = rowsByOrder[sortOrder];
-    const row: Row = existingRow ?? {
-      factorName: param.factorName,
-      valuesByCoin: {},
-    };
-
-    if (param.applicableCoins && param.applicableCoins.length > 0) {
-      // Coin-specific overrides
-      param.applicableCoins.forEach((liquidityPoolCoin) => {
-        const coinCode = liquidityPoolCoin.coin.coinCode;
-        const rawValue = liquidityPoolCoin.factorValue ?? param.factorValue;
-        const value = to18Decimals(Number(rawValue));
-        row.valuesByCoin[coinCode] = value;
-      });
-    } else {
-      // Applies to all coins – fill any missing values
-      tokenCodes.forEach((coinCode) => {
-        if (!(coinCode in row.valuesByCoin)) {
-          row.valuesByCoin[coinCode] = to18Decimals(Number(param.factorValue));
-        }
-      });
-    }
-
-    rowsByOrder[sortOrder] = row;
-  });
-
-  const sortedOrders = Object.keys(rowsByOrder)
-    .map(Number)
-    .sort((a, b) => a - b);
-
-  const rowStrings = sortedOrders.map((order) => {
-    const row = rowsByOrder[order];
-    const perTokenValues = tokenCodes.map(
-      (coinCode) => row.valuesByCoin[coinCode] ?? ''
-    );
-    return `[${perTokenValues.join(', ')}] // ${row.factorName}`;
-  });
-
-  return `[\n  ${rowStrings.join(',\n  ')}\n]`;
-}
-
 export function PoolDeploymentConfigReview({
   pool,
   initialisationData,
@@ -222,6 +162,17 @@ export function PoolDeploymentConfigReview({
     PoolVersion: '',
   });
 
+  const sortedTokenAddresses = useMemo(() => {
+    const addresses = pool.poolConstituents
+      .map(
+        (pc) =>
+          getDeploymentForChain(pc.coin.deploymentByChain, targetChain)
+            ?.address ?? ''
+      )
+      .filter((addr) => addr && addr.length > 0);
+    return sortTokenAddresses(addresses);
+  }, [pool.poolConstituents, targetChain]);
+  
   const [poolParams, setPoolParams] = useState<LocalCreationNewPoolParams>({
     name: pool.name,
     symbol: pool.name.replace(/\s+/g, ''),
@@ -239,12 +190,12 @@ export function PoolDeploymentConfigReview({
         .join(', '),
       rule: pool.updateRule.updateRuleName,
       updateInterval: null,
-      lambda: '',
+      lambda: buildRuleParametersString(pool, initialisationData?.smart_contract_parameters?.strings ?? {}, sortedTokenAddresses, targetChain, true),
       epsilonMax: '0.432',
       absoluteWeightGuardRail: '0.03',
       maxTradeSizeRatio: '0.1',
       // initialise from update rule parameters in smart-contract order
-      ruleParameters: buildRuleParametersString(pool),
+      ruleParameters: buildRuleParametersString(pool, initialisationData?.smart_contract_parameters?.strings ?? {}, sortedTokenAddresses, targetChain, false),
       poolManager: '',
     },
     initialMovingAverages: '',
@@ -254,47 +205,6 @@ export function PoolDeploymentConfigReview({
     poolDetails: '',
   });
 
-  const sortedTokenAddresses = useMemo(() => {
-    const addresses = pool.poolConstituents
-      .map(
-        (pc) =>
-          getDeploymentForChain(pc.coin.deploymentByChain, targetChain)
-            ?.address ?? ''
-      )
-      .filter((addr) => addr && addr.length > 0);
-    return sortTokenAddresses(addresses);
-  }, [pool.poolConstituents, targetChain]);
-
-  const oracleAddressesMatrixString = useMemo(() => {
-    // Tokens in pool order
-    const tokenDeployments = pool.poolConstituents.map((pc) =>
-      getDeploymentForChain(pc.coin.deploymentByChain, targetChain)
-    );
-
-    // Collect union of oracle names across all tokens
-    const oracleNameSet = new Set<string>();
-    tokenDeployments.forEach((dt) => {
-      dt?.oracles?.forEach((_, oracleName) => oracleNameSet.add(oracleName));
-    });
-
-    // Deterministic order: sort oracle names alphabetically
-    const oracleNames = Array.from(oracleNameSet).sort((a, b) =>
-      a.localeCompare(b)
-    );
-
-    // Build rows: each row is per-oracle, ordered by pool token order
-    const rows = oracleNames.map((oracleName) => {
-      const perTokenAddresses = tokenDeployments.map((dt) => {
-        const addr = dt?.oracles?.get(oracleName) ?? '';
-        return addr;
-      });
-      return `[${perTokenAddresses.join(', ')}] // ${oracleName}`;
-    });
-
-    if (rows.length === 0) return '[]';
-
-    return `[${rows.join(',')}]`;
-  }, [pool.poolConstituents, targetChain]);
 
   // Whenever targetChain changes, hydrate token addresses from deploymentByChain
   useEffect(() => {
@@ -553,19 +463,19 @@ export function PoolDeploymentConfigReview({
             <Divider orientation="left">Initial State</Divider>
             <Input
               addonBefore="_initialWeights"
-              value={initialisationData?.final_weights?.join(', ') ?? 'UNKNOWN'}
+              value={reorderReadoutStringArray(pool,initialisationData?.final_weights_strings ?? [], sortedTokenAddresses, targetChain).join(', ') ?? 'UNKNOWN'}
             />
             <Input
               addonBefore="_initialMovingAverages"
               value={
-                initialisationData?.readouts.strings.ewma.join(', ') ??
+                reorderReadoutStringArray(pool,initialisationData?.readouts.strings.ewma ?? [], sortedTokenAddresses, targetChain).join(', ') ??
                 'UNKNOWN'
               }
             />
             <Input
               addonBefore="_initialIntermediateValues"
               value={
-                initialisationData?.readouts.strings.running_a.join(', ') ??
+                reorderReadoutStringArray(pool,initialisationData?.readouts.strings.running_a ?? [], sortedTokenAddresses, targetChain).join(', ') ??
                 'UNKNOWN'
               }
             />
@@ -591,9 +501,7 @@ export function PoolDeploymentConfigReview({
             <Input
               addonBefore="lambda"
               value={poolParams.poolSettings.lambda}
-              onChange={(e) =>
-                handlePoolSettingsChange('lambda', e.target.value)
-              }
+              disabled
             />
             <Input
               addonBefore="absoluteWeightGuardRail"
