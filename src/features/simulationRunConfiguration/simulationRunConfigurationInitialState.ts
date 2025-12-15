@@ -596,7 +596,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           factorDescription: 'TODO MW',
           applicableCoins: [],
           factorValue: '0.0125',
-          minValue: '0',
+          minValue: '-5000',
           maxValue: '5000',
         },
         {
@@ -606,7 +606,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           applicableCoins: [],
           factorValue: '-0.0125',
           minValue: '-5000',
-          maxValue: '0',
+          maxValue: '5000',
         },
         {
           factorName: 'flat_buffer_up',
