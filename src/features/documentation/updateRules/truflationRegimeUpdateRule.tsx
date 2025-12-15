@@ -49,7 +49,7 @@ export function TruflationRegimeUpdateRule(props: DocProps) {
               </Col>
             </Row>
             <Row>
-              <Col span={24} style={{ padding: 10 }}>
+              <Col span={24} >
                 <div hidden={eli5 != 'ELI5' || props.hideImage}>
                   <Row>
                     <Col span={8}>
@@ -65,7 +65,7 @@ export function TruflationRegimeUpdateRule(props: DocProps) {
                       />
                     </Col>
                     <Col span={16}>
-                      <div style={{ marginTop: '20px' }}>
+                      <div>
                         <Eli5 strategy="TRUFLATION_INFLATION_REGIME" />
                       </div>
                     </Col>

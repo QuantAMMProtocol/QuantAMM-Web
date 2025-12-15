@@ -14,7 +14,7 @@ export const TruflationInflationRegime = ({
   return (
     <>
       {!hideTitle && (
-        <Title level={3}>
+        <Title level={3} style={{ margin: 0 }}>
           <Text style={{ fontSize: 'inherit' }}>
             Bitcoin is an inflation hedge, it could react to inflation data
           </Text>

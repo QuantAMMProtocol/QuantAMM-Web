@@ -1,4 +1,13 @@
-import { Button, Card, Col, Collapse, Row, Tooltip } from 'antd';
+import {
+  Button,
+  Card,
+  Col,
+  Collapse,
+  Row,
+  Segmented,
+  Space,
+  Tooltip,
+} from 'antd';
 import { useEffect, useState } from 'react';
 import { useMemo } from 'react';
 import { Radio } from 'antd';
@@ -13,11 +22,16 @@ import { useAppSelector } from '../../../../app/hooks';
 import { selectTheme } from '../../../themes/themeSlice';
 import { FactsheetModel } from '../../landing/desktop/factsheetModel';
 import { FAQItems } from '../../landing/faqItems';
+import { SimulationResultDrawdownChart } from '../../../simulationResults/visualisations/simulationResultDrawdownGraph';
 import ButtonGroup from 'antd/es/button/button-group';
 
 interface FactsheetDesktopProps {
   model: FactsheetModel;
 }
+
+type ExplorerView = 'drawdowns' | 'composition';
+
+type TrainingView = 'drawdowns' | 'marketValue' | 'weightChange' | 'metrics';
 
 export function TruflationFactSheetDesktop(props: FactsheetDesktopProps) {
   const [breakdowns, setBreakdowns] = useState<
@@ -79,6 +93,28 @@ export function TruflationFactSheetDesktop(props: FactsheetDesktopProps) {
     [props.model.trainPeriod, props.model.poolPrefix]
   );
 
+  const [view, setView] = useState<ExplorerView>('drawdowns');
+
+  const viewOptions = useMemo(
+    () => [
+      { label: 'Drawdowns', value: 'drawdowns' as const },
+      { label: 'Composition', value: 'composition' as const },
+    ],
+    []
+  );
+
+  const [trainingView, setTrainingView] = useState<TrainingView>('drawdowns');
+
+  const trainingViewOptions = useMemo(
+    () => [
+      { label: 'Drawdowns', value: 'drawdowns' as const },
+      { label: 'Market value', value: 'marketValue' as const },
+      { label: 'Weight change', value: 'weightChange' as const },
+      { label: 'Metrics', value: 'metrics' as const },
+    ],
+    []
+  );
+
   const periodSelector = (
     <Radio.Group
       onChange={(e) => setPeriod(e.target.value)}
@@ -89,10 +125,13 @@ export function TruflationFactSheetDesktop(props: FactsheetDesktopProps) {
       <Radio.Button value={props.model.defaultPeriod[0]}>
         {props.model.defaultPeriod[1]}
       </Radio.Button>
-      {props.model.alternatePeriod[0] != '' ? 
-      <Radio.Button value={props.model.alternatePeriod[0]}>
-        {props.model.alternatePeriod[1]}
-      </Radio.Button> : <></>}
+      {props.model.alternatePeriod[0] != '' ? (
+        <Radio.Button value={props.model.alternatePeriod[0]}>
+          {props.model.alternatePeriod[1]}
+        </Radio.Button>
+      ) : (
+        <></>
+      )}
     </Radio.Group>
   );
 
@@ -103,7 +142,7 @@ export function TruflationFactSheetDesktop(props: FactsheetDesktopProps) {
   const xAxisMonthInterval = useMemo(() => {
     return props.model.xAxisIntervals.get(period);
   }, [period, props.model.xAxisIntervals]);
-
+  console.log(breakdowns[btf]);
   return (
     <div>
       <Row>
@@ -159,157 +198,9 @@ export function TruflationFactSheetDesktop(props: FactsheetDesktopProps) {
       <Row>
         <Col span={1}></Col>
         <Col span={22}>
-          <h1 style={{ marginLeft: '10px' }}>OVERVIEW</h1>
-        </Col>
-        <Col span={1}></Col>
-      </Row>
-      <Row style={{ height: '52vh' }}>
-        <Col span={1}></Col>
-        <Col span={10}>
-          <Row style={{ height: '100%' }}>
-            <Col span={24}>
-              <Card
-                title={
-                  <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                    }}
-                  >
-                    <span>GENERAL DETAILS</span>
-                    <ButtonGroup>
-                    <Button
-                      size="small"
-                      onClick={() =>
-                        navigate(
-                          '/factsheet/example/' + props.model.poolId
-                        )
-                      }
-                    >
-                      View Simulation Results
-                    </Button>
-                    <Button
-                      disabled={props.model.status !== 'LIVE'}
-                      size="small"
-                      onClick={() =>
-                        navigate(
-                          '/product-explorer/' + props.model.poolChain + '/' + props.model.poolId
-                        )
-                      }
-                    >
-                      View Live Pool
-                    </Button>
-                    </ButtonGroup>
-                  </div>
-                }
-                style={{ height: '100%' }}
-              >
-                <Row>
-                  <Col span={2}></Col>
-                  <Col span={10}>
-                    <Col span={24}>
-                      <h5
-                        style={{
-                          margin: 10,
-                          width: '80%',
-                          textAlign: 'center',
-                        }}
-                      >
-                        Deployment Links
-                      </h5>
-                    </Col>
-                    {props.model.deploymentLinks.contractLinks.map(
-                      (link, index) => {
-                        return (
-                          <Col span={24} key={index}>
-                            <Button
-                              disabled={link[1] === 'UNKNOWN'}
-                              size="small"
-                              style={{ margin: 10, width: '80%' }}
-                              color="primary"
-                            >
-                              <a href={link[1]}>{link[0]}</a>
-                            </Button>
-                          </Col>
-                        );
-                      }
-                    )}
-                  </Col>
-                  <Col span={10}>
-                    <Col span={24}>
-                      <h5
-                        style={{
-                          margin: 10,
-                          width: '80%',
-                          textAlign: 'center',
-                        }}
-                      >
-                        Fixed Settings
-                      </h5>
-                    </Col>
-                    {props.model.fixedSettings.map((setting, index) => {
-                      return (
-                        <Col span={24} key={index}>
-                          <Button
-                            size="small"
-                            style={{
-                              margin: 10,
-                              width: '80%',
-                              backgroundColor: 'transparent',
-                              color: 'var(--tooltip-text-color)',
-                            }}
-                            disabled={true}
-                          >
-                            {setting[0]}: {setting[1]}
-                          </Button>
-                        </Col>
-                      );
-                    })}
-                  </Col>
-                  <Col span={2}></Col>
-                </Row>
-              </Card>
-            </Col>
-          </Row>
-        </Col>
-        <Col span={1}></Col>
-        <Col span={11}>
-          <Card
-            title={
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}
-              >
-                <span>COMPOSITION OVER TIME</span>
-                {periodSelector}
-              </div>
-            }
-            style={{ height: '100%' }}
-          >
-            <Row>
-              <Col span={24} style={{ paddingTop: '30px' }}>
-                <WeightChangeOverTimeGraph
-                  simulationRunBreakdown={breakdowns[btf]}
-                  overrideChartTheme={
-                    isDarkTheme ? 'ag-default-dark' : 'ag-default'
-                  }
-                  overrideXAxisInterval={xAxisMonthInterval}
-                />
-              </Col>
-            </Row>
-          </Card>
-        </Col>
-        <Col span={1}></Col>
-      </Row>
-
-      <Row>
-        <Col span={1}></Col>
-        <Col span={22}>
-          <h1 style={{ marginLeft: '10px' }}>CUMULATIVE PERFORMANCE</h1>
+          <h1 style={{ marginLeft: '10px' }}>
+            TEST WINDOW (JAN-DEC 2025) PERFORMANCE
+          </h1>
         </Col>
         <Col span={1}></Col>
       </Row>
@@ -335,11 +226,7 @@ export function TruflationFactSheetDesktop(props: FactsheetDesktopProps) {
               <SimulationResultMarketValueChart
                 hideTitle={true}
                 overrideNagivagtion={false}
-                breakdowns={
-                  loading
-                    ? []
-                    : [breakdowns[btf], breakdowns[hodl]]
-                }
+                breakdowns={loading ? [] : [breakdowns[btf], breakdowns[hodl]]}
                 overrideSeriesStrokeColor={
                   props.model.cumulativePerformanceOverrideSeriesStrokeColor
                 }
@@ -354,17 +241,11 @@ export function TruflationFactSheetDesktop(props: FactsheetDesktopProps) {
         </Col>
         <Col span={1}></Col>
       </Row>
-      <Row>
-        <Col span={1}></Col>
-        <Col span={22}>
-          <h1 style={{ marginLeft: '10px' }}>RE-WEIGHTING METHODOLOGY</h1>
-        </Col>
-        <Col span={1}></Col>
-      </Row>
-      <Row style={{ height: '80vh' }}>
+
+      <Row style={{ height: '75vh', marginTop: '30px' }}>
         <Col span={1}></Col>
         <Col span={10}>
-          <Row>
+          <Row style={{ height: '100%' }}>
             <Col span={24}>
               <Card
                 title={
@@ -375,68 +256,111 @@ export function TruflationFactSheetDesktop(props: FactsheetDesktopProps) {
                       alignItems: 'center',
                     }}
                   >
-                    <span>QUANTAMM REBALANCING</span>
-                    <Radio.Group
-                      size="small"
-                      buttonStyle="solid"
-                      value={faqEli5}
-                      onChange={(e) => setFAQEli5(e.target.value)}
-                      style={{ fontWeight: 'normal' }}
-                    >
-                      <Radio.Button value="ELI5">ELI5</Radio.Button>
-                      <Radio.Button value="Crypto Native">
-                        Crypto Native
-                      </Radio.Button>
-                      <Radio.Button value="Quant">Quant</Radio.Button>
-                    </Radio.Group>
+                    <span>STRATEGY DETAILS</span>
+                    <ButtonGroup>
+                      <Button
+                        size="small"
+                        onClick={() =>
+                          navigate('/factsheet/example/' + props.model.poolId)
+                        }
+                      >
+                        View Simulation Results
+                      </Button>
+                      <Button
+                        disabled={props.model.status !== 'LIVE'}
+                        size="small"
+                        onClick={() =>
+                          navigate(
+                            '/product-explorer/' +
+                              props.model.poolChain +
+                              '/' +
+                              props.model.poolId
+                          )
+                        }
+                      >
+                        View Live Pool
+                      </Button>
+                    </ButtonGroup>
                   </div>
                 }
-                style={{ height: '80vh', overflowY: 'auto' }}
+                style={{ height: '100%' }}
               >
-                <Collapse
-                  defaultActiveKey={['1']}
+                <div
                   style={{
-                    width: '100%',
-                    backgroundColor: isDarkTheme ? '#162536' : '#fff',
+                    overflowY: 'auto',
+                    height: '55vh',
                   }}
-                  accordion
-                  items={FAQItems.map((x) => {
-                    return {
-                      key: x.key,
-                      label: x.label,
-                      children: (
-                        <>
-                          <div hidden={faqEli5 != 'ELI5'}>
-                            {x.eli5Description}
-                          </div>
-                          <div hidden={faqEli5 != 'Crypto Native'}>
-                            {x.cryptoNativeDescription}
-                          </div>
-                          <div hidden={faqEli5 != 'Quant'}>
-                            {x.quantDescription}
-                          </div>
-                        </>
-                      ),
-                    };
-                  })}
-                  size="small"
-                />
+                >
+                  {props.model.updateRule}
+                </div>
               </Card>
             </Col>
           </Row>
         </Col>
         <Col span={1}></Col>
+
         <Col span={11}>
-          <Row>
-            <Col span={24} style={{ height: '100%' }}>
+          <Row style={{ height: '100%' }}>
+            <Col span={24}>
               <Card
-                title="BTF RE-WEIGHT STRATEGY"
-                style={{ height: '80vh', overflowY: 'auto' }}
+                title={
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      gap: 12,
+                    }}
+                  >
+                    <span>Test Window Strategy Explorer</span>
+
+                    <Space size="middle">
+                      <ButtonGroup>
+                      {viewOptions.map((opt) => (
+                        <Button
+                        key={opt.value}
+                        size="small"
+                        type={view === opt.value ? 'primary' : 'default'}
+                        onClick={() => setView(opt.value as ExplorerView)}
+                        >
+                        {opt.label}
+                        </Button>
+                      ))}
+                      </ButtonGroup>
+                    </Space>
+                  </div>
+                }
+                style={{ height: '100%' }}
               >
-                {props.model.updateRule}
+                {view === 'drawdowns' ? (
+                  <Row>
+                    <Col span={1} />
+                    <Col span={22}>
+                      <SimulationResultDrawdownChart
+                        breakdowns={
+                          loading ? [] : [breakdowns[btf], breakdowns[hodl]]
+                        }
+                        forceViewResults={true}
+                        hideTitle={true}
+                      />
+                    </Col>
+                    <Col span={1} />
+                  </Row>
+                ) : (
+                  <Row>
+                    <Col span={24} style={{ paddingTop: '30px' }}>
+                      <WeightChangeOverTimeGraph
+                        simulationRunBreakdown={breakdowns[btf]}
+                        overrideChartTheme={
+                          isDarkTheme ? 'ag-default-dark' : 'ag-default'
+                        }
+                        overrideXAxisInterval={xAxisMonthInterval}
+                      />
+                    </Col>
+                  </Row>
+                )}
               </Card>
             </Col>
-            <Col span={24}></Col>
           </Row>
         </Col>
         <Col span={1}></Col>
@@ -475,11 +399,15 @@ export function TruflationFactSheetDesktop(props: FactsheetDesktopProps) {
                       <Radio.Button value={props.model.defaultPeriod[0]}>
                         {props.model.defaultPeriod[1]}
                       </Radio.Button>
-                      {props.model.alternatePeriod[0] != '' ? 
+                      
+                      {props.model.alternatePeriod[0] != '' ? (
                         <Radio.Button value={props.model.alternatePeriod[0]}>
                           {props.model.alternatePeriod[1]}
-                        </Radio.Button> : <></>
-                      }
+                        </Radio.Button>
+                      ) : (
+                        <></>
+                      )}
+                      
                     </Radio.Group>
                   </div>
                 }
@@ -487,9 +415,7 @@ export function TruflationFactSheetDesktop(props: FactsheetDesktopProps) {
               >
                 <AnalysisSimplifiedBreakdownTable
                   simulationRunBreakdowns={
-                    loading
-                      ? []
-                      : [breakdowns[btf], breakdowns[hodl]]
+                    loading ? [] : [breakdowns[btf], breakdowns[hodl]]
                   }
                   visibleMetrics={[
                     'Absolute Return (%)',
@@ -498,6 +424,7 @@ export function TruflationFactSheetDesktop(props: FactsheetDesktopProps) {
                     'Annualized Information Ratio',
                     'Total Capture Ratio',
                     "Annualized Jensen's Alpha (%)",
+                    'Monthly Returns Maximum Drawdown'
                   ]}
                   height={300}
                 />
@@ -596,47 +523,117 @@ export function TruflationFactSheetDesktop(props: FactsheetDesktopProps) {
         <Col span={22}>{props.model.trainingDescription}</Col>
         <Col span={1}></Col>
       </Row>
-      <Row style={{ height: '130vh' }}>
+      <Row style={{ height: '110vh' }}>
         <Col span={1}></Col>
         <Col span={10}>
           <Col span={24}>
             <Card
-              title={props.model.trainingWindowTitle}
-              style={{ height: '130vh' }}
+              title={
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    gap: 12,
+                  }}
+                >
+                  <span>{props.model.trainingWindowTitle}</span>
+
+                </div>
+              }
+              style={{ height: '110vh' }}
             >
               <Row>
                 <Col span={24}>
+
+                    <Space size="middle">
+                      <ButtonGroup>
+                      {trainingViewOptions.map((opt) => (
+                        <Button
+                        key={opt.value}
+                        size="small"
+                        type={trainingView === opt.value ? 'primary' : 'default'}
+                        onClick={() => setTrainingView(opt.value as TrainingView)}
+                        >
+                        {opt.label}
+                        </Button>
+                      ))}
+                      </ButtonGroup>
+                    </Space>
+                </Col>
+              </Row>
+              <Row>
+                <Col span={24}>
                   <div hidden={loading}>
-                    <h5>Constituent weights over time</h5>
-                    <WeightChangeOverTimeGraph
-                      simulationRunBreakdown={breakdowns[btfTrain]}
-                      overrideChartTheme={
-                        isDarkTheme ? 'ag-default-dark' : 'ag-default'
+                    {
+                      trainingView === 'metrics' && (
+                      <AnalysisSimplifiedBreakdownTable
+                      simulationRunBreakdowns={
+                        loading ? [] : [breakdowns[btfTrain], breakdowns[hodlTrain]]
                       }
-                      overrideXAxisInterval={trainXAxisMonthInterval}
+                      visibleMetrics={[
+                        'Absolute Return (%)',
+                        'Annualized Sharpe Ratio',
+                        'Annualized Sortino Ratio',
+                          'Annualized Information Ratio',
+                        'Total Capture Ratio',
+                        "Annualized Jensen's Alpha (%)",
+                      ]}
+                      height={300}
                     />
-                    <h5>Cumulative performance over time</h5>
-                    <SimulationResultMarketValueChart
-                      hideTitle={true}
-                      breakdowns={
-                        loading
-                          ? []
-                          : [
-                              breakdowns[btfTrain],
-                              breakdowns[hodlTrain],
-                            ]
-                      }
-                      overrideSeriesStrokeColor={
-                        props.model
-                          .cumulativePerformanceOverrideSeriesStrokeColor
-                      }
-                      overrideSeriesName={
-                        props.model.cumulativePerformanceOverrideSeriesName
-                      }
-                      overrideNagivagtion={false}
-                      overrideXAxisInterval={trainXAxisMonthInterval}
-                      forceViewResults={true}
-                    />
+                      )
+                    }
+                    {trainingView === 'drawdowns' && (
+                      <>
+                        <h5>Drawdowns</h5>
+                        <SimulationResultDrawdownChart
+                          breakdowns={
+                            loading
+                              ? []
+                              : [breakdowns[btfTrain], breakdowns[hodlTrain]]
+                          }
+                          forceViewResults={true}
+                          hideTitle={true}
+                        />
+                      </>
+                    )}
+
+                    {trainingView === 'marketValue' && (
+                      <>
+                        <h5>Cumulative performance over time</h5>
+                        <SimulationResultMarketValueChart
+                          hideTitle={true}
+                          breakdowns={
+                            loading
+                              ? []
+                              : [breakdowns[btfTrain], breakdowns[hodlTrain]]
+                          }
+                          overrideSeriesStrokeColor={
+                            props.model
+                              .cumulativePerformanceOverrideSeriesStrokeColor
+                          }
+                          overrideSeriesName={
+                            props.model.cumulativePerformanceOverrideSeriesName
+                          }
+                          overrideNagivagtion={false}
+                          overrideXAxisInterval={trainXAxisMonthInterval}
+                          forceViewResults={true}
+                        />
+                      </>
+                    )}
+
+                    {trainingView === 'weightChange' && (
+                      <>
+                        <h5>Constituent weights over time</h5>
+                        <WeightChangeOverTimeGraph
+                          simulationRunBreakdown={breakdowns[btfTrain]}
+                          overrideChartTheme={
+                            isDarkTheme ? 'ag-default-dark' : 'ag-default'
+                          }
+                          overrideXAxisInterval={trainXAxisMonthInterval}
+                        />
+                      </>
+                    )}
                   </div>
                 </Col>
               </Row>
@@ -645,46 +642,122 @@ export function TruflationFactSheetDesktop(props: FactsheetDesktopProps) {
         </Col>
         <Col span={1}></Col>
         <Col span={11}>
-            <Card title={'Parameters Selected'} style={{ height: 'auto' }}>
+          <Card title={'Parameters Selected'} style={{ height: 'auto' }}>
             <Row>
               {props.model.trainedParameters.map((parameter, index) => (
-              <Col span={12} key={index}>
-                <Card
-                style={{ margin: '5px' }}
-                title={
-                  <Tooltip
-                  title={`The following represent different forms of the ${parameter.name} setting used for different tooling.`}
-                  >
-                  {parameter.name}
-                  </Tooltip>
-                }
-                >
-                <Row>
-                  {parameter.variations.map((variation, variationIndex) => (
-                  <Col span={24} key={variationIndex}>
-                    <Tooltip title={variation.tooltip}>
-                    <p>
-                      {variation.name}:{'  '} <InfoCircleOutlined />
-                    </p>
-                    {variation.value.map((val, valIndex) => (
-                      <Button
-                      size="small"
-                      disabled={true}
-                      style={{ margin: '5px' }}
-                      key={valIndex}
+                <Col span={12} key={index}>
+                  <Card
+                    style={{ margin: '5px' }}
+                    title={
+                      <Tooltip
+                        title={`The following represent different forms of the ${parameter.name} setting used for different tooling.`}
                       >
-                      {val}
-                      </Button>
-                    ))}
-                    </Tooltip>
-                  </Col>
-                  ))}
-                </Row>
-                </Card>
-              </Col>
+                        {parameter.name}
+                      </Tooltip>
+                    }
+                  >
+                    <Row>
+                      {parameter.variations.map((variation, variationIndex) => (
+                        <Col span={24} key={variationIndex}>
+                          <Tooltip title={variation.tooltip}>
+                            <p>
+                              {variation.name}:{'  '} <InfoCircleOutlined />
+                            </p>
+                            {variation.value.map((val, valIndex) => (
+                              <Button
+                                size="small"
+                                disabled={true}
+                                style={{ margin: '5px' }}
+                                key={valIndex}
+                              >
+                                {val}
+                              </Button>
+                            ))}
+                          </Tooltip>
+                        </Col>
+                      ))}
+                    </Row>
+                  </Card>
+                </Col>
               ))}
             </Row>
-            </Card>
+          </Card>
+        </Col>
+        <Col span={1}></Col>
+      </Row>
+
+      <Row>
+        <Col span={1}></Col>
+        <Col span={22}>
+          <h1 style={{ marginLeft: '10px' }}>
+            QUANTAMM FREQUENTLY ASKED QUESTIONS
+          </h1>
+        </Col>
+        <Col span={1}></Col>
+      </Row>
+      <Row style={{ height: '80vh' }}>
+        <Col span={1}></Col>
+        <Col span={22}>
+          <Row>
+            <Col span={24}>
+              <Card
+                title={
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <span>QUANTAMM REBALANCING</span>
+                    <Radio.Group
+                      size="small"
+                      buttonStyle="solid"
+                      value={faqEli5}
+                      onChange={(e) => setFAQEli5(e.target.value)}
+                      style={{ fontWeight: 'normal' }}
+                    >
+                      <Radio.Button value="ELI5">ELI5</Radio.Button>
+                      <Radio.Button value="Crypto Native">
+                        Crypto Native
+                      </Radio.Button>
+                      <Radio.Button value="Quant">Quant</Radio.Button>
+                    </Radio.Group>
+                  </div>
+                }
+                style={{ height: '80vh', overflowY: 'auto' }}
+              >
+                <Collapse
+                  defaultActiveKey={['1']}
+                  style={{
+                    width: '100%',
+                    backgroundColor: isDarkTheme ? '#162536' : '#fff',
+                  }}
+                  accordion
+                  items={FAQItems.map((x) => {
+                    return {
+                      key: x.key,
+                      label: x.label,
+                      children: (
+                        <>
+                          <div hidden={faqEli5 != 'ELI5'}>
+                            {x.eli5Description}
+                          </div>
+                          <div hidden={faqEli5 != 'Crypto Native'}>
+                            {x.cryptoNativeDescription}
+                          </div>
+                          <div hidden={faqEli5 != 'Quant'}>
+                            {x.quantDescription}
+                          </div>
+                        </>
+                      ),
+                    };
+                  })}
+                  size="small"
+                />
+              </Card>
+            </Col>
+          </Row>
         </Col>
         <Col span={1}></Col>
       </Row>

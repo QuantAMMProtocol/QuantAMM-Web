@@ -1,10 +1,10 @@
 import { FactsheetModel } from '../../landing/desktop/factsheetModel';
 import { ROUTES } from '../../../../routesEnum';
-import { TruflationInflationRegime } from '../../../shared/eli5/truflationInflationRegime';
+import { TruflationRegimeUpdateRule } from '../../updateRules/truflationRegimeUpdateRule';
 
 export const truflationBitcoinFactsheetData: FactsheetModel = {
   poolId: ROUTES.TRUFLATIONBITCOINFACTSHEET,
-  inceptionLpPrice:3023,
+  inceptionLpPrice: 3023,
   poolChain: 'MAINNET',
   pools: [
     'truflationBitcoinBTFJuneTrain',
@@ -19,21 +19,13 @@ export const truflationBitcoinFactsheetData: FactsheetModel = {
     width: '30%',
     alt: 'TRUFLATION BITCOIN BTF Icon',
   },
-  objective: 'Truflation has created an inflation based strategy that shows historical correlation with Bitcoin bull runs. This BTF either stays in USDC or gains BTC exposure based on this metric',
+  objective:
+    'Truflation has created an inflation based strategy that shows historical correlation with Bitcoin bull runs. This BTF either stays in USDC or gains BTC exposure based on this metric',
   deploymentLinks: {
     contractLinks: [
-      [
-        'Pool Factory Contract',
-        'UNKNOWN',
-      ],
-      [
-        'Strategy Contract',
-        'UNKNOWN',
-      ],
-      [
-        'Strategy Runner Contract',
-        'UNKNOWN',
-      ],
+      ['Pool Factory Contract', 'UNKNOWN'],
+      ['Strategy Contract', 'UNKNOWN'],
+      ['Strategy Runner Contract', 'UNKNOWN'],
       [
         'Truflation US Inflation Index',
         'https://trufscan.io/0x4710a8d8f0d845da110086812a32de6d90d7ff5c/st1e321de22ece39a258bc2588dd2871?action=get_record',
@@ -67,10 +59,10 @@ export const truflationBitcoinFactsheetData: FactsheetModel = {
   cumulativePerformanceOverrideSeriesName: {
     'Truflation BTC Regime': 'Truflation BTC BTF',
     'Balancer Weighted': 'Traditional HODL',
-    'HODL': 'BTC ONLY HODL',
+    HODL: 'BTC ONLY HODL',
   },
 
-  updateRule: <TruflationInflationRegime hideTitle={true} hideImage={true} />,
+  updateRule: <TruflationRegimeUpdateRule hideTitle={true} hideImage={true} />,
   advantages: [
     {
       title: 'Advanced Infrastructure',
@@ -95,11 +87,13 @@ export const truflationBitcoinFactsheetData: FactsheetModel = {
           <p>QuantAMM believes in transparency through decentralisation</p>
           <p>
             The re-weighting strategy and parameters are run on Chainlink CRE.
-            The runtime environment is fixed and the workflow cannot be altered without admin permissions.
+            The runtime environment is fixed and the workflow cannot be altered
+            without admin permissions.
           </p>
           <p>
-            Chainlink CRE is institutional grade infrastructure that provides admin control however during
-            standard operations is verified by Chainlink.
+            Chainlink CRE is institutional grade infrastructure that provides
+            admin control however during standard operations is verified by
+            Chainlink.
           </p>
         </>
       ),
@@ -114,10 +108,13 @@ export const truflationBitcoinFactsheetData: FactsheetModel = {
             with advanced disaster recovery features.
           </p>
           <p>
-            While QuantAMM has performed competitive and private audits of its
+            QuantAMM has performed competitive and private audits of its
             own, the Balancer Vault has had its own numerous audits, large bug
-            bounties and real-time monitoring. The vault manages all pools on
-            Balancer V3.
+            bounties and real-time monitoring. 
+          </p>
+          <p>
+            While the level of audits and monitoring is higher than normal new
+            product infrastructure, contract risk still applies.
           </p>
         </>
       ),
@@ -133,7 +130,8 @@ export const truflationBitcoinFactsheetData: FactsheetModel = {
           </p>
           <p>
             ARB is the Arbitrum native token. While this token carries potential
-            protocol risk and higher volatility, it is key token of the Arbitrum ecosystem.
+            protocol risk and higher volatility, it is key token of the Arbitrum
+            ecosystem.
           </p>
         </>
       ),
@@ -182,7 +180,7 @@ export const truflationBitcoinFactsheetData: FactsheetModel = {
       ),
     },
     {
-      title: 'Contract Risk',
+      title: 'Smart Contract Risk',
       description: (
         <>
           <p>
@@ -205,22 +203,24 @@ export const truflationBitcoinFactsheetData: FactsheetModel = {
       description: (
         <>
           <p>
-            Re-weightings rely on inflation data on the TRUF network. This data has to be correct for
-            the strategy to run.
+            Re-weightings rely on inflation data on the TRUF network. This data
+            has to be correct for the strategy to run.
           </p>
           <p>
-            TRUF network is a chain that provides inflation data for Truflation. The manipulability
-            of the data source is protected by Truflation and not by QuantAMM. 
+            TRUF network is a chain that provides inflation data for Truflation.
+            The manipulability of the data source is protected by Truflation and
+            not by QuantAMM.
           </p>
           <p>
-            Manipulation of the inflation data can put the weights into one of 3 regimes however it cannot
-            determine new weights. Those weights are controlled by CRE. 
+            Manipulation of the inflation data can put the weights into one of 3
+            regimes however it cannot determine new weights. Those weights are
+            controlled by CRE.
           </p>
         </>
       ),
     },
   ],
-  trainingWindowTitle: 'Training window June 2023 - Dec 2024',
+  trainingWindowTitle: 'Training June 2023 - Dec 2024',
   trainingDescription: (
     <>
       <p>
@@ -229,15 +229,14 @@ export const truflationBitcoinFactsheetData: FactsheetModel = {
       </p>
       <p>
         A training period of June 2023 - Dec 2024 was selected and parameters
-        were selected using the machine learning optimization method ADAM.
-        This was performed by the QuantAMM team using the
-        QuantAMM simulator framework. A parameter set was selected that
-        maximised the Sharpe Ratio of the strategy. This was selected over other
-        objectives such as maximising Ulcer or Calmer Ratios as the parameter
-        set showed better test set statistics. Random 6 month length windows
-        were selected within the training price range and optimisation was
-        performed via stochastic gradient descent for 1000 steps with batches of
-        8 windows per step.
+        were selected using the machine learning optimization method ADAM. This
+        was performed by the QuantAMM team using the QuantAMM simulator
+        framework. A parameter set was selected that maximised the Sharpe Ratio
+        of the strategy. This was selected over other objectives such as
+        maximising Ulcer or Calmer Ratios as the parameter set showed better
+        test set statistics. Random 6 month length windows were selected within
+        the training price range and optimisation was performed via stochastic
+        gradient descent for 1000 steps with batches of 8 windows per step.
       </p>
     </>
   ),
@@ -258,10 +257,9 @@ export const truflationBitcoinFactsheetData: FactsheetModel = {
       variations: [
         {
           name: 'Threshold Up',
-          tooltip: 'Defines the positive slope value that must be exceeded to trigger a potential switch to an Uptrend from a Flat state (or directly from a Downtrend). Marks the upper boundary of the "neutral" zone for initiating new trends.',
-          value: [
-            '-1.0363972',
-          ],
+          tooltip:
+            'Defines the positive slope value that must be exceeded to trigger a potential switch to an Uptrend from a Flat state (or directly from a Downtrend). Marks the upper boundary of the "neutral" zone for initiating new trends.',
+          value: ['-1.0363972'],
         },
       ],
     },
@@ -270,10 +268,9 @@ export const truflationBitcoinFactsheetData: FactsheetModel = {
       variations: [
         {
           name: 'Threshold Down',
-          tooltip: 'Defines the negative slope value below which the system triggers a potential switch to a Downtrend from a Flat state (or directly from an Uptrend). Marks the lower boundary of the "neutral" zone for initiating new trends.',
-          value: [
-            '0.02426888',
-          ],
+          tooltip:
+            'Defines the negative slope value below which the system triggers a potential switch to a Downtrend from a Flat state (or directly from an Uptrend). Marks the lower boundary of the "neutral" zone for initiating new trends.',
+          value: ['0.02426888'],
         },
       ],
     },
@@ -282,10 +279,9 @@ export const truflationBitcoinFactsheetData: FactsheetModel = {
       variations: [
         {
           name: 'Flat Buffer Up',
-          tooltip: 'A hysteresis threshold used to maintain an existing Uptrend; the slope must fall below this value (while remaining above threshold_down) to downgrade the state from Uptrend back to Flat.',
-          value: [
-            '2.01109116',
-          ],
+          tooltip:
+            'A hysteresis threshold used to maintain an existing Uptrend; the slope must fall below this value (while remaining above threshold_down) to downgrade the state from Uptrend back to Flat.',
+          value: ['2.01109116'],
         },
       ],
     },
@@ -294,10 +290,9 @@ export const truflationBitcoinFactsheetData: FactsheetModel = {
       variations: [
         {
           name: 'Flat Buffer DOWN',
-          tooltip: 'A hysteresis threshold used to maintain an existing Downtrend; the slope must rise above this value (while remaining below threshold_up) to upgrade the state from Downtrend back to Flat.',
-          value: [
-            '-0.33645896',
-          ],
+          tooltip:
+            'A hysteresis threshold used to maintain an existing Downtrend; the slope must rise above this value (while remaining below threshold_up) to upgrade the state from Downtrend back to Flat.',
+          value: ['-0.33645896'],
         },
       ],
     },
@@ -306,10 +301,9 @@ export const truflationBitcoinFactsheetData: FactsheetModel = {
       variations: [
         {
           name: 'Confirm Up Days',
-          tooltip: 'The number of consecutive time steps the slope condition must remain in the "Uptrend" zone to confirm and lock in a regime change to Uptrend.',
-          value: [
-            '5.34041237',
-          ],
+          tooltip:
+            'The number of consecutive time steps the slope condition must remain in the "Uptrend" zone to confirm and lock in a regime change to Uptrend.',
+          value: ['5.34041237'],
         },
       ],
     },
@@ -318,10 +312,9 @@ export const truflationBitcoinFactsheetData: FactsheetModel = {
       variations: [
         {
           name: 'Confirm Down Days',
-          tooltip: 'The number of consecutive time steps the slope condition must remain in the "Downtrend" zone to confirm and lock in a regime change to Downtrend.',
-          value: [
-            '5.20466189',
-          ],
+          tooltip:
+            'The number of consecutive time steps the slope condition must remain in the "Downtrend" zone to confirm and lock in a regime change to Downtrend.',
+          value: ['5.20466189'],
         },
       ],
     },
@@ -330,25 +323,27 @@ export const truflationBitcoinFactsheetData: FactsheetModel = {
       variations: [
         {
           name: 'Confirm Flat Days',
-          tooltip: 'The number of consecutive time steps the slope condition must remain in the "Flat" zone to confirm and lock in a regime change to Flat.',
-          value: [
-            '2.69850236',
-          ],
+          tooltip:
+            'The number of consecutive time steps the slope condition must remain in the "Flat" zone to confirm and lock in a regime change to Flat.',
+          value: ['2.69850236'],
         },
       ],
     },
   ],
   iconTitle: 'Truflation Bitcoin',
-  iconDescription: ['Truflation Bitcoin BTF', 'BTC vault curated by Truflation'],
+  iconDescription: [
+    'Truflation Bitcoin BTF',
+    'BTC vault curated by Truflation',
+  ],
   status: 'PREVIEW',
   iconOpacity: 1,
   iconFocus: true,
   depositorBadges: {
-    prefix:'Truflation_',
-    gold:1748213999,
-    silver:1749423599,
-    bronze:1750633199
+    prefix: 'Truflation_',
+    gold: 1748213999,
+    silver: 1749423599,
+    bronze: 1750633199,
   },
-  targetPoolJson:'truflationBitcoinBTF2025Test',
-  launchUnixTimestamp:1747267200
+  targetPoolJson: 'truflationBitcoinBTF2025Test',
+  launchUnixTimestamp: 1747267200,
 };
