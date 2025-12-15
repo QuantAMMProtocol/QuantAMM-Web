@@ -32,6 +32,7 @@ import {
   selectBreakdownResult,
   selectSimulationResults,
 } from '../simulationResultSlice';
+import { PoolDeploymentConfigReview } from '../../simulationRunner/simulationDeploymentPreview';
 
 export interface RunDetailProps {
   breakdowns: SimulationRunBreakdown[];
@@ -86,7 +87,6 @@ export function SimulationResultsRunDetailsTable(props: RunDetailProps) {
     const thisIsFirstColumn = displayedColumns[0] === params.column;
     return props.selectButton && thisIsFirstColumn;
   }
-
   const SaveButton: React.FC<ICellRendererParams & AppProps> = (params) => {
     return (
       <Button
@@ -110,6 +110,25 @@ export function SimulationResultsRunDetailsTable(props: RunDetailProps) {
         }
       >
         Save
+      </Button>
+    );
+  };
+
+  const [deploymentBreakdown, setDeploymentBreakdown] = useState(
+    undefined as SimulationRunBreakdown | undefined
+  );
+  // Cell renderer for "See Deployment Preview" button.
+  // Expects the grid to pass savedSelectedBreakdowns and setKey via params (e.g., gridOptions.context or frameworkComponents props).
+  const DeploymentPreviewButton: React.FC<ICellRendererParams & AppProps> = (
+    params
+  ) => {
+    return (
+      <Button
+        onClick={() => {
+          setDeploymentBreakdown(params.data.originatingBreakdown);
+        }}
+      >
+        Deploy
       </Button>
     );
   };
@@ -166,11 +185,6 @@ export function SimulationResultsRunDetailsTable(props: RunDetailProps) {
 
   const [summaryColDefs] = useState<ColDef[]>([
     {
-      colId: 'timePeriodName',
-      field: 'timePeriodName',
-      headerName: 'Time Period',
-    },
-    {
       colId: 'poolConstituents',
       headerName: 'Constituents',
       valueGetter: (params) => {
@@ -192,7 +206,12 @@ export function SimulationResultsRunDetailsTable(props: RunDetailProps) {
       },
     },
     { colId: 'updateRule', field: 'updateRule', headerName: 'Update Rule' },
-    { colId: 'parameters', field: 'parameters', headerName: 'Parameters' },
+    {
+      colId: 'parameters',
+      field: 'parameters',
+      headerName: 'Parameters',
+      hide: true,
+    },
     { colId: 'starDate', field: 'starDate', headerName: 'Start', hide: true },
     { colId: 'endDate', field: 'endDate', headerName: 'End', hide: true },
     {
@@ -236,6 +255,11 @@ export function SimulationResultsRunDetailsTable(props: RunDetailProps) {
 
         return '';
       },
+    },
+    {
+      colId: 'deploymentPreview',
+      cellRenderer: DeploymentPreviewButton,
+      hide: props.breakdowns.length !== 1,
     },
     {
       colId: 'save',
@@ -392,28 +416,54 @@ export function SimulationResultsRunDetailsTable(props: RunDetailProps) {
   };
 
   return (
-    <div>
-      <Row>
-        <Col span={24} style={{ paddingLeft: 30, paddingRight: 30 }}>
-          <div className="wrapper">
-            <div
-              id="myGrid"
-              className={darkThemeAg}
-              style={{ height: props.tableHeight }}
-            >
-              <AgGridReact
-                className={styles.summaryTableParent}
-                autoSizePadding={20}
-                rowData={getResultSummary()}
-                gridOptions={summaryGridOptions}
-                columnDefs={summaryColDefs}
-                rowSelection={'multiple'}
-                sideBar={sideBar}
-              ></AgGridReact>
-            </div>
-          </div>
-        </Col>
-      </Row>
-    </div>
+    <>
+      {' '}
+      {deploymentBreakdown ? (
+        <>
+          <Row>
+            <Col span={8}></Col>
+            <Col span={8} style={{ display: 'flex', justifyContent: 'center' }}>
+              <Button
+                type="primary"
+                onClick={() => setDeploymentBreakdown(undefined)}
+              >
+                Go Back To Saved Results
+              </Button>
+            </Col>
+            <Col span={8}></Col>
+          </Row>
+          <PoolDeploymentConfigReview
+            pool={deploymentBreakdown.simulationRun}
+            initialisationData={
+              deploymentBreakdown?.simulationRunResultAnalysis
+            }
+          ></PoolDeploymentConfigReview>
+        </>
+      ) : (
+        <div>
+          <Row>
+            <Col span={24} style={{ paddingLeft: 30, paddingRight: 30 }}>
+              <div className="wrapper">
+                <div
+                  id="myGrid"
+                  className={darkThemeAg}
+                  style={{ height: props.tableHeight }}
+                >
+                  <AgGridReact
+                    className={styles.summaryTableParent}
+                    autoSizePadding={20}
+                    rowData={getResultSummary()}
+                    gridOptions={summaryGridOptions}
+                    columnDefs={summaryColDefs}
+                    rowSelection={'multiple'}
+                    sideBar={sideBar}
+                  ></AgGridReact>
+                </div>
+              </div>
+            </Col>
+          </Row>
+        </div>
+      )}
+    </>
   );
 }

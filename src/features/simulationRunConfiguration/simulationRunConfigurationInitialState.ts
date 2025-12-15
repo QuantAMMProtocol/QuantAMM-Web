@@ -1,13 +1,101 @@
-import { ReturnTimeStep } from '../simulationResults/simulationResultSummaryModels';
 import {
-  CoinComparison,
-  CoinPrice,
+  BITCOIN,
+  ETHEREUM,
+  RIPPLE,
+  SOLANA,
+  BINANCE,
+  USDCOIN,
+  DOGECOIN,
+  CARDANO,
+  TRON,
+  CHAINLINK,
+  AVALANCHE,
+  STELLAR,
+  SHIBA_INU,
+  UNISWAP,
+  AAVE,
+  SONIC,
+  MONERO,
+  POLYGON,
+  ALGORAND,
+  ARBITRUM,
+  FILECOIN,
+  COSMOS,
+  EOS,
+  MAKER_DAO,
+  LIDO,
+  DYDX,
+  COMPOUND,
+  CURVE,
+  SUSHISWAP,
+  LITECOIN,
+  PAX_GOLD,
+} from './InitialConfigurationState/Coins/CoinStates';
+import {
+  AntiMomentumState,
+  LvrAntiMomentumState,
+  RvrAntiMomentumState,
+} from './InitialConfigurationState/UpdateRules/antimomentumState';
+import {
+  BalancerWeightedState,
+  LvrBalancerWeightedState,
+  RvrBalancerWeightedState,
+} from './InitialConfigurationState/UpdateRules/balancerWeightedState';
+import {
+  ChannelFollowingState,
+  LvrChannelFollowingState,
+  RvrChannelFollowingState,
+} from './InitialConfigurationState/UpdateRules/channelFollowingState';
+import {
+  CowAMMState,
+  LvrCowAMMState,
+  RvrCowAMMState,
+} from './InitialConfigurationState/UpdateRules/cowammState';
+import {
+  DifferenceMomentumState,
+  LvrDifferenceMomentumState,
+  RvrDifferenceMomentumState,
+} from './InitialConfigurationState/UpdateRules/differenceMomentumState';
+import {
+  gyroscopeState,
+  lvrGyroscopeState,
+  rvrGyroscopeState,
+} from './InitialConfigurationState/UpdateRules/gyroscopeState';
+import { HodlState } from './InitialConfigurationState/UpdateRules/hodlState';
+import {
+  LvrMinimumVarianceState,
+  MinimumVarianceState,
+  RvrMinimumVarianceState,
+} from './InitialConfigurationState/UpdateRules/minimumVarianceState';
+import {
+  LvrMomentumState,
+  MomentumState,
+  RvrMomentumState,
+} from './InitialConfigurationState/UpdateRules/momentumState';
+import {
+  LvrPowerChannelState,
+  PowerChannelState,
+  RvrPowerChannelState,
+} from './InitialConfigurationState/UpdateRules/powerChannelState';
+import { TruflationBtcRegimeState } from './InitialConfigurationState/UpdateRules/TruflationBtcRegimeState';
+import {
+  Chain,
+  ChainDeploymentDetails,
   SimulationRunConfig,
 } from './simulationRunConfigModels';
 
+const formatYesterdaysEnd = (): string => {
+  const d = new Date();
+  d.setDate(d.getDate() - 1);
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, '0');
+  const dd = String(d.getDate()).padStart(2, '0');
+  return `${yyyy}-${mm}-${dd} 23:59:00`;
+};
+
 export const ConfigInitialState: SimulationRunConfig = {
   startDate: '2024-01-01 00:00:00',
-  endDate: '2025-07-01 23:59:00',
+  endDate: formatYesterdaysEnd(),
   coinLoadStatus: [],
   coinPriceHistoryLoadedStatus: 'pending',
   simulationSimplifiedIncludeLvrRuns: false,
@@ -56,39 +144,7 @@ export const ConfigInitialState: SimulationRunConfig = {
   selectedInitialCoinMarketValue: null,
   simulationRunning: false,
   coinPriceHistoryLoaded: false,
-  selectedUpdateRulesToSimulate: [
-    {
-      updateRuleName: 'Momentum',
-      updateRuleKey: 'momentum',
-      updateRuleSimKey: 'momentum',
-      updateRuleResultProfileSummary: '',
-      heatmapKeys: [],
-      updateRuleRunUrl: 'runSimulation',
-      updateRuleTrainUrl: 'runTraining',
-      applicablePoolTypes: ['QuantAMM'],
-      updateRuleParameters: [
-        {
-          factorName: 'k_per_day',
-          factorDisplayName: 'K per day',
-          factorDescription: 'Determines how aggressive the pool is',
-          applicableCoins: [],
-          factorValue: '0',
-          minValue: '-6',
-          maxValue: '5000',
-        },
-        {
-          factorName: 'memory_days',
-          factorDisplayName: 'Memory in days',
-          factorDescription:
-            'Determines how quickly the pool forgets previous data',
-          applicableCoins: [],
-          factorValue: '10',
-          minValue: '1',
-          maxValue: '1095',
-        },
-      ],
-    },
-  ],
+  selectedUpdateRulesToSimulate: [MomentumState],
   gasPriceImport: [],
   availablePoolTypes: [
     {
@@ -184,1113 +240,35 @@ export const ConfigInitialState: SimulationRunConfig = {
     },
   ],
   availableUpdateRules: [
-    {
-      updateRuleName: 'HODL',
-      updateRuleKey: 'HODL',
-      updateRuleSimKey: 'hodl',
-      updateRuleRunUrl: 'runSimulation',
-      updateRuleTrainUrl: undefined,
-      updateRuleResultProfileSummary:
-        'Returns are the change in price relative to the intial reserves',
-      heatmapKeys: [],
-      applicablePoolTypes: ['HODL'],
-      updateRuleParameters: [],
-    },
-    {
-      updateRuleName: 'CowAMM Weighted',
-      updateRuleKey: 'CowAMM Weighted',
-      updateRuleSimKey: 'cow',
-      updateRuleResultProfileSummary: 'CowAMM Weighted simulation engine',
-      heatmapKeys: [],
-      updateRuleRunUrl: 'runSimulation',
-      updateRuleTrainUrl: 'runTraining',
-      updateRuleParameters: [
-        {
-          factorName: 'arb_quality',
-          factorDisplayName: 'Solver efficiency',
-          factorDescription:
-            'There can be enough competition between solvers when batching to fully eliminate LVR, however they can also run sub-optimally',
-          applicableCoins: [],
-          factorValue: '1.0',
-          minValue: '0.0',
-          maxValue: '1.0',
-        },
-        {
-          factorName: 'noise_trader_ratio',
-          factorDisplayName: 'Noise/Arb Ratio',
-          factorDescription:
-            'CowAMM shows how noise can be a multiplier of arb volume. This is that multiplier',
-          applicableCoins: [],
-          factorValue: '0.0',
-          minValue: '0.0',
-          maxValue: '10.0',
-        },
-      ],
-      applicablePoolTypes: ['CowAMM Weighted'],
-    },
-    {
-      updateRuleName: 'LVR - CowAMM Weighted',
-      updateRuleKey: 'lvr__CowAMM',
-      updateRuleSimKey: 'lvr__cow',
-      updateRuleResultProfileSummary: 'CowAMM Weighted LVR simulation engine',
-      heatmapKeys: [],
-      updateRuleRunUrl: 'runSimulation',
-      updateRuleTrainUrl: undefined,
-      updateRuleParameters: [],
-      applicablePoolTypes: ['LVR for CowAMM Weighted'],
-    },
-    {
-      updateRuleName: 'RVR - CowAMM Weighted',
-      updateRuleKey: 'rvr__CowAMM',
-      updateRuleSimKey: 'rvr__cow',
-      updateRuleResultProfileSummary: 'CowAMM Weighted RVR simulation engine',
-      heatmapKeys: [],
-      updateRuleRunUrl: 'runSimulation',
-      updateRuleTrainUrl: undefined,
-      updateRuleParameters: [],
-      applicablePoolTypes: ['RVR for CowAMM Weighted'],
-    },
-    {
-      updateRuleName: 'Gyroscope',
-      updateRuleKey: 'gyroscope',
-      updateRuleSimKey: 'gyroscope',
-      updateRuleResultProfileSummary: 'Gyroscope simulation engine',
-      heatmapKeys: [],
-      updateRuleRunUrl: 'runSimulation',
-      updateRuleTrainUrl: undefined,
-      updateRuleParameters: [
-        {
-          factorName: 'alpha',
-          factorDisplayName: 'Lower price bound',
-          factorDescription:
-            'Top of the price range (denominated in the numeraire token)',
-          applicableCoins: [],
-          factorValue: '10',
-          minValue: '0',
-          maxValue: '200000',
-        },
-        {
-          factorName: 'beta',
-          factorDisplayName: 'Upper price bound',
-          factorDescription:
-            'Top of the price range (denominated in the numeraire token)',
-          applicableCoins: [],
-          factorValue: '20',
-          minValue: '0',
-          maxValue: '200000',
-        },
-      ],
-      applicablePoolTypes: ['Gyroscope'],
-    },
-    {
-      updateRuleName: 'LVR - Gyroscope',
-      updateRuleKey: 'lvr__Gyroscope',
-      updateRuleSimKey: 'lvr__gyroscope',
-      updateRuleResultProfileSummary: 'Gyroscope LVR simulation engine',
-      heatmapKeys: [],
-      updateRuleRunUrl: 'runSimulation',
-      updateRuleTrainUrl: undefined,
-      updateRuleParameters: [
-        {
-          factorName: 'alpha',
-          factorDisplayName: 'Lower price bound',
-          factorDescription:
-            'Top of the price range (denominated in the numeraire token)',
-          applicableCoins: [],
-          factorValue: '10',
-          minValue: '0',
-          maxValue: '200000',
-        },
-        {
-          factorName: 'beta',
-          factorDisplayName: 'Upper price bound',
-          factorDescription:
-            'Top of the price range (denominated in the numeraire token)',
-          applicableCoins: [],
-          factorValue: '20',
-          minValue: '0',
-          maxValue: '200000',
-        },
-      ],
-      applicablePoolTypes: ['LVR for Gyroscope'],
-    },
-    {
-      updateRuleName: 'RVR - Gyroscope',
-      updateRuleKey: 'rvr__Gyroscope',
-      updateRuleSimKey: 'rvr__gyroscope',
-      updateRuleResultProfileSummary: 'Gyroscope RVR simulation engine',
-      heatmapKeys: [],
-      updateRuleRunUrl: 'runSimulation',
-      updateRuleTrainUrl: undefined,
-      updateRuleParameters: [
-        {
-          factorName: 'alpha',
-          factorDisplayName: 'Lower price bound',
-          factorDescription:
-            'Top of the price range (denominated in the numeraire token)',
-          applicableCoins: [],
-          factorValue: '10',
-          minValue: '0',
-          maxValue: '200000',
-        },
-        {
-          factorName: 'beta',
-          factorDisplayName: 'Upper price bound',
-          factorDescription:
-            'Top of the price range (denominated in the numeraire token)',
-          applicableCoins: [],
-          factorValue: '20',
-          minValue: '0',
-          maxValue: '200000',
-        },
-      ],
-      applicablePoolTypes: ['RVR for Gyroscope'],
-    },
-    {
-      updateRuleName: 'Balancer Weighted',
-      updateRuleKey: 'balancer',
-      updateRuleSimKey: 'balancer',
-      updateRuleResultProfileSummary:
-        'As a constant function market maker balancer suffers from impermanent loss leading to negative returns in almost all circumstances.',
-      heatmapKeys: [],
-      updateRuleRunUrl: 'runSimulation',
-      updateRuleTrainUrl: 'runTraining',
-      updateRuleParameters: [],
-      applicablePoolTypes: ['Balancer Weighted'],
-    },
-    {
-      updateRuleName: 'LVR - Balancer Weighted',
-      updateRuleKey: 'lvr__balancer',
-      updateRuleSimKey: 'lvr__balancer',
-      updateRuleResultProfileSummary:
-        'As a constant function market maker balancer suffers from impermanent loss leading to negative returns in almost all circumstances.',
-      heatmapKeys: [],
-      updateRuleRunUrl: 'runSimulation',
-      updateRuleTrainUrl: undefined,
-      updateRuleParameters: [],
-      applicablePoolTypes: ['LVR for Balancer Weighted'],
-    },
-    {
-      updateRuleName: 'RVR - Balancer Weighted',
-      updateRuleKey: 'rvr__balancer',
-      updateRuleSimKey: 'rvr__balancer',
-      updateRuleResultProfileSummary:
-        'As a constant function market maker balancer suffers from impermanent loss leading to negative returns in almost all circumstances.',
-      heatmapKeys: [],
-      updateRuleRunUrl: 'runSimulation',
-      updateRuleTrainUrl: undefined,
-      updateRuleParameters: [],
-      applicablePoolTypes: ['RVR for Balancer Weighted'],
-    },
-    {
-      updateRuleName: 'Momentum',
-      updateRuleKey: 'momentum',
-      updateRuleSimKey: 'momentum',
-      updateRuleRunUrl: 'runSimulation',
-      updateRuleTrainUrl: 'runTraining',
-      applicablePoolTypes: ['QuantAMM'],
-      updateRuleResultProfileSummary:
-        "One gets different returns for different values of κ, which determines how 'aggressive' the pool is, and memory length (in days), which determines how quickly the pool forgets previous data. " +
-        'For good choices, this update rule greatly increases capital over HODL (and thus also Balancer) during breakouts and increases capital during sustained bull runs. ' +
-        'This rule works best over long price memories, so sudden crashes are not detected and lose capital faster ' +
-        'than HODL. This is not a deal-breaker, however, as the capital gain increases (as demonstrated over a super cycle) are still greater than these sharp losses. ' +
-        'It often makes sense to have a stablecoin in a pool running this strategy, as during market downturns' +
-        'the pool can then smoothly ‘exit to fiat‘, putting greater and greater weight on the stablecoin during these periods.',
-      heatmapKeys: [],
-      updateRuleParameters: [
-        {
-          factorName: 'k_per_day',
-          factorDisplayName: 'K per day',
-          factorDescription: 'Determines how aggressive the pool is',
-          applicableCoins: [],
-          factorValue: '4',
-          minValue: '0',
-          maxValue: '5000',
-        },
-        {
-          factorName: 'memory_days',
-          factorDisplayName: 'Memory in days',
-          factorDescription:
-            'Determines how quickly the pool forgets previous data',
-          applicableCoins: [],
-          factorValue: '10',
-          minValue: '1',
-          maxValue: '1095',
-        },
-      ],
-    },
-    {
-      updateRuleName: 'AntiMomentum',
-      updateRuleKey: 'anti_momentum',
-      updateRuleSimKey: 'anti_momentum',
-      updateRuleRunUrl: 'runSimulation',
-      updateRuleTrainUrl: 'runTraining',
-      applicablePoolTypes: ['QuantAMM'],
-      updateRuleResultProfileSummary:
-        "One gets different returns for different values of κ, which determines how 'aggressive' the pool is, and memory length (in days), which determines how quickly the pool forgets previous data. " +
-        'Often this rule outperforms other rules in bear runs, which makes this a useful part of ' +
-        'a broader portfolio. This rule also benefits from relatively small κ/step sizes, with good results often for log2(κ)' +
-        ' around -4 to 4.',
-      heatmapKeys: [],
-      updateRuleParameters: [
-        {
-          factorName: 'k_per_day',
-          factorDisplayName: 'K per day',
-          factorDescription: 'Determines how aggressive the pool is',
-          applicableCoins: [],
-          factorValue: '4',
-          minValue: '0',
-          maxValue: '5000',
-        },
-        {
-          factorName: 'memory_days',
-          factorDisplayName: 'Memory in days',
-          factorDescription:
-            'Determines how quickly the pool forgets previous data',
-          applicableCoins: [],
-          factorValue: '10',
-          minValue: '1',
-          maxValue: '1095',
-        },
-      ],
-    },
-    {
-      updateRuleName: 'Channel Following',
-      updateRuleKey: 'channelFollowing',
-      updateRuleSimKey: 'mean_reversion_channel',
-      updateRuleRunUrl: 'runSimulation',
-      updateRuleTrainUrl: 'runTraining',
-      applicablePoolTypes: ['QuantAMM'],
-      updateRuleResultProfileSummary:
-        'The channel following parameters can be divided into three categories' +
-        '1. Standard Antimomentum parameters to dictate how antimomentum works when price changes are small' +
-        '2. Standard Power channel parameters to dictate how power channel works when price changes are large' +
-        '3. Parameters dictating the shape of the gaussian function determining when the rule behaves more like antimomentum or power channel' +
-        'width dictates the width of the channel where antimomentum is used. ' +
-        'amplitude dictates how fast one rule changes from the other when the edge of the channel approaches.' +
-        '',
-      heatmapKeys: [],
-      updateRuleParameters: [
-        {
-          factorName: 'k_per_day',
-          factorDisplayName: 'K per day',
-          factorDescription: 'Determines how aggressive the pool is',
-          applicableCoins: [],
-          factorValue: '12',
-          minValue: '0',
-          maxValue: '5000',
-        },
-        {
-          factorName: 'memory_days',
-          factorDisplayName: 'Memory in days',
-          factorDescription:
-            'Determines how quickly the pool forgets previous data',
-          applicableCoins: [],
-          factorValue: '10',
-          minValue: '1',
-          maxValue: '1095',
-        },
-        {
-          factorName: 'exponent',
-          factorDisplayName: 'Exponent',
-          factorDescription:
-            'Controls the exponential non-linearity that is applied to the price change signal',
-          applicableCoins: [],
-          factorValue: '2',
-          minValue: '0',
-          maxValue: '20',
-        },
-        {
-          factorName: 'amplitude',
-          factorDisplayName: 'Amplitude',
-          factorDescription:
-            'Controls the strength of the mean reversion effect within the channel',
-          applicableCoins: [],
-          factorValue: '1',
-          minValue: '0',
-          maxValue: '3000',
-        },
-        {
-          factorName: 'width',
-          factorDisplayName: 'Width',
-          factorDescription: 'Controls the width of the channel',
-          applicableCoins: [],
-          factorValue: '1',
-          minValue: '0',
-          maxValue: '400',
-        },
-        {
-          factorName: 'pre_exp_scaling',
-          factorDisplayName: 'Scaling',
-          factorDescription: 'Controls the scaling of the price gradient',
-          applicableCoins: [],
-          factorValue: '0.5',
-          minValue: '0',
-          maxValue: '400',
-        },
-      ],
-    },
-    {
-      updateRuleName: 'Difference Momentum',
-      updateRuleKey: 'difference_momentum',
-      updateRuleSimKey: 'difference_momentum',
-      updateRuleRunUrl: 'runSimulation',
-      updateRuleTrainUrl: 'runTraining',
-      applicablePoolTypes: ['QuantAMM'],
-      updateRuleResultProfileSummary:
-        'This rule implements a Moving Average Convergence Divergence strategy. It uses two moving averages, one short and one long, and compares their difference to determine a change in pool weights.',
-      heatmapKeys: [],
-      updateRuleParameters: [
-        {
-          factorName: 'k_per_day',
-          factorDisplayName: 'K per day',
-          factorDescription: 'Determines how aggressive the pool is',
-          applicableCoins: [],
-          factorValue: '12',
-          minValue: '-100',
-          maxValue: '5000',
-        },
-        {
-          factorName: 'memory_days_2',
-          factorDisplayName: 'Short memory in days',
-          factorDescription: 'The memory of the short moving average',
-          applicableCoins: [],
-          factorValue: '10',
-          minValue: '1',
-          maxValue: '1095',
-        },
-        {
-          factorName: 'memory_days_1',
-          factorDisplayName: 'Long memory in days',
-          factorDescription: 'The memory of the long moving average',
-          applicableCoins: [],
-          factorValue: '30',
-          minValue: '1',
-          maxValue: '1095',
-        },
-      ],
-    },
-    {
-      updateRuleName: 'Truflation BTC Regime',
-      updateRuleKey: 'truflation_regime',
-      updateRuleSimKey: 'regime_detection',
-      updateRuleRunUrl: 'runSimulation',
-      updateRuleTrainUrl: 'runTraining',
-      applicablePoolTypes: ['QuantAMM'],
-      updateRuleResultProfileSummary:
-        "Using Truflation CPI data as input, this strategy dynamically adjusts portfolio allocations by classifying the market into Uptrend, Downtrend, or Flat regimes based on the calculated slope of the data."
-        + "To filter out noise and prevent 'whipsawing', it employs a state machine with hysteresis thresholds and confirmation delays, requiring a trend to persist for a specific duration before switching regimes."
-        + "Upon confirmation, the pool rebalances to a defined set of target weights, favoring risk-on assets in uptrends and risking-off in downtrends.",
-      heatmapKeys: [],
-      updateRuleParameters: [
-        {
-          factorName: 'slope_length',
-          factorDisplayName: 'Slope Length',
-          factorDescription: 'Signal lookback period for the slope calculation in days.',
-          applicableCoins: [],
-          factorValue: '15.0',
-          minValue: '0',
-          maxValue: '5000',
-        },
-        {
-          factorName: 'threshold_up',
-          factorDisplayName: 'Threshold Up',
-          factorDescription: 'The minimum positive slope value required to trigger a potential entry into an Uptrend regime.',
-          applicableCoins: [],
-          factorValue: '0.0125',
-          minValue: '-5000',
-          maxValue: '5000',
-        },
-        {
-          factorName: 'threshold_down',
-          factorDisplayName: 'Threshold Down',
-          factorDescription: 'The maximum negative slope value required to trigger a potential entry into a Downtrend regime.',
-          applicableCoins: [],
-          factorValue: '-0.0125',
-          minValue: '-5000',
-          maxValue: '5000',
-        },
-        {
-          factorName: 'flat_buffer_up',
-          factorDisplayName: 'Flat Buffer Up',
-          factorDescription: 'A hysteresis threshold that the slope must fall below to exit a confirmed Uptrend and return to Flat.',
-          applicableCoins: [],
-          factorValue: '0.005',
-          minValue: '0',
-          maxValue: '5000',
-        },
-        {
-          factorName: 'flat_buffer_down',
-          factorDisplayName: 'Flat Buffer Down',
-          factorDescription: 'A hysteresis threshold that the slope must rise above to exit a confirmed Downtrend and return to Flat.',
-          applicableCoins: [],
-          factorValue: '-0.005',
-          minValue: '-5000',
-          maxValue: '0',
-        },
-        {
-          factorName: 'confirm_up_days',
-          factorDisplayName: 'Confirm Up Days',
-          factorDescription: 'The number of consecutive time steps the slope must satisfy Uptrend criteria to officially confirm the regime.',
-          applicableCoins: [],
-          factorValue: '5',
-          minValue: '0',
-          maxValue: '5000',
-        },
-        {
-          factorName: 'confirm_down_days',
-          factorDisplayName: 'Confirm Down Days',
-          factorDescription: 'The number of consecutive time steps the slope must satisfy Downtrend criteria to officially confirm the regime.',
-          applicableCoins: [],
-          factorValue: '5',
-          minValue: '0',
-          maxValue: '5000',
-        },
-        {
-          factorName: 'confirm_flat_days',
-          factorDisplayName: 'Confirm Flat Days',
-          factorDescription: 'The number of consecutive time steps the slope must satisfy Flat criteria to officially confirm the regime.',
-          applicableCoins: [],
-          factorValue: '4',
-          minValue: '0',
-          maxValue: '5000',
-        },
-      ],
-    },
-    {
-      updateRuleName: 'Power Channel',
-      updateRuleKey: 'power_channel',
-      updateRuleSimKey: 'power_channel',
-      updateRuleRunUrl: 'runSimulation',
-      updateRuleTrainUrl: 'runTraining',
-      applicablePoolTypes: ['QuantAMM'],
-      updateRuleResultProfileSummary:
-        "One gets different returns for different values of κ (how 'aggressive' the pool is), memory length in days (how quickly the pool forgets previous data) and exponent. " +
-        'The exponent, when > 1, has the effect of ' +
-        'dampening down small weight changes to even smaller values and increasing the effect of larger ' +
-        'weight changes. The heatmaps given have exponent = 2. It tends to perform best when a stablecoin is present in the pool. Also note ' +
-        'that large (log) kappa values are needed, as this rule tends to decrease the overall scale of the weight changes. ' +
-        'Finally, there is a rough linear scaling between exponent and log2(κ). We find roughly that increasing the exponent by 1 ' +
-        'increases the optimal log2(κ) by ~10.',
-      heatmapKeys: [],
-      updateRuleParameters: [
-        {
-          factorName: 'k_per_day',
-          factorDisplayName: 'K per day',
-          factorDescription: 'Determines how aggressive the pool is',
-          applicableCoins: [],
-          factorValue: '12',
-          minValue: '0',
-          maxValue: '5000',
-        },
-        {
-          factorName: 'memory_days',
-          factorDisplayName: 'Memory in days',
-          factorDescription:
-            'Determines how quickly the pool forgets previous data',
-          applicableCoins: [],
-          factorValue: '10',
-          minValue: '1',
-          maxValue: '1095',
-        },
-        {
-          factorName: 'exponent',
-          factorDisplayName: 'Exponent',
-          factorDescription:
-            'Controls the exponential non-linearity that is applied to the price change signal',
-          applicableCoins: [],
-          factorValue: '2',
-          minValue: '0',
-          maxValue: '20',
-        },
-      ],
-    },
-    {
-      updateRuleName: 'Min Variance',
-      updateRuleKey: 'min_variance',
-      updateRuleSimKey: 'min_variance',
-      updateRuleRunUrl: 'runSimulation',
-      updateRuleTrainUrl: 'runTraining',
-      applicablePoolTypes: ['QuantAMM'],
-      updateRuleResultProfileSummary:
-        "This rules has two memory lengths: 'memory_days', the memory length of the process that " +
-        "estimates the inverse variance of returns (needed to calculate the currently-estimated minimum-variance portfolio); and 'mixing_memory_days', the time it takes to get to a new portfolio vector. " +
-        'This rule, unsurprisingly as it aims for a minimum-variance portfolio, ' +
-        'tends to lead to returns close to 0. This rule makes most sense when a stablecoin is NOT present ' +
-        'in the pool; if a stablecoin is present it comes to dominate the portfolio as it (hopefully) has almost no ' +
-        'change in value over time so vanishing variance.',
-      heatmapKeys: [],
-      updateRuleParameters: [
-        {
-          factorName: 'memory_days_1',
-          factorDisplayName: 'Variance memory in days',
-          factorDescription:
-            'Determines how quickly the pool forgets previous data when calculating asset variance',
-          applicableCoins: [],
-          factorValue: '10',
-          minValue: '1',
-          maxValue: '1095',
-        },
-        {
-          factorName: 'memory_days_2',
-          factorDisplayName: 'Portfolio smoothing memory in days',
-          factorDescription:
-            'Determines how quickly the pool forgets previous data when calculating the overall portfolio',
-          applicableCoins: [],
-          factorValue: '10',
-          minValue: '1',
-          maxValue: '1095',
-        },
-      ],
-    },
-    {
-      updateRuleName: 'LVR - Momentum',
-      updateRuleKey: 'lvr__momentum',
-      updateRuleSimKey: 'lvr__momentum',
-      updateRuleRunUrl: 'runSimulation',
-      updateRuleTrainUrl: 'runTraining',
-      applicablePoolTypes: ['LVR for QuantAMM'],
-      updateRuleResultProfileSummary:
-        "One gets different returns for different values of κ, which determines how 'aggressive' the pool is, and memory length (in days), which determines how quickly the pool forgets previous data. " +
-        'For good choices, this update rule greatly increases capital over HODL (and thus also Balancer) during breakouts and increases capital during sustained bull runs. ' +
-        'This rule works best over long price memories, so sudden crashes are not detected and lose capital faster ' +
-        'than HODL. This is not a deal-breaker, however, as the capital gain increases (as demonstrated over a super cycle) are still greater than these sharp losses. ' +
-        'It often makes sense to have a stablecoin in a pool running this strategy, as during market downturns' +
-        'the pool can then smoothly ‘exit to fiat‘, putting greater and greater weight on the stablecoin during these periods.',
-      heatmapKeys: [],
-      updateRuleParameters: [
-        {
-          factorName: 'k_per_day',
-          factorDisplayName: 'K per day',
-          factorDescription: 'Determines how aggressive the pool is',
-          applicableCoins: [],
-          factorValue: '4',
-          minValue: '0',
-          maxValue: '5000',
-        },
-        {
-          factorName: 'memory_days',
-          factorDisplayName: 'Memory in days',
-          factorDescription:
-            'Determines how quickly the pool forgets previous data',
-          applicableCoins: [],
-          factorValue: '10',
-          minValue: '1',
-          maxValue: '1095',
-        },
-      ],
-    },
-    {
-      updateRuleName: 'LVR - AntiMomentum',
-      updateRuleKey: 'lvr__anti_momentum',
-      updateRuleSimKey: 'lvr__anti_momentum',
-      updateRuleRunUrl: 'runSimulation',
-      updateRuleTrainUrl: 'runTraining',
-      applicablePoolTypes: ['LVR for QuantAMM'],
-      updateRuleResultProfileSummary:
-        "One gets different returns for different values of κ, which determines how 'aggressive' the pool is, and memory length (in days), which determines how quickly the pool forgets previous data. " +
-        'Often this rule outperforms other rules in bear runs, which makes this a useful part of ' +
-        'a broader portfolio. This rule also benefits from relatively small κ/step sizes, with good results often for log2(κ)' +
-        ' around -4 to 4.',
-      heatmapKeys: [],
-      updateRuleParameters: [
-        {
-          factorName: 'k_per_day',
-          factorDisplayName: 'K per day',
-          factorDescription: 'Determines how aggressive the pool is',
-          applicableCoins: [],
-          factorValue: '4',
-          minValue: '0',
-          maxValue: '5000',
-        },
-        {
-          factorName: 'memory_days',
-          factorDisplayName: 'Memory in days',
-          factorDescription:
-            'Determines how quickly the pool forgets previous data',
-          applicableCoins: [],
-          factorValue: '10',
-          minValue: '1',
-          maxValue: '1095',
-        },
-      ],
-    },
-    {
-      updateRuleName: 'LVR - Channel Following',
-      updateRuleKey: 'lvr__channelFollowing',
-      updateRuleSimKey: 'lvr__mean_reversion_channel',
-      updateRuleRunUrl: 'runSimulation',
-      updateRuleTrainUrl: 'runTraining',
-      applicablePoolTypes: ['LVR for QuantAMM'],
-      updateRuleResultProfileSummary:
-        'The channel following parameters can be divided into three categories' +
-        '1. Standard Antimomentum parameters to dictate how antimomentum works when price changes are small' +
-        '2. Standard Power channel parameters to dictate how power channel works when price changes are large' +
-        '3. Parameters dictating the shape of the gaussian function determining when the rule behaves more like antimomentum or power channel' +
-        'width dictates the width of the channel where antimomentum is used. ' +
-        'amplitude dictates how fast one rule changes from the other when the edge of the channel approaches.' +
-        '',
-      heatmapKeys: [],
-      updateRuleParameters: [
-        {
-          factorName: 'k_per_day',
-          factorDisplayName: 'K per day',
-          factorDescription: 'Determines how aggressive the pool is',
-          applicableCoins: [],
-          factorValue: '12',
-          minValue: '0',
-          maxValue: '5000',
-        },
-        {
-          factorName: 'memory_days',
-          factorDisplayName: 'Memory in days',
-          factorDescription:
-            'Determines how quickly the pool forgets previous data',
-          applicableCoins: [],
-          factorValue: '10',
-          minValue: '1',
-          maxValue: '1095',
-        },
-        {
-          factorName: 'exponent',
-          factorDisplayName: 'Exponent',
-          factorDescription:
-            'Controls the exponential non-linearity that is applied to the price change signal',
-          applicableCoins: [],
-          factorValue: '2',
-          minValue: '0',
-          maxValue: '20',
-        },
-        {
-          factorName: 'amplitude',
-          factorDisplayName: 'Amplitude',
-          factorDescription:
-            'Controls the strength of the mean reversion effect within the channel',
-          applicableCoins: [],
-          factorValue: '1',
-          minValue: '0',
-          maxValue: '20',
-        },
-        {
-          factorName: 'width',
-          factorDisplayName: 'Width',
-          factorDescription: 'Controls the width of the channel',
-          applicableCoins: [],
-          factorValue: '1',
-          minValue: '0',
-          maxValue: '400',
-        },
-        {
-          factorName: 'pre_exp_scaling',
-          factorDisplayName: 'Scaling',
-          factorDescription: 'Controls the scaling of the price gradient',
-          applicableCoins: [],
-          factorValue: '0.5',
-          minValue: '0',
-          maxValue: '400',
-        },
-      ],
-    },
-    {
-      updateRuleName: 'LVR - Difference Momentum',
-      updateRuleKey: 'lvr__difference_momentum',
-      updateRuleSimKey: 'lvr__difference_momentum',
-      updateRuleRunUrl: 'runSimulation',
-      updateRuleTrainUrl: 'runTraining',
-      applicablePoolTypes: ['LVR for QuantAMM'],
-      updateRuleResultProfileSummary:
-        'This rule implements a Moving Average Convergence Divergence strategy. It uses two moving averages, one short and one long, and compares their difference to determine a change in pool weights.',
-      heatmapKeys: [],
-      updateRuleParameters: [
-        {
-          factorName: 'k_per_day',
-          factorDisplayName: 'K per day',
-          factorDescription: 'Determines how aggressive the pool is',
-          applicableCoins: [],
-          factorValue: '12',
-          minValue: '-100',
-          maxValue: '5000',
-        },
-        {
-          factorName: 'memory_days_2',
-          factorDisplayName: 'Short memory in days',
-          factorDescription: 'The memory of the short moving average',
-          applicableCoins: [],
-          factorValue: '10',
-          minValue: '1',
-          maxValue: '1095',
-        },
-        {
-          factorName: 'memory_days_1',
-          factorDisplayName: 'Long memory in days',
-          factorDescription: 'The memory of the long moving average',
-          applicableCoins: [],
-          factorValue: '30',
-          minValue: '1',
-          maxValue: '1095',
-        },
-      ],
-    },
-    {
-      updateRuleName: 'LVR - Power Channel',
-      updateRuleKey: 'lvr__power_channel',
-      updateRuleSimKey: 'lvr__power_channel',
-      updateRuleRunUrl: 'runSimulation',
-      updateRuleTrainUrl: 'runTraining',
-      applicablePoolTypes: ['LVR for QuantAMM'],
-      updateRuleResultProfileSummary:
-        "One gets different returns for different values of κ (how 'aggressive' the pool is), memory length in days (how quickly the pool forgets previous data) and exponent. " +
-        'The exponent, when > 1, has the effect of ' +
-        'dampening down small weight changes to even smaller values and increasing the size of larger ' +
-        'weight changes. The heatmaps given have exponent = 2. It tends to perform best when a stablecoin is present in the pool. Also note ' +
-        'that large (log) kappa values are needed, as this rule tends to decrease the overall scale of the weight changes. ' +
-        'Finally, there is a rough linear scaling between exponent and log2(κ). We find roughly that increasing the exponent by 1 ' +
-        'increases the optimal log2(κ) by ~10.',
-      heatmapKeys: [],
-      updateRuleParameters: [
-        {
-          factorName: 'k_per_day',
-          factorDisplayName: 'K per day',
-          factorDescription: 'Determines how aggressive the pool is',
-          applicableCoins: [],
-          factorValue: '12',
-          minValue: '0',
-          maxValue: '5000',
-        },
-        {
-          factorName: 'memory_days',
-          factorDisplayName: 'Memory in days',
-          factorDescription:
-            'Determines how quickly the pool forgets previous data',
-          applicableCoins: [],
-          factorValue: '10',
-          minValue: '1',
-          maxValue: '1095',
-        },
-        {
-          factorName: 'exponent',
-          factorDisplayName: 'Exponent',
-          factorDescription:
-            'Controls the exponential non-linearity that is applied to the price change signal',
-          applicableCoins: [],
-          factorValue: '2',
-          minValue: '0',
-          maxValue: '20',
-        },
-      ],
-    },
-    {
-      updateRuleName: 'LVR - Min Variance',
-      updateRuleKey: 'lvr__min_variance',
-      updateRuleSimKey: 'lvr__min_variance',
-      updateRuleRunUrl: 'runSimulation',
-      updateRuleTrainUrl: 'runTraining',
-      applicablePoolTypes: ['LVR for QuantAMM'],
-      updateRuleResultProfileSummary:
-        "This rules has two memory lengths: 'memory_days', the memory length of the process that " +
-        "estimates the inverse variance of returns (needed to calculate the currently-estimated minimum-variance portfolio); and 'mixing_memory_days', the time it takes to get to a new portfolio vector. " +
-        'This rule, unsurprisingly as it aims for a minimum-variance portfolio, ' +
-        'tends to lead to returns close to 0. This rule makes most sense when a stablecoin is NOT present ' +
-        'in the pool; if a stablecoin is present it comes to dominate the portfolio as it (hopefully) has almost no ' +
-        'change in value over time so vanishing variance.',
-      heatmapKeys: [],
-      updateRuleParameters: [
-        {
-          factorName: 'memory_days_1',
-          factorDisplayName: 'Variance memory in days',
-          factorDescription:
-            'Determines how quickly the pool forgets previous data when calculating asset variance',
-          applicableCoins: [],
-          factorValue: '10',
-          minValue: '1',
-          maxValue: '1095',
-        },
-        {
-          factorName: 'memory_days_2',
-          factorDisplayName: 'Portfolio smoothing memory in days',
-          factorDescription:
-            'Determines how quickly the pool forgets previous data when calculating the overall portfolio',
-          applicableCoins: [],
-          factorValue: '10',
-          minValue: '1',
-          maxValue: '1095',
-        },
-      ],
-    },
-    {
-      updateRuleName: 'RVR - Momentum',
-      updateRuleKey: 'rvr__momentum',
-      updateRuleSimKey: 'rvr__momentum',
-      updateRuleRunUrl: 'runSimulation',
-      updateRuleTrainUrl: 'runTraining',
-      applicablePoolTypes: ['RVR for QuantAMM'],
-      updateRuleResultProfileSummary:
-        "One gets different returns for different values of κ, which determines how 'aggressive' the pool is, and memory length (in days), which determines how quickly the pool forgets previous data. " +
-        'For good choices, this update rule greatly increases capital over HODL (and thus also Balancer) during breakouts and increases capital during sustained bull runs. ' +
-        'This rule works best over long price memories, so sudden crashes are not detected and lose capital faster ' +
-        'than HODL. This is not a deal-breaker, however, as the capital gain increases (as demonstrated over a super cycle) are still greater than these sharp losses. ' +
-        'It often makes sense to have a stablecoin in a pool running this strategy, as during market downturns' +
-        'the pool can then smoothly ‘exit to fiat‘, putting greater and greater weight on the stablecoin during these periods.',
-      heatmapKeys: [],
-      updateRuleParameters: [
-        {
-          factorName: 'k_per_day',
-          factorDisplayName: 'K per day',
-          factorDescription: 'Determines how aggressive the pool is',
-          applicableCoins: [],
-          factorValue: '4',
-          minValue: '0',
-          maxValue: '5000',
-        },
-        {
-          factorName: 'memory_days',
-          factorDisplayName: 'Memory in days',
-          factorDescription:
-            'Determines how quickly the pool forgets previous data',
-          applicableCoins: [],
-          factorValue: '10',
-          minValue: '1',
-          maxValue: '1095',
-        },
-      ],
-    },
-    {
-      updateRuleName: 'RVR - AntiMomentum',
-      updateRuleKey: 'rvr__anti_momentum',
-      updateRuleSimKey: 'rvr__anti_momentum',
-      updateRuleRunUrl: 'runSimulation',
-      updateRuleTrainUrl: 'runTraining',
-      applicablePoolTypes: ['RVR for QuantAMM'],
-      updateRuleResultProfileSummary:
-        "One gets different returns for different values of κ, which determines how 'aggressive' the pool is, and memory length (in days), which determines how quickly the pool forgets previous data. " +
-        'Often this rule outperforms other rules in bear runs, which makes this a useful part of ' +
-        'a broader portfolio. This rule also benefits from relatively small κ/step sizes, with good results often for log2(κ)' +
-        ' around -4 to 4.',
-      heatmapKeys: [],
-      updateRuleParameters: [
-        {
-          factorName: 'k_per_day',
-          factorDisplayName: 'K per day',
-          factorDescription: 'Determines how aggressive the pool is',
-          applicableCoins: [],
-          factorValue: '4',
-          minValue: '0',
-          maxValue: '5000',
-        },
-        {
-          factorName: 'memory_days',
-          factorDisplayName: 'Memory in days',
-          factorDescription:
-            'Determines how quickly the pool forgets previous data',
-          applicableCoins: [],
-          factorValue: '10',
-          minValue: '1',
-          maxValue: '1095',
-        },
-      ],
-    },
-    {
-      updateRuleName: 'RVR - Channel Following',
-      updateRuleKey: 'rvr__channelFollowing',
-      updateRuleSimKey: 'rvr__mean_reversion_channel',
-      updateRuleRunUrl: 'runSimulation',
-      updateRuleTrainUrl: 'runTraining',
-      applicablePoolTypes: ['RVR for QuantAMM'],
-      updateRuleResultProfileSummary:
-        'The channel following parameters can be divided into three categories' +
-        '1. Standard Antimomentum parameters to dictate how antimomentum works when price changes are small' +
-        '2. Standard Power channel parameters to dictate how power channel works when price changes are large' +
-        '3. Parameters dictating the shape of the gaussian function determining when the rule behaves more like antimomentum or power channel' +
-        'width dictates the width of the channel where antimomentum is used. ' +
-        'amplitude dictates how fast one rule changes from the other when the edge of the channel approaches.' +
-        '',
-      heatmapKeys: [],
-      updateRuleParameters: [
-        {
-          factorName: 'k_per_day',
-          factorDisplayName: 'K per day',
-          factorDescription: 'Determines how aggressive the pool is',
-          applicableCoins: [],
-          factorValue: '12',
-          minValue: '0',
-          maxValue: '5000',
-        },
-        {
-          factorName: 'memory_days',
-          factorDisplayName: 'Memory in days',
-          factorDescription:
-            'Determines how quickly the pool forgets previous data',
-          applicableCoins: [],
-          factorValue: '10',
-          minValue: '1',
-          maxValue: '1095',
-        },
-        {
-          factorName: 'exponent',
-          factorDisplayName: 'Exponent',
-          factorDescription:
-            'Controls the exponential non-linearity that is applied to the price change signal',
-          applicableCoins: [],
-          factorValue: '2',
-          minValue: '0',
-          maxValue: '20',
-        },
-        {
-          factorName: 'amplitude',
-          factorDisplayName: 'Amplitude',
-          factorDescription:
-            'Controls the strength of the mean reversion effect within the channel',
-          applicableCoins: [],
-          factorValue: '1',
-          minValue: '0',
-          maxValue: '20',
-        },
-        {
-          factorName: 'width',
-          factorDisplayName: 'Width',
-          factorDescription: 'Controls the width of the channel',
-          applicableCoins: [],
-          factorValue: '1',
-          minValue: '0',
-          maxValue: '400',
-        },
-        {
-          factorName: 'pre_exp_scaling',
-          factorDisplayName: 'Scaling',
-          factorDescription: 'Controls the scaling of the price gradient',
-          applicableCoins: [],
-          factorValue: '0.5',
-          minValue: '0',
-          maxValue: '400',
-        },
-      ],
-    },
-    {
-      updateRuleName: 'RVR - Difference Momentum',
-      updateRuleKey: 'rvr__difference_momentum',
-      updateRuleSimKey: 'rvr__difference_momentum',
-      updateRuleRunUrl: 'runSimulation',
-      updateRuleTrainUrl: 'runTraining',
-      applicablePoolTypes: ['RVR for QuantAMM'],
-      updateRuleResultProfileSummary:
-        'This rule implements a Moving Average Convergence Divergence strategy. It uses two moving averages, one short and one long, and compares their difference to determine a change in pool weights.',
-      heatmapKeys: [],
-      updateRuleParameters: [
-        {
-          factorName: 'k_per_day',
-          factorDisplayName: 'K per day',
-          factorDescription: 'Determines how aggressive the pool is',
-          applicableCoins: [],
-          factorValue: '12',
-          minValue: '-100',
-          maxValue: '5000',
-        },
-        {
-          factorName: 'memory_days_2',
-          factorDisplayName: 'Short memory in days',
-          factorDescription: 'The memory of the short moving average',
-          applicableCoins: [],
-          factorValue: '10',
-          minValue: '1',
-          maxValue: '1095',
-        },
-        {
-          factorName: 'memory_days_1',
-          factorDisplayName: 'Long memory in days',
-          factorDescription: 'The memory of the long moving average',
-          applicableCoins: [],
-          factorValue: '30',
-          minValue: '1',
-          maxValue: '1095',
-        },
-      ],
-    },
-    {
-      updateRuleName: 'RVR - Power Channel',
-      updateRuleKey: 'rvr__power_channel',
-      updateRuleSimKey: 'rvr__power_channel',
-      updateRuleRunUrl: 'runSimulation',
-      updateRuleTrainUrl: 'runTraining',
-      applicablePoolTypes: ['RVR for QuantAMM'],
-      updateRuleResultProfileSummary:
-        "One gets different returns for different values of κ (how 'aggressive' the pool is), memory length in days (how quickly the pool forgets previous data) and exponent. " +
-        'The exponent, when > 1, has the effect of ' +
-        'dampening down small weight changes to even smaller values and increasing the size of larger ' +
-        'weight changes. The heatmaps given have exponent = 2. It tends to perform best when a stablecoin is present in the pool. Also note ' +
-        'that large (log) kappa values are needed, as this rule tends to decrease the overall scale of the weight changes. ' +
-        'Finally, there is a rough linear scaling between exponent and log2(κ). We find roughly that increasing the exponent by 1 ' +
-        'increases the optimal log2(κ) by ~10.',
-      heatmapKeys: [],
-      updateRuleParameters: [
-        {
-          factorName: 'k_per_day',
-          factorDisplayName: 'K per day',
-          factorDescription: 'Determines how aggressive the pool is',
-          applicableCoins: [],
-          factorValue: '12',
-          minValue: '0',
-          maxValue: '5000',
-        },
-        {
-          factorName: 'memory_days',
-          factorDisplayName: 'Memory in days',
-          factorDescription:
-            'Determines how quickly the pool forgets previous data',
-          applicableCoins: [],
-          factorValue: '10',
-          minValue: '1',
-          maxValue: '1095',
-        },
-        {
-          factorName: 'exponent',
-          factorDisplayName: 'Exponent',
-          factorDescription:
-            'Controls the exponential non-linearity that is applied to the price change signal',
-          applicableCoins: [],
-          factorValue: '2',
-          minValue: '0',
-          maxValue: '20',
-        },
-      ],
-    },
-    {
-      updateRuleName: 'RVR - Min Variance',
-      updateRuleKey: 'rvr__min_variance',
-      updateRuleSimKey: 'rvr__min_variance',
-      updateRuleRunUrl: 'runSimulation',
-      updateRuleTrainUrl: 'runTraining',
-      applicablePoolTypes: ['RVR for QuantAMM'],
-      updateRuleResultProfileSummary:
-        "This rules has two memory lengths: 'memory_days', the memory length of the process that " +
-        "estimates the inverse variance of returns (needed to calculate the currently-estimated minimum-variance portfolio); and 'mixing_memory_days', the time it takes to get to a new portfolio vector. " +
-        'This rule, unsurprisingly as it aims for a minimum-variance portfolio, ' +
-        'tends to lead to returns close to 0. This rule makes most sense when a stablecoin is NOT present ' +
-        'in the pool; if a stablecoin is present it comes to dominate the portfolio as it (hopefully) has almost no ' +
-        'change in value over time so vanishing variance.',
-      heatmapKeys: [],
-      updateRuleParameters: [
-        {
-          factorName: 'memory_days_1',
-          factorDisplayName: 'Variance memory in days',
-          factorDescription:
-            'Determines how quickly the pool forgets previous data when calculating asset variance',
-          applicableCoins: [],
-          factorValue: '10',
-          minValue: '1',
-          maxValue: '1095',
-        },
-        {
-          factorName: 'memory_days_2',
-          factorDisplayName: 'Portfolio smoothing memory in days',
-          factorDescription:
-            'Determines how quickly the pool forgets previous data when calculating the overall portfolio',
-          applicableCoins: [],
-          factorValue: '10',
-          minValue: '1',
-          maxValue: '1095',
-        },
-      ],
-    },
+    HodlState,
+    CowAMMState,
+    LvrCowAMMState,
+    RvrCowAMMState,
+    gyroscopeState,
+    lvrGyroscopeState,
+    rvrGyroscopeState,
+    BalancerWeightedState,
+    LvrBalancerWeightedState,
+    RvrBalancerWeightedState,
+    MomentumState,
+    AntiMomentumState,
+    ChannelFollowingState,
+    DifferenceMomentumState,
+    PowerChannelState,
+    MinimumVarianceState,
+    LvrMomentumState,
+    LvrAntiMomentumState,
+    LvrChannelFollowingState,
+    LvrDifferenceMomentumState,
+    LvrPowerChannelState,
+    LvrMinimumVarianceState,
+    RvrMomentumState,
+    RvrAntiMomentumState,
+    RvrChannelFollowingState,
+    RvrDifferenceMomentumState,
+    RvrPowerChannelState,
+    RvrMinimumVarianceState,
+    TruflationBtcRegimeState,
   ],
   availableFeeHooks: [
     {
@@ -1303,533 +281,37 @@ export const ConfigInitialState: SimulationRunConfig = {
     },
   ],
   availableCoins: [
-    {
-      coinName: 'Bitcoin',
-      coinCode: 'BTC',
-      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-      coinComparisons: new Map<string, CoinComparison>(),
-      dailyPriceHistory: [
-        {
-          date: '2020-01-01 00:00:00:00',
-          unix: 1234,
-          open: 1234,
-          high: 1234,
-          low: 1234,
-          close: 1234,
-        },
-      ],
-      dailyReturns: new Map<number, ReturnTimeStep>(),
-    },
-    {
-      coinName: 'Ethereum',
-      coinCode: 'ETH',
-      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-      coinComparisons: new Map<string, CoinComparison>(),
-      dailyPriceHistory: [
-        {
-          date: '2020-01-01 00:00:00:00',
-          unix: 1234,
-          open: 1234,
-          high: 1234,
-          low: 1234,
-          close: 1234,
-        },
-      ],
-      dailyReturns: new Map<number, ReturnTimeStep>(),
-    },
-    {
-      coinName: 'Ripple',
-      coinCode: 'XRP',
-      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-      coinComparisons: new Map<string, CoinComparison>(),
-      dailyPriceHistory: [
-        {
-          date: '2020-01-01 00:00:00:00',
-          unix: 1234,
-          open: 1234,
-          high: 1234,
-          low: 1234,
-          close: 1234,
-        },
-      ],
-      dailyReturns: new Map<number, ReturnTimeStep>(),
-    },
-    {
-      coinName: 'Solana',
-      coinCode: 'SOL',
-      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-      coinComparisons: new Map<string, CoinComparison>(),
-      dailyPriceHistory: [
-        {
-          date: '2020-01-01 00:00:00:00',
-          unix: 1234,
-          open: 1234,
-          high: 1234,
-          low: 1234,
-          close: 1234,
-        },
-      ],
-      dailyReturns: new Map<number, ReturnTimeStep>(),
-    },
-    {
-      coinName: 'Binance',
-      coinCode: 'BNB',
-      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-      coinComparisons: new Map<string, CoinComparison>(),
-      dailyPriceHistory: [
-        {
-          date: '2020-01-01 00:00:00:00',
-          unix: 1234,
-          open: 1234,
-          high: 1234,
-          low: 1234,
-          close: 1234,
-        },
-      ],
-      dailyReturns: new Map<number, ReturnTimeStep>(),
-    },
-    {
-      coinName: 'USDCoin',
-      coinCode: 'USDC',
-      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-      coinComparisons: new Map<string, CoinComparison>(),
-      dailyPriceHistory: [
-        {
-          date: '2020-01-01 00:00:00:00',
-          unix: 1234,
-          open: 1234,
-          high: 1234,
-          low: 1234,
-          close: 1234,
-        },
-      ],
-      dailyReturns: new Map<number, ReturnTimeStep>(),
-    },
-    {
-      coinName: 'DogeCoin',
-      coinCode: 'DOGE',
-      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-      coinComparisons: new Map<string, CoinComparison>(),
-      dailyPriceHistory: [
-        {
-          date: '2020-01-01 00:00:00:00',
-          unix: 1234,
-          open: 1234,
-          high: 1234,
-          low: 1234,
-          close: 1234,
-        },
-      ],
-      dailyReturns: new Map<number, ReturnTimeStep>(),
-    },
-    {
-      coinName: 'Cardano',
-      coinCode: 'ADA',
-      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-      coinComparisons: new Map<string, CoinComparison>(),
-      dailyPriceHistory: [
-        {
-          date: '2020-01-01 00:00:00:00',
-          unix: 1234,
-          open: 1234,
-          high: 1234,
-          low: 1234,
-          close: 1234,
-        },
-      ],
-      dailyReturns: new Map<number, ReturnTimeStep>(),
-    },
-    {
-      coinName: 'Tron',
-      coinCode: 'TRX',
-      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-      coinComparisons: new Map<string, CoinComparison>(),
-      dailyPriceHistory: [
-        {
-          date: '2020-01-01 00:00:00:00',
-          unix: 1234,
-          open: 1234,
-          high: 1234,
-          low: 1234,
-          close: 1234,
-        },
-      ],
-      dailyReturns: new Map<number, ReturnTimeStep>(),
-    },
-    {
-      coinName: 'Chainlink',
-      coinCode: 'LINK',
-      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-      coinComparisons: new Map<string, CoinComparison>(),
-      dailyPriceHistory: [
-        {
-          date: '2020-01-01 00:00:00:00',
-          unix: 1234,
-          open: 1234,
-          high: 1234,
-          low: 1234,
-          close: 1234,
-        },
-      ],
-      dailyReturns: new Map<number, ReturnTimeStep>(),
-    },
-    {
-      coinName: 'Avalanche',
-      coinCode: 'AVAX',
-      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-      coinComparisons: new Map<string, CoinComparison>(),
-      dailyPriceHistory: [
-        {
-          date: '2020-01-01 00:00:00:00',
-          unix: 1234,
-          open: 1234,
-          high: 1234,
-          low: 1234,
-          close: 1234,
-        },
-      ],
-      dailyReturns: new Map<number, ReturnTimeStep>(),
-    },
-    {
-      coinName: 'Stellar',
-      coinCode: 'XLM',
-      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-      coinComparisons: new Map<string, CoinComparison>(),
-      dailyPriceHistory: [
-        {
-          date: '2020-01-01 00:00:00:00',
-          unix: 1234,
-          open: 1234,
-          high: 1234,
-          low: 1234,
-          close: 1234,
-        },
-      ],
-      dailyReturns: new Map<number, ReturnTimeStep>(),
-    },
-    {
-      coinName: 'Shiba Inu',
-      coinCode: 'SHIB',
-      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-      coinComparisons: new Map<string, CoinComparison>(),
-      dailyPriceHistory: [
-        {
-          date: '2020-01-01 00:00:00:00',
-          unix: 1234,
-          open: 1234,
-          high: 1234,
-          low: 1234,
-          close: 1234,
-        },
-      ],
-      dailyReturns: new Map<number, ReturnTimeStep>(),
-    },
-    {
-      coinName: 'Uniswap',
-      coinCode: 'UNI',
-      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-      coinComparisons: new Map<string, CoinComparison>(),
-      dailyPriceHistory: [
-        {
-          date: '2020-01-01 00:00:00:00',
-          unix: 1234,
-          open: 1234,
-          high: 1234,
-          low: 1234,
-          close: 1234,
-        },
-      ],
-      dailyReturns: new Map<number, ReturnTimeStep>(),
-    },
-    {
-      coinName: 'AAVE',
-      coinCode: 'AAVE',
-      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-      coinComparisons: new Map<string, CoinComparison>(),
-      dailyPriceHistory: [
-        {
-          date: '2020-01-01 00:00:00:00',
-          unix: 1234,
-          open: 1234,
-          high: 1234,
-          low: 1234,
-          close: 1234,
-        },
-      ],
-      dailyReturns: new Map<number, ReturnTimeStep>(),
-    },
-    {
-      coinName: 'SONIC',
-      coinCode: 'S',
-      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-      coinComparisons: new Map<string, CoinComparison>(),
-      dailyPriceHistory: [
-        {
-          date: '2020-01-01 00:00:00:00',
-          unix: 1234,
-          open: 1234,
-          high: 1234,
-          low: 1234,
-          close: 1234,
-        },
-      ],
-      dailyReturns: new Map<number, ReturnTimeStep>(),
-    },
-    {
-      coinName: 'Monero',
-      coinCode: 'XMR',
-      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-      coinComparisons: new Map<string, CoinComparison>(),
-      dailyPriceHistory: [
-        {
-          date: '2020-01-01 00:00:00:00',
-          unix: 1234,
-          open: 1234,
-          high: 1234,
-          low: 1234,
-          close: 1234,
-        },
-      ],
-      dailyReturns: new Map<number, ReturnTimeStep>(),
-    },
-    {
-      coinName: 'Polygon',
-      coinCode: 'MATIC',
-      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-      coinComparisons: new Map<string, CoinComparison>(),
-      dailyPriceHistory: [
-        {
-          date: '2020-01-01 00:00:00:00',
-          unix: 1234,
-          open: 1234,
-          high: 1234,
-          low: 1234,
-          close: 1234,
-        },
-      ],
-      dailyReturns: new Map<number, ReturnTimeStep>(),
-    },
-    {
-      coinName: 'Algorand',
-      coinCode: 'ALGO',
-      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-      coinComparisons: new Map<string, CoinComparison>(),
-      dailyPriceHistory: [
-        {
-          date: '2020-01-01 00:00:00:00',
-          unix: 1234,
-          open: 1234,
-          high: 1234,
-          low: 1234,
-          close: 1234,
-        },
-      ],
-      dailyReturns: new Map<number, ReturnTimeStep>(),
-    },
-    {
-      coinName: 'Arbitrum',
-      coinCode: 'ARB',
-      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-      coinComparisons: new Map<string, CoinComparison>(),
-      dailyPriceHistory: [
-        {
-          date: '2020-01-01 00:00:00:00',
-          unix: 1234,
-          open: 1234,
-          high: 1234,
-          low: 1234,
-          close: 1234,
-        },
-      ],
-      dailyReturns: new Map<number, ReturnTimeStep>(),
-    },
-    {
-      coinName: 'Filecoin',
-      coinCode: 'FIL',
-      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-      coinComparisons: new Map<string, CoinComparison>(),
-      dailyPriceHistory: [
-        {
-          date: '2020-01-01 00:00:00:00',
-          unix: 1234,
-          open: 1234,
-          high: 1234,
-          low: 1234,
-          close: 1234,
-        },
-      ],
-      dailyReturns: new Map<number, ReturnTimeStep>(),
-    },
-    {
-      coinName: 'Cosmos',
-      coinCode: 'ATOM',
-      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-      coinComparisons: new Map<string, CoinComparison>(),
-      dailyPriceHistory: [
-        {
-          date: '2020-01-01 00:00:00:00',
-          unix: 1234,
-          open: 1234,
-          high: 1234,
-          low: 1234,
-          close: 1234,
-        },
-      ],
-      dailyReturns: new Map<number, ReturnTimeStep>(),
-    },
-    {
-      coinName: 'EOS',
-      coinCode: 'EOS',
-      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-      coinComparisons: new Map<string, CoinComparison>(),
-      dailyPriceHistory: [
-        {
-          date: '2020-01-01 00:00:00:00',
-          unix: 1234,
-          open: 1234,
-          high: 1234,
-          low: 1234,
-          close: 1234,
-        },
-      ],
-      dailyReturns: new Map<number, ReturnTimeStep>(),
-    },
-    {
-      coinName: 'Maker DAO',
-      coinCode: 'MKR',
-      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-      coinComparisons: new Map<string, CoinComparison>(),
-      dailyPriceHistory: [
-        {
-          date: '2020-01-01 00:00:00:00',
-          unix: 1234,
-          open: 1234,
-          high: 1234,
-          low: 1234,
-          close: 1234,
-        },
-      ],
-      dailyReturns: new Map<number, ReturnTimeStep>(),
-    },
-    {
-      coinName: 'Lido',
-      coinCode: 'LDO',
-      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-      coinComparisons: new Map<string, CoinComparison>(),
-      dailyPriceHistory: [
-        {
-          date: '2020-01-01 00:00:00:00',
-          unix: 1234,
-          open: 1234,
-          high: 1234,
-          low: 1234,
-          close: 1234,
-        },
-      ],
-      dailyReturns: new Map<number, ReturnTimeStep>(),
-    },
-    {
-      coinName: 'DyDx',
-      coinCode: 'DYDX',
-      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-      coinComparisons: new Map<string, CoinComparison>(),
-      dailyPriceHistory: [
-        {
-          date: '2020-01-01 00:00:00:00',
-          unix: 1234,
-          open: 1234,
-          high: 1234,
-          low: 1234,
-          close: 1234,
-        },
-      ],
-      dailyReturns: new Map<number, ReturnTimeStep>(),
-    },
-    {
-      coinName: 'Compound',
-      coinCode: 'COMP',
-      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-      coinComparisons: new Map<string, CoinComparison>(),
-      dailyPriceHistory: [
-        {
-          date: '2020-01-01 00:00:00:00',
-          unix: 1234,
-          open: 1234,
-          high: 1234,
-          low: 1234,
-          close: 1234,
-        },
-      ],
-      dailyReturns: new Map<number, ReturnTimeStep>(),
-    },
-    {
-      coinName: 'Curve',
-      coinCode: 'CRV',
-      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-      coinComparisons: new Map<string, CoinComparison>(),
-      dailyPriceHistory: [
-        {
-          date: '2020-01-01 00:00:00:00',
-          unix: 1234,
-          open: 1234,
-          high: 1234,
-          low: 1234,
-          close: 1234,
-        },
-      ],
-      dailyReturns: new Map<number, ReturnTimeStep>(),
-    },
-    {
-      coinName: 'SushiSwap',
-      coinCode: 'SUSHI',
-      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-      coinComparisons: new Map<string, CoinComparison>(),
-      dailyPriceHistory: [
-        {
-          date: '2020-01-01 00:00:00:00',
-          unix: 1234,
-          open: 1234,
-          high: 1234,
-          low: 1234,
-          close: 1234,
-        },
-      ],
-      dailyReturns: new Map<number, ReturnTimeStep>(),
-    },
-    {
-      coinName: 'Litecoin',
-      coinCode: 'LTC',
-      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-      coinComparisons: new Map<string, CoinComparison>(),
-      dailyPriceHistory: [
-        {
-          date: '2020-01-01 00:00:00:00',
-          unix: 1234,
-          open: 1234,
-          high: 1234,
-          low: 1234,
-          close: 1234,
-        },
-      ],
-      dailyReturns: new Map<number, ReturnTimeStep>(),
-    },
-    {
-      coinName: 'PAX Gold',
-      coinCode: 'PAXG',
-      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-      coinComparisons: new Map<string, CoinComparison>(),
-      dailyPriceHistory: [
-        {
-          date: '2020-01-01 00:00:00:00',
-          unix: 1234,
-          open: 1234,
-          high: 1234,
-          low: 1234,
-          close: 1234,
-        },
-      ],
-      dailyReturns: new Map<number, ReturnTimeStep>(),
-    },
+    BITCOIN,
+    ETHEREUM,
+    RIPPLE,
+    SOLANA,
+    BINANCE,
+    USDCOIN,
+    DOGECOIN,
+    CARDANO,
+    TRON,
+    CHAINLINK,
+    AVALANCHE,
+    STELLAR,
+    SHIBA_INU,
+    UNISWAP,
+    AAVE,
+    SONIC,
+    MONERO,
+    POLYGON,
+    ALGORAND,
+    ARBITRUM,
+    FILECOIN,
+    COSMOS,
+    EOS,
+    MAKER_DAO,
+    LIDO,
+    DYDX,
+    COMPOUND,
+    CURVE,
+    SUSHISWAP,
+    LITECOIN,
+    PAX_GOLD,
   ],
   initialLiquidityPool: {
     id: '12345',
@@ -1839,18 +321,7 @@ export const ConfigInitialState: SimulationRunConfig = {
     swapImports: [],
     poolNumeraireCoinCode: '',
     enableAutomaticArbBots: false,
-    updateRule: {
-      updateRuleName: 'HODL',
-      updateRuleKey: 'HODL',
-      updateRuleSimKey: 'hodl',
-      updateRuleRunUrl: 'runSimulation',
-      applicablePoolTypes: ['HODL'],
-      updateRuleTrainUrl: undefined,
-      updateRuleResultProfileSummary:
-        'Your return is just the price change (proportional per coin held at the start) of each coin over time',
-      heatmapKeys: [],
-      updateRuleParameters: [],
-    },
+    updateRule: HodlState,
     poolType: {
       name: 'HODL',
       mandatoryProperties: [],
@@ -1859,23 +330,7 @@ export const ConfigInitialState: SimulationRunConfig = {
     },
     poolConstituents: [
       {
-        coin: {
-          coinName: 'Ethereum',
-          coinCode: 'ETH',
-          coinComparisons: new Map<string, CoinComparison>(),
-          dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-          dailyPriceHistory: [
-            {
-              date: '2020-01-01 00:00:00:00',
-              unix: 1234,
-              open: 1234,
-              high: 1234,
-              low: 1234,
-              close: 1234,
-            },
-          ],
-          dailyReturns: new Map<number, ReturnTimeStep>(),
-        },
+        coin: ETHEREUM,
         weight: 50,
         currentPrice: 10,
         currentPriceUnix: 1,
@@ -1884,23 +339,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         marketValue: 30000000,
       },
       {
-        coin: {
-          coinName: 'USDCoin',
-          coinCode: 'USDC',
-          dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-          coinComparisons: new Map<string, CoinComparison>(),
-          dailyPriceHistory: [
-            {
-              date: '2020-01-01 00:00:00:00',
-              unix: 1234,
-              open: 1234,
-              high: 1234,
-              low: 1234,
-              close: 1234,
-            },
-          ],
-          dailyReturns: new Map<number, ReturnTimeStep>(),
-        },
+        coin: USDCOIN,
         weight: 50,
         currentPrice: 1,
         currentPriceUnix: 1,
@@ -1925,56 +364,10 @@ export const ConfigInitialState: SimulationRunConfig = {
         shortDescription: 'Quantitative Automated Market Maker',
         requiresPoolNumeraire: false,
       },
-      updateRule: {
-        updateRuleName: 'Momentum',
-        updateRuleKey: 'momentum',
-        updateRuleSimKey: 'momentum',
-        updateRuleResultProfileSummary: '',
-        applicablePoolTypes: ['QuantAMM'],
-        heatmapKeys: [],
-        updateRuleRunUrl: 'runSimulation',
-        updateRuleTrainUrl: 'runTraining',
-        updateRuleParameters: [
-          {
-            factorName: 'k_per_day',
-            factorDisplayName: 'K per day',
-            factorDescription: 'Determines how aggressive the pool is',
-            applicableCoins: [],
-            factorValue: '0',
-            minValue: '-6',
-            maxValue: '5000',
-          },
-          {
-            factorName: 'memory_days',
-            factorDisplayName: 'Memory in days',
-            factorDescription:
-              'Determines how quickly the pool forgets previous data',
-            applicableCoins: [],
-            factorValue: '1',
-            minValue: '1',
-            maxValue: '1095',
-          },
-        ],
-      },
+      updateRule: MomentumState,
       poolConstituents: [
         {
-          coin: {
-            coinName: 'Ethereum',
-            coinCode: 'ETH',
-            dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-            coinComparisons: new Map<string, CoinComparison>(),
-            dailyPriceHistory: [
-              {
-                date: '2020-01-01 00:00:00:00',
-                unix: 1234,
-                open: 1234,
-                high: 1234,
-                low: 1234,
-                close: 1234,
-              },
-            ],
-            dailyReturns: new Map<number, ReturnTimeStep>(),
-          },
+          coin: ETHEREUM,
           weight: 33,
           currentPrice: 10,
           currentPriceUnix: 1,
@@ -1983,23 +376,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           marketValue: 30000000,
         },
         {
-          coin: {
-            coinName: 'Bitcoin',
-            coinCode: 'BTC',
-            dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-            coinComparisons: new Map<string, CoinComparison>(),
-            dailyPriceHistory: [
-              {
-                date: '2020-01-01 00:00:00:00',
-                unix: 1234,
-                open: 1234,
-                high: 1234,
-                low: 1234,
-                close: 1234,
-              },
-            ],
-            dailyReturns: new Map<number, ReturnTimeStep>(),
-          },
+          coin: BITCOIN,
           weight: 33,
           currentPrice: 10,
           currentPriceUnix: 1,
@@ -2008,23 +385,7 @@ export const ConfigInitialState: SimulationRunConfig = {
           marketValue: 30000000,
         },
         {
-          coin: {
-            coinName: 'Cardano',
-            coinCode: 'ADA',
-            dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-            coinComparisons: new Map<string, CoinComparison>(),
-            dailyPriceHistory: [
-              {
-                date: '2020-01-01 00:00:00:00',
-                unix: 1234,
-                open: 1234,
-                high: 1234,
-                low: 1234,
-                close: 1234,
-              },
-            ],
-            dailyReturns: new Map<number, ReturnTimeStep>(),
-          },
+          coin: CARDANO,
           weight: 33,
           currentPrice: 10,
           factorValue: '0',
@@ -2131,27 +492,34 @@ export const ConfigInitialState: SimulationRunConfig = {
       },
     ],
   },
+  chainDeploymentDetails: new Map<Chain, ChainDeploymentDetails>([
+    // Stubbed entries; fill in real deployment details as needed
+    [Chain.Ethereum, {
+      updateWeightRunnerAddress:'0x21Ae9576a393413D6d91dFE2543dCb548Dbb8748',
+      balancerVaultAddress:'0xbA1333333333a1BA1108E8412f11850A5C319bA9',
+      quantammWeightedPoolFactoryAddress:'0xD5c43063563f9448cE822789651662cA7DcD5773',
+    } as ChainDeploymentDetails],
+    [Chain.Arbitrum, {
+      updateWeightRunnerAddress:'0x8Ca4e2a74B84c1feb9ADe19A0Ce0bFcd57e3f6F7',
+      balancerVaultAddress:'0xbA1333333333a1BA1108E8412f11850A5C319bA9',
+      quantammWeightedPoolFactoryAddress:'0x62B9eC6A5BBEBe4F5C5f46C8A8880df857004295',
+    } as ChainDeploymentDetails],
+    [Chain.Base, {
+      updateWeightRunnerAddress:'0x8Ca4e2a74B84c1feb9ADe19A0Ce0bFcd57e3f6F7',
+      balancerVaultAddress:'0xbA1333333333a1BA1108E8412f11850A5C319bA9',
+      quantammWeightedPoolFactoryAddress:'0x62B9eC6A5BBEBe4F5C5f46C8A8880df857004295',
+    } as ChainDeploymentDetails],
+    [Chain.Sonic, {
+      updateWeightRunnerAddress:'0xD5c43063563f9448cE822789651662cA7DcD5773',
+      balancerVaultAddress:'0xbA1333333333a1BA1108E8412f11850A5C319bA9',
+      quantammWeightedPoolFactoryAddress:'0x60006d255569b36a3d494e83D182b57acd04D484',
+    } as ChainDeploymentDetails],
+  ]),
 };
 
 export const tokenList = [
   {
-    coin: {
-      coinName: 'Ethereum',
-      coinCode: 'ETH',
-      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-      coinComparisons: new Map<string, CoinComparison>(),
-      dailyPriceHistory: [
-        {
-          date: '2020-01-01 00:00:00:00',
-          unix: 1234,
-          open: 1234,
-          high: 1234,
-          low: 1234,
-          close: 1234,
-        },
-      ],
-      dailyReturns: new Map<number, ReturnTimeStep>(),
-    },
+    coin: ETHEREUM,
     weight: 33,
     currentPrice: 10,
     currentPriceUnix: 1,
@@ -2159,23 +527,7 @@ export const tokenList = [
     marketValue: 30000000,
   },
   {
-    coin: {
-      coinName: 'Bitcoin',
-      coinCode: 'BTC',
-      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-      coinComparisons: new Map<string, CoinComparison>(),
-      dailyPriceHistory: [
-        {
-          date: '2020-01-01 00:00:00:00',
-          unix: 1234,
-          open: 1234,
-          high: 1234,
-          low: 1234,
-          close: 1234,
-        },
-      ],
-      dailyReturns: new Map<number, ReturnTimeStep>(),
-    },
+    coin: BITCOIN,
     weight: 33,
     currentPrice: 10,
     currentPriceUnix: 1,
@@ -2183,23 +535,7 @@ export const tokenList = [
     marketValue: 30000000,
   },
   {
-    coin: {
-      coinName: 'Cardano',
-      coinCode: 'ADA',
-      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-      coinComparisons: new Map<string, CoinComparison>(),
-      dailyPriceHistory: [
-        {
-          date: '2020-01-01 00:00:00:00',
-          unix: 1234,
-          open: 1234,
-          high: 1234,
-          low: 1234,
-          close: 1234,
-        },
-      ],
-      dailyReturns: new Map<number, ReturnTimeStep>(),
-    },
+    coin: CARDANO,
     weight: 33,
     currentPrice: 10,
     currentPriceUnix: 1,
@@ -2207,23 +543,7 @@ export const tokenList = [
     marketValue: 30000000,
   },
   {
-    coin: {
-      coinName: 'USDC',
-      coinCode: 'USDC',
-      dailyPriceHistoryMap: new Map<number, CoinPrice>(),
-      coinComparisons: new Map<string, CoinComparison>(),
-      dailyPriceHistory: [
-        {
-          date: '2020-01-01 00:00:00:00',
-          unix: 1234,
-          open: 1234,
-          high: 1234,
-          low: 1234,
-          close: 1234,
-        },
-      ],
-      dailyReturns: new Map<number, ReturnTimeStep>(),
-    },
+    coin: USDCOIN,
     weight: 25,
     currentPrice: 1,
     currentPriceUnix: 1,

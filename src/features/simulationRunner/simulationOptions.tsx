@@ -58,13 +58,14 @@ export function SimulatorOptions() {
   const simplifiedIncludeRvr = useAppSelector(
     selectSimulationSimplifiedIncludeRvrRuns
   );
-  const disabledDate = (current: any) => {
-    // Can not select days before today and today
-    return (
-      current < dayjs('2020-11-20', 'YYYY-MM-DD') ||
-      current > dayjs('2024-09-01', 'YYYY-MM-DD')
-    );
-  };
+    const disabledDate = (current: any) => {
+      // Can not select days before today and today
+      const yesterdayStr = dayjs().subtract(1, 'day').format('YYYY-MM-DD'); // Can not select days before today and today
+      return (
+        current < dayjs('2021-11-20', 'YYYY-MM-DD') ||
+        current > dayjs(yesterdayStr, 'YYYY-MM-DD')
+      );
+    };
 
   const selectedCoinCodes = useMemo(() => {
     return selectedCoins.map((x) => x.coinCode);

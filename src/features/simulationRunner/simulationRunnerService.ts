@@ -31,6 +31,9 @@ export const simulationRunnerService = createApi({
       }),
       transformResponse: (response: string): SimulationResult => {
         const sanitizedResponse = response.replace(/:\s*NaN/g, ': null');
+        console.log(sanitizedResponse);
+        console.log('Sanitized Response:', JSON.parse(sanitizedResponse));
+        console.log(JSON.parse(sanitizedResponse) as SimulationResult);
         return JSON.parse(sanitizedResponse);
       },
     }),

@@ -34,8 +34,6 @@ export interface Failure {
 
 export interface RunSetting {
   pool: LiquidityPool;
-  startDate: number;
-  endDate: number;
 }
 
 const { TabPane } = Tabs;
@@ -54,6 +52,7 @@ export function SimulationRunnerFinalReviewStep() {
   function onlyUnique(value: string, index: number, self: string[]) {
     return self.indexOf(value) === index;
   }
+
 
   return (
     <Row className={styles.simRunSection}>
@@ -167,17 +166,22 @@ export function SimulationRunnerFinalReviewStep() {
                               </Col>
                               <Col span={4}>
                                 <div style={{ padding: 5 }}>
-                                  <Button
-                                    disabled={
-                                      !coinDataLoaded || runStatusIndex == 2
-                                    }
-                                    type="primary"
-                                    onClick={() => {
-                                      dispatch(removeSim(z.id));
-                                    }}
+                                  <Space
+                                    direction="vertical"
+                                    style={{ width: '100%' }}
                                   >
-                                    Remove
-                                  </Button>
+                                    <Button
+                                      disabled={
+                                        !coinDataLoaded || runStatusIndex == 2
+                                      }
+                                      type="primary"
+                                      onClick={() => {
+                                        dispatch(removeSim(z.id));
+                                      }}
+                                    >
+                                      Remove
+                                    </Button>
+                                  </Space>
                                 </div>
                               </Col>
                             </Row>

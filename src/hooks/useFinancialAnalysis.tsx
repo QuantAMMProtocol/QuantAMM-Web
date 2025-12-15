@@ -10,6 +10,7 @@ import {
 } from '../features/productExplorer/productExplorerSlice';
 import { addImportedSimRunResults } from '../features/simulationRunner/simulationRunnerSlice';
 import { CURRENT_LIVE_FACTSHEETS } from '../features/documentation/factSheets/liveFactsheets';
+import { Chain } from '../features/simulationRunConfiguration/simulationRunConfigModels';
 
 export type Success =
   | { data: FinancialAnalysisResultDto; error?: never }
@@ -114,6 +115,7 @@ export const useFinancialAnalysis = ({
         if (success?.data && product) {
           const simBreakdown = {
             simulationRunResultAnalysis: success.data.analysis,
+            
             simulationRun: {
               id: product.id,
               enableAutomaticArbBots: false,
@@ -129,6 +131,7 @@ export const useFinancialAnalysis = ({
                 updateRuleTrainUrl: '',
                 updateRuleSimKey: '',
                 applicablePoolTypes: [],
+                chainDeploymentDetails: new Map<Chain, string>(),
               },
               runStatus: 'completed',
               name: product.name,
