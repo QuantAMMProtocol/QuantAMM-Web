@@ -127,13 +127,8 @@ export const truflationBitcoinFactsheetData: FactsheetModel = {
             TRUF.network provides Truflation's realtime CPI inflation data that is more timely than traditional inflation data sources.
           </p>
           <p>
-<<<<<<< HEAD
             This granular, daily data stream allows the strategy to identify regime shifts and rebalance positions significantly faster than traditional models dependent on lagged monthly reports.
-=======
-            ARB is the Arbitrum native token. While this token carries potential
-            protocol risk and higher volatility, it is key token of the Arbitrum
-            ecosystem.
->>>>>>> 42b7d6d70b41e20509965175da54992b76a8170b
+
           </p>
         </>
       ),
