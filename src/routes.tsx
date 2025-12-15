@@ -23,6 +23,7 @@ import AbritrumMacroFactSheet from './features/documentation/factSheets/arbitrum
 import { ArbitrumMacroSimulatorExample } from './features/documentation/factSheets/arbitrumMacro/arbitrumMacroSimView';
 import { ProductHealthMonitor } from './features/productExplorer/productHealthMonitor';
 import TruflationBitcoinFactSheet from './features/documentation/factSheets/truflationBitcoin/truflationBitcoin';
+import { TruflationBitcoinSimulatorExample } from './features/documentation/factSheets/truflationBitcoin/truflationBitcoinSimView';
 
 const BASE_ROUTE = '/';
 
@@ -84,6 +85,10 @@ export const routes = createBrowserRouter([
       {
         path: 'factsheet/example/' + ROUTES.ARBITRUMMACROFACTSHEET,
         element:<ArbitrumMacroSimulatorExample />,
+      },
+      {
+        path: 'factsheet/example/' + ROUTES.TRUFLATIONBITCOINFACTSHEET,
+        element:<TruflationBitcoinSimulatorExample />,
       },
       {
         path: 'factsheet/' + ROUTES.BASEMACROFACTSHEET,

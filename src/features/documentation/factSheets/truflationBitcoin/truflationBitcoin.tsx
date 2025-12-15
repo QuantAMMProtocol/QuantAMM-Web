@@ -1,7 +1,7 @@
 import { Grid } from 'antd';
 import { FactSheetMobile } from '../mobile/factsheetMobile';
-import { FactSheetDesktop } from '../desktop/factsheetDesktop';
 import { truflationBitcoinFactsheetData } from './truflationBitcoinFactsheetData';
+import { TruflationFactSheetDesktop } from './customTruflationFactsheetDesktop';
 
 const { useBreakpoint } = Grid;
 
@@ -11,7 +11,7 @@ export default function TruflationBitcoinFactSheet() {
 
   return (
     <>
-      {isMobile ? <FactSheetMobile model={truflationBitcoinFactsheetData} /> : <FactSheetDesktop model={truflationBitcoinFactsheetData} />}
+      {isMobile ? <FactSheetMobile model={truflationBitcoinFactsheetData} /> : <TruflationFactSheetDesktop model={truflationBitcoinFactsheetData} />}
     </>
   );
 }
