@@ -153,23 +153,9 @@ export function TruflationRegimeUpdateRule(props: DocProps) {
                         '\\end{cases}\\]'
                       }
                     </MathJax>
-                    <span>
-                      where{' '}
-                      <MathJax inline>{'\\(\\theta_{\\uparrow}\\)'}</MathJax> is{' '}
-                      <MathJax inline>{'\\(\\texttt{threshold\\_up}\\)'}</MathJax>,{' '}
-                      <MathJax inline>{'\\(\\theta_{\\downarrow}\\)'}</MathJax> is{' '}
-                      <MathJax inline>
-                        {'\\(\\texttt{threshold\\_down}\\)'}
-                      </MathJax>,{' '}
-                      <MathJax inline>{'\\(b_{\\uparrow}\\)'}</MathJax> is{' '}
-                      <MathJax inline>
-                        {'\\(\\texttt{flat\\_buffer\\_up}\\)'}
-                      </MathJax>, and{' '}
-                      <MathJax inline>{'\\(b_{\\downarrow}\\)'}</MathJax> is{' '}
-                      <MathJax inline>
-                        {'\\(\\texttt{flat\\_buffer\\_down}\\)'}
-                      </MathJax>.
-                    </span>
+                    <MathJax inline>
+  {String.raw`\(\text{where } \theta_{\uparrow}=\mathtt{threshold\_up},\; \theta_{\downarrow}=\mathtt{threshold\_down},\; b_{\uparrow}=\mathtt{flat\_buffer\_up},\; \text{and } b_{\downarrow}=\mathtt{flat\_buffer\_down}.\)`}
+</MathJax>
                   </p>
 
                   <h3>Confirmation logic (debouncing regime changes)</h3>
@@ -206,21 +192,9 @@ export function TruflationRegimeUpdateRule(props: DocProps) {
                         '\\end{cases}\\]'
                       }
                     </MathJax>
-                    <span>
-                      with{' '}
-                      <MathJax inline>{'\\(D_{\\uparrow}\\)'}</MathJax> =
-                      <MathJax inline>
-                        {'\\(\\texttt{confirm\\_up\\_days}\\)'}
-                      </MathJax>,{' '}
-                      <MathJax inline>{'\\(D_{\\downarrow}\\)'}</MathJax> =
-                      <MathJax inline>
-                        {'\\(\\texttt{confirm\\_down\\_days}\\)'}
-                      </MathJax>, and{' '}
-                      <MathJax inline>{'\\(D_{0}\\)'}</MathJax> =
-                      <MathJax inline>
-                        {'\\(\\texttt{confirm\\_flat\\_days}\\)'}
-                      </MathJax>.
-                    </span>
+                    <MathJax inline>
+  {String.raw`\(\text{with } D_{\uparrow}=\mathtt{confirm\_up\_days},\; D_{\downarrow}=\mathtt{confirm\_down\_days},\; \text{and } D_{0}=\mathtt{confirm\_flat\_days}.\)`}
+</MathJax>
                   </p>
                   <p>
                     <span>
@@ -300,8 +274,10 @@ export function TruflationRegimeUpdateRule(props: DocProps) {
                   </p>
 
                   <Divider></Divider>
-                  <h3>Parameter Guide {'&'} Return Profile Summary</h3>
-                  <p>{updateRuleProfileSummary}</p>
+                    <div hidden={!updateRuleProfileSummary?.trim()}>
+                    <h3>Parameter Guide {'&'} Return Profile Summary</h3>
+                    <p>{updateRuleProfileSummary}</p>
+                    </div>
                 </div>
               </Col>
             </Row>
