@@ -68,24 +68,24 @@ export const truflationBitcoinFactsheetData: FactsheetModel = {
       title: 'Advanced Infrastructure',
       description: (
         <>
-          <p>BTFs are dynamically weighted Balancer V3 DEX pools</p>
+          <p>BTFs are dynamically weighted pools</p>
           <p>
             While the rebalancing process of index and ETP products can be an
             inefficient periodic process, the BTF pool offers a price to
             external arbitrageurs that keeps in line with the market price and
-            the current BTF weights. This is one of the tried and tested
-            innovations of blockchain and requires no complex execution/auction
+            the current BTF target weights. This is one of the tried and tested
+            innovations of blockchain and requires no complex execution or separate auction,
             and no BTF custodian or governing manager.
           </p>
         </>
       ),
     },
     {
-      title: 'Responsive Strategies',
+      title: 'Chainlink Runtime Environment',
       description: (
         <>
-          <p>QuantAMM believes in transparency through decentralisation</p>
           <p>
+
             The re-weighting strategy and parameters are run on Chainlink CRE.
             The runtime environment is fixed and the workflow cannot be altered
             without admin permissions.
@@ -99,12 +99,12 @@ export const truflationBitcoinFactsheetData: FactsheetModel = {
       ),
     },
     {
-      title: 'Secure Balancer Vault',
+      title: 'Blue Chip Vault',
       description: (
         <>
           <p>
             QuantAMM is a Balancer V3 launch partner. The state-of-the-art
-            Balancer Vault manages all non-custodial deposits and withdrawals
+            Balancer V3 Vault manages all non-custodial deposits and withdrawals
             with advanced disaster recovery features.
           </p>
           <p>
@@ -120,18 +120,15 @@ export const truflationBitcoinFactsheetData: FactsheetModel = {
       ),
     },
     {
-      title: 'Cross Asset Baskets',
+      title: 'TRUF Inflation Data',
       description: (
         <>
           <p>
-            USDC provides a stablecoin that is the most widely used in DeFi. It
-            is the most liquid and widely accepted stablecoin in the crypto
-            ecosystem.
+            TRUF.network provides Truflation's realtime CPI inflation data that is more timely than traditional inflation data sources.
           </p>
           <p>
-            ARB is the Arbitrum native token. While this token carries potential
-            protocol risk and higher volatility, it is key token of the Arbitrum
-            ecosystem.
+            This granular, daily data stream allows the strategy to identify regime shifts and rebalance positions significantly faster than traditional models dependent on lagged monthly reports.
+
           </p>
         </>
       ),
