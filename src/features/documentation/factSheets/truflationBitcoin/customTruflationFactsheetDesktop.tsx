@@ -73,7 +73,7 @@ export function TruflationFactSheetDesktop(props: FactsheetDesktopProps) {
     () => props.model.poolPrefix + `BTF${props.model.trainPeriod}`,
     [props.model.trainPeriod, props.model.poolPrefix]
   );
-  
+
   const hodlTrain = useMemo(
     () => props.model.poolPrefix + `Hodl${props.model.trainPeriod}`,
     [props.model.trainPeriod, props.model.poolPrefix]
@@ -190,6 +190,7 @@ export function TruflationFactSheetDesktop(props: FactsheetDesktopProps) {
                       View Simulation Results
                     </Button>
                     <Button
+                      disabled={props.model.status !== 'LIVE'}
                       size="small"
                       onClick={() =>
                         navigate(
@@ -223,6 +224,7 @@ export function TruflationFactSheetDesktop(props: FactsheetDesktopProps) {
                         return (
                           <Col span={24} key={index}>
                             <Button
+                              disabled={link[1] === 'UNKNOWN'}
                               size="small"
                               style={{ margin: 10, width: '80%' }}
                               color="primary"

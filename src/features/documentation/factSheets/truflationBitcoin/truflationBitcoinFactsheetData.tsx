@@ -24,16 +24,20 @@ export const truflationBitcoinFactsheetData: FactsheetModel = {
     contractLinks: [
       [
         'Pool Factory Contract',
-        'https://etherscan.org/address/0x60006d255569b36a3d494e83D182b57acd04D484',
+        'UNKNOWN',
       ],
       [
         'Strategy Contract',
-        'https://etherscan.org/address/0x18Bd2de107C70222f1cd9796F9aB01458A85d7a7',
+        'UNKNOWN',
       ],
       [
         'Strategy Runner Contract',
-        'https://etherscan.org/address/0xD5c43063563f9448cE822789651662cA7DcD5773',
-      ]
+        'UNKNOWN',
+      ],
+      [
+        'Truflation US Inflation Index',
+        'https://trufscan.io/0x4710a8d8f0d845da110086812a32de6d90d7ff5c/st1e321de22ece39a258bc2588dd2871?action=get_record',
+      ],
     ],
   },
   fixedSettings: [
@@ -336,11 +340,11 @@ export const truflationBitcoinFactsheetData: FactsheetModel = {
   ],
   iconTitle: 'Truflation Bitcoin',
   iconDescription: ['Truflation Bitcoin BTF', 'BTC vault curated by Truflation'],
-  status: 'LIVE',
+  status: 'PREVIEW',
   iconOpacity: 1,
   iconFocus: true,
   depositorBadges: {
-    prefix:'Safe_Haven_',
+    prefix:'Truflation_',
     gold:1748213999,
     silver:1749423599,
     bronze:1750633199
