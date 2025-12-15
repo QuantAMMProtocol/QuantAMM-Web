@@ -278,7 +278,7 @@ export const getBreakdown = async (
   };
 
   const poolFilePath = poolFileMapping[poolName];
-
+  console.log(`Fetching breakdown for pool: ${poolName} from ${poolFilePath}`);
   if (!poolFilePath) {
     throw new Error(`No MessagePack file found for pool: ${poolName}`);
   }

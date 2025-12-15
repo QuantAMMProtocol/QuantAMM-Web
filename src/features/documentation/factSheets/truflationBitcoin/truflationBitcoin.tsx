@@ -5,7 +5,7 @@ import { truflationBitcoinFactsheetData } from './truflationBitcoinFactsheetData
 
 const { useBreakpoint } = Grid;
 
-export default function ArbitrumMacroFactSheet() {
+export default function TruflationBitcoinFactSheet() {
   const screens = useBreakpoint();
   const isMobile = !screens.lg && !screens.xl && !screens.xxl;
 

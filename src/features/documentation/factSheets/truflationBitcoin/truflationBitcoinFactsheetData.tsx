@@ -3,16 +3,13 @@ import { ChannelFollowingUpdateRule } from '../../updateRules/channelFollowing';
 import { ROUTES } from '../../../../routesEnum';
 
 export const truflationBitcoinFactsheetData: FactsheetModel = {
-  poolId: ROUTES.ARBITRUMMACROFACTSHEET,
+  poolId: ROUTES.TRUFLATIONBITCOINFACTSHEET,
   inceptionLpPrice:3023,
   poolChain: 'MAINNET',
   pools: [
-    'truflationBitcoinBTFAugTrain',
-    'truflationBitcoinCFMMAugTrain',
-    'truflationBitcoinHodlAugTrain',
-    'truflationBitcoinCFMMAugTest',
-    'truflationBitcoinBTFAugTest',
-    'truflationBitcoinHodlAugTest',
+    'truflationBitcoinBTFJuneTrain',
+    'truflationBitcoinCFMMJuneTrain',
+    'truflationBitcoinHodlJuneTrain',
     'truflationBitcoinBTF2025Test',
     'truflationBitcoinCFMM2025Test',
     'truflationBitcoinHodl2025Test',
@@ -36,14 +33,6 @@ export const truflationBitcoinFactsheetData: FactsheetModel = {
       [
         'Strategy Runner Contract',
         'https://etherscan.org/address/0xD5c43063563f9448cE822789651662cA7DcD5773',
-      ],
-      [
-        'Chainlink scBTC Oracle',
-        'https://etherscan.org/address/0x8905b91b301677e674cF964Fbc4Ac3844EF79620',
-      ],
-      [
-        'Chainlink USDC Oracle',
-        'https://etherscan.org/address/0x6f2bD10b9b17E80e5BCd49158890561f053Ed2EB',
       ]
     ],
   },
@@ -55,25 +44,26 @@ export const truflationBitcoinFactsheetData: FactsheetModel = {
     ['Withdrawal Fee', '0%'],
     ['Streaming Fee', '0%'],
   ],
-  defaultPeriod: ['AprilTest', 'Test Period: Jan-Dec25'],
+  defaultPeriod: ['2025Test', 'Test Period: Jan-Dec25'],
   alternatePeriod: ['', ''],
-  trainPeriod: 'AugTrain',
+  trainPeriod: 'JuneTrain',
   poolPrefix: 'truflationBitcoin',
   xAxisIntervals: new Map<string, number>([
-    ['AprilTest', 1],
-    ['AugTrain', 14],
+    ['2025Test', 2],
+    ['JuneTrain', 10],
     ['default', 22],
   ]),
   mainTitle: 'Truflation Bitcoin BTF',
   mainDescription: `Truflation is a leading provider of alternate daily inflation data that has gained notoriety given its increased accuracy compared to standard truflation data. `,
   cumulativePerformanceOverrideSeriesStrokeColor: {
-    'Channel Following': '#c7b283',
+    'Truflation BTC Regime': '#c7b283',
     'Balancer Weighted': '#528aae',
     HODL: '#52ad80',
   },
   cumulativePerformanceOverrideSeriesName: {
     'Truflation BTC Regime': 'Truflation BTC BTF',
-    'Balancer Weighted': 'Traditional DEX',
+    'Balancer Weighted': 'Traditional HODL',
+    'HODL': 'BTC ONLY HODL',
   },
 
   updateRule: <ChannelFollowingUpdateRule hideTitle={true} hideImage={true} />,
@@ -346,7 +336,7 @@ export const truflationBitcoinFactsheetData: FactsheetModel = {
   ],
   iconTitle: 'Truflation Bitcoin',
   iconDescription: ['Truflation Bitcoin BTF', 'BTC vault curated by Truflation'],
-  status: 'DEC 2025',
+  status: 'LIVE',
   iconOpacity: 1,
   iconFocus: true,
   depositorBadges: {
@@ -355,6 +345,6 @@ export const truflationBitcoinFactsheetData: FactsheetModel = {
     silver:1749423599,
     bronze:1750633199
   },
-  targetPoolJson:'safeHavenBTFAugTest',
+  targetPoolJson:'truflationBitcoinBTF2025Test',
   launchUnixTimestamp:1747267200
 };
