@@ -11,6 +11,7 @@ import { MomentumUpdateRule } from './updateRules/momentumUpdateRule';
 import { AntiMomentumUpdateRule } from './updateRules/antiMomentum';
 import { PowerChannelUpdateRule } from './updateRules/powerChannelUpdateRule';
 import { ChannelFollowingUpdateRule } from './updateRules/channelFollowing';
+import { TruflationRegimeUpdateRule } from './updateRules/truflationRegimeUpdateRule';
 import { MinVarianceUpdateRule } from './updateRules/minVarianceUpdateRule';
 import { ImpermanentLoss } from './basics/impermanentLoss';
 import LossVsRebalancing from './basics/lossVsRebalancing';
@@ -85,6 +86,10 @@ const items = [
         key: 'MinVariance',
       },
       {
+        label: 'Truflation Inflation Regime',
+        key: 'TruflationInflationRegime',
+      },
+      {
         label: 'Estimating Gradients',
         key: 'PriceGradientEstimation',
       },
@@ -116,6 +121,7 @@ const submenuKeys = [
   'WeightedSumsOfPools',
   'SimpleMomentum',
   'ChannelFollowing',
+  'TruflationInflationRegime',
   'AntiMomentum',
   'PowerChannel',
   'MinVariance',
@@ -152,6 +158,7 @@ export function Documentation() {
     ChannelFollowing: <ChannelFollowingUpdateRule />,
     AntiMomentum: <AntiMomentumUpdateRule />,
     PowerChannel: <PowerChannelUpdateRule />,
+    TruflationInflationRegime: <TruflationRegimeUpdateRule />,
     MinVariance: <MinVarianceUpdateRule />,
     ImpermanentLoss: <ImpermanentLoss />,
     LVR: <LossVsRebalancing />,
