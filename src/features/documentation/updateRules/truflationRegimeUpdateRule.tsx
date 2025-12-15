@@ -33,7 +33,7 @@ export function TruflationRegimeUpdateRule(props: DocProps) {
                 </div>
               </Col>
               <Col span={24}>
-                <Form.Item style={{ marginTop: '5px' }}>
+                <Form.Item style={{ marginTop: '5px', marginBottom: '0px' }}>
                   <Radio.Group
                     size="small"
                     value={eli5}
@@ -85,7 +85,7 @@ export function TruflationRegimeUpdateRule(props: DocProps) {
                 <div
                   hidden={eli5 == 'ELI5' || (eli5 == 'ELI5' && !props.hideImage)}
                 >
-                  <h3>Summary</h3>
+                  <h3 style={{marginTop:0}}>Summary</h3>
                   <p>
                     This update rule detects inflation “regimes” from a Truflation
                     oracle time series (or, if unavailable, a fallback price

@@ -6,6 +6,19 @@ export const INITIAL_PAGE = 1;
 
 export const returnMetricThresholds = [
   {
+    key: 'Absolute Return (%)',
+    veryLow: 0,
+    veryLowColor: 'rgba(166, 0, 0, 0.6)',
+    low: 2,
+    lowColor: 'rgba(220, 109, 6, 0.6)',
+    medium: 5,
+    mediumColor: 'rgba(240, 228, 6, 0.6)',
+    high: 10,
+    highColor: 'rgba(2, 189, 46, 0.6)',
+    tooltipDescription:
+      'The Calmar ratio is a risk-adjusted measure of return. It is calculated as the ratio of the annualized return over the maximum drawdown over the past 36 months. The higher the Calmar ratio, the better the risk-adjusted return.',
+  },
+  {
     key: 'Annualized Calmer Ratio',
     veryLow: 0.5,
     veryLowColor: 'rgba(166, 0, 0, 0.6)',

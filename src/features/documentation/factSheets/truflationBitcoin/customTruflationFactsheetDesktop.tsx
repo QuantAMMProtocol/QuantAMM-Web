@@ -4,7 +4,6 @@ import {
   Col,
   Collapse,
   Row,
-  Segmented,
   Space,
   Tooltip,
 } from 'antd';
@@ -31,7 +30,7 @@ interface FactsheetDesktopProps {
 
 type ExplorerView = 'drawdowns' | 'composition';
 
-type TrainingView = 'drawdowns' | 'marketValue' | 'weightChange' | 'metrics';
+type TrainingView = 'drawdowns' | 'marketValue' | 'weightChange';
 
 export function TruflationFactSheetDesktop(props: FactsheetDesktopProps) {
   const [breakdowns, setBreakdowns] = useState<
@@ -71,16 +70,17 @@ export function TruflationFactSheetDesktop(props: FactsheetDesktopProps) {
     }
   }, [loading, breakdowns, props.model.pools]);
 
-  const [period, setPeriod] = useState<string>(props.model.defaultPeriod[0]);
+  const [testPeriod, setTestPeriod] = useState<string>(props.model.defaultPeriod[0]);
+  const [period, setPeriod] = useState<string>(props.model.trainPeriod);
 
   const btf = useMemo(
-    () => props.model.poolPrefix + `BTF${period}`,
-    [period, props.model.poolPrefix]
+    () => props.model.poolPrefix + `BTF${testPeriod}`,
+    [testPeriod, props.model.poolPrefix]
   );
 
   const hodl = useMemo(
-    () => props.model.poolPrefix + `Hodl${period}`,
-    [period, props.model.poolPrefix]
+    () => props.model.poolPrefix + `Hodl${testPeriod}`,
+    [testPeriod, props.model.poolPrefix]
   );
 
   const btfTrain = useMemo(
@@ -110,38 +110,44 @@ export function TruflationFactSheetDesktop(props: FactsheetDesktopProps) {
       { label: 'Drawdowns', value: 'drawdowns' as const },
       { label: 'Market value', value: 'marketValue' as const },
       { label: 'Weight change', value: 'weightChange' as const },
-      { label: 'Metrics', value: 'metrics' as const },
     ],
     []
   );
 
-  const periodSelector = (
+  const renderPeriodSelector = (includeTrainPeriod: boolean) => (
     <Radio.Group
-      onChange={(e) => setPeriod(e.target.value)}
-      value={period}
+      onChange={(e) => includeTrainPeriod ? setPeriod(e.target.value) : setTestPeriod(e.target.value)}
+      value={includeTrainPeriod ? period : testPeriod}
       buttonStyle="solid"
       size="small"
     >
+      {includeTrainPeriod &&
+        props.model.trainPeriod &&
+        props.model.trainPeriod !== props.model.defaultPeriod[0] &&
+        props.model.trainPeriod !== props.model.alternatePeriod[0] && (
+          <Radio.Button value={props.model.trainPeriod}>
+            {props.model.trainingWindowTitle}
+          </Radio.Button>
+        )}
       <Radio.Button value={props.model.defaultPeriod[0]}>
         {props.model.defaultPeriod[1]}
       </Radio.Button>
-      {props.model.alternatePeriod[0] != '' ? (
+      {props.model.alternatePeriod[0] !== '' ? (
         <Radio.Button value={props.model.alternatePeriod[0]}>
           {props.model.alternatePeriod[1]}
         </Radio.Button>
-      ) : (
-        <></>
-      )}
+      ) : null}
     </Radio.Group>
   );
+
 
   const trainXAxisMonthInterval = useMemo(() => {
     return props.model.xAxisIntervals.get(props.model.trainPeriod);
   }, [props.model.trainPeriod, props.model.xAxisIntervals]);
 
   const xAxisMonthInterval = useMemo(() => {
-    return props.model.xAxisIntervals.get(period);
-  }, [period, props.model.xAxisIntervals]);
+    return props.model.xAxisIntervals.get(testPeriod);
+  }, [testPeriod, props.model.xAxisIntervals]);
   console.log(breakdowns[btf]);
   return (
     <div>
@@ -204,45 +210,8 @@ export function TruflationFactSheetDesktop(props: FactsheetDesktopProps) {
         </Col>
         <Col span={1}></Col>
       </Row>
-      <Row>
-        <Col span={1}></Col>
-        <Col span={22}>
-          <Card
-            title={
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}
-              >
-                <span>SIMULATED BTF TOTAL $ VALUE OVER TIME</span>
-                {periodSelector}
-              </div>
-            }
-            style={{ margin: '5px' }}
-          >
-            <div hidden={loading}>
-              <SimulationResultMarketValueChart
-                hideTitle={true}
-                overrideNagivagtion={false}
-                breakdowns={loading ? [] : [breakdowns[btf], breakdowns[hodl]]}
-                overrideSeriesStrokeColor={
-                  props.model.cumulativePerformanceOverrideSeriesStrokeColor
-                }
-                overrideSeriesName={
-                  props.model.cumulativePerformanceOverrideSeriesName
-                }
-                overrideXAxisInterval={xAxisMonthInterval}
-                forceViewResults={true}
-              />
-            </div>
-          </Card>
-        </Col>
-        <Col span={1}></Col>
-      </Row>
 
-      <Row style={{ height: '75vh', marginTop: '30px' }}>
+      <Row style={{ height: '75vh', marginTop: '5px' }}>
         <Col span={1}></Col>
         <Col span={10}>
           <Row style={{ height: '100%' }}>
@@ -316,16 +285,16 @@ export function TruflationFactSheetDesktop(props: FactsheetDesktopProps) {
 
                     <Space size="middle">
                       <ButtonGroup>
-                      {viewOptions.map((opt) => (
-                        <Button
-                        key={opt.value}
-                        size="small"
-                        type={view === opt.value ? 'primary' : 'default'}
-                        onClick={() => setView(opt.value as ExplorerView)}
-                        >
-                        {opt.label}
-                        </Button>
-                      ))}
+                        {viewOptions.map((opt) => (
+                          <Button
+                            key={opt.value}
+                            size="small"
+                            type={view === opt.value ? 'primary' : 'default'}
+                            onClick={() => setView(opt.value as ExplorerView)}
+                          >
+                            {opt.label}
+                          </Button>
+                        ))}
                       </ButtonGroup>
                     </Space>
                   </div>
@@ -368,146 +337,41 @@ export function TruflationFactSheetDesktop(props: FactsheetDesktopProps) {
       <Row>
         <Col span={1}></Col>
         <Col span={22}>
-          <h1 style={{ marginLeft: '10px' }}>
-            QUANTITATIVE FINANCIAL ANALYSIS
-          </h1>
-        </Col>
-        <Col span={1}></Col>
-      </Row>
-      <Row>
-        <Col span={1}></Col>
-        <Col span={24}>
-          <Row>
-            <Col span={1}></Col>
-            <Col span={22}>
-              <Card
-                title={
-                  <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                    }}
-                  >
-                    <span>SIMULATED FINANCIAL METRICS</span>
-                    <Radio.Group
-                      onChange={(e) => setPeriod(e.target.value)}
-                      value={period}
-                      buttonStyle="solid"
-                      size="small"
-                    >
-                      <Radio.Button value={props.model.defaultPeriod[0]}>
-                        {props.model.defaultPeriod[1]}
-                      </Radio.Button>
-                      
-                      {props.model.alternatePeriod[0] != '' ? (
-                        <Radio.Button value={props.model.alternatePeriod[0]}>
-                          {props.model.alternatePeriod[1]}
-                        </Radio.Button>
-                      ) : (
-                        <></>
-                      )}
-                      
-                    </Radio.Group>
-                  </div>
+          <Card
+            title={
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}
+              >
+                <span>SIMULATED BTF TOTAL $ VALUE OVER TIME</span>
+                {renderPeriodSelector(false)}
+              </div>
+            }
+            style={{ margin: '5px' }}
+          >
+            <div hidden={loading}>
+              <SimulationResultMarketValueChart
+                hideTitle={true}
+                overrideNagivagtion={false}
+                breakdowns={loading ? [] : [breakdowns[btf], breakdowns[hodl]]}
+                overrideSeriesStrokeColor={
+                  props.model.cumulativePerformanceOverrideSeriesStrokeColor
                 }
-                style={{ margin: '5px' }}
-              >
-                <AnalysisSimplifiedBreakdownTable
-                  simulationRunBreakdowns={
-                    loading ? [] : [breakdowns[btf], breakdowns[hodl]]
-                  }
-                  visibleMetrics={[
-                    'Absolute Return (%)',
-                    'Annualized Sharpe Ratio',
-                    'Annualized Sortino Ratio',
-                    'Annualized Information Ratio',
-                    'Total Capture Ratio',
-                    "Annualized Jensen's Alpha (%)",
-                    'Monthly Returns Maximum Drawdown'
-                  ]}
-                  height={300}
-                />
-                <Row>
-                  <Col span={10}>
-                    <span>
-                      R(f) ={' '}
-                      <a
-                        href="https://fred.stlouisfed.org/series/DTB3"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        3-Month Treasury Bill Secondary Market Rate, Discount
-                        Basis (DTB3)
-                      </a>
-                    </span>
-                  </Col>
-                  <Col span={10}>
-                    <span>R(b) = HODL</span>
-                  </Col>
-                </Row>
-              </Card>
-            </Col>
-            <Col span={1}></Col>
-          </Row>
-        </Col>
-        <Col span={1}></Col>
-      </Row>
-      <Row>
-        <Col span={1}></Col>
-        <Col span={22}>
-          <h1 style={{ marginLeft: '10px' }}>KEY FACTS</h1>
-        </Col>
-        <Col span={1}></Col>
-      </Row>
-      <Row style={{ height: '130vh' }}>
-        <Col span={1}></Col>
-        <Col span={10}>
-          <Row style={{ height: '130vh' }}>
-            <Col span={24}>
-              <Card
-                title="Advantages"
-                style={{ height: '130vh', overflowY: 'auto' }}
-              >
-                <Row>
-                  {props.model.advantages.map((advantage, index) => (
-                    <Col span={12} key={index}>
-                      <Card
-                        style={{ margin: '5px', height: '57vh' }}
-                        title={advantage.title}
-                      >
-                        <Row>
-                          <Col span={24}>{advantage.description}</Col>
-                        </Row>
-                      </Card>
-                    </Col>
-                  ))}
-                </Row>
-              </Card>
-            </Col>
-          </Row>
-        </Col>
-        <Col span={1}></Col>
-        <Col span={11}>
-          <Card style={{ height: '130vh', overflowY: 'auto' }} title={'Risks'}>
-            <Row>
-              {props.model.risks.map((risk, index) => (
-                <Col span={12} key={index}>
-                  <Card
-                    style={{ margin: '5px', height: '57vh' }}
-                    title={risk.title}
-                  >
-                    <Row>
-                      <Col span={24}>{risk.description}</Col>
-                    </Row>
-                  </Card>
-                </Col>
-              ))}
-            </Row>
+                overrideSeriesName={
+                  props.model.cumulativePerformanceOverrideSeriesName
+                }
+                overrideXAxisInterval={xAxisMonthInterval}
+                forceViewResults={true}
+              />
+            </div>
           </Card>
         </Col>
         <Col span={1}></Col>
       </Row>
+
       <Row>
         <Col span={1}></Col>
         <Col span={22}>
@@ -538,51 +402,35 @@ export function TruflationFactSheetDesktop(props: FactsheetDesktopProps) {
                   }}
                 >
                   <span>{props.model.trainingWindowTitle}</span>
-
                 </div>
               }
               style={{ height: '110vh' }}
             >
               <Row>
                 <Col span={24}>
-
-                    <Space size="middle">
-                      <ButtonGroup>
+                  <Space size="middle">
+                    <ButtonGroup>
                       {trainingViewOptions.map((opt) => (
                         <Button
-                        key={opt.value}
-                        size="small"
-                        type={trainingView === opt.value ? 'primary' : 'default'}
-                        onClick={() => setTrainingView(opt.value as TrainingView)}
+                          key={opt.value}
+                          size="small"
+                          type={
+                            trainingView === opt.value ? 'primary' : 'default'
+                          }
+                          onClick={() =>
+                            setTrainingView(opt.value as TrainingView)
+                          }
                         >
-                        {opt.label}
+                          {opt.label}
                         </Button>
                       ))}
-                      </ButtonGroup>
-                    </Space>
+                    </ButtonGroup>
+                  </Space>
                 </Col>
               </Row>
               <Row>
                 <Col span={24}>
                   <div hidden={loading}>
-                    {
-                      trainingView === 'metrics' && (
-                      <AnalysisSimplifiedBreakdownTable
-                      simulationRunBreakdowns={
-                        loading ? [] : [breakdowns[btfTrain], breakdowns[hodlTrain]]
-                      }
-                      visibleMetrics={[
-                        'Absolute Return (%)',
-                        'Annualized Sharpe Ratio',
-                        'Annualized Sortino Ratio',
-                          'Annualized Information Ratio',
-                        'Total Capture Ratio',
-                        "Annualized Jensen's Alpha (%)",
-                      ]}
-                      height={300}
-                    />
-                      )
-                    }
                     {trainingView === 'drawdowns' && (
                       <>
                         <h5>Drawdowns</h5>
@@ -676,6 +524,132 @@ export function TruflationFactSheetDesktop(props: FactsheetDesktopProps) {
                           </Tooltip>
                         </Col>
                       ))}
+                    </Row>
+                  </Card>
+                </Col>
+              ))}
+            </Row>
+          </Card>
+        </Col>
+        <Col span={1}></Col>
+      </Row>
+      <Row>
+        <Col span={1}></Col>
+        <Col span={22}>
+          <h1 style={{ marginLeft: '10px' }}>
+            QUANTITATIVE FINANCIAL ANALYSIS
+          </h1>
+        </Col>
+        <Col span={1}></Col>
+      </Row>
+      <Row>
+        <Col span={1}></Col>
+        <Col span={24}>
+          <Row>
+            <Col span={1}></Col>
+            <Col span={22}>
+              <Card
+                title={
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <span>SIMULATED FINANCIAL METRICS</span>
+                    {renderPeriodSelector(true)}
+                  </div>
+                }
+                style={{ margin: '5px' }}
+              >
+                <AnalysisSimplifiedBreakdownTable
+                  simulationRunBreakdowns={
+                    loading ? [] : 
+                    period == props.model.trainPeriod ? [breakdowns[btfTrain]] : [breakdowns[btf]]
+                  }
+                  benchmarkBreakdown={period == props.model.trainPeriod ? breakdowns[hodlTrain] : breakdowns[hodl]}
+                  visibleMetrics={[
+                    'Absolute Return (%)',
+                    "Annualized Jensen's Alpha (%)",
+                    'Annualized Sharpe Ratio',
+                    'Annualized Sortino Ratio',
+                    'Annualized Information Ratio',
+                    'Total Capture Ratio',
+                  ]}
+                  height={300}
+                />
+                <Row>
+                  <Col span={10}>
+                    <span>
+                      R(f) ={' '}
+                      <a
+                        href="https://fred.stlouisfed.org/series/DTB3"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        3-Month Treasury Bill Secondary Market Rate, Discount
+                        Basis (DTB3)
+                      </a>
+                    </span>
+                  </Col>
+                  <Col span={10}>
+                    <span>R(b) = HODL</span>
+                  </Col>
+                </Row>
+              </Card>
+            </Col>
+            <Col span={1}></Col>
+          </Row>
+        </Col>
+        <Col span={1}></Col>
+      </Row>
+      <Row>
+        <Col span={1}></Col>
+        <Col span={22}>
+          <h1 style={{ marginLeft: '10px' }}>KEY FACTS</h1>
+        </Col>
+        <Col span={1}></Col>
+      </Row>
+      <Row style={{ height: '130vh' }}>
+        <Col span={1}></Col>
+        <Col span={10}>
+          <Row style={{ height: '130vh' }}>
+            <Col span={24}>
+              <Card
+                title="Advantages"
+                style={{ height: '130vh', overflowY: 'auto' }}
+              >
+                <Row>
+                  {props.model.advantages.map((advantage, index) => (
+                    <Col span={12} key={index}>
+                      <Card
+                        style={{ margin: '5px', height: '57vh' }}
+                        title={advantage.title}
+                      >
+                        <Row>
+                          <Col span={24}>{advantage.description}</Col>
+                        </Row>
+                      </Card>
+                    </Col>
+                  ))}
+                </Row>
+              </Card>
+            </Col>
+          </Row>
+        </Col>
+        <Col span={1}></Col>
+        <Col span={11}>
+          <Card style={{ height: '130vh', overflowY: 'auto' }} title={'Risks'}>
+            <Row>
+              {props.model.risks.map((risk, index) => (
+                <Col span={12} key={index}>
+                  <Card
+                    style={{ margin: '5px', height: '57vh' }}
+                    title={risk.title}
+                  >
+                    <Row>
+                      <Col span={24}>{risk.description}</Col>
                     </Row>
                   </Card>
                 </Col>
