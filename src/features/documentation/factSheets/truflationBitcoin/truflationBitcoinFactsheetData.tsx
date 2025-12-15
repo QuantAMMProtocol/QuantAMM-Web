@@ -55,7 +55,7 @@ export const truflationBitcoinFactsheetData: FactsheetModel = {
     ['Withdrawal Fee', '0%'],
     ['Streaming Fee', '0%'],
   ],
-  defaultPeriod: ['AprilTest', 'Test Period: Apr-Jul25'],
+  defaultPeriod: ['AprilTest', 'Test Period: Jan-Dec25'],
   alternatePeriod: ['', ''],
   trainPeriod: 'AugTrain',
   poolPrefix: 'truflationBitcoin',
@@ -226,7 +226,7 @@ export const truflationBitcoinFactsheetData: FactsheetModel = {
       ),
     },
   ],
-  trainingWindowTitle: 'Training window Jan 2023 - March 2025',
+  trainingWindowTitle: 'Training window June 2023 - Dec 2024',
   trainingDescription: (
     <>
       <p>
