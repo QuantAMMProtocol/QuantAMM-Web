@@ -104,7 +104,7 @@ export function TruflationRegimeUpdateRule(props: DocProps) {
                       chunk index{' '}
                       <MathJax inline>{'\\(k\\)'}</MathJax>. Using a slope lookback{' '}
                       <MathJax inline>{'\\(n\\)'}</MathJax> (the parameter{' '}
-                      <MathJax inline>{'\\(\\texttt{slope\\_length}\\)'}</MathJax>),
+                      <MathJax inline>{'\\(\\texttt{slope_length}\\)'}</MathJax>),
                       the strategy computes an{' '}
                       <i>n</i>-period difference (matching{' '}
                       <MathJax inline>{'\\(\\texttt{diff}(n)\\)'}</MathJax> semantics)
