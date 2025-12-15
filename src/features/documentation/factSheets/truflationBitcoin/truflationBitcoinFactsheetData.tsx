@@ -234,16 +234,16 @@ export const truflationBitcoinFactsheetData: FactsheetModel = {
         a strategy re-weights to different assets as well as when to re-weight.
       </p>
       <p>
-        A training period of Jan 2023 - March 2025 was selected and parameters
-        were selected using the machine learning technique called: Stochastic
-        Gradient Descent. This was performed by the QuantAMM team using the
+        A training period of June 2023 - Dec 2024 was selected and parameters
+        were selected using the machine learning optimization method ADAM.
+        This was performed by the QuantAMM team using the
         QuantAMM simulator framework. A parameter set was selected that
         maximised the Sharpe Ratio of the strategy. This was selected over other
         objectives such as maximising Ulcer or Calmer Ratios as the parameter
-        set showed better test set statistics. Random 73-day length windows
+        set showed better test set statistics. Random 6 month length windows
         were selected within the training price range and optimisation was
-        performed via stochastic gradient descent for 6000 steps with batches of
-        6 windows per step.
+        performed via stochastic gradient descent for 1000 steps with batches of
+        8 windows per step.
       </p>
     </>
   ),
