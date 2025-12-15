@@ -29,13 +29,11 @@ export function TruflationBitcoinSimulatorExample() {
       if (key === '1') {
         poolNames = [
           'truflationBitcoinBTFJuneTrainFull',
-          'truflationBitcoinCFMMJuneTrainFull',
           'truflationBitcoinHodlJuneTrainFull',
         ];
       } else if (key === '2') {
         poolNames = [
           'truflationBitcoinBTF2025TestFull',
-          'truflationBitcoinCFMM2025TestFull',
           'truflationBitcoinHodl2025TestFull',
         ];
       }
