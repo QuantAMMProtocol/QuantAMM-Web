@@ -162,6 +162,7 @@ export function SimulationResultsSummaryStep(props: BreakdownProps) {
         <SimulationResultDrawdownChart
           breakdowns={props.breakdowns}
           forceViewResults={props.forceViewResults}
+                  hideTitle={false}
         />
       );
     } else if (resultChartSelection == 'Returns') {
