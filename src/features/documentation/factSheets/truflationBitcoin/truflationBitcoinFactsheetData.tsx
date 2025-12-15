@@ -65,28 +65,23 @@ export const truflationBitcoinFactsheetData: FactsheetModel = {
   updateRule: <TruflationRegimeUpdateRule hideTitle={true} hideImage={true} />,
   advantages: [
     {
-      title: 'Advanced Infrastructure',
+      title: 'Dynamic Asset Rebalancing',
       description: (
         <>
-          <p>BTFs are dynamically weighted pools</p>
+          <p>BTFs are dynamically weighted pools.</p>
           <p>
-            While the rebalancing process of index and ETP products can be an
-            inefficient periodic process, the BTF pool offers a price to
-            external arbitrageurs that keeps in line with the market price and
-            the current BTF target weights. This is one of the tried and tested
-            innovations of blockchain and requires no complex execution or separate auction,
-            and no BTF custodian or governing manager.
+            Unlike traditional ETPs that rely on inefficient periodic rebalancing, the BTF pool continuously aligns with its target weights through natural market arbitrage. This autonomous mechanism ensures the portfolio tracks its strategy in real-time without the need for centralized custodians or a complex execution stack.
           </p>
         </>
       ),
     },
     {
-      title: 'Chainlink Runtime Environment',
+      title: 'Chainlink Infrastructure',
       description: (
         <>
           <p>
 
-            The re-weighting strategy and parameters are run on Chainlink CRE.
+            The re-weighting strategy and parameters are run on Chainlink's Runtime Environment (CRE).
             The runtime environment is fixed and the workflow cannot be altered
             without admin permissions.
           </p>
@@ -124,7 +119,7 @@ export const truflationBitcoinFactsheetData: FactsheetModel = {
       description: (
         <>
           <p>
-            TRUF.network provides Truflation's realtime CPI inflation data that is more timely than traditional inflation data sources.
+            TRUF network provides Truflation's realtime CPI inflation data that is more timely than traditional inflation data sources.
           </p>
           <p>
             This granular, daily data stream allows the strategy to identify regime shifts and rebalance positions significantly faster than traditional models dependent on lagged monthly reports.
@@ -210,7 +205,7 @@ export const truflationBitcoinFactsheetData: FactsheetModel = {
           </p>
           <p>
             Manipulation of the inflation data can put the weights into one of 3
-            regimes however it cannot determine new weights. Those weights are
+            regimes, however it cannot determine wholy new weights. Those weights are
             controlled by CRE.
           </p>
         </>
