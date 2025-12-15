@@ -2,16 +2,25 @@ import { Typography } from 'antd';
 
 const { Title, Text } = Typography;
 
-export const TruflationInflationRegime = () => {
+export interface TruflationInflationRegimeProps {
+  hideTitle?: boolean;
+  hideImage?: boolean;
+};
+
+export const TruflationInflationRegime = ({
+  hideTitle = false,
+  hideImage = false,
+}: TruflationInflationRegimeProps) => {
   return (
     <>
-      <Title level={3}>
-        <Text
-          style={{ fontSize: 'inherit' }}
-        >
-          Bitcoin is an inflation hedge, it could react to inflation data
-        </Text>
-      </Title>
+      {!hideTitle && (
+        <Title level={3} style={{ margin: 0 }}>
+          <Text style={{ fontSize: 'inherit' }}>
+            Bitcoin is an inflation hedge, it could react to inflation data
+          </Text>
+        </Title>
+      )}
+      {hideImage && null}
       <p>
         <Text strong style={{ color: 'var(--secondary-text-color)' }}>
           Get high frequency, world class inflation data:{' '}

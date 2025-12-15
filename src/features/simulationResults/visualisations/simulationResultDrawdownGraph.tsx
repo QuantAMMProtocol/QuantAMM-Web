@@ -117,6 +117,7 @@ export function SimulationResultDrawdownChart(props: BreakdownProps) {
   return (
     <div>
       <Row>
+        <div hidden={props.hideTitle}>
         <Col span={16}>
           <Divider className={styles.simResultDividers}>
             Historic Drawdown
@@ -137,6 +138,24 @@ export function SimulationResultDrawdownChart(props: BreakdownProps) {
             </a>
           </Dropdown>
         </Col>
+        </div>
+        <div hidden={!props.hideTitle}>
+        <Col span={25}>
+          <Dropdown
+            menu={{
+              items,
+              onClick,
+            }}
+          >
+            <a onClick={(e) => e.preventDefault()}>
+              <Space>
+                {drawdownType}
+                <DownOutlined />
+              </Space>
+            </a>
+          </Dropdown>
+        </Col>
+        </div>
       </Row>
       <Row className={styles.resultChartRow}>
         <Col span={24}>
