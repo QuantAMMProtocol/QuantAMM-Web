@@ -226,13 +226,13 @@ export const truflationBitcoinFactsheetData: FactsheetModel = {
       </p>
       <p>
         A training period of June 2023 - Dec 2024 was selected and parameters
-        were selected using the machine learning optimization method ADAM. This
-        was performed by the QuantAMM team using the QuantAMM simulator
-        framework. A parameter set was selected that maximised the Sharpe Ratio
+        were selected using the machine learning optimization method Adam. This
+        was performed using the QuantAMM simulator
+        framework. A parameter set was selected that maximised the Sharpe ratio
         of the strategy. This was selected over other objectives such as
         maximising Ulcer or Calmer Ratios as the parameter set showed better
         test set statistics. Random 6 month length windows were selected within
-        the training price range and optimisation was performed via stochastic
+        the training price range and optimisation was performed via
         gradient descent for 1000 steps with batches of 8 windows per step.
       </p>
     </>
