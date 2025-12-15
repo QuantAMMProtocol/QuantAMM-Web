@@ -578,13 +578,15 @@ export const ConfigInitialState: SimulationRunConfig = {
       updateRuleTrainUrl: 'runTraining',
       applicablePoolTypes: ['QuantAMM'],
       updateRuleResultProfileSummary:
-        "TODO MW explanation of truflation regime strat?",
+        "Using Truflation CPI data as input, this strategy dynamically adjusts portfolio allocations by classifying the market into Uptrend, Downtrend, or Flat regimes based on the calculated slope of the data."
+        + "To filter out noise and prevent 'whipsawing', it employs a state machine with hysteresis thresholds and confirmation delays, requiring a trend to persist for a specific duration before switching regimes."
+        + "Upon confirmation, the pool rebalances to a defined set of target weights, favoring risk-on assets in uptrends and risking-off in downtrends.",
       heatmapKeys: [],
       updateRuleParameters: [
         {
           factorName: 'slope_length',
           factorDisplayName: 'Slope Length',
-          factorDescription: 'TODO MW',
+          factorDescription: 'Signal lookback period for the slope calculation in days.',
           applicableCoins: [],
           factorValue: '15.0',
           minValue: '0',
@@ -593,7 +595,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         {
           factorName: 'threshold_up',
           factorDisplayName: 'Threshold Up',
-          factorDescription: 'TODO MW',
+          factorDescription: 'The minimum positive slope value required to trigger a potential entry into an Uptrend regime.',
           applicableCoins: [],
           factorValue: '0.0125',
           minValue: '0',
@@ -602,7 +604,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         {
           factorName: 'threshold_down',
           factorDisplayName: 'Threshold Down',
-          factorDescription: 'TODO MW',
+          factorDescription: 'The maximum negative slope value required to trigger a potential entry into a Downtrend regime.',
           applicableCoins: [],
           factorValue: '-0.0125',
           minValue: '-5000',
@@ -611,7 +613,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         {
           factorName: 'flat_buffer_up',
           factorDisplayName: 'Flat Buffer Up',
-          factorDescription: 'TODO MW',
+          factorDescription: 'A hysteresis threshold that the slope must fall below to exit a confirmed Uptrend and return to Flat.',
           applicableCoins: [],
           factorValue: '0.005',
           minValue: '0',
@@ -620,7 +622,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         {
           factorName: 'flat_buffer_down',
           factorDisplayName: 'Flat Buffer Down',
-          factorDescription: 'TODO MW',
+          factorDescription: 'A hysteresis threshold that the slope must rise above to exit a confirmed Downtrend and return to Flat.',
           applicableCoins: [],
           factorValue: '-0.005',
           minValue: '-5000',
@@ -629,7 +631,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         {
           factorName: 'confirm_up_days',
           factorDisplayName: 'Confirm Up Days',
-          factorDescription: 'TODO MW',
+          factorDescription: 'The number of consecutive time steps the slope must satisfy Uptrend criteria to officially confirm the regime.',
           applicableCoins: [],
           factorValue: '5',
           minValue: '0',
@@ -638,7 +640,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         {
           factorName: 'confirm_down_days',
           factorDisplayName: 'Confirm Down Days',
-          factorDescription: 'TODO MW',
+          factorDescription: 'The number of consecutive time steps the slope must satisfy Downtrend criteria to officially confirm the regime.',
           applicableCoins: [],
           factorValue: '5',
           minValue: '0',
@@ -647,7 +649,7 @@ export const ConfigInitialState: SimulationRunConfig = {
         {
           factorName: 'confirm_flat_days',
           factorDisplayName: 'Confirm Flat Days',
-          factorDescription: 'TODO MW',
+          factorDescription: 'The number of consecutive time steps the slope must satisfy Flat criteria to officially confirm the regime.',
           applicableCoins: [],
           factorValue: '4',
           minValue: '0',

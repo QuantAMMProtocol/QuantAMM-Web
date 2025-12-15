@@ -254,7 +254,7 @@ export const truflationBitcoinFactsheetData: FactsheetModel = {
       variations: [
         {
           name: 'Slope Length',
-          tooltip: 'TODO MW',
+          tooltip: 'The lookback period for the slope calculation.',
           value: ['BTC - 50.35461604'],
         },
       ],
@@ -264,7 +264,7 @@ export const truflationBitcoinFactsheetData: FactsheetModel = {
       variations: [
         {
           name: 'Threshold Up',
-          tooltip: 'TODO MW',
+          tooltip: 'Defines the positive slope value that must be exceeded to trigger a potential switch to an Uptrend from a Flat state (or directly from a Downtrend). Marks the upper boundary of the "neutral" zone for initiating new trends.',
           value: [
             'BTC - 0.929563018539273',
           ],
@@ -276,7 +276,7 @@ export const truflationBitcoinFactsheetData: FactsheetModel = {
       variations: [
         {
           name: 'Threshold Down',
-          tooltip: 'TODO MW',
+          tooltip: 'Defines the negative slope value below which the system triggers a potential switch to a Downtrend from a Flat state (or directly from an Uptrend). Marks the lower boundary of the "neutral" zone for initiating new trends.',
           value: [
             'BTC - 2601.9593723570410',
           ],
@@ -288,7 +288,7 @@ export const truflationBitcoinFactsheetData: FactsheetModel = {
       variations: [
         {
           name: 'Flat Buffer Up',
-          tooltip: 'TODO MW',
+          tooltip: 'A hysteresis threshold used to maintain an existing Uptrend; the slope must fall below this value (while remaining above threshold_down) to downgrade the state from Uptrend back to Flat.',
           value: [
             'BTC - 0.7832038911979993',
           ],
@@ -300,7 +300,7 @@ export const truflationBitcoinFactsheetData: FactsheetModel = {
       variations: [
         {
           name: 'Flat Buffer DOWN',
-          tooltip: 'TODO MW',
+          tooltip: 'A hysteresis threshold used to maintain an existing Downtrend; the slope must rise above this value (while remaining below threshold_up) to upgrade the state from Downtrend back to Flat.',
           value: [
             'BTC - 0.0086388441051054223',
           ],
@@ -312,7 +312,7 @@ export const truflationBitcoinFactsheetData: FactsheetModel = {
       variations: [
         {
           name: 'Confirm Up Days',
-          tooltip: 'TODO MW',
+          tooltip: 'The number of consecutive time steps the slope condition must remain in the "Uptrend" zone to confirm and lock in a regime change to Uptrend.',
           value: [
             'BTC - 0.074853775497883593',
           ],
@@ -324,7 +324,7 @@ export const truflationBitcoinFactsheetData: FactsheetModel = {
       variations: [
         {
           name: 'Confirm Down Days',
-          tooltip: 'TODO MW',
+          tooltip: 'The number of consecutive time steps the slope condition must remain in the "Downtrend" zone to confirm and lock in a regime change to Downtrend.',
           value: [
             'BTC - 0.0002015493093145',
           ],
@@ -336,7 +336,7 @@ export const truflationBitcoinFactsheetData: FactsheetModel = {
       variations: [
         {
           name: 'Confirm Flat Days',
-          tooltip: 'TODO MW',
+          tooltip: 'The number of consecutive time steps the slope condition must remain in the "Flat" zone to confirm and lock in a regime change to Flat.',
           value: [
             'BTC - 0.0002015493093145',
           ],
