@@ -1,6 +1,6 @@
 import { FactsheetModel } from '../../landing/desktop/factsheetModel';
-import { ChannelFollowingUpdateRule } from '../../updateRules/channelFollowing';
 import { ROUTES } from '../../../../routesEnum';
+import { TruflationInflationRegime } from '../../../shared/eli5/truflationInflationRegime';
 
 export const truflationBitcoinFactsheetData: FactsheetModel = {
   poolId: ROUTES.TRUFLATIONBITCOINFACTSHEET,
@@ -70,7 +70,7 @@ export const truflationBitcoinFactsheetData: FactsheetModel = {
     'HODL': 'BTC ONLY HODL',
   },
 
-  updateRule: <ChannelFollowingUpdateRule hideTitle={true} hideImage={true} />,
+  updateRule: <TruflationInflationRegime hideTitle={true} hideImage={true} />,
   advantages: [
     {
       title: 'Advanced Infrastructure',
