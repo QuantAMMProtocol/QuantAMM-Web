@@ -5,7 +5,7 @@ import { ROUTES } from '../../../../routesEnum';
 export const truflationBitcoinFactsheetData: FactsheetModel = {
   poolId: ROUTES.ARBITRUMMACROFACTSHEET,
   inceptionLpPrice:3023,
-  poolChain: 'ARBITRUM',
+  poolChain: 'MAINNET',
   pools: [
     'truflationBitcoinBTFAugTrain',
     'truflationBitcoinCFMMAugTrain',
@@ -44,15 +44,7 @@ export const truflationBitcoinFactsheetData: FactsheetModel = {
       [
         'Chainlink USDC Oracle',
         'https://etherscan.org/address/0x6f2bD10b9b17E80e5BCd49158890561f053Ed2EB',
-      ],
-      [
-        'Chainlink ARB Oracle',
-        'https://etherscan.org/address/0x62B9eC6A5BBEBe4F5C5f46C8A8880df857004295',
-      ],
-      [
-        'Chainlink scETH Oracle',
-        'https://etherscan.org/address/0x4FFE46130bCBb16BF5EDc4bBaa06f158921764C2',
-      ],
+      ]
     ],
   },
   fixedSettings: [
@@ -80,7 +72,7 @@ export const truflationBitcoinFactsheetData: FactsheetModel = {
     HODL: '#52ad80',
   },
   cumulativePerformanceOverrideSeriesName: {
-    'Channel Following': 'ARBITRUM MACRO BTF',
+    'Truflation BTC Regime': 'Truflation BTC BTF',
     'Balancer Weighted': 'Traditional DEX',
   },
 

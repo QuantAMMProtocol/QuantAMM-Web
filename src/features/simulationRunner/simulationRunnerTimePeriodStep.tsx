@@ -134,7 +134,7 @@ export function SimulationRunnerTimePeriodStep() {
     // Can not select days before today and today
     return (
       current < dayjs('2021-11-20', 'YYYY-MM-DD') ||
-      current > dayjs('2025-07-02', 'YYYY-MM-DD')
+      current > dayjs('2025-12-11', 'YYYY-MM-DD')
     );
   };
 
