@@ -99,21 +99,15 @@ export type Pool =
   | 'arbitrumMacroBTF2025TestFull'
   | 'arbitrumMacroCFMM2025TestFull'
   | 'arbitrumMacroHodl2025TestFull'  
-  |  'truflationBitcoinBTFAugTrain'
-  |  'truflationBitcoinCFMMAugTrain'
-  |  'truflationBitcoinHodlAugTrain'
-  |  'truflationBitcoinCFMMAugTest'
-  |  'truflationBitcoinBTFAugTest'
-  |  'truflationBitcoinHodlAugTest'
+  |  'truflationBitcoinBTFJuneTrain'
+  |  'truflationBitcoinCFMMJuneTrain'
+  |  'truflationBitcoinHodlJuneTrain'
   |  'truflationBitcoinBTF2025Test'
   |  'truflationBitcoinCFMM2025Test'
   |  'truflationBitcoinHodl2025Test'  
-  |  'truflationBitcoinBTFAugTrainFull'
-  |  'truflationBitcoinCFMMAugTrainFull'
-  |  'truflationBitcoinHodlAugTrainFull'
-  |  'truflationBitcoinCFMMAugTestFull'
-  |  'truflationBitcoinBTFAugTestFull'
-  |  'truflationBitcoinHodlAugTestFull'
+  |  'truflationBitcoinBTFJuneTrainFull'
+  |  'truflationBitcoinCFMMJuneTrainFull'
+  |  'truflationBitcoinHodlJuneTrainFull'
   |  'truflationBitcoinBTF2025TestFull'
   |  'truflationBitcoinCFMM2025TestFull'
   |  'truflationBitcoinHodl2025TestFull';
@@ -269,24 +263,18 @@ export const getBreakdown = async (
     arbitrumMacroBTF2025TestFull: '/prerun_sims/ARBITRUM_MACRO_BTF_2025_TEST_FULL.msgpack',
     arbitrumMacroCFMM2025TestFull: '/prerun_sims/ARBITRUM_MACRO_CFMM_2025_TEST_FULL.msgpack',
     arbitrumMacroHodl2025TestFull: '/prerun_sims/ARBITRUM_MACRO_HODL_2025_TEST_FULL.msgpack',
-    truflationBitcoinBTFAugTrain:"/prerun_sims/TRUFLATION_BITCOIN_.msgpack",
-    truflationBitcoinCFMMAugTrain:"/prerun_sims/TRUFLATION_BITCOIN_.msgpack",
-    truflationBitcoinHodlAugTrain:"/prerun_sims/TRUFLATION_BITCOIN_.msgpack",
-    truflationBitcoinCFMMAugTest:"/prerun_sims/TRUFLATION_BITCOIN_.msgpack",
-    truflationBitcoinBTFAugTest:"/prerun_sims/TRUFLATION_BITCOIN_.msgpack",
-    truflationBitcoinHodlAugTest:"/prerun_sims/TRUFLATION_BITCOIN_.msgpack",
-    truflationBitcoinBTF2025Test:"/prerun_sims/TRUFLATION_BITCOIN_.msgpack",
-    truflationBitcoinCFMM2025Test:"/prerun_sims/TRUFLATION_BITCOIN_.msgpack",
-    truflationBitcoinHodl2025Test:"/prerun_sims/TRUFLATION_BITCOIN_.msgpack",
-    truflationBitcoinBTFAugTrainFull:"/prerun_sims/TRUFLATION_BITCOIN_.msgpack",
-    truflationBitcoinCFMMAugTrainFull:"/prerun_sims/TRUFLATION_BITCOIN_.msgpack",
-    truflationBitcoinHodlAugTrainFull:"/prerun_sims/TRUFLATION_BITCOIN_.msgpack",
-    truflationBitcoinCFMMAugTestFull:"/prerun_sims/TRUFLATION_BITCOIN_.msgpack",
-    truflationBitcoinBTFAugTestFull:"/prerun_sims/TRUFLATION_BITCOIN_.msgpack",
-    truflationBitcoinHodlAugTestFull:"/prerun_sims/TRUFLATION_BITCOIN_.msgpack",
-    truflationBitcoinBTF2025TestFull:"/prerun_sims/TRUFLATION_BITCOIN_.msgpack",
-    truflationBitcoinCFMM2025TestFull:"/prerun_sims/TRUFLATION_BITCOIN_.msgpack",
-    truflationBitcoinHodl2025TestFull:"/prerun_sims/TRUFLATION_BITCOIN_.msgpack",
+    truflationBitcoinBTFJuneTrain:"/prerun_sims/TRUFLATION_BITCOIN_BTF_JUNE_TRAIN.msgpack",
+    truflationBitcoinCFMMJuneTrain:"/prerun_sims/TRUFLATION_BITCOIN_CFMM_JUNE_TRAIN.msgpack",
+    truflationBitcoinHodlJuneTrain:"/prerun_sims/TRUFLATION_BITCOIN_HODL_JUNE_TRAIN.msgpack",
+    truflationBitcoinBTF2025Test:"/prerun_sims/TRUFLATION_BITCOIN_BTF_2025_TEST.msgpack",
+    truflationBitcoinCFMM2025Test:"/prerun_sims/TRUFLATION_BITCOIN_CFMM_2025_TEST.msgpack",
+    truflationBitcoinHodl2025Test:"/prerun_sims/TRUFLATION_BITCOIN_HODL_2025_TEST.msgpack",
+    truflationBitcoinBTFJuneTrainFull:"/prerun_sims/TRUFLATION_BITCOIN_BTF_JUNE_TRAIN_FULL.msgpack",
+    truflationBitcoinCFMMJuneTrainFull:"/prerun_sims/TRUFLATION_BITCOIN_CFMM_JUNE_TRAIN_FULL.msgpack",
+    truflationBitcoinHodlJuneTrainFull:"/prerun_sims/TRUFLATION_BITCOIN_HODL_JUNE_TRAIN_FULL.msgpack",
+    truflationBitcoinBTF2025TestFull:"/prerun_sims/TRUFLATION_BITCOIN_BTF_2025_TEST_FULL.msgpack",
+    truflationBitcoinCFMM2025TestFull:"/prerun_sims/TRUFLATION_BITCOIN_CFMM_2025_TEST_FULL.msgpack",
+    truflationBitcoinHodl2025TestFull:"/prerun_sims/TRUFLATION_BITCOIN_HODL_2025_TEST_FULL.msgpack",
   };
 
   const poolFilePath = poolFileMapping[poolName];
