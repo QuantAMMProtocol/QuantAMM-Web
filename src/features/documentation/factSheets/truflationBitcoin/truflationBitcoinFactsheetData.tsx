@@ -50,7 +50,7 @@ export const truflationBitcoinFactsheetData: FactsheetModel = {
     ['default', 22],
   ]),
   mainTitle: 'Truflation Bitcoin BTF',
-  mainDescription: `Truflation is a leading provider of alternate daily inflation data that has gained notoriety given its increased accuracy compared to standard truflation data. `,
+  mainDescription: `Truflation is a leading provider of alternate daily inflation data that has gained notoriety given its increased accuracy compared to standard inflation data. `,
   cumulativePerformanceOverrideSeriesStrokeColor: {
     'Truflation BTC Regime': '#c7b283',
     'Balancer Weighted': '#528aae',
