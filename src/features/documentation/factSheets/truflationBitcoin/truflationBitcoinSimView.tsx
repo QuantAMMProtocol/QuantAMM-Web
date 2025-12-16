@@ -28,20 +28,12 @@ export function TruflationBitcoinSimulatorExample() {
 
       if (key === '1') {
         poolNames = [
-          'truflationBitcoinBTFAugTrainFull',
-          'truflationBitcoinCFMMAugTrainFull',
-          'truflationBitcoinHodlAugTrainFull',
+          'truflationBitcoinBTFJuneTrainFull',
+          'truflationBitcoinHodlJuneTrainFull',
         ];
       } else if (key === '2') {
         poolNames = [
-          'truflationBitcoinCFMMAugTestFull',
-          'truflationBitcoinBTFAugTestFull',
-          'truflationBitcoinHodlAugTestFull',
-        ];
-      } else if (key === '3') {
-        poolNames = [
           'truflationBitcoinBTF2025TestFull',
-          'truflationBitcoinCFMM2025TestFull',
           'truflationBitcoinHodl2025TestFull',
         ];
       }
@@ -56,7 +48,7 @@ export function TruflationBitcoinSimulatorExample() {
   }, [key]); // Dependency array ensures that effect runs when `key` changes
 
   const seriesName = {
-    'Power Channel': '#c7b283',
+    'Truflation BTC Regime': '#c7b283',
     'Balancer Weighted': '#528aae',
     HODL: '#52ad80',
   };
@@ -87,23 +79,8 @@ export function TruflationBitcoinSimulatorExample() {
               )}
             </TabPane>
             <TabPane
-              tab="Truflation Bitcoin Test Period: Aug 2024 - Apr 2025"
-              key={'2'}
-            >
-              {loading ? (
-                <Spin size="large" />
-              ) : (
-                <SimulationResultsSummaryStep
-                  breakdowns={breakdowns}
-                  forceViewResults={true}
-                  overrideSeriesName={seriesName}
-                  overrideSeriesStrokeColor={seriesStrokeColor}
-                />
-              )}
-            </TabPane>
-            <TabPane
               tab="Truflation Bitcoin Test Period: Jan 2025 - Apr 2025"
-              key={'3'}
+              key={'2'}
             >
               {loading ? (
                 <Spin size="large" />

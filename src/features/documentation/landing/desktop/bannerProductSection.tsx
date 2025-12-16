@@ -242,7 +242,7 @@ export function BannerProductSection({ productData }: ProductBannerProps) {
                       >
                         <h5 style={{ margin: 0 }}>
                           {tag.title.toUpperCase()}
-                          {tag.status !== 'LIVE' && ' ('+ tag.status +')'}
+                          {tag.status !== 'LIVE' && ' (' + tag.status + ')'}
                         </h5>
                       </Tooltip>
                     </Col>
@@ -363,7 +363,9 @@ export function BannerProductSection({ productData }: ProductBannerProps) {
                           <Button
                             onClick={() => handleNavigation(tag.factsheetRoute)}
                             size="small"
-                            disabled={tag.status !== 'LIVE'}
+                            disabled={
+                              tag.status !== 'LIVE' && tag.status !== 'PREVIEW'
+                            }
                             style={{
                               padding: '6px 12px',
                               borderRadius: 6,
@@ -372,7 +374,11 @@ export function BannerProductSection({ productData }: ProductBannerProps) {
                               color: '#fff',
                               fontSize: '0.78rem',
                               lineHeight: 1,
-                              cursor: tag.status !== 'LIVE' ? 'not-allowed' :   'pointer',
+                              cursor:
+                                tag.status !== 'LIVE' &&
+                                tag.status !== 'PREVIEW'
+                                  ? 'not-allowed'
+                                  : 'pointer',
                             }}
                           >
                             View Factsheet
@@ -396,7 +402,10 @@ export function BannerProductSection({ productData }: ProductBannerProps) {
                               fontWeight: 600,
                               fontSize: '0.78rem',
                               lineHeight: 1,
-                              cursor: tag.status !== 'LIVE' ? 'not-allowed' :   'pointer',
+                              cursor:
+                                tag.status !== 'LIVE'
+                                  ? 'not-allowed'
+                                  : 'pointer',
                             }}
                           >
                             View Live Pool

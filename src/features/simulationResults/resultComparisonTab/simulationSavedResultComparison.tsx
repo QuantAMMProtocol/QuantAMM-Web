@@ -7,6 +7,7 @@ import {
 } from '../simulationResultSlice';
 import { SimulationResultsSummaryStep } from '../simulationResultsSummaryStep';
 import { SimulationResultsRunDetailsTable } from './simulationResultsRunDetailsTable';
+import { PoolDeploymentConfigReview } from '../../simulationRunner/simulationDeploymentPreview';
 
 const { TabPane } = Tabs;
 
@@ -35,6 +36,13 @@ export function SimulationSavedResultComparison() {
           forceViewResults={false}
         />
       );
+    } else if (key == '3') {
+      return (
+        <PoolDeploymentConfigReview
+          pool={savedSelectedBreakdowns[0].simulationRun}
+          initialisationData={savedSelectedBreakdowns[0].simulationRunResultAnalysis}
+        />
+      );
     }
 
     return <div></div>;
@@ -58,7 +66,7 @@ export function SimulationSavedResultComparison() {
               key="1"
             >
               <Row>
-                <Col span={20}>
+                <Col span={16}>
                   <Divider>Run Detail Summary</Divider>
                 </Col>
                 <Col span={4}>
@@ -70,6 +78,18 @@ export function SimulationSavedResultComparison() {
                     }}
                   >
                     See Comparison Results
+                  </Button>
+                </Col>
+                <Col span={4}>
+                  <Button
+                    disabled={savedSelectedBreakdowns.length !== 1}
+                    type="primary"
+                    style={{ marginTop: 5, marginLeft: 40, height: 40 }}
+                    onClick={() => {
+                      setKey('3');
+                    }}
+                  >
+                    See Deployment Preview
                   </Button>
                 </Col>
               </Row>

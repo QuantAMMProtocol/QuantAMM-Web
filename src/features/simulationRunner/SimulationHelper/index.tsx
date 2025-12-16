@@ -17,6 +17,7 @@ import {
 } from './../simulationRunnerSlice';
 import { useLoadHistoricDailyPricesMutation } from '../../coinData/coinPriceRetrievalService';
 import {
+  Chain,
   CoinComparison,
   CoinPrice,
 } from '../../simulationRunConfiguration/simulationRunConfigModels';
@@ -75,6 +76,7 @@ export const loadPriceHistoryAsync =
           dailyPriceHistoryMap: fullPriceMap,
           dailyReturns: timesteps,
           coinComparisons: new Map<string, CoinComparison>(),
+          deploymentByChain: coin.deploymentByChain,
         })
       );
     }
@@ -130,6 +132,7 @@ export const handleDownloadParams = (
               updateRuleParameters: [],
               applicablePoolTypes:
                 jsonData.simulationRun.updateRule.applicablePoolTypes,
+              chainDeploymentDetails:jsonData.simulationRun.updateRule.chainDeploymentDetails
             },
             poolConstituents: jsonData.simulationRun.poolConstituents,
             poolType: jsonData.simulationRun.poolType,
@@ -267,6 +270,7 @@ export const handleFileChange = (
                 heatmapKeys: [],
                 updateRuleParameters: [],
                 applicablePoolTypes: [],
+                chainDeploymentDetails: new Map<Chain, string>(),
               },
               poolConstituents: jsonData.simulationRun.poolConstituents,
               poolType: {

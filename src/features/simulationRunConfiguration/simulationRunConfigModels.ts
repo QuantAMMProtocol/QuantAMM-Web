@@ -1,6 +1,14 @@
 import { ReturnTimeStep } from '../simulationResults/simulationResultSummaryModels';
 import { TrainingParametersDto } from '../simulationRunner/simulationRunnerDtos';
 
+export enum Chain {
+  Ethereum = 'Ethereum',
+  Polygon = 'Polygon',
+  Arbitrum = 'Arbitrum',
+  Optimism = 'Optimism',
+  Base = 'Base',
+  Sonic = 'Sonic',
+}
 export interface CoinPrice {
   unix: number;
   open: number;
@@ -15,6 +23,12 @@ export interface CoinComparison {
   trackingError: number;
 }
 
+export interface DeployedToken{
+  address: string;
+  oracles: Map<string, string>;
+  approvalStatus: boolean;
+}
+
 export interface Coin {
   coinName: string;
   coinCode: string;
@@ -22,6 +36,7 @@ export interface Coin {
   dailyPriceHistoryMap: Map<number, CoinPrice>;
   dailyReturns: Map<number, ReturnTimeStep>;
   coinComparisons: Map<string, CoinComparison>;
+  deploymentByChain: Map<Chain, DeployedToken>;
 }
 
 export interface CoinDto {
@@ -57,6 +72,7 @@ export interface UpdateRuleParameter {
   factorValue: string;
   minValue: string;
   maxValue: string;
+  smartContractSortOrder: number;
 }
 
 export interface UpdateRule {
@@ -69,6 +85,7 @@ export interface UpdateRule {
   updateRuleTrainUrl: string | undefined;
   applicablePoolTypes: string[];
   updateRuleParameters: UpdateRuleParameter[];
+  chainDeploymentDetails: Map<Chain, string>;
 }
 
 export interface HookTimeSeriesStep {
@@ -161,6 +178,12 @@ export interface RunTimePeriodRange {
   name: string;
 }
 
+export interface ChainDeploymentDetails{
+  updateWeightRunnerAddress: string;
+  balancerVaultAddress: string;
+  quantammWeightedPoolFactoryAddress: string;
+}
+
 export interface SimulationRunConfig {
   initialLiquidityPool: LiquidityPool;
   simulationLiquidityPools: LiquidityPool[];
@@ -185,6 +208,7 @@ export interface SimulationRunConfig {
   trainingParameters: TrainingParametersDto;
   simulationSimplifiedIncludeLvrRuns: boolean;
   simulationSimplifiedIncludeRvrRuns: boolean;
+  chainDeploymentDetails: Map<Chain, ChainDeploymentDetails>;
 }
 
 export interface SimulationRunProgress {

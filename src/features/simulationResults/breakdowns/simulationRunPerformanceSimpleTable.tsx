@@ -1,5 +1,5 @@
 import { FC, useCallback, useMemo, useRef } from 'react';
-import { ColDef, SideBarDef, CellStyle } from 'ag-grid-community';
+import { ColDef, SideBarDef, CellStyle, ValueGetterParams } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-quartz.css';
@@ -14,15 +14,31 @@ import { benchmarkMetricThresholds, returnMetricThresholds } from '../../../mode
 
 interface AnalysisBreakdownTableProps {
   simulationRunBreakdowns: SimulationRunBreakdown[];
+  benchmarkBreakdown: SimulationRunBreakdown | null;
   visibleMetrics: string[];
   height?: number;
 }
 
-export const AnalysisSimplifiedBreakdownTable: FC<
-  AnalysisBreakdownTableProps
-> = ({ simulationRunBreakdowns, visibleMetrics, height = 700 }) => {
+export const AnalysisSimplifiedBreakdownTable: FC<AnalysisBreakdownTableProps> = ({
+  simulationRunBreakdowns,
+  benchmarkBreakdown,
+  visibleMetrics,
+  height = 700,
+}) => {
   const darkThemeAg = useAppSelector(selectAgGridTheme);
   const gridRef = useRef<AgGridReact>(null);
+
+  const benchmarkHeaderName = useMemo(() => {
+    if (!benchmarkBreakdown) {
+      return null;}
+    return benchmarkBreakdown.simulationRun.updateRule.updateRuleName;
+  }, [benchmarkBreakdown]);
+
+  const allBreakdowns = useMemo(() => {
+    return benchmarkBreakdown
+      ? [...simulationRunBreakdowns, benchmarkBreakdown]
+      : simulationRunBreakdowns;
+  }, [simulationRunBreakdowns, benchmarkBreakdown]);
 
   const flatSummary = useMemo(() => {
     interface Flat {
@@ -31,17 +47,20 @@ export const AnalysisSimplifiedBreakdownTable: FC<
       value: number;
     }
     const out: Flat[] = [];
-    simulationRunBreakdowns.forEach((br) => {
+    allBreakdowns.forEach((br) => {
       const ruleName = br.simulationRun.updateRule.updateRuleName;
       const analysis = br.simulationRunResultAnalysis;
-      if (!analysis) return;
+      if (!analysis) {
+        return;}
+
       const metrics: SimulationRunMetric[] = [
         ...(analysis.return_analysis || []),
         ...(analysis.benchmark_analysis || []),
       ];
+
       metrics.forEach((m) => {
-        if (m.benchmarkName === 'benchmark_return_analysis') return;
-        if (m.metricValue == null) return;
+        if (m.benchmarkName === 'benchmark_return_analysis' || m.metricValue == null) {
+          return;}
         out.push({
           updateRule: ruleName,
           metric: m.metricName,
@@ -50,7 +69,7 @@ export const AnalysisSimplifiedBreakdownTable: FC<
       });
     });
     return out;
-  }, [simulationRunBreakdowns]);
+  }, [allBreakdowns]);
 
   const updateRules = useMemo(
     () => Array.from(new Set(flatSummary.map((f) => f.updateRule))),
@@ -59,29 +78,41 @@ export const AnalysisSimplifiedBreakdownTable: FC<
 
   const getColorFor = useCallback((metric: string, value: number | null) => {
     if (value == null) return undefined;
-    const t = [...returnMetricThresholds, ...benchmarkMetricThresholds].find(x => x.key === metric);
+
+    const t = [...returnMetricThresholds, ...benchmarkMetricThresholds].find(
+      (x) => x.key === metric
+    );
     if (!t) return undefined;
 
     const { veryLow, low, medium, high } = t;
     const ascending = high > medium;
+
     if (ascending) {
-      if (value >= high)   return t.highColor;
+      if (value >= high) return t.highColor;
       if (value >= medium) return t.mediumColor;
-      if (value >= low)    return t.lowColor;
-      if (value >= veryLow)return t.veryLowColor;
-      return '#610000'
-    } else {
-      if (value <= high)   return t.highColor;
-      if (value <= medium) return t.mediumColor;
-      if (value <= low)    return t.lowColor;
-      if (value <= veryLow)return t.veryLowColor;
-      return '#01ec38'
+      if (value >= low) return t.lowColor;
+      if (value >= veryLow) return t.veryLowColor;
+      return '#610000';
     }
+
+    if (value <= high) return t.highColor;
+    if (value <= medium) return t.mediumColor;
+    if (value <= low) return t.lowColor;
+    if (value <= veryLow) return t.veryLowColor;
+    return '#01ec38';
+  }, []);
+
+  const vsCellStyle = useCallback((value: number | null): CellStyle | undefined => {
+    if (value == null) return undefined;
+
+    // Light green if > 0, dark green if > 100%, red if < 0
+    if (value > 0) return { backgroundColor: 'rgba(2, 189, 46, 0.6)', color: '#ffffff' };
+    if (value < 0) return { backgroundColor: 'rgba(166, 0, 0, 0.6)' };
     return undefined;
   }, []);
 
-  const colDefs = useMemo<ColDef[]>(
-    () => [
+  const colDefs = useMemo<ColDef[]>(() => {
+    const baseCols: ColDef[] = [
       {
         colId: 'metric',
         field: 'metric',
@@ -91,55 +122,87 @@ export const AnalysisSimplifiedBreakdownTable: FC<
         filter: 'agSetColumnFilter',
         resizable: true,
         width: 300,
-        tooltipValueGetter: params => {
-        const t = returnMetricThresholds.find(x => x.key === params.value);
-        return t?.tooltipDescription;
+        tooltipValueGetter: (params) => {
+          const t = returnMetricThresholds.find((x) => x.key === params.value);
+          return t?.tooltipDescription;
+        },
       },
-      },
-      ...updateRules.map(rule => ({
+      ...updateRules.map((rule) => ({
         colId: rule,
         field: rule,
         headerName: rule,
         sortable: true,
         filter: 'agNumberColumnFilter',
         resizable: true,
-        valueFormatter: (params: { value: number | undefined}) =>
-          typeof params.value === 'number'
-            ? params.value.toFixed(4)
-            : '',
-        cellStyle: (params: { data: { metric: string; }; value: number | null; }): CellStyle | undefined => {
+        valueFormatter: (params: { value: number | undefined }) =>
+          typeof params.value === 'number' ? params.value.toFixed(4) : '',
+        cellStyle: (params: {
+          data: { metric: string };
+          value: number | null;
+        }): CellStyle | undefined => {
           const metric = params.data.metric;
           const color = getColorFor(metric, params.value);
           if (!color) return undefined;
           return { backgroundColor: color };
         },
       })),
-    ],
-    [updateRules, getColorFor]
-  );
+    ];
 
-  // 4) build your rows
+    if (!benchmarkHeaderName) return baseCols;
+
+    const vsCols: ColDef[] = updateRules
+      .filter((rule) => rule !== benchmarkHeaderName)
+      .map((rule) => {
+        const colId = `${rule}__vs__${benchmarkHeaderName}`;
+        return {
+          colId,
+          headerName: `${rule} vs ${benchmarkHeaderName}`,
+          sortable: true,
+          filter: 'agNumberColumnFilter',
+          resizable: true,
+        width: 300,
+          valueGetter: (params: ValueGetterParams) => {
+            const row = params.data as Record<string, unknown> | undefined;
+            if (!row) return null;
+
+            const a = row[rule];
+            const b = row[benchmarkHeaderName];
+
+            if (typeof a !== 'number' || typeof b !== 'number') return null;
+            if (b === 0) return null;
+
+            // Overperformance (%) relative to benchmark:
+            // ((value - benchmark) / |benchmark|) * 100
+            return ((a - b));
+          },
+          valueFormatter: (params: { value: number | null | undefined }) =>
+            typeof params.value === 'number' ? params.value > 0 ? `+${params.value.toFixed(2)}` : `${params.value.toFixed(2)}` : '',
+          cellStyle: (params: { value: number | null }): CellStyle | undefined =>
+            vsCellStyle(params.value),
+        } as ColDef;
+      });
+
+    return [...baseCols, ...vsCols];
+  }, [updateRules, benchmarkHeaderName, getColorFor, vsCellStyle]);
+
   const rowData = useMemo(() => {
-    const metrics = Array.from(new Set(flatSummary.map((f) => f.metric)));
-    return metrics.map((metric) => {
+    return visibleMetrics.map((metric) => {
       const row: Record<string, string | number | null> = { metric };
       updateRules.forEach((rule) => {
-        const e = flatSummary.find(
-          (f) => f.metric === metric && f.updateRule === rule
-        );
+        const e = flatSummary.find((f) => f.metric === metric && f.updateRule === rule);
         row[rule] = e ? e.value : null;
       });
       return row;
     });
-  }, [flatSummary, updateRules]);
+  }, [flatSummary, updateRules, visibleMetrics]);
 
   const sideBar: SideBarDef = {
     toolPanels: [
       {
         id: 'columns',
         labelDefault: 'Columns',
-        labelKey: 'columns', // ← add this
-        iconKey: 'columns', // ← add this
+        labelKey: 'columns',
+        iconKey: 'columns',
         toolPanel: 'agColumnsToolPanel',
         minWidth: 100,
         maxWidth: 300,
@@ -148,8 +211,8 @@ export const AnalysisSimplifiedBreakdownTable: FC<
       {
         id: 'filters',
         labelDefault: 'Filters',
-        labelKey: 'filters', // ← add this
-        iconKey: 'filter', // ← add this
+        labelKey: 'filters',
+        iconKey: 'filter',
         toolPanel: 'agFiltersToolPanel',
         minWidth: 100,
         maxWidth: 300,
@@ -173,7 +236,6 @@ export const AnalysisSimplifiedBreakdownTable: FC<
     (params: { api: any; columnApi: any }) => {
       params.api.setFilterModel({
         metric: {
-          // make it explicit if you like:
           filterType: 'set',
           values: visibleMetrics,
         },
@@ -185,10 +247,7 @@ export const AnalysisSimplifiedBreakdownTable: FC<
 
   return (
     <div style={{ width: '100%' }}>
-      <div
-        className={`${darkThemeAg} ag-theme-quartz`}
-        style={{ width: '100%', height }}
-      >
+      <div className={`${darkThemeAg} ag-theme-quartz`} style={{ width: '100%', height }}>
         <AgGridReact
           ref={gridRef}
           columnDefs={colDefs}
@@ -199,9 +258,8 @@ export const AnalysisSimplifiedBreakdownTable: FC<
           sideBar={sideBar}
           onGridReady={onGridReady}
           onFirstDataRendered={onFirstDataRendered}
-          /* …other props… */
-          tooltipShowDelay={200}       // optional: delay before showing
-          tooltipMouseTrack={true}     // optional: have it follow your cursor
+          tooltipShowDelay={200}
+          tooltipMouseTrack={true}
         />
       </div>
     </div>

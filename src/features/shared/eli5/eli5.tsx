@@ -10,6 +10,7 @@ import { ElementPool } from './element';
 import { FX } from './fx';
 import { Gyro } from './gyro';
 import { LiquidityBoostrap } from './liquidityBootstrapping';
+import { TruflationInflationRegime } from './truflationInflationRegime';
 
 const mapStrategyToContent = (strategy: string): JSX.Element => {
   switch (strategy) {
@@ -39,6 +40,8 @@ const mapStrategyToContent = (strategy: string): JSX.Element => {
       return <Gyro />;
     case 'LIQUIDITY_BOOTSTRAPPING':
       return <LiquidityBoostrap />;
+    case 'TRUFLATION_INFLATION_REGIME':
+      return <TruflationInflationRegime />;
   }
 
   return <div>No description found</div>;

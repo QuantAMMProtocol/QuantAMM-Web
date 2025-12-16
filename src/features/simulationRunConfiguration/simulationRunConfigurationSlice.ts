@@ -604,6 +604,7 @@ export const clonePool = (originalPool: LiquidityPool): LiquidityPool => {
                 dailyPriceHistory: [],
                 dailyPriceHistoryMap: new Map<number, CoinPrice>(),
                 dailyReturns: new Map<number, ReturnTimeStep>(),
+                deploymentByChain: x.coin.deploymentByChain,
                 coinComparisons: new Map<string, CoinComparison>(),
               },
         amount: x.amount,
@@ -622,6 +623,7 @@ export const clonePool = (originalPool: LiquidityPool): LiquidityPool => {
       updateRuleRunUrl: originalPool.updateRule.updateRuleRunUrl,
       updateRuleTrainUrl: originalPool.updateRule.updateRuleTrainUrl,
       applicablePoolTypes: originalPool.updateRule.applicablePoolTypes,
+      chainDeploymentDetails: originalPool.updateRule.chainDeploymentDetails,
       updateRuleResultProfileSummary:
         originalPool.updateRule.updateRuleResultProfileSummary,
       heatmapKeys: originalPool.updateRule.heatmapKeys,
@@ -671,6 +673,7 @@ export const clonePool = (originalPool: LiquidityPool): LiquidityPool => {
             factorValue: x.factorValue,
             minValue: x.minValue,
             maxValue: x.maxValue,
+            smartContractSortOrder: x.smartContractSortOrder,
             applicableCoins: x.applicableCoins.map((x) => x),
           };
         }
@@ -762,6 +765,7 @@ export const clonePoolFingerPrint = (
                 dailyPriceHistory: [],
                 dailyPriceHistoryMap: new Map<number, CoinPrice>(),
                 dailyReturns: new Map<number, ReturnTimeStep>(),
+                deploymentByChain: x.coin.deploymentByChain,
                 coinComparisons: new Map<string, CoinComparison>(),
               },
         amount: x.amount,
@@ -780,6 +784,7 @@ export const clonePoolFingerPrint = (
       updateRuleRunUrl: originalPool.updateRule.updateRuleRunUrl,
       updateRuleTrainUrl: originalPool.updateRule.updateRuleTrainUrl,
       applicablePoolTypes: originalPool.updateRule.applicablePoolTypes,
+      chainDeploymentDetails: originalPool.updateRule.chainDeploymentDetails,
       updateRuleResultProfileSummary:
         originalPool.updateRule.updateRuleResultProfileSummary,
       heatmapKeys: originalPool.updateRule.heatmapKeys,
@@ -829,6 +834,7 @@ export const clonePoolFingerPrint = (
             factorValue: x.factorValue,
             minValue: x.minValue,
             maxValue: x.maxValue,
+            smartContractSortOrder: x.smartContractSortOrder,
             applicableCoins: x.applicableCoins.map((x) => x),
           };
         }
@@ -921,7 +927,9 @@ export const maxInitialPoolConstituentAvailableDate = (state: RootState) => {
     }
   });
   if (defaultEndDate == 0) {
-    defaultEndDate = new Date('2025-07-01').getTime() / 1000;
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    defaultEndDate = Math.floor(yesterday.getTime() / 1000);
   }
 
   return new Date(defaultEndDate * 1000).toISOString().split('T')[0];
@@ -998,5 +1006,9 @@ export const selectPoolTypeDefaultUpdateRule = (
     );
   }
 };
+
+export const selectChainDeploymentSettings = (state: RootState) =>
+  state.simConfig.chainDeploymentDetails;
+
 
 export default simConfigurationSlice.reducer;

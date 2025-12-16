@@ -22,6 +22,8 @@ import { SonicMacroSimulatorExample } from './features/documentation/factSheets/
 import AbritrumMacroFactSheet from './features/documentation/factSheets/arbitrumMacro/arbitrumMacro';
 import { ArbitrumMacroSimulatorExample } from './features/documentation/factSheets/arbitrumMacro/arbitrumMacroSimView';
 import { ProductHealthMonitor } from './features/productExplorer/productHealthMonitor';
+import TruflationBitcoinFactSheet from './features/documentation/factSheets/truflationBitcoin/truflationBitcoin';
+import { TruflationBitcoinSimulatorExample } from './features/documentation/factSheets/truflationBitcoin/truflationBitcoinSimView';
 
 const BASE_ROUTE = '/';
 
@@ -85,6 +87,10 @@ export const routes = createBrowserRouter([
         element:<ArbitrumMacroSimulatorExample />,
       },
       {
+        path: 'factsheet/example/' + ROUTES.TRUFLATIONBITCOINFACTSHEET,
+        element:<TruflationBitcoinSimulatorExample />,
+      },
+      {
         path: 'factsheet/' + ROUTES.BASEMACROFACTSHEET,
         element:<BaseMacroFactSheet />,
       },
@@ -95,6 +101,10 @@ export const routes = createBrowserRouter([
       {
         path: 'factsheet/' + ROUTES.ARBITRUMMACROFACTSHEET,
         element:<AbritrumMacroFactSheet />,
+      },
+      {
+        path: 'factsheet/' + ROUTES.TRUFLATIONBITCOINFACTSHEET,
+        element:<TruflationBitcoinFactSheet />,
       },
       {
         path: ROUTES.EXAMPLES,

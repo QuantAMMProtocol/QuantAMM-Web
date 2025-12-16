@@ -109,6 +109,22 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
           ),
         })),
       },
+      {
+        key: 'Education',
+        label: 'Education',
+        type: 'submenu',
+        children: [
+          {
+            key: 'research',
+            label: 'Research',
+            icon: <FireOutlined />,
+          },
+          {
+            key: 'tos',
+            label: 'Terms of Service',
+          },
+        ],
+      },
     ];
   }
 

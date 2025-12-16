@@ -96,6 +96,7 @@ function App() {
                 dailyPriceHistoryMap,
                 dailyReturns,
                 coinComparisons: new Map(),
+                deploymentByChain: coin.deploymentByChain,
               })
             );
           }

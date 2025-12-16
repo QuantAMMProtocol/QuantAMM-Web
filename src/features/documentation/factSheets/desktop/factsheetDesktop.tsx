@@ -493,8 +493,9 @@ export function FactSheetDesktop(props: FactsheetDesktopProps) {
                   simulationRunBreakdowns={
                     loading
                       ? []
-                      : [breakdowns[btf], breakdowns[cfmm], breakdowns[hodl]]
+                      : [breakdowns[btf], breakdowns[cfmm]]
                   }
+                  benchmarkBreakdown={breakdowns[hodl]}
                   visibleMetrics={[
                     'Absolute Return (%)',
                     'Annualized Sharpe Ratio',
