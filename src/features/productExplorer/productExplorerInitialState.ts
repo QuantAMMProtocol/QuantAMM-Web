@@ -5,10 +5,8 @@ import {
   returnMetricThresholds,
 } from '../../models';
 import { ProductExplorer } from '../../models/productModels';
+import { TOS_COOKIE } from './cookieUtils';
 
-
-// ----- Cookie helpers (SSR-safe) -----
-const TOS_COOKIE = 'quantamm_tos_accepted';
 
 const isBrowser = typeof window !== 'undefined' && typeof document !== 'undefined';
 
