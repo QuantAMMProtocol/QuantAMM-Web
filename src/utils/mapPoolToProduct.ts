@@ -28,6 +28,7 @@ import {
 } from '../features/productDetail/productDetailContent/helpers';
 import { useAprTooltip } from '../features/productExplorer/productItem/shared/apr/useAprTooltip';
 import { isQuantAmmPool } from './poolHelpers';
+import { getTotalApr } from '../features/productExplorer/productItem/shared/apr/pool.utils';
 
 const formatTimestamp = (timestamp: number): string => {
   return format(fromUnixTime(timestamp), 'yyyy/MM/dd HH:mm:ss');
@@ -157,7 +158,7 @@ export const getFullProductsFromSnapshots = (
           value: getYieldRating(product, products),
           maxScore: MAX_SCORE,
           description:
-            '<p>The yield return relative to other pools in the protocol.</p>' +
+            '<p>The APR return relative to other pools in the protocol.</p>' +
             '<p>Top 20%=5</p>' +
             '<p>20-40%=4</p>' +
             '<p>40-60%=3</p>' +
@@ -222,33 +223,33 @@ export const getProductFromPool = (
     overview: [
       {
         metric: 'tvl',
-        value: 1, // TODO: how to get this?
+        value: 1,
         maxScore: MAX_SCORE,
-        description: 'TVL rating is blah blah blah', // TODO: add proper description
+        description: 'TVL rating',
       },
       {
         metric: 'performance',
-        value: 1, // TODO: how to get this?
+        value: 1,
         maxScore: MAX_SCORE,
-        description: 'Performance rating is blah blah blah blah ', // TODO: add proper description
+        description: 'Performance rating ',
       },
       {
         metric: 'adaptability',
         value: getAdaptabilityScore(pool as unknown as GqlPoolMinimal),
         maxScore: MAX_SCORE,
-        description: 'Adaptability rating is blah blah blah blah ', // TODO: add proper description
+        description: 'Adaptability rating',
       },
       {
         metric: 'diversification',
         value: pool.poolTokens.length > 5 ? 5 : pool.poolTokens.length - 1,
         maxScore: MAX_SCORE,
-        description: 'Diversification rating is blah blah blah blah ', // TODO: add proper description
+        description: 'Diversification rating',
       },
       {
         metric: 'yield',
-        value: 1, // TODO: how to get this?
+        value: 1,
         maxScore: MAX_SCORE,
-        description: 'Yield rating is blah blah blah blah ', // TODO: add proper description
+        description: 'Yield rating',
       },
     ],
     timeSeries: snapshot?.timeSeries ?? ([] as TimeSeriesData[]),
@@ -397,16 +398,20 @@ function getTvlRating(product: Product, products: Product[]) {
 }
 
 function getYieldRating(product: Product, products: Product[]) {
-  const orderedProducts = [...products].sort(
-    (a, b) =>
-      parseFloat(a.dynamicData?.yieldCapture48h ?? '0') -
-      parseFloat(b.dynamicData?.yieldCapture48h ?? '0')
+  const orderedProducts = [...products].sort((a, b) => {
+    const [, aMaxTotal] = getTotalApr(a.dynamicData?.aprItems ?? [], undefined);
+    const [, bMaxTotal] = getTotalApr(b.dynamicData?.aprItems ?? [], undefined);
+    console.log(a.name, aMaxTotal.toString(), b.name, bMaxTotal.toString());
+    return aMaxTotal.toNumber() - bMaxTotal.toNumber();
+  });
+  const [, productMaxTotal] = getTotalApr(
+    product.dynamicData?.aprItems ?? [],
+    undefined
   );
-
   return getOrderedRating(
     product,
     orderedProducts,
-    parseFloat(product.dynamicData?.yieldCapture48h ?? '0')
+    productMaxTotal.toNumber() ?? '0'
   );
 }
 
@@ -573,13 +578,13 @@ const getStrategy = (pool: GqlPoolMinimal): Strategy => {
     pool.address.toLowerCase() == '0xb4161aea25bd6c5c8590ad50deb4ca752532f05d'
   ) {
     return 'POWER_CHANNEL';
-  }
-  else if (pool.address.toLowerCase() == '0x74dc857d5567a3b087e79b96b91cdc8099b2fa34'){
+  } else if (
+    pool.address.toLowerCase() == '0x74dc857d5567a3b087e79b96b91cdc8099b2fa34'
+  ) {
     return 'CHANNEL_FOLLOWING';
   }
-    
-    
-    if (quantAmmWeightedParams) {
+
+  if (quantAmmWeightedParams) {
     const { details } = quantAmmWeightedParams;
     return details
       ?.find((detail) => detail.name === 'updateRuleName')
