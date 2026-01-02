@@ -2,6 +2,8 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
 import { ActiveThemes } from './themeModels';
 
+import './ag-theme-quartz-custom.css'; // your override file, AFTER Quartz
+
 const initialState: ActiveThemes = {
   isDarkTheme: true,
   chartTheme: 'ag-polychroma-dark',
