@@ -74,26 +74,32 @@ export const ProductItemGridHeader = () => {
             <Col
               xs={24}
               sm={24}
+              md={3}
+              lg={3}
+              xl={3}
+              className={styles['product-item-grid-header__column']}
+            >
+              <Text>Strategy</Text>
+            </Col>
+            <Col
+              xs={24}
+              sm={24}
+              md={3}
+              lg={3}
+              xl={3}
+              className={styles['product-item-grid-header__column']}
+            >
+              <Text>Tokens</Text>
+            </Col>
+            <Col
+              xs={24}
+              sm={24}
               md={2}
               lg={2}
               xl={2}
               className={styles['product-item-grid-header__column']}
             >
-              <Button
-                data-id="sharePrice"
-                size="small"
-                variant="text"
-                color={sortingMetric === 'sharePrice' ? 'primary' : 'default'}
-                onClick={handleMetricClick}
-              >
-                Share Price{' '}
-                {sortingMetric === 'sharePrice' &&
-                  (sortingDirection === 'desc' ? (
-                    <ArrowDownOutlined />
-                  ) : (
-                    <ArrowUpOutlined />
-                  ))}
-              </Button>
+              <Text>Share P&L</Text>
             </Col>
             <Col
               xs={24}
@@ -127,37 +133,7 @@ export const ProductItemGridHeader = () => {
               xl={3}
               className={styles['product-item-grid-header__column']}
             >
-              <Text>Scores</Text>
-            </Col>
-            <Col
-              xs={24}
-              sm={24}
-              md={2}
-              lg={2}
-              xl={2}
-              className={styles['product-item-grid-header__column']}
-            >
-              <Text>Overview</Text>
-            </Col>
-            <Col
-              xs={24}
-              sm={24}
-              md={2}
-              lg={2}
-              xl={2}
-              className={styles['product-item-grid-header__column']}
-            >
-              <Text>Performance</Text>
-            </Col>
-            <Col
-              xs={24}
-              sm={24}
-              md={2}
-              lg={2}
-              xl={2}
-              className={styles['product-item-grid-header__column']}
-            >
-              <Text>Tokens</Text>
+              <Text>Overall Rating</Text>
             </Col>
           </Row>
         </Card>

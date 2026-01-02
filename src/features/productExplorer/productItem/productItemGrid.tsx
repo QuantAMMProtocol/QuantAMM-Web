@@ -12,7 +12,7 @@ import { ProductExplorerSort } from '../productExplorerSort/productExplorerSort'
 import { ProductExplorerTabOverride } from '../productExplorerTabOverride/productExplorerTabOverride';
 import { ProductExplorerPagination } from '../ProductExplorerPagination';
 import { useSort } from './useSort';
-import { ProductItemWide } from './wide/productItemWide';
+import { ProductItemWide } from './wide/productItemSimpleWide';
 import { ProductItemGridHeader } from './productItemGridHeader';
 import { ProductItemLoading } from './card/productItemLoading';
 import { ProductItemWideLoading } from './wide/productItemWideLoading';

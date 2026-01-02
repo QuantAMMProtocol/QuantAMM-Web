@@ -138,10 +138,18 @@ export const ProductItemWide: FC<ProductItemWideProps> = ({
 
   const tokenSummary = useMemo(() => {
     const constituents = product.poolConstituents ?? [];
+<<<<<<< Updated upstream
     if (constituents.length === 0) return { top: [] as TokenSummaryItem[], rest: 0 };
 
     const totalWeight = constituents.reduce((acc, t) => acc + t.weight, 0);
     if (totalWeight <= 0) return { top: [] as TokenSummaryItem[], rest: 0 };
+=======
+    const base = { top: [] as TokenSummaryItem[], rest: 0, all: [] as TokenSummaryItem[] };
+    if (constituents.length === 0) return base;
+
+    const totalWeight = constituents.reduce((acc, t) => acc + t.weight, 0);
+    if (totalWeight <= 0) return base;
+>>>>>>> Stashed changes
 
     const sorted = [...constituents]
       .sort((a, b) => b.weight - a.weight)
@@ -194,7 +202,11 @@ export const ProductItemWide: FC<ProductItemWideProps> = ({
 
   const overviewTooltip = useMemo(() => {
     const created = safeIsoDate(product.createTime);
+<<<<<<< Updated upstream
     const rows: Array<{ k: string; v: string }> = [
+=======
+    const rows: { k: string; v: string }[] = [
+>>>>>>> Stashed changes
       { k: 'Type', v: overviewTypeLabel || '—' },
       { k: 'Strategy', v: overviewStrategyLabel || '—' },
     ];
@@ -250,7 +262,11 @@ export const ProductItemWide: FC<ProductItemWideProps> = ({
         <ProductItemOverviewGraph
           data={product.overview}
           isDarkTheme={isDarkTheme}
+<<<<<<< Updated upstream
           wide={true}
+=======
+          wide={false}
+>>>>>>> Stashed changes
           showScoreOverall={true}
         />
       </div>
@@ -302,6 +318,7 @@ export const ProductItemWide: FC<ProductItemWideProps> = ({
               </Text>
             </Col>
 
+<<<<<<< Updated upstream
             {/* Share Price */}
             <Col span={2} className={styles['product-item__card-column']}>
               <Text className={styles['product-item__card-under-body__text']}>
@@ -309,6 +326,91 @@ export const ProductItemWide: FC<ProductItemWideProps> = ({
                   {currentPrice ? currentPrice : <Spin />}
                 </span>
               </Text>
+=======
+                  {/* Overview */}
+                  <Col span={3} className={styles['product-item__card-column']}>
+                    <Tooltip title={overviewTooltip}>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, justifyContent: 'center' }}>
+                      {overviewTags.map((t) => (
+                      <Tag key={t}>{t}</Tag>
+                      ))}
+                    </div>
+                    </Tooltip>
+                  </Col>
+
+                  {/* Tokens */}
+                  <Col span={3} className={styles['product-item__card-column']}>
+                    {tokenSummary.top.length > 0 ? (
+                    <Tooltip
+                      title={
+                      <div style={{ maxWidth: 240 }}>
+                        <Text strong>Token composition</Text>
+                        <div style={{ marginTop: 6 }}>
+                        {tokenSummary.all.map((t) => (
+                          <div
+                          key={t.coin}
+                          style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            gap: 12,
+                          }}
+                          >
+                          {t.coin.length > 6 ? 
+                            <Tooltip title={t.coin}>
+                            <span>{`${t.coin.slice(0, 6)}…`}</span>
+                            </Tooltip>
+                           : 
+                          <Text>
+                            {t.coin}
+                          </Text>}
+                          <Text style={{ fontSize: 12 }}>{formatPct(t.pct)}</Text>
+                          </div>
+                        ))}
+                        </div>
+                      </div>
+                      }
+                    >
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 4, alignItems: 'center' }}>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, justifyContent: 'center' }}>
+                        {tokenSummary.top.map((t) => (
+                        <Tag key={t.coin}>
+                          {t.coin} {formatPct(t.pct)}
+                        </Tag>
+                        ))}
+                        {tokenSummary.rest > 0 && <Tag>+{tokenSummary.rest}</Tag>}
+                      </div>
+                      </div>
+                    </Tooltip>
+                    ) : (
+                    <div style={{ textAlign: 'center', width: '100%' }}>
+                      <Text style={{ fontSize: 12, color: 'var(--secondary-text-color)' }}>
+                      —
+                      </Text>
+                    </div>
+                    )}
+                  </Col>
+            {/* Performance (2dp) */}
+            <Col span={2} className={styles['product-item__card-column']}>
+              {performance.formatted ? (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  <Tag
+                    color={
+                      performance.numeric !== undefined && performance.numeric >= 0 ? 'green' : 'red'
+                    }
+                  >
+                    {performance.formatted}
+                  </Tag>
+                </div>
+              ) : performance.node ? (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  <Tag>{performance.node}</Tag>
+                </div>
+              ) : (
+                <Text style={{ fontSize: 12, color: 'var(--secondary-text-color)' }}>
+                  —
+                </Text>
+              )}
+>>>>>>> Stashed changes
             </Col>
 
             {/* APR (reuse existing tooltip component) */}
@@ -338,7 +440,13 @@ export const ProductItemWide: FC<ProductItemWideProps> = ({
                     <div style={{ position: 'relative', width: '100%' }}>
                       <Progress
                         percent={scoreSummary.percent}
+<<<<<<< Updated upstream
                         size="small"
+=======
+                        size={{
+                          height: 30,
+                        }}
+>>>>>>> Stashed changes
                         showInfo={false}
                         strokeColor={scoreSummary.color}
                         strokeWidth={10}
@@ -354,9 +462,16 @@ export const ProductItemWide: FC<ProductItemWideProps> = ({
                           alignItems: 'center',
                           justifyContent: 'center',
                           pointerEvents: 'none',
+<<<<<<< Updated upstream
                         }}
                       >
                         <Text style={{ fontSize: 11, color: '#000' }}>
+=======
+                          marginTop:40
+                        }}
+                      >
+                        <Text style={{ fontSize: 11, color: scoreSummary.color }}>
+>>>>>>> Stashed changes
                           {scoreSummary.total}/{scoreSummary.max}
                         </Text>
                       </div>
@@ -368,6 +483,7 @@ export const ProductItemWide: FC<ProductItemWideProps> = ({
               )}
             </Col>
 
+<<<<<<< Updated upstream
             {/* Overview */}
             <Col span={2} className={styles['product-item__card-column']}>
               <Tooltip title={overviewTooltip}>
@@ -453,11 +569,17 @@ export const ProductItemWide: FC<ProductItemWideProps> = ({
                 </Text>
               )}
             </Col>
+=======
+>>>>>>> Stashed changes
 
             {/* Actions */}
             <Col span={3} className={styles['product-item__card-column-right']}>
               <div className={styles['product-item__card__action']}>
+<<<<<<< Updated upstream
                 <Button size="small" type="link">
+=======
+                <Button size="large" type="link">
+>>>>>>> Stashed changes
                   <Link to={`${product.chain}/${product.id}`}>details</Link>
                 </Button>
 
@@ -469,7 +591,11 @@ export const ProductItemWide: FC<ProductItemWideProps> = ({
                   }
                 >
                   <Button
+<<<<<<< Updated upstream
                     size="small"
+=======
+                    size="large"
+>>>>>>> Stashed changes
                     type="primary"
                     onClick={showProductModal}
                     disabled={!acceptedTerms}
