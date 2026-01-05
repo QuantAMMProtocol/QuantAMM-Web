@@ -4,7 +4,7 @@ import { Button, Col, Collapse, CollapseProps, Row, Typography } from 'antd';
 import { Product } from '../../../models';
 import { ProductDetailSidebarOverview } from './productDetailSidebarOverview';
 import { ProductDetailSidebarPoolInfo } from './productDetailSidebarPoolInfo';
-import { ProductDetailSidebarCompositionGraph } from './productDetailSidebarICompositionGraph';
+import { ProductDetailSidebarCompositionGraph } from './productDetailSidebarCompositionGraph';
 import { ProductDetailSidebarSocials } from './productDetailSidebarSocials';
 
 import sharedStyles from '../../../shared.module.scss';
@@ -13,7 +13,7 @@ import styles from './productDetailSidebar.module.scss';
 import { useAppSelector } from '../../../app/hooks';
 import { selectProductDetailSelectedTimeRange } from '../../productExplorer/productExplorerSlice';
 import { ProductDetailSidebarStrategySummary } from './productDetailSidebarStrategySummary';
-import { ProductDetailSidebarPerformanceGraph } from './productDetailSidebarIPerformanceGraph';
+import { ProductDetailSidebarPerformanceGraph } from './productDetailSidebarPerformanceGraph';
 import { useNavigate } from 'react-router-dom';
 import { CURRENT_LIVE_FACTSHEETS } from '../../documentation/factSheets/liveFactsheets';
 
