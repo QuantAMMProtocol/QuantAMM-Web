@@ -164,7 +164,6 @@ export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({
         },
       },
     },
-
     {
       key: '1',
       label: '',
@@ -179,6 +178,19 @@ export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({
         },
       },
     },
+
+    {
+      key: '4',
+      label: '',
+      showArrow: false,
+      children: <ProductDetailSidebarCompositionGraph product={product} />,
+      style: panelStyle,
+      styles: {
+        header: {
+          padding: '0',
+        },
+      },
+    } as const,
     {
       key: '2',
       showArrow: !isMobile,
@@ -205,18 +217,6 @@ export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({
         },
       },
     },
-
-    {
-      key: '4',
-      label: 'Pool Composition',
-      children: <ProductDetailSidebarCompositionGraph product={product} />,
-      style: panelStyle,
-      styles: {
-        header: {
-          padding: '0',
-        },
-      },
-    } as const,
 
     ...(!isMobile
       ? [

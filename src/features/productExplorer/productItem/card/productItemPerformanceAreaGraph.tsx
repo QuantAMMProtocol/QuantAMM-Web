@@ -30,11 +30,11 @@ const mapPerformanceData = (
 ): PerformanceGraphData[] => {
   const periods = [
     'Inception to Date',
-    '7D ROI',
-    '1M ROI',
-    '3M ROI',
-    '6M ROI',
-    '1Y ROI',
+    'Last 7D',
+    'Last Month',
+    'Last 3M',
+    'Last 6M',
+    'Last Year',
   ];
 
   return periods

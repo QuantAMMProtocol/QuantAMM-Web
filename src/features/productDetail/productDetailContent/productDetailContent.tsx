@@ -11,6 +11,7 @@ import sharedStyles from '../../../shared.module.scss';
 import { ProductDetailInfo } from '../productDetailSidebar/productDetailInfo';
 import { GqlChain } from '../../../__generated__/graphql-types';
 import { ProductDetailSidebarSocials } from '../productDetailSidebar/productDetailSidebarSocials';
+import { ProductDetailSidebarStrategySummary } from '../productDetailSidebar/productDetailSidebarStrategySummary';
 
 const { Content } = Layout;
 
@@ -46,6 +47,11 @@ export const ProductDetailContent: FC<ProductDetailContentProps> = ({
             ) : (
               <></>
             )}
+            <Row>
+              <Col span={24} style={{ padding: '16px' }}>
+                <ProductDetailSidebarStrategySummary product={product} />
+              </Col>
+            </Row>
             <Row>
               <Col span={24}>
                 <ProductDetailStats productId={product.id} />

@@ -1,36 +1,104 @@
 .product-detail-info__container {
   width: 100%;
   box-sizing: border-box;
-  display: grid;
-  /* first column: up to 50% of the container, but will size down to its content;
-     second column: take remaining space, and can shrink below its content‐width if needed */
-  grid-template-columns: fit-content(50%) minmax(0, 1fr);
-  gap: 1px 0;
-  padding: 0;
-
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-  }
-}
-.product-detail-info__item-left {
-  padding: 4px;
   display: flex;
-  justify-content: start;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* One row = one visual unit (no nested pills) */
+.product-detail-info__row {
+  display: grid;
+  grid-template-columns: minmax(160px, 240px) minmax(0, 1fr);
+  gap: 12px;
+
+  padding: 10px 12px;
+  border-radius: 12px;
+
+  background: rgba(120, 180, 255, 0.06);
+  border: 1px solid rgba(120, 180, 255, 0.30);
+}
+
+.product-detail-info__label {
+  align-self: center;
+  color: var(--secondary-text-color);
+  font-size: 0.95rem;
+  line-height: 1.2;
+  white-space: normal;
+}
+
+.product-detail-info__value {
+  align-self: center;
+  justify-self: end;
+
+  display: flex;
   align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+
+  min-width: 0; /* critical for ellipsis in grid/flex */
+  font-weight: 600;
+  text-align: right;
+}
+
+.product-detail-info__valueText {
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.product-detail-info__valueLink {
+  min-width: 0;
+}
+
+/* Optional: a compact “chip” action (e.g., Contract) if you ever need it */
+.product-detail-info__action {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+
+  border: 1px solid rgba(120, 180, 255, 0.35);
+  background: rgba(120, 180, 255, 0.08);
+
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* Keep your existing icon spacing */
+.product-detail-info__item-icon {
+  margin-left: 8px;
+}
+
+/* Backward-compatible aliases (in case anything still references them) */
+.product-detail-info__item-left {
+  @extend .product-detail-info__label;
 }
 
 .product-detail-info__item-right {
-  padding: 4px;
-  display: flex;
-  justify-content: end;
-  align-items: center;
-  font-weight: bold;
-
-  @media (max-width: 768px) {
-    justify-content: start;
-  }
+  @extend .product-detail-info__value;
 }
 
-.product-detail-info__item-icon {
-  margin-left: 8px;
+@media (max-width: 768px) {
+  .product-detail-info__row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .product-detail-info__value {
+    justify-self: start;
+    justify-content: flex-start;
+    text-align: left;
+  }
+
+  /* On mobile, wrapping is usually more readable than truncation */
+  .product-detail-info__valueText {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+  }
 }
