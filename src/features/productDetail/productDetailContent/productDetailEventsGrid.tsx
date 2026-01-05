@@ -83,7 +83,7 @@ export const ProductDetailEventsGrid = forwardRef<AgGridReact<GqlPoolEvent>, Eve
         colId: 'timestamp',
         field: 'timestamp',
         headerName: 'Timestamp',
-        width: 160,
+        width: 165,
         enableRowGroup: true,
         valueFormatter: (p: ValueFormatterParams) =>
           p.value ? format(new Date(Number(p.value) * 1000), 'yyyy-MM-dd HH:mm:ss') : '',
