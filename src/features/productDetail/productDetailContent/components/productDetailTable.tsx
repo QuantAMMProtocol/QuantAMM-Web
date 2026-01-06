@@ -21,7 +21,7 @@ export const ProductDetailTable: FC<ProductDetailTableProps> = memo(function Pro
             simulationRunBreakdowns={[simulationRunBreakdown]}
             benchmarkBreakdown={null}
             visibleMetrics={[...(simulationRunBreakdown.simulationRunResultAnalysis?.return_analysis.map(x => x.metricName) ?? []),
-            ...(simulationRunBreakdown.simulationRunResultAnalysis?.benchmark_analysis.filter(x => x.benchmarkName != "return_analysis").map(x => x.metricName) ?? [])]}
+            ...(simulationRunBreakdown.simulationRunResultAnalysis?.benchmark_analysis.filter(x => x.benchmarkName != "benchmark_return_analysis").map(x => x.metricName) ?? [])]}
           />
     ) : null;
   }

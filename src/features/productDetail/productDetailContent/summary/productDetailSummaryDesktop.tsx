@@ -15,14 +15,22 @@ import {
   Typography,
 } from 'antd';
 
-import { InfoCircleOutlined, WarningOutlined } from '@ant-design/icons';
+import {
+  InfoCircleOutlined,
+  WarningOutlined,
+  TableOutlined,
+  BoxPlotOutlined,
+} from '@ant-design/icons';
 
 import { FinancialMetricThresholds, Product } from '../../../../models';
 import {
   ReturnDistributionGraph,
   ProductTokenWeightChangeOverTimeGraph,
 } from '../../../shared/graphs';
-import { SimulationRunMetric } from '../../../simulationResults/simulationResultSummaryModels';
+import {
+  SimulationRunMetric,
+  SimulationRunBreakdown,
+} from '../../../simulationResults/simulationResultSummaryModels';
 import { ProductDetailDropdown } from '../components/productDetailDropdown';
 
 import { CURRENT_LIVE_FACTSHEETS } from '../../../documentation/factSheets/liveFactsheets';
@@ -31,6 +39,7 @@ import styles from './productDetailSummary.module.scss';
 import { getMax, getMin } from './utils';
 import Title from 'antd/es/typography/Title';
 import { StrategyWorkflowCard } from './strategyWorkflowCard';
+import { AnalysisSimplifiedBreakdownTable } from '../../../simulationResults/breakdowns/simulationRunPerformanceSimpleTable';
 
 const { Text } = Typography;
 const { Panel } = Collapse;
@@ -151,6 +160,8 @@ export const ProductDetailSummaryDesktop: FC<
     'product'
   );
 
+  const [metricsView, setMetricsView] = useState<'gauge' | 'table'>('gauge');
+
   const ts = useMemo(() => product?.timeSeries ?? [], [product?.timeSeries]);
 
   const factsheet = useMemo(() => {
@@ -170,7 +181,6 @@ export const ProductDetailSummaryDesktop: FC<
       return prefix && name.includes(prefix);
     });
   }, [product]);
-
 
   const selectedReturnThreshold = useMemo(
     () =>
@@ -226,6 +236,62 @@ export const ProductDetailSummaryDesktop: FC<
     [ts]
   );
 
+  const simulationRunBreakdown = useMemo(
+    () => product?.simulationRunBreakdown as SimulationRunBreakdown | undefined,
+    [product?.simulationRunBreakdown]
+  );
+
+  const visibleMetrics = useMemo(() => {
+    const returnAnalysis =
+      simulationRunBreakdown?.simulationRunResultAnalysis?.return_analysis ??
+      [];
+    const benchmarkAnalysisArr =
+      simulationRunBreakdown?.simulationRunResultAnalysis?.benchmark_analysis ??
+      [];
+
+    return [
+      ...(returnAnalysis.map((x) => x.metricName) ?? []),
+      ...((benchmarkAnalysisArr
+        .filter((x) => x.benchmarkName != 'return_analysis')
+        .map((x) => x.metricName) ?? []) as string[]),
+    ];
+  }, [simulationRunBreakdown]);
+
+  const metricsToggle = (
+    <div
+      onClick={(e) => {
+        e.stopPropagation();
+      }}
+      onMouseDown={(e) => {
+        e.stopPropagation();
+      }}
+    >
+      <Segmented
+        size="large"
+        value={metricsView}
+        onChange={(v) => setMetricsView(v as 'gauge' | 'table')}
+        options={[
+          {
+            value: 'gauge',
+            label: (
+              <Tooltip title="Gauge view">
+                <BoxPlotOutlined />
+              </Tooltip>
+            ),
+          },
+          {
+            value: 'table',
+            label: (
+              <Tooltip title="Table view">
+                <TableOutlined />
+              </Tooltip>
+            ),
+          },
+        ]}
+      />
+    </div>
+  );
+
   return (
     <div className={styles['product-detail-summary__desktop']}>
       <Card
@@ -250,6 +316,7 @@ export const ProductDetailSummaryDesktop: FC<
           />
         </div>
       </Card>
+
       {
         /* hidden as the subgraph has still not been pushed to prod*/
         <div hidden>
@@ -277,155 +344,197 @@ export const ProductDetailSummaryDesktop: FC<
                 </div>
               }
             >
-              <StrategyWorkflowCard
-                product={product}
-                factsheet={factsheet}
-              />
+              <StrategyWorkflowCard product={product} factsheet={factsheet} />
             </Panel>
           </Collapse>
         </div>
       }
 
-      <Col span={24} className={styles['product-detail-summary__title']}>
-        <div>
-          <Tooltip title="This pool is new and does not have enough data for most financial metrics. This is a simulated performance metric analysis based on the test period (see factsheet). Once the pool has been running for a while it will become live metrics">
-            <Title level={4}>
-              Simulated HODL Performance Metric Analysis {'  '}{' '}
-              <WarningOutlined type="warning" />{' '}
-            </Title>
-          </Tooltip>
-        </div>
-      </Col>
-      <Card
-        className={styles['product-detail-summary__cardDesktop']}
-        title={
-          <div className={styles['product-detail-summary__cardTitleRow']}>
-            Metric:{' '}
-            <ProductDetailDropdown
-              items={returnAnalysisDropdownOptions}
-              isLoading={isLoading}
-              onChangeItem={handleReturnAnalysisChange}
-            />
-          </div>
-        }
+      {/* Collapsible metrics section with icon toggle */}
+      <Collapse
+        defaultActiveKey={['metrics']}
+        className={styles['product-detail-summary__collapse']}
+        bordered={false}
       >
-        {isLoading ? (
-          <Skeleton active />
-        ) : (
-          <Row gutter={[16, 16]}>
-            <Col xs={24} md={8}>
-              <Statistic
-                title="Product"
-                value={
-                  isFiniteNumber(productReturnValue)
-                    ? productReturnValue
-                    : undefined
+        <Panel
+          key="metrics"
+          header={
+            <div className={styles['product-detail-summary__title']}>
+              <Tooltip title="This pool is new and does not have enough data for live financial metrics. This is a simulated performance metric analysis based on the test period (see factsheet). Once the pool has been running for a while it will become live metrics">
+                <Title level={4} style={{ margin: 0 }}>
+                  Simulated HODL Performance Metric Analysis {'  '}
+                  <WarningOutlined
+                    type="warning"
+                    style={{ color: 'orange' }}
+                  />{' '}
+                </Title>
+              </Tooltip>
+            </div>
+          }
+          extra={metricsToggle}
+        >
+          {metricsView === 'table' ? (
+            isLoading ? (
+              <Skeleton active />
+            ) : simulationRunBreakdown ? (
+              <AnalysisSimplifiedBreakdownTable
+                simulationRunBreakdowns={[simulationRunBreakdown]}
+                benchmarkBreakdown={null}
+                visibleMetrics={visibleMetrics}
+              />
+            ) : (
+              <Text type="secondary">No Data</Text>
+            )
+          ) : (
+            <>
+              <Card
+                className={styles['product-detail-summary__cardDesktop']}
+                title={
+                  <div
+                    className={styles['product-detail-summary__cardTitleRow']}
+                  >
+                    Metric:{' '}
+                    <ProductDetailDropdown
+                      items={returnAnalysisDropdownOptions}
+                      isLoading={isLoading}
+                      onChangeItem={handleReturnAnalysisChange}
+                    />
+                  </div>
                 }
-                precision={2}
-              />
-              <MetricProgress
-                label="Position in range"
-                value={productReturnValue}
-                thresholds={selectedReturnThreshold}
-                allThresholds={returnAnalysisThresholds}
-                helpText={selectedReturnThreshold?.tooltipDescription}
-              />
-            </Col>
+              >
+                {isLoading ? (
+                  <Skeleton active />
+                ) : (
+                  <Row gutter={[16, 16]}>
+                    <Col xs={24} md={8}>
+                      <Statistic
+                        title="Product"
+                        value={
+                          isFiniteNumber(productReturnValue)
+                            ? productReturnValue
+                            : undefined
+                        }
+                        precision={2}
+                      />
+                      <MetricProgress
+                        label="Position in range"
+                        value={productReturnValue}
+                        thresholds={selectedReturnThreshold}
+                        allThresholds={returnAnalysisThresholds}
+                        helpText={selectedReturnThreshold?.tooltipDescription}
+                      />
+                    </Col>
 
-            <Col xs={24} md={8}>
-              <Statistic
-                title="Benchmark"
-                value={
-                  isFiniteNumber(benchmarkReturnValue)
-                    ? benchmarkReturnValue
-                    : undefined
+                    <Col xs={24} md={8}>
+                      <Statistic
+                        title="Benchmark"
+                        value={
+                          isFiniteNumber(benchmarkReturnValue)
+                            ? benchmarkReturnValue
+                            : undefined
+                        }
+                        precision={2}
+                      />
+                      <MetricProgress
+                        label="Position in range"
+                        value={benchmarkReturnValue}
+                        thresholds={selectedReturnThreshold}
+                        allThresholds={returnAnalysisThresholds}
+                        helpText={selectedReturnThreshold?.tooltipDescription}
+                      />
+                    </Col>
+
+                    <Col xs={24} md={8}>
+                      <div
+                        className={styles['product-detail-summary__deltaBlock']}
+                      >
+                        <Text type="secondary">
+                          Delta (Product − Benchmark)
+                        </Text>
+                        <div
+                          className={styles['product-detail-summary__deltaTag']}
+                        >
+                          {deltaTag}
+                        </div>
+                        <Divider
+                          className={
+                            styles['product-detail-summary__dividerCompact']
+                          }
+                        />
+                        <Space direction="vertical" size={4}>
+                          <Text type="secondary">
+                            Product: <Text>{format2(productReturnValue)}</Text>
+                          </Text>
+                          <Text type="secondary">
+                            Benchmark:{' '}
+                            <Text>{format2(benchmarkReturnValue)}</Text>
+                          </Text>
+                        </Space>
+                      </div>
+                    </Col>
+                  </Row>
+                )}
+              </Card>
+
+              {/* Benchmark-relative metric (product only) */}
+              <Card
+                className={styles['product-detail-summary__cardDesktop']}
+                title={
+                  <div
+                    className={styles['product-detail-summary__cardTitleRow']}
+                  >
+                    <span style={{ marginRight: 8 }}>Benchmark metric: </span>
+                    <ProductDetailDropdown
+                      items={benchmarkReturnAnalysisDropdownOptions}
+                      isLoading={isLoading}
+                      onChangeItem={handleBenchmarkAnalysisChange}
+                    />
+                  </div>
                 }
-                precision={2}
-              />
-              <MetricProgress
-                label="Position in range"
-                value={benchmarkReturnValue}
-                thresholds={selectedReturnThreshold}
-                allThresholds={returnAnalysisThresholds}
-                helpText={selectedReturnThreshold?.tooltipDescription}
-              />
-            </Col>
+              >
+                {isLoading ? (
+                  <Skeleton active />
+                ) : (
+                  <Row gutter={[16, 16]}>
+                    <Col xs={24} md={12}>
+                      <Statistic
+                        title="Product"
+                        value={
+                          isFiniteNumber(
+                            selectedBenchmarkReturnAnalysis?.metricValue
+                          )
+                            ? selectedBenchmarkReturnAnalysis?.metricValue
+                            : undefined
+                        }
+                        precision={2}
+                      />
+                      <MetricProgress
+                        label="Position in range"
+                        value={selectedBenchmarkReturnAnalysis?.metricValue}
+                        thresholds={selectedBenchmarkRelThreshold}
+                        allThresholds={benchmarkReturnAnalysisThresholds}
+                        helpText={
+                          selectedBenchmarkRelThreshold?.tooltipDescription
+                        }
+                      />
+                    </Col>
 
-            <Col xs={24} md={8}>
-              <div className={styles['product-detail-summary__deltaBlock']}>
-                <Text type="secondary">Delta (Product − Benchmark)</Text>
-                <div className={styles['product-detail-summary__deltaTag']}>
-                  {deltaTag}
-                </div>
-                <Divider
-                  className={styles['product-detail-summary__dividerCompact']}
-                />
-                <Space direction="vertical" size={4}>
-                  <Text type="secondary">
-                    Product: <Text>{format2(productReturnValue)}</Text>
-                  </Text>
-                  <Text type="secondary">
-                    Benchmark: <Text>{format2(benchmarkReturnValue)}</Text>
-                  </Text>
-                </Space>
-              </div>
-            </Col>
-          </Row>
-        )}
-      </Card>
-
-      {/* Benchmark-relative metric (product only) */}
-      <Card
-        className={styles['product-detail-summary__cardDesktop']}
-        title={
-          <div className={styles['product-detail-summary__cardTitleRow']}>
-            <span style={{ marginRight: 8 }}>Benchmark metric: </span>
-            <ProductDetailDropdown
-              items={benchmarkReturnAnalysisDropdownOptions}
-              isLoading={isLoading}
-              onChangeItem={handleBenchmarkAnalysisChange}
-            />
-          </div>
-        }
-      >
-        {isLoading ? (
-          <Skeleton active />
-        ) : (
-          <Row gutter={[16, 16]}>
-            <Col xs={24} md={12}>
-              <Statistic
-                title="Product"
-                value={
-                  isFiniteNumber(selectedBenchmarkReturnAnalysis?.metricValue)
-                    ? selectedBenchmarkReturnAnalysis?.metricValue
-                    : undefined
-                }
-                precision={2}
-              />
-              <MetricProgress
-                label="Position in range"
-                value={selectedBenchmarkReturnAnalysis?.metricValue}
-                thresholds={selectedBenchmarkRelThreshold}
-                allThresholds={benchmarkReturnAnalysisThresholds}
-                helpText={selectedBenchmarkRelThreshold?.tooltipDescription}
-              />
-            </Col>
-
-            <Col xs={24} md={12}>
-              <div className={styles['product-detail-summary__naBlock']}>
-                <Text type="secondary">Benchmark</Text>
-                <div className={styles['product-detail-summary__naValue']}>
-                  Not applicable
-                </div>
-                <Text type="secondary">
-                  This metric is defined relative to the benchmark, so the
-                  benchmark does not have its own value.
-                </Text>
-              </div>
-            </Col>
-          </Row>
-        )}
-      </Card>
+                    <Col xs={24} md={12}>
+                      <div
+                        className={styles['product-detail-summary__naBlock']}
+                      >
+                        <Text type="secondary">
+                          {selectedBenchmarkRelThreshold?.tooltipDescription}
+                        </Text>
+                      </div>
+                    </Col>
+                  </Row>
+                )}
+              </Card>
+            </>
+          )}
+        </Panel>
+      </Collapse>
 
       {/* Return distribution */}
       <Card

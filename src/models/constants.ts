@@ -15,11 +15,10 @@ export const returnMetricThresholds = [
     mediumColor: 'rgba(240, 228, 6, 0.6)',
     high: 10,
     highColor: 'rgba(2, 189, 46, 0.6)',
-    tooltipDescription:
-      'The Calmar ratio is a risk-adjusted measure of return. It is calculated as the ratio of the annualized return over the maximum drawdown over the past 36 months. The higher the Calmar ratio, the better the risk-adjusted return.',
+    tooltipDescription: 'Absolute return over the selected period.',
   },
   {
-    key: 'Annualized Calmer Ratio',
+    key: 'Annualized Calmar Ratio',
     veryLow: 0.5,
     veryLowColor: 'rgba(166, 0, 0, 0.6)',
     low: 1,
@@ -29,7 +28,7 @@ export const returnMetricThresholds = [
     high: 3,
     highColor: 'rgba(2, 189, 46, 0.6)',
     tooltipDescription:
-      'The Calmar ratio is a risk-adjusted measure of return. It is calculated as the ratio of the annualized return over the maximum drawdown over the past 36 months. The higher the Calmar ratio, the better the risk-adjusted return.',
+      'The Calmar ratio is a risk-adjusted return metric. It is calculated as the annualized return divided by the maximum drawdown over the selected period. Higher values indicate better risk-adjusted performance.',
   },
   {
     key: 'Annualized Omega Ratio',
@@ -42,7 +41,7 @@ export const returnMetricThresholds = [
     high: 3,
     highColor: 'rgba(2, 189, 46, 0.6)',
     tooltipDescription:
-      'The Omega ratio is a risk-adjusted measure of return. It is calculated as the ratio of the probability-weighted return over a target return. The higher the Omega ratio, the better the risk-adjusted return.',
+      'The Omega ratio is a risk-adjusted return metric comparing the probability-weighted gains to probability-weighted losses relative to a chosen threshold over the selected period. Higher values indicate better risk-adjusted performance.',
   },
   {
     key: 'Annualized Return on VaR',
@@ -55,7 +54,7 @@ export const returnMetricThresholds = [
     high: 3,
     highColor: 'rgba(2, 189, 46, 0.6)',
     tooltipDescription:
-      'The Return on VaR is a risk-adjusted measure of return. It is calculated as the ratio of the annualized return over the annualized Value at Risk (VaR) over the past 36 months. The higher the Return on VaR, the better the risk-adjusted return.',
+      'Return on VaR is a risk-adjusted return metric calculated as the annualized return divided by Value at Risk (VaR) over the selected period. Higher values indicate better return per unit of VaR.',
   },
   {
     key: 'Annualized Sharpe Ratio',
@@ -68,7 +67,7 @@ export const returnMetricThresholds = [
     high: 1.5,
     highColor: 'rgba(2, 189, 46, 0.6)',
     tooltipDescription:
-      'The Sharpe ratio is a risk-adjusted measure of return. It is calculated as the ratio of the annualized return over the annualized standard deviation of returns over the past 36 months. The higher the Sharpe ratio, the better the risk-adjusted return.',
+      'The Sharpe ratio is a risk-adjusted return metric. It is calculated as the annualized excess return divided by the annualized volatility over the selected period. Higher values indicate better risk-adjusted performance.',
   },
   {
     key: 'Annualized Sortino Ratio',
@@ -81,7 +80,7 @@ export const returnMetricThresholds = [
     high: 3.5,
     highColor: 'rgba(2, 189, 46, 0.6)',
     tooltipDescription:
-      'The Sortino ratio is a risk-adjusted measure of return. It is calculated as the ratio of the annualized return over the downside deviation of returns over the past 36 months. The higher the Sortino ratio, the better the risk-adjusted return.',
+      'The Sortino ratio is a downside-risk-adjusted return metric. It is calculated as the annualized excess return divided by downside deviation over the selected period. Higher values indicate better downside-risk-adjusted performance.',
   },
   {
     key: 'Conditional Drawdown at Risk',
@@ -94,7 +93,7 @@ export const returnMetricThresholds = [
     high: 2,
     highColor: 'rgba(2, 189, 46, 0.6)',
     tooltipDescription:
-      'The Conditional Drawdown at Risk is a risk-adjusted measure of return. It is calculated as the ratio of the annualized return over the conditional Value at Risk (VaR) over the past 36 months. The higher the Conditional Drawdown at Risk, the better the risk-adjusted return.',
+      'Conditional Drawdown at Risk (CDaR) measures tail drawdown risk as the expected drawdown beyond a specified confidence level over the selected period. Lower values indicate lower tail drawdown risk.',
   },
   {
     key: 'Daily Returns Maximum Drawdown',
@@ -107,7 +106,7 @@ export const returnMetricThresholds = [
     high: 2,
     highColor: 'rgba(2, 189, 46, 0.6)',
     tooltipDescription:
-      'The Maximum Drawdown is a risk-adjusted measure of return. It is calculated as the ratio of the annualized return over the maximum drawdown over the past 36 months. The higher the Maximum Drawdown, the better the risk-adjusted return.',
+      'Maximum drawdown (daily returns) is the largest peak-to-trough decline observed over the selected period. Lower values (closer to 0) indicate less severe drawdowns.',
   },
   {
     key: 'Monthly Returns Maximum Drawdown',
@@ -120,7 +119,7 @@ export const returnMetricThresholds = [
     high: 2,
     highColor: 'rgba(2, 189, 46, 0.6)',
     tooltipDescription:
-      'The Maximum Drawdown is a risk-adjusted measure of return. It is calculated as the ratio of the annualized return over the maximum drawdown over the past 36 months. The higher the Maximum Drawdown, the better the risk-adjusted return.',
+      'Maximum drawdown (monthly returns) is the largest peak-to-trough decline observed over the selected period. Lower values (closer to 0) indicate less severe drawdowns.',
   },
   {
     key: 'Return on VaR',
@@ -133,7 +132,7 @@ export const returnMetricThresholds = [
     high: 2,
     highColor: 'rgba(2, 189, 46, 0.6)',
     tooltipDescription:
-      'The Return on VaR is a risk-adjusted measure of return. It is calculated as the ratio of the annualized return over the annualized Value at Risk (VaR) over the past 36 months. The higher the Return on VaR, the better the risk-adjusted return.',
+      'Return on VaR is a risk-adjusted return metric calculated as the return divided by Value at Risk (VaR) over the selected period. Higher values indicate better return per unit of VaR.',
   },
   {
     key: 'Sharpe Ratio',
@@ -146,7 +145,7 @@ export const returnMetricThresholds = [
     high: 1.6,
     highColor: 'rgba(2, 189, 46, 0.6)',
     tooltipDescription:
-      'The Sharpe ratio is a risk-adjusted measure of return. It is calculated as the ratio of the annualized return over the annualized standard deviation of returns over the past 36 months. The higher the Sharpe ratio, the better the risk-adjusted return.',
+      'The Sharpe ratio is a risk-adjusted return metric. It is calculated as the excess return divided by volatility over the selected period. Higher values indicate better risk-adjusted performance.',
   },
   {
     key: 'Sterling Ratio',
@@ -159,7 +158,7 @@ export const returnMetricThresholds = [
     high: 2,
     highColor: 'rgba(2, 189, 46, 0.6)',
     tooltipDescription:
-      'The Sterling ratio is a risk-adjusted measure of return. It is calculated as the ratio of the annualized return over the downside deviation of returns over the past 36 months. The higher the Sterling ratio, the better the risk-adjusted return.',
+      'The Sterling ratio is a drawdown-adjusted return metric, commonly calculated as annualized return divided by an average (or expected) drawdown measure over the selected period. Higher values indicate better drawdown-adjusted performance.',
   },
   {
     key: 'Ulcer Index',
@@ -172,7 +171,7 @@ export const returnMetricThresholds = [
     high: 1,
     highColor: 'rgba(2, 189, 46, 0.6)',
     tooltipDescription:
-      'The Ulcer Index is a risk-adjusted measure of return. It is calculated as the ratio of the annualized return over the maximum drawdown over the past 36 months. The higher the Ulcer Index, the better the risk-adjusted return.',
+      'The Ulcer Index is a drawdown-based risk metric (based on the depth and duration of drawdowns) over the selected period. Lower values indicate smaller and shorter drawdowns.',
   },
   {
     key: 'Weekly Returns Maximum Drawdown',
@@ -185,10 +184,10 @@ export const returnMetricThresholds = [
     high: 2,
     highColor: 'rgba(2, 189, 46, 0.6)',
     tooltipDescription:
-      'The Maximum Drawdown is a risk-adjusted measure of return. It is calculated as the ratio of the annualized return over the maximum drawdown over the past 36 months. The higher the Maximum Drawdown, the better the risk-adjusted return.',
+      'Maximum drawdown (weekly returns) is the largest peak-to-trough decline observed over the selected period. Lower values (closer to 0) indicate less severe drawdowns.',
   },
   {
-    key: 'kurtosis',
+    key: 'Kurtosis',
     veryLow: 7,
     veryLowColor: 'rgba(166, 0, 0, 0.6)',
     low: 4,
@@ -198,10 +197,10 @@ export const returnMetricThresholds = [
     high: 1,
     highColor: 'rgba(2, 189, 46, 0.6)',
     tooltipDescription:
-      'Kurtosis is a measure of the "tailedness" of the probability distribution of returns. A high kurtosis indicates a high probability of extreme values in the distribution.',
+      'Kurtosis measures the tailedness of the return distribution over the selected period. Higher kurtosis indicates a greater likelihood of extreme outcomes; lower values generally indicate lower tail risk.',
   },
   {
-    key: 'skewness',
+    key: 'Skewness',
     veryLow: -1,
     veryLowColor: 'rgba(166, 0, 0, 0.6)',
     low: 0,
@@ -211,10 +210,10 @@ export const returnMetricThresholds = [
     high: 2,
     highColor: 'rgba(2, 189, 46, 0.6)',
     tooltipDescription:
-      'Skewness is a measure of the asymmetry of the probability distribution of returns. A positive skewness indicates a right-skewed distribution, while a negative skewness indicates a left-skewed distribution.',
+      'Skewness measures the asymmetry of the return distribution over the selected period. Positive skewness indicates a right-skewed distribution (more upside tail), while negative skewness indicates a left-skewed distribution (more downside tail).',
   },
   {
-    key: 'std',
+    key: 'Volatility (Std Dev)',
     veryLow: 25,
     veryLowColor: 'rgba(166, 0, 0, 0.6)',
     low: 15,
@@ -224,7 +223,7 @@ export const returnMetricThresholds = [
     high: 5,
     highColor: 'rgba(2, 189, 46, 0.6)',
     tooltipDescription:
-      'The standard deviation of returns is a measure of the dispersion of returns around the mean return. A higher standard deviation indicates higher volatility.',
+      'Standard deviation of returns is a measure of volatility over the selected period. Higher standard deviation indicates higher volatility (risk).',
   },
 ];
 
@@ -240,7 +239,7 @@ export const benchmarkMetricThresholds = [
     high: 2,
     highColor: 'rgba(2, 189, 46, 0.6)',
     tooltipDescription:
-      'The Information ratio is a risk-adjusted measure of return. It is calculated as the ratio of the annualized excess return over the benchmark over the annualized tracking error over the past 36 months. The higher the Information ratio, the better the risk-adjusted return.',
+      'The Information ratio is a risk-adjusted excess return metric. It is calculated as the annualized excess return over the benchmark divided by tracking error over the selected period. Higher values indicate better risk-adjusted outperformance.',
   },
   {
     key: "Annualized Jensen's Alpha",
@@ -253,7 +252,7 @@ export const benchmarkMetricThresholds = [
     high: 0.04,
     highColor: 'rgba(2, 189, 46, 0.6)',
     tooltipDescription:
-      'Jensen’s Alpha is a risk-adjusted measure of return. It is calculated as the excess return over the benchmark over the expected return based on the Capital Asset Pricing Model (CAPM). The higher the Jensen’s Alpha, the better the risk-adjusted return.',
+      'Jensen’s Alpha measures risk-adjusted excess return relative to the benchmark based on CAPM over the selected period. Higher values indicate better risk-adjusted outperformance.',
   },
   {
     key: "Annualized Jensen's Alpha (%)",
@@ -266,7 +265,7 @@ export const benchmarkMetricThresholds = [
     high: 4,
     highColor: 'rgba(2, 189, 46, 0.6)',
     tooltipDescription:
-      'Jensen’s Alpha is a risk-adjusted measure of return. It is calculated as the excess return over the benchmark over the expected return based on the Capital Asset Pricing Model (CAPM). The higher the Jensen’s Alpha, the better the risk-adjusted return.',
+      'Jensen’s Alpha (%) measures risk-adjusted excess return relative to the benchmark based on CAPM over the selected period. Higher values indicate better risk-adjusted outperformance.',
   },
   {
     key: 'Beta',
@@ -279,7 +278,7 @@ export const benchmarkMetricThresholds = [
     high: 0.05,
     highColor: 'rgba(2, 189, 46, 0.6)',
     tooltipDescription:
-      'Beta is a measure of the sensitivity of the product to market movements. A beta of 1 indicates that the product moves in line with the market, while a beta greater than 1 indicates that the product is more volatile than the market.',
+      'Beta measures sensitivity to benchmark movements over the selected period. Lower beta indicates lower market sensitivity (more defensive or market-neutral behavior).',
   },
   {
     key: 'Daily VaR (95)',
@@ -292,7 +291,7 @@ export const benchmarkMetricThresholds = [
     high: 0.5,
     highColor: 'rgba(2, 189, 46, 0.6)',
     tooltipDescription:
-      'Value at Risk (VaR) is a measure of the potential loss in value of a product over a given time period and confidence level. A higher VaR indicates a higher potential loss.',
+      'Value at Risk (VaR) estimates the potential loss over a given horizon at a chosen confidence level during the selected period. Lower VaR indicates lower downside risk.',
   },
   {
     key: 'Downside Capture Ratio',
@@ -305,7 +304,7 @@ export const benchmarkMetricThresholds = [
     high: 60,
     highColor: 'rgba(2, 189, 46, 0.6)',
     tooltipDescription:
-      'The Downside Capture Ratio is a measure of the product’s performance relative to the benchmark during periods of negative benchmark returns. A downside capture ratio of less than 1 indicates that the product has outperformed the benchmark during periods of negative benchmark returns.',
+      'Downside Capture Ratio measures performance relative to the benchmark during periods when the benchmark is negative over the selected period. Lower values indicate capturing less of the benchmark’s downside.',
   },
   {
     key: 'Total Capture Ratio',
@@ -318,7 +317,7 @@ export const benchmarkMetricThresholds = [
     high: 1.5,
     highColor: 'rgba(2, 189, 46, 0.6)',
     tooltipDescription:
-      'The Total Capture Ratio is a measure of the product’s performance relative to the benchmark during all periods. A total capture ratio of less than 1 indicates that the product has outperformed the benchmark during all periods.',
+      'Total Capture Ratio measures performance relative to the benchmark across all periods within the selected period. Values above 1 indicate the product captured more of the benchmark’s returns overall; values below 1 indicate less.',
   },
   {
     key: 'Tracking Error',
@@ -331,7 +330,7 @@ export const benchmarkMetricThresholds = [
     high: 0.5,
     highColor: 'rgba(2, 189, 46, 0.6)',
     tooltipDescription:
-      'Tracking Error is a measure of the volatility of the excess return of the product over the benchmark. A higher tracking error indicates higher active risk.',
+      'Tracking Error is the volatility of the product’s excess return versus the benchmark over the selected period. Lower values indicate lower active risk.',
   },
   {
     key: 'Upside Capture Ratio',
@@ -344,7 +343,7 @@ export const benchmarkMetricThresholds = [
     high: 120,
     highColor: 'rgba(2, 189, 46, 0.6)',
     tooltipDescription:
-      'The Upside Capture Ratio is a measure of the product’s performance relative to the benchmark during periods of positive benchmark returns. An upside capture ratio of more than 1 indicates that the product has outperformed the benchmark during periods of positive benchmark returns.',
+      'Upside Capture Ratio measures performance relative to the benchmark during periods when the benchmark is positive over the selected period. Higher values indicate capturing more of the benchmark’s upside.',
   },
   {
     key: 'Volatility',
@@ -357,6 +356,6 @@ export const benchmarkMetricThresholds = [
     high: 5,
     highColor: 'rgba(2, 189, 46, 0.6)',
     tooltipDescription:
-      'Volatility is a measure of the dispersion of returns around the mean return. A higher volatility indicates higher risk.',
+      'Volatility measures the dispersion of returns around the mean over the selected period. Lower volatility indicates lower risk.',
   },
 ];

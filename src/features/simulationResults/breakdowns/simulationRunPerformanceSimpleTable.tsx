@@ -61,17 +61,16 @@ export const AnalysisSimplifiedBreakdownTable: FC<AnalysisBreakdownTableProps> =
       console.log('Metrics for rule', ruleName, metrics);
       
 
-      metrics.forEach((m) => {
-        if (m.benchmarkName === 'benchmark_return_analysis' || m.metricValue == null) {
-          return;}
+      metrics.filter(x => x.benchmarkName !== 'benchmark_return_analysis' && x.metricValue != undefined).forEach((m) => {
         out.push({
           updateRule: ruleName,
           metric: m.metricName,
           benchmark: m.benchmarkName ?? "",
-          value: m.metricValue,
+          value: m.metricValue as number,
         });
       });
     });
+    console.log('Flat Summary:', out);
     return out;
   }, [allBreakdowns]);
 
@@ -201,19 +200,31 @@ console.log('Column Definitions:', [...baseCols]);
     return [...baseCols, ...vsCols];
   }, [updateRules, benchmarkHeaderName, getColorFor, vsCellStyle]);
   const rowData = useMemo(() => {
-    return visibleMetrics.map((metric) => {
-      const benchmark =
-        flatSummary.find((f) => f.metric === metric && f.benchmark)?.benchmark ?? '';
+    // Build rows keyed by (metric, benchmark) so each flatSummary entry maps to exactly one cell.
+    const rowsByKey = new Map<string, Record<string, string | number | null>>();
 
-      const row: Record<string, string | number | null> = { metric, benchmark: benchmark.toUpperCase() };
+    const visibleSet = new Set(visibleMetrics);
 
-      updateRules.forEach((rule) => {
-        const e = flatSummary.find((f) => f.metric === metric && f.updateRule === rule);
-        row[rule] = e ? e.value : null;
+    flatSummary
+      .filter((f) => visibleSet.has(f.metric))
+      .forEach((f) => {
+        const benchmark = (f.benchmark ?? '').toUpperCase();
+        const key = `${f.metric}||${benchmark}`;
+
+        let row = rowsByKey.get(key);
+        if (!row) {
+          row = { metric: f.metric, benchmark };
+          // Initialize all rule columns so the grid has stable fields
+          updateRules.forEach((rule) => {
+            row![rule] = null;
+          });
+          rowsByKey.set(key, row);
+        }
+
+        row[f.updateRule] = f.value;
       });
 
-      return row;
-    });
+    return Array.from(rowsByKey.values());
   }, [flatSummary, updateRules, visibleMetrics]);
 
     console.log('Row Data:', rowData);

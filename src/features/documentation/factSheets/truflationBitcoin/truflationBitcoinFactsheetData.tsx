@@ -225,7 +225,7 @@ export const truflationBitcoinFactsheetData: FactsheetModel = {
         was performed using the QuantAMM simulator
         framework. A parameter set was selected that maximised the Sharpe ratio
         of the strategy. This was selected over other objectives such as
-        maximising Ulcer or Calmer Ratios as the parameter set showed better
+        maximising Ulcer or Calmar Ratios as the parameter set showed better
         test set statistics. Random 6 month length windows were selected within
         the training price range and optimisation was performed via
         gradient descent for 1000 steps with batches of 8 windows per step.
