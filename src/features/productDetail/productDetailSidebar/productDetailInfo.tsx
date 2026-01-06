@@ -12,7 +12,6 @@ import sharedStyles from '../../../shared.module.scss';
 import styles from './productDetailSidebar.module.scss';
 import { useAppSelector } from '../../../app/hooks';
 import { selectProductDetailSelectedTimeRange } from '../../productExplorer/productExplorerSlice';
-import { ProductDetailSidebarStrategySummary } from './productDetailSidebarStrategySummary';
 import { ProductDetailSidebarPerformanceGraph } from './productDetailSidebarPerformanceGraph';
 import { useNavigate } from 'react-router-dom';
 import { CURRENT_LIVE_FACTSHEETS } from '../../documentation/factSheets/liveFactsheets';
@@ -205,19 +204,6 @@ export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({
         },
       },
     },
-    {
-      key: '5',
-      label: !isMobile ? 'About Pool Type' : '',
-      children: <ProductDetailSidebarStrategySummary product={product} />,
-      style: panelStyle,
-      showArrow: false,
-      styles: {
-        header: {
-          padding: '0',
-        },
-      },
-    },
-
     ...(!isMobile
       ? [
           {

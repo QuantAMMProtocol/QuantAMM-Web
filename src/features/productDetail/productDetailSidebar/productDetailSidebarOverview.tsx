@@ -1,6 +1,6 @@
 import { FC, ReactNode } from 'react';
 import { Card, Descriptions, Typography } from 'antd';
-import { manualTruncate, shortenAddress } from '../../../utils';
+import { shortenAddress } from '../../../utils';
 import { Product } from '../../../models';
 
 import styles from './productDetailInfo.module.scss';

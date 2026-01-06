@@ -44,6 +44,7 @@ export const AnalysisSimplifiedBreakdownTable: FC<AnalysisBreakdownTableProps> =
     interface Flat {
       updateRule: string;
       metric: string;
+      benchmark: string;
       value: number;
     }
     const out: Flat[] = [];
@@ -57,6 +58,8 @@ export const AnalysisSimplifiedBreakdownTable: FC<AnalysisBreakdownTableProps> =
         ...(analysis.return_analysis || []),
         ...(analysis.benchmark_analysis || []),
       ];
+      console.log('Metrics for rule', ruleName, metrics);
+      
 
       metrics.forEach((m) => {
         if (m.benchmarkName === 'benchmark_return_analysis' || m.metricValue == null) {
@@ -64,6 +67,7 @@ export const AnalysisSimplifiedBreakdownTable: FC<AnalysisBreakdownTableProps> =
         out.push({
           updateRule: ruleName,
           metric: m.metricName,
+          benchmark: m.benchmarkName ?? "",
           value: m.metricValue,
         });
       });
@@ -112,7 +116,7 @@ export const AnalysisSimplifiedBreakdownTable: FC<AnalysisBreakdownTableProps> =
   }, []);
 
   const colDefs = useMemo<ColDef[]>(() => {
-    const baseCols: ColDef[] = [
+    let baseCols: ColDef[] = [
       {
         colId: 'metric',
         field: 'metric',
@@ -126,7 +130,21 @@ export const AnalysisSimplifiedBreakdownTable: FC<AnalysisBreakdownTableProps> =
           const t = returnMetricThresholds.find((x) => x.key === params.value);
           return t?.tooltipDescription;
         },
-      },
+      }
+    ];
+
+    baseCols = [...baseCols,
+          {
+        colId: 'benchmark',
+        field: 'benchmark',
+        headerName: 'Benchmark',
+        sortable: true,
+        filter: 'agSetColumnFilter',
+        resizable: true,
+        width: 320,
+      },]
+
+    baseCols = [...baseCols,
       ...updateRules.map((rule) => ({
         colId: rule,
         field: rule,
@@ -145,9 +163,8 @@ export const AnalysisSimplifiedBreakdownTable: FC<AnalysisBreakdownTableProps> =
           if (!color) return undefined;
           return { backgroundColor: color };
         },
-      })),
-    ];
-
+      })),]
+console.log('Column Definitions:', [...baseCols]);
     if (!benchmarkHeaderName) return baseCols;
 
     const vsCols: ColDef[] = updateRules
@@ -181,21 +198,25 @@ export const AnalysisSimplifiedBreakdownTable: FC<AnalysisBreakdownTableProps> =
             vsCellStyle(params.value),
         } as ColDef;
       });
-
     return [...baseCols, ...vsCols];
   }, [updateRules, benchmarkHeaderName, getColorFor, vsCellStyle]);
-
   const rowData = useMemo(() => {
     return visibleMetrics.map((metric) => {
-      const row: Record<string, string | number | null> = { metric };
+      const benchmark =
+        flatSummary.find((f) => f.metric === metric && f.benchmark)?.benchmark ?? '';
+
+      const row: Record<string, string | number | null> = { metric, benchmark: benchmark.toUpperCase() };
+
       updateRules.forEach((rule) => {
         const e = flatSummary.find((f) => f.metric === metric && f.updateRule === rule);
         row[rule] = e ? e.value : null;
       });
+
       return row;
     });
   }, [flatSummary, updateRules, visibleMetrics]);
 
+    console.log('Row Data:', rowData);
   const sideBar: SideBarDef = {
     toolPanels: [
       {

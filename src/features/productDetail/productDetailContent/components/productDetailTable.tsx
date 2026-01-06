@@ -1,8 +1,8 @@
 import { FC, memo } from 'react';
 import { SimulationRunBreakdown } from '../../../simulationResults/simulationResultSummaryModels';
 
-import { DesktopTable } from './ProductDetailDesktopTable';
 import { MobileTable } from './ProductDetailMobileTable';
+import { AnalysisSimplifiedBreakdownTable } from '../../../simulationResults/breakdowns/simulationRunPerformanceSimpleTable';
 
 export interface ProductDetailTableProps {
   simulationRunBreakdown?: SimulationRunBreakdown;
@@ -17,7 +17,12 @@ export const ProductDetailTable: FC<ProductDetailTableProps> = memo(function Pro
 }) {
   if (!isMobile) {
     return simulationRunBreakdown ? (
-      <DesktopTable simulationRunBreakdown={simulationRunBreakdown} productId={productId} />
+          <AnalysisSimplifiedBreakdownTable
+            simulationRunBreakdowns={[simulationRunBreakdown]}
+            benchmarkBreakdown={null}
+            visibleMetrics={[...(simulationRunBreakdown.simulationRunResultAnalysis?.return_analysis.map(x => x.metricName) ?? []),
+            ...(simulationRunBreakdown.simulationRunResultAnalysis?.benchmark_analysis.filter(x => x.benchmarkName != "return_analysis").map(x => x.metricName) ?? [])]}
+          />
     ) : null;
   }
 

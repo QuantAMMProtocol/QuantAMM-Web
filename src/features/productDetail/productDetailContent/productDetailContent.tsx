@@ -12,6 +12,7 @@ import { ProductDetailInfo } from '../productDetailSidebar/productDetailInfo';
 import { GqlChain } from '../../../__generated__/graphql-types';
 import { ProductDetailSidebarSocials } from '../productDetailSidebar/productDetailSidebarSocials';
 import { ProductDetailSidebarStrategySummary } from '../productDetailSidebar/productDetailSidebarStrategySummary';
+import { ProductDetailTable } from './components/productDetailTable';
 
 const { Content } = Layout;
 
@@ -64,6 +65,25 @@ export const ProductDetailContent: FC<ProductDetailContentProps> = ({
                   chain={product.chain as GqlChain}
                   isMobile={isMobile}
                 />
+              </Col>
+            </Row>
+            <Row id="details" style={{ marginTop: 20 }} hidden={isMobile}>
+              
+              <Col
+                span={24}
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginTop: 20,
+                  paddingLeft: 12,
+                }}
+              >
+                <ProductDetailTable
+                    simulationRunBreakdown={product.simulationRunBreakdown}
+                    productId={product.address ?? product.id}
+                    isMobile={isMobile}
+                  />
               </Col>
             </Row>
           </div>
