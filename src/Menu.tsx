@@ -92,7 +92,7 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
         label: 'View Products',
         type: 'submenu',
         style: { marginLeft: 'auto' }, // Align to the right
-        children: liveProducts.factsheets.map((product) => ({
+        children: liveProducts.factsheets.filter(x => x.status == "LIVE").map((product) => ({
           key:
             ROUTES.PRODUCT_EXPLORER +
             '/' +
@@ -146,7 +146,7 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
         label: 'View Products',
         type: 'submenu',
         style: { marginLeft: 'auto' }, // Align to the right
-        children: liveProducts.factsheets.map((product) => ({
+        children: liveProducts.factsheets.filter(x => x.status == "LIVE").map((product) => ({
           key:
             ROUTES.PRODUCT_EXPLORER +
             '/' +
