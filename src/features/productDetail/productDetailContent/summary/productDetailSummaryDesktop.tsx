@@ -1,51 +1,137 @@
-import { FC } from 'react';
-import { Col, Row, Spin, Tooltip, Typography } from 'antd';
-import { CloseOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { FC, useMemo, useState } from 'react';
+import {
+  Card,
+  Collapse,
+  Divider,
+  Progress,
+  Row,
+  Col,
+  Segmented,
+  Skeleton,
+  Space,
+  Statistic,
+  Tag,
+  Tooltip,
+  Typography,
+} from 'antd';
+
+import {
+  InfoCircleOutlined,
+  WarningOutlined,
+  TableOutlined,
+  BoxPlotOutlined,
+} from '@ant-design/icons';
+
 import { FinancialMetricThresholds, Product } from '../../../../models';
 import {
   ReturnDistributionGraph,
   ProductTokenWeightChangeOverTimeGraph,
 } from '../../../shared/graphs';
-import { SimulationRunMetric } from '../../../simulationResults/simulationResultSummaryModels';
+import {
+  SimulationRunMetric,
+  SimulationRunBreakdown,
+} from '../../../simulationResults/simulationResultSummaryModels';
 import { ProductDetailDropdown } from '../components/productDetailDropdown';
-import { ProductDetailGauge } from '../components/productDetailGauge';
-import { ComparableProductSelector } from '../comparableProduct/comparableProductSelector';
-import { getMax, benchmarksDropdownOptions, getMin } from './utils';
+
+import { CURRENT_LIVE_FACTSHEETS } from '../../../documentation/factSheets/liveFactsheets';
 
 import styles from './productDetailSummary.module.scss';
-import { manualTruncate } from '../../../../utils';
+import { getMax, getMin } from './utils';
+import Title from 'antd/es/typography/Title';
+import { StrategyWorkflowCard } from './strategyWorkflowCard';
+import { AnalysisSimplifiedBreakdownTable } from '../../../simulationResults/breakdowns/simulationRunPerformanceSimpleTable';
 
 const { Text } = Typography;
-
-export interface ProductDetailSelectorData {
-  stats?: string;
-  values: number[] | string[];
-}
-
-export interface ProductDetailSelectorData {
-  stats?: string;
-  values: number[] | string[];
-}
+const { Panel } = Collapse;
 
 interface ProductDetailSummaryDesktopProps {
   product: Product;
   loadingSimulationRunBreakdown: boolean;
   loadingOtherProductSimulationRunBreakdown: boolean;
+
   returnAnalysisDropdownOptions: { label: string; key: number }[];
   returnAnalysisThresholds: FinancialMetricThresholds[];
+
   benchmarkReturnAnalysisDropdownOptions: { label: string; key: number }[];
   benchmarkReturnAnalysisThresholds: FinancialMetricThresholds[];
+
   benchmarkAnalysis?: SimulationRunMetric[] | null;
   selectedReturnAnalysis?: SimulationRunMetric;
   selectedBenchmarkReturnAnalysis?: SimulationRunMetric;
+
+  // Kept for drop-in compatibility (compare removed; unused)
   comparingProduct?: Product;
   comparingProductLoading: boolean;
   comparingProductReturnAnalysis?: SimulationRunMetric[] | null;
   comparingProductBenchmarkAnalysis?: SimulationRunMetric[] | null;
   onSelectComparableProduct: (poolId: string) => void;
+
+  // Kept for drop-in compatibility
   handleBenchmarkChange: (key: string) => void;
+
   handleReturnAnalysisChange: (key: string) => void;
   handleBenchmarkAnalysisChange: (key: string) => void;
+}
+
+/* -------------------------- helpers -------------------------- */
+
+function isFiniteNumber(v: unknown): v is number {
+  return typeof v === 'number' && Number.isFinite(v);
+}
+
+function format2(v?: number | null) {
+  if (!isFiniteNumber(v)) return '—';
+  return v.toFixed(2);
+}
+
+function clamp(n: number, min: number, max: number) {
+  return Math.min(max, Math.max(min, n));
+}
+
+function MetricProgress({
+  label,
+  value,
+  thresholds,
+  allThresholds,
+  helpText,
+}: {
+  label: string;
+  value?: number | null;
+  thresholds?: FinancialMetricThresholds;
+  allThresholds: FinancialMetricThresholds[];
+  helpText?: string;
+}) {
+  const min = getMin(allThresholds, { metricName: thresholds?.key } as any);
+  const max = getMax(allThresholds, { metricName: thresholds?.key } as any);
+
+  const pct =
+    isFiniteNumber(value) &&
+    isFiniteNumber(min) &&
+    isFiniteNumber(max) &&
+    max !== min
+      ? clamp(((value - min) / (max - min)) * 100, 0, 100)
+      : 0;
+
+  return (
+    <div className={styles['product-detail-summary__metric']}>
+      <div className={styles['product-detail-summary__metricHeader']}>
+        <Text strong>{label}</Text>
+        {helpText ? (
+          <Tooltip title={helpText}>
+            <InfoCircleOutlined />
+          </Tooltip>
+        ) : null}
+      </div>
+
+      <Progress percent={pct} showInfo={false} />
+
+      <div className={styles['product-detail-summary__metricQual']}>
+        <Text type="secondary">poor</Text>
+        <Text type="secondary">good</Text>
+        <Text type="secondary">very good</Text>
+      </div>
+    </div>
+  );
 }
 
 export const ProductDetailSummaryDesktop: FC<
@@ -61,422 +147,425 @@ export const ProductDetailSummaryDesktop: FC<
   benchmarkAnalysis,
   selectedReturnAnalysis,
   selectedBenchmarkReturnAnalysis,
-  comparingProduct,
-  comparingProductLoading,
-  comparingProductReturnAnalysis,
-  comparingProductBenchmarkAnalysis,
   handleReturnAnalysisChange,
   handleBenchmarkAnalysisChange,
-  onSelectComparableProduct,
 }) => {
+  const isLoading =
+    loadingSimulationRunBreakdown && loadingOtherProductSimulationRunBreakdown;
+
+  const [weightsView, setWeightsView] = useState<'product' | 'benchmark'>(
+    'product'
+  );
+  const [returnsView, setReturnsView] = useState<'product' | 'benchmark'>(
+    'product'
+  );
+
+  const [metricsView, setMetricsView] = useState<'gauge' | 'table'>('gauge');
+
+  const ts = useMemo(() => product?.timeSeries ?? [], [product?.timeSeries]);
+
+  const factsheet = useMemo(() => {
+    const anyP = product as any;
+    const poolId = anyP?.poolId ?? anyP?.id ?? anyP?.pool?.id;
+    const name = String(anyP?.name ?? '').toLowerCase();
+
+    const byPoolId = CURRENT_LIVE_FACTSHEETS.factsheets.find((f: any) => {
+      const fId = String(f?.poolId ?? '').toLowerCase();
+      const pId = String(poolId ?? '').toLowerCase();
+      return fId && pId && fId === pId;
+    });
+    if (byPoolId) return byPoolId;
+
+    return CURRENT_LIVE_FACTSHEETS.factsheets.find((f: any) => {
+      const prefix = String(f?.poolPrefix ?? '').toLowerCase();
+      return prefix && name.includes(prefix);
+    });
+  }, [product]);
+
+  const selectedReturnThreshold = useMemo(
+    () =>
+      returnAnalysisThresholds?.find(
+        (x) => x.key == selectedReturnAnalysis?.metricName
+      ),
+    [returnAnalysisThresholds, selectedReturnAnalysis?.metricName]
+  );
+
+  const selectedBenchmarkRelThreshold = useMemo(
+    () =>
+      benchmarkReturnAnalysisThresholds?.find(
+        (x) => x.key == selectedBenchmarkReturnAnalysis?.metricName
+      ),
+    [
+      benchmarkReturnAnalysisThresholds,
+      selectedBenchmarkReturnAnalysis?.metricName,
+    ]
+  );
+
+  const benchmarkMetricForSelectedReturn = useMemo(
+    () =>
+      benchmarkAnalysis?.find(
+        (x) => x.metricName == selectedReturnAnalysis?.metricName
+      ) ?? undefined,
+    [benchmarkAnalysis, selectedReturnAnalysis?.metricName]
+  );
+
+  const productReturnValue = selectedReturnAnalysis?.metricValue;
+  const benchmarkReturnValue = benchmarkMetricForSelectedReturn?.metricValue;
+
+  const deltaAbs =
+    isFiniteNumber(productReturnValue) && isFiniteNumber(benchmarkReturnValue)
+      ? productReturnValue - benchmarkReturnValue
+      : null;
+
+  const deltaTag = useMemo(() => {
+    if (!isFiniteNumber(deltaAbs)) return <Tag>—</Tag>;
+    const positive = deltaAbs >= 0;
+    return (
+      <Tag
+        color={positive ? 'green' : 'red'}
+      >{`${positive ? '+' : ''}${deltaAbs.toFixed(2)}`}</Tag>
+    );
+  }, [deltaAbs]);
+
+  const marketValuesProduct = useMemo(
+    () => ts.map((x) => x.sharePrice).filter(isFiniteNumber),
+    [ts]
+  );
+  const marketValuesBenchmark = useMemo(
+    () => ts.map((x) => x.hodlSharePrice).filter(isFiniteNumber),
+    [ts]
+  );
+
+  const simulationRunBreakdown = useMemo(
+    () => product?.simulationRunBreakdown as SimulationRunBreakdown | undefined,
+    [product?.simulationRunBreakdown]
+  );
+
+  const visibleMetrics = useMemo(() => {
+    const returnAnalysis =
+      simulationRunBreakdown?.simulationRunResultAnalysis?.return_analysis ??
+      [];
+    const benchmarkAnalysisArr =
+      simulationRunBreakdown?.simulationRunResultAnalysis?.benchmark_analysis ??
+      [];
+
+    return [
+      ...(returnAnalysis.map((x) => x.metricName) ?? []),
+      ...((benchmarkAnalysisArr
+        .filter((x) => x.benchmarkName != 'return_analysis')
+        .map((x) => x.metricName) ?? []) as string[]),
+    ];
+  }, [simulationRunBreakdown]);
+
+  const metricsToggle = (
+    <div
+      onClick={(e) => {
+        e.stopPropagation();
+      }}
+      onMouseDown={(e) => {
+        e.stopPropagation();
+      }}
+    >
+      <Segmented
+        size="large"
+        value={metricsView}
+        onChange={(v) => setMetricsView(v as 'gauge' | 'table')}
+        options={[
+          {
+            value: 'gauge',
+            label: (
+              <Tooltip title="Gauge view">
+                <BoxPlotOutlined />
+              </Tooltip>
+            ),
+          },
+          {
+            value: 'table',
+            label: (
+              <Tooltip title="Table view">
+                <TableOutlined />
+              </Tooltip>
+            ),
+          },
+        ]}
+      />
+    </div>
+  );
+
   return (
-    <>
-      {/* first row */}
-      {/* first column - empty item to align the other products */}
-      <div className={styles['product-detail-summary__item']}></div>
-      {/* second column - current product */}
-      <div className={styles['product-detail-summary__item']}>
-        <Text style={{ fontSize: 16 }} strong>
-          Current Product
-        </Text>
-      </div>
-      {/* third column - benchmark */}
-      <div className={styles['product-detail-summary__item']}>
-        <Text style={{ fontSize: 16 }} strong>
-          Benchmark
-        </Text>
-      </div>
-      {/* fourth column - other products */}
-      <div className={styles['product-detail-summary__item']}>
-        <Text style={{ fontSize: 16 }} strong>
-          Compare Product
-        </Text>
-      </div>
-
-      {/* second row */}
-      {/* first column - empty item to align the other products */}
-      <div className={styles['product-detail-summary__item']}></div>
-
-      {/* second column - current product */}
-      <div className={styles['product-detail-summary__item']}>
-        <Tooltip title={product.name}>
-          <Text style={{ fontSize: 16 }} strong>
-            {manualTruncate(product.name, 10)}
-          </Text>
-        </Tooltip>
-      </div>
-
-      {/* third column */}
-      <div className={styles['product-detail-summary__item']}>
-        <ProductDetailDropdown
-          items={benchmarksDropdownOptions}
-          width={'auto'}
-          disabled={true}
-          onChangeItem={handleBenchmarkAnalysisChange}
-        />
-        <Tooltip title="Select a benchmark to compare the product with">
-          <InfoCircleOutlined style={{ paddingLeft: '5px' }} />
-        </Tooltip>
-      </div>
-
-      {/* fourth column */}
-      <div
-        className={styles['product-detail-summary__item']}
-        style={comparingProduct ? {} : { gridRowEnd: 'span 5' }}
+    <div className={styles['product-detail-summary__desktop']}>
+      <Card
+        className={styles['product-detail-summary__cardDesktop']}
+        title="Pool weights"
+        extra={
+          <Segmented
+            value={weightsView}
+            onChange={(v) => setWeightsView(v as 'product' | 'benchmark')}
+            options={[
+              { label: 'Product', value: 'product' },
+              { label: 'Benchmark', value: 'benchmark' },
+            ]}
+          />
+        }
       >
-        {comparingProduct ? (
-          <div
-            className={
-              styles['product-detail-summary__comparable-product-title']
-            }
+        <div className={styles['product-detail-summary__chart']}>
+          <ProductTokenWeightChangeOverTimeGraph
+            product={product}
+            isBenchmark={weightsView === 'benchmark'}
+            yAxisOverride={{ label: { enabled: false } }}
+          />
+        </div>
+      </Card>
+
+      {
+        /* hidden as the subgraph has still not been pushed to prod*/
+        <div hidden>
+          <Collapse
+            defaultActiveKey={[]}
+            className={styles['product-detail-summary__collapse']}
+            bordered={false}
           >
-        <Tooltip title={comparingProduct.name}>
-            <Text
-              style={{ fontSize: 16 }}
-              onClick={() => onSelectComparableProduct('')}
-            >
-              {manualTruncate(comparingProduct.name, 10)} <CloseOutlined />
-            </Text>
-            </Tooltip>
-          </div>
-        ) : (
-          <ComparableProductSelector
-            onSelect={onSelectComparableProduct}
-            comparingProductLoading={comparingProductLoading}
-          />
-        )}
-      </div>
-
-      {/* third row */}
-      {/* first column */}
-      <div className={styles['product-detail-summary__item-vertical']}>
-        <Row>
-          <Col span={4}>
-            <Tooltip
-              title={
-                returnAnalysisThresholds?.find(
-                  (x) => x.key == selectedReturnAnalysis?.metricName
-                )?.tooltipDescription
+            <Panel
+              key="strategy-workflow"
+              header={
+                <div
+                  className={styles['product-detail-summary__collapseHeader']}
+                >
+                  <span
+                    className={styles['product-detail-summary__stepNumber']}
+                  >
+                    2
+                  </span>
+                  <Text strong>Strategy workflow</Text>
+                  <Text
+                    type="secondary"
+                    className={styles['product-detail-summary__collapseHint']}
+                  ></Text>
+                </div>
               }
             >
-              <InfoCircleOutlined
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  height: '100%',
-                }}
-              />
-            </Tooltip>
-          </Col>
-          <Col span={20}>
-            <ProductDetailDropdown
-              items={returnAnalysisDropdownOptions}
-              isLoading={
-                loadingSimulationRunBreakdown &&
-                loadingOtherProductSimulationRunBreakdown
-              }
-              onChangeItem={handleReturnAnalysisChange}
-            />
-          </Col>
-        </Row>
-      </div>
-
-      {/* second column */}
-      <div className={styles['product-detail-summary__item']}>
-        <ProductDetailGauge
-          thresholds={returnAnalysisThresholds?.find(
-            (x) => x.key == selectedReturnAnalysis?.metricName
-          )}
-          values={{
-            min: getMin(returnAnalysisThresholds, selectedReturnAnalysis),
-            max: getMax(returnAnalysisThresholds, selectedReturnAnalysis),
-            actual: getMax(returnAnalysisThresholds, selectedReturnAnalysis),
-            target: selectedReturnAnalysis?.metricValue,
-          }}
-        />
-      </div>
-      {/* third column */}
-      <div className={styles['product-detail-summary__item']}>
-        <ProductDetailGauge
-          thresholds={returnAnalysisThresholds?.find(
-            (x) => x.key == selectedReturnAnalysis?.metricName
-          )}
-          values={{
-            min: getMin(
-              returnAnalysisThresholds,
-              benchmarkAnalysis?.find(
-                (x) => x.metricName == selectedReturnAnalysis?.metricName
-              )
-            ),
-            max: getMax(
-              returnAnalysisThresholds,
-              benchmarkAnalysis?.find(
-                (x) => x.metricName == selectedReturnAnalysis?.metricName
-              )
-            ),
-            actual: getMax(
-              returnAnalysisThresholds,
-              benchmarkAnalysis?.find(
-                (x) => x.metricName == selectedReturnAnalysis?.metricName
-              )
-            ),
-            target: Number(
-              benchmarkAnalysis
-                ?.find(
-                  (x) => x.metricName == selectedReturnAnalysis?.metricName
-                )
-                ?.metricValue?.toFixed(2)
-            ),
-          }}
-        />
-      </div>
-
-      {/* fourth column */}
-
-      {comparingProduct && comparingProductReturnAnalysis && (
-        <div className={styles['product-detail-summary__item']}>
-          <ProductDetailGauge
-            thresholds={returnAnalysisThresholds?.find(
-              (x) =>
-                x.key ==
-                comparingProductReturnAnalysis?.find(
-                  (x) => x.metricName == selectedReturnAnalysis?.metricName
-                )?.metricName
-            )}
-            values={{
-              min: getMin(
-                returnAnalysisThresholds,
-                comparingProductReturnAnalysis?.find(
-                  (x) => x.metricName == selectedReturnAnalysis?.metricName
-                )
-              ),
-              max: getMax(
-                returnAnalysisThresholds,
-                comparingProductReturnAnalysis?.find(
-                  (x) => x.metricName == selectedReturnAnalysis?.metricName
-                )
-              ),
-              actual: getMax(
-                returnAnalysisThresholds,
-                comparingProductReturnAnalysis?.find(
-                  (x) => x.metricName == selectedReturnAnalysis?.metricName
-                )
-              ),
-              target: Number(
-                comparingProductReturnAnalysis
-                  ?.find(
-                    (x) => x.metricName == selectedReturnAnalysis?.metricName
-                  )
-                  ?.metricValue?.toFixed(2)
-              ),
-            }}
-          />
+              <StrategyWorkflowCard product={product} factsheet={factsheet} />
+            </Panel>
+          </Collapse>
         </div>
-      )}
-      {comparingProduct && !comparingProductReturnAnalysis && (
-        <div className={styles['product-detail-summary__item']}>
-          <Spin />
-        </div>
-      )}
+      }
 
-      {/* fourth row */}
-      {/* first column */}
-      <div className={styles['product-detail-summary__item-vertical']}>
-        <Row>
-          <Col span={4}>
-            <Tooltip
-              title={
-                benchmarkReturnAnalysisThresholds?.find(
-                  (x) => x.key == selectedBenchmarkReturnAnalysis?.metricName
-                )?.tooltipDescription
-              }
-            >
-              <InfoCircleOutlined
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  height: '100%',
-                }}
-              />
-            </Tooltip>
-          </Col>
-          <Col span={20}>
-            <ProductDetailDropdown
-              items={benchmarkReturnAnalysisDropdownOptions}
-              isLoading={
-                loadingSimulationRunBreakdown &&
-                loadingOtherProductSimulationRunBreakdown
-              }
-              onChangeItem={handleBenchmarkAnalysisChange}
-            />
-          </Col>
-        </Row>
-      </div>
-
-      {/* second column */}
-      <div className={styles['product-detail-summary__item']}>
-        <ProductDetailGauge
-          thresholds={benchmarkReturnAnalysisThresholds?.find(
-            (x) => x.key == selectedBenchmarkReturnAnalysis?.metricName
-          )}
-          values={{
-            min: getMin(
-              benchmarkReturnAnalysisThresholds,
-              selectedBenchmarkReturnAnalysis
-            ),
-            max: getMax(
-              benchmarkReturnAnalysisThresholds,
-              selectedBenchmarkReturnAnalysis
-            ),
-            actual: getMax(
-              benchmarkReturnAnalysisThresholds,
-              selectedBenchmarkReturnAnalysis
-            ),
-            target: selectedBenchmarkReturnAnalysis?.metricValue,
-          }}
-        />
-      </div>
-      {/* third column */}
-      <div className={styles['product-detail-summary__item']}></div>
-
-      {/* fourth column */}
-      {comparingProduct && comparingProductBenchmarkAnalysis && (
-        <div className={styles['product-detail-summary__item']}>
-          <ProductDetailGauge
-            thresholds={benchmarkReturnAnalysisThresholds?.find(
-              (x) =>
-                x.key ==
-                comparingProductBenchmarkAnalysis?.find(
-                  (x) =>
-                    x.metricName == selectedBenchmarkReturnAnalysis?.metricName
-                )?.metricName
-            )}
-            values={{
-              min: getMin(
-                benchmarkReturnAnalysisThresholds,
-                comparingProductBenchmarkAnalysis?.find(
-                  (x) =>
-                    x.metricName == selectedBenchmarkReturnAnalysis?.metricName
-                )
-              ),
-              max: getMax(
-                benchmarkReturnAnalysisThresholds,
-                comparingProductBenchmarkAnalysis?.find(
-                  (x) =>
-                    x.metricName == selectedBenchmarkReturnAnalysis?.metricName
-                )
-              ),
-              actual: getMax(
-                benchmarkReturnAnalysisThresholds,
-                comparingProductBenchmarkAnalysis?.find(
-                  (x) =>
-                    x.metricName == selectedBenchmarkReturnAnalysis?.metricName
-                )
-              ),
-              target: comparingProductBenchmarkAnalysis?.find(
-                (x) =>
-                  x.metricName == selectedBenchmarkReturnAnalysis?.metricName
-              )?.metricValue,
-            }}
-          />
-        </div>
-      )}
-      {comparingProduct && !comparingProductBenchmarkAnalysis && (
-        <div className={styles['product-detail-summary__item']}>
-          <Spin />
-        </div>
-      )}
-
-      {/* fifth row */}
-      {/* first column */}
-      <div className={styles['product-detail-summary__item-vertical']}>
-        Pool Weights [%]
-      </div>
-
-      {/* second column */}
-      <div className={styles['product-detail-summary__item']}>
-        <div style={{ height: '100%', width: '100%' }}>
-          <ProductTokenWeightChangeOverTimeGraph
-            product={product}
-            yAxisOverride={{ label: { enabled: false } }}
-          />
-        </div>
-      </div>
-
-      {/* third column */}
-      <div className={styles['product-detail-summary__item']}>
-        <div style={{ height: '100%', width: '100%' }}>
-          <ProductTokenWeightChangeOverTimeGraph
-            product={product}
-            isBenchmark={true}
-            yAxisOverride={{ label: { enabled: false } }}
-          />
-        </div>
-      </div>
-
-      {/* fourth column */}
-      {comparingProduct && (
-        <div className={styles['product-detail-summary__item']}>
-          <div style={{ height: '100%', width: '100%' }}>
-            <ProductTokenWeightChangeOverTimeGraph
-              product={comparingProduct}
-              yAxisOverride={{ label: { enabled: false } }}
-            />
-          </div>
-        </div>
-      )}
-
-      {/* sixth row */}
-      {/* first column */}
-      <div className={styles['product-detail-summary__item-vertical']}>
-        Return distribution
-      </div>
-
-      {/* second column */}
-      <div className={styles['product-detail-summary__item']}>
-        {product.timeSeries?.length ? (
-          <div style={{ height: '100%', width: '100%' }}>
-            <ReturnDistributionGraph
-              marketValues={product.timeSeries.map((x) => x.sharePrice)}
-              yAxisOverride={{ title: { enabled: false } }}
-            />
-          </div>
-        ) : (
-          <>No Data</>
-        )}
-      </div>
-
-      {/* third column */}
-      <div className={styles['product-detail-summary__item']}>
-        {product.timeSeries?.length ? (
-          <div style={{ height: '100%', width: '100%' }}>
-            <ReturnDistributionGraph
-              yAxisOverride={{ title: { enabled: false } }}
-              marketValues={product.timeSeries.map((x) => x.hodlSharePrice)}
-            />
-          </div>
-        ) : (
-          <>No Data</>
-        )}
-      </div>
-
-      {/* fourth column */}
-      {comparingProduct && (
-        <div className={styles['product-detail-summary__item']}>
-          {comparingProduct.timeSeries?.length ? (
-            <div style={{ height: '100%', width: '100%' }}>
-              <ReturnDistributionGraph
-                yAxisOverride={{ title: { enabled: false } }}
-                marketValues={comparingProduct.timeSeries.map(
-                  (x) => x.sharePrice
-                )}
-              />
+      {/* Collapsible metrics section with icon toggle */}
+      <Collapse
+        defaultActiveKey={['metrics']}
+        className={styles['product-detail-summary__collapse']}
+        bordered={false}
+      >
+        <Panel
+          key="metrics"
+          header={
+            <div className={styles['product-detail-summary__title']}>
+              <Tooltip title="This pool is new and does not have enough data for live financial metrics. This is a simulated performance metric analysis based on the test period (see factsheet). Once the pool has been running for a while it will become live metrics">
+                <Title level={4} style={{ margin: 0 }}>
+                  Simulated HODL Performance Metric Analysis {'  '}
+                  <WarningOutlined
+                    type="warning"
+                    style={{ color: 'orange' }}
+                  />{' '}
+                </Title>
+              </Tooltip>
             </div>
+          }
+          extra={metricsToggle}
+        >
+          {metricsView === 'table' ? (
+            isLoading ? (
+              <Skeleton active />
+            ) : simulationRunBreakdown ? (
+              <AnalysisSimplifiedBreakdownTable
+                simulationRunBreakdowns={[simulationRunBreakdown]}
+                benchmarkBreakdown={null}
+                visibleMetrics={visibleMetrics}
+              />
+            ) : (
+              <Text type="secondary">No Data</Text>
+            )
           ) : (
-            <>No Data</>
+            <>
+              <Card
+                className={styles['product-detail-summary__cardDesktop']}
+                title={
+                  <div
+                    className={styles['product-detail-summary__cardTitleRow']}
+                  >
+                    Metric:{' '}
+                    <ProductDetailDropdown
+                      items={returnAnalysisDropdownOptions}
+                      isLoading={isLoading}
+                      onChangeItem={handleReturnAnalysisChange}
+                    />
+                  </div>
+                }
+              >
+                {isLoading ? (
+                  <Skeleton active />
+                ) : (
+                  <Row gutter={[16, 16]}>
+                    <Col xs={24} md={8}>
+                      <Statistic
+                        title="Product"
+                        value={
+                          isFiniteNumber(productReturnValue)
+                            ? productReturnValue
+                            : undefined
+                        }
+                        precision={2}
+                      />
+                      <MetricProgress
+                        label="Position in range"
+                        value={productReturnValue}
+                        thresholds={selectedReturnThreshold}
+                        allThresholds={returnAnalysisThresholds}
+                        helpText={selectedReturnThreshold?.tooltipDescription}
+                      />
+                    </Col>
+
+                    <Col xs={24} md={8}>
+                      <Statistic
+                        title="Benchmark"
+                        value={
+                          isFiniteNumber(benchmarkReturnValue)
+                            ? benchmarkReturnValue
+                            : undefined
+                        }
+                        precision={2}
+                      />
+                      <MetricProgress
+                        label="Position in range"
+                        value={benchmarkReturnValue}
+                        thresholds={selectedReturnThreshold}
+                        allThresholds={returnAnalysisThresholds}
+                        helpText={selectedReturnThreshold?.tooltipDescription}
+                      />
+                    </Col>
+
+                    <Col xs={24} md={8}>
+                      <div
+                        className={styles['product-detail-summary__deltaBlock']}
+                      >
+                        <Text type="secondary">
+                          Delta (Product − Benchmark)
+                        </Text>
+                        <div
+                          className={styles['product-detail-summary__deltaTag']}
+                        >
+                          {deltaTag}
+                        </div>
+                        <Divider
+                          className={
+                            styles['product-detail-summary__dividerCompact']
+                          }
+                        />
+                        <Space direction="vertical" size={4}>
+                          <Text type="secondary">
+                            Product: <Text>{format2(productReturnValue)}</Text>
+                          </Text>
+                          <Text type="secondary">
+                            Benchmark:{' '}
+                            <Text>{format2(benchmarkReturnValue)}</Text>
+                          </Text>
+                        </Space>
+                      </div>
+                    </Col>
+                  </Row>
+                )}
+              </Card>
+
+              {/* Benchmark-relative metric (product only) */}
+              <Card
+                className={styles['product-detail-summary__cardDesktop']}
+                title={
+                  <div
+                    className={styles['product-detail-summary__cardTitleRow']}
+                  >
+                    <span style={{ marginRight: 8 }}>Benchmark metric: </span>
+                    <ProductDetailDropdown
+                      items={benchmarkReturnAnalysisDropdownOptions}
+                      isLoading={isLoading}
+                      onChangeItem={handleBenchmarkAnalysisChange}
+                    />
+                  </div>
+                }
+              >
+                {isLoading ? (
+                  <Skeleton active />
+                ) : (
+                  <Row gutter={[16, 16]}>
+                    <Col xs={24} md={12}>
+                      <Statistic
+                        title="Product"
+                        value={
+                          isFiniteNumber(
+                            selectedBenchmarkReturnAnalysis?.metricValue
+                          )
+                            ? selectedBenchmarkReturnAnalysis?.metricValue
+                            : undefined
+                        }
+                        precision={2}
+                      />
+                      <MetricProgress
+                        label="Position in range"
+                        value={selectedBenchmarkReturnAnalysis?.metricValue}
+                        thresholds={selectedBenchmarkRelThreshold}
+                        allThresholds={benchmarkReturnAnalysisThresholds}
+                        helpText={
+                          selectedBenchmarkRelThreshold?.tooltipDescription
+                        }
+                      />
+                    </Col>
+
+                    <Col xs={24} md={12}>
+                      <div
+                        className={styles['product-detail-summary__naBlock']}
+                      >
+                        <Text type="secondary">
+                          {selectedBenchmarkRelThreshold?.tooltipDescription}
+                        </Text>
+                      </div>
+                    </Col>
+                  </Row>
+                )}
+              </Card>
+            </>
+          )}
+        </Panel>
+      </Collapse>
+
+      {/* Return distribution */}
+      <Card
+        className={styles['product-detail-summary__cardDesktop']}
+        title="Return distribution"
+        extra={
+          <Segmented
+            value={returnsView}
+            onChange={(v) => setReturnsView(v as 'product' | 'benchmark')}
+            options={[
+              { label: 'Product', value: 'product' },
+              { label: 'Benchmark', value: 'benchmark' },
+            ]}
+          />
+        }
+      >
+        <div className={styles['product-detail-summary__chart']}>
+          {ts.length > 0 ? (
+            <ReturnDistributionGraph
+              yAxisOverride={{ title: { enabled: false } }}
+              marketValues={
+                returnsView === 'benchmark'
+                  ? marketValuesBenchmark
+                  : marketValuesProduct
+              }
+            />
+          ) : (
+            <Text type="secondary">No Data</Text>
           )}
         </div>
-      )}
-    </>
+      </Card>
+    </div>
   );
 };

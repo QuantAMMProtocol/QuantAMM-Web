@@ -121,6 +121,14 @@ const TermsOfServiceGateModal: React.FC<TermsOfServiceGateModalProps> = ({
 
     setCookie(LOC_COOKIE, location || '');
 
+
+    if (!continueEnabled || location === 'uk') {
+      window.location.href = '/' + ROUTES.INELIGIBLEUSER;
+      return;
+    }
+
+    dispatch(setAcceptedTermsAndConditions(true));
+
     void runAuditLog({
       request: {
         timestamp: new Date().toLocaleString(undefined, {
@@ -129,23 +137,16 @@ const TermsOfServiceGateModal: React.FC<TermsOfServiceGateModalProps> = ({
         user: window.location.hostname,
         page: page + '-tos-gate',
         isMobile,
-        tosAgreement: acceptedTerms ? 'accepted' : 'not accepted',
+        tosAgreement: 'accepted', //this is always accepted if we reach here
       },
     });
 
-    if (!continueEnabled || location === 'uk') {
-      window.location.href = '/' + ROUTES.INELIGIBLEUSER;
-      return;
-    }
-
-    dispatch(setAcceptedTermsAndConditions(true));
     onClose();
   }, [
     location,
     runAuditLog,
     page,
     isMobile,
-    acceptedTerms,
     continueEnabled,
     dispatch,
     onClose,

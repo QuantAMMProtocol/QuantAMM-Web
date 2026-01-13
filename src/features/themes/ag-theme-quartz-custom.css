@@ -1,0 +1,58 @@
+/* -----------------------------
+   Dark Theme (custom palette)
+   ----------------------------- */
+.ag-theme-quartz-dark {
+  /* Map of requested “withParams” values to Quartz CSS variables. */
+  --ag-active-color: #E6CE97 !important;            /* accentColor */
+  --ag-background-color: #162536  !important;        /* backgroundColor */
+  --ag-foreground-color: #ffffff !important;        /* foregroundColor */
+  --ag-border-color: #E6CE975C !important;          /* borderColor */
+  --ag-secondary-border-color: #E6CE975C !important;
+
+  --ag-header-background-color: #0B1827 !important; /* headerBackgroundColor */
+  --ag-control-panel-background-color: #13202F !important; /* chromeBackgroundColor */
+  --ag-tooltip-background-color: #13202F !important;       /* chromeBackgroundColor */
+
+
+  /* Ensure consistent text colour in header areas even if your core CSS doesn’t define these vars. */
+  --ag-header-foreground-color: var(--ag-foreground-color);
+  --ag-secondary-foreground-color: var(--ag-foreground-color);
+
+  /* browserColorScheme */
+  color-scheme: dark;
+}
+
+/* Ensure odd-row colour is actually applied (AG Grid typically adds .ag-row-odd automatically). */
+.ag-theme-quartz-dark .ag-row-odd {
+  background-color: var(--ag-odd-row-background-color);
+}
+
+/* wrapperBorder: false — remove the outer border drawn by core AG Grid CSS. */
+.ag-theme-quartz-dark .ag-root-wrapper,
+.ag-theme-quartz-dark .ag-root-wrapper-body {
+  border: none;
+}
+
+/* headerRowBorder: true — draw a separator below the header area. */
+.ag-theme-quartz-dark .ag-header {
+  border-bottom: var(--ag-borders) var(--ag-border-color);
+}
+
+/* columnBorder: false — remove vertical separators between columns/cells.
+   Note: the core CSS sets these borders; Quartz mostly controls colours via CSS variables. */
+.ag-theme-quartz-dark .ag-cell,
+.ag-theme-quartz-dark .ag-header-cell,
+.ag-theme-quartz-dark .ag-header-group-cell {
+  border-right: none !important;
+}
+
+/* Some AG Grid versions draw header separators using pseudo-elements. */
+.ag-theme-quartz-dark .ag-header-cell::after,
+.ag-theme-quartz-dark .ag-header-group-cell::after {
+  display: none !important;
+}
+
+/* Keep horizontal separators consistent with your custom border colour. */
+.ag-theme-quartz-dark.ag-theme-quartz-custom-dark .ag-row .ag-cell {
+  border-bottom-color: var(--ag-border-color);
+}

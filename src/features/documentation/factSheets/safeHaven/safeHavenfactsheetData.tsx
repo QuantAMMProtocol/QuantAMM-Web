@@ -258,7 +258,7 @@ inflation and currency devaluation.`,
         Gradient Descent. This was performed by the QuantAMM team using the
         QuantAMM simulator framework. A parameter set was selected that
         maximised the Sharpe Ratio of the strategy. This was selected over other
-        objectives such as maximising Ulcer or Calmer Ratios as the parameter
+        objectives such as maximising Ulcer or Calmar Ratios as the parameter
         set showed better test set statistics. Random 1038-day length windows
         were selected within the training price range and optimisation was
         performed via stochastic gradient descent for 6000 steps with batches of
