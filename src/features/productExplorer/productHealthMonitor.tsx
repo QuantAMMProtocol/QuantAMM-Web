@@ -1,4 +1,3 @@
-import React from 'react';
 import { CURRENT_LIVE_FACTSHEETS } from '../documentation/factSheets/liveFactsheets';
 import { ProductDetailHealthMonitor } from '../productDetail/productDetailHealthMonitor';
 import { Grid } from 'antd';
@@ -6,7 +5,7 @@ import { Grid } from 'antd';
 
 const { useBreakpoint } = Grid;
 
-export const ProductHealthMonitor: React.FC = () => {
+export default function ProductHealthMonitor() {
   const { factsheets } = CURRENT_LIVE_FACTSHEETS;
   const screens = useBreakpoint();
   const isMobile = !screens.lg && !screens.xl && !screens.xxl;
@@ -224,3 +223,5 @@ export const ProductHealthMonitor: React.FC = () => {
     </div>
   );
 };
+
+export { ProductHealthMonitor };

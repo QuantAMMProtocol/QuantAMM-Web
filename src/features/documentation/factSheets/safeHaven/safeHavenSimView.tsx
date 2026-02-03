@@ -6,7 +6,7 @@ import { SimulationRunBreakdown } from '../../../simulationResults/simulationRes
 
 const { TabPane } = Tabs;
 
-export function SafeHavenSimulatorExample() {
+export default function SafeHavenSimulatorExample() {
   const [key, setKey] = useState<string>('2');
   const [breakdowns, setBreakdowns] = useState<SimulationRunBreakdown[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -116,3 +116,5 @@ export function SafeHavenSimulatorExample() {
     </div>
   );
 }
+
+export { SafeHavenSimulatorExample };

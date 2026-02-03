@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { Suspense, useCallback, useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { Layout } from 'antd';
 import { ModuleRegistry } from 'ag-grid-community';
@@ -23,17 +23,12 @@ import { ROUTES } from './routesEnum';
 
 import style from './app.module.scss';
 
-export interface Success {
-  data: CoinPrice[];
-}
-
 const { Content, Header } = Layout;
 
 const isRoute = (value: string): value is ROUTES =>
   (Object.values(ROUTES) as string[]).includes(value);
 
-
-const AG_GRID_LICENSE_KEY = process.env.AG_GRID_LICENCE_KEY ?? '';
+const AG_GRID_LICENSE_KEY = import.meta.env.AG_GRID_LICENCE_KEY ?? '';
 
 const initialiseSimsToRun = (): AppThunk => (dispatch, getState) => {
   if (getState().simRunner.simulationsToRun.length === 0) {
@@ -55,72 +50,79 @@ function App() {
   const [loadHistoricPrices] = useLoadHistoricDailyPricesMutation();
 
   const loadPriceHistoryAsync = useCallback(
-    (): AppThunk =>
-      async (dispatch, getState) => {
-        const {
-          availableCoins,
-          coinPriceHistoryLoaded,
-          coinPriceHistoryLoadedStatus,
-        } = getState().simConfig;
+    (): AppThunk => async (dispatch, getState) => {
+      const {
+        availableCoins,
+        coinPriceHistoryLoaded,
+        coinPriceHistoryLoadedStatus,
+      } = getState().simConfig;
 
-        if (!coinPriceHistoryLoaded && coinPriceHistoryLoadedStatus === 'pending') {
-          dispatch(updateCoinPriceHistoryLoadedStatus('loading'));
+      if (
+        !coinPriceHistoryLoaded &&
+        coinPriceHistoryLoadedStatus === 'pending'
+      ) {
+        dispatch(updateCoinPriceHistoryLoadedStatus('loading'));
 
-          try {
-            // 1) Fire off all the requests in parallel
-            const promises = availableCoins.map(async (coin) => {
-              const data = await loadHistoricPrices({
-                coinCode: coin.coinCode,
-              }).unwrap();
+        try {
+          // 1) Fire off all the requests in parallel
+          const promises = availableCoins.map(async (coin) => {
+            const data = await loadHistoricPrices({
+              coinCode: coin.coinCode,
+            }).unwrap();
 
-              const fullPriceMap = new Map<number, CoinPrice>();
-              const timesteps = new Map<number, ReturnTimeStep>();
+            const fullPriceMap = new Map<number, CoinPrice>();
+            const timesteps = new Map<number, ReturnTimeStep>();
 
-              data.forEach((p, i) => {
-                fullPriceMap.set(p.unix, p);
-                const ret = i === 0 ? 0 : p.close / data[i - 1].close - 1;
-                timesteps.set(p.unix, {
-                  date: p.date,
-                  unix: p.unix,
-                  return: ret,
-                });
+            data.forEach((p, i) => {
+              fullPriceMap.set(p.unix, p);
+              const ret = i === 0 ? 0 : p.close / data[i - 1].close - 1;
+              timesteps.set(p.unix, {
+                date: p.date,
+                unix: p.unix,
+                return: ret,
               });
+            });
 
-              return {
+            return {
+              coin,
+              dailyPriceHistory: data,
+              dailyPriceHistoryMap: fullPriceMap,
+              dailyReturns: timesteps,
+            };
+          });
+
+          const results = await Promise.all(promises);
+
+          batch(() => {
+            results.forEach(
+              ({
                 coin,
-                dailyPriceHistory: data,
-                dailyPriceHistoryMap: fullPriceMap,
-                dailyReturns: timesteps,
-              };
-            });
-
-            const results = await Promise.all(promises);
-
-            batch(() => {
-              results.forEach(
-                ({ coin, dailyPriceHistory, dailyPriceHistoryMap, dailyReturns }) => {
-                  dispatch(
-                    updateCoinPriceHistory({
-                      coinCode: coin.coinCode,
-                      coinName: coin.coinName,
-                      dailyPriceHistory,
-                      dailyPriceHistoryMap,
-                      dailyReturns,
-                      coinComparisons: new Map(),
-                      deploymentByChain: coin.deploymentByChain,
-                    })
-                  );
-                }
-              );
-              dispatch(updateCoinPriceHistoryLoaded(true));
-              dispatch(updateCoinPriceHistoryLoadedStatus('loaded'));
-            });
-          } catch (e) {
-            dispatch(updateCoinPriceHistoryLoadedStatus('pending'));
-            throw e;
-          }
+                dailyPriceHistory,
+                dailyPriceHistoryMap,
+                dailyReturns,
+              }) => {
+                dispatch(
+                  updateCoinPriceHistory({
+                    coinCode: coin.coinCode,
+                    coinName: coin.coinName,
+                    dailyPriceHistory,
+                    dailyPriceHistoryMap,
+                    dailyReturns,
+                    coinComparisons: new Map(),
+                    deploymentByChain: coin.deploymentByChain,
+                  })
+                );
+              }
+            );
+            dispatch(updateCoinPriceHistoryLoaded(true));
+            dispatch(updateCoinPriceHistoryLoadedStatus('loaded'));
+          });
+        } catch (e) {
+          dispatch(updateCoinPriceHistoryLoadedStatus('pending'));
+          throw e;
         }
-      },
+      }
+    },
     [loadHistoricPrices]
   );
 
@@ -154,7 +156,9 @@ function App() {
           <MenuComponent initialise={initialisePage} />
         </Header>
         <Content>
-          <Outlet />
+          <Suspense fallback={<div />}>
+            <Outlet />
+          </Suspense>
         </Content>
       </Layout>
     </AntDesignThemeProvider>

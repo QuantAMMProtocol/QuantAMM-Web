@@ -5,7 +5,7 @@ const { Title } = Typography;
 
 const { useBreakpoint } = Grid;
 
-export function CompanyPage() {
+export default function CompanyPage() {
   const screens = useBreakpoint();
   const isMobile = !screens.lg && !screens.xl && !screens.xxl;
 

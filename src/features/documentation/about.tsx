@@ -6,7 +6,7 @@ import { SimulationRunBreakdown } from '../simulationResults/simulationResultSum
 
 const { TabPane } = Tabs;
 
-export function About() {
+export default function About() {
   const [key, setKey] = useState<string>('2');
   const [breakdowns, setBreakdowns] = useState<SimulationRunBreakdown[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -117,3 +117,4 @@ export function About() {
     </div>
   );
 }
+export { About };

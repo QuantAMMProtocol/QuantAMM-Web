@@ -127,7 +127,7 @@ const submenuKeys = [
   'MinVariance',
 ];
 
-export function Documentation() {
+export default function Documentation() {
   const { id } = useParams();
   const [openKeys, setOpenKeys] = useState(rootSubmenuKeys);
   const [current, updateCurrent] = useState(id ? id : 'AutomatedMarketMakers');
@@ -213,3 +213,5 @@ export function Documentation() {
     </div>
   );
 }
+
+export { Documentation };

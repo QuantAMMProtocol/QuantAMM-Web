@@ -1,151 +1,148 @@
-import { Navigate, createBrowserRouter } from 'react-router-dom';
+import {
+  About,
+  ArbitrumMacroFactSheet,
+  ArbitrumMacroSimulatorExample,
+  BaseMacroFactSheet,
+  BaseMacroSimulatorExample,
+  CoinData,
+  CompanyPage,
+  ContactCompany,
+  Documentation,
+  IneligibleUser,
+  LandingPage,
+  ProductDetail,
+  ProductExplorer,
+  ProductHealthMonitor,
+  Research,
+  SafeHavenFactSheet,
+  SafeHavenSimulatorExample,
+  SimulationRunner,
+  SimulationSavedResultComparison,
+  SonicMacroFactSheet,
+  SonicMacroSimulatorExample,
+  TermsOfService,
+  TruflationBitcoinFactSheet,
+  TruflationBitcoinSimulatorExample,
+} from './routeComponents';
+
+import {
+  Navigate,
+  createBrowserRouter,
+  isRouteErrorResponse,
+  useRouteError,
+} from 'react-router-dom';
 import App from './App';
-import { CoinData } from './features/coinData/coinData';
-import { SimulationRunner } from './features/simulationRunner/simulationRunner';
-import { ProductDetail, ProductExplorer } from './features';
-import { About } from './features/documentation/about';
-import { Documentation } from './features/documentation/documentation';
-import { SimulationSavedResultComparison } from './features/simulationResults/resultComparisonTab/simulationSavedResultComparison';
 import { ROUTES } from './routesEnum';
-import LandingPage from './features/documentation/landing/landingPage';
-import { Research } from './features/documentation/research';
-import { CompanyPage } from './features/documentation/company';
-import { ContactCompany } from './features/documentation/landing/desktop/contactCompany';
-import TermsOfService from './features/documentation/landing/newTermsOfService';
-import InegligibleUser from './features/documentation/landing/IneligableUserLanding';
-import SafeHavenFactSheet from './features/documentation/factSheets/safeHaven/safeHaven';
-import BaseMacroFactSheet from './features/documentation/factSheets/baseMacro/baseMacro';
-import { SafeHavenSimulatorExample } from './features/documentation/factSheets/safeHaven/safeHavenSimView';
-import { BaseMacroSimulatorExample } from './features/documentation/factSheets/baseMacro/baseMacroSimView';
-import SonicMacroFactSheet from './features/documentation/factSheets/sonicMacro/sonicMacro';
-import { SonicMacroSimulatorExample } from './features/documentation/factSheets/sonicMacro/sonicMacroSimView';
-import AbritrumMacroFactSheet from './features/documentation/factSheets/arbitrumMacro/arbitrumMacro';
-import { ArbitrumMacroSimulatorExample } from './features/documentation/factSheets/arbitrumMacro/arbitrumMacroSimView';
-import { ProductHealthMonitor } from './features/productExplorer/productHealthMonitor';
-import TruflationBitcoinFactSheet from './features/documentation/factSheets/truflationBitcoin/truflationBitcoin';
-import { TruflationBitcoinSimulatorExample } from './features/documentation/factSheets/truflationBitcoin/truflationBitcoinSimView';
 
 const BASE_ROUTE = '/';
+
+function RouteErrorBoundary() {
+  const error = useRouteError();
+
+  if (isRouteErrorResponse(error)) {
+    return (
+      <div style={{ padding: 16 }}>
+        <h2>
+          {error.status} {error.statusText}
+        </h2>
+        <p>
+          {typeof error.data === 'string'
+            ? error.data
+            : 'Something went wrong.'}
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ padding: 16 }}>
+      <h2>Something went wrong.</h2>
+    </div>
+  );
+}
 
 export const routes = createBrowserRouter([
   {
     path: BASE_ROUTE,
     element: <App />,
+    errorElement: <RouteErrorBoundary />,
     children: [
-      {
-        index: true,
-        element: <LandingPage />,
-      },
-      {
-        path: ROUTES.HOME,
-        element: <Navigate to={BASE_ROUTE} replace />,
-      },
+      { index: true, element: <LandingPage /> },
+      { path: ROUTES.HOME, element: <Navigate to={BASE_ROUTE} replace /> },
+
       {
         path: ROUTES.DOCUMENTATION,
         children: [
-          {
-            index: true,
-            element: <Documentation />,
-          },
-          {
-            path: ':id',
-            element: <Documentation />,
-          },
+          { index: true, element: <Documentation /> },
+          { path: ':id', element: <Documentation /> },
         ],
       },
+
       {
         path: ROUTES.PRODUCT_EXPLORER,
         children: [
-          {
-            index: true,
-            element: <ProductExplorer />,
-          },
-          {
-            path: ':chain/:id',
-            element: <ProductDetail />,
-          },
+          { index: true, element: <ProductExplorer /> },
+          { path: ':chain/:id', element: <ProductDetail /> },
         ],
       },
+
       {
-        path: 'factsheet/' + ROUTES.SAFEHAVENFACTSHEET,
-        element:<SafeHavenFactSheet />,
+        path: `factsheet/${ROUTES.SAFEHAVENFACTSHEET}`,
+        element: <SafeHavenFactSheet />,
       },
       {
-        path: 'factsheet/example/' + ROUTES.SAFEHAVENFACTSHEET,
-        element:<SafeHavenSimulatorExample />,
+        path: `factsheet/${ROUTES.BASEMACROFACTSHEET}`,
+        element: <BaseMacroFactSheet />,
       },
       {
-        path: 'factsheet/example/' + ROUTES.BASEMACROFACTSHEET,
-        element:<BaseMacroSimulatorExample />,
+        path: `factsheet/${ROUTES.SONICMACROFACTSHEET}`,
+        element: <SonicMacroFactSheet />,
       },
       {
-        path: 'factsheet/example/' + ROUTES.SONICMACROFACTSHEET,
-        element:<SonicMacroSimulatorExample />,
+        path: `factsheet/${ROUTES.ARBITRUMMACROFACTSHEET}`,
+        element: <ArbitrumMacroFactSheet />,
       },
       {
-        path: 'factsheet/example/' + ROUTES.ARBITRUMMACROFACTSHEET,
-        element:<ArbitrumMacroSimulatorExample />,
+        path: `factsheet/${ROUTES.TRUFLATIONBITCOINFACTSHEET}`,
+        element: <TruflationBitcoinFactSheet />,
+      },
+
+      {
+        path: `factsheet/example/${ROUTES.SAFEHAVENFACTSHEET}`,
+        element: <SafeHavenSimulatorExample />,
       },
       {
-        path: 'factsheet/example/' + ROUTES.TRUFLATIONBITCOINFACTSHEET,
-        element:<TruflationBitcoinSimulatorExample />,
+        path: `factsheet/example/${ROUTES.BASEMACROFACTSHEET}`,
+        element: <BaseMacroSimulatorExample />,
       },
       {
-        path: 'factsheet/' + ROUTES.BASEMACROFACTSHEET,
-        element:<BaseMacroFactSheet />,
+        path: `factsheet/example/${ROUTES.SONICMACROFACTSHEET}`,
+        element: <SonicMacroSimulatorExample />,
       },
       {
-        path: 'factsheet/' + ROUTES.SONICMACROFACTSHEET,
-        element:<SonicMacroFactSheet />,
+        path: `factsheet/example/${ROUTES.ARBITRUMMACROFACTSHEET}`,
+        element: <ArbitrumMacroSimulatorExample />,
       },
       {
-        path: 'factsheet/' + ROUTES.ARBITRUMMACROFACTSHEET,
-        element:<AbritrumMacroFactSheet />,
+        path: `factsheet/example/${ROUTES.TRUFLATIONBITCOINFACTSHEET}`,
+        element: <TruflationBitcoinSimulatorExample />,
       },
-      {
-        path: 'factsheet/' + ROUTES.TRUFLATIONBITCOINFACTSHEET,
-        element:<TruflationBitcoinFactSheet />,
-      },
-      {
-        path: ROUTES.EXAMPLES,
-        element: <About />,
-      },
-      {
-        path: ROUTES.COMPANY,
-        element: <CompanyPage />,
-      },
-      {
-        path: ROUTES.INELIGIBLEUSER,
-        element: <InegligibleUser />,
-      },
-      {
-        path: ROUTES.RESEARCH,
-        element: <Research />,
-      },
-      {
-        path: ROUTES.COINS,
-        element: <CoinData />,
-      },
-      {
-        path:ROUTES.CONTACT,
-        element: <ContactCompany />
-      },
-      {
-        path: ROUTES.SIMULATION_RUNNER,
-        element: <SimulationRunner />,
-      },
+
+      { path: ROUTES.EXAMPLES, element: <About /> },
+      { path: ROUTES.COMPANY, element: <CompanyPage /> },
+      { path: ROUTES.INELIGIBLEUSER, element: <IneligibleUser /> },
+      { path: ROUTES.RESEARCH, element: <Research /> },
+      { path: ROUTES.COINS, element: <CoinData /> },
+      { path: ROUTES.CONTACT, element: <ContactCompany /> },
+      { path: ROUTES.SIMULATION_RUNNER, element: <SimulationRunner /> },
       {
         path: ROUTES.SIMULATION_COMPARER,
         element: <SimulationSavedResultComparison />,
       },
-      {
-        path: ROUTES.TOS,
-        element: <TermsOfService />,
-      },
-      {
-        path: ROUTES.HEALTH_MONITOR,
-        element: <ProductHealthMonitor />,
-      }
+      { path: ROUTES.TOS, element: <TermsOfService /> },
+      { path: ROUTES.HEALTH_MONITOR, element: <ProductHealthMonitor /> },
+
+      { path: '*', element: <Navigate to={BASE_ROUTE} replace /> },
     ],
   },
 ]);

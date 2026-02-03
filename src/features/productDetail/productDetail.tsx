@@ -16,7 +16,7 @@ import TermsOfServiceGateModal from '../documentation/landing/termsOfServiceModa
 
 const { useBreakpoint } = Grid;
 
-export const ProductDetail = () => {
+export default function ProductDetail() {
   const { chain, id } = useParams();
 
   const screens = useBreakpoint();
@@ -97,3 +97,5 @@ export const ProductDetail = () => {
     </>
   );
 };
+
+export { ProductDetail };

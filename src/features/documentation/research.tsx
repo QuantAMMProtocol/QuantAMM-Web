@@ -10,7 +10,7 @@ interface ResearchProps {
 
 const { useBreakpoint } = Grid;
 
-export function Research() {
+export default function Research() {
   const screens = useBreakpoint();
   const isMobile = !screens.lg && !screens.xl && !screens.xxl;
 
@@ -179,3 +179,5 @@ export function Research() {
     </div>
   );
 }
+
+export { Research };

@@ -61,7 +61,7 @@ export interface SeriesConfig {
   marker: Marker;
 }
 
-export function CoinData() {
+export default function CoinData() {
   const [currentCoin, setCurrentCoin] = useState('BTC');
   const availableCoins = useAppSelector(selectAvailableCoins);
   const coinLoadStatus = useAppSelector(selectCoinLoadStatus);
@@ -429,6 +429,5 @@ export function CoinData() {
     </div>
   );
 }
-/*
 
-*/
+export { CoinData };

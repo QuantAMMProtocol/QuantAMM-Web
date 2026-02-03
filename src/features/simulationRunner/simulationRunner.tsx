@@ -41,7 +41,7 @@ import { useRef, useState } from 'react';
 import { SimulatorOptions } from './simulationOptions';
 
 
-export function SimulationRunner() {
+export default function SimulationRunner() {
   const dispatch = useAppDispatch();
 
   const results = useAppSelector(selectSimulationRunBreakdowns);
@@ -375,3 +375,5 @@ export function SimulationRunner() {
     </div>
   );
 }
+
+export { SimulationRunner };

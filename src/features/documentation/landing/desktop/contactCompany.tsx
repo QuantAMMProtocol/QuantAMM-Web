@@ -3,7 +3,7 @@ import { Typography } from "antd";
 const { Title } = Typography;
 
 
-export function ContactCompany(){
+export default function ContactCompany(){
     return <div
     style={{
       padding: '20px',
@@ -25,3 +25,5 @@ export function ContactCompany(){
     <p>Twitter: <a href="https://x.com/QuantAMMDeFi">@QuantAMMDefi</a></p>
   </div>
 }
+
+export { ContactCompany };

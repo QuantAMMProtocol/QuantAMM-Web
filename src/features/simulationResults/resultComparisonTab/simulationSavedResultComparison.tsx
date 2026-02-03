@@ -11,7 +11,7 @@ import { PoolDeploymentConfigReview } from '../../simulationRunner/simulationDep
 
 const { TabPane } = Tabs;
 
-export function SimulationSavedResultComparison() {
+export default function SimulationSavedResultComparison() {
   const savedBreakdowns = useAppSelector(selectSimulationResults);
   const savedSelectedBreakdowns = useAppSelector(
     selectSelectedSimulationResults
@@ -104,3 +104,5 @@ export function SimulationSavedResultComparison() {
     </div>
   );
 }
+
+export { SimulationSavedResultComparison };

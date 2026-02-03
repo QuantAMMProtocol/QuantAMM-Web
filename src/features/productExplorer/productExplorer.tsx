@@ -17,7 +17,7 @@ import { ProductExplorerError } from './productExplorerError';
 import { ProductItemGrid } from './productItem';
 import TermsOfServiceGateModal from '../documentation/landing/termsOfServiceModal';
 
-export const ProductExplorer = () => {
+export default function ProductExplorer() {
   const dispatch = useAppDispatch();
   const [horizontalView, setHorizontalView] = useState(true);
 
@@ -82,4 +82,6 @@ export const ProductExplorer = () => {
     
   );
 };
+
+export { ProductExplorer };
 
