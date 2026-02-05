@@ -44,7 +44,7 @@ export function PowerChannelUpdateRule(props: DocProps) {
             </Row>
             <Row>
               <Col span={24}>
-                <div hidden={eli5 != 'ELI5' || props.hideImage}>
+                <div hidden={eli5 !== 'ELI5' || props.hideImage}>
                   <Row>
                     <Col span={8}>
                       <img
@@ -62,14 +62,18 @@ export function PowerChannelUpdateRule(props: DocProps) {
                     </Col>
                   </Row>
                 </div>
-                <div hidden={eli5 != 'ELI5' || (eli5 == 'ELI5' && !props.hideImage)}>
+                <div
+                  hidden={
+                    eli5 !== 'ELI5' || (eli5 === 'ELI5' && !props.hideImage)
+                  }
+                >
                   <Row>
                     <Col span={24}>
                       <Eli5 strategy="POWER_CHANNEL" />
                     </Col>
                   </Row>
                 </div>
-                <div hidden={eli5 == 'ELI5'}>
+                <div hidden={eli5 === 'ELI5'}>
                   <h3>Summary</h3>
                   <p>
                     This update rule applies a soft form of
@@ -130,7 +134,7 @@ export function PowerChannelUpdateRule(props: DocProps) {
                   <h3>Parameter Guide {'&'} Return Profile Summary</h3>
                   <p>
                     {
-                      rules.find((x) => x.updateRuleName == 'Power Channel')
+                      rules.find((x) => x.updateRuleName === 'Power Channel')
                         ?.updateRuleResultProfileSummary
                     }
                   </p>

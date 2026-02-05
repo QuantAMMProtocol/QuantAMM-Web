@@ -1,3 +1,4 @@
+// TODO CH split into subcomponents
 import {
   Button,
   Card,
@@ -565,10 +566,17 @@ export function TruflationFactSheetDesktop(props: FactsheetDesktopProps) {
               >
                 <AnalysisSimplifiedBreakdownTable
                   simulationRunBreakdowns={
-                    loading ? [] : 
-                    period == props.model.trainPeriod ? [breakdowns[btfTrain]] : [breakdowns[btf]]
+                    loading
+                      ? []
+                      : period === props.model.trainPeriod
+                        ? [breakdowns[btfTrain]]
+                        : [breakdowns[btf]]
                   }
-                  benchmarkBreakdown={period == props.model.trainPeriod ? breakdowns[hodlTrain] : breakdowns[hodl]}
+                  benchmarkBreakdown={
+                    period === props.model.trainPeriod
+                      ? breakdowns[hodlTrain]
+                      : breakdowns[hodl]
+                  }
                   visibleMetrics={[
                     'Absolute Return (%)',
                     "Annualized Jensen's Alpha (%)",
@@ -714,13 +722,13 @@ export function TruflationFactSheetDesktop(props: FactsheetDesktopProps) {
                       label: x.label,
                       children: (
                         <>
-                          <div hidden={faqEli5 != 'ELI5'}>
+                          <div hidden={faqEli5 !== 'ELI5'}>
                             {x.eli5Description}
                           </div>
-                          <div hidden={faqEli5 != 'Crypto Native'}>
+                          <div hidden={faqEli5 !== 'Crypto Native'}>
                             {x.cryptoNativeDescription}
                           </div>
-                          <div hidden={faqEli5 != 'Quant'}>
+                          <div hidden={faqEli5 !== 'Quant'}>
                             {x.quantDescription}
                           </div>
                         </>

@@ -1,3 +1,4 @@
+// TODO CH split into subcomponents
 import { Button, Card, Col, Collapse, Row, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
 import { useMemo } from 'react';
@@ -95,10 +96,13 @@ export function FactSheetDesktop(props: FactsheetDesktopProps) {
       <Radio.Button value={props.model.defaultPeriod[0]}>
         {props.model.defaultPeriod[1]}
       </Radio.Button>
-      {props.model.alternatePeriod[0] != '' ? 
-      <Radio.Button value={props.model.alternatePeriod[0]}>
-        {props.model.alternatePeriod[1]}
-      </Radio.Button> : <></>}
+      {props.model.alternatePeriod[0] !== '' ? (
+        <Radio.Button value={props.model.alternatePeriod[0]}>
+          {props.model.alternatePeriod[1]}
+        </Radio.Button>
+      ) : (
+        <></>
+      )}
     </Radio.Group>
   );
 
@@ -410,13 +414,13 @@ export function FactSheetDesktop(props: FactsheetDesktopProps) {
                       label: x.label,
                       children: (
                         <>
-                          <div hidden={faqEli5 != 'ELI5'}>
+                          <div hidden={faqEli5 !== 'ELI5'}>
                             {x.eli5Description}
                           </div>
-                          <div hidden={faqEli5 != 'Crypto Native'}>
+                          <div hidden={faqEli5 !== 'Crypto Native'}>
                             {x.cryptoNativeDescription}
                           </div>
-                          <div hidden={faqEli5 != 'Quant'}>
+                          <div hidden={faqEli5 !== 'Quant'}>
                             {x.quantDescription}
                           </div>
                         </>
@@ -479,11 +483,13 @@ export function FactSheetDesktop(props: FactsheetDesktopProps) {
                       <Radio.Button value={props.model.defaultPeriod[0]}>
                         {props.model.defaultPeriod[1]}
                       </Radio.Button>
-                      {props.model.alternatePeriod[0] != '' ? 
+                      {props.model.alternatePeriod[0] !== '' ? (
                         <Radio.Button value={props.model.alternatePeriod[0]}>
                           {props.model.alternatePeriod[1]}
-                        </Radio.Button> : <></>
-                      }
+                        </Radio.Button>
+                      ) : (
+                        <></>
+                      )}
                     </Radio.Group>
                   </div>
                 }

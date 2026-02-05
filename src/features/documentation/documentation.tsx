@@ -133,7 +133,7 @@ export default function Documentation() {
   const [current, updateCurrent] = useState(id ? id : 'AutomatedMarketMakers');
 
   const onClick = (e: any) => {
-    if (submenuKeys.indexOf(e.key) != -1) {
+    if (submenuKeys.indexOf(e.key) !== -1) {
       updateCurrent(e.key);
     }
   };

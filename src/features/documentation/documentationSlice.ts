@@ -69,13 +69,13 @@ export const documentationSlice = createSlice({
       state.updateRuleTrainingFilter.startDate = action.payload;
     },
     setTrainingWindow: (state, action: PayloadAction<string>) => {
-      state.updateRuleTrainingFilter.endDate = action.payload;
+      state.updateRuleTrainingFilter.trainingWindow = action.payload;
     },
     setMemorySettings: (state, action: PayloadAction<string>) => {
       state.updateRuleTrainingFilter.memorySettings = action.payload;
     },
     setTradingFunction: (state, action: PayloadAction<string>) => {
-      state.updateRuleTrainingFilter.endDate = action.payload;
+      state.updateRuleTrainingFilter.tradingFunction = action.payload;
     },
     setStrategyRefresh: (state, action: PayloadAction<string>) => {
       state.updateRuleTrainingFilter.strategyRefresh = action.payload;

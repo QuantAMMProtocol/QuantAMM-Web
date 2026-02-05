@@ -39,7 +39,7 @@ export function QuantAMMPoolDescription(props: OptionalProps) {
               </Form.Item>
               </div>
             </Col>
-            <div hidden={eli5 != 'ELI5'}>
+            <div hidden={eli5 !== 'ELI5'}>
               <h3>How vaults and indexes normally work</h3>
               <p>
                 Crypto vaults usually involve an off-chain manager who decides
@@ -67,7 +67,7 @@ export function QuantAMMPoolDescription(props: OptionalProps) {
                 rebalancing continuously and efficiently.
               </p>
             </div>
-            <div hidden={eli5 == 'ELI5'}>
+            <div hidden={eli5 === 'ELI5'}>
               <Col span={24}>
                 <p>
                   <span>QuantAMM updates</span>

@@ -39,7 +39,7 @@ export function MinVarianceUpdateRule() {
             </Row>
             <Row>
               <Col span={24}>
-                <div hidden={eli5 != 'ELI5'}>
+                <div hidden={eli5 !== 'ELI5'}>
                   <Row>
                     <Col span={8}>
                       <img
@@ -57,7 +57,7 @@ export function MinVarianceUpdateRule() {
                     </Col>
                   </Row>
                 </div>
-                <div hidden={eli5 == 'ELI5'}>
+                <div hidden={eli5 === 'ELI5'}>
                   <h3>Summary</h3>
                   <p>
                     This rule uses a simple form of Mean-Variance Portfolio
@@ -163,7 +163,7 @@ export function MinVarianceUpdateRule() {
                   <h3>Parameter Guide {'&'} Return Profile Summary</h3>
                   <p>
                     {
-                      rules.find((x) => x.updateRuleName == 'Min Variance')
+                      rules.find((x) => x.updateRuleName === 'Min Variance')
                         ?.updateRuleResultProfileSummary
                     }
                   </p>

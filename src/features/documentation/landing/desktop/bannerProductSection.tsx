@@ -174,7 +174,7 @@ export function BannerProductSection({ productData }: ProductBannerProps) {
         </Row>
       ) : (
         <Row gutter={[24, 24]} justify="center">
-          {productData.map((tag, index) => {
+          {productData.map((tag) => {
             const key = `${tag.poolChain}:${tag.poolId}`;
             const keyLower = `${tag.poolChain}:${tag.poolId.toLowerCase()}`;
 
@@ -196,7 +196,7 @@ export function BannerProductSection({ productData }: ProductBannerProps) {
 
             return (
               <Col
-                key={index}
+                key={key}
                 xs={24}
                 sm={24}
                 md={24}

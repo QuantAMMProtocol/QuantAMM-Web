@@ -39,7 +39,7 @@ export function AntiMomentumUpdateRule() {
             </Row>
             <Row>
               <Col span={24} style={{ padding: '15px' }}>
-                <div hidden={eli5 != 'ELI5'}>
+                <div hidden={eli5 !== 'ELI5'}>
                   <Row>
                     <Col span={8}>
                       <img
@@ -57,7 +57,7 @@ export function AntiMomentumUpdateRule() {
                     </Col>
                   </Row>
                 </div>
-                <div hidden={eli5 == 'ELI5'}>
+                <div hidden={eli5 === 'ELI5'}>
                   <h3>Summary</h3>
                   <p>
                     Under anti-momentum updating, the weights change in negative
@@ -122,7 +122,7 @@ export function AntiMomentumUpdateRule() {
                   <h3>Parameter Guide {'&'} Return Profile Summary</h3>
                   <p>
                     {
-                      rules.find((x) => x.updateRuleName == 'AntiMomentum')
+                      rules.find((x) => x.updateRuleName === 'AntiMomentum')
                         ?.updateRuleResultProfileSummary
                     }
                   </p>

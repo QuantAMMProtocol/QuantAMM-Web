@@ -85,13 +85,13 @@ export function FAQ() {
                         label: x.label,
                         children: (
                           <>
-                            <div hidden={eli5 != 'ELI5'}>
+                            <div hidden={eli5 !== 'ELI5'}>
                               {x.eli5Description}
                             </div>
-                            <div hidden={eli5 != 'Crypto Native'}>
+                            <div hidden={eli5 !== 'Crypto Native'}>
                               {x.cryptoNativeDescription}
                             </div>
-                            <div hidden={eli5 != 'Quant'}>
+                            <div hidden={eli5 !== 'Quant'}>
                               {x.quantDescription}
                             </div>
                           </>

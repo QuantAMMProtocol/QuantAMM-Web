@@ -15,9 +15,9 @@ export function TruflationRegimeUpdateRule(props: DocProps) {
   const rules = useAppSelector(selectAvailableUpdateRules);
 
   const updateRuleProfileSummary =
-    rules.find((x) => x.updateRuleName == 'Truflation Inflation Regime')
+    rules.find((x) => x.updateRuleName === 'Truflation Inflation Regime')
       ?.updateRuleResultProfileSummary ??
-    rules.find((x) => x.updateRuleName == 'Truflation Regime Update Rule')
+    rules.find((x) => x.updateRuleName === 'Truflation Regime Update Rule')
       ?.updateRuleResultProfileSummary;
 
   return (
@@ -50,7 +50,7 @@ export function TruflationRegimeUpdateRule(props: DocProps) {
             </Row>
             <Row>
               <Col span={24} >
-                <div hidden={eli5 != 'ELI5' || props.hideImage}>
+                <div hidden={eli5 !== 'ELI5' || props.hideImage}>
                   <Row>
                     <Col span={8}>
                       <img
@@ -73,7 +73,7 @@ export function TruflationRegimeUpdateRule(props: DocProps) {
                 </div>
                 <div
                   hidden={
-                    eli5 != 'ELI5' || (eli5 == 'ELI5' && !props.hideImage)
+                    eli5 !== 'ELI5' || (eli5 === 'ELI5' && !props.hideImage)
                   }
                 >
                   <Row>
@@ -83,7 +83,9 @@ export function TruflationRegimeUpdateRule(props: DocProps) {
                   </Row>
                 </div>
                 <div
-                  hidden={eli5 == 'ELI5' || (eli5 == 'ELI5' && !props.hideImage)}
+                  hidden={
+                    eli5 === 'ELI5' || (eli5 === 'ELI5' && !props.hideImage)
+                  }
                 >
                   <h3 style={{marginTop:0}}>Summary</h3>
                   <p>

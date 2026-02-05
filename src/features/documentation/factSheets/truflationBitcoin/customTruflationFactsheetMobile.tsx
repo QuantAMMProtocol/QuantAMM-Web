@@ -1,3 +1,4 @@
+// TODO CH split into subcomponents
 import { Button, Card, Col, Collapse, Radio, Row, Space, Tooltip } from 'antd';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { SimulationRunBreakdown } from '../../../simulationResults/simulationResultSummaryModels';
@@ -150,7 +151,7 @@ export function TruflationFactSheetMobile(props: FactsheetDesktopProps) {
       <Radio.Button value={props.model.defaultPeriod[0]} style={{width:'100%'}}>
         {props.model.defaultPeriod[1]}
       </Radio.Button>
-      {props.model.alternatePeriod[0] != '' ? (
+      {props.model.alternatePeriod[0] !== '' ? (
         <Radio.Button value={props.model.alternatePeriod[0]} style={{width:'100%'}}>
           {props.model.alternatePeriod[1]}
         </Radio.Button>
@@ -458,7 +459,7 @@ export function TruflationFactSheetMobile(props: FactsheetDesktopProps) {
                                 `${category}_analysis` as
                                   | 'return_analysis'
                                   | 'benchmark_analysis'
-                              ]?.find((x) => x.metricName == metric)
+                              ]?.find((x) => x.metricName === metric)
                                 ?.metricValue ?? 0
                             ),
                           }}
@@ -469,7 +470,7 @@ export function TruflationFactSheetMobile(props: FactsheetDesktopProps) {
                                 `${category}_analysis` as
                                   | 'return_analysis'
                                   | 'benchmark_analysis'
-                              ]?.find((x) => x.metricName == metric)
+                              ]?.find((x) => x.metricName === metric)
                                 ?.metricValue ?? 'N/A'}
                         </span>
                       </Col>
@@ -484,7 +485,7 @@ export function TruflationFactSheetMobile(props: FactsheetDesktopProps) {
                                 `${category}_analysis` as
                                   | 'return_analysis'
                                   | 'benchmark_analysis'
-                              ]?.find((x) => x.metricName == metric)
+                              ]?.find((x) => x.metricName === metric)
                                 ?.metricValue ?? 0
                             ),
                           }}
@@ -495,7 +496,7 @@ export function TruflationFactSheetMobile(props: FactsheetDesktopProps) {
                                 `${category}_analysis` as
                                   | 'return_analysis'
                                   | 'benchmark_analysis'
-                              ]?.find((x) => x.metricName == metric)
+                              ]?.find((x) => x.metricName === metric)
                                 ?.metricValue ?? 'N/A'}
                         </span>
                       </Col>
@@ -807,13 +808,13 @@ export function TruflationFactSheetMobile(props: FactsheetDesktopProps) {
                       label: x.label,
                       children: (
                         <>
-                          <div hidden={faqEli5 != 'ELI5'}>
+                          <div hidden={faqEli5 !== 'ELI5'}>
                             {x.eli5Description}
                           </div>
-                          <div hidden={faqEli5 != 'Crypto Native'}>
+                          <div hidden={faqEli5 !== 'Crypto Native'}>
                             {x.cryptoNativeDescription}
                           </div>
-                          <div hidden={faqEli5 != 'Quant'}>
+                          <div hidden={faqEli5 !== 'Quant'}>
                             {x.quantDescription}
                           </div>
                         </>

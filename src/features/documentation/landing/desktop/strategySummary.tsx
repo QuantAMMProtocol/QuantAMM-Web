@@ -1,3 +1,4 @@
+// TODO CH split into subcomponents
 import { Button, Col, Row, Tooltip, Typography } from 'antd';
 import { ProductItemBackground } from '../../../productExplorer/productItem/productItemBackground';
 import { useEffect, useState } from 'react';
@@ -247,20 +248,20 @@ export function StrategySummary() {
                       marginTop: '2vh',
                     }}
                     hidden={
-                      (loading && breakdowns.length == 0) ||
+                      (loading && breakdowns.length === 0) ||
                       breakdowns.filter(
                         (x) =>
-                          x.simulationRun.updateRule.updateRuleName ==
+                          x.simulationRun.updateRule.updateRuleName ===
                           'Balancer Weighted'
-                      ).length == 0
+                      ).length === 0
                     }
                   >
                     <WeightChangeOverTimeGraph
                       simulationRunBreakdown={
                         breakdowns.filter(
                           (x) =>
-                            x.simulationRun.updateRule.updateRuleName ==
-                            'Balancer Weighted'
+                          x.simulationRun.updateRule.updateRuleName ===
+                          'Balancer Weighted'
                         )[0]
                       }
                       overrideChartTheme="ag-default-dark"
@@ -279,7 +280,7 @@ export function StrategySummary() {
                   >
                     QuantAMM{' '}
                     <span style={{ color: '#c7b283' }}>
-                      {strategy == 'AntiMomentum'
+                      {strategy === 'AntiMomentum'
                         ? 'Price Reversion'
                         : strategy}
                     </span>{' '}
@@ -298,19 +299,19 @@ export function StrategySummary() {
                   <div
                     style={{ paddingLeft: '70px', paddingRight: '30px' }}
                     hidden={
-                      (loading && breakdowns.length == 0) ||
+                      (loading && breakdowns.length === 0) ||
                       breakdowns.filter(
                         (x) =>
-                          x.simulationRun.updateRule.updateRuleName ==
+                          x.simulationRun.updateRule.updateRuleName ===
                           'Balancer Weighted'
-                      ).length == 0
+                      ).length === 0
                     }
                   >
                     <WeightChangeOverTimeGraph
                       simulationRunBreakdown={
                         breakdowns.filter(
                           (x) =>
-                            x.simulationRun.updateRule.updateRuleName ==
+                            x.simulationRun.updateRule.updateRuleName ===
                             strategy
                         )[0]
                       }
@@ -334,8 +335,9 @@ export function StrategySummary() {
                 <SimulationResultMarketValueChart
                   breakdowns={breakdowns.filter(
                     (x) =>
-                      x.simulationRun.updateRule.updateRuleName == strategy ||
-                      x.simulationRun.updateRule.updateRuleName == 'Balancer Weighted'
+                      x.simulationRun.updateRule.updateRuleName === strategy ||
+                      x.simulationRun.updateRule.updateRuleName ===
+                        'Balancer Weighted'
                   )}
                   forceViewResults={true}
                   overrideXAxisInterval={24}
@@ -351,7 +353,7 @@ export function StrategySummary() {
                     AntiMomentum: 'QuantAMM',
                     'Channel Following': 'QuantAMM',
                     'Power Channel': 'QuantAMM',
-                    'Balancer Weighted' : 'Traditional DEX'
+                    'Balancer Weighted': 'Traditional DEX'
                   }}
                 />
               </div>

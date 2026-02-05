@@ -60,7 +60,7 @@ export function MomentumUpdateRule() {
             </Row>
 
             <Row>
-              <div hidden={eli5 != 'ELI5'}>
+              <div hidden={eli5 !== 'ELI5'}>
                 <Row>
                   <Col span={8}>
                     <img
@@ -78,7 +78,7 @@ export function MomentumUpdateRule() {
                   </Col>
                 </Row>
               </div>
-              <div hidden={eli5 == 'ELI5'}>
+              <div hidden={eli5 === 'ELI5'}>
                 <Col span={24}>
                   <h3>Summary</h3>
                   <p>
@@ -134,7 +134,7 @@ export function MomentumUpdateRule() {
                   <h3>Parameter Guide {'&'} Return Profile Summary</h3>
                   <p>
                     {
-                      rules.find((x) => x.updateRuleName == 'Momentum')
+                      rules.find((x) => x.updateRuleName === 'Momentum')
                         ?.updateRuleResultProfileSummary
                     }
                   </p>
