@@ -1,12 +1,14 @@
 // CurrentPricePollingGate.tsx
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import type { AppDispatch } from '../../app/store';
-import { startCoinCurrentPricesPolling, stopCoinCurrentPricesPolling } from './coinCurrentPriceSlice';
+import { useAppDispatch } from '../../app/hooks';
 import { apolloClient } from '../../queries/apolloClient';
+import {
+  startCoinCurrentPricesPolling,
+  stopCoinCurrentPricesPolling,
+} from './coinCurrentPriceSlice';
 
 export function CurrentPricePollingGate(): null {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(startCoinCurrentPricesPolling(apolloClient, 30_000));

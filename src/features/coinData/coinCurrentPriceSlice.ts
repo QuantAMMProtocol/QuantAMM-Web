@@ -12,8 +12,11 @@ import {
 import type { RootState, AppDispatch } from '../../app/store';
 import { CURRENT_LIVE_FACTSHEETS } from '../documentation/factSheets/liveFactsheets';
 
-export const COIN_PRICE_CHAINS: GqlChain[] =
-  CURRENT_LIVE_FACTSHEETS.factsheets.map((f) => f.poolChain as GqlChain);
+export const COIN_PRICE_CHAINS: GqlChain[] = Array.from(
+  new Set(
+    CURRENT_LIVE_FACTSHEETS.factsheets.map((f) => f.poolChain as GqlChain)
+  )
+);
 
 export interface CoinPriceEntry {
   address: string;
@@ -83,7 +86,6 @@ export const fetchCoinCurrentPrices = createAsyncThunk<
     chains && chains.length > 0 ? chains : COIN_PRICE_CHAINS
   ).slice();
   const fetchedAt = Date.now();
-  console.log('fetching data');
   const results = await Promise.all(
     usedChains.map(async (chain) => {
       const { data } = await client.query<GetCurrentPricesQuery>({
@@ -91,7 +93,6 @@ export const fetchCoinCurrentPrices = createAsyncThunk<
         variables: { chains: [chain] },
         fetchPolicy: 'network-only',
       });
-      console.log(data);
 
       const items = data?.tokenGetCurrentPrices ?? [];
       const mapForChain: Record<string, CoinPriceEntry> = {};
@@ -110,7 +111,10 @@ export const fetchCoinCurrentPrices = createAsyncThunk<
     })
   );
 
-  const perChain: Record<GqlChain, Record<string, CoinPriceEntry>> = {} as any;
+  const perChain: Record<GqlChain, Record<string, CoinPriceEntry>> = {} as Record<
+    GqlChain,
+    Record<string, CoinPriceEntry>
+  >;
   for (const { chain, mapForChain } of results) {
     perChain[chain] = mapForChain;
   }

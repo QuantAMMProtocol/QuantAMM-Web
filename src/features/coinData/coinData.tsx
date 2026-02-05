@@ -1,3 +1,4 @@
+// TODO CH split into subcomponents
 import { useState } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import { AgTimeAxisOptions } from 'ag-charts-community';
@@ -82,7 +83,9 @@ export default function CoinData() {
       colId: 'open',
       headerName: 'open',
       valueGetter: (params: { data: CoinPrice }) => {
-        return params.data.open == 1 / 0 ? undefined : params.data.open;
+        return params.data.open === Number.POSITIVE_INFINITY
+          ? undefined
+          : params.data.open;
       },
       filter: 'agNumberColumnFilter',
       type: ['numericColumn', 'nonEditableColumn'],
@@ -92,7 +95,9 @@ export default function CoinData() {
       colId: 'high',
       headerName: 'high',
       valueGetter: (params: { data: CoinPrice }) => {
-        return params.data.high == 1 / 0 ? undefined : params.data.high;
+        return params.data.high === Number.POSITIVE_INFINITY
+          ? undefined
+          : params.data.high;
       },
       filter: 'agNumberColumnFilter',
       type: ['numericColumn', 'nonEditableColumn'],
@@ -102,7 +107,9 @@ export default function CoinData() {
       colId: 'low',
       headerName: 'low',
       valueGetter: (params: { data: CoinPrice }) => {
-        return params.data.low == 1 / 0 ? undefined : params.data.low;
+        return params.data.low === Number.POSITIVE_INFINITY
+          ? undefined
+          : params.data.low;
       },
       filter: 'agNumberColumnFilter',
       type: ['numericColumn', 'nonEditableColumn'],
@@ -226,23 +233,25 @@ export default function CoinData() {
 
   const getCurrentPriceData = () => {
     const empty: CoinPrice[] = [];
-    if (currentCoin == '3mTbillDaily') {
+    if (currentCoin === '3mTbillDaily') {
       const tbillData = tBillPrices as TBillYield[];
       const tBillCloseData: CoinPrice[] = tbillData.map((x) => {
         return {
           date: x.date,
           unix: new Date(x.date).getTime(),
           close: x.rate,
-          open: 1 / 0,
-          low: 1 / 0,
-          high: 1 / 0,
+          open: Number.POSITIVE_INFINITY,
+          low: Number.POSITIVE_INFINITY,
+          high: Number.POSITIVE_INFINITY,
         };
       });
 
       return tBillCloseData;
     }
 
-    const availableCoin = availableCoins.find((x) => x.coinCode == currentCoin);
+    const availableCoin = availableCoins.find(
+      (x) => x.coinCode === currentCoin
+    );
 
     return availableCoin?.dailyPriceHistory ?? empty;
   };
@@ -312,7 +321,7 @@ export default function CoinData() {
                     defaultSelectedKeys={[currentCoin]}
                     items={getCoinSelections()}
                     onClick={(x) => {
-                      setCurrentCoin(x.key);
+                      setCurrentCoin(String(x.key));
                     }}
                     activeKey={currentCoin}
                   />
