@@ -58,7 +58,6 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
 
   const toggleTheme = (isChecked: boolean) => {
     dispatch(changeTheme(isChecked || (current as ROUTES) == ROUTES.HOME));
-    changeTheme(isChecked);
   };
 
   const handleClick: MenuProps['onClick'] = useCallback(
