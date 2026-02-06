@@ -304,20 +304,12 @@ export default function CoinData() {
               <Row>
                 <Col span={4}>
                   <Menu
-                    style={{
-                      width: 256,
-                      maxHeight: '500px',
-                      overflowY: 'auto',
-                    }}
+                    className={styles.menuPanel}
                     defaultSelectedKeys={['Daily']}
                     items={getPriceFrequency()}
                   />
                   <Menu
-                    style={{
-                      width: 256,
-                      maxHeight: '500px',
-                      overflowY: 'auto',
-                    }}
+                    className={styles.menuPanel}
                     defaultSelectedKeys={[currentCoin]}
                     items={getCoinSelections()}
                     onClick={(x) => {
@@ -346,12 +338,7 @@ export default function CoinData() {
                       <div hidden={!priceDataLoaded}>
                         <div
                           id="myGrid"
-                          className={styles.tableParent + ' ' + darkThemeAg}
-                          style={{
-                            width: '100%',
-                            paddingLeft: '60px',
-                            paddingRight: '30px',
-                          }}
+                          className={`${styles.tableParent} ${styles.gridWrapper} ${darkThemeAg}`}
                         >
                           <AgGridReact
                             className={styles.tableParent}
@@ -369,12 +356,7 @@ export default function CoinData() {
                     <Col span={24}>
                       <div
                         hidden={!priceDataLoaded}
-                        style={{
-                          width: '100%',
-                          paddingLeft: '60px',
-                          paddingRight: '30px',
-                          paddingTop: '20px',
-                        }}
+                        className={styles.chartWrapper}
                       >
                         <AgCharts
                           options={{
