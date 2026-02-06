@@ -1,5 +1,6 @@
 import { Card, Grid, Timeline, Typography } from "antd";
 import { VisionOverview } from "./landing/desktop/visionOverview";
+import styles from './documentation.module.css';
 
 const { Title } = Typography;
 
@@ -12,7 +13,7 @@ export default function CompanyPage() {
     return (
       isMobile ? <div>
       {/* Company Section */}
-      <div style={{ padding: '20px' }}>
+      <div className={styles.companySection}>
         <Title level={3}>Our Vision</Title>
         <p>
           At QuantAMM, our vision is to build a passive fund product that
@@ -21,7 +22,7 @@ export default function CompanyPage() {
           infrastructure on-chain.
         </p>
 
-        <Title level={3} style={{ marginTop: '20px' }}>
+        <Title level={3} className={styles.companySectionTitle}>
           Our Team
         </Title>
         {[
@@ -43,12 +44,12 @@ export default function CompanyPage() {
           <Card
             key={index}
             title={founder.name}
-            style={{ marginBottom: '10px' }}
+            className={styles.companyFounderCard}
           >
             <img
               src={founder.image}
               alt={founder.name}
-              style={{ width: '100px', borderRadius: '50%' }}
+              className={styles.companyFounderImage}
             />
             <p>
               <strong>{founder.role}</strong>
@@ -59,13 +60,7 @@ export default function CompanyPage() {
 
         {/* Updated Company Images */}
         <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            flexWrap: 'wrap',
-            gap: '10px',
-            marginTop: '20px',
-          }}
+          className={styles.companyPartnersWrap}
         >
           {[
             '8vc.png',
@@ -83,14 +78,14 @@ export default function CompanyPage() {
               key={index}
               src={`/companies/${img}`}
               alt={img}
-              style={{ width: '15%', height: 'auto' }}
+              className={styles.companyPartnerImage}
             />
           ))}
         </div>
       </div>
 
       {/* Timeline */}
-      <div style={{ padding: '20px' }}>
+      <div className={styles.companySection}>
         <Title level={3}>Our Journey</Title>
         <Timeline>
           <Timeline.Item>H1 2023 - Simulator Build</Timeline.Item>

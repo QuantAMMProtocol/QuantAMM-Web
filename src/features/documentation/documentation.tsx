@@ -22,6 +22,7 @@ import { BalancerPoolDescription } from './poolTypes/balancer';
 import AMMDescription from './basics/amm';
 import RebalancingVsRebalancing from './basics/rebalancingvsRebalancing';
 import { useParams } from 'react-router-dom';
+import styles from './documentation.module.css';
 
 const items = [
   {
@@ -173,7 +174,7 @@ export default function Documentation() {
   return (
     <div>
       <Row>
-        <Col span={6} style={{ maxHeight: '95vh', overflowY: 'auto' }}>
+        <Col span={6} className={styles.documentationMenuCol}>
           <Button
             onClick={() =>
               window.open(
@@ -181,7 +182,7 @@ export default function Documentation() {
                 '_blank'
               )
             }
-            style={{ marginTop: '15px', marginBottom: '15px', width: '80%', margin:'10px'  }}
+            className={styles.documentationMenuButton}
           >
             Open Simulator Technical Code Docs
           </Button>
@@ -192,7 +193,7 @@ export default function Documentation() {
                 '_blank'
               )
             }
-            style={{ marginTop: '15px', marginBottom: '15px', width: '80%', margin:'10px' }}
+            className={styles.documentationMenuButton}
           >
             Open Protocol Contracts GitBook
           </Button>
@@ -206,7 +207,7 @@ export default function Documentation() {
             defaultValue={current}
           />
         </Col>
-        <Col span={18} style={{ paddingBottom: 40 }}>
+        <Col span={18} className={styles.documentationContentCol}>
           {components[current]}
         </Col>
       </Row>

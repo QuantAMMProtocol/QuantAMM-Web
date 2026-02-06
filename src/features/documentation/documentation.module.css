@@ -6,3 +6,102 @@
 .descriptionBold {
   color: rgb(1, 105, 1);
 }
+
+.simViewTabs {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.companySection {
+  padding: 20px;
+}
+
+.companySectionTitle {
+  margin-top: 20px;
+}
+
+.companyFounderCard {
+  margin-bottom: 10px;
+}
+
+.companyFounderImage {
+  width: 100px;
+  border-radius: 50%;
+}
+
+.companyPartnersWrap {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.companyPartnerImage {
+  width: 15%;
+  height: auto;
+}
+
+.researchSecondaryText {
+  color: var(--secondary-text-color);
+}
+
+.fontWeightBold {
+  font-weight: bold;
+}
+
+.researchButtonColMobile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.researchDesktopContainer {
+  padding: 10px;
+}
+
+.researchDesktopLeftCol {
+  padding: 10px;
+}
+
+.researchDesktopMiddleCol {
+  padding: 10px;
+}
+
+.researchDesktopButtonCol {
+  padding: 10px;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center;
+  height: 100%;
+}
+
+
+.documentationMenuCol {
+  max-height: 95vh;
+  overflow-y: auto;
+}
+
+.documentationMenuButton {
+  margin: 10px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  width: 80%;
+}
+
+.documentationContentCol {
+  padding-bottom: 40px;
+}
+
+.simGuideParagraph {
+  margin-bottom: 20px;
+}
+
+.simGuideListItem {
+  margin-bottom: 20px;
+}
+
+.simGuideSubList {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
