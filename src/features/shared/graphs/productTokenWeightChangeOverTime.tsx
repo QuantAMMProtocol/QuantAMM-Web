@@ -1,6 +1,5 @@
-import { FC, useMemo, useEffect, useState } from 'react';
+import { FC, useMemo } from 'react';
 import { AgCharts } from 'ag-charts-react';
-import { Spin } from 'antd';
 import {
   AgAxisLabelFormatterParams,
   AgAreaSeriesOptions,
@@ -35,6 +34,7 @@ const normalisedTokenName = (token: string) => {
   return token.replace(/\./g, '-');
 };
 
+//TODO CH split components.
 export const ProductTokenWeightChangeOverTimeGraph: FC<
   ProductTokenWeightChangeOverTimeGraphProps
 > = ({
@@ -45,18 +45,6 @@ export const ProductTokenWeightChangeOverTimeGraph: FC<
   legendOverride,
 }) => {
   const chartTheme = useAppSelector(selectAgChartTheme);
-
-  const [updatingChart, setUpdatingChart] = useState(false);
-
-  useEffect(() => {
-    if (product) {
-      setUpdatingChart(true);
-
-      setTimeout(() => {
-        setUpdatingChart(false);
-      }, 1000);
-    }
-  }, [product]);
 
   const filteredConstituents = useMemo(() => {
     const poolBptTokenAddress = product.id.substring(0, 42);
@@ -74,11 +62,47 @@ export const ProductTokenWeightChangeOverTimeGraph: FC<
         return index !== bptIndex;
       }
     );
-  }, [product]);
+  }, [product.id, product.poolConstituents]);
 
   const normalisedTimeSeries = useMemo(() => {
     return getChartTimeStepsFromProduct(product.timeSeries ?? []);
-  }, [product]);
+  }, [product.timeSeries]);
+
+  const benchmarkEqualWeightedAmounts = useMemo(() => {
+    if (!isBenchmark || normalisedTimeSeries.length === 0) {
+      return [];
+    }
+
+    const firstTimeStep = normalisedTimeSeries[0];
+    if (filteredConstituents.length === 0) {
+      return [];
+    }
+
+    const totalLiquidity = firstTimeStep.amounts.reduce(
+      (sum, amount, index) => {
+        const constituent = filteredConstituents[index];
+        if (!constituent) {
+          return sum;
+        }
+        const tokenPrice = firstTimeStep.tokenPrices[constituent.address] ?? 0;
+        return sum + amount * tokenPrice;
+      },
+      0
+    );
+
+    if (totalLiquidity <= 0) {
+      return filteredConstituents.map(() => 0);
+    }
+
+    return filteredConstituents.map((constituent) => {
+      const tokenPrice = firstTimeStep.tokenPrices[constituent.address] ?? 0;
+      const equalShare = totalLiquidity / filteredConstituents.length;
+      if (tokenPrice <= 0) {
+        return 0;
+      }
+      return equalShare / tokenPrice;
+    });
+  }, [isBenchmark, normalisedTimeSeries, filteredConstituents]);
 
   const normalisedAreaData = useMemo(() => {
     const result: TokenWeightTimeStep[] = [];
@@ -89,25 +113,12 @@ export const ProductTokenWeightChangeOverTimeGraph: FC<
         timestamp: item.timestamp * 1000,
         timeSeriesData: item,
       };
-      let equalWeightedAmounts: number[] = [];
-      if (isBenchmark) {
-        const totalLiquidity = normalisedTimeSeries[0].amounts.reduce(
-          (sum, amount, index) =>
-        sum +
-        amount * normalisedTimeSeries[0].tokenPrices[filteredConstituents[index].address],
-          0
-        );
 
-        equalWeightedAmounts = filteredConstituents.map((constituent) => {
-          const equalShare = totalLiquidity / filteredConstituents.length;
-          return equalShare / normalisedTimeSeries[0].tokenPrices[constituent.address];
-        });
-      }
       filteredConstituents.forEach(
         (constituent: ProductPoolConstituents, index: number) => {
           if (isBenchmark) {
             timeStep[normalisedTokenName(constituent.coin.toLowerCase())] =
-            equalWeightedAmounts[index] *
+              (benchmarkEqualWeightedAmounts[index] ?? 0) *
               item.tokenPrices[constituent.address];
           } else {
             timeStep[normalisedTokenName(constituent.coin.toLowerCase())] =
@@ -122,7 +133,12 @@ export const ProductTokenWeightChangeOverTimeGraph: FC<
     });
 
     return result;
-  }, [normalisedTimeSeries, filteredConstituents, isBenchmark]);
+  }, [
+    normalisedTimeSeries,
+    filteredConstituents,
+    isBenchmark,
+    benchmarkEqualWeightedAmounts,
+  ]);
 
   const normalisedAreaSeries: AgAreaSeriesOptions[] =
     useMemo((): AgAreaSeriesOptions[] => {
@@ -185,17 +201,7 @@ export const ProductTokenWeightChangeOverTimeGraph: FC<
     };
   }, [normalisedTimeSeries]);
 
-  return updatingChart ? (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    >
-      <Spin />
-    </div>
-  ) : (
+  return (
     <AgCharts
       options={{
         height: 230,

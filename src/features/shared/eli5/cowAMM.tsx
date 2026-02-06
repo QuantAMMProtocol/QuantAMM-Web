@@ -26,7 +26,7 @@ export const CowAMM = () => {
         weights, similar to traditional AMMs.
       </p>
 
-      <p>
+      <div>
         For more background, implementation details, and detailed mathematical
         analysis, see:
         <ul>
@@ -44,7 +44,7 @@ export const CowAMM = () => {
             </a>
           </li>
         </ul>
-      </p>
+      </div>
     </>
   );
 };

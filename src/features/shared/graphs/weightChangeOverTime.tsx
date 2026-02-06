@@ -17,7 +17,7 @@ import { FlatWeightTimeStep } from '../../simulationResults/visualisations/simul
 import { getChartTimeSteps } from './helpers';
 
 interface WeightChangeOverTimeGraphProps {
-  simulationRunBreakdown: SimulationRunBreakdown;
+  simulationRunBreakdown?: SimulationRunBreakdown;
   yAxisOverride?: Partial<AgNumberAxisOptions>;
   legendOverride?: Partial<AgChartLegendOptions>;
   tickIntervalInMonths?: number;
@@ -25,6 +25,8 @@ interface WeightChangeOverTimeGraphProps {
   overrideChartTheme?: AgChartThemeName;
   overrideXAxisInterval?: number;
 }
+
+const normalisedTokenName = (token: string) => token.replace(/\./g, '-');
 
 export const WeightChangeOverTimeGraph: FC<WeightChangeOverTimeGraphProps> = ({
   simulationRunBreakdown,
@@ -36,20 +38,19 @@ export const WeightChangeOverTimeGraph: FC<WeightChangeOverTimeGraphProps> = ({
 }) => {
   const chartTheme = useAppSelector(selectAgChartTheme);
 
-  const normalisedTokenName = (token: string) => {
-    return token.replace(/\./g, '-');
-  };
-
-  const getNormalisedAreaData = (breakdown: SimulationRunBreakdown) => {
+  const normalisedAreaData = useMemo(() => {
     const result: FlatWeightTimeStep[] = [];
-
-    let data = getChartTimeSteps(breakdown);
+    if (!simulationRunBreakdown) {
+      return result;
+    }
+    let data = getChartTimeSteps(simulationRunBreakdown);
 
     if (data.length > 200) {
       //stacked chart is more cpu intensive, ~500 points is a good balance
       const proportion = Math.ceil(data.length / 200);
       data = data.filter((_, index) => index % proportion === 0);
     }
+
     data.forEach((item) => {
       const timeStep: FlatWeightTimeStep = {
         date: item.date,
@@ -65,20 +66,19 @@ export const WeightChangeOverTimeGraph: FC<WeightChangeOverTimeGraphProps> = ({
     });
 
     return result;
-  };
+  }, [simulationRunBreakdown]);
 
-  const getNormalisedAreaSeries = (
-    breakdown: SimulationRunBreakdown
-  ): AgAreaSeriesOptions[] => {
-    if (
-      !breakdown ||
-      breakdown?.simulationRun?.poolConstituents?.length === 0
-    ) {
+  const normalisedAreaSeries = useMemo((): AgAreaSeriesOptions[] => {
+    if (!simulationRunBreakdown) {
+      return [];
+    }
+    const { simulationRun } = simulationRunBreakdown;
+    if (simulationRun?.poolConstituents?.length === 0) {
       return [];
     }
 
     const series: AgAreaSeriesOptions[] = [];
-    breakdown.simulationRun.poolConstituents.forEach((constituent) => {
+    simulationRun.poolConstituents.forEach((constituent) => {
       series.push({
         type: 'area',
         xKey: 'unix',
@@ -90,18 +90,16 @@ export const WeightChangeOverTimeGraph: FC<WeightChangeOverTimeGraphProps> = ({
     });
 
     return series;
-  };
+  }, [simulationRunBreakdown]);
 
   const timeAxisOption: AgTimeAxisOptions = useMemo(() => {
     return {
       type: 'time',
       interval: {
-      step: time.month.every(
-        overrideXAxisInterval ? overrideXAxisInterval : tickIntervalInMonths
-      ),
+        step: time.month.every(overrideXAxisInterval ?? tickIntervalInMonths),
       },
       label: {
-      format: '%Y-%m',
+        format: '%Y-%m',
       },
     };
   }, [tickIntervalInMonths, overrideXAxisInterval]);
@@ -116,7 +114,7 @@ export const WeightChangeOverTimeGraph: FC<WeightChangeOverTimeGraphProps> = ({
           bottom: 20,
           left: 0,
         },
-        data: getNormalisedAreaData(simulationRunBreakdown),
+        data: normalisedAreaData,
         axes: [
           { ...timeAxisOption },
           {
@@ -130,7 +128,7 @@ export const WeightChangeOverTimeGraph: FC<WeightChangeOverTimeGraphProps> = ({
             ...yAxisOverride,
           },
         ],
-        series: getNormalisedAreaSeries(simulationRunBreakdown),
+        series: normalisedAreaSeries,
         legend: {
           ...legendOverride,
         },

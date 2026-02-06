@@ -156,7 +156,9 @@ export function BannerProductSection({ productData }: ProductBannerProps) {
 
       {loading ? (
         <Row justify="center">
-          <Spin tip="Loading pool data..." />
+          <Spin spinning tip="Loading pool data...">
+            <div style={{ minHeight: 48, minWidth: 240 }} />
+          </Spin>
         </Row>
       ) : (
         <Row gutter={[24, 24]} justify="center">

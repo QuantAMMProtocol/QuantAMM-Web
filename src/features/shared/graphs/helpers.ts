@@ -2,6 +2,13 @@ import { TimeSeriesData } from '../../../models';
 import { SimulationRunBreakdown } from '../../simulationResults/simulationResultSummaryModels';
 
 const THREE_MONTHS = 7776000000;
+const DAY_IN_MS = 24 * 60 * 60 * 1000;
+
+const toUnixMs = (unixTime: number): number =>
+  unixTime < 10_000_000_000 ? unixTime * 1000 : unixTime;
+
+const getUtcDayKey = (unixTime: number): number =>
+  Math.floor(toUnixMs(unixTime) / DAY_IN_MS);
 
 // if data range is less than THREE_MONTHS, returns everything
 // else return the first data point of the day
@@ -10,19 +17,19 @@ export const getChartTimeSteps = (breakdown: SimulationRunBreakdown) => {
     return [];
   }
   const maxTime =
-    breakdown.timeSteps[breakdown.timeSteps.length - 1].unix -
-    breakdown.timeSteps[0].unix;
+    toUnixMs(breakdown.timeSteps[breakdown.timeSteps.length - 1].unix) -
+    toUnixMs(breakdown.timeSteps[0].unix);
   const { timeSteps: data } = breakdown;
 
   if (maxTime > THREE_MONTHS) {
-    const filteredData = [];
-    let currentDay = 0;
+    const filteredData: typeof data = [];
+    let currentDayKey = -1;
 
     for (let i = 0; i < data.length; i++) {
-      const day = new Date(data[i].unix).getDay();
-      if (i === 0 || day !== currentDay) {
+      const dayKey = getUtcDayKey(data[i].unix);
+      if (i === 0 || dayKey !== currentDayKey) {
         filteredData.push(data[i]);
-        currentDay = day;
+        currentDayKey = dayKey;
       }
     }
     return filteredData;
@@ -38,17 +45,18 @@ export const getChartTimeStepsFromProduct = (timeSeries: TimeSeriesData[]) => {
     return [];
   }
   const maxTime =
-    timeSeries[timeSeries.length - 1].timestamp - timeSeries[0].timestamp;
+    toUnixMs(timeSeries[timeSeries.length - 1].timestamp) -
+    toUnixMs(timeSeries[0].timestamp);
 
   if (maxTime > THREE_MONTHS) {
-    const filteredData = [];
-    let currentDay = 0;
+    const filteredData: TimeSeriesData[] = [];
+    let currentDayKey = -1;
 
     for (let i = 0; i < timeSeries.length; i++) {
-      const day = new Date(timeSeries[i].timestamp).getDay();
-      if (i === 0 || day !== currentDay) {
+      const dayKey = getUtcDayKey(timeSeries[i].timestamp);
+      if (i === 0 || dayKey !== currentDayKey) {
         filteredData.push(timeSeries[i]);
-        currentDay = day;
+        currentDayKey = dayKey;
       }
     }
     return filteredData;

@@ -69,12 +69,16 @@ export const ProductItemOverviewGraph: FC<ProductItemOverviewGraphProps> = ({
         stroke: radarColor,
         tooltip: {
           renderer: (params): string | AgTooltipRendererResult => {
+            const datumValue = Number(params.datum.value ?? 0);
+            const scoreColor = getScoreColor(datumValue);
             return {
-              title: `<h6 class="overall-graph-tooltip-title">${params.datum.metric.toUpperCase()}</h4>`,
-              content: `<div style="width:150px"class="overall-graph-tooltip-content"}}>Score: <strong style="color: ${getScoreColor(params.datum.value)}">${params.datum.value}/${params.datum.maxScore}</strong>
+              title: `<div class="overall-graph-tooltip-title">${String(
+                params.datum.metric
+              ).toUpperCase()}</div>`,
+              content: `<div class="overall-graph-tooltip-content" style="width:150px">Score: <strong style="color: ${scoreColor}">${datumValue}/${params.datum.maxScore}</strong>
               <br />
               ${wide ? '' : params.datum.description}</div>`,
-              backgroundColor: getScoreColor(params.datum.value),
+              backgroundColor: scoreColor,
             };
           },
         },
@@ -128,8 +132,8 @@ export const ProductItemOverviewGraph: FC<ProductItemOverviewGraphProps> = ({
       )}
       <AgCharts
         options={{
-          width: widthOverride ?? wide ? 100 : 288,
-          height: heightOverride ?? wide ? 100 : 240,
+          width: widthOverride ?? (wide ? 100 : 288),
+          height: heightOverride ?? (wide ? 100 : 240),
           data,
           series,
           axes,

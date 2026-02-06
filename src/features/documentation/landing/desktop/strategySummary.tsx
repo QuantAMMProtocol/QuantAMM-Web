@@ -118,6 +118,13 @@ export function StrategySummary() {
     },
   ];
 
+  const traditionalDexBreakdown = breakdowns.find(
+    (x) => x.simulationRun.updateRule.updateRuleName === 'Balancer Weighted'
+  );
+  const selectedStrategyBreakdown = breakdowns.find(
+    (x) => x.simulationRun.updateRule.updateRuleName === strategy
+  );
+
   return (
     <Row id="final_section_row">
       <Col span={24}>
@@ -200,23 +207,10 @@ export function StrategySummary() {
                   </p>
                   <div
                     className={styles.chartWrap}
-                    hidden={
-                      (loading && breakdowns.length === 0) ||
-                      breakdowns.filter(
-                        (x) =>
-                          x.simulationRun.updateRule.updateRuleName ===
-                          'Balancer Weighted'
-                      ).length === 0
-                    }
+                    hidden={(loading && breakdowns.length === 0) || !traditionalDexBreakdown}
                   >
                     <WeightChangeOverTimeGraph
-                      simulationRunBreakdown={
-                        breakdowns.filter(
-                          (x) =>
-                          x.simulationRun.updateRule.updateRuleName ===
-                          'Balancer Weighted'
-                        )[0]
-                      }
+                      simulationRunBreakdown={traditionalDexBreakdown}
                       overrideChartTheme="ag-default-dark"
                       overrideXAxisInterval={22}
                     />
@@ -237,23 +231,10 @@ export function StrategySummary() {
                   </p>
                   <div
                     className={styles.chartWrapNoTop}
-                    hidden={
-                      (loading && breakdowns.length === 0) ||
-                      breakdowns.filter(
-                        (x) =>
-                          x.simulationRun.updateRule.updateRuleName ===
-                          'Balancer Weighted'
-                      ).length === 0
-                    }
+                    hidden={(loading && breakdowns.length === 0) || !selectedStrategyBreakdown}
                   >
                     <WeightChangeOverTimeGraph
-                      simulationRunBreakdown={
-                        breakdowns.filter(
-                          (x) =>
-                            x.simulationRun.updateRule.updateRuleName ===
-                            strategy
-                        )[0]
-                      }
+                      simulationRunBreakdown={selectedStrategyBreakdown}
                       overrideChartTheme="ag-default-dark"
                       overrideXAxisInterval={22}
                     />

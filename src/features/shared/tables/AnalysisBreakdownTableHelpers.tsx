@@ -27,9 +27,9 @@ export const getAnalysisSummary = (
         simulationRunBreakdown.simulationRunResultAnalysis.return_analysis
           .filter(
             (x) =>
-              x.metricValue != undefined &&
-              x.metricValue != null &&
-              !isNaN(x.metricValue)
+              x.metricValue !== undefined &&
+              x.metricValue !== null &&
+              !Number.isNaN(x.metricValue)
           )
           .forEach((y) => {
             const breakdown: FlatQuantDynamicAnalysisBreakdown = {
@@ -63,13 +63,13 @@ export const getAnalysisSummary = (
         simulationRunBreakdown.simulationRunResultAnalysis?.benchmark_analysis
           .filter(
             (x) =>
-              x.metricValue != undefined &&
-              x.metricValue != null &&
-              !isNaN(x.metricValue)
+              x.metricValue !== undefined &&
+              x.metricValue !== null &&
+              !Number.isNaN(x.metricValue)
           )
           .forEach((analysis) => {
             if (
-              analysis.benchmarkName?.toLowerCase() !=
+              analysis.benchmarkName?.toLowerCase() !==
               simulationRunBreakdown.simulationRun.updateRule.updateRuleName.toLowerCase()
             ) {
               const breakdown: FlatQuantDynamicAnalysisBreakdown = {
