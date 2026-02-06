@@ -25,9 +25,6 @@ export const ProductModal: React.FC<ProductModalProps> = ({
   onClose,
 }) => {
   const acceptedTerms = useAppSelector(selectAcceptedTermsAndConditions);
-  const [intervalId, setIntervalId] = useState<NodeJS.Timeout | undefined>(
-    undefined
-  );
   const [understandExternalWebsite, setUnderstandExternalWebsite] =
     useState(false);
   const [visitorId, setVisitorId] = useState<string | undefined>(undefined);
@@ -63,16 +60,15 @@ export const ProductModal: React.FC<ProductModalProps> = ({
         tosAgreement: understandExternalWebsite ? 'accepted' : 'not accepted',
       },
     });
-    window.open(url, '_blank');
-    clearInterval(intervalId);
-    setIntervalId(undefined);
+    if (url) {
+      window.open(url, '_blank');
+    }
     onClose();
   }, [
     runAuditLog,
     isWithdraw,
     understandExternalWebsite,
     url,
-    intervalId,
     onClose,
     visitorId,
   ]);

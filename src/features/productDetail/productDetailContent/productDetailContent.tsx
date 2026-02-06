@@ -68,10 +68,8 @@ export const ProductDetailContent: FC<ProductDetailContentProps> = ({
                 />
               </Col>
             </Row>
-            {!isMobile ? (
-              <></>
-            ) : (
-              <Row id="details" className={styles.detailsRow} hidden={isMobile}>
+            {isMobile ? (
+              <Row id="details" className={styles.detailsRow}>
                 <Col span={24} className={styles.detailsCol}>
                   <ProductDetailTable
                     simulationRunBreakdown={product.simulationRunBreakdown}
@@ -80,11 +78,17 @@ export const ProductDetailContent: FC<ProductDetailContentProps> = ({
                   />
                 </Col>
               </Row>
+            ) : (
+              <></>
             )}
           </div>
-          <div>
-            <ProductDetailSidebarSocials />
-          </div>
+          {isMobile ? (
+            <div>
+              <ProductDetailSidebarSocials />
+            </div>
+          ) : (
+            <></>
+          )}
         </>
       )}
     </Content>

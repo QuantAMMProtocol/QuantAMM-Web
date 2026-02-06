@@ -1,4 +1,4 @@
-import { CSSProperties, FC, useCallback, useState } from 'react';
+import { CSSProperties, FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { Dropdown, Typography } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 
@@ -29,9 +29,20 @@ export const ProductDetailDropdown: FC<ProductDetailDropdownProps> = ({
   width,
   onChangeItem,
 }) => {
-  const [selectedIndex, setSelectedIndex] = useState<number>(
-    defaultSelectedKey ?? 0
+  const [selectedKey, setSelectedKey] = useState<number>(
+    defaultSelectedKey ?? items[0]?.key ?? 0
   );
+
+  const selectedItem = useMemo(
+    () => items.find((item) => item.key === selectedKey) ?? items[0],
+    [items, selectedKey]
+  );
+
+  useEffect(() => {
+    if (!items.some((item) => item.key === selectedKey) && items[0]) {
+      setSelectedKey(items[0].key);
+    }
+  }, [items, selectedKey]);
 
   const handleClick = useCallback(
     (event: { key: string }) => {
@@ -39,7 +50,7 @@ export const ProductDetailDropdown: FC<ProductDetailDropdownProps> = ({
         (option) => String(option.key) === event.key
       );
       if (selectedItem) {
-        setSelectedIndex(selectedItem.key);
+        setSelectedKey(selectedItem.key);
         onChangeItem && onChangeItem(selectedItem.label);
       }
     },
@@ -56,7 +67,7 @@ export const ProductDetailDropdown: FC<ProductDetailDropdownProps> = ({
           menu={{
             items,
             selectable: !disabled,
-            defaultSelectedKeys: [String(selectedIndex)],
+            selectedKeys: [String(selectedKey)],
             onClick: handleClick,
             disabled: disabled,
           }}
@@ -72,7 +83,7 @@ export const ProductDetailDropdown: FC<ProductDetailDropdownProps> = ({
           ) : (
             <div className={styles['product-detail-dropdown__content']}>
               <Text strong className={styles['product-detail-dropdown__text']}>
-                {items[selectedIndex]?.label}
+                {selectedItem?.label}
               </Text>
               <DownOutlined
                 className={styles['product-detail-dropdown__icon']}

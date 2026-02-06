@@ -76,6 +76,7 @@ export const ProductDetailSidebarPoolInfo: FC<ProductDetailSidebarPoolInfoProps>
     const root = explorerRootUrl[product.chain];
     const runnerAddr = strategyRunnerContractAddresses[product.chain];
     const factoryAddr = factoryAddress[product.chain];
+    const poolContractAddr = product.dynamicData?.poolId ?? product.id;
 
     const makeHref = (addr?: string) =>
       root && addr ? `${root}/address/${addr}` : undefined;
@@ -85,6 +86,7 @@ export const ProductDetailSidebarPoolInfo: FC<ProductDetailSidebarPoolInfoProps>
 
     const runnerHref = makeHref(runnerAddr);
     const factoryHref = makeHref(factoryAddr);
+    const poolContractHref = makeHref(poolContractAddr);
 
     const fees24h =
       product.dynamicData?.fees24h != null
@@ -124,12 +126,12 @@ export const ProductDetailSidebarPoolInfo: FC<ProductDetailSidebarPoolInfoProps>
             }}
           >
            <Descriptions.Item label="Pool Contract">
-              {runnerHref ? (
-                <Link href={runnerHref} target="_blank" rel="noreferrer">
-                  {shortAddr(product.dynamicData?.poolId ?? product.id)}
+              {poolContractHref ? (
+                <Link href={poolContractHref} target="_blank" rel="noreferrer">
+                  {shortAddr(poolContractAddr)}
                 </Link>
               ) : (
-                <Text strong>{shortAddr(runnerAddr)}</Text>
+                <Text strong>{shortAddr(poolContractAddr)}</Text>
               )}
             </Descriptions.Item>
             <Descriptions.Item label="Pool chain">

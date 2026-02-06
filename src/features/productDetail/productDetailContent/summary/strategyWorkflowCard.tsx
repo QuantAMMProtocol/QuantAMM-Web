@@ -235,6 +235,7 @@ interface FactsheetTrainedParameter {
   }[];
 }
 
+//TODO CH split components.
 export const StrategyWorkflowCard: FC<{
   product: Product;
   factsheet?: any;

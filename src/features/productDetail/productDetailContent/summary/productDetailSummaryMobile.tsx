@@ -55,7 +55,7 @@ function withAlpha(color: string, alpha: number) {
     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
   }
   if (color.startsWith('rgb')) {
-    const nums = color.match(/\d+(\.\d+)?/g) || ['0', '0', '0'];
+    const nums = color.match(/\d+(\.\d+)?/g) ?? ['0', '0', '0'];
     const [r, g, b] = nums.map(Number);
     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
   }
@@ -63,7 +63,7 @@ function withAlpha(color: string, alpha: number) {
   const el = document.createElement('canvas').getContext('2d');
   if (el) {
     el.fillStyle = color as any;
-    const parsed = el.fillStyle?.toString() ?? '';
+    const parsed = typeof el.fillStyle === 'string' ? el.fillStyle : '';
     if (parsed.startsWith('#')) return withAlpha(parsed, alpha);
   }
 
@@ -156,6 +156,7 @@ function MetricHeader({ name }: { name: string }) {
   );
 }
 
+//TODO CH split components.
 export const ProductDetailSummaryMobile = ({
   product,
   returnAnalysisThresholds,
@@ -274,14 +275,14 @@ export const ProductDetailSummaryMobile = ({
               repr(
                 returnAnalysisThresholds,
                 currentReturnAnalysisLabel,
-                selectedReturnAnalysis?.metricValue ?? 0
+                selectedBenchmarkReturnAnalysis?.metricValue ?? 0
               ).color
             }
             gradeText={
               repr(
                 returnAnalysisThresholds,
                 currentReturnAnalysisLabel,
-                selectedReturnAnalysis?.metricValue ?? 0
+                selectedBenchmarkReturnAnalysis?.metricValue ?? 0
               ).grade
             }
           />
@@ -418,9 +419,9 @@ export const ProductDetailSummaryMobile = ({
           <div>
             <Text strong>{product.name}</Text>
             <div style={{ height: '100%', width: '100%' }}>
-              {product.timeSeries?.length && (
+              {(product.timeSeries?.length ?? 0) > 0 && (
                 <ReturnDistributionGraph
-                  marketValues={product.timeSeries.map((x) => x.sharePrice)}
+                  marketValues={product.timeSeries?.map((x) => x.sharePrice) ?? []}
                   yAxisOverride={{ title: { enabled: false } }}
                 />
               )}
@@ -431,9 +432,11 @@ export const ProductDetailSummaryMobile = ({
                 'No benchmark selected'}
             </Text>
             <div style={{ height: '100%', width: '100%' }}>
-              {product.timeSeries?.length && (
+              {(product.timeSeries?.length ?? 0) > 0 && (
                 <ReturnDistributionGraph
-                  marketValues={product.timeSeries.map((x) => x.hodlSharePrice)}
+                  marketValues={
+                    product.timeSeries?.map((x) => x.hodlSharePrice) ?? []
+                  }
                   yAxisOverride={{ title: { enabled: false } }}
                 />
               )}
@@ -443,10 +446,10 @@ export const ProductDetailSummaryMobile = ({
               <div>
                 <Text strong>{comparingProduct?.name}</Text>
                 <div style={{ height: '100%', width: '100%' }}>
-                  {comparingProduct?.timeSeries?.length && (
+                  {(comparingProduct?.timeSeries?.length ?? 0) > 0 && (
                     <ReturnDistributionGraph
                       marketValues={
-                        comparingProduct?.timeSeries.map((x) => x.sharePrice) ??
+                        comparingProduct?.timeSeries?.map((x) => x.sharePrice) ??
                         []
                       }
                       yAxisOverride={{ title: { enabled: false } }}

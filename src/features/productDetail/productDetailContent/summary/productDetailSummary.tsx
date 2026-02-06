@@ -60,6 +60,7 @@ interface ProductDetailSummaryProps {
 
 const defaultBenchmark = Benchmark.HODL;
 
+//TODO CH split components.
 export const ProductDetailSummary: FC<ProductDetailSummaryProps> = ({
   product,
   loadingSimulationRunBreakdown,
@@ -248,26 +249,39 @@ export const ProductDetailSummary: FC<ProductDetailSummaryProps> = ({
   >({} as Record<Pool, SimulationRunBreakdown>);
 
   const addressKey = product.address?.toLowerCase() ?? '';
-  const specialPoolKey = live_pools.factsheets.find(x => x.poolId == addressKey)?.targetPoolJson ?? '';
+  const specialPoolKey =
+    live_pools.factsheets.find((x) => x.poolId === addressKey)?.targetPoolJson ??
+    '';
 
   const existingReturnAnalysis = useAppSelector((state) =>
     selectReturnAnalysisByProductId(state, product.id)
   );
 
   useEffect(() => {
-    const pools = Object.values(live_pools.factsheets.map(x => x.targetPoolJson));
+    let cancelled = false;
+    const pools = live_pools.factsheets.map((x) => x.targetPoolJson);
+
     const loadAll = async () => {
-      setLoadingJsonProductSimulations(true);
-      const entries = await Promise.all(
-        pools.map(async (pool) => [pool, await getBreakdown(pool)] as const)
-      );
-      setBreakdowns(
-        Object.fromEntries(entries) as Record<Pool, SimulationRunBreakdown>
-      );
-      setLoadingJsonProductSimulations(false);
+      dispatch(setLoadingJsonProductSimulations(true));
+      try {
+        const entries = await Promise.all(
+          pools.map(async (pool) => [pool, await getBreakdown(pool)] as const)
+        );
+        if (!cancelled) {
+          setBreakdowns(
+            Object.fromEntries(entries) as Record<Pool, SimulationRunBreakdown>
+          );
+        }
+      } finally {
+        dispatch(setLoadingJsonProductSimulations(false));
+      }
     };
+
     void loadAll();
-  }, [live_pools.factsheets]);
+    return () => {
+      cancelled = true;
+    };
+  }, [dispatch, live_pools.factsheets]);
 
   useEffect(() => {
     if (!specialPoolKey || loadingBreakdowns) return;

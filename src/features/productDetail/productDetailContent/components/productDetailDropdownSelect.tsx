@@ -49,7 +49,7 @@ export const ProductDetailDropdownSelect: FC<
         showSearch
         popupMatchSelectWidth
         loading={isLoading}
-        disabled={isLoading || options.length === 0}
+        disabled={isLoading ?? options.length === 0}
         className={styles['product-detail-dropdown-select']}
         optionFilterProp="label"
         optionLabelProp="label"

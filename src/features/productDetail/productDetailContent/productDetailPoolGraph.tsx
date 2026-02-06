@@ -276,20 +276,17 @@ const ProductDetailPoolGraphImpl: FC<ProductDetailPoolGraphImplProps> = ({
       }
 
       switch (range) {
-        case '1D':
-          return 6 * HOUR;
-        case '1W':
+        case '7d':
           return DAY;
-        case '1M':
+        case '1m':
           return 2 * DAY;
-        case '3M':
+        case '3m':
           return WEEK;
-        case '6M':
+        case '6m':
           return 2 * WEEK;
-        case 'YTD':
-        case '1Y':
+        case '1y':
           return MONTH;
-        case 'ALL':
+        case 'max':
           return Math.max(MONTH, Math.round(spanMs / 12));
         default: {
           if (spanMs <= maxDataPoints * oneDay) {
@@ -301,7 +298,7 @@ const ProductDetailPoolGraphImpl: FC<ProductDetailPoolGraphImplProps> = ({
         }
       }
     },
-    [DAY, HOUR, MONTH, WEEK, isMobile]
+    [DAY, MONTH, WEEK, isMobile]
   );
 
   const totalSpanMs = useMemo(() => {

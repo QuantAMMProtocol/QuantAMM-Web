@@ -29,7 +29,6 @@ import {
 } from '../../../shared/graphs';
 import {
   SimulationRunMetric,
-  SimulationRunBreakdown,
 } from '../../../simulationResults/simulationResultSummaryModels';
 import { ProductDetailDropdown } from '../components/productDetailDropdown';
 
@@ -134,6 +133,7 @@ function MetricProgress({
   );
 }
 
+//TODO CH split components.
 export const ProductDetailSummaryDesktop: FC<
   ProductDetailSummaryDesktopProps
 > = ({
@@ -151,7 +151,7 @@ export const ProductDetailSummaryDesktop: FC<
   handleBenchmarkAnalysisChange,
 }) => {
   const isLoading =
-    loadingSimulationRunBreakdown && loadingOtherProductSimulationRunBreakdown;
+    loadingSimulationRunBreakdown || loadingOtherProductSimulationRunBreakdown;
 
   const [weightsView, setWeightsView] = useState<'product' | 'benchmark'>(
     'product'
@@ -237,7 +237,7 @@ export const ProductDetailSummaryDesktop: FC<
   );
 
   const simulationRunBreakdown = useMemo(
-    () => product?.simulationRunBreakdown as SimulationRunBreakdown | undefined,
+    () => product?.simulationRunBreakdown,
     [product?.simulationRunBreakdown]
   );
 
@@ -252,8 +252,8 @@ export const ProductDetailSummaryDesktop: FC<
     return [
       ...(returnAnalysis.map((x) => x.metricName) ?? []),
       ...((benchmarkAnalysisArr
-        .filter((x) => x.benchmarkName != 'return_analysis')
-        .map((x) => x.metricName) ?? []) as string[]),
+        .filter((x) => x.benchmarkName !== 'benchmark_return_analysis')
+        .map((x) => x.metricName) ?? [])),
     ];
   }, [simulationRunBreakdown]);
 
