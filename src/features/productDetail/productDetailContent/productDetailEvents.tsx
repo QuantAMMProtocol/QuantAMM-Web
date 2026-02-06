@@ -14,6 +14,7 @@ import { ProductDetailEventsHeatmap } from './productDetailEventsHeatmap';
 import { useExplorerBase } from './productDetailUseExplorerBase';
 import { useBadgeThresholds } from './productDetailUseBadgeThresholds';
 import { useHeatmapData } from './productDetailUseHeatmapData';
+import styles from './productDetailEvents.module.scss';
 
 export interface ProductDetailEventsProps {
   productId: string;
@@ -63,24 +64,21 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = memo(function P
   const heatmap = useHeatmapData(product, poolEvents);
 
   return (
-    <Row id="events" style={{ marginTop: 20 }}>
-      <Col span={24} style={{ display: 'flex', flexDirection: 'row', justifyContent: 'start', paddingLeft: 8, borderBottom: '1px solid var(--primary-lighter)' }}>
+    <Row id="events" className={styles.eventsRow}>
+      <Col span={24} className={styles.headerCol}>
         <ProductDetailEventsHeader
           isMobile={!!isMobile}
           onCsv={() => gridRef.current?.api?.exportDataAsCsv()}
         />
       </Col>
 
-      <Col
-        span={24}
-        style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 20, paddingLeft: 12, paddingRight: 12, width: '100%' }}
-      >
+      <Col span={24} className={styles.contentCol}>
         {showSpinner ? (
           <Spin />
         ) : error && rowData.length === 0 ? (
           <div>Failed to load events.</div>
         ) : isMobile ? (
-          <div style={{ width: '100%' }}>
+          <div className={styles.contentFullWidth}>
             {!heatmap.heatmapData.length ? (
               <Empty description="No swap data" />
             ) : (
@@ -94,8 +92,8 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = memo(function P
             )}
           </div>
         ) : (
-          <div style={{ width: '100%' }}>
-            <div className={darkThemeAg} style={{ height: 700, width: '100%' }}>
+          <div className={styles.contentFullWidth}>
+            <div className={`${darkThemeAg} ${styles.gridWrapper}`}>
               <ProductDetailEventsGrid
                 ref={gridRef}
                 rowData={rowData}

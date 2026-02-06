@@ -5,6 +5,7 @@ import { GqlPoolEvent, GqlPoolEventType } from '../../../__generated__/graphql-t
 import { format } from 'date-fns';
 import { Tag, Tooltip } from 'antd';
 import { truncateMiddle } from './utils';
+import styles from './productDetailEventsGrid.module.scss';
 
 export interface Thresholds {
   goldThreshold: number;
@@ -53,7 +54,7 @@ export const ProductDetailEventsGrid = forwardRef<AgGridReact<GqlPoolEvent>, Eve
           const hasValidPrefix = !!thresholds.srcPrefix && thresholds.srcPrefix !== 'UNKNOWN';
 
           if (!level || !hasValidPrefix) {
-            return <span style={{ display: 'inline-block', width: 18, height: 18 }} />;
+            return <span className={styles.badgePlaceholder} />;
           }
 
           const src = `/badges/${thresholds.srcPrefix}-${level}.svg`;
@@ -63,7 +64,7 @@ export const ProductDetailEventsGrid = forwardRef<AgGridReact<GqlPoolEvent>, Eve
               <img
                 alt=""
                 src={src}
-                style={{ width: 18, height: 18, display: 'block' }}
+                className={styles.badgeImage}
                 onError={(e) => {
                   e.currentTarget.style.display = 'none';
                 }}
@@ -115,17 +116,8 @@ export const ProductDetailEventsGrid = forwardRef<AgGridReact<GqlPoolEvent>, Eve
         cellRenderer: (p: ICellRendererParams) => {
           const url = `${explorerBase}/address/${p.value}`;
           return (
-            <Tag
-              style={{
-                width: '100%',
-                display: 'flex',
-                justifyContent: 'center',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
-              }}
-            >
-              <a href={url} target="_blank" rel="noopener noreferrer" style={{ textAlign: 'center' }}>
+            <Tag className={styles.addressTag}>
+              <a href={url} target="_blank" rel="noopener noreferrer" className={styles.tagLink}>
                 {truncateMiddle(String(p.value))}
               </a>
             </Tag>
@@ -141,17 +133,8 @@ export const ProductDetailEventsGrid = forwardRef<AgGridReact<GqlPoolEvent>, Eve
         cellRenderer: (p: ICellRendererParams) => {
           const url = `${explorerBase}/tx/${p.value}`;
           return (
-            <Tag
-              style={{
-                width: '100%',
-                display: 'flex',
-                justifyContent: 'center',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
-              }}
-            >
-              <a href={url} target="_blank" rel="noopener noreferrer" style={{ textAlign: 'center' }}>
+            <Tag className={styles.addressTag}>
+              <a href={url} target="_blank" rel="noopener noreferrer" className={styles.tagLink}>
                 {truncateMiddle(String(p.value))}
               </a>
             </Tag>

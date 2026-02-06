@@ -13,6 +13,7 @@ import { GqlChain } from '../../../__generated__/graphql-types';
 import { ProductDetailSidebarSocials } from '../productDetailSidebar/productDetailSidebarSocials';
 import { ProductDetailSidebarStrategySummary } from '../productDetailSidebar/productDetailSidebarStrategySummary';
 import { ProductDetailTable } from './components/productDetailTable';
+import styles from './productDetailContent.module.scss';
 
 const { Content } = Layout;
 
@@ -49,7 +50,7 @@ export const ProductDetailContent: FC<ProductDetailContentProps> = ({
               <></>
             )}
             <Row>
-              <Col span={24} style={{ padding: '16px' }}>
+              <Col span={24} className={styles.strategyCol}>
                 <ProductDetailSidebarStrategySummary product={product} />
               </Col>
             </Row>
@@ -70,17 +71,8 @@ export const ProductDetailContent: FC<ProductDetailContentProps> = ({
             {!isMobile ? (
               <></>
             ) : (
-              <Row id="details" style={{ marginTop: 20 }} hidden={isMobile}>
-                <Col
-                  span={24}
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    marginTop: 20,
-                    paddingLeft: 12,
-                  }}
-                >
+              <Row id="details" className={styles.detailsRow} hidden={isMobile}>
+                <Col span={24} className={styles.detailsCol}>
                   <ProductDetailTable
                     simulationRunBreakdown={product.simulationRunBreakdown}
                     productId={product.address ?? product.id}

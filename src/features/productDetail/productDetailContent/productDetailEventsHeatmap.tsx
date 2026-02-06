@@ -1,5 +1,6 @@
 import { FC, memo, useEffect, useRef } from 'react';
 import { AgChartOptions, AgCharts, AgHeatmapSeriesStyle } from 'ag-charts-enterprise';
+import styles from './productDetailEventsHeatmap.module.scss';
 
 export interface HeatDatum {
   tokenIn: string;
@@ -183,10 +184,5 @@ export const ProductDetailEventsHeatmap: FC<EventsHeatmapProps> = memo(function 
     };
   }, [chartTheme, data, xDomain, yDomain, addrNameMap]);
 
-  return (
-    <div
-      ref={chartElRef}
-      style={{ width: '100%', height: 520, background: 'transparent', borderRadius: 16 }}
-    />
-  );
+  return <div ref={chartElRef} className={styles.heatmapContainer} />;
 });

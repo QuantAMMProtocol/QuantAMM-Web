@@ -17,3 +17,15 @@
   top: 0;
   bottom: 0;
 }
+
+.detailsRow {
+  margin-top: 20px;
+}
+
+.detailsCol {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  padding-left: 12px;
+}

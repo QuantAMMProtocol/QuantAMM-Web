@@ -6,6 +6,7 @@ import { selectAvailableUpdateRules } from '../../simulationRunConfiguration/sim
 import { TrainingResult } from '../docModel';
 import { Eli5 } from '../../shared';
 import styles from './updateRules.module.css';
+import sharedStyles from '../documentation.module.css';
 
 export interface Marker {
   enabled: boolean;
@@ -42,7 +43,7 @@ export function MomentumUpdateRule() {
                 <h1>QuantAMM Update Rule: Momentum</h1>
               </Col>
               <Col span={24}>
-                <Form.Item className={styles.formItemTop5}>
+                <Form.Item className={sharedStyles.formItemTop5}>
                   <Radio.Group
                     size="small"
                     value={eli5}

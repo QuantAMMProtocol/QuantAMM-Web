@@ -5,6 +5,7 @@ import { useAppSelector } from '../../../app/hooks';
 import { selectAvailableUpdateRules } from '../../simulationRunConfiguration/simulationRunConfigurationSlice';
 import { Eli5 } from '../../shared';
 import styles from './updateRules.module.css';
+import sharedStyles from '../documentation.module.css';
 
 interface DocProps {
   hideTitle?: boolean;
@@ -28,7 +29,7 @@ export function ChannelFollowingUpdateRule(props: DocProps) {
                 </div>
               </Col>
               <Col span={24}>
-                <Form.Item className={styles.formItemTop5}>
+                <Form.Item className={sharedStyles.formItemTop5}>
                   <Radio.Group
                     size="small"
                     value={eli5}

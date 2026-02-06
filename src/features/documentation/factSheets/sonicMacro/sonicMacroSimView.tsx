@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { SimulationResultsSummaryStep } from '../../../simulationResults/simulationResultsSummaryStep';
 import { getBreakdown, Pool } from '../../../../services/breakdownService';
 import { SimulationRunBreakdown } from '../../../simulationResults/simulationResultSummaryModels';
-import styles from '../factSheetSimView.module.css';
+import sharedStyles from '../../documentation.module.css';
 
 const { TabPane } = Tabs;
 
@@ -67,7 +67,7 @@ export default function SonicMacroSimulatorExample() {
             defaultActiveKey={key}
             key={key}
             onChange={(key) => setKey(key)}
-            className={styles.simViewTabs}
+            className={sharedStyles.simViewTabs}
           >
             <TabPane tab="Sonic Macro Training Period" key={'1'}>
               {loading ? (

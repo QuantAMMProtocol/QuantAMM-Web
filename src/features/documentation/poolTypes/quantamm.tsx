@@ -2,6 +2,7 @@ import { Col, Radio, Row, Form } from 'antd';
 import { MathJax, MathJaxContext } from 'better-react-mathjax';
 import { useState } from 'react';
 import styles from './poolTypes.module.css';
+import sharedStyles from '../documentation.module.css';
 interface OptionalProps {
   hideTitle?: boolean;
   fixedEL15?: boolean;
@@ -23,7 +24,7 @@ export function QuantAMMPoolDescription(props: OptionalProps) {
             </Col>
             <Col span={24}>
               <div hidden={props.fixedEL15}>
-              <Form.Item className={styles.formItemTop5}>
+              <Form.Item className={sharedStyles.formItemTop5}>
                 <Radio.Group
                   size="small"
                   value={eli5}
@@ -56,8 +57,8 @@ export function QuantAMMPoolDescription(props: OptionalProps) {
                 swap one token for another at an automated price. The holdings
                 within the liquidity pool are kept at constant equal weights.
               </p>
-              <h3 className={styles.secondaryText}>How QuantAMM BTFs work</h3>
-              <p className={styles.secondaryText}>
+              <h3 className={sharedStyles.secondaryText}>How QuantAMM BTFs work</h3>
+              <p className={sharedStyles.secondaryText}>
                 QuantAMM BTFs are automated market maker pools. However instead
                 of offering a competitive market price, BTFs offer a slightly
                 off market price. The aim of this off market price is to allow

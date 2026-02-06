@@ -89,9 +89,7 @@ export default function Research() {
                       <Col span={24}>
                         <Row>
                           <Col span={24}>
-                            <h3
-                              className={styles.researchSecondaryText}
-                            >
+                            <h3 className={styles.secondaryText}>
                               {item.title}
                             </h3>
                             <p>
@@ -111,11 +109,8 @@ export default function Research() {
                           </Col>
                           <Col
                             span={24}
-                            style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                            }}                          >
+                            className={styles.researchButtonColMobile}
+                          >
                             <Button href={item.link} type="primary">
                               View Full Article
                             </Button>
@@ -140,7 +135,7 @@ export default function Research() {
                   <Col span={24}>
                     <Row>
                       <Col span={4} className={styles.researchDesktopLeftCol}>
-                        <h3 className={styles.researchSecondaryText}>
+                        <h3 className={styles.secondaryText}>
                           {item.title}
                         </h3>
                         <p>
@@ -162,7 +157,8 @@ export default function Research() {
                           padding: 10,
                           display: 'flex',
                           alignItems: 'center',
-                        }}                      >
+                        }}      
+                      >
                         <Button href={item.link} type="primary">
                           View Full Article
                         </Button>

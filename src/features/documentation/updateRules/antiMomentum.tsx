@@ -5,6 +5,7 @@ import { useAppSelector } from '../../../app/hooks';
 import { selectAvailableUpdateRules } from '../../simulationRunConfiguration/simulationRunConfigurationSlice';
 import { Eli5 } from '../../shared';
 import styles from './updateRules.module.css';
+import sharedStyles from '../documentation.module.css';
 
 export function AntiMomentumUpdateRule() {
   const [eli5, setEli5] = useState('ELI5');
@@ -21,7 +22,7 @@ export function AntiMomentumUpdateRule() {
                 <h1>QuantAMM Update Rule: Anti Momentum</h1>
               </Col>
               <Col span={24}>
-                <Form.Item className={styles.formItemTop5}>
+                <Form.Item className={sharedStyles.formItemTop5}>
                   <Radio.Group
                     size="small"
                     value={eli5}

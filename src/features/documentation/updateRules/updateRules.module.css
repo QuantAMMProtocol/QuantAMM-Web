@@ -6,14 +6,6 @@
   padding: 15px;
 }
 
-.rowPad20 {
-  padding: 20px;
-}
-
-.formItemTop5 {
-  margin-top: 5px;
-}
-
 .formItemTop5NoBottom {
   margin-top: 5px;
   margin-bottom: 0;

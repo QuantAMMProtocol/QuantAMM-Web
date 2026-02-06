@@ -1,13 +1,13 @@
 import { Col, Row } from 'antd';
 import { MathJax, MathJaxContext } from 'better-react-mathjax';
 import { Fade } from 'react-awesome-reveal';
-import styles from './basics.module.css';
+import sharedStyles from '../documentation.module.css';
 
 export function AMMDescription() {
   return (
     <Row>
       <Col span={4}></Col>
-      <Col className={styles.contentPad20} span={16}>
+      <Col className={sharedStyles.pad20} span={16}>
         <Fade>
           <MathJaxContext>
             <h2>Simulating Automated Market Makers</h2>

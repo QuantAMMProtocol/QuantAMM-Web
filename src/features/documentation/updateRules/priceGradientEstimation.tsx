@@ -1,7 +1,7 @@
 import { Col, Row } from 'antd';
 import { MathJax, MathJaxContext } from 'better-react-mathjax';
 import { Fade } from 'react-awesome-reveal';
-import styles from './updateRules.module.css';
+import sharedStyles from '../documentation.module.css';
 
 export function PriceGradientEstimation() {
   return (
@@ -9,7 +9,7 @@ export function PriceGradientEstimation() {
       <Row>
         <Col span={4}></Col>
         <Col span={16}>
-          <Row className={styles.rowPad20}>
+          <Row className={sharedStyles.pad20}>
             <Col span={24}>
               <span>
                 <h2>

@@ -7,6 +7,18 @@
   color: rgb(1, 105, 1);
 }
 
+.pad20 {
+  padding: 20px;
+}
+
+.formItemTop5 {
+  margin-top: 5px;
+}
+
+.secondaryText {
+  color: var(--secondary-text-color);
+}
+
 .simViewTabs {
   padding-left: 20px;
   padding-right: 20px;
@@ -40,10 +52,6 @@
 .companyPartnerImage {
   width: 15%;
   height: auto;
-}
-
-.researchSecondaryText {
-  color: var(--secondary-text-color);
 }
 
 .fontWeightBold {

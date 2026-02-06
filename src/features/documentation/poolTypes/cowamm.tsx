@@ -2,7 +2,7 @@ import React from 'react';
 import { Fade } from 'react-awesome-reveal';
 import { Col, Row } from 'antd';
 import { CowAMM } from '../../shared/eli5/cowAMM';
-import styles from './poolTypes.module.css';
+import sharedStyles from '../documentation.module.css';
 
 const CowammPoolDescription: React.FC = () => {
   return (
@@ -10,7 +10,7 @@ const CowammPoolDescription: React.FC = () => {
       <Col span={4}></Col>
       <Col span={16}>
         <Fade>
-          <div className={styles.contentPad20}>
+          <div className={sharedStyles.pad20}>
             <CowAMM />
           </div>
         </Fade>
