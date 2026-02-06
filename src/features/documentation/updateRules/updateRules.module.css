@@ -1,0 +1,45 @@
+.containerPad10 {
+  padding: 10px;
+}
+
+.containerPad15 {
+  padding: 15px;
+}
+
+.rowPad20 {
+  padding: 20px;
+}
+
+.formItemTop5 {
+  margin-top: 5px;
+}
+
+.formItemTop5NoBottom {
+  margin-top: 5px;
+  margin-bottom: 0;
+}
+
+.imageFull {
+  width: 100%;
+}
+
+.imagePadRight5Top15 {
+  width: 100%;
+  padding-right: 5%;
+  padding-top: 15%;
+}
+
+.imagePadLeft10Right10Bottom10 {
+  width: 100%;
+  padding-left: 10%;
+  padding-right: 10%;
+  padding-bottom: 10%;
+}
+
+.marginTop20 {
+  margin-top: 20px;
+}
+
+.summaryTitle {
+  margin-top: 0;
+}

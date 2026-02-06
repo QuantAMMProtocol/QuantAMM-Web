@@ -5,6 +5,7 @@ import { useAppSelector } from '../../../app/hooks';
 import { selectAvailableUpdateRules } from '../../simulationRunConfiguration/simulationRunConfigurationSlice';
 import { TrainingResult } from '../docModel';
 import { Eli5 } from '../../shared';
+import styles from './updateRules.module.css';
 
 export interface Marker {
   enabled: boolean;
@@ -35,13 +36,13 @@ export function MomentumUpdateRule() {
       <MathJaxContext>
         <Row>
           <Col span={1}></Col>
-          <Col style={{ padding: 10 }} span={23}>
+          <Col className={styles.containerPad10} span={23}>
             <Row>
               <Col span={24}>
                 <h1>QuantAMM Update Rule: Momentum</h1>
               </Col>
               <Col span={24}>
-                <Form.Item style={{ marginTop: '5px' }}>
+                <Form.Item className={styles.formItemTop5}>
                   <Radio.Group
                     size="small"
                     value={eli5}
@@ -63,15 +64,11 @@ export function MomentumUpdateRule() {
               <div hidden={eli5 !== 'ELI5'}>
                 <Row>
                   <Col span={8}>
-                    <img
-                      loading="lazy"
-                      src={'/documentation/vanilla_momentum.svg'}
-                      style={{
-                        width: '100%',
-                        paddingRight: '5%',
-                        paddingTop: '15%',
-                      }}
-                    />
+                      <img
+                        loading="lazy"
+                        src={'/documentation/vanilla_momentum.svg'}
+                        className={styles.imagePadRight5Top15}
+                      />
                   </Col>
                   <Col span={16}>
                     <Eli5 strategy="MOMENTUM" />

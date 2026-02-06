@@ -1,6 +1,7 @@
 import { Col, Row } from 'antd';
 import { MathJax, MathJaxContext } from 'better-react-mathjax';
 import { Fade } from 'react-awesome-reveal';
+import styles from './basics.module.css';
 
 export function ImpermanentLoss() {
   return (
@@ -8,7 +9,7 @@ export function ImpermanentLoss() {
       <Row>
         <Col span={4}></Col>
         <Col span={16}>
-          <Row style={{ padding: 20 }}>
+          <Row className={styles.contentPad20}>
             <Col span={24}>
               <span>
                 <h2>Fixed Weight DEXes must suffer Impermanent Loss</h2>

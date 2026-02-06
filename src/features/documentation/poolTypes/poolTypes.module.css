@@ -1,0 +1,15 @@
+.contentPad20 {
+  padding: 20px;
+}
+
+.formItemTop5 {
+  margin-top: 5px;
+}
+
+.secondaryText {
+  color: var(--secondary-text-color);
+}
+
+.mathSmall {
+  font-size: 12px;
+}

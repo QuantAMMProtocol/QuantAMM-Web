@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useAppSelector } from '../../../app/hooks';
 import { selectAvailableUpdateRules } from '../../simulationRunConfiguration/simulationRunConfigurationSlice';
 import { Eli5 } from '../../shared';
+import styles from './updateRules.module.css';
 
 interface DocProps {
   hideTitle?: boolean;
@@ -25,7 +26,7 @@ export function TruflationRegimeUpdateRule(props: DocProps) {
       <MathJaxContext>
         <Row>
           <Col span={1}></Col>
-          <Col style={{ padding: 10 }} span={23}>
+          <Col className={styles.containerPad10} span={23}>
             <Row>
               <Col span={24}>
                 <div hidden={props.hideTitle}>
@@ -33,7 +34,7 @@ export function TruflationRegimeUpdateRule(props: DocProps) {
                 </div>
               </Col>
               <Col span={24}>
-                <Form.Item style={{ marginTop: '5px', marginBottom: '0px' }}>
+                <Form.Item className={styles.formItemTop5NoBottom}>
                   <Radio.Group
                     size="small"
                     value={eli5}
@@ -49,19 +50,14 @@ export function TruflationRegimeUpdateRule(props: DocProps) {
               </Col>
             </Row>
             <Row>
-              <Col span={24} >
+              <Col span={24}>
                 <div hidden={eli5 !== 'ELI5' || props.hideImage}>
                   <Row>
                     <Col span={8}>
                       <img
                         loading="lazy"
                         src={'/assets/truflation_bitcoin_mono.png'}
-                        style={{
-                          width: '100%',
-                          paddingLeft: '10%',
-                          paddingRight: '10%',
-                          paddingBottom: '10%',
-                        }}
+                        className={styles.imagePadLeft10Right10Bottom10}
                       />
                     </Col>
                     <Col span={16}>
@@ -87,7 +83,7 @@ export function TruflationRegimeUpdateRule(props: DocProps) {
                     eli5 === 'ELI5' || (eli5 === 'ELI5' && !props.hideImage)
                   }
                 >
-                  <h3 style={{marginTop:0}}>Summary</h3>
+                  <h3 className={styles.summaryTitle}>Summary</h3>
                   <p>
                     This update rule detects inflation “regimes” from a Truflation
                     oracle time series (or, if unavailable, a fallback price

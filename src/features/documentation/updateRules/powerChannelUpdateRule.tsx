@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useAppSelector } from '../../../app/hooks';
 import { selectAvailableUpdateRules } from '../../simulationRunConfiguration/simulationRunConfigurationSlice';
 import { Eli5 } from '../../shared';
+import styles from './updateRules.module.css';
 interface DocProps {
   hideTitle?: boolean;
   hideImage?: boolean;
@@ -17,7 +18,7 @@ export function PowerChannelUpdateRule(props: DocProps) {
       <MathJaxContext>
         <Row>
           <Col span={1}></Col>
-          <Col style={{ padding: 10 }} span={23}>
+          <Col className={styles.containerPad10} span={23}>
             <Row>
               <Col span={24}>
                 <div hidden={props.hideTitle}>
@@ -25,7 +26,7 @@ export function PowerChannelUpdateRule(props: DocProps) {
                 </div>
               </Col>
               <Col span={24}>
-                <Form.Item style={{ marginTop: '5px', marginBottom: '0px' }}>
+                <Form.Item className={styles.formItemTop5NoBottom}>
                   <Radio.Group
                     size="small"
                     value={eli5}
@@ -50,11 +51,7 @@ export function PowerChannelUpdateRule(props: DocProps) {
                       <img
                         loading="lazy"
                         src={'/documentation/power_channel.svg'}
-                        style={{
-                          width: '100%',
-                          paddingRight: '5%',
-                          paddingTop: '15%',
-                        }}
+                        className={styles.imagePadRight5Top15}
                       />
                     </Col>
                     <Col span={16}>
