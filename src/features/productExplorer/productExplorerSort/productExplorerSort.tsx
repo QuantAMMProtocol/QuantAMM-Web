@@ -1,6 +1,6 @@
-import { FC, useCallback } from 'react';
+import { FC, useCallback, useMemo } from 'react';
 import { DownOutlined } from '@ant-design/icons';
-import { Dropdown, Space, Typography } from 'antd';
+import { Dropdown, MenuProps, Space, Typography } from 'antd';
 import { MenuItemType } from 'antd/es/menu/interface';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { ProductExplorerSortMetric } from '../../../models';
@@ -51,9 +51,10 @@ export const ProductExplorerSort: FC = () => {
   const dispatch = useAppDispatch();
   const sortingMetric = useAppSelector(selectSortingMetric);
   const sortingDirection = useAppSelector(selectSortingDirection);
+  type MenuClickEvent = Parameters<NonNullable<MenuProps['onClick']>>[0];
 
   const handleDirectionClick = useCallback(
-    (event: any) => {
+    (event: MenuClickEvent) => {
       const selectedItem = directionItems.find((i) => i?.key === event.key);
       if (selectedItem) {
         const direction = selectedItem.label === 'Ascending' ? 'asc' : 'desc';
@@ -64,7 +65,7 @@ export const ProductExplorerSort: FC = () => {
   );
 
   const handleMetricClick = useCallback(
-    (event: any) => {
+    (event: MenuClickEvent) => {
       const selectedItem = metricItems.find((i) => i?.key === event.key);
       if (selectedItem) {
         dispatch(
@@ -79,6 +80,17 @@ export const ProductExplorerSort: FC = () => {
     [dispatch]
   );
 
+  const selectedMetricKey = useMemo(() => {
+    if (sortingMetric === 'tvl') return '1';
+    if (sortingMetric === 'yield') return '2';
+    if (sortingMetric === 'performance') return '3';
+    if (sortingMetric === 'diversification') return '4';
+    if (sortingMetric === 'adaptability') return '5';
+    return '1';
+  }, [sortingMetric]);
+
+  const selectedDirectionKey = sortingDirection === 'asc' ? '1' : '2';
+
   return (
     <div className={style['product-explorer__sort-container']}>
       <Typography.Text>Sort by</Typography.Text>
@@ -87,7 +99,7 @@ export const ProductExplorerSort: FC = () => {
           menu={{
             items: metricItems,
             selectable: true,
-            defaultSelectedKeys: ['1'],
+            selectedKeys: [selectedMetricKey],
             onClick: handleMetricClick,
           }}
         >
@@ -105,7 +117,7 @@ export const ProductExplorerSort: FC = () => {
           menu={{
             items: directionItems,
             selectable: true,
-            defaultSelectedKeys: ['2'],
+            selectedKeys: [selectedDirectionKey],
             onClick: handleDirectionClick,
           }}
         >

@@ -1,7 +1,11 @@
 import { Product } from '../../../models';
 
-const formatValueToUsd = (value: string) => {
-  const valueFloat = parseFloat(value);
+const formatValueToUsd = (value: string | number) => {
+  const valueFloat =
+    typeof value === 'number' ? value : parseFloat(String(value));
+  if (!Number.isFinite(valueFloat)) {
+    return undefined;
+  }
   const valueCompact = Intl.NumberFormat('en', {
     notation: 'compact',
     maximumSignificantDigits: 3,
@@ -13,7 +17,7 @@ const formatValueToUsd = (value: string) => {
 
 export const getTvl = (product: Product): string | undefined => {
   const value = product.dynamicData?.totalLiquidity;
-  return value ? formatValueToUsd(value) : undefined;
+  return value == null ? undefined : formatValueToUsd(value);
 };
 
 export const getCurrentPrice = (product: Product) => {
@@ -22,7 +26,7 @@ export const getCurrentPrice = (product: Product) => {
   }
   const lastTimeSeriesEntry =
     product.timeSeries?.[product.timeSeries?.length - 1];
-  if (!lastTimeSeriesEntry?.sharePrice) {
+  if (lastTimeSeriesEntry?.sharePrice == null) {
     return formatValueToUsd('0');
   }
   return formatValueToUsd(lastTimeSeriesEntry.sharePrice.toFixed(2));

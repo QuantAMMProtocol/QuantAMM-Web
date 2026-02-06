@@ -25,9 +25,10 @@ export const ProductItemTokenList: FC<ProductItemTokenListProps> = ({
   }, [product]);
 
   const tokenList = useMemo(() => {
+    const safeTotalWeight = totalWeight > 0 ? totalWeight : 1;
     const mappedTokens = product.poolConstituents.map((token) => [
       token.coin,
-      token.weight / totalWeight,
+      token.weight / safeTotalWeight,
     ]);
 
     const firstColumn = mappedTokens.slice(0, 4);
@@ -113,7 +114,7 @@ export const ProductItemTokenList: FC<ProductItemTokenListProps> = ({
             }}
           >
             <Button size="small" type="link" onClick={() => setShowGraph(true)}>
-              <Text style={{ fontSize: 10 }} onClick={handleTokenNamesClick}>
+              <Text style={{ fontSize: 10 }}>
                 Token Composition
               </Text>
             </Button>

@@ -7,7 +7,6 @@ import {
   AgTooltipRendererResult,
 } from 'ag-charts-community';
 import { Typography } from 'antd';
-import { getTime } from 'date-fns';
 import { useAppSelector } from '../../../../app/hooks';
 import { CURRENT_PERFORMANCE_PERIOD, Product } from '../../../../models';
 import { selectAgChartTheme } from '../../../themes/themeSlice';
@@ -23,7 +22,8 @@ interface ProductItemPerformanceGraphProps {
   wide?: boolean;
 }
 const mapPerformanceData = (product: Product) => {
-  const findFirstNonZeroPerformance = product.timeSeries!.findIndex(
+  const timeSeries = product.timeSeries ?? [];
+  const findFirstNonZeroPerformance = timeSeries.findIndex(
     (dataPoint) => dataPoint.sharePrice !== 0
   );
 
@@ -31,13 +31,13 @@ const mapPerformanceData = (product: Product) => {
     return [];
   }
 
-  return product.timeSeries
+  return timeSeries
     ?.slice(findFirstNonZeroPerformance)
     .filter((dataPoint) =>
       filterByTimeRange(dataPoint.timestamp, CURRENT_PERFORMANCE_PERIOD)
     )
     .map((dataPoint) => ({
-      date: getTime(dataPoint.timestamp) * 1000,
+      date: dataPoint.timestamp * 1000,
       value: dataPoint.sharePrice,
     }));
 };

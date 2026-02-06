@@ -24,6 +24,7 @@ interface ProductItemProps {
   product: Product;
 }
 
+//TODO CH split components.
 export const ProductItemWide: FC<ProductItemProps> = ({ product }) => {
   const isDarkTheme = useAppSelector(selectTheme);
 
@@ -55,8 +56,8 @@ export const ProductItemWide: FC<ProductItemProps> = ({ product }) => {
   }, [product]);
 
   const shouldShow = useMemo(() => {
-    return product.timeSeries && product.timeSeries.length > 0;
-  }, [product]);
+    return !!product.timeSeries && product.timeSeries.length > 0;
+  }, [product.timeSeries]);
 
   return (
     <div

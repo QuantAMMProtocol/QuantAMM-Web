@@ -5,7 +5,6 @@ import {
   useMemo,
   CSSProperties,
   useEffect,
-  ChangeEvent,
 } from 'react';
 import {
   Checkbox,
@@ -28,7 +27,7 @@ import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { FilterList, FilterMap } from '../../../models';
 import {
   selectFilters,
-  selectHorizontalView,
+  selectActiveFilters,
   selectLoadingFilters,
   selectTextSearch,
   setFilters,
@@ -44,20 +43,25 @@ const { Title, Text } = Typography;
 
 interface ProductExplorerFiltersProps {
   isDark?: boolean;
+  horizontalView: boolean;
   setHorizontalView: (checked: boolean) => void;
 }
 
+//TODO CH split components.
 export const ProductExplorerFilters: FC<ProductExplorerFiltersProps> = ({
   isDark,
+  horizontalView,
   setHorizontalView,
 }) => {
   const dispatch = useAppDispatch();
   const filters = useAppSelector<FilterList>(selectFilters);
-  const initialHorizontalView = useAppSelector<boolean>(selectHorizontalView);
+  const activeFilters = useAppSelector<FilterMap>(selectActiveFilters);
   const initialTextSearch = useAppSelector<string>(selectTextSearch);
   const loading = useAppSelector<boolean>(selectLoadingFilters);
 
   const [localFilters, setLocalFilters] = useState<FilterMap>({});
+  const [searchInput, setSearchInput] = useState<string>(initialTextSearch);
+  const [tvlInput, setTvlInput] = useState<number>(10000);
 
   const [collapsed, setCollapsed] = useState<boolean>(true);
   const [brokenBreakpoint, setBrokenBreakpoint] = useState<boolean>(true);
@@ -74,13 +78,6 @@ export const ProductExplorerFilters: FC<ProductExplorerFiltersProps> = ({
     return {};
   }, [brokenBreakpoint]);
 
-  const handleResetClick = useCallback(() => {
-    dispatch(setFilters({}));
-    dispatch(setFilters({ filterCategory: 'tvl', minTvl: undefined }));
-    dispatch(setTextSearch(''));
-    setLocalFilters({});
-  }, [dispatch]);
-
   const handleFilterClick = useCallback(
     (event: CheckboxChangeEvent) => {
       const filter = (event.target as any)['data-filter'];
@@ -96,7 +93,7 @@ export const ProductExplorerFilters: FC<ProductExplorerFiltersProps> = ({
   const handleTvlChange = useCallback(
     (value: number | null) => {
       if (value === null) {
-        dispatch(setFilters({ filterCategory: 'tvl', minTvl: undefined }));
+        dispatch(setFilters({ filterCategory: 'tvl', minTvl: 10000 }));
       } else {
         dispatch(setFilters({ filterCategory: 'tvl', minTvl: value }));
       }
@@ -110,8 +107,8 @@ export const ProductExplorerFilters: FC<ProductExplorerFiltersProps> = ({
   );
 
   const handleTextSearchChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
-      dispatch(setTextSearch(event.target.value));
+    (value: string) => {
+      dispatch(setTextSearch(value));
     },
     [dispatch]
   );
@@ -121,11 +118,40 @@ export const ProductExplorerFilters: FC<ProductExplorerFiltersProps> = ({
     [handleTextSearchChange]
   );
 
+  const handleResetClick = useCallback(() => {
+    debouncedHandleTvlChange.cancel();
+    debouncedHandleTextSearchChange.cancel();
+    dispatch(setFilters({}));
+    dispatch(setTextSearch(''));
+    setLocalFilters({});
+    setSearchInput('');
+    setTvlInput(10000);
+  }, [debouncedHandleTextSearchChange, debouncedHandleTvlChange, dispatch]);
+
   useEffect(() => {
     return () => {
       debouncedHandleTvlChange.cancel();
+      debouncedHandleTextSearchChange.cancel();
     };
-  }, [debouncedHandleTvlChange]);
+  }, [debouncedHandleTextSearchChange, debouncedHandleTvlChange]);
+
+  useEffect(() => {
+    setLocalFilters(activeFilters);
+  }, [activeFilters]);
+
+  const tvlDefaultValue = useMemo(() => {
+    const candidate = localFilters.minTvl?.[0];
+    const parsed = candidate ? parseFloat(candidate) : NaN;
+    return Number.isFinite(parsed) ? parsed : 10000;
+  }, [localFilters.minTvl]);
+
+  useEffect(() => {
+    setSearchInput(initialTextSearch);
+  }, [initialTextSearch]);
+
+  useEffect(() => {
+    setTvlInput(tvlDefaultValue);
+  }, [tvlDefaultValue]);
 
   return (
     <Sider
@@ -196,7 +222,7 @@ export const ProductExplorerFilters: FC<ProductExplorerFiltersProps> = ({
               <>
                 <Text style={{ marginRight: 12 }}>Toggle View</Text>
                 <Switch
-                  defaultChecked={initialHorizontalView}
+                  checked={horizontalView}
                   checkedChildren={<MenuOutlined />}
                   unCheckedChildren={<TableOutlined />}
                   onChange={setHorizontalView}
@@ -237,7 +263,6 @@ export const ProductExplorerFilters: FC<ProductExplorerFiltersProps> = ({
                           checked={localFilters[filterCategory]?.includes(
                             filter
                           )}
-                          disabled={false}
                           data-filter-category={filterCategory}
                           data-filter={filter}
                           onChange={handleFilterClick}
@@ -256,14 +281,18 @@ export const ProductExplorerFilters: FC<ProductExplorerFiltersProps> = ({
                 <InputNumber<number>
                   min={0}
                   max={1000000000}
-                  defaultValue={parseFloat(localFilters.minTvl?.[0] ?? '10000')}
+                  value={tvlInput}
                   formatter={(value) =>
                     `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
                   }
                   parser={(value) =>
                     value?.replace(/\$\s?|(,*)/g, '') as unknown as number
                   }
-                  onChange={debouncedHandleTvlChange}
+                  onChange={(value) => {
+                    const nextValue = value ?? 10000;
+                    setTvlInput(nextValue);
+                    debouncedHandleTvlChange(nextValue);
+                  }}
                   style={{ width: '100%' }}
                 />
                 <Text>minimum tvl</Text>
@@ -273,8 +302,12 @@ export const ProductExplorerFilters: FC<ProductExplorerFiltersProps> = ({
                 <div className={styles['filter-bar__filters']}>
                   <Input
                     placeholder="Search"
-                    defaultValue={initialTextSearch}
-                    onChange={debouncedHandleTextSearchChange}
+                    value={searchInput}
+                    onChange={(event) => {
+                      const nextValue = event.target.value;
+                      setSearchInput(nextValue);
+                      debouncedHandleTextSearchChange(nextValue);
+                    }}
                     style={{ width: '100%' }}
                   />
                 </div>

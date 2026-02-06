@@ -65,6 +65,7 @@ function getDynamicSwapFeesLabel(hookType: GqlHookType) {
   }
 }
 
+//TODO CH split components.
 export const BaseAprTooltip = ({
   aprItems,
   poolId,

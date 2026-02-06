@@ -40,6 +40,8 @@ export default function ProductExplorer() {
 
     if (!isLoadingFilters && !filterError && filterList) {
       dispatch(loadFilters(filterList));
+    } else if (!isLoadingFilters && filterError) {
+      dispatch(loadFilters([]));
     }
   }, [dispatch, filterList, filterError, isLoadingFilters]);
 
@@ -53,7 +55,7 @@ export default function ProductExplorer() {
   }, [productMap, productMapLoading, productMapError, dispatch]);
 
   useEffect(() => {
-    if (productCount) {
+    if (productCount !== undefined) {
       dispatch(setTotalPools(productCount));
     }
   }, [productCount, dispatch]);
@@ -71,6 +73,7 @@ export default function ProductExplorer() {
       ) : (
         <>
           <ProductExplorerFilters
+            horizontalView={horizontalView}
             setHorizontalView={setHorizontalView}
             isDark={isDark}
           />
@@ -84,4 +87,3 @@ export default function ProductExplorer() {
 };
 
 export { ProductExplorer };
-

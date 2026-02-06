@@ -36,6 +36,5 @@ function getCookie(name: string): string | null {
 export function getCookieBool(name: string, fallback = false): boolean {
   const v = getCookie(name);
   if (v === null) return fallback;
-  console.log('Cookie', name, 'is', v);
   return v === '1';
 }

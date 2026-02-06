@@ -5,25 +5,9 @@ import {
   returnMetricThresholds,
 } from '../../models';
 import { ProductExplorer } from '../../models/productModels';
-import { TOS_COOKIE } from './cookieUtils';
-
-
-const isBrowser = typeof window !== 'undefined' && typeof document !== 'undefined';
-
-function getCookie(name: string): string | null {
-  if (!isBrowser) return null;
-  const match = document.cookie.match(new RegExp('(?:^|; )' + name.replace(/[-[\]/{}()*+?.\\^$|]/g, '\\$&') + '=([^;]*)'));
-  return match ? decodeURIComponent(match[1]) : null;
-}
-
-function getCookieBool(name: string, fallback = false): boolean {
-  const v = getCookie(name);
-  if (v === null) return fallback;
-  console.log('Cookie bool', name, 'is', v);
-  return v === '1';
-}
+import { getCookieBool, TOS_COOKIE } from './cookieUtils';
 export const productExplorerInitialState: ProductExplorer = {
-  acceptedTermsAndConditions:getCookieBool(TOS_COOKIE),
+  acceptedTermsAndConditions: getCookieBool(TOS_COOKIE),
   loadingProducts: true,
   loadingFilters: true,
   loadingError: false,

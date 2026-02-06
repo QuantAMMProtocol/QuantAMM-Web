@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo, useRef, useState } from 'react';
+import { FC, useEffect, useMemo, useRef } from 'react';
 import { Col, Layout, Row } from 'antd';
 import autoAnimate from '@formkit/auto-animate';
 import { ProductItem } from './card/productItem';
@@ -28,7 +28,6 @@ interface ProductItemGridProps {
 
 export const ProductItemGrid: FC<ProductItemGridProps> = ({ wide }) => {
   const parent = useRef<HTMLDivElement | null>(null);
-  const [, setRefVisible] = useState(false);
 
   const products = useAppSelector(selectProducts);
   const loading = useAppSelector(selectLoadingProducts);
@@ -41,8 +40,10 @@ export const ProductItemGrid: FC<ProductItemGridProps> = ({ wide }) => {
   );
 
   useEffect(() => {
-    parent.current && autoAnimate(parent.current);
-  }, [parent.current]);
+    if (parent.current) {
+      autoAnimate(parent.current);
+    }
+  }, []);
 
   const loadingProducts = Array.from(
     {
@@ -81,11 +82,10 @@ export const ProductItemGrid: FC<ProductItemGridProps> = ({ wide }) => {
         </Row>
       </div>
       <Content className={styles['product-item-grid__content']}>
-        <Row
-          ref={(element: HTMLDivElement) => {
-            parent.current = element;
-            setRefVisible(!!element);
-          }}
+          <Row
+            ref={(element: HTMLDivElement | null) => {
+              parent.current = element;
+            }}
           gutter={[8, 8]}
           justify={{
             xs: 'center',
