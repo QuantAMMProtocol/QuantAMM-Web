@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, Card, Col, Row, Tooltip } from "antd";
-import type { CSSProperties } from "react";
+import styles from "./landingDesktop.module.css";
 
 import {
   BarChartOutlined,
@@ -13,20 +13,6 @@ import {
   ReadOutlined,
   SwapOutlined,
 } from "@ant-design/icons";
-
-const articleCardGridStyle: CSSProperties = {
-  width: "33.33%",
-  textAlign: "center",
-  padding: "10px",
-};
-
-const titleAreaStyle: CSSProperties = {
-  // Ensures icon + title block reserves vertical space
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  justifyContent: "flex-start",
-};
 
 interface ResearchItem {
   key: string;
@@ -133,26 +119,23 @@ const items: ResearchItem[] = [
 export function ResearchExplorer() {
   return (
     <Row
-      style={{
-        height: "100%",
-        marginTop: "5vh",
-      }}
+      className={styles.researchRoot}
     >
       <Col span={24}>
-        <div style={{ justifyContent: "center" }}>
-          <Row style={{ marginTop: "5vh" }}>
+        <div className={styles.centeredRow}>
+          <Row className={styles.researchSpacer}>
             <Col span={24}>
-              <div style={{ display: "flex", justifyContent: "center" }}>
+              <div className={styles.centeredRow}>
                 <Card
                   title="Explore the bleeding-edge research that makes QuantAMM possible"
-                  style={{ width: "90%" }}
+                  className={styles.researchCard}
                 >
                   {items.map(({ key, title, href, tooltip, cta = "Open", Icon }) => (
-                    <Card.Grid key={key} style={articleCardGridStyle}>
+                    <Card.Grid key={key} className={styles.researchGrid}>
                       <Tooltip title={tooltip}>
-                        <div style={titleAreaStyle}>
-                          <Icon style={{ fontSize: 60, marginTop: 10 }} />
-                          <h4 style={{ marginTop: 10, minHeight: 45 }}>{title}</h4>
+                        <div className={styles.researchTitleArea}>
+                          <Icon className={styles.researchIcon} />
+                          <h4 className={styles.researchTitle}>{title}</h4>
                         </div>
                       </Tooltip>
 

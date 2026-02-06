@@ -2,6 +2,7 @@ import { Col, Collapse, Form, Radio, Row } from 'antd';
 import { ProductItemBackground } from '../../../productExplorer/productItem/productItemBackground';
 import { useState } from 'react';
 import { FAQItems } from '../faqItems';
+import styles from './landingDesktop.module.css';
 
 export function FAQ() {
   const [eli5, setEli5] = useState('ELI5');
@@ -13,45 +14,23 @@ export function FAQ() {
       backgroundColourOverride="#FFFEF2"
       borderColourOverride="#f6f4ef"
     >
-      <Row style={{ height: '100%' }}>
-        <Row style={{ height: '100%', width: '100%' }}>
-          <Col span={1} style={{ width: '100%' }}></Col>
-          <Col span={8} style={{ width: '100%', height: '100%' }}>
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                height: '100%',
-              }}
-            >
+      <Row className={styles.fullHeight}>
+        <Row className={styles.faqLayout}>
+          <Col span={1} className={styles.fullWidth}></Col>
+          <Col span={8} className={styles.faqLayout}>
+            <div className={styles.faqImageWrap}>
               <img
                 src="/background/sandChart.png"
-                style={{ width: '100%', borderRadius: '20px' }}
+                className={styles.faqImage}
               />
             </div>
           </Col>
           <Col span={1}></Col>
-          <Col span={13} style={{ width: '100%', height: '100%' }}>
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                height: '100%',
-              }}
-            >
+          <Col span={13} className={styles.faqLayout}>
+            <div className={styles.centeredColumn}>
               <Row>
                 <Col span={24}>
-                  <h1
-                    style={{
-                      color: '#162536',
-                      textAlign: 'center',
-                      width: '100%',
-                    }}
-                  >
-                    FREQUENTLY ASKED QUESTIONS
-                  </h1>
+                  <h1 className={styles.faqTitle}>FREQUENTLY ASKED QUESTIONS</h1>
                 </Col>
                 <Col
                   span={24}
@@ -77,7 +56,7 @@ export function FAQ() {
                 <Col span={24}>
                   <Collapse
                     defaultActiveKey={['1']}
-                    style={{ width: '100%', backgroundColor: '#2c496b' }}
+                    className={styles.faqCollapse}
                     accordion
                     items={FAQItems.map((x) => {
                       return {

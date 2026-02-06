@@ -6,6 +6,7 @@ import { SimulationRunBreakdown } from '../../../simulationResults/simulationRes
 import { getBreakdown, Pool } from '../../../../services/breakdownService';
 import { WeightChangeOverTimeGraph } from '../../../shared';
 import { SimulationResultMarketValueChart } from '../../../simulationResults/visualisations/simulationResultMarketValueChart';
+import styles from './landingDesktop.module.css';
 
 const { Title } = Typography;
 
@@ -128,80 +129,50 @@ export function StrategySummary() {
         >
           <Row>
             <Col span={24}>
-              <Title style={{ textAlign: 'center', marginBottom: 0 }}>
+              <Title className={styles.sectionTitleDark}>
                 EXPLORE QUANTAMM REVOLUTIONARY ARCHITECTURE
               </Title>
             </Col>
           </Row>
           <Row>
             <Col span={6}>
-              <div
-                style={{
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  paddingTop: '40px',
-                  marginLeft: '20px',
-                }}
-              >
-                <h4 style={{ textAlign: 'center', margin: 0 }}>
+              <div className={styles.strategyPanel}>
+                <h4 className={styles.textCenter}>
                   ADAPTIVE STRATEGIES
                 </h4>
-                <p style={{ textAlign: 'center', margin: 0 }}>
+                <p className={styles.textCenter}>
                   FULLY DECENTRALISED, FULLY TRANSPARENT
                 </p>
-                <Row gutter={[8, 8]} style={{ marginTop: '2vh', padding: 0 }}>
+                <Row gutter={[8, 8]} className={styles.strategyGrid}>
                   {strategies.map((strategyItem) => (
                     <Col
                       span={24}
-                      style={{ margin: 0, padding: 0, height: '100%' }}
+                      className={`${styles.zeroSpacing} ${styles.fullHeight}`}
                       key={strategyItem.name}
                       
                     >
-                      <Row style={{marginTop:'2vh'}}>
+                      <Row className={styles.strategyRow}>
                         <Col span={8}>
-                          <div
-                            style={{
-                              justifyContent: 'center',
-                              alignItems: 'center',
-                            }}
-                          >
+                          <div className={styles.centeredRow}>
                             <img
                               loading="lazy"
-                              style={{
-                                width: strategyItem.imgWidth,
-                                height: 'auto',
-                                padding: '15px',
-                              }}
+                              style={{ width: strategyItem.imgWidth }}
+                              className={styles.strategyImage}
                               src={strategyItem.image}
                             />
                           </div>
                         </Col>
                         <Col span={16}>
-                            <div
-                            style={{
-                              display: 'flex',
-                              flexDirection: 'column',
-                              justifyContent: 'center',
-                              alignItems: 'center',
-                              height: '100%',
-                            }}
-                            >
+                            <div className={styles.strategyButtonWrap}>
                             <Tooltip title={strategyItem.description}>
                               <Button
                               disabled={strategy === strategyItem.name}
                               size="small"
-                              style={{
-                                width: '100%',
-                                height: '60%',
-                                backgroundColor:
+                              className={
                                 strategy === strategyItem.name
-                                  ? '#c7b283'
-                                  : undefined,
-                                color:
-                                strategy === strategyItem.name
-                                  ? '#2c496b'
-                                  : undefined,
-                              }}
+                                  ? `${styles.strategyButton} ${styles.strategyButtonActive}`
+                                  : styles.strategyButton
+                              }
                               onClick={() => {
                                 setStrategy(strategyItem.name);
                                 setAutoCycle(false);
@@ -220,33 +191,15 @@ export function StrategySummary() {
             </Col>
             <Col span={10}>
               <Row>
-                <Col span={24} style={{ paddingTop: '40px' }}>
-                  <h4
-                    style={{
-                      textAlign: 'center',
-                      margin: 0,
-                      paddingLeft: '50px',
-                      paddingRight: '30px',
-                    }}
-                  >
+                <Col span={24} className={styles.chartSection}>
+                  <h4 className={styles.chartTitle}>
                     Traditional DEX Pool Holdings
                   </h4>
-                  <p
-                    style={{
-                      textAlign: 'center',
-                      margin: 0,
-                      paddingLeft: '50px',
-                      paddingRight: '30px',
-                    }}
-                  >
+                  <p className={styles.chartSubtitle}>
                     Focus on earning fees, ignore price movements
                   </p>
                   <div
-                    style={{
-                      paddingLeft: '70px',
-                      paddingRight: '30px',
-                      marginTop: '2vh',
-                    }}
+                    className={styles.chartWrap}
                     hidden={
                       (loading && breakdowns.length === 0) ||
                       breakdowns.filter(
@@ -270,34 +223,20 @@ export function StrategySummary() {
                   </div>
                 </Col>
                 <Col span={24}>
-                  <h4
-                    style={{
-                      textAlign: 'center',
-                      margin: 0,
-                      paddingLeft: '50px',
-                      paddingRight: '30px',
-                    }}
-                  >
+                  <h4 className={styles.chartTitle}>
                     QuantAMM{' '}
-                    <span style={{ color: '#c7b283' }}>
+                    <span className={styles.accentText}>
                       {strategy === 'AntiMomentum'
                         ? 'Price Reversion'
                         : strategy}
                     </span>{' '}
                     Pool Holdings
                   </h4>
-                  <p
-                    style={{
-                      textAlign: 'center',
-                      margin: 0,
-                      paddingLeft: '50px',
-                      paddingRight: '30px',
-                    }}
-                  >
+                  <p className={styles.chartSubtitle}>
                     React to markets while earning fees.
                   </p>
                   <div
-                    style={{ paddingLeft: '70px', paddingRight: '30px' }}
+                    className={styles.chartWrapNoTop}
                     hidden={
                       (loading && breakdowns.length === 0) ||
                       breakdowns.filter(
@@ -323,15 +262,7 @@ export function StrategySummary() {
               </Row>
             </Col>
             <Col span={8}>
-              <div
-                style={{
-                  height: '100%',
-                  width: '100%',
-                  paddingLeft: '20px',
-                  paddingRight: '20px',
-                  paddingTop: '20px',
-                }}
-              >
+              <div className={styles.summaryChartPanel}>
                 <SimulationResultMarketValueChart
                   breakdowns={breakdowns.filter(
                     (x) =>
@@ -359,15 +290,9 @@ export function StrategySummary() {
               </div>
             </Col>
           </Row>
-          <Row style={{ margin: 0, padding: 0 }}>
-            <Col span={24} style={{ padding: 0, margin: 0 }}>
-              <div
-                style={{
-                  textAlign: 'center',
-                  paddingBottom: '5vh',
-                  paddingRight: '80px',
-                }}
-              >
+          <Row className={styles.footerRow}>
+            <Col span={24} className={styles.footerCol}>
+              <div className={styles.footerControls}>
                 <Button size="small" onClick={() => setAutoCycle(!autoCycle)}>
                   {autoCycle ? 'Pause' : 'Resume'}
                 </Button>
