@@ -1,0 +1,219 @@
+.centeredHero {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.heroImage {
+  height: auto;
+}
+
+.heroTitle {
+  text-align: center;
+  margin: 0;
+}
+
+.heroDescription {
+  text-align: center;
+}
+
+.sectionTitle {
+  margin-left: 10px;
+}
+
+.rowHeight65 {
+  height: 65vh;
+}
+
+.rowHeight80 {
+  height: 80vh;
+}
+
+.rowHeight90 {
+  height: 90vh;
+}
+
+.rowHeight110 {
+  height: 110vh;
+}
+
+.rowHeight130 {
+  height: 130vh;
+}
+
+.rowHeight155 {
+  height: 155vh;
+}
+
+.rowHeight200 {
+  height: 200vh;
+}
+
+.rowHeight250 {
+  height: 250vh;
+}
+
+.rowHeight500 {
+  height: 500vh;
+}
+
+.rowMarginTop20 {
+  margin-top: 20px;
+}
+
+.rowMarginTop100 {
+  margin-top: 100px;
+}
+
+.fullHeight {
+  height: 100%;
+}
+
+.colHeight250 {
+  height: 250vh;
+}
+
+.cardHeight65 {
+  height: 65vh;
+}
+
+.cardHeight80 {
+  height: 80vh;
+}
+
+.cardHeight90 {
+  height: 90vh;
+}
+
+.cardHeight100 {
+  height: 100%;
+}
+
+.cardHeight100Scroll {
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.cardHeight110Scroll {
+  height: 110vh;
+  overflow-y: auto;
+}
+
+.cardHeight130 {
+  height: 130vh;
+}
+
+.cardHeight250Scroll {
+  height: 250vh;
+  overflow-y: auto;
+}
+
+.cardHeightAuto {
+  height: auto;
+}
+
+.cardMarginTop15 {
+  margin-top: 15px;
+}
+
+.cardMarginSmall {
+  margin: 5px;
+}
+
+.cardMarginHeight57 {
+  margin: 5px;
+  height: 57vh;
+}
+
+.cardHeightAutoMarginTop20 {
+  height: auto;
+  margin-top: 20px;
+}
+
+.titleRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.titleRowGap {
+  gap: 12px;
+}
+
+.listHeading {
+  margin: 10px;
+  width: 80%;
+  text-align: center;
+}
+
+.listButton {
+  margin: 10px;
+  width: 80%;
+}
+
+.listButtonMuted {
+  margin: 10px;
+  width: 80%;
+  background-color: transparent !important;
+  color: var(--tooltip-text-color) !important;
+}
+
+.paddingTop10 {
+  padding-top: 10px;
+}
+
+.paddingTop30 {
+  padding-top: 30px;
+}
+
+.radioGroupNormal {
+  font-weight: normal;
+}
+
+.radioGroupStacked {
+  font-weight: normal;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.collapseBase {
+  width: 100%;
+}
+
+.collapseMarginTop10 {
+  margin-top: 10px;
+}
+
+.collapseMarginTop20 {
+  margin-top: 20px;
+}
+
+.metricItem {
+  margin-bottom: 20px;
+}
+
+.spaceFullWidth {
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.buttonFullWidth {
+  width: 100%;
+}
+
+.radioButtonFullWidth {
+  width: 100%;
+}
+
+.scrollArea48 {
+  overflow-y: auto;
+  height: 48vh;
+}
+
+.buttonMarginSmall {
+  margin: 5px;
+}

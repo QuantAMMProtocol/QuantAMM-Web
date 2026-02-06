@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { SimulationResultsSummaryStep } from '../../../simulationResults/simulationResultsSummaryStep';
 import { getBreakdown, Pool } from '../../../../services/breakdownService';
 import { SimulationRunBreakdown } from '../../../simulationResults/simulationResultSummaryModels';
+import styles from '../factSheetSimView.module.css';
 
 const { TabPane } = Tabs;
 
@@ -72,7 +73,7 @@ export default function SafeHavenSimulatorExample() {
             defaultActiveKey={key}
             key={key}
             onChange={(key) => setKey(key)}
-            style={{ paddingLeft: 20, paddingRight: 20 }}
+            className={styles.simViewTabs}
           >
             <TabPane tab="Safe Haven Training Period" key={'1'}>
               {loading ? (

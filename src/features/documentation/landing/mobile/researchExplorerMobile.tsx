@@ -1,4 +1,5 @@
 import { Button, Card, Collapse } from "antd";
+import styles from "./landingMobile.module.css";
 
 import {
   BarChartOutlined,
@@ -9,7 +10,7 @@ import {
 const { Panel } = Collapse;
 
 export function ResearchExplorerMobile(){
-    return <div style={{ padding: '20px' }}>
+    return <div className={styles.mobileSection}>
     <Collapse>
       <Panel header="Explore Our Research" key="1">
         {[
@@ -33,7 +34,7 @@ export function ResearchExplorerMobile(){
               'A comparison of TFMM rebalancing for fund managers compared to running CEX portfolios',
             link: 'https://cdn.prod.website-files.com/6616670ddddc931f1dd3aa73/672283811331fc9bef39be23_RVR_30_10_24.pdf',
             icon: (
-                <BarChartOutlined style={{ fontSize: '60px', marginTop: '10px' }} />
+                <BarChartOutlined className={styles.researchIcon} />
             ),
           },
         ].map((paper, index) => (
@@ -44,7 +45,7 @@ export function ResearchExplorerMobile(){
           {paper.icon} {paper.title}
               </>
             }
-            style={{ marginBottom: '10px' }}
+            className={styles.researchCard}
           >
             <p>{paper.description}</p>
             <Button href={paper.link}>View Full Paper</Button>

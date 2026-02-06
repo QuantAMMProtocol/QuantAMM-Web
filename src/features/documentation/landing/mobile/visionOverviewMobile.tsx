@@ -1,9 +1,10 @@
 import { Typography } from "antd";
+import styles from "./landingMobile.module.css";
 
 const { Title } = Typography;
 
 export function VisionOverviewMobile(){
-    return <div style={{ padding: '20px' }}>
+    return <div className={styles.mobileSection}>
     <Title level={3}>Our Vision</Title>
     <p>
       At QuantAMM, our vision is to build a passive fund product that
@@ -13,15 +14,7 @@ export function VisionOverviewMobile(){
     </p>
 
     {/* Updated Company Images */}
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        flexWrap: 'wrap',
-        gap: '10px',
-        marginTop: '20px',
-      }}
-    >
+    <div className={styles.logoGrid}>
       {[
         '8vc.png',
         '369.png',
@@ -39,7 +32,7 @@ export function VisionOverviewMobile(){
           key={index}
           src={`/companies/${img}`}
           alt={img}
-          style={{ width: '15%', height: 'auto' }}
+          className={styles.logoImage}
         />
       ))}
     </div>

@@ -3,6 +3,7 @@ import { SimulationRunBreakdown } from "../../../simulationResults/simulationRes
 import { Pool,getBreakdown } from "../../../../services/breakdownService";
 import { WeightChangeOverTimeGraph } from "../../../shared/graphs";
 import { Typography } from "antd";
+import styles from "./landingMobile.module.css";
 
 const { Title } = Typography;
 
@@ -39,7 +40,7 @@ export function StrategySummaryMobile() {
       />
     )}
 
-    <Title level={3} style={{ marginTop: '20px' }}>
+    <Title level={3} className={styles.sectionTitleSpacer}>
       QuantAMM BTF Pool Holdings
     </Title>
     <p>
@@ -52,46 +53,41 @@ export function StrategySummaryMobile() {
       />
     )}
 
-    <div
-      style={{
-        marginTop: '20px',
-        textAlign: 'left',
-        padding: '10px',
-        borderRadius: '10px',
-      }}
-    >
-      <ul
-        style={{ padding: '10px', listStyle: 'none', textAlign: 'center' }}
-      >
+    <div className={styles.strategyInfo}>
+      <ul className={styles.strategyList}>
         <li>
           <strong>✅ Broad baskets and Themes</strong>{' '}
-          <p style={{ marginTop: 0 }}>No need to be a blockchain expert</p>
+          <p className={styles.listParagraph}>
+            No need to be a blockchain expert
+          </p>
         </li>
         <li>
           <strong>✅ Fire and Forget</strong>
-          <p style={{ marginTop: 0 }}>
+          <p className={styles.listParagraph}>
             Automatic, fully on-chain daily rebalancing
           </p>
         </li>
         <li>
           <strong>✅ Low Fees</strong>
-          <p style={{ marginTop: 0 }}>No streaming maintenance fees</p>
+          <p className={styles.listParagraph}>
+            No streaming maintenance fees
+          </p>
         </li>
         <li>
           <strong>✅ Trustless</strong>
-          <p style={{ marginTop: 0 }}>
+          <p className={styles.listParagraph}>
             No off-chain stack, no anonymous manager
           </p>
         </li>
         <li>
           <strong>✅ Simplicity</strong>
-          <p style={{ marginTop: 0 }}>
+          <p className={styles.listParagraph}>
             No moving liquidity, no complex trade routing
           </p>
         </li>
         <li>
           <strong>✅ Known Strategies</strong>
-          <p style={{ marginTop: 0 }}>
+          <p className={styles.listParagraph}>
             Simulate performance and risk before investing
           </p>
         </li>

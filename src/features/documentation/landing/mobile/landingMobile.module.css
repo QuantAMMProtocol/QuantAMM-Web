@@ -1,0 +1,180 @@
+.mobileSection {
+  padding: 20px;
+}
+
+.noPadding {
+  padding: 0;
+}
+
+.landingRoot {
+  width: 100%;
+  padding: 10px;
+  text-align: center;
+}
+
+.bannerRoot {
+  height: 85vh;
+  background-image: url(/background/Hourglass_Dune_80.avif);
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  color: #ffffff;
+  width: 100%;
+}
+
+.bannerTitle {
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
+
+.bannerSubtitle {
+  text-align: center;
+  font-size: 7px;
+  margin-top: 0;
+  padding-top: 0;
+}
+
+.bannerContent {
+  margin-top: 35vh;
+  height: 95vh;
+  width: 100%;
+}
+
+.bannerContentInner {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  padding: 5px 0;
+}
+
+.bannerExtension {
+  height: 85vh;
+  width: 100%;
+  background-image: url(/background/hourglass_bottom_extension.png);
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  color: #ffffff;
+}
+
+.researchCard {
+  margin-bottom: 10px;
+}
+
+.researchIcon {
+  font-size: 60px;
+  margin-top: 10px;
+}
+
+.explainerRoot {
+  height: 100vh;
+  background-color: #FFFEF2;
+}
+
+.explainerTopCol {
+  padding: 0;
+  margin-top: 2vh;
+}
+
+.explainerImageWrap {
+  height: 10vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.explainerImage {
+  max-width: 100%;
+  max-height: 100%;
+  margin-top: 1vh;
+}
+
+.explainerTitleIntro {
+  color: #162536;
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 0;
+  padding: 0;
+  font-weight: 400;
+}
+
+.explainerTitleMain {
+  color: #162536;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
+
+.explainerSubtitle {
+  color: #162536;
+  text-align: center;
+  margin-top: 0;
+}
+
+.explainerTitleBlock {
+  margin-bottom: 0.5vh;
+}
+
+.explainerGaugeRow {
+  display: flex;
+}
+
+.indexGaugeWrap {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.quantammGaugeWrap {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-left: -170px;
+}
+
+.strategyInfo {
+  margin-top: 20px;
+  text-align: left;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.strategyList {
+  padding: 10px;
+  list-style: none;
+  text-align: center;
+}
+
+.sectionTitleSpacer {
+  margin-top: 20px;
+}
+
+.listParagraph {
+  margin-top: 0;
+}
+
+.contactLogo {
+  width: 100px;
+  height: auto;
+}
+
+.logoGrid {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.logoImage {
+  width: 15%;
+  height: auto;
+}

@@ -15,6 +15,7 @@ import { selectTheme } from '../../../themes/themeSlice';
 import { FactsheetModel } from '../../landing/desktop/factsheetModel';
 import { FAQItems } from '../../landing/faqItems';
 import ButtonGroup from 'antd/es/button/button-group';
+import styles from '../factsheetDesktop.module.css';
 
 interface FactsheetDesktopProps {
   model: FactsheetModel;
@@ -119,27 +120,21 @@ export function FactSheetDesktop(props: FactsheetDesktopProps) {
       <Row>
         <Col span={1}></Col>
         <Col span={10}>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: '100%',
-            }}
-          >
+          <div className={styles.centeredHero}>
             <img
               src={props.model.factsheetImage.image}
               alt={props.model.factsheetImage.alt}
               style={{
                 width: props.model.factsheetImage.width,
-                height: 'auto',
               }}
+              className={styles.heroImage}
             />
-            <h1 style={{ textAlign: 'center', margin: 0 }}>
+            <h1 className={styles.heroTitle}>
               {props.model.mainTitle}
             </h1>
-            <p style={{ textAlign: 'center' }}>{props.model.mainDescription}</p>
+            <p className={styles.heroDescription}>
+              {props.model.mainDescription}
+            </p>
           </div>
         </Col>
         <Col span={1}></Col>
@@ -169,24 +164,18 @@ export function FactSheetDesktop(props: FactsheetDesktopProps) {
       <Row>
         <Col span={1}></Col>
         <Col span={22}>
-          <h1 style={{ marginLeft: '10px' }}>OVERVIEW</h1>
+          <h1 className={styles.sectionTitle}>OVERVIEW</h1>
         </Col>
         <Col span={1}></Col>
       </Row>
-      <Row style={{ height: '52vh' }}>
+      <Row className={styles.rowHeight52}>
         <Col span={1}></Col>
         <Col span={10}>
-          <Row style={{ height: '100%' }}>
+          <Row className={styles.fullHeight}>
             <Col span={24}>
               <Card
                 title={
-                  <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                    }}
-                  >
+                  <div className={styles.titleRow}>
                     <span>GENERAL DETAILS</span>
                     <ButtonGroup>
                     <Button
@@ -212,19 +201,13 @@ export function FactSheetDesktop(props: FactsheetDesktopProps) {
                     </ButtonGroup>
                   </div>
                 }
-                style={{ height: '100%' }}
+                className={styles.cardHeightFull}
               >
                 <Row>
                   <Col span={2}></Col>
                   <Col span={10}>
                     <Col span={24}>
-                      <h5
-                        style={{
-                          margin: 10,
-                          width: '80%',
-                          textAlign: 'center',
-                        }}
-                      >
+                      <h5 className={styles.listHeading}>
                         Deployment Links
                       </h5>
                     </Col>
@@ -234,7 +217,7 @@ export function FactSheetDesktop(props: FactsheetDesktopProps) {
                           <Col span={24} key={index}>
                             <Button
                               size="small"
-                              style={{ margin: 10, width: '80%' }}
+                              className={styles.listButton}
                               color="primary"
                             >
                               <a href={link[1]}>{link[0]}</a>
@@ -246,13 +229,7 @@ export function FactSheetDesktop(props: FactsheetDesktopProps) {
                   </Col>
                   <Col span={10}>
                     <Col span={24}>
-                      <h5
-                        style={{
-                          margin: 10,
-                          width: '80%',
-                          textAlign: 'center',
-                        }}
-                      >
+                      <h5 className={styles.listHeading}>
                         Fixed Settings
                       </h5>
                     </Col>
@@ -261,12 +238,7 @@ export function FactSheetDesktop(props: FactsheetDesktopProps) {
                         <Col span={24} key={index}>
                           <Button
                             size="small"
-                            style={{
-                              margin: 10,
-                              width: '80%',
-                              backgroundColor: 'transparent',
-                              color: 'var(--tooltip-text-color)',
-                            }}
+                            className={styles.listButtonMuted}
                             disabled={true}
                           >
                             {setting[0]}: {setting[1]}
@@ -285,21 +257,15 @@ export function FactSheetDesktop(props: FactsheetDesktopProps) {
         <Col span={11}>
           <Card
             title={
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}
-              >
+              <div className={styles.titleRow}>
                 <span>COMPOSITION OVER TIME</span>
                 {periodSelector}
               </div>
             }
-            style={{ height: '100%' }}
+            className={styles.cardHeightFull}
           >
             <Row>
-              <Col span={24} style={{ paddingTop: '30px' }}>
+              <Col span={24} className={styles.paddingTop30}>
                 <WeightChangeOverTimeGraph
                   simulationRunBreakdown={breakdowns[btf]}
                   overrideChartTheme={
@@ -317,7 +283,7 @@ export function FactSheetDesktop(props: FactsheetDesktopProps) {
       <Row>
         <Col span={1}></Col>
         <Col span={22}>
-          <h1 style={{ marginLeft: '10px' }}>CUMULATIVE PERFORMANCE</h1>
+          <h1 className={styles.sectionTitle}>CUMULATIVE PERFORMANCE</h1>
         </Col>
         <Col span={1}></Col>
       </Row>
@@ -326,18 +292,12 @@ export function FactSheetDesktop(props: FactsheetDesktopProps) {
         <Col span={22}>
           <Card
             title={
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}
-              >
+              <div className={styles.titleRow}>
                 <span>SIMULATED BTF TOTAL $ VALUE OVER TIME</span>
                 {periodSelector}
               </div>
             }
-            style={{ margin: '5px' }}
+            className={styles.cardMarginSmall}
           >
             <div hidden={loading}>
               <SimulationResultMarketValueChart
@@ -365,31 +325,25 @@ export function FactSheetDesktop(props: FactsheetDesktopProps) {
       <Row>
         <Col span={1}></Col>
         <Col span={22}>
-          <h1 style={{ marginLeft: '10px' }}>RE-WEIGHTING METHODOLOGY</h1>
+          <h1 className={styles.sectionTitle}>RE-WEIGHTING METHODOLOGY</h1>
         </Col>
         <Col span={1}></Col>
       </Row>
-      <Row style={{ height: '80vh' }}>
+      <Row className={styles.rowHeight80}>
         <Col span={1}></Col>
         <Col span={10}>
           <Row>
             <Col span={24}>
               <Card
                 title={
-                  <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                    }}
-                  >
+                  <div className={styles.titleRow}>
                     <span>QUANTAMM REBALANCING</span>
                     <Radio.Group
                       size="small"
                       buttonStyle="solid"
                       value={faqEli5}
                       onChange={(e) => setFAQEli5(e.target.value)}
-                      style={{ fontWeight: 'normal' }}
+                      className={styles.radioGroupNormal}
                     >
                       <Radio.Button value="ELI5">ELI5</Radio.Button>
                       <Radio.Button value="Crypto Native">
@@ -399,12 +353,12 @@ export function FactSheetDesktop(props: FactsheetDesktopProps) {
                     </Radio.Group>
                   </div>
                 }
-                style={{ height: '80vh', overflowY: 'auto' }}
+                className={styles.cardHeight80Scroll}
               >
                 <Collapse
                   defaultActiveKey={['1']}
+                  className={styles.collapseBase}
                   style={{
-                    width: '100%',
                     backgroundColor: isDarkTheme ? '#162536' : '#fff',
                   }}
                   accordion
@@ -436,10 +390,10 @@ export function FactSheetDesktop(props: FactsheetDesktopProps) {
         <Col span={1}></Col>
         <Col span={11}>
           <Row>
-            <Col span={24} style={{ height: '100%' }}>
+            <Col span={24} className={styles.fullHeight}>
               <Card
                 title="BTF RE-WEIGHT STRATEGY"
-                style={{ height: '80vh', overflowY: 'auto' }}
+                className={styles.cardHeight80Scroll}
               >
                 {props.model.updateRule}
               </Card>
@@ -452,7 +406,7 @@ export function FactSheetDesktop(props: FactsheetDesktopProps) {
       <Row>
         <Col span={1}></Col>
         <Col span={22}>
-          <h1 style={{ marginLeft: '10px' }}>
+          <h1 className={styles.sectionTitle}>
             QUANTITATIVE FINANCIAL ANALYSIS
           </h1>
         </Col>
@@ -466,13 +420,7 @@ export function FactSheetDesktop(props: FactsheetDesktopProps) {
             <Col span={22}>
               <Card
                 title={
-                  <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                    }}
-                  >
+                  <div className={styles.titleRow}>
                     <span>SIMULATED FINANCIAL METRICS</span>
                     <Radio.Group
                       onChange={(e) => setPeriod(e.target.value)}
@@ -493,7 +441,7 @@ export function FactSheetDesktop(props: FactsheetDesktopProps) {
                     </Radio.Group>
                   </div>
                 }
-                style={{ margin: '5px' }}
+                className={styles.cardMarginSmall}
               >
                 <AnalysisSimplifiedBreakdownTable
                   simulationRunBreakdowns={
@@ -540,24 +488,24 @@ export function FactSheetDesktop(props: FactsheetDesktopProps) {
       <Row>
         <Col span={1}></Col>
         <Col span={22}>
-          <h1 style={{ marginLeft: '10px' }}>KEY FACTS</h1>
+          <h1 className={styles.sectionTitle}>KEY FACTS</h1>
         </Col>
         <Col span={1}></Col>
       </Row>
-      <Row style={{ height: '130vh' }}>
+      <Row className={styles.rowHeight130}>
         <Col span={1}></Col>
         <Col span={10}>
-          <Row style={{ height: '130vh' }}>
+          <Row className={styles.rowHeight130}>
             <Col span={24}>
               <Card
                 title="Advantages"
-                style={{ height: '130vh', overflowY: 'auto' }}
+                className={styles.cardHeight130Scroll}
               >
                 <Row>
                   {props.model.advantages.map((advantage, index) => (
                     <Col span={12} key={index}>
                       <Card
-                        style={{ margin: '5px', height: '57vh' }}
+                        className={styles.cardMarginHeight57}
                         title={advantage.title}
                       >
                         <Row>
@@ -573,12 +521,15 @@ export function FactSheetDesktop(props: FactsheetDesktopProps) {
         </Col>
         <Col span={1}></Col>
         <Col span={11}>
-          <Card style={{ height: '130vh', overflowY: 'auto' }} title={'Risks'}>
+          <Card
+            className={styles.cardHeight130Scroll}
+            title={'Risks'}
+          >
             <Row>
               {props.model.risks.map((risk, index) => (
                 <Col span={12} key={index}>
                   <Card
-                    style={{ margin: '5px', height: '57vh' }}
+                    className={styles.cardMarginHeight57}
                     title={risk.title}
                   >
                     <Row>
@@ -595,7 +546,7 @@ export function FactSheetDesktop(props: FactsheetDesktopProps) {
       <Row>
         <Col span={1}></Col>
         <Col span={22}>
-          <h1 style={{ marginLeft: '10px' }}>
+          <h1 className={styles.sectionTitle}>
             RE-WEIGHTING STRATEGY PARAMETER SELECTION
           </h1>
         </Col>
@@ -607,13 +558,13 @@ export function FactSheetDesktop(props: FactsheetDesktopProps) {
         <Col span={22}>{props.model.trainingDescription}</Col>
         <Col span={1}></Col>
       </Row>
-      <Row style={{ height: '130vh' }}>
+      <Row className={styles.rowHeight130}>
         <Col span={1}></Col>
         <Col span={10}>
           <Col span={24}>
             <Card
               title={props.model.trainingWindowTitle}
-              style={{ height: '130vh' }}
+              className={styles.cardHeight130}
             >
               <Row>
                 <Col span={24}>
@@ -657,12 +608,15 @@ export function FactSheetDesktop(props: FactsheetDesktopProps) {
         </Col>
         <Col span={1}></Col>
         <Col span={11}>
-            <Card title={'Parameters Selected'} style={{ height: 'auto' }}>
+            <Card
+              title={'Parameters Selected'}
+              className={styles.cardHeightAuto}
+            >
             <Row>
               {props.model.trainedParameters.map((parameter, index) => (
               <Col span={12} key={index}>
                 <Card
-                style={{ margin: '5px' }}
+                className={styles.cardMarginSmall}
                 title={
                   <Tooltip
                   title={`The following represent different forms of the ${parameter.name} setting used for different tooling.`}
@@ -682,7 +636,7 @@ export function FactSheetDesktop(props: FactsheetDesktopProps) {
                       <Button
                       size="small"
                       disabled={true}
-                      style={{ margin: '5px' }}
+                      className={styles.buttonMarginSmall}
                       key={valIndex}
                       >
                       {val}

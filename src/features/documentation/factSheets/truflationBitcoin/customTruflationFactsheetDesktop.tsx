@@ -24,6 +24,7 @@ import { FactsheetModel } from '../../landing/desktop/factsheetModel';
 import { FAQItems } from '../../landing/faqItems';
 import { SimulationResultDrawdownChart } from '../../../simulationResults/visualisations/simulationResultDrawdownGraph';
 import ButtonGroup from 'antd/es/button/button-group';
+import styles from '../factsheetDesktop.module.css';
 
 interface FactsheetDesktopProps {
   model: FactsheetModel;
@@ -155,27 +156,21 @@ export function TruflationFactSheetDesktop(props: FactsheetDesktopProps) {
       <Row>
         <Col span={1}></Col>
         <Col span={10}>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: '100%',
-            }}
-          >
+          <div className={styles.centeredHero}>
             <img
               src={props.model.factsheetImage.image}
               alt={props.model.factsheetImage.alt}
               style={{
                 width: props.model.factsheetImage.width,
-                height: 'auto',
               }}
+              className={styles.heroImage}
             />
-            <h1 style={{ textAlign: 'center', margin: 0 }}>
+            <h1 className={styles.heroTitle}>
               {props.model.mainTitle}
             </h1>
-            <p style={{ textAlign: 'center' }}>{props.model.mainDescription}</p>
+            <p className={styles.heroDescription}>
+              {props.model.mainDescription}
+            </p>
           </div>
         </Col>
         <Col span={1}></Col>
@@ -205,27 +200,21 @@ export function TruflationFactSheetDesktop(props: FactsheetDesktopProps) {
       <Row>
         <Col span={1}></Col>
         <Col span={22}>
-          <h1 style={{ marginLeft: '10px' }}>
+          <h1 className={styles.sectionTitle}>
             TEST WINDOW (JAN-DEC 2025) PERFORMANCE
           </h1>
         </Col>
         <Col span={1}></Col>
       </Row>
 
-      <Row style={{ height: '75vh', marginTop: '5px' }}>
+      <Row className={`${styles.rowHeight75} ${styles.rowMarginTop5}`}>
         <Col span={1}></Col>
         <Col span={10}>
-          <Row style={{ height: '100%' }}>
+          <Row className={styles.fullHeight}>
             <Col span={24}>
               <Card
                 title={
-                  <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                    }}
-                  >
+                  <div className={styles.titleRow}>
                     <span>STRATEGY DETAILS</span>
                     <ButtonGroup>
                       <Button
@@ -253,14 +242,9 @@ export function TruflationFactSheetDesktop(props: FactsheetDesktopProps) {
                     </ButtonGroup>
                   </div>
                 }
-                style={{ height: '100%' }}
+                className={styles.cardHeightFull}
               >
-                <div
-                  style={{
-                    overflowY: 'auto',
-                    height: '55vh',
-                  }}
-                >
+                <div className={styles.scrollArea55}>
                   {props.model.updateRule}
                 </div>
               </Card>
@@ -270,18 +254,11 @@ export function TruflationFactSheetDesktop(props: FactsheetDesktopProps) {
         <Col span={1}></Col>
 
         <Col span={11}>
-          <Row style={{ height: '100%' }}>
+          <Row className={styles.fullHeight}>
             <Col span={24}>
               <Card
                 title={
-                  <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      gap: 12,
-                    }}
-                  >
+                  <div className={`${styles.titleRow} ${styles.titleRowGap}`}>
                     <span>Test Window Strategy Explorer</span>
 
                     <Space size="middle">
@@ -300,7 +277,7 @@ export function TruflationFactSheetDesktop(props: FactsheetDesktopProps) {
                     </Space>
                   </div>
                 }
-                style={{ height: '100%' }}
+                className={styles.cardHeightFull}
               >
                 {view === 'drawdowns' ? (
                   <Row>
@@ -318,7 +295,7 @@ export function TruflationFactSheetDesktop(props: FactsheetDesktopProps) {
                   </Row>
                 ) : (
                   <Row>
-                    <Col span={24} style={{ paddingTop: '30px' }}>
+                    <Col span={24} className={styles.paddingTop30}>
                       <WeightChangeOverTimeGraph
                         simulationRunBreakdown={breakdowns[btf]}
                         overrideChartTheme={
@@ -340,18 +317,12 @@ export function TruflationFactSheetDesktop(props: FactsheetDesktopProps) {
         <Col span={22}>
           <Card
             title={
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}
-              >
+              <div className={styles.titleRow}>
                 <span>SIMULATED BTF TOTAL $ VALUE OVER TIME</span>
                 {renderPeriodSelector(false)}
               </div>
             }
-            style={{ margin: '5px' }}
+            className={styles.cardMarginSmall}
           >
             <div hidden={loading}>
               <SimulationResultMarketValueChart
@@ -376,7 +347,7 @@ export function TruflationFactSheetDesktop(props: FactsheetDesktopProps) {
       <Row>
         <Col span={1}></Col>
         <Col span={22}>
-          <h1 style={{ marginLeft: '10px' }}>
+          <h1 className={styles.sectionTitle}>
             RE-WEIGHTING STRATEGY PARAMETER SELECTION
           </h1>
         </Col>
@@ -388,24 +359,17 @@ export function TruflationFactSheetDesktop(props: FactsheetDesktopProps) {
         <Col span={22}>{props.model.trainingDescription}</Col>
         <Col span={1}></Col>
       </Row>
-      <Row style={{ height: '110vh' }}>
+      <Row className={styles.rowHeight110}>
         <Col span={1}></Col>
         <Col span={10}>
           <Col span={24}>
             <Card
               title={
-                <div
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    gap: 12,
-                  }}
-                >
+                <div className={`${styles.titleRow} ${styles.titleRowGap}`}>
                   <span>{props.model.trainingWindowTitle}</span>
                 </div>
               }
-              style={{ height: '110vh' }}
+              className={styles.cardHeight110}
             >
               <Row>
                 <Col span={24}>
@@ -491,12 +455,12 @@ export function TruflationFactSheetDesktop(props: FactsheetDesktopProps) {
         </Col>
         <Col span={1}></Col>
         <Col span={11}>
-          <Card title={'Parameters Selected'} style={{ height: 'auto' }}>
+          <Card title={'Parameters Selected'} className={styles.cardHeightAuto}>
             <Row>
               {props.model.trainedParameters.map((parameter, index) => (
                 <Col span={12} key={index}>
                   <Card
-                    style={{ margin: '5px' }}
+                    className={styles.cardMarginSmall}
                     title={
                       <Tooltip
                         title={`The following represent different forms of the ${parameter.name} setting used for different tooling.`}
@@ -516,7 +480,7 @@ export function TruflationFactSheetDesktop(props: FactsheetDesktopProps) {
                               <Button
                                 size="small"
                                 disabled={true}
-                                style={{ margin: '5px' }}
+                                className={styles.buttonMarginSmall}
                                 key={valIndex}
                               >
                                 {val}
@@ -537,7 +501,7 @@ export function TruflationFactSheetDesktop(props: FactsheetDesktopProps) {
       <Row>
         <Col span={1}></Col>
         <Col span={22}>
-          <h1 style={{ marginLeft: '10px' }}>
+          <h1 className={styles.sectionTitle}>
             QUANTITATIVE FINANCIAL ANALYSIS
           </h1>
         </Col>
@@ -551,18 +515,12 @@ export function TruflationFactSheetDesktop(props: FactsheetDesktopProps) {
             <Col span={22}>
               <Card
                 title={
-                  <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                    }}
-                  >
+                  <div className={styles.titleRow}>
                     <span>SIMULATED FINANCIAL METRICS</span>
                     {renderPeriodSelector(true)}
                   </div>
                 }
-                style={{ margin: '5px' }}
+                className={styles.cardMarginSmall}
               >
                 <AnalysisSimplifiedBreakdownTable
                   simulationRunBreakdowns={
@@ -615,24 +573,24 @@ export function TruflationFactSheetDesktop(props: FactsheetDesktopProps) {
       <Row>
         <Col span={1}></Col>
         <Col span={22}>
-          <h1 style={{ marginLeft: '10px' }}>KEY FACTS</h1>
+          <h1 className={styles.sectionTitle}>KEY FACTS</h1>
         </Col>
         <Col span={1}></Col>
       </Row>
-      <Row style={{ height: '130vh' }}>
+      <Row className={styles.rowHeight130}>
         <Col span={1}></Col>
         <Col span={10}>
-          <Row style={{ height: '130vh' }}>
+          <Row className={styles.rowHeight130}>
             <Col span={24}>
               <Card
                 title="Advantages"
-                style={{ height: '130vh', overflowY: 'auto' }}
+                className={styles.cardHeight130Scroll}
               >
                 <Row>
                   {props.model.advantages.map((advantage, index) => (
                     <Col span={12} key={index}>
                       <Card
-                        style={{ margin: '5px', height: '57vh' }}
+                        className={styles.cardMarginHeight57}
                         title={advantage.title}
                       >
                         <Row>
@@ -648,12 +606,12 @@ export function TruflationFactSheetDesktop(props: FactsheetDesktopProps) {
         </Col>
         <Col span={1}></Col>
         <Col span={11}>
-          <Card style={{ height: '130vh', overflowY: 'auto' }} title={'Risks'}>
+          <Card className={styles.cardHeight130Scroll} title={'Risks'}>
             <Row>
               {props.model.risks.map((risk, index) => (
                 <Col span={12} key={index}>
                   <Card
-                    style={{ margin: '5px', height: '57vh' }}
+                    className={styles.cardMarginHeight57}
                     title={risk.title}
                   >
                     <Row>
@@ -671,33 +629,27 @@ export function TruflationFactSheetDesktop(props: FactsheetDesktopProps) {
       <Row>
         <Col span={1}></Col>
         <Col span={22}>
-          <h1 style={{ marginLeft: '10px' }}>
+          <h1 className={styles.sectionTitle}>
             QUANTAMM FREQUENTLY ASKED QUESTIONS
           </h1>
         </Col>
         <Col span={1}></Col>
       </Row>
-      <Row style={{ height: '80vh' }}>
+      <Row className={styles.rowHeight80}>
         <Col span={1}></Col>
         <Col span={22}>
           <Row>
             <Col span={24}>
               <Card
                 title={
-                  <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                    }}
-                  >
+                  <div className={styles.titleRow}>
                     <span>QUANTAMM REBALANCING</span>
                     <Radio.Group
                       size="small"
                       buttonStyle="solid"
                       value={faqEli5}
                       onChange={(e) => setFAQEli5(e.target.value)}
-                      style={{ fontWeight: 'normal' }}
+                      className={styles.radioGroupNormal}
                     >
                       <Radio.Button value="ELI5">ELI5</Radio.Button>
                       <Radio.Button value="Crypto Native">
@@ -707,12 +659,12 @@ export function TruflationFactSheetDesktop(props: FactsheetDesktopProps) {
                     </Radio.Group>
                   </div>
                 }
-                style={{ height: '80vh', overflowY: 'auto' }}
+                className={styles.cardHeight80Scroll}
               >
                 <Collapse
                   defaultActiveKey={['1']}
+                  className={styles.collapseBase}
                   style={{
-                    width: '100%',
                     backgroundColor: isDarkTheme ? '#162536' : '#fff',
                   }}
                   accordion

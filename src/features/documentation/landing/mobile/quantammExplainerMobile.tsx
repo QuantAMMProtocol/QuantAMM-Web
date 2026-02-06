@@ -1,5 +1,6 @@
 import { AgGauge } from 'ag-charts-react';
 import { Col, Row, Typography } from 'antd';
+import styles from './landingMobile.module.css';
 
 const { Title } = Typography;
 
@@ -16,73 +17,40 @@ export function QuantAMMExplainerMobile() {
   ];
   
   return (
-    <div style={{height: '100vh', backgroundColor: '#FFFEF2'}}>
+    <div className={styles.explainerRoot}>
       <Row>
-        <Col span={24} style={{ padding: 0, marginTop:'2vh' }}>
-          <div
-            style={{
-              height: '10vh',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
+        <Col span={24} className={styles.explainerTopCol}>
+          <div className={styles.explainerImageWrap}>
             <img
               src="/background/blueSand.png"
-              style={{
-                maxWidth: '100%',
-                maxHeight: '100%',
-                marginTop: '1vh',
-              }}
+              className={styles.explainerImage}
             />
           </div>
         </Col>
-        <Col span={24} style={{ marginBottom: '0.5vh' }}>
+        <Col span={24} className={styles.explainerTitleBlock}>
           <Title
             level={3}
-            style={{
-              color: '#162536',
-              textAlign: 'center',
-              marginTop: '10px',
-              marginBottom: '0px',
-              padding: 0,
-              fontWeight: '400',
-            }}
+            className={styles.explainerTitleIntro}
           >
             INTRODUCING
           </Title>
           <Title
             level={3}
-            style={{
-              color: '#162536',
-              textAlign: 'center',
-              margin: 0,
-              padding: 0,
-            }}
+            className={styles.explainerTitleMain}
           >
             BLOCKCHAIN TRADED FUNDS
           </Title>
 
-          <p
-            style={{
-              color: '#162536',
-              textAlign: 'center',
-              marginTop: '0px',
-            }}
-          >
+          <p className={styles.explainerSubtitle}>
             FULLY ON-CHAIN ETFs THAT ADAPT TO THE VOLATILITY INHERENT WITH
             CRYPTO.
           </p>
         </Col>
         <Col span={24}>
-        <div style={{display:'flex'}}>
+        <div className={styles.explainerGaugeRow}>
         
                 <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'center',
-                      width: '100%',
-                    }}
+                    className={styles.indexGaugeWrap}
                     id="indexGauge"
                   >
                     <AgGauge
@@ -146,12 +114,7 @@ export function QuantAMMExplainerMobile() {
                     />
                   </div>
                   <div
-                    style={{
-                      display: 'flex',
-                      flexDirection:'row',
-                      justifyContent: 'center',
-                      marginLeft: '-170px',
-                    }}
+                    className={styles.quantammGaugeWrap}
                     id="quantammGauge"
                   >
                     <AgGauge

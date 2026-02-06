@@ -1,9 +1,10 @@
 import { Timeline, Typography } from "antd";
+import styles from "./landingMobile.module.css";
 
 const { Title } = Typography;
 
 export function TimelineMobile() {
-    return <div style={{ padding: '20px' }}>
+    return <div className={styles.mobileSection}>
     <Title level={3}>Our Journey</Title>
     <Timeline>
       <Timeline.Item>H1 2023 - Simulator Build</Timeline.Item>
