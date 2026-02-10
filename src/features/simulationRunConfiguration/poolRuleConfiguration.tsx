@@ -1,3 +1,4 @@
+//TODO CH split into subcomponents
 import {
   Select,
   Row,
@@ -21,7 +22,6 @@ import {
   selectAvailableUpdateRules,
   selectPoolConstituents,
   generateAndAddPoolToSim,
-  selectPoolTypeDefaultUpdateRule,
   selectAvailablePoolTypes,
   selectPoolType,
   setPoolCoinNumeraire,
@@ -42,7 +42,7 @@ const { Option } = Select;
 interface updateRuleFactorParams {
   handleUpdateRuleFactor: (
     updateRule: UpdateRuleParameter,
-    e: string | null,
+    e: number | string | null,
     _applicableCoins: LiquidityPoolCoin[]
   ) => void;
   isUniversal: boolean;
@@ -50,6 +50,26 @@ interface updateRuleFactorParams {
   coinDataLoaded: boolean;
   runStatusIndex: number;
 }
+
+const getDefaultUpdateRuleForPoolType = (
+  poolTypeName: string,
+  availableUpdateRules: UpdateRule[]
+): UpdateRule | undefined => {
+  if (poolTypeName === 'QuantAMM') {
+    return availableUpdateRules.find((x) => x.updateRuleName === 'Momentum');
+  }
+  return availableUpdateRules.find((x) =>
+    x.applicablePoolTypes.some((poolType) => poolType === poolTypeName)
+  );
+};
+
+const toNumericValue = (
+  value: string | number | null | undefined
+): number | undefined => {
+  const numericValue = Number(value);
+  return Number.isFinite(numericValue) ? numericValue : undefined;
+};
+
 export function PoolRuleConfiguration() {
   const availableUpdateRules = useAppSelector(selectAvailableUpdateRules);
   const availablePoolTypes = useAppSelector(selectAvailablePoolTypes);
@@ -57,12 +77,12 @@ export function PoolRuleConfiguration() {
   const poolConstituents = useAppSelector(selectPoolConstituents);
   const coinDataLoaded = useAppSelector(selectCoinPriceDataLoaded);
   const runStatusIndex = useAppSelector(selectSimulationRunStatusStepIndex);
-  const state = useAppSelector((state) => state);
   const poolNumeraire = useAppSelector(selectPoolNumeraire);
   const simulationPools = useAppSelector(selectSimulationPools);
   const dispatch = useAppDispatch();
 
   const currentInitialRule =
+    getDefaultUpdateRuleForPoolType(poolType.name, availableUpdateRules) ??
     availableUpdateRules.find((rule) => rule.updateRuleName === 'HODL') ??
     availableUpdateRules[0];
 
@@ -79,46 +99,44 @@ export function PoolRuleConfiguration() {
   const [enableArbBots, setEnableArbBots] = useState(true);
 
   const [isUniversal, setIsUniversal] = useState(true);
+  const isRunLocked = runStatusIndex === 2;
 
   function handleUpdateRuleFactor(
     updateRuleParam: UpdateRuleParameter,
-    e: string | null,
+    e: number | string | null,
     applicableCoins: LiquidityPoolCoin[]
   ) {
-    const newValue = e ?? '0';
+    const newValue = `${e ?? 0}`;
 
     setLocalUpdateRule((prevRule) => {
       const updatedParameters = prevRule.updateRuleParameters.map((param) => {
-        if (param.factorName == updateRuleParam.factorName) {
+        if (param.factorName === updateRuleParam.factorName) {
           if (isUniversal) {
-            // For universal, clear applicable coins and update the factor value
             return {
               ...param,
               factorValue: newValue,
               applicableCoins: [],
             };
-          } else {
-            // For non-universal, only update the applicable coin's factor value
-            const updatedApplicableCoins = param.applicableCoins.map((coin) => {
-              // Check if this coin is in the list of coins to be updated
-              if (
-                applicableCoins.some(
-                  (ac) => ac.coin.coinCode === coin.coin.coinCode
-                )
-              ) {
-                return {
-                  ...coin,
-                  factorValue: newValue.toString(), // Update only the factor value for this specific coin
-                };
-              }
-              return coin; // Return other coins as is
-            });
-
-            return {
-              ...param,
-              applicableCoins: updatedApplicableCoins,
-            };
           }
+
+          const updatedApplicableCoins = param.applicableCoins.map((coin) => {
+            if (
+              applicableCoins.some(
+                (ac) => ac.coin.coinCode === coin.coin.coinCode
+              )
+            ) {
+              return {
+                ...coin,
+                factorValue: newValue,
+              };
+            }
+            return coin;
+          });
+
+          return {
+            ...param,
+            applicableCoins: updatedApplicableCoins,
+          };
         }
         return param;
       });
@@ -149,30 +167,34 @@ export function PoolRuleConfiguration() {
               </Col>
               <Col span={24}>
                 <Select
-                  disabled={!coinDataLoaded || runStatusIndex == 2}
+                  disabled={!coinDataLoaded || isRunLocked}
                   placeholder="Add pool to simulation"
                   style={{ width: '100%' }}
-                  defaultValue={poolType.name}
+                  value={localPoolType.name}
                   onSelect={(poolTypeName) => {
                     const foundType = availablePoolTypes.find(
-                      (x) => x.name == poolTypeName
+                      (x) => x.name === poolTypeName
                     );
 
-                    if (foundType) setLocalPoolType(foundType);
+                    if (foundType) {
+                      setLocalPoolType(foundType);
+                    }
 
-                    const foundRule = selectPoolTypeDefaultUpdateRule(
-                      state,
-                      poolTypeName
+                    const foundRule = getDefaultUpdateRuleForPoolType(
+                      poolTypeName,
+                      availableUpdateRules
                     );
 
-                    if (foundRule) setLocalUpdateRule(foundRule);
+                    if (foundRule) {
+                      setLocalUpdateRule(foundRule);
+                    }
                   }}
                 >
                   {(poolConstituents.length > 2
                     ? availablePoolTypes.filter(
                         (x) =>
-                          x.name.toLowerCase().indexOf('cow') == -1 &&
-                          x.name.toLowerCase().indexOf('gyroscope') == -1
+                          !x.name.toLowerCase().includes('cow') &&
+                          !x.name.toLowerCase().includes('gyroscope')
                       )
                     : availablePoolTypes
                   ).map((x) => (
@@ -193,16 +215,11 @@ export function PoolRuleConfiguration() {
                     paddingRight: '3px',
                   }}
                   placeholder="Select pool coin numeraire"
-                  disabled={!coinDataLoaded || runStatusIndex == 2}
+                  disabled={!coinDataLoaded || isRunLocked}
                   onChange={(value: string) => {
                     dispatch(setPoolCoinNumeraire(value));
                   }}
-                  key={poolNumeraire}
-                  value={
-                    poolNumeraire == ''
-                      ? 'Select Pool Numeraire'
-                      : poolNumeraire
-                  }
+                  value={poolNumeraire || undefined}
                 >
                   {poolConstituents.map((constituent) => (
                     <Option
@@ -216,7 +233,7 @@ export function PoolRuleConfiguration() {
               </div>
             </Col>
             <Col span={24} style={{ paddingTop: '10px' }}>
-              <Row hidden={localPoolType.mandatoryProperties.length == 0}>
+              <Row hidden={localPoolType.mandatoryProperties.length === 0}>
                 <Col span={24}>
                   <h5>
                     Choose pool strategy
@@ -229,27 +246,28 @@ export function PoolRuleConfiguration() {
                   <Select
                     disabled={
                       !coinDataLoaded ||
-                      runStatusIndex == 2 ||
-                      localPoolType.mandatoryProperties.length == 0
+                      isRunLocked ||
+                      localPoolType.mandatoryProperties.length === 0
                     }
                     placeholder="Select an update rule"
                     style={{ width: '100%', paddingRight: '3px' }}
                     value={localUpdateRule.updateRuleName}
-                    defaultValue={localUpdateRule.updateRuleName}
                     onSelect={(ruleName) => {
                       const foundRule = availableUpdateRules.find(
-                        (x) => x.updateRuleName == ruleName
+                        (x) => x.updateRuleName === ruleName
                       );
 
-                      if (foundRule) setLocalUpdateRule(foundRule);
+                      if (foundRule) {
+                        setLocalUpdateRule(foundRule);
+                      }
                     }}
                   >
                     {availableUpdateRules
                       .filter(
                         (x) =>
-                          x.applicablePoolTypes?.find(
-                            (y) => y == localPoolType.name
-                          ) != undefined
+                          x.applicablePoolTypes?.some(
+                            (y) => y === localPoolType.name
+                          ) ?? false
                       )
                       .map((x) => (
                         <Option key={x.updateRuleName} value={x.updateRuleName}>
@@ -282,7 +300,7 @@ export function PoolRuleConfiguration() {
                       size="small"
                     >
                       <Radio.Button
-                        disabled={true}
+                        disabled
                         style={{ width: '33%', textAlign: 'center' }}
                       >
                         Arbitrage Bots
@@ -317,14 +335,14 @@ export function PoolRuleConfiguration() {
             </Col>
             <Col
               span={24}
-              hidden={localPoolType.mandatoryProperties.length == 0}
+              hidden={localPoolType.mandatoryProperties.length === 0}
             >
               <Row>
                 <Col span={24} className={styles.updateRuleParam}>
                   <h5
                     hidden={
-                      localPoolType.mandatoryProperties.length == 0 &&
-                      localUpdateRule.updateRuleParameters.length == 0
+                      localPoolType.mandatoryProperties.length === 0 &&
+                      localUpdateRule.updateRuleParameters.length === 0
                     }
                   >
                     Choose strategy parameters
@@ -348,71 +366,67 @@ export function PoolRuleConfiguration() {
                           hidden={
                             localUpdateRule.updateRuleName
                               .toLowerCase()
-                              .indexOf('cowamm') != -1 ||
+                              .indexOf('cowamm') !== -1 ||
                             localUpdateRule.updateRuleName
                               .toLowerCase()
-                              .indexOf('gyro') != -1
+                              .indexOf('gyro') !== -1
                           }
                         >
                           <Radio.Group
                             onChange={(e) => {
-                              const isUniversal = e.target.value;
+                              const nextIsUniversal = e.target.value;
 
-                              if (!isUniversal) {
-                                // If not universal, set applicable coins for each parameter
-                                const updatedParameters =
-                                  localUpdateRule.updateRuleParameters.map(
-                                    (param) => ({
-                                      ...param,
-                                      applicableCoins: poolConstituents.map(
-                                        (token) => ({
-                                          coin: token.coin,
-                                          weight: token.weight,
-                                          currentPrice: token.currentPrice,
-                                          currentPriceUnix:
-                                            token.currentPriceUnix,
-                                          amount: token.amount,
-                                          marketValue: token.marketValue,
-                                          factorValue: param.factorValue,
-                                        })
-                                      ),
-                                    })
-                                  );
-                                setLocalUpdateRule({
-                                  ...localUpdateRule,
-                                  updateRuleParameters: updatedParameters,
-                                });
+                              if (!nextIsUniversal) {
+                                setLocalUpdateRule((prevRule) => ({
+                                  ...prevRule,
+                                  updateRuleParameters:
+                                    prevRule.updateRuleParameters.map(
+                                      (param) => ({
+                                        ...param,
+                                        applicableCoins: poolConstituents.map(
+                                          (token) => ({
+                                            coin: token.coin,
+                                            weight: token.weight,
+                                            currentPrice: token.currentPrice,
+                                            currentPriceUnix:
+                                              token.currentPriceUnix,
+                                            amount: token.amount,
+                                            marketValue: token.marketValue,
+                                            factorValue: param.factorValue,
+                                          })
+                                        ),
+                                      })
+                                    ),
+                                }));
                               } else {
                                 const foundRule = availableUpdateRules.find(
                                   (x) =>
-                                    x.updateRuleName ==
+                                    x.updateRuleName ===
                                     localUpdateRule.updateRuleName
                                 );
 
-                                // If universal, clear applicable coins
                                 if (foundRule) {
-                                  const updatedParameters =
-                                    foundRule.updateRuleParameters.map(
-                                      (param) => ({
-                                        ...param,
-                                        applicableCoins: [],
-                                      })
-                                    );
-                                  setLocalUpdateRule({
-                                    ...localUpdateRule,
-                                    updateRuleParameters: updatedParameters,
-                                  });
+                                  setLocalUpdateRule((prevRule) => ({
+                                    ...prevRule,
+                                    updateRuleParameters:
+                                      foundRule.updateRuleParameters.map(
+                                        (param) => ({
+                                          ...param,
+                                          applicableCoins: [],
+                                        })
+                                      ),
+                                  }));
                                 }
                               }
-                              setIsUniversal(isUniversal);
+                              setIsUniversal(nextIsUniversal);
                             }}
                             size="small"
                             style={{ width: '100%', textAlign: 'center' }}
-                            defaultValue={true}
+                            value={isUniversal}
                           >
                             <Radio.Button
                               value={true}
-                              disabled={true}
+                              disabled
                               style={{ width: '50%' }}
                             >
                               Parameters applied to
@@ -447,19 +461,14 @@ export function PoolRuleConfiguration() {
               <Button
                 disabled={
                   !coinDataLoaded ||
-                  runStatusIndex == 2 ||
-                  (localPoolType.requiresPoolNumeraire && poolNumeraire == '')
+                  isRunLocked ||
+                  (localPoolType.requiresPoolNumeraire && poolNumeraire === '')
                 }
                 type="primary"
                 onClick={() => {
                   dispatch(
                     generateAndAddPoolToSim({
-                      updateRule:
-                        localUpdateRule ??
-                        selectPoolTypeDefaultUpdateRule(
-                          state,
-                          localPoolType.name
-                        ),
+                      updateRule: localUpdateRule,
                       poolConstituents,
                       poolType: localPoolType,
 
@@ -469,11 +478,11 @@ export function PoolRuleConfiguration() {
                   );
                 }}
               >
-                {runStatusIndex == 2 ? 'Reset Sim' : 'Add pool to simulator'}
+                {isRunLocked ? 'Reset Sim' : 'Add pool to simulator'}
               </Button>
               <p
                 hidden={
-                  !(localPoolType.requiresPoolNumeraire && poolNumeraire == '')
+                  !(localPoolType.requiresPoolNumeraire && poolNumeraire === '')
                 }
                 style={{ color: 'red' }}
               >
@@ -489,8 +498,8 @@ export function PoolRuleConfiguration() {
               <Button
                 disabled={
                   !coinDataLoaded ||
-                  runStatusIndex == 2 ||
-                  simulationPools.length == 0
+                  isRunLocked ||
+                  simulationPools.length === 0
                 }
                 style={{ backgroundColor: 'green', float: 'right' }}
                 onClick={() => {
@@ -572,13 +581,12 @@ const UpdateRuleConfiguration = ({
                 disabled={!coinDataLoaded || runStatusIndex === 2}
                 key={`${param.factorName}-${coinCode}-${index}`}
                 id={`${param.factorName}-${coinCode}-${index}`}
-                defaultValue={param.factorValue}
                 value={
-                  isUniversal
-                    ? param.factorValue
-                    : items[index].coin?.factorValue
-                      ? items[index].coin?.factorValue
-                      : param.factorValue
+                  toNumericValue(
+                    isUniversal
+                      ? param.factorValue
+                      : items[index].coin?.factorValue ?? param.factorValue
+                  )
                 }
                 addonBefore={
                   <div>
@@ -589,17 +597,14 @@ const UpdateRuleConfiguration = ({
                   </div>
                 }
                 addonAfter={`${param.minValue} < x < ${param.maxValue}`}
-                min={param.minValue}
-                max={param.maxValue}
-                step="0.0001"
+                min={toNumericValue(param.minValue)}
+                max={toNumericValue(param.maxValue)}
+                step={0.0001}
                 onChange={(e) => {
-                  const coins = isUniversal
-                    ? []
-                    : items?.[index]?.coin?.amount
-                      ? [items[index].coin]
-                      : param.applicableCoins[index]
-                        ? [param.applicableCoins[index]]
-                        : [];
+                  const selectedCoin =
+                    items[index].coin ?? param.applicableCoins[index];
+                  const coins =
+                    isUniversal || !selectedCoin ? [] : [selectedCoin];
 
                   handleUpdateRuleFactor(param, e, coins);
                 }}

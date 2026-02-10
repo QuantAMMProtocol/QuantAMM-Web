@@ -1,3 +1,4 @@
+//TODO CH split into subcomponents
 import { Button, Col, Divider, InputNumber, Row, Space, Tabs } from 'antd';
 import {
   LiquidityPool,
@@ -16,27 +17,29 @@ export type GroupedParameters = Record<
   { param: UpdateRuleParameter; coin?: LiquidityPoolCoin }[]
 >;
 
+const toNumericValue = (value: string | number | null | undefined) => {
+  const numericValue = Number(value);
+  return Number.isFinite(numericValue) ? numericValue : undefined;
+};
+
 export function ConfiguredSimulationsToRunSummary() {
   const simulationPools = useAppSelector(selectSimulationPools);
   const coinDataLoaded = useAppSelector(selectCoinPriceDataLoaded);
 
   const [activeSimRuleToRun, setActiveSimToRun] = useState('');
-  const [isUniversal] = useState(true);
 
   const dispatch = useAppDispatch();
   const { TabPane } = Tabs;
 
-  function onlyUnique(value: string, index: number, self: string[]) {
-    return self.indexOf(value) === index;
-  }
+  const uniquePoolTypes = Array.from(
+    new Set(simulationPools.map((pool) => pool.poolType.name))
+  );
+  const activePoolType =
+    activeSimRuleToRun && uniquePoolTypes.includes(activeSimRuleToRun)
+      ? activeSimRuleToRun
+      : uniquePoolTypes[0] ?? '';
 
-  const UpdateRuleConfigurationResultView = ({
-    pool,
-    isUniversal = true,
-  }: {
-    pool: LiquidityPool;
-    isUniversal: boolean;
-  }) => {
+  const UpdateRuleConfigurationResultView = ({ pool }: { pool: LiquidityPool }) => {
     const groupedParameters = pool.updateRule.updateRuleParameters.reduce(
       (acc: GroupedParameters, param: UpdateRuleParameter) => {
         if (param.applicableCoins && param.applicableCoins.length > 0) {
@@ -110,28 +113,18 @@ export function ConfiguredSimulationsToRunSummary() {
                   </Row>
                 )}
                 <Row gutter={[16, 16]}>
-                  <Col span={10} style={{ verticalAlign: 'middle' }}>
-                    <p hidden={items.length > 0}>
-                      No dynamic default parameters{' '}
-                    </p>
-                  </Col>
-
                   {items.map(({ param }, index) => (
                     <Col
                       key={`${param.factorName}-${coinCode}-${index}`}
                       span={24}
                     >
                       <InputNumber
-                        disabled={true}
+                        disabled
                         id={`${param.factorName}-${coinCode}-${index}`}
                         addonBefore={param.factorName}
-                        value={
-                          isUniversal
-                            ? param.factorValue
-                            : items[index].coin?.factorValue
-                              ? items[index].coin?.factorValue
-                              : param.factorValue
-                        }
+                        value={toNumericValue(
+                          items[index].coin?.factorValue ?? param.factorValue
+                        )}
                         style={{ width: '100%' }}
                       />
                     </Col>
@@ -148,68 +141,53 @@ export function ConfiguredSimulationsToRunSummary() {
   return (
     <Row>
       <Col span={24}>
-        <h4 hidden={simulationPools.length > 0}>
-          No simulations have been selected to run
-        </h4>
-        {
-          <div hidden={simulationPools.length == 0}>
+        {simulationPools.length === 0 && (
+          <h4>No simulations have been selected to run</h4>
+        )}
+        {simulationPools.length > 0 && (
+          <div>
             <Tabs
-              activeKey={
-                simulationPools.length == 1 ||
-                (simulationPools.length > 1 && activeSimRuleToRun == '')
-                  ? simulationPools[0].poolType.name
-                  : activeSimRuleToRun
-              }
+              activeKey={activePoolType}
               onChange={(x) => setActiveSimToRun(x)}
             >
-              {simulationPools
-                .map((x) => x.poolType.name)
-                .filter(onlyUnique)
-                .map((x) => {
-                  return (
-                    <TabPane tab={x} key={x}>
-                      {simulationPools
-                        .filter((y) => y.poolType.name == x)
-                        .map((z) => {
-                          return (
-                            <div key={z.id}>
-                              <Row>
-                                <Col span={21}>
-                                  <Space
-                                    direction="vertical"
-                                    size="middle"
-                                    style={{
-                                      display: 'flex',
-                                    }}
-                                  >
-                                    <UpdateRuleConfigurationResultView
-                                      pool={z}
-                                      isUniversal={isUniversal}
-                                    />
-                                  </Space>
-                                </Col>
-                                <Col span={3} style={{ paddingLeft: '10px' }}>
-                                  <Button
-                                    disabled={!coinDataLoaded}
-                                    type="primary"
-                                    onClick={() => {
-                                      dispatch(removeSim(z.id));
-                                    }}
-                                  >
-                                    X
-                                  </Button>
-                                </Col>
-                              </Row>
-                              <Divider></Divider>
-                            </div>
-                          );
-                        })}
-                    </TabPane>
-                  );
-                })}
+              {uniquePoolTypes.map((poolTypeName) => (
+                <TabPane tab={poolTypeName} key={poolTypeName}>
+                  {simulationPools
+                    .filter((pool) => pool.poolType.name === poolTypeName)
+                    .map((pool) => (
+                      <div key={pool.id}>
+                        <Row>
+                          <Col span={21}>
+                            <Space
+                              direction="vertical"
+                              size="middle"
+                              style={{
+                                display: 'flex',
+                              }}
+                            >
+                              <UpdateRuleConfigurationResultView pool={pool} />
+                            </Space>
+                          </Col>
+                          <Col span={3} style={{ paddingLeft: '10px' }}>
+                            <Button
+                              disabled={!coinDataLoaded}
+                              type="primary"
+                              onClick={() => {
+                                dispatch(removeSim(pool.id));
+                              }}
+                            >
+                              X
+                            </Button>
+                          </Col>
+                        </Row>
+                        <Divider></Divider>
+                      </div>
+                    ))}
+                </TabPane>
+              ))}
             </Tabs>
           </div>
-        }
+        )}
       </Col>
     </Row>
   );
