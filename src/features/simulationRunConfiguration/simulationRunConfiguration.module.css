@@ -58,3 +58,140 @@
   overflow-y: scroll;
   height: 75vh;
 }
+
+.coinSelectInput {
+  width: 90%;
+  margin-bottom: 5px;
+}
+
+.coinMarketValueInput {
+  width: 90%;
+}
+
+.poolRuleCenterColumn {
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+.infoIcon {
+  padding-left: 5px;
+}
+
+.sectionPaddingTop {
+  padding-top: 10px;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.fullWidthWithRightPadding {
+  width: 100%;
+  padding-right: 3px;
+}
+
+.numeraireSelect {
+  width: 100%;
+  margin-bottom: 5px;
+  padding-right: 3px;
+}
+
+.arbGroupContainer {
+  width: 100%;
+}
+
+.arbBotsGroup {
+  width: 100%;
+}
+
+.arbBotsButton {
+  width: 33%;
+  text-align: center;
+}
+
+.noParamsRequired {
+  padding-top: 10px;
+}
+
+.updateRuleParamsSpace {
+  display: flex;
+}
+
+.updateRuleConfigContainer {
+  padding-top: 16px;
+  padding-left: 8px;
+  display: flex;
+}
+
+.groupParameterSection {
+  width: 100%;
+}
+
+.groupParameterTitle {
+  margin-bottom: 8px;
+}
+
+.inputWithRightPadding {
+  width: 100%;
+  padding-right: 8px;
+}
+
+.universalToggleGroup {
+  width: 100%;
+  text-align: center;
+}
+
+.universalToggleLabel {
+  width: 50%;
+}
+
+.universalToggleOption {
+  width: 25%;
+}
+
+.errorText {
+  color: red;
+}
+
+.continueSection {
+  padding-top: 10px;
+}
+
+.continueButton {
+  background-color: green;
+  float: right;
+}
+
+.summarySpace {
+  width: 100%;
+  justify-content: space-around;
+}
+
+.summaryRuleColumn {
+  padding-right: 10px;
+  padding-top: 20px;
+}
+
+.summaryNoParams {
+  vertical-align: middle;
+}
+
+.summaryParameterGroup {
+  width: 100%;
+}
+
+.summaryParameterTitle {
+  margin-bottom: 8px;
+}
+
+.summaryInput {
+  width: 100%;
+}
+
+.summaryEntrySpace {
+  display: flex;
+}
+
+.summaryRemoveColumn {
+  padding-left: 10px;
+}

@@ -12,6 +12,7 @@ import {
   selectCoinPriceDataLoaded,
   selectSimulationPools,
 } from './simulationRunConfigurationSlice';
+import styles from './simulationRunConfiguration.module.css';
 export type GroupedParameters = Record<
   string,
   { param: UpdateRuleParameter; coin?: LiquidityPoolCoin }[]
@@ -64,10 +65,7 @@ export function ConfiguredSimulationsToRunSummary() {
       <Space
         direction="vertical"
         align="start"
-        style={{
-          width: '100%',
-          justifyContent: 'space-around',
-        }}
+        className={styles.summarySpace}
       >
         <Row>
           <Col span={8}>
@@ -83,7 +81,7 @@ export function ConfiguredSimulationsToRunSummary() {
             </Col>
             <Col span={24}></Col>
           </Col>
-          <Col span={16} style={{ paddingRight: '10px', paddingTop: '20px' }}>
+          <Col span={16} className={styles.summaryRuleColumn}>
             <Row>
               <Col span={24}>
                 <span>Automatic Arb Bots:</span>
@@ -93,20 +91,16 @@ export function ConfiguredSimulationsToRunSummary() {
               </Col>
             </Row>
             {Object.keys(groupedParameters).length === 0 && (
-              <Col span={24} style={{ verticalAlign: 'middle' }}>
+              <Col span={24} className={styles.summaryNoParams}>
                 No dynamic default parameters
               </Col>
             )}
             {Object.entries(groupedParameters).map(([coinCode, items]) => (
-              <div key={coinCode} style={{ width: '100%' }}>
+              <div key={coinCode} className={styles.summaryParameterGroup}>
                 {items[0].coin && (
                   <Row>
                     <Col span={24}>
-                      <h5
-                        style={{
-                          marginBottom: 8,
-                        }}
-                      >
+                      <h5 className={styles.summaryParameterTitle}>
                         {items[0].coin.coin.coinName}
                       </h5>
                     </Col>
@@ -125,7 +119,7 @@ export function ConfiguredSimulationsToRunSummary() {
                         value={toNumericValue(
                           items[index].coin?.factorValue ?? param.factorValue
                         )}
-                        style={{ width: '100%' }}
+                        className={styles.summaryInput}
                       />
                     </Col>
                   ))}
@@ -161,14 +155,12 @@ export function ConfiguredSimulationsToRunSummary() {
                             <Space
                               direction="vertical"
                               size="middle"
-                              style={{
-                                display: 'flex',
-                              }}
+                              className={styles.summaryEntrySpace}
                             >
                               <UpdateRuleConfigurationResultView pool={pool} />
                             </Space>
                           </Col>
-                          <Col span={3} style={{ paddingLeft: '10px' }}>
+                          <Col span={3} className={styles.summaryRemoveColumn}>
                             <Button
                               disabled={!coinDataLoaded}
                               type="primary"

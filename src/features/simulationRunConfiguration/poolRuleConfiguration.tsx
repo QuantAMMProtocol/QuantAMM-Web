@@ -154,14 +154,14 @@ export function PoolRuleConfiguration() {
         <Col span={8}>
           <LiquidityPoolConfiguration />
         </Col>
-        <Col span={8} style={{ paddingLeft: 40, paddingRight: 40 }}>
+        <Col span={8} className={styles.poolRuleCenterColumn}>
           <Row>
             <Col span={24}>
               <Col span={24}>
                 <h5>
                   Choose pool type
                   <Tooltip title="Balancer-v3 can run multiple AMM types, select and configure which AMM types you would like to simulate">
-                    <InfoCircleOutlined style={{ paddingLeft: '5px' }} />
+                    <InfoCircleOutlined className={styles.infoIcon} />
                   </Tooltip>
                 </h5>
               </Col>
@@ -169,7 +169,7 @@ export function PoolRuleConfiguration() {
                 <Select
                   disabled={!coinDataLoaded || isRunLocked}
                   placeholder="Add pool to simulation"
-                  style={{ width: '100%' }}
+                  className={styles.fullWidth}
                   value={localPoolType.name}
                   onSelect={(poolTypeName) => {
                     const foundType = availablePoolTypes.find(
@@ -206,14 +206,10 @@ export function PoolRuleConfiguration() {
               </Col>
             </Col>
 
-            <Col span={24} style={{ paddingTop: '10px' }}>
+            <Col span={24} className={styles.sectionPaddingTop}>
               <div hidden={!localPoolType.requiresPoolNumeraire}>
                 <Select
-                  style={{
-                    width: '100%',
-                    marginBottom: '5px',
-                    paddingRight: '3px',
-                  }}
+                  className={styles.numeraireSelect}
                   placeholder="Select pool coin numeraire"
                   disabled={!coinDataLoaded || isRunLocked}
                   onChange={(value: string) => {
@@ -232,13 +228,13 @@ export function PoolRuleConfiguration() {
                 </Select>
               </div>
             </Col>
-            <Col span={24} style={{ paddingTop: '10px' }}>
+            <Col span={24} className={styles.sectionPaddingTop}>
               <Row hidden={localPoolType.mandatoryProperties.length === 0}>
                 <Col span={24}>
                   <h5>
                     Choose pool strategy
                     <Tooltip title="Some balancer-v3 pool types can run various strategies, select a strategy to run on this dynamic AMM">
-                      <InfoCircleOutlined style={{ paddingLeft: '5px' }} />
+                      <InfoCircleOutlined className={styles.infoIcon} />
                     </Tooltip>
                   </h5>
                 </Col>
@@ -250,7 +246,7 @@ export function PoolRuleConfiguration() {
                       localPoolType.mandatoryProperties.length === 0
                     }
                     placeholder="Select an update rule"
-                    style={{ width: '100%', paddingRight: '3px' }}
+                    className={styles.fullWidthWithRightPadding}
                     value={localUpdateRule.updateRuleName}
                     onSelect={(ruleName) => {
                       const foundRule = availableUpdateRules.find(
@@ -278,7 +274,7 @@ export function PoolRuleConfiguration() {
                 </Col>
               </Row>
               <Row>
-                <Col span={24} style={{ paddingTop: '10px' }}>
+                <Col span={24} className={styles.sectionPaddingTop}>
                   <div
                     hidden={
                       localUpdateRule.updateRuleName
@@ -291,30 +287,21 @@ export function PoolRuleConfiguration() {
                         .toLowerCase()
                         .includes('rvr')
                     }
-                    style={{ width: '100%' }}
+                    className={styles.arbGroupContainer}
                   >
                     <Radio.Group
                       onChange={(e) => setEnableArbBots(e.target.value)}
                       value={enableArbBots}
-                      style={{ width: '100%' }}
+                      className={styles.arbBotsGroup}
                       size="small"
                     >
-                      <Radio.Button
-                        disabled
-                        style={{ width: '33%', textAlign: 'center' }}
-                      >
+                      <Radio.Button disabled className={styles.arbBotsButton}>
                         Arbitrage Bots
                       </Radio.Button>
-                      <Radio.Button
-                        value={true}
-                        style={{ width: '33%', textAlign: 'center' }}
-                      >
+                      <Radio.Button value={true} className={styles.arbBotsButton}>
                         Automated
                       </Radio.Button>
-                      <Radio.Button
-                        value={false}
-                        style={{ width: '33%', textAlign: 'center' }}
-                      >
+                      <Radio.Button value={false} className={styles.arbBotsButton}>
                         None
                       </Radio.Button>
                     </Radio.Group>
@@ -323,7 +310,7 @@ export function PoolRuleConfiguration() {
               </Row>
               <Row>
                 <div
-                  style={{ paddingTop: '10px' }}
+                  className={styles.noParamsRequired}
                   hidden={
                     localPoolType.mandatoryProperties.length > 0 ||
                     localUpdateRule.updateRuleParameters.length > 0
@@ -347,7 +334,7 @@ export function PoolRuleConfiguration() {
                   >
                     Choose strategy parameters
                     <Tooltip title="This dynamic AMM requires some fine tuning given some pool creation parameters. Parameters can often be global or specific to a given constituent.">
-                      <InfoCircleOutlined style={{ paddingLeft: '5px' }} />
+                      <InfoCircleOutlined className={styles.infoIcon} />
                     </Tooltip>
                   </h5>
                 </Col>
@@ -355,9 +342,7 @@ export function PoolRuleConfiguration() {
                   <Space
                     direction="vertical"
                     size="middle"
-                    style={{
-                      display: 'flex',
-                    }}
+                    className={styles.updateRuleParamsSpace}
                   >
                     {localUpdateRule.updateRuleParameters.length > 0 && (
                       <div>
@@ -421,22 +406,25 @@ export function PoolRuleConfiguration() {
                               setIsUniversal(nextIsUniversal);
                             }}
                             size="small"
-                            style={{ width: '100%', textAlign: 'center' }}
+                            className={styles.universalToggleGroup}
                             value={isUniversal}
                           >
                             <Radio.Button
                               value={true}
                               disabled
-                              style={{ width: '50%' }}
+                              className={styles.universalToggleLabel}
                             >
                               Parameters applied to
                             </Radio.Button>
-                            <Radio.Button value={true} style={{ width: '25%' }}>
+                            <Radio.Button
+                              value={true}
+                              className={styles.universalToggleOption}
+                            >
                               All Tokens
                             </Radio.Button>
                             <Radio.Button
                               value={false}
-                              style={{ width: '25%' }}
+                              className={styles.universalToggleOption}
                             >
                               Per Token
                             </Radio.Button>
@@ -457,7 +445,7 @@ export function PoolRuleConfiguration() {
             </Col>
           </Row>
           <Row>
-            <Col span={24} style={{ paddingTop: '10px' }}>
+            <Col span={24} className={styles.sectionPaddingTop}>
               <Button
                 disabled={
                   !coinDataLoaded ||
@@ -484,7 +472,7 @@ export function PoolRuleConfiguration() {
                 hidden={
                   !(localPoolType.requiresPoolNumeraire && poolNumeraire === '')
                 }
-                style={{ color: 'red' }}
+                className={styles.errorText}
               >
                 Mandatory Pool Numeraire Required
               </p>
@@ -492,7 +480,7 @@ export function PoolRuleConfiguration() {
           </Row>
         </Col>
         <Col span={8}>
-          <Row style={{ paddingTop: '10px' }}>
+          <Row className={styles.continueSection}>
             <Col span={24}>
               <ConfiguredSimulationsToRunSummary />
               <Button
@@ -501,7 +489,7 @@ export function PoolRuleConfiguration() {
                   isRunLocked ||
                   simulationPools.length === 0
                 }
-                style={{ backgroundColor: 'green', float: 'right' }}
+                className={styles.continueButton}
                 onClick={() => {
                   dispatch(changeSimulationRunnerCurrentStepIndex(2));
                 }}
@@ -552,22 +540,14 @@ const UpdateRuleConfiguration = ({
     <Space
       direction="vertical"
       size="middle"
-      style={{
-        paddingTop: '16px',
-        paddingLeft: '8px',
-        display: 'flex',
-      }}
+      className={styles.updateRuleConfigContainer}
     >
       {Object.entries(groupedParameters).map(([coinCode, items]) => (
-        <div key={coinCode} style={{ width: '100%' }}>
+        <div key={coinCode} className={styles.groupParameterSection}>
           {items[0].coin && (
             <Row>
               <Col span={24}>
-                <h5
-                  style={{
-                    marginBottom: 8,
-                  }}
-                >
+                <h5 className={styles.groupParameterTitle}>
                   {items[0].coin.coin.coinCode}
                 </h5>
               </Col>
@@ -576,7 +556,7 @@ const UpdateRuleConfiguration = ({
           <Row gutter={[16, 16]}>
             {items.map(({ param }, index) => (
               <InputNumber
-                style={{ width: '100%', paddingRight: '8px' }}
+                className={styles.inputWithRightPadding}
                 size="small"
                 disabled={!coinDataLoaded || runStatusIndex === 2}
                 key={`${param.factorName}-${coinCode}-${index}`}
@@ -592,7 +572,7 @@ const UpdateRuleConfiguration = ({
                   <div>
                     {param.factorDisplayName}
                     <Tooltip title={param.factorDescription}>
-                      <InfoCircleOutlined style={{ paddingLeft: '5px' }} />
+                      <InfoCircleOutlined className={styles.infoIcon} />
                     </Tooltip>
                   </div>
                 }

@@ -229,7 +229,7 @@ export function LiquidityPoolConfiguration() {
                 disabled={!coinDataLoaded}
                 allowClear
                 value={selectedCoinCodes}
-                style={{ width: '90%', marginBottom: '5px' }}
+                className={styles.coinSelectInput}
                 placeholder="Select coins to add/modify"
                 onSelect={(item: string) => dispatch(upsertSelectedCoins(item))}
                 onDeselect={(item: string) =>
@@ -258,7 +258,7 @@ export function LiquidityPoolConfiguration() {
                   addonBefore={'$'}
                   value={initialMarketValue}
                   placeholder="enter dollar value to add"
-                  style={{ width: '90%' }}
+                  className={styles.coinMarketValueInput}
                   onChange={(e) => {
                     dispatch(setSelectedInitialCoinAmount(e));
                   }}
