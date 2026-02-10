@@ -1,5 +1,6 @@
 import { useAppSelector } from '../../../app/hooks';
 import { Row, Col, Divider } from 'antd';
+import { useMemo } from 'react';
 import { ReturnDistributionGraph } from '../../shared/graphs';
 import { selectSimulationResultTimeRangeSelection } from '../../simulationRunner/simulationRunnerSlice';
 import { BreakdownProps } from '../simulationResultsSummaryStep';
@@ -18,20 +19,27 @@ export function SimulationResultReturnChart(props: BreakdownProps) {
 
   function getMetricName(
     metric: SimulationRunMetric[],
-    metricName: string,
+    metricName: string | string[],
     percentage = false
   ) {
-    const metricFilter = metric.filter((x) => x.metricName == metricName);
-    if (metricFilter.length > 0) {
-      if (percentage) {
-        return ((metricFilter[0]?.metricValue ?? 0) * 100)?.toFixed(4);
-      } else {
-        return (metricFilter[0]?.metricValue ?? 0)?.toFixed(4);
-      }
-    } else {
-      return 0;
+    const metricNames = Array.isArray(metricName) ? metricName : [metricName];
+    const selected = metric.find((x) => metricNames.includes(x.metricName));
+    if (selected?.metricValue == null) {
+      return '-';
     }
+
+    return percentage
+      ? (selected.metricValue * 100).toFixed(4)
+      : selected.metricValue.toFixed(4);
   }
+
+  const visibleBreakdowns = useMemo(
+    () =>
+      simulationBreakdownResults
+        .filter((result) => result.simulationRunStatus === 'Complete')
+        .filter((result) => result.timeRange.name === simulationTimeRangeSelected),
+    [simulationBreakdownResults, simulationTimeRangeSelected]
+  );
 
   return (
     <div>
@@ -40,12 +48,7 @@ export function SimulationResultReturnChart(props: BreakdownProps) {
       </Divider>
       <Row className={styles.resultChartRow}>
         <Col span={24}>
-          {simulationBreakdownResults
-            .filter((result) => result.simulationRunStatus == 'Complete')
-            .filter(
-              (result) => result.timeRange.name == simulationTimeRangeSelected
-            )
-            .map((result, index) => (
+          {visibleBreakdowns.map((result, index) => (
               <Row key={index}>
                 <Col span={4}>
                   <div className={styles.weightChartDescription}>
@@ -112,7 +115,7 @@ export function SimulationResultReturnChart(props: BreakdownProps) {
                         {getMetricName(
                           result.simulationRunResultAnalysis?.return_analysis ??
                             [],
-                          'skewness'
+                          ['jarqueBera', 'jarque_bera', 'jaqueBera']
                         )}
                       </p>
                     </Col>

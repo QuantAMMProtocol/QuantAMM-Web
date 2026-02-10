@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 
 import 'ag-grid-enterprise/styles/ag-grid.css';
@@ -20,7 +20,7 @@ export function SimulationRunMvSummaryBreakdown(props: BreakdownProps) {
   const simulationRunBreakdowns = props.breakdowns;
 
   function currencyFormatter(currency: number, sign: string) {
-    if (currency == undefined) return '';
+    if (currency === undefined) return '';
     const sansDec = currency.toFixed(0);
     const formatted = sansDec.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     return sign + `${formatted}`;
@@ -87,7 +87,7 @@ export function SimulationRunMvSummaryBreakdown(props: BreakdownProps) {
   ]);
 
   const customRounding = (original: number | undefined): number | undefined => {
-    if (original == undefined) {
+    if (original === undefined) {
       return original;
     }
 
@@ -107,14 +107,15 @@ export function SimulationRunMvSummaryBreakdown(props: BreakdownProps) {
     return original;
   };
   
-  const getResultSummary = (): FlatResultSummaryBreakdown[] => {
+  const resultSummary = useMemo((): FlatResultSummaryBreakdown[] => {
     const results: FlatResultSummaryBreakdown[] = [];
 
     simulationRunBreakdowns
-      .filter((x) => x.simulationRunStatus == 'Complete')
+      .filter((x) => x.simulationRunStatus === 'Complete')
+      .filter((x) => x.timeSteps.length > 0)
       .forEach((x) => {
         const finalValues = x.timeSteps[x.timeSteps.length - 1];
-        if (x.flatSimulationRunResult != undefined) {
+        if (x.flatSimulationRunResult !== undefined) {
           results.push(x.flatSimulationRunResult);
         } else {
           results.push({
@@ -151,50 +152,55 @@ export function SimulationRunMvSummaryBreakdown(props: BreakdownProps) {
       });
 
     return results;
-  };
+  }, [simulationRunBreakdowns]);
 
-  const summaryGridOptions: GridOptions = {
-    columnDefs: summaryColDefs,
-    rowHeight: 26,
-    defaultColDef: {
-      filter: 'agTextColumnFilter',
-      sortable: true,
-      resizable: true,
-      enablePivot: true,
-    },
-    columnTypes: {
-      nonEditableColumn: { editable: false },
-      
-    },
-    groupDefaultExpanded: 1,
-  };
+  const summaryGridOptions: GridOptions = useMemo(
+    () => ({
+      columnDefs: summaryColDefs,
+      rowHeight: 26,
+      defaultColDef: {
+        filter: 'agTextColumnFilter',
+        sortable: true,
+        resizable: true,
+        enablePivot: true,
+      },
+      columnTypes: {
+        nonEditableColumn: { editable: false },
+      },
+      groupDefaultExpanded: 1,
+    }),
+    [summaryColDefs]
+  );
 
-  const sideBar: SideBarDef = {
-    toolPanels: [
-      {
-        id: 'columns',
-        labelDefault: 'Columns',
-        labelKey: 'columns',
-        iconKey: 'columns',
-        toolPanel: 'agColumnsToolPanel',
-        minWidth: 100,
-        maxWidth: 300,
-        width: 150,
-      },
-      {
-        id: 'filters',
-        labelDefault: 'Filters',
-        labelKey: 'filters',
-        iconKey: 'filter',
-        toolPanel: 'agFiltersToolPanel',
-        minWidth: 100,
-        maxWidth: 300,
-        width: 150,
-      },
-    ],
-    position: 'right',
-    defaultToolPanel: 'none',
-  };
+  const sideBar: SideBarDef = useMemo(
+    () => ({
+      toolPanels: [
+        {
+          id: 'columns',
+          labelDefault: 'Columns',
+          labelKey: 'columns',
+          iconKey: 'columns',
+          toolPanel: 'agColumnsToolPanel',
+          minWidth: 100,
+          maxWidth: 300,
+          width: 150,
+        },
+        {
+          id: 'filters',
+          labelDefault: 'Filters',
+          labelKey: 'filters',
+          iconKey: 'filter',
+          toolPanel: 'agFiltersToolPanel',
+          minWidth: 100,
+          maxWidth: 300,
+          width: 150,
+        },
+      ],
+      position: 'right',
+      defaultToolPanel: 'none',
+    }),
+    []
+  );
 
   return (
     <div>
@@ -208,7 +214,7 @@ export function SimulationRunMvSummaryBreakdown(props: BreakdownProps) {
             >
               <AgGridReact
                 className={styles.summaryTableParent}
-                rowData={getResultSummary()}
+                rowData={resultSummary}
                 gridOptions={summaryGridOptions}
                 columnDefs={summaryColDefs}
                 sideBar={sideBar}

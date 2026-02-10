@@ -1,7 +1,7 @@
 import { AgCharts } from 'ag-charts-react';
 import * as agCharts from 'ag-charts-community';
 import { AgTimeAxisOptions } from 'ag-charts-community';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import styles from '../simulationResultSummary.module.css';
 import { useAppSelector } from '../../../app/hooks';
@@ -30,6 +30,7 @@ export interface FlatAmountTimeStep {
 
 type VolumeType = 'tradingVolume' | 'reserveQuantity';
 
+//TODO CH split components.
 export function SimulationResultAmountChart(props: BreakdownProps) {
   const simulationBreakdownResults = props.breakdowns;
   const simulationTimeRangeSelected = useAppSelector(
@@ -65,11 +66,11 @@ export function SimulationResultAmountChart(props: BreakdownProps) {
 
       current.coinsHeld.forEach((coinHeld) => {
         const lowerCode = coinHeld.coin.coinCode.toLowerCase();
-        if (coinHeld.amount) {
+        if (coinHeld.amount !== undefined && coinHeld.amount !== null) {
           timeStep[normalisedTokenName(lowerCode)] = Math.abs(
             coinHeld.amount -
               (prev?.coinsHeld.find(
-                (z) => z.coin.coinCode == coinHeld.coin.coinCode
+                (z) => z.coin.coinCode === coinHeld.coin.coinCode
               )?.amount ?? 0)
           );
         }
@@ -114,7 +115,7 @@ export function SimulationResultAmountChart(props: BreakdownProps) {
       series.push({
         type: 'line',
         xKey: 'unix',
-        yKey: x.coin.coinCode.toLowerCase(),
+        yKey: normalisedTokenName(x.coin.coinCode.toLowerCase()),
         yName: x.coin.coinCode.toLowerCase(),
         marker: { enabled: false },
       });
@@ -138,6 +139,15 @@ export function SimulationResultAmountChart(props: BreakdownProps) {
       },
     };
   }
+
+  const visibleBreakdowns = useMemo(
+    () =>
+      simulationBreakdownResults
+        .filter((x) => x.simulationRun.updateRule.updateRuleName !== 'HODL')
+        .filter((x) => x.simulationRunStatus === 'Complete')
+        .filter((x) => x.timeRange.name === simulationTimeRangeSelected),
+    [simulationBreakdownResults, simulationTimeRangeSelected]
+  );
 
   return (
     <div>
@@ -163,11 +173,12 @@ export function SimulationResultAmountChart(props: BreakdownProps) {
       </Row>
       <Row className={styles.resultChartRow}>
         <Col span={24}>
-          {simulationBreakdownResults
-            .filter((x) => x.simulationRun.updateRule.updateRuleName != 'HODL')
-            .filter((x) => x.simulationRunStatus == 'Complete')
-            .filter((x) => x.timeRange.name == simulationTimeRangeSelected)
-            .map((x, index) => (
+          {visibleBreakdowns.map((x, index) => {
+            const amountDeltaData = getAmountDeltaData(x);
+            const amountData = getAmountData(x);
+            const amountSeries = getAmountSeries(x);
+
+            return (
               <Row key={index}>
                 <Col span={4}>
                   <div className={styles.weightChartDescription}>
@@ -187,14 +198,14 @@ export function SimulationResultAmountChart(props: BreakdownProps) {
                   <AgCharts
                     options={{
                       height: 350,
-                      data: getAmountDeltaData(x),
+                      data: amountDeltaData,
                       navigator: {
                         enabled: true,
                         height: 5,
                         spacing: 6,
                       },
                       axes: [
-                        getTimeAxisOption(getAmountDeltaData(x).length),
+                        getTimeAxisOption(amountDeltaData.length),
                         {
                           type: 'log',
                           position: 'left',
@@ -204,7 +215,7 @@ export function SimulationResultAmountChart(props: BreakdownProps) {
                           },
                         },
                       ],
-                      series: getAmountSeries(x),
+                      series: amountSeries,
                       legend: {
                         position: 'bottom',
                       },
@@ -236,14 +247,14 @@ export function SimulationResultAmountChart(props: BreakdownProps) {
                   <AgCharts
                     options={{
                       height: 350,
-                      data: getAmountData(x),
+                      data: amountData,
                       navigator: {
                         enabled: true,
                         height: 5,
                         spacing: 6,
                       },
                       axes: [
-                        getTimeAxisOption(getAmountDeltaData(x).length),
+                        getTimeAxisOption(amountData.length),
                         {
                           type: 'log',
                           position: 'left',
@@ -253,7 +264,7 @@ export function SimulationResultAmountChart(props: BreakdownProps) {
                           },
                         },
                       ],
-                      series: getAmountSeries(x),
+                      series: amountSeries,
                       legend: {
                         position: 'bottom',
                       },
@@ -276,7 +287,8 @@ export function SimulationResultAmountChart(props: BreakdownProps) {
                   />
                 </Col>
               </Row>
-            ))}
+            );
+          })}
         </Col>
       </Row>
     </div>

@@ -10,6 +10,7 @@ import {
 } from '../simulationRunner/simulationRunnerSlice';
 
 import { Col, Menu, Row, Tabs } from 'antd';
+import { useEffect } from 'react';
 
 import {
   LineChartOutlined,
@@ -51,6 +52,7 @@ export interface BreakdownProps {
   hideTitle?:boolean;
 }
 
+//TODO CH split components.
 export function SimulationResultsSummaryStep(props: BreakdownProps) {
   const runStatusIndex = useAppSelector(selectSimulationRunStatusStepIndex);
   const resultChartSelection = useAppSelector(
@@ -66,15 +68,17 @@ export function SimulationResultsSummaryStep(props: BreakdownProps) {
 
   const dispatch = useAppDispatch();
 
-  if (
-    props.breakdowns.length > 0 &&
-    props.breakdowns.find((x) => x.timeRange.name == timeRangeSelected) ==
-      undefined
-  ) {
-    dispatch(
-      changeVisualisationTimeRangeSelected(props.breakdowns[0].timeRange.name)
-    );
-  }
+  useEffect(() => {
+    if (
+      props.breakdowns.length > 0 &&
+      props.breakdowns.find((x) => x.timeRange.name === timeRangeSelected) ===
+        undefined
+    ) {
+      dispatch(
+        changeVisualisationTimeRangeSelected(props.breakdowns[0].timeRange.name)
+      );
+    }
+  }, [dispatch, props.breakdowns, timeRangeSelected]);
 
   function getItem(
     label: string,
@@ -143,36 +147,36 @@ export function SimulationResultsSummaryStep(props: BreakdownProps) {
   }
 
   function getChart(): JSX.Element {
-    if (resultChartSelection == 'MarketValueOverTime') {
+    if (resultChartSelection === 'MarketValueOverTime') {
       return (
         <SimulationResultMarketValueChart
           breakdowns={props.breakdowns}
           forceViewResults={props.forceViewResults}
         />
       );
-    } else if (resultChartSelection == 'Weights') {
+    } else if (resultChartSelection === 'Weights') {
       return (
         <SimulationResultWeightChart
           breakdowns={props.breakdowns}
           forceViewResults={props.forceViewResults}
         />
       );
-    } else if (resultChartSelection == 'Drawdowns') {
+    } else if (resultChartSelection === 'Drawdowns') {
       return (
         <SimulationResultDrawdownChart
           breakdowns={props.breakdowns}
           forceViewResults={props.forceViewResults}
-                  hideTitle={false}
+          hideTitle={false}
         />
       );
-    } else if (resultChartSelection == 'Returns') {
+    } else if (resultChartSelection === 'Returns') {
       return (
         <SimulationResultReturnChart
           breakdowns={props.breakdowns}
           forceViewResults={props.forceViewResults}
         />
       );
-    } else if (resultChartSelection == 'Amounts') {
+    } else if (resultChartSelection === 'Amounts') {
       return (
         <SimulationResultAmountChart
           breakdowns={props.breakdowns}
@@ -185,14 +189,14 @@ export function SimulationResultsSummaryStep(props: BreakdownProps) {
   }
 
   function getBreakdown(): JSX.Element {
-    if (resultBreakdownSelection == 'MvSummary') {
+    if (resultBreakdownSelection === 'MvSummary') {
       return (
         <SimulationRunMvSummaryBreakdown
           breakdowns={props.breakdowns}
           forceViewResults={props.forceViewResults}
         ></SimulationRunMvSummaryBreakdown>
       );
-    } else if (resultBreakdownSelection == 'PerformanceAnalysis') {
+    } else if (resultBreakdownSelection === 'PerformanceAnalysis') {
       return <SimulationRunPerformanceAnalysisBreakdown {...props} />;
     }
     return <div>No Breakdown</div>;
@@ -223,7 +227,7 @@ export function SimulationResultsSummaryStep(props: BreakdownProps) {
                 </Row>
               </Col>
               <Col span={20}>
-                {runStatusIndex == 2 || props.forceViewResults ? (
+                {runStatusIndex === 2 || props.forceViewResults ? (
                   getChart()
                 ) : (
                   <h2>Simulation not finished yet</h2>

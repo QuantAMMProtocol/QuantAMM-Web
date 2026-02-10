@@ -9,7 +9,7 @@ import { selectSimulationResultTimeRangeSelection } from '../../simulationRunner
 import { VaRTimestep } from '../simulationResultSummaryModels';
 import { selectAgChartTheme } from '../../themes/themeSlice';
 import { BreakdownProps } from '../simulationResultsSummaryStep';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { DownOutlined } from '@ant-design/icons';
 import { SimulationResultTimestepDto } from '../../simulationRunner/simulationRunnerDtos';
 
@@ -43,14 +43,17 @@ export function SimulationResultVaRChart(props: BreakdownProps) {
     { label: 'Monthly CDaR', key: 'Monthly CDaR' },
   ];
 
-  function getSeriesForSelectedVaRType(): agCharts.AgCartesianSeriesOptions[] {
+  const visibleBreakdowns = useMemo(
+    () => props.breakdowns.filter((x) => x.timeRange.name === simulationTimeRangeSelected),
+    [props.breakdowns, simulationTimeRangeSelected]
+  );
+
+  const series = useMemo((): agCharts.AgCartesianSeriesOptions[] => {
     const seriesArray: agCharts.AgCartesianSeriesOptions[] = [];
-    props.breakdowns
-      .filter((x) => x.timeRange.name == simulationTimeRangeSelected)
-      .forEach((x) => {
+    visibleBreakdowns.forEach((x) => {
         const timeSeries =
           x.simulationRunResultAnalysis?.return_timeseries_analysis.find(
-            (y) => y.metricName == varType
+            (y) => y.metricName === varType
           );
         let timeSeriesValues: SimulationResultTimestepDto[] = [];
 
@@ -79,16 +82,10 @@ export function SimulationResultVaRChart(props: BreakdownProps) {
       });
 
     return seriesArray;
-  }
+  }, [varType, visibleBreakdowns]);
 
-  function getTimeAxisOption(): AgTimeAxisOptions {
-    let dataLength = 1;
-    const breakdowns = props.breakdowns.filter(
-      (x) => x.timeRange.name == simulationTimeRangeSelected
-    );
-    if (breakdowns.length > 0) {
-      dataLength = breakdowns[0].timeSteps.length;
-    }
+  const timeAxisOption: AgTimeAxisOptions = useMemo(() => {
+    const dataLength = visibleBreakdowns[0]?.timeSteps.length ?? 1;
 
     return {
       type: 'time',
@@ -104,7 +101,7 @@ export function SimulationResultVaRChart(props: BreakdownProps) {
         format: '%m/%y',
       },
     };
-  }
+  }, [visibleBreakdowns]);
 
   return (
     <div>
@@ -139,13 +136,13 @@ export function SimulationResultVaRChart(props: BreakdownProps) {
                 spacing: 6,
               },
               axes: [
-                getTimeAxisOption(),
+                timeAxisOption,
                 {
                   type: 'number',
                   position: 'left',
                 },
               ],
-              series: getSeriesForSelectedVaRType(),
+              series,
               legend: {
                 position: 'bottom',
               },
