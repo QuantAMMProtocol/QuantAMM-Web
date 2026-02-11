@@ -32,7 +32,7 @@ interface BreakdownGridProps {
   height: number;
   gridRef: RefObject<AgGridReact>;
   colDefs: ColDef[];
-  rowData: Array<Record<string, string | number | null>>;
+  rowData: Record<string, string | number | null>[];
   sideBar: SideBarDef;
   onGridReady: (params: { api: any; columnApi: any }) => void;
   onFirstDataRendered: (params: { api: any; columnApi: any }) => void;
