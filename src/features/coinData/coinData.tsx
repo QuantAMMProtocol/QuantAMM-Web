@@ -1,4 +1,3 @@
-// TODO CH split into subcomponents
 import { useState } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import { AgTimeAxisOptions } from 'ag-charts-community';
@@ -295,6 +294,121 @@ export default function CoinData() {
     }
   }
 
+  const CoinSelectionPanel = () => (
+    <Col span={4}>
+      <Menu
+        className={styles.menuPanel}
+        defaultSelectedKeys={['Daily']}
+        items={getPriceFrequency()}
+      />
+      <Menu
+        className={styles.menuPanel}
+        defaultSelectedKeys={[currentCoin]}
+        items={getCoinSelections()}
+        onClick={(x) => {
+          setCurrentCoin(String(x.key));
+        }}
+        activeKey={currentCoin}
+      />
+    </Col>
+  );
+
+  const LoadingStatusPanel = () => (
+    <div hidden={priceDataLoaded}>
+      {coinLoadStatus.map((x, index) => (
+        <Row key={index}>
+          <Col span={8}></Col>
+          <Col span={6}>
+            <span style={{ color: getLoadPriceColor() }}>{x}</span>
+            <CheckOutlined />
+          </Col>
+          <Col span={10}></Col>
+        </Row>
+      ))}
+    </div>
+  );
+
+  const DataTablePanel = () => (
+    <Row>
+      <Col span={24}>
+        <div hidden={!priceDataLoaded}>
+          <div
+            id="myGrid"
+            className={`${styles.tableParent} ${styles.gridWrapper} ${darkThemeAg}`}
+          >
+            <AgGridReact
+              className={styles.tableParent}
+              rowData={getCurrentPriceData()}
+              gridOptions={gridOptions}
+              columnDefs={columnDefs}
+              onFirstDataRendered={onFirstDataRendered}
+              sideBar={sideBar}
+            ></AgGridReact>
+          </div>
+        </div>
+      </Col>
+    </Row>
+  );
+
+  const PriceChartPanel = () => (
+    <Row>
+      <Col span={24}>
+        <div hidden={!priceDataLoaded} className={styles.chartWrapper}>
+          <AgCharts
+            options={{
+              height: 300,
+              navigator: {
+                enabled: true,
+                height: 5,
+                spacing: 6,
+              },
+              axes: [
+                getTimeAxisOption(getCoinSeries()[0].data.length),
+                {
+                  type: 'number',
+                  position: 'left',
+                  label: {
+                    format: '$~s',
+                  },
+                },
+              ],
+              series: getCoinSeries(),
+              legend: {
+                position: 'top',
+              },
+              overlays: {
+                noData: {
+                  text: 'No data',
+                },
+              },
+              theme: {
+                baseTheme: chartTheme,
+                overrides: {
+                  common: {
+                    background: {
+                      fill: 'transparent',
+                    },
+                  },
+                  line: {
+                    series: {
+                      stroke: '#DAAB43',
+                      cursor: 'crosshair',
+                      marker: {
+                        stroke: '#DAAB43',
+                        fill: '#DAAB43',
+                        enabled: false,
+                      },
+                    },
+                  },
+                },
+              },
+            }}
+          />
+        </div>
+      </Col>
+    </Row>
+  );
+
   return (
     <div>
       <Row className={styles.coinTabSection}>
@@ -302,115 +416,11 @@ export default function CoinData() {
           <Tabs>
             <TabPane tab="Individual Coin/Token Data" key={'coinprices'}>
               <Row>
-                <Col span={4}>
-                  <Menu
-                    className={styles.menuPanel}
-                    defaultSelectedKeys={['Daily']}
-                    items={getPriceFrequency()}
-                  />
-                  <Menu
-                    className={styles.menuPanel}
-                    defaultSelectedKeys={[currentCoin]}
-                    items={getCoinSelections()}
-                    onClick={(x) => {
-                      setCurrentCoin(String(x.key));
-                    }}
-                    activeKey={currentCoin}
-                  />
-                </Col>
+                <CoinSelectionPanel />
                 <Col span={20}>
-                  <div hidden={priceDataLoaded}>
-                    {coinLoadStatus.map((x, index) => (
-                      <Row key={index}>
-                        <Col span={8}></Col>
-                        <Col span={6}>
-                          <span style={{ color: getLoadPriceColor() }}>
-                            {x}
-                          </span>
-                          <CheckOutlined />
-                        </Col>
-                        <Col span={10}></Col>
-                      </Row>
-                    ))}
-                  </div>
-                  <Row>
-                    <Col span={24}>
-                      <div hidden={!priceDataLoaded}>
-                        <div
-                          id="myGrid"
-                          className={`${styles.tableParent} ${styles.gridWrapper} ${darkThemeAg}`}
-                        >
-                          <AgGridReact
-                            className={styles.tableParent}
-                            rowData={getCurrentPriceData()}
-                            gridOptions={gridOptions}
-                            columnDefs={columnDefs}
-                            onFirstDataRendered={onFirstDataRendered}
-                            sideBar={sideBar}
-                          ></AgGridReact>
-                        </div>
-                      </div>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col span={24}>
-                      <div
-                        hidden={!priceDataLoaded}
-                        className={styles.chartWrapper}
-                      >
-                        <AgCharts
-                          options={{
-                            height: 300,
-                            navigator: {
-                              enabled: true,
-                              height: 5,
-                              spacing: 6,
-                            },
-                            axes: [
-                              getTimeAxisOption(getCoinSeries()[0].data.length),
-                              {
-                                type: 'number',
-                                position: 'left',
-                                label: {
-                                  format: '$~s',
-                                },
-                              },
-                            ],
-                            series: getCoinSeries(),
-                            legend: {
-                              position: 'top',
-                            },
-                            overlays: {
-                              noData: {
-                                text: 'No data',
-                              },
-                            },
-                            theme: {
-                              baseTheme: chartTheme,
-                              overrides: {
-                                common: {
-                                  background: {
-                                    fill: 'transparent',
-                                  },
-                                },
-                                line: {
-                                  series: {
-                                    stroke: '#DAAB43',
-                                    cursor: 'crosshair',
-                                    marker: {
-                                      stroke: '#DAAB43',
-                                      fill: '#DAAB43',
-                                      enabled: false,
-                                    },
-                                  },
-                                },
-                              },
-                            },
-                          }}
-                        />
-                      </div>
-                    </Col>
-                  </Row>
+                  <LoadingStatusPanel />
+                  <DataTablePanel />
+                  <PriceChartPanel />
                 </Col>
               </Row>
             </TabPane>

@@ -1,4 +1,3 @@
-//TODO CH split into subcomponents
 import {
   Select,
   Row,
@@ -39,8 +38,8 @@ import { ConfiguredSimulationsToRunSummary } from './configuredSimulationsToRunS
 
 const { Option } = Select;
 
-interface updateRuleFactorParams {
-  handleUpdateRuleFactor: (
+interface UpdateRuleFactorParams {
+  onUpdateRuleFactor: (
     updateRule: UpdateRuleParameter,
     e: number | string | null,
     _applicableCoins: LiquidityPoolCoin[]
@@ -69,6 +68,97 @@ const toNumericValue = (
   const numericValue = Number(value);
   return Number.isFinite(numericValue) ? numericValue : undefined;
 };
+
+interface AddPoolButtonSectionProps {
+  coinDataLoaded: boolean;
+  isRunLocked: boolean;
+  localPoolType: PoolType;
+  poolNumeraire: string;
+  localUpdateRule: UpdateRule;
+  poolConstituents: LiquidityPoolCoin[];
+  enableArbBots: boolean;
+  onAddPool: (payload: {
+    updateRule: UpdateRule;
+    poolConstituents: LiquidityPoolCoin[];
+    poolType: PoolType;
+    id: string;
+    enableAutomaticArbBots: boolean;
+  }) => void;
+}
+
+function AddPoolButtonSection({
+  coinDataLoaded,
+  isRunLocked,
+  localPoolType,
+  poolNumeraire,
+  localUpdateRule,
+  poolConstituents,
+  enableArbBots,
+  onAddPool,
+}: AddPoolButtonSectionProps) {
+  return (
+    <Row>
+      <Col span={24} className={styles.sectionPaddingTop}>
+        <Button
+          disabled={
+            !coinDataLoaded ||
+            isRunLocked ||
+            (localPoolType.requiresPoolNumeraire && poolNumeraire === '')
+          }
+          type="primary"
+          onClick={() => {
+            onAddPool({
+              updateRule: localUpdateRule,
+              poolConstituents,
+              poolType: localPoolType,
+              id: '',
+              enableAutomaticArbBots: enableArbBots,
+            });
+          }}
+        >
+          {isRunLocked ? 'Reset Sim' : 'Add pool to simulator'}
+        </Button>
+        <p
+          hidden={!(localPoolType.requiresPoolNumeraire && poolNumeraire === '')}
+          className={styles.errorText}
+        >
+          Mandatory Pool Numeraire Required
+        </p>
+      </Col>
+    </Row>
+  );
+}
+
+interface SummaryAndContinueSectionProps {
+  coinDataLoaded: boolean;
+  isRunLocked: boolean;
+  simulationPoolsLength: number;
+  onContinue: () => void;
+}
+
+function SummaryAndContinueSection({
+  coinDataLoaded,
+  isRunLocked,
+  simulationPoolsLength,
+  onContinue,
+}: SummaryAndContinueSectionProps) {
+  return (
+    <Col span={8}>
+      <Row className={styles.continueSection}>
+        <Col span={24}>
+          <ConfiguredSimulationsToRunSummary />
+          <Button
+            disabled={!coinDataLoaded || isRunLocked || simulationPoolsLength === 0}
+            className={styles.continueButton}
+            onClick={onContinue}
+          >
+            Continue
+          </Button>
+        </Col>
+      </Row>
+    </Col>
+  );
+}
 
 export function PoolRuleConfiguration() {
   const availableUpdateRules = useAppSelector(selectAvailableUpdateRules);
@@ -431,7 +521,7 @@ export function PoolRuleConfiguration() {
                           </Radio.Group>
                         </div>
                         <UpdateRuleConfiguration
-                          handleUpdateRuleFactor={handleUpdateRuleFactor}
+                          onUpdateRuleFactor={handleUpdateRuleFactor}
                           updateRule={localUpdateRule}
                           coinDataLoaded={coinDataLoaded}
                           runStatusIndex={runStatusIndex}
@@ -444,61 +534,27 @@ export function PoolRuleConfiguration() {
               </Row>
             </Col>
           </Row>
-          <Row>
-            <Col span={24} className={styles.sectionPaddingTop}>
-              <Button
-                disabled={
-                  !coinDataLoaded ||
-                  isRunLocked ||
-                  (localPoolType.requiresPoolNumeraire && poolNumeraire === '')
-                }
-                type="primary"
-                onClick={() => {
-                  dispatch(
-                    generateAndAddPoolToSim({
-                      updateRule: localUpdateRule,
-                      poolConstituents,
-                      poolType: localPoolType,
-
-                      id: '',
-                      enableAutomaticArbBots: enableArbBots,
-                    })
-                  );
-                }}
-              >
-                {isRunLocked ? 'Reset Sim' : 'Add pool to simulator'}
-              </Button>
-              <p
-                hidden={
-                  !(localPoolType.requiresPoolNumeraire && poolNumeraire === '')
-                }
-                className={styles.errorText}
-              >
-                Mandatory Pool Numeraire Required
-              </p>
-            </Col>
-          </Row>
+          <AddPoolButtonSection
+            coinDataLoaded={coinDataLoaded}
+            isRunLocked={isRunLocked}
+            localPoolType={localPoolType}
+            poolNumeraire={poolNumeraire}
+            localUpdateRule={localUpdateRule}
+            poolConstituents={poolConstituents}
+            enableArbBots={enableArbBots}
+            onAddPool={(payload) => {
+              dispatch(generateAndAddPoolToSim(payload));
+            }}
+          />
         </Col>
-        <Col span={8}>
-          <Row className={styles.continueSection}>
-            <Col span={24}>
-              <ConfiguredSimulationsToRunSummary />
-              <Button
-                disabled={
-                  !coinDataLoaded ||
-                  isRunLocked ||
-                  simulationPools.length === 0
-                }
-                className={styles.continueButton}
-                onClick={() => {
-                  dispatch(changeSimulationRunnerCurrentStepIndex(2));
-                }}
-              >
-                Continue
-              </Button>
-            </Col>
-          </Row>
-        </Col>
+        <SummaryAndContinueSection
+          coinDataLoaded={coinDataLoaded}
+          isRunLocked={isRunLocked}
+          simulationPoolsLength={simulationPools.length}
+          onContinue={() => {
+            dispatch(changeSimulationRunnerCurrentStepIndex(2));
+          }}
+        />
       </Row>
     </div>
   );
@@ -510,12 +566,12 @@ export type GroupedParameters = Record<
 >;
 
 const UpdateRuleConfiguration = ({
-  handleUpdateRuleFactor,
+  onUpdateRuleFactor,
   isUniversal,
   updateRule,
   coinDataLoaded,
   runStatusIndex,
-}: updateRuleFactorParams) => {
+}: UpdateRuleFactorParams) => {
   const groupedParameters = updateRule.updateRuleParameters.reduce(
     (acc: GroupedParameters, param: UpdateRuleParameter) => {
       if (param.applicableCoins && param.applicableCoins.length > 0) {
@@ -586,7 +642,7 @@ const UpdateRuleConfiguration = ({
                   const coins =
                     isUniversal || !selectedCoin ? [] : [selectedCoin];
 
-                  handleUpdateRuleFactor(param, e, coins);
+                  onUpdateRuleFactor(param, e, coins);
                 }}
               />
             ))}

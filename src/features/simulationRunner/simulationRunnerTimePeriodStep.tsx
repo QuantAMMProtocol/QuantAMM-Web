@@ -160,7 +160,6 @@ const handleDownloadGas = (
   }
 };
 
-//TODO CH split into subcomponents
 export function SimulationRunnerTimePeriodStep() {
   const disabledDate = (current: Dayjs) => {
     const yesterday = dayjs().subtract(1, 'day').endOf('day');
@@ -181,205 +180,208 @@ export function SimulationRunnerTimePeriodStep() {
   const startDate = useAppSelector(selectStartDate);
   const endDate = useAppSelector(selectEndDate);
 
-  return (
-    <div>
+  const TimePeriodControlPanel = () => (
+    <Col span={6}>
       <Row>
-        <Col span={6}>
-          <Row>
-            <Col span={24}>
-              <Divider orientation="center">
-                Select Time Range
-                <Tooltip title="Select the backtest range period">
-                  <InfoCircleOutlined className={runnerStyles.infoIcon} />
-                </Tooltip>
-              </Divider>
-              <RangePicker
-                style={{
-                  //staying inline given rendering priorities
-                  marginLeft: '10px',
-                  width: '100%',
-                }}
-                disabledDate={disabledDate}
-                value={[
-                  dayjs(startDate, dateFormat),
-                  dayjs(endDate, dateFormat),
-                ]}
-                onChange={(_dates, dateStrings) => {
-                  if (!dateStrings[0] || !dateStrings[1]) {
-                    return;
-                  }
-                  dispatch(
-                    setDateRange({
-                      startDate: dateStrings[0] + ' 00:00:00',
-                      endDate: dateStrings[1] + ' 23:59:00',
-                    })
-                  );
-                }}
-              />
-            </Col>
-            <Col span={24} className={runnerStyles.leftPadding10}>
-              <Divider orientation="center">
-                Import Swaps
-                <Tooltip
-                  title="A general pool parameter is automatic optimal arb trading. 
+        <Col span={24}>
+          <Divider orientation="center">
+            Select Time Range
+            <Tooltip title="Select the backtest range period">
+              <InfoCircleOutlined className={runnerStyles.infoIcon} />
+            </Tooltip>
+          </Divider>
+          <RangePicker
+            style={{
+              //staying inline given rendering priorities
+              marginLeft: '10px',
+              width: '100%',
+            }}
+            disabledDate={disabledDate}
+            value={[dayjs(startDate, dateFormat), dayjs(endDate, dateFormat)]}
+            onChange={(_dates, dateStrings) => {
+              if (!dateStrings[0] || !dateStrings[1]) {
+                return;
+              }
+              dispatch(
+                setDateRange({
+                  startDate: dateStrings[0] + ' 00:00:00',
+                  endDate: dateStrings[1] + ' 23:59:00',
+                })
+              );
+            }}
+          />
+        </Col>
+        <Col span={24} className={runnerStyles.leftPadding10}>
+          <Divider orientation="center">
+            Import Swaps
+            <Tooltip
+              title="A general pool parameter is automatic optimal arb trading. 
                 These swaps are applied even if there is optimal arb trading. 
                 They are applied after the arb trades. 
                 There can only be one trade per unix value on one token. 
                 V2 will allow multiple trades ordered on the same unix timestamp. 
                 The import will be rejected if there are multiple"
-                >
-                  <InfoCircleOutlined className={runnerStyles.infoIcon} />
-                </Tooltip>
-              </Divider>
-            </Col>
-            <Col span={24} className={runnerStyles.leftPadding10}>
-              <p
-                hidden={simulationPools.length > 0}
-                className={runnerStyles.marginBottom10}
-              >
-                You need to configure pools to run in the pool step before
-                importing swaps.
-              </p>
-              <div hidden={simulationPools.length === 0}>
-                <input
-                  type="file"
-                  accept=".csv"
-                  ref={swapInputRef}
-                  className={runnerStyles.hiddenFileInput}
-                  onChange={(event) => handleDownloadSwaps(event, dispatch)}
-                />
-                <Button
-                  type="primary"
-                  onClick={() => swapInputRef.current?.click()}
-                  disabled={!coinDataLoaded}
-                >
-                  Load Swap CSV (optional)
-                </Button>
-
-                <p>Expected CSV header format:</p>
-                <p>unix, tokenIn, tokenOut, amountIn</p>
-              </div>
-            </Col>
-            <Col span={24} className={runnerStyles.leftPadding10}>
-              <Divider orientation="center">
-                Gas Settings
-                <Tooltip title="Default is 0 gas cost. However you can import daily gas costs in USD which allow more accurate no arbitrage/no trade region modelling.">
-                  <InfoCircleOutlined className={runnerStyles.infoIcon} />
-                </Tooltip>
-              </Divider>
-              <p
-                hidden={simulationPools.length > 0}
-                className={runnerStyles.marginBottom10}
-              >
-                You need to configure pools to run in the pool step before
-                importing swaps.
-              </p>
-              <div hidden={simulationPools.length === 0}>
-                <input
-                  type="file"
-                  accept=".csv"
-                  ref={gasInputRef}
-                  className={runnerStyles.hiddenFileInput}
-                  onChange={(event) => handleDownloadGas(event, dispatch)}
-                />
-                <Button
-                  type="primary"
-                  onClick={() => gasInputRef.current?.click()}
-                  disabled={!coinDataLoaded}
-                >
-                  Load Gas Cost CSV (optional)
-                </Button>
-
-                <p>Expected CSV header format:</p>
-                <p>unix, USD</p>
-                <p>unix ms format</p>
-                <p>Minimum resolution: 1 minute</p>
-              </div>
-            </Col>
-            <Col span={24}>
-              <Button
-                className={`${runnerStyles.greenButton} ${runnerStyles.marginLeft10}`}
-                onClick={() => {
-                  dispatch(changeSimulationRunnerCurrentStepIndex(3));
-                }}
-              >
-                Continue
-              </Button>
-            </Col>
-          </Row>
+            >
+              <InfoCircleOutlined className={runnerStyles.infoIcon} />
+            </Tooltip>
+          </Divider>
         </Col>
-        <Col span={18} hidden={currentTimeRangeSelection !== 'custom'}>
-          <CustomTimePeriodPoolPriceHistoryChart />
-          <Row>
-            <Col span={24}>
-              <div hidden={gasSteps.length === 0}>
-                <AgCharts
-                  options={{
-                    height: 300,
-                    axes: [
-                      {
-                        type: 'time',
-                        interval: {
-                          step: agCharts.time.month.every(
-                            gasSteps.length > 150 ? 3 : 1
-                          ),
-                        },
-                        label: {
-                          format: '%m/%y',
-                        },
+        <Col span={24} className={runnerStyles.leftPadding10}>
+          <p
+            hidden={simulationPools.length > 0}
+            className={runnerStyles.marginBottom10}
+          >
+            You need to configure pools to run in the pool step before
+            importing swaps.
+          </p>
+          <div hidden={simulationPools.length === 0}>
+            <input
+              type="file"
+              accept=".csv"
+              ref={swapInputRef}
+              className={runnerStyles.hiddenFileInput}
+              onChange={(event) => handleDownloadSwaps(event, dispatch)}
+            />
+            <Button
+              type="primary"
+              onClick={() => swapInputRef.current?.click()}
+              disabled={!coinDataLoaded}
+            >
+              Load Swap CSV (optional)
+            </Button>
+
+            <p>Expected CSV header format:</p>
+            <p>unix, tokenIn, tokenOut, amountIn</p>
+          </div>
+        </Col>
+        <Col span={24} className={runnerStyles.leftPadding10}>
+          <Divider orientation="center">
+            Gas Settings
+            <Tooltip title="Default is 0 gas cost. However you can import daily gas costs in USD which allow more accurate no arbitrage/no trade region modelling.">
+              <InfoCircleOutlined className={runnerStyles.infoIcon} />
+            </Tooltip>
+          </Divider>
+          <p
+            hidden={simulationPools.length > 0}
+            className={runnerStyles.marginBottom10}
+          >
+            You need to configure pools to run in the pool step before
+            importing swaps.
+          </p>
+          <div hidden={simulationPools.length === 0}>
+            <input
+              type="file"
+              accept=".csv"
+              ref={gasInputRef}
+              className={runnerStyles.hiddenFileInput}
+              onChange={(event) => handleDownloadGas(event, dispatch)}
+            />
+            <Button
+              type="primary"
+              onClick={() => gasInputRef.current?.click()}
+              disabled={!coinDataLoaded}
+            >
+              Load Gas Cost CSV (optional)
+            </Button>
+
+            <p>Expected CSV header format:</p>
+            <p>unix, USD</p>
+            <p>unix ms format</p>
+            <p>Minimum resolution: 1 minute</p>
+          </div>
+        </Col>
+        <Col span={24}>
+          <Button
+            className={`${runnerStyles.greenButton} ${runnerStyles.marginLeft10}`}
+            onClick={() => {
+              dispatch(changeSimulationRunnerCurrentStepIndex(3));
+            }}
+          >
+            Continue
+          </Button>
+        </Col>
+      </Row>
+    </Col>
+  );
+
+  const GasCostChartSection = () => (
+    <Col span={18} hidden={currentTimeRangeSelection !== 'custom'}>
+      <CustomTimePeriodPoolPriceHistoryChart />
+      <Row>
+        <Col span={24}>
+          <div hidden={gasSteps.length === 0}>
+            <AgCharts
+              options={{
+                height: 300,
+                axes: [
+                  {
+                    type: 'time',
+                    interval: {
+                      step: agCharts.time.month.every(gasSteps.length > 150 ? 3 : 1),
+                    },
+                    label: {
+                      format: '%m/%y',
+                    },
+                  },
+                  {
+                    type: 'number',
+                    position: 'left',
+                    keys: ['value'],
+                  },
+                ],
+                series: [
+                  {
+                    type: 'line',
+                    xKey: 'unix',
+                    yKey: 'value',
+                    yName: 'Gas Cost (USD)',
+                    data: gasSteps,
+                    stroke: '#DAAB43',
+                    marker: { enabled: false },
+                  },
+                ],
+                legend: {
+                  position: 'top',
+                },
+                overlays: {
+                  noData: {
+                    text: 'No data',
+                  },
+                },
+                theme: {
+                  baseTheme: chartTheme,
+                  overrides: {
+                    common: {
+                      background: {
+                        fill: 'transparent',
                       },
-                      {
-                        type: 'number',
-                        position: 'left',
-                        keys: ['value'],
-                      },
-                    ],
-                    series: [
-                      {
-                        type: 'line',
-                        xKey: 'unix',
-                        yKey: 'value',
-                        yName: 'Gas Cost (USD)',
-                        data: gasSteps,
+                    },
+                    line: {
+                      series: {
                         stroke: '#DAAB43',
-                        marker: { enabled: false },
-                      },
-                    ],
-                    legend: {
-                      position: 'top',
-                    },
-                    overlays: {
-                      noData: {
-                        text: 'No data',
-                      },
-                    },
-                    theme: {
-                      baseTheme: chartTheme,
-                      overrides: {
-                        common: {
-                          background: {
-                            fill: 'transparent',
-                          },
-                        },
-                        line: {
-                          series: {
-                            stroke: '#DAAB43',
-                            cursor: 'crosshair',
-                            marker: {
-                              stroke: '#DAAB43',
-                              fill: '#DAAB43',
-                              enabled: false,
-                            },
-                          },
+                        cursor: 'crosshair',
+                        marker: {
+                          stroke: '#DAAB43',
+                          fill: '#DAAB43',
+                          enabled: false,
                         },
                       },
                     },
-                  }}
-                />
-              </div>
-            </Col>
-          </Row>
+                  },
+                },
+              }}
+            />
+          </div>
         </Col>
+      </Row>
+    </Col>
+  );
+
+  return (
+    <div>
+      <Row>
+        <TimePeriodControlPanel />
+        <GasCostChartSection />
       </Row>
     </div>
   );

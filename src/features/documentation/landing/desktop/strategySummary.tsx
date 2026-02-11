@@ -1,4 +1,3 @@
-// TODO CH split into subcomponents
 import { Button, Col, Row, Tooltip, Typography } from 'antd';
 import { ProductItemBackground } from '../../../productExplorer/productItem/productItemBackground';
 import { useEffect, useState } from 'react';
@@ -125,6 +124,97 @@ export function StrategySummary() {
     (x) => x.simulationRun.updateRule.updateRuleName === strategy
   );
 
+  const StrategySelectorPanel = () => (
+    <div className={styles.strategyPanel}>
+      <h4 className={styles.textCenter}>ADAPTIVE STRATEGIES</h4>
+      <p className={styles.textCenter}>FULLY DECENTRALISED, FULLY TRANSPARENT</p>
+      <Row gutter={[8, 8]} className={styles.strategyGrid}>
+        {strategies.map((strategyItem) => (
+          <Col
+            span={24}
+            className={`${styles.zeroSpacing} ${styles.fullHeight}`}
+            key={strategyItem.name}
+          >
+            <Row className={styles.strategyRow}>
+              <Col span={8}>
+                <div className={styles.centeredRow}>
+                  <img
+                    loading="lazy"
+                    style={{ width: strategyItem.imgWidth }}
+                    className={styles.strategyImage}
+                    src={strategyItem.image}
+                  />
+                </div>
+              </Col>
+              <Col span={16}>
+                <div className={styles.strategyButtonWrap}>
+                  <Tooltip title={strategyItem.description}>
+                    <Button
+                      disabled={strategy === strategyItem.name}
+                      size="small"
+                      className={
+                        strategy === strategyItem.name
+                          ? `${styles.strategyButton} ${styles.strategyButtonActive}`
+                          : styles.strategyButton
+                      }
+                      onClick={() => {
+                        setStrategy(strategyItem.name);
+                        setAutoCycle(false);
+                      }}
+                    >
+                      {strategyItem.title}
+                    </Button>
+                  </Tooltip>
+                </div>
+              </Col>
+            </Row>
+          </Col>
+        ))}
+      </Row>
+    </div>
+  );
+
+  const HoldingsChartsSection = () => (
+    <Row>
+      <Col span={24} className={styles.chartSection}>
+        <h4 className={styles.chartTitle}>Traditional DEX Pool Holdings</h4>
+        <p className={styles.chartSubtitle}>
+          Focus on earning fees, ignore price movements
+        </p>
+        <div
+          className={styles.chartWrap}
+          hidden={(loading && breakdowns.length === 0) || !traditionalDexBreakdown}
+        >
+          <WeightChangeOverTimeGraph
+            simulationRunBreakdown={traditionalDexBreakdown}
+            overrideChartTheme="ag-default-dark"
+            overrideXAxisInterval={22}
+          />
+        </div>
+      </Col>
+      <Col span={24}>
+        <h4 className={styles.chartTitle}>
+          QuantAMM{' '}
+          <span className={styles.accentText}>
+            {strategy === 'AntiMomentum' ? 'Price Reversion' : strategy}
+          </span>{' '}
+          Pool Holdings
+        </h4>
+        <p className={styles.chartSubtitle}>React to markets while earning fees.</p>
+        <div
+          className={styles.chartWrapNoTop}
+          hidden={(loading && breakdowns.length === 0) || !selectedStrategyBreakdown}
+        >
+          <WeightChangeOverTimeGraph
+            simulationRunBreakdown={selectedStrategyBreakdown}
+            overrideChartTheme="ag-default-dark"
+            overrideXAxisInterval={22}
+          />
+        </div>
+      </Col>
+    </Row>
+  );
+
   return (
     <Row id="final_section_row">
       <Col span={24}>
@@ -143,104 +233,10 @@ export function StrategySummary() {
           </Row>
           <Row>
             <Col span={6}>
-              <div className={styles.strategyPanel}>
-                <h4 className={styles.textCenter}>
-                  ADAPTIVE STRATEGIES
-                </h4>
-                <p className={styles.textCenter}>
-                  FULLY DECENTRALISED, FULLY TRANSPARENT
-                </p>
-                <Row gutter={[8, 8]} className={styles.strategyGrid}>
-                  {strategies.map((strategyItem) => (
-                    <Col
-                      span={24}
-                      className={`${styles.zeroSpacing} ${styles.fullHeight}`}
-                      key={strategyItem.name}
-                      
-                    >
-                      <Row className={styles.strategyRow}>
-                        <Col span={8}>
-                          <div className={styles.centeredRow}>
-                            <img
-                              loading="lazy"
-                              style={{ width: strategyItem.imgWidth }}
-                              className={styles.strategyImage}
-                              src={strategyItem.image}
-                            />
-                          </div>
-                        </Col>
-                        <Col span={16}>
-                            <div className={styles.strategyButtonWrap}>
-                            <Tooltip title={strategyItem.description}>
-                              <Button
-                              disabled={strategy === strategyItem.name}
-                              size="small"
-                              className={
-                                strategy === strategyItem.name
-                                  ? `${styles.strategyButton} ${styles.strategyButtonActive}`
-                                  : styles.strategyButton
-                              }
-                              onClick={() => {
-                                setStrategy(strategyItem.name);
-                                setAutoCycle(false);
-                              }}
-                              >
-                              {strategyItem.title}
-                              </Button>
-                            </Tooltip>
-                            </div>
-                        </Col>
-                      </Row>
-                    </Col>
-                  ))}
-                </Row>
-              </div>
+              <StrategySelectorPanel />
             </Col>
             <Col span={10}>
-              <Row>
-                <Col span={24} className={styles.chartSection}>
-                  <h4 className={styles.chartTitle}>
-                    Traditional DEX Pool Holdings
-                  </h4>
-                  <p className={styles.chartSubtitle}>
-                    Focus on earning fees, ignore price movements
-                  </p>
-                  <div
-                    className={styles.chartWrap}
-                    hidden={(loading && breakdowns.length === 0) || !traditionalDexBreakdown}
-                  >
-                    <WeightChangeOverTimeGraph
-                      simulationRunBreakdown={traditionalDexBreakdown}
-                      overrideChartTheme="ag-default-dark"
-                      overrideXAxisInterval={22}
-                    />
-                  </div>
-                </Col>
-                <Col span={24}>
-                  <h4 className={styles.chartTitle}>
-                    QuantAMM{' '}
-                    <span className={styles.accentText}>
-                      {strategy === 'AntiMomentum'
-                        ? 'Price Reversion'
-                        : strategy}
-                    </span>{' '}
-                    Pool Holdings
-                  </h4>
-                  <p className={styles.chartSubtitle}>
-                    React to markets while earning fees.
-                  </p>
-                  <div
-                    className={styles.chartWrapNoTop}
-                    hidden={(loading && breakdowns.length === 0) || !selectedStrategyBreakdown}
-                  >
-                    <WeightChangeOverTimeGraph
-                      simulationRunBreakdown={selectedStrategyBreakdown}
-                      overrideChartTheme="ag-default-dark"
-                      overrideXAxisInterval={22}
-                    />
-                  </div>
-                </Col>
-              </Row>
+              <HoldingsChartsSection />
             </Col>
             <Col span={8}>
               <div className={styles.summaryChartPanel}>

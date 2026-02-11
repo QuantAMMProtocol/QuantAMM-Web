@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import { Col, Row } from 'antd';
 import { GqlChain } from '../../../../__generated__/graphql-types';
 import { Benchmark, Product } from '../../../../models';
@@ -58,9 +58,6 @@ interface ProductDetailSummaryProps {
   isMobile: boolean;
 }
 
-const defaultBenchmark = Benchmark.HODL;
-
-//TODO CH split components.
 export const ProductDetailSummary: FC<ProductDetailSummaryProps> = ({
   product,
   loadingSimulationRunBreakdown,
@@ -76,7 +73,7 @@ export const ProductDetailSummary: FC<ProductDetailSummaryProps> = ({
     SimulationRunMetric | undefined
   >(undefined);
 
-  const [comparingProductId, setComparingProductId] = useState<{
+  const [comparingProductId] = useState<{
     id: string;
     chain: GqlChain;
   } | null>(null);
@@ -98,10 +95,6 @@ export const ProductDetailSummary: FC<ProductDetailSummaryProps> = ({
   );
 
   const returnAnalysisThresholds = useAppSelector(selectReturnMetricThresholds);
-
-  const returnAnalysisThresholdsKeys = useMemo(() => {
-    return returnAnalysisThresholds.map((element) => element.key);
-  }, [returnAnalysisThresholds]);
 
   const comparingProductReturnAnalysis = useAppSelector((state) =>
     selectReturnAnalysisByProductId(state, comparingProductId?.id ?? '')
@@ -137,10 +130,6 @@ export const ProductDetailSummary: FC<ProductDetailSummaryProps> = ({
     selectBenchmarkMetricThresholds
   );
 
-  const benchmarkReturnAnalysisThresholdsKeys = useMemo(() => {
-    return benchmarkReturnAnalysisThresholds.map((element) => element.key);
-  }, [benchmarkReturnAnalysisThresholds]);
-
   const returnAnalysisDropdownOptions = useMemo(() => {
     return getDropdownOptions(
       returnAnalysis
@@ -174,64 +163,11 @@ export const ProductDetailSummary: FC<ProductDetailSummaryProps> = ({
     );
   }, [benchmarkReturnAnalysis, benchmarkReturnAnalysisThresholds]);
 
-  const handleReturnAnalysisChange = useCallback(
-    (selectedItemKey: string) => {
-      setSelectedReturnAnalysis(
-        returnAnalysis
-          ?.filter(
-            (x) => returnAnalysisThresholdsKeys.indexOf(x.metricName) != -1
-          )
-          .find((option) => option.metricName === selectedItemKey)
-      );
-    },
-    [returnAnalysis, returnAnalysisThresholdsKeys]
-  );
-
-  const handleBenchmarkChange = useCallback(
-    (selectedItemKey: string) => {
-      const benchmarkName =
-        benchmarksDropdownOptions
-          ?.filter(
-            (x) => benchmarkReturnAnalysisThresholdsKeys.indexOf(x.label) != -1
-          )
-          .find((option) => option.label === selectedItemKey)?.label ??
-        defaultBenchmark;
-      setComparingBenchmark(benchmarkName);
-    },
-    [benchmarkReturnAnalysisThresholdsKeys]
-  );
-
-  const handleBenchmarkAnalysisChange = useCallback(
-    (selectedItemKey: string) => {
-      setSelectedBenchmarkAnalysis(
-        benchmarkReturnAnalysis
-          ?.filter(
-            (x) =>
-              benchmarkReturnAnalysisThresholdsKeys.indexOf(x.metricName) != -1
-          )
-          .find((option) => option.metricName === selectedItemKey)
-      );
-    },
-    [benchmarkReturnAnalysis, benchmarkReturnAnalysisThresholdsKeys]
-  );
-
   useEffect(() => {
     if (comparingBenchmark === null && benchmarksDropdownOptions) {
       setComparingBenchmark(benchmarksDropdownOptions[0].label.toLowerCase());
     }
   }, [comparingBenchmark]);
-
-  const handleSelectComparableProduct = (poolId: string) => {
-    if (poolId === '') {
-      setComparingProductId(null);
-    } else {
-      const [chain, id] = poolId.split(':');
-      setComparingProductId({
-        id,
-        chain: chain as GqlChain,
-      });
-    }
-  };
 
   const { product: productData, productLoading } = useFetchProductData(
     comparingProductId?.id ?? '',
@@ -344,9 +280,7 @@ export const ProductDetailSummary: FC<ProductDetailSummaryProps> = ({
               selectedReturnAnalysis={selectedReturnAnalysis}
               returnAnalysisThresholds={returnAnalysisThresholds}
               selectedBenchmarkReturnAnalysis={selectedBenchmarkAnalysis}
-              benchmarkReturnAnalysisThresholds={
-                benchmarkReturnAnalysisThresholds
-              }
+              benchmarkReturnAnalysisThresholds={benchmarkReturnAnalysisThresholds}
               comparingProductReturnAnalysis={comparingProductReturnAnalysis}
               comparingProductBenchmarkAnalysis={
                 comparingProductBenchmarkReturnAnalysis
@@ -357,10 +291,6 @@ export const ProductDetailSummary: FC<ProductDetailSummaryProps> = ({
               }
               comparingProduct={comparingProduct}
               comparingProductLoading={productLoading}
-              onSelectComparableProduct={handleSelectComparableProduct}
-              handleBenchmarkChange={handleBenchmarkChange}
-              handleReturnAnalysisChange={handleReturnAnalysisChange}
-              handleBenchmarkAnalysisChange={handleBenchmarkAnalysisChange}
             />
           ) : (
             <ProductDetailSummaryDesktop
@@ -370,26 +300,18 @@ export const ProductDetailSummary: FC<ProductDetailSummaryProps> = ({
                 loadingOtherProductSimulationRunBreakdown
               }
               selectedReturnAnalysis={selectedReturnAnalysis}
+              returnAnalysis={returnAnalysis}
               returnAnalysisThresholds={returnAnalysisThresholds}
               benchmarkAnalysis={benchmarkAnalysis}
               selectedBenchmarkReturnAnalysis={selectedBenchmarkAnalysis}
+              benchmarkReturnAnalysis={benchmarkReturnAnalysis}
               benchmarkReturnAnalysisThresholds={
                 benchmarkReturnAnalysisThresholds
-              }
-              comparingProductReturnAnalysis={comparingProductReturnAnalysis}
-              comparingProductBenchmarkAnalysis={
-                comparingProductBenchmarkReturnAnalysis
               }
               returnAnalysisDropdownOptions={returnAnalysisDropdownOptions}
               benchmarkReturnAnalysisDropdownOptions={
                 benchmarkAnalysisDropdownOptions
               }
-              comparingProduct={comparingProduct}
-              comparingProductLoading={productLoading}
-              onSelectComparableProduct={handleSelectComparableProduct}
-              handleBenchmarkChange={handleBenchmarkChange}
-              handleReturnAnalysisChange={handleReturnAnalysisChange}
-              handleBenchmarkAnalysisChange={handleBenchmarkAnalysisChange}
             />
           )}
         </div>

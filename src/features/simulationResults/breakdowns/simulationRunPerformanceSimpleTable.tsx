@@ -1,4 +1,4 @@
-import { FC, useCallback, useMemo, useRef } from 'react';
+import { FC, RefObject, useCallback, useMemo, useRef } from 'react';
 import {
   ColDef,
   SideBarDef,
@@ -27,7 +27,51 @@ interface AnalysisBreakdownTableProps {
   height?: number;
 }
 
-//TODO CH split components.
+interface BreakdownGridProps {
+  darkThemeAg: string;
+  height: number;
+  gridRef: RefObject<AgGridReact>;
+  colDefs: ColDef[];
+  rowData: Array<Record<string, string | number | null>>;
+  sideBar: SideBarDef;
+  onGridReady: (params: { api: any; columnApi: any }) => void;
+  onFirstDataRendered: (params: { api: any; columnApi: any }) => void;
+}
+
+function BreakdownGrid({
+  darkThemeAg,
+  height,
+  gridRef,
+  colDefs,
+  rowData,
+  sideBar,
+  onGridReady,
+  onFirstDataRendered,
+}: BreakdownGridProps) {
+  return (
+    <div style={{ width: '100%' }}>
+      <div
+        className={`${darkThemeAg} ag-theme-quartz`}
+        style={{ width: '100%', height }}
+      >
+        <AgGridReact
+          ref={gridRef}
+          columnDefs={colDefs}
+          rowData={rowData}
+          defaultColDef={{ resizable: true }}
+          rowHeight={28}
+          rowSelection="single"
+          sideBar={sideBar}
+          onGridReady={onGridReady}
+          onFirstDataRendered={onFirstDataRendered}
+          tooltipShowDelay={200}
+          tooltipMouseTrack={true}
+        />
+      </div>
+    </div>
+  );
+}
+
 export const AnalysisSimplifiedBreakdownTable: FC<
   AnalysisBreakdownTableProps
 > = ({
@@ -308,25 +352,15 @@ export const AnalysisSimplifiedBreakdownTable: FC<
   );
 
   return (
-    <div style={{ width: '100%' }}>
-      <div
-        className={`${darkThemeAg} ag-theme-quartz`}
-        style={{ width: '100%', height }}
-      >
-        <AgGridReact
-          ref={gridRef}
-          columnDefs={colDefs}
-          rowData={rowData}
-          defaultColDef={{ resizable: true }}
-          rowHeight={28}
-          rowSelection="single"
-          sideBar={sideBar}
-          onGridReady={onGridReady}
-          onFirstDataRendered={onFirstDataRendered}
-          tooltipShowDelay={200}
-          tooltipMouseTrack={true}
-        />
-      </div>
-    </div>
+    <BreakdownGrid
+      darkThemeAg={darkThemeAg}
+      height={height}
+      gridRef={gridRef}
+      colDefs={colDefs}
+      rowData={rowData}
+      sideBar={sideBar}
+      onGridReady={onGridReady}
+      onFirstDataRendered={onFirstDataRendered}
+    />
   );
 };

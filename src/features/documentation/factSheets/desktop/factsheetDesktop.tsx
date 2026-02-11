@@ -1,4 +1,3 @@
-// TODO CH split into subcomponents
 import { Button, Card, Col, Collapse, Row, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
 import { useMemo } from 'react';
@@ -19,6 +18,51 @@ import styles from '../factsheetDesktop.module.css';
 
 interface FactsheetDesktopProps {
   model: FactsheetModel;
+}
+
+function FactsheetHeroObjectiveSection({ model }: FactsheetDesktopProps) {
+  return (
+    <Row>
+      <Col span={1}></Col>
+      <Col span={10}>
+        <div className={styles.centeredHero}>
+          <img
+            src={model.factsheetImage.image}
+            alt={model.factsheetImage.alt}
+            style={{
+              width: model.factsheetImage.width,
+            }}
+            className={styles.heroImage}
+          />
+          <h1 className={styles.heroTitle}>{model.mainTitle}</h1>
+          <p className={styles.heroDescription}>{model.mainDescription}</p>
+        </div>
+      </Col>
+      <Col span={1}></Col>
+      <Col span={11}>
+        <h4>BTF Objective</h4>
+        <p>{model.objective}</p>
+        <h4>Responsive Strategy Objective</h4>
+        <p>
+          The BTF structure allows this to be done in a feeless manner for the
+          LP with continuous on-chain rebalancing rather than the traditional
+          monthly or quarterly rebalances. Re-weighting is performed daily.
+        </p>
+        <p>
+          BTFs also augment returns with swap fees associated with providing a
+          decentralised liquidity pool and provide an ERC20 token that can be
+          used in other DeFi applications.
+        </p>
+        <p>
+          It is crucial to recognize that BTFs carry risks. Reallocation
+          strategies are not market-neutral and involve directional assumptions
+          about asset allocation. Furthermore, the value of assets can be
+          affected by macro economic factors and global events.
+        </p>
+      </Col>
+      <Col span={1}></Col>
+    </Row>
+  );
 }
 
 export function FactSheetDesktop(props: FactsheetDesktopProps) {
@@ -117,50 +161,7 @@ export function FactSheetDesktop(props: FactsheetDesktopProps) {
 
   return (
     <div>
-      <Row>
-        <Col span={1}></Col>
-        <Col span={10}>
-          <div className={styles.centeredHero}>
-            <img
-              src={props.model.factsheetImage.image}
-              alt={props.model.factsheetImage.alt}
-              style={{
-                width: props.model.factsheetImage.width,
-              }}
-              className={styles.heroImage}
-            />
-            <h1 className={styles.heroTitle}>
-              {props.model.mainTitle}
-            </h1>
-            <p className={styles.heroDescription}>
-              {props.model.mainDescription}
-            </p>
-          </div>
-        </Col>
-        <Col span={1}></Col>
-        <Col span={11}>
-          <h4>BTF Objective</h4>
-          <p>{props.model.objective}</p>
-          <h4>Responsive Strategy Objective</h4>
-          <p>
-            The BTF structure allows this to be done in a feeless manner for the
-            LP with continuous on-chain rebalancing rather than the traditional
-            monthly or quarterly rebalances. Re-weighting is performed daily.
-          </p>
-          <p>
-            BTFs also augment returns with swap fees associated with providing a
-            decentralised liquidity pool and provide an ERC20 token that can be
-            used in other DeFi applications.
-          </p>
-          <p>
-            It is crucial to recognize that BTFs carry risks. Reallocation
-            strategies are not market-neutral and involve directional
-            assumptions about asset allocation. Furthermore, the value of assets
-            can be affected by macro economic factors and global events.
-          </p>
-        </Col>
-        <Col span={1}></Col>
-      </Row>
+      <FactsheetHeroObjectiveSection model={props.model} />
       <Row>
         <Col span={1}></Col>
         <Col span={22}>

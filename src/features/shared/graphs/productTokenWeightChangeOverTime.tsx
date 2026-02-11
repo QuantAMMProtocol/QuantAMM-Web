@@ -34,7 +34,68 @@ const normalisedTokenName = (token: string) => {
   return token.replace(/\./g, '-');
 };
 
-//TODO CH split components.
+const getFilteredConstituents = (product: Product) => {
+  const poolBptTokenAddress = product.id.substring(0, 42);
+  const bptIndex = product.poolConstituents.findIndex(
+    (token) => token.address === poolBptTokenAddress
+  );
+
+  if (bptIndex === -1) {
+    return product.poolConstituents;
+  }
+
+  return product.poolConstituents.filter(
+    (_: ProductPoolConstituents, index: number) => {
+      return index !== bptIndex;
+    }
+  );
+};
+
+const getTimeAxisOption = (
+  normalisedTimeSeries: ReturnType<typeof getChartTimeStepsFromProduct>
+): AgTimeAxisOptions => {
+  if (normalisedTimeSeries.length < 1) {
+    return {
+      type: 'time',
+    };
+  }
+
+  const [first] = normalisedTimeSeries;
+  const last = normalisedTimeSeries[normalisedTimeSeries.length - 1];
+  const startDate = first.timestamp * 1000;
+  const endDate = last.timestamp * 1000;
+  const totalDuration = endDate - startDate;
+
+  const ticks: number[] = [startDate];
+
+  if (normalisedTimeSeries.length < 2) {
+    return {
+      type: 'time',
+      interval: {
+        values: ticks,
+      },
+    };
+  } else if (normalisedTimeSeries.length < 3) {
+    ticks.push(endDate);
+  } else {
+    ticks.push(startDate + totalDuration / 2);
+    ticks.push(endDate);
+  }
+
+  return {
+    type: 'time',
+    nice: false,
+    interval: {
+      values: ticks,
+    },
+    label: {
+      format: '%d-%m-%y',
+    },
+    min: startDate,
+    max: endDate,
+  };
+};
+
 export const ProductTokenWeightChangeOverTimeGraph: FC<
   ProductTokenWeightChangeOverTimeGraphProps
 > = ({
@@ -47,21 +108,7 @@ export const ProductTokenWeightChangeOverTimeGraph: FC<
   const chartTheme = useAppSelector(selectAgChartTheme);
 
   const filteredConstituents = useMemo(() => {
-    const poolBptTokenAddress = product.id.substring(0, 42);
-
-    const bptIndex = product.poolConstituents.findIndex(
-      (token) => token.address === poolBptTokenAddress
-    );
-
-    if (bptIndex === -1) {
-      return product.poolConstituents;
-    }
-
-    return product.poolConstituents.filter(
-      (_: ProductPoolConstituents, index: number) => {
-        return index !== bptIndex;
-      }
-    );
+    return getFilteredConstituents(product);
   }, [product.id, product.poolConstituents]);
 
   const normalisedTimeSeries = useMemo(() => {
@@ -159,46 +206,7 @@ export const ProductTokenWeightChangeOverTimeGraph: FC<
     }, [filteredConstituents]);
 
   const timeAxisOption: AgTimeAxisOptions = useMemo(() => {
-    if (normalisedTimeSeries.length < 1) {
-      return {
-        type: 'time',
-      };
-    }
-
-    const [first] = normalisedTimeSeries;
-    const last = normalisedTimeSeries[normalisedTimeSeries.length - 1];
-    const startDate = first.timestamp * 1000;
-    const endDate = last.timestamp * 1000;
-    const totalDuration = endDate - startDate;
-
-    const ticks: number[] = [startDate];
-
-    if (normalisedTimeSeries.length < 2) {
-      return {
-        type: 'time',
-        interval: {
-          values: ticks,
-        },
-      };
-    } else if (normalisedTimeSeries.length < 3) {
-      ticks.push(endDate);
-    } else {
-      ticks.push(startDate + totalDuration / 2);
-      ticks.push(endDate);
-    }
-
-    return {
-      type: 'time',
-      nice: false,
-      interval: {
-        values: ticks,
-      },
-      label: {
-        format: '%d-%m-%y',
-      },
-      min: startDate,
-      max: endDate,
-    };
+    return getTimeAxisOption(normalisedTimeSeries);
   }, [normalisedTimeSeries]);
 
   return (

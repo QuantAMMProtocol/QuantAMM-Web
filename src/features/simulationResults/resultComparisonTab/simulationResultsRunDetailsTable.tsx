@@ -41,7 +41,74 @@ export interface RunDetailProps {
   tableHeight: string;
 }
 
-//TODO CH split components.
+interface DeploymentPreviewViewProps {
+  deploymentBreakdown: SimulationRunBreakdown;
+  onGoBack: () => void;
+}
+
+function DeploymentPreviewView({
+  deploymentBreakdown,
+  onGoBack,
+}: DeploymentPreviewViewProps) {
+  return (
+    <>
+      <Row>
+        <Col span={8}></Col>
+        <Col span={8} style={{ display: 'flex', justifyContent: 'center' }}>
+          <Button type="primary" onClick={onGoBack}>
+            Go Back To Saved Results
+          </Button>
+        </Col>
+        <Col span={8}></Col>
+      </Row>
+      <PoolDeploymentConfigReview
+        pool={deploymentBreakdown.simulationRun}
+        initialisationData={deploymentBreakdown?.simulationRunResultAnalysis}
+      ></PoolDeploymentConfigReview>
+    </>
+  );
+}
+
+interface ResultSummaryGridViewProps {
+  darkThemeAg: string;
+  tableHeight: string;
+  resultSummary: FlatResultSummaryBreakdown[];
+  summaryGridOptions: GridOptions;
+  summaryColDefs: ColDef[];
+  sideBar: SideBarDef;
+}
+
+function ResultSummaryGridView({
+  darkThemeAg,
+  tableHeight,
+  resultSummary,
+  summaryGridOptions,
+  summaryColDefs,
+  sideBar,
+}: ResultSummaryGridViewProps) {
+  return (
+    <div>
+      <Row>
+        <Col span={24} style={{ paddingLeft: 30, paddingRight: 30 }}>
+          <div className="wrapper">
+            <div id="myGrid" className={darkThemeAg} style={{ height: tableHeight }}>
+              <AgGridReact
+                className={styles.summaryTableParent}
+                autoSizePadding={20}
+                rowData={resultSummary}
+                gridOptions={summaryGridOptions}
+                columnDefs={summaryColDefs}
+                rowSelection={'multiple'}
+                sideBar={sideBar}
+              ></AgGridReact>
+            </div>
+          </div>
+        </Col>
+      </Row>
+    </div>
+  );
+}
+
 export function SimulationResultsRunDetailsTable(props: RunDetailProps) {
   const dispatch = useAppDispatch();
   const darkThemeAg = useAppSelector(selectAgGridTheme);
@@ -427,50 +494,19 @@ export function SimulationResultsRunDetailsTable(props: RunDetailProps) {
     <>
       {' '}
       {deploymentBreakdown ? (
-        <>
-          <Row>
-            <Col span={8}></Col>
-            <Col span={8} style={{ display: 'flex', justifyContent: 'center' }}>
-              <Button
-                type="primary"
-                onClick={() => setDeploymentBreakdown(undefined)}
-              >
-                Go Back To Saved Results
-              </Button>
-            </Col>
-            <Col span={8}></Col>
-          </Row>
-          <PoolDeploymentConfigReview
-            pool={deploymentBreakdown.simulationRun}
-            initialisationData={
-              deploymentBreakdown?.simulationRunResultAnalysis
-            }
-          ></PoolDeploymentConfigReview>
-        </>
+        <DeploymentPreviewView
+          deploymentBreakdown={deploymentBreakdown}
+          onGoBack={() => setDeploymentBreakdown(undefined)}
+        />
       ) : (
-        <div>
-          <Row>
-            <Col span={24} style={{ paddingLeft: 30, paddingRight: 30 }}>
-              <div className="wrapper">
-                <div
-                  id="myGrid"
-                  className={darkThemeAg}
-                  style={{ height: props.tableHeight }}
-                >
-                  <AgGridReact
-                    className={styles.summaryTableParent}
-                    autoSizePadding={20}
-                    rowData={resultSummary}
-                    gridOptions={summaryGridOptions}
-                    columnDefs={summaryColDefs}
-                    rowSelection={'multiple'}
-                    sideBar={sideBar}
-                  ></AgGridReact>
-                </div>
-              </div>
-            </Col>
-          </Row>
-        </div>
+        <ResultSummaryGridView
+          darkThemeAg={darkThemeAg}
+          tableHeight={props.tableHeight}
+          resultSummary={resultSummary}
+          summaryGridOptions={summaryGridOptions}
+          summaryColDefs={summaryColDefs}
+          sideBar={sideBar}
+        />
       )}
     </>
   );

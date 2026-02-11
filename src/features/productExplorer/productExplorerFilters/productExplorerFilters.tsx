@@ -47,7 +47,6 @@ interface ProductExplorerFiltersProps {
   setHorizontalView: (checked: boolean) => void;
 }
 
-//TODO CH split components.
 export const ProductExplorerFilters: FC<ProductExplorerFiltersProps> = ({
   isDark,
   horizontalView,
@@ -153,6 +152,146 @@ export const ProductExplorerFilters: FC<ProductExplorerFiltersProps> = ({
     setTvlInput(tvlDefaultValue);
   }, [tvlDefaultValue]);
 
+  const LoadingView = () => (
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '190px',
+        height: '100vh',
+      }}
+    >
+      <Spin />
+    </div>
+  );
+
+  const FilterToggleView = () => (
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'flex-start',
+        width: '100%',
+        marginBottom: 24,
+      }}
+    >
+      {!brokenBreakpoint && (
+        <>
+          <Text style={{ marginRight: 12 }}>Toggle View</Text>
+          <Switch
+            checked={horizontalView}
+            checkedChildren={<MenuOutlined />}
+            unCheckedChildren={<TableOutlined />}
+            onChange={setHorizontalView}
+          />
+        </>
+      )}
+    </div>
+  );
+
+  const DynamicFilters = () => (
+    <>
+      {filters.map((filterGroup) => {
+        const filterCategory = Object.keys(filterGroup)[0];
+
+        return (
+          <div key={filterCategory} className={styles['filter-bar__filter-group']}>
+            <Title level={4}>
+              {productExplorerTranslation[Object.keys(filterGroup)[0]]}
+            </Title>
+
+            <div className={styles['filter-bar__filters']}>
+              {filterGroup[filterCategory].map((filter: string) => {
+                return (
+                  <Checkbox
+                    key={filter}
+                    checked={localFilters[filterCategory]?.includes(filter)}
+                    data-filter-category={filterCategory}
+                    data-filter={filter}
+                    onChange={handleFilterClick}
+                  >
+                    {productExplorerTranslation[filter]}
+                  </Checkbox>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })}
+    </>
+  );
+
+  const TvlAndSearchFilters = () => (
+    <div className={styles['filter-bar__filter-group']}>
+      <Title level={4}>TVL ($)</Title>
+      <div className={styles['filter-bar__filters']}>
+        <InputNumber<number>
+          min={0}
+          max={1000000000}
+          value={tvlInput}
+          formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+          parser={(value) =>
+            value?.replace(/\$\s?|(,*)/g, '') as unknown as number
+          }
+          onChange={(value) => {
+            const nextValue = value ?? 10000;
+            setTvlInput(nextValue);
+            debouncedHandleTvlChange(nextValue);
+          }}
+          style={{ width: '100%' }}
+        />
+        <Text>minimum tvl</Text>
+      </div>
+      <div className={styles['filter-bar__filter-group']}>
+        <Title level={4}>Search</Title>
+        <div className={styles['filter-bar__filters']}>
+          <Input
+            placeholder="Search"
+            value={searchInput}
+            onChange={(event) => {
+              const nextValue = event.target.value;
+              setSearchInput(nextValue);
+              debouncedHandleTextSearchChange(nextValue);
+            }}
+            style={{ width: '100%' }}
+          />
+        </div>
+      </div>
+    </div>
+  );
+
+  const FilterPanel = () => (
+    <div
+      className={
+        brokenBreakpoint
+          ? [
+              styles['filter-bar-container__collapsible'],
+              isDark
+                ? styles['filter-bar-container__dark']
+                : styles['filter-bar-container__light'],
+            ].join(' ')
+          : [styles['filter-bar-container']].join(' ')
+      }
+    >
+      <FilterToggleView />
+      <div
+        className={
+          collapsed && brokenBreakpoint
+            ? styles['filter-bar__collapsed']
+            : styles['filter-bar']
+        }
+      >
+        <div className={styles['filter-bar__reset']}>
+          <Text onClick={handleResetClick}>
+            Reset Filters <CloseOutlined />
+          </Text>
+        </div>
+        <DynamicFilters />
+        <TvlAndSearchFilters />
+      </div>
+    </div>
+  );
+
   return (
     <Sider
       width={brokenBreakpoint ? '300px' : '190px'}
@@ -185,137 +324,7 @@ export const ProductExplorerFilters: FC<ProductExplorerFiltersProps> = ({
         ...style,
       }}
     >
-      {loading ? (
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            width: '190px',
-            height: '100vh',
-          }}
-        >
-          <Spin />
-        </div>
-      ) : (
-        <div
-          className={
-            brokenBreakpoint
-              ? [
-                  styles['filter-bar-container__collapsible'],
-                  isDark
-                    ? styles['filter-bar-container__dark']
-                    : styles['filter-bar-container__light'],
-                ].join(' ')
-              : [styles['filter-bar-container']].join(' ')
-          }
-        >
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'flex-start',
-              width: '100%',
-              marginBottom: 24,
-            }}
-          >
-            {!brokenBreakpoint && (
-              <>
-                <Text style={{ marginRight: 12 }}>Toggle View</Text>
-                <Switch
-                  checked={horizontalView}
-                  checkedChildren={<MenuOutlined />}
-                  unCheckedChildren={<TableOutlined />}
-                  onChange={setHorizontalView}
-                />
-              </>
-            )}
-          </div>
-          <div
-            className={
-              collapsed && brokenBreakpoint
-                ? styles['filter-bar__collapsed']
-                : styles['filter-bar']
-            }
-          >
-            <div className={styles['filter-bar__reset']}>
-              <Text onClick={handleResetClick}>
-                Reset Filters <CloseOutlined />
-              </Text>
-            </div>
-
-            {filters.map((filterGroup) => {
-              const filterCategory = Object.keys(filterGroup)[0];
-
-              return (
-                <div
-                  key={filterCategory}
-                  className={styles['filter-bar__filter-group']}
-                >
-                  <Title level={4}>
-                    {productExplorerTranslation[Object.keys(filterGroup)[0]]}
-                  </Title>
-
-                  <div className={styles['filter-bar__filters']}>
-                    {filterGroup[filterCategory].map((filter: string) => {
-                      return (
-                        <Checkbox
-                          key={filter}
-                          checked={localFilters[filterCategory]?.includes(
-                            filter
-                          )}
-                          data-filter-category={filterCategory}
-                          data-filter={filter}
-                          onChange={handleFilterClick}
-                        >
-                          {productExplorerTranslation[filter]}
-                        </Checkbox>
-                      );
-                    })}
-                  </div>
-                </div>
-              );
-            })}
-            <div className={styles['filter-bar__filter-group']}>
-              <Title level={4}>TVL ($)</Title>
-              <div className={styles['filter-bar__filters']}>
-                <InputNumber<number>
-                  min={0}
-                  max={1000000000}
-                  value={tvlInput}
-                  formatter={(value) =>
-                    `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                  }
-                  parser={(value) =>
-                    value?.replace(/\$\s?|(,*)/g, '') as unknown as number
-                  }
-                  onChange={(value) => {
-                    const nextValue = value ?? 10000;
-                    setTvlInput(nextValue);
-                    debouncedHandleTvlChange(nextValue);
-                  }}
-                  style={{ width: '100%' }}
-                />
-                <Text>minimum tvl</Text>
-              </div>
-              <div className={styles['filter-bar__filter-group']}>
-                <Title level={4}>Search</Title>
-                <div className={styles['filter-bar__filters']}>
-                  <Input
-                    placeholder="Search"
-                    value={searchInput}
-                    onChange={(event) => {
-                      const nextValue = event.target.value;
-                      setSearchInput(nextValue);
-                      debouncedHandleTextSearchChange(nextValue);
-                    }}
-                    style={{ width: '100%' }}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {loading ? <LoadingView /> : <FilterPanel />}
     </Sider>
   );
 };

@@ -52,7 +52,54 @@ export interface BreakdownProps {
   hideTitle?:boolean;
 }
 
-//TODO CH split components.
+function getMenuItem(
+  label: string,
+  key: string,
+  icon: JSX.Element,
+  disabled: boolean
+): ItemType {
+  return {
+    key,
+    label,
+    icon,
+    disabled,
+  } as ItemType;
+}
+
+function getGraphMenuItems(): ItemType[] {
+  return [
+    getMenuItem('Select Visualisation', 'placeholder', <DownOutlined />, true),
+    getMenuItem(
+      'Pool $ value over time',
+      'MarketValueOverTime',
+      <LineChartOutlined />,
+      false
+    ),
+    getMenuItem('MV Weight over time', 'Weights', <PieChartOutlined />, false),
+    getMenuItem('Amount over time', 'Amounts', <LineChartOutlined />, false),
+    getMenuItem('Drawdowns', 'Drawdowns', <BoxPlotOutlined />, false),
+    getMenuItem('Return Distribution', 'Returns', <BarChartOutlined />, false),
+  ];
+}
+
+function getBreakdownMenuItems(): ItemType[] {
+  return [
+    getMenuItem('Select Breakdown', 'placeholder', <DownOutlined />, true),
+    getMenuItem(
+      'Market Value Summary',
+      'MvSummary',
+      <OrderedListOutlined />,
+      false
+    ),
+    getMenuItem(
+      'Performance Analysis',
+      'PerformanceAnalysis',
+      <HeatMapOutlined />,
+      false
+    ),
+  ];
+}
+
 export function SimulationResultsSummaryStep(props: BreakdownProps) {
   const runStatusIndex = useAppSelector(selectSimulationRunStatusStepIndex);
   const resultChartSelection = useAppSelector(
@@ -79,72 +126,6 @@ export function SimulationResultsSummaryStep(props: BreakdownProps) {
       );
     }
   }, [dispatch, props.breakdowns, timeRangeSelected]);
-
-  function getItem(
-    label: string,
-    key: string,
-    icon: JSX.Element,
-    disabled: boolean
-  ): ItemType {
-    return {
-      key,
-      label,
-      icon,
-      disabled,
-    } as ItemType;
-  }
-
-  function getGraphMenu(): ItemType[] {
-    const menu: ItemType[] = [];
-    menu.push(
-      getItem('Select Visualisation', 'placeholder', <DownOutlined />, true)
-    );
-    menu.push(
-      getItem(
-        'Pool $ value over time',
-        'MarketValueOverTime',
-        <LineChartOutlined />,
-        false
-      )
-    );
-    menu.push(
-      getItem('MV Weight over time', 'Weights', <PieChartOutlined />, false)
-    );
-    menu.push(
-      getItem('Amount over time', 'Amounts', <LineChartOutlined />, false)
-    );
-    menu.push(getItem('Drawdowns', 'Drawdowns', <BoxPlotOutlined />, false));
-    menu.push(
-      getItem('Return Distribution', 'Returns', <BarChartOutlined />, false)
-    );
-
-    return menu;
-  }
-
-  function getBreakdownMenu(): ItemType[] {
-    const menu: ItemType[] = [];
-    menu.push(
-      getItem('Select Breakdown', 'placeholder', <DownOutlined />, true)
-    );
-    menu.push(
-      getItem(
-        'Market Value Summary',
-        'MvSummary',
-        <OrderedListOutlined />,
-        false
-      )
-    );
-    menu.push(
-      getItem(
-        'Performance Analysis',
-        'PerformanceAnalysis',
-        <HeatMapOutlined />,
-        false
-      )
-    );
-
-    return menu;
-  }
 
   function getChart(): JSX.Element {
     if (resultChartSelection === 'MarketValueOverTime') {
@@ -202,61 +183,69 @@ export function SimulationResultsSummaryStep(props: BreakdownProps) {
     return <div>No Breakdown</div>;
   }
 
+  const VisualisationTab = () => (
+    <Row>
+      <Col span={4}>
+        <Row justify="center">
+          <Col span={24}>
+            <Menu
+              style={{
+                width: 200,
+                fontSize: 10,
+              }}
+              defaultSelectedKeys={[chartSelection]}
+              items={getGraphMenuItems()}
+              activeKey={chartSelection}
+              onClick={(x) => {
+                dispatch(changeChartSelected(x.key));
+              }}
+            />
+          </Col>
+        </Row>
+      </Col>
+      <Col span={20}>
+        {runStatusIndex === 2 || props.forceViewResults ? (
+          getChart()
+        ) : (
+          <h2>Simulation not finished yet</h2>
+        )}
+      </Col>
+    </Row>
+  );
+
+  const BreakdownTab = () => (
+    <Row>
+      <Col span={4}>
+        <Row justify="center">
+          <Col span={24}>
+            <Menu
+              style={{
+                width: 200,
+                fontSize: 10,
+              }}
+              defaultSelectedKeys={[resultBreakdownSelection]}
+              items={getBreakdownMenuItems()}
+              onClick={(x) => {
+                dispatch(changeBreakdownSelected(x.key));
+              }}
+              activeKey={resultBreakdownSelection}
+            />
+          </Col>
+        </Row>
+      </Col>
+      <Col span={20}>{getBreakdown()}</Col>
+    </Row>
+  );
+
   return (
     <Row className={styles.simRunSection}>
       <Col span={24}>
         <Tabs>
           <TabPane tab="Result Visualisation" key={'vis'}>
-            <Row>
-              <Col span={4}>
-                <Row justify="center">
-                  <Col span={24}>
-                    <Menu
-                      style={{
-                        width: 200,
-                        fontSize: 10,
-                      }}
-                      defaultSelectedKeys={[chartSelection]}
-                      items={getGraphMenu()}
-                      activeKey={chartSelection}
-                      onClick={(x) => {
-                        dispatch(changeChartSelected(x.key));
-                      }}
-                    />
-                  </Col>
-                </Row>
-              </Col>
-              <Col span={20}>
-                {runStatusIndex === 2 || props.forceViewResults ? (
-                  getChart()
-                ) : (
-                  <h2>Simulation not finished yet</h2>
-                )}
-              </Col>
-            </Row>
+            <VisualisationTab />
           </TabPane>
           <TabPane tab="Result Breakdown" key={'breakdown'}>
-            <Row>
-              <Col span={4}>
-                <Row justify="center">
-                  <Col span={24}>
-                    <Menu
-                      style={{
-                        width: 200,
-                        fontSize: 10,
-                      }}
-                      defaultSelectedKeys={[resultBreakdownSelection]}
-                      items={getBreakdownMenu()}
-                      onClick={(x) => {
-                        dispatch(changeBreakdownSelected(x.key));
-                      }}
-                      activeKey={resultBreakdownSelection}
-                    />
-                  </Col>
-                </Row>
-              </Col>
-              <Col span={20}>{getBreakdown()}</Col>
-            </Row>
+            <BreakdownTab />
           </TabPane>
         </Tabs>
       </Col>

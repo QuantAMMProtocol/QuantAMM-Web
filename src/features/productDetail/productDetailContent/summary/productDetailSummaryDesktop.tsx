@@ -1,4 +1,4 @@
-import { FC, useMemo, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import {
   Card,
   Collapse,
@@ -50,26 +50,15 @@ interface ProductDetailSummaryDesktopProps {
 
   returnAnalysisDropdownOptions: { label: string; key: number }[];
   returnAnalysisThresholds: FinancialMetricThresholds[];
+  returnAnalysis?: SimulationRunMetric[] | null;
 
   benchmarkReturnAnalysisDropdownOptions: { label: string; key: number }[];
   benchmarkReturnAnalysisThresholds: FinancialMetricThresholds[];
+  benchmarkReturnAnalysis?: SimulationRunMetric[] | null;
 
   benchmarkAnalysis?: SimulationRunMetric[] | null;
   selectedReturnAnalysis?: SimulationRunMetric;
   selectedBenchmarkReturnAnalysis?: SimulationRunMetric;
-
-  // Kept for drop-in compatibility (compare removed; unused)
-  comparingProduct?: Product;
-  comparingProductLoading: boolean;
-  comparingProductReturnAnalysis?: SimulationRunMetric[] | null;
-  comparingProductBenchmarkAnalysis?: SimulationRunMetric[] | null;
-  onSelectComparableProduct: (poolId: string) => void;
-
-  // Kept for drop-in compatibility
-  handleBenchmarkChange: (key: string) => void;
-
-  handleReturnAnalysisChange: (key: string) => void;
-  handleBenchmarkAnalysisChange: (key: string) => void;
 }
 
 /* -------------------------- helpers -------------------------- */
@@ -133,7 +122,6 @@ function MetricProgress({
   );
 }
 
-//TODO CH split components.
 export const ProductDetailSummaryDesktop: FC<
   ProductDetailSummaryDesktopProps
 > = ({
@@ -142,13 +130,13 @@ export const ProductDetailSummaryDesktop: FC<
   loadingOtherProductSimulationRunBreakdown,
   returnAnalysisDropdownOptions,
   returnAnalysisThresholds,
+  returnAnalysis,
   benchmarkReturnAnalysisDropdownOptions,
   benchmarkReturnAnalysisThresholds,
+  benchmarkReturnAnalysis,
   benchmarkAnalysis,
-  selectedReturnAnalysis,
-  selectedBenchmarkReturnAnalysis,
-  handleReturnAnalysisChange,
-  handleBenchmarkAnalysisChange,
+  selectedReturnAnalysis: initialSelectedReturnAnalysis,
+  selectedBenchmarkReturnAnalysis: initialSelectedBenchmarkReturnAnalysis,
 }) => {
   const isLoading =
     loadingSimulationRunBreakdown || loadingOtherProductSimulationRunBreakdown;
@@ -161,8 +149,71 @@ export const ProductDetailSummaryDesktop: FC<
   );
 
   const [metricsView, setMetricsView] = useState<'gauge' | 'table'>('gauge');
+  const [selectedReturnMetricName, setSelectedReturnMetricName] = useState<
+    string | undefined
+  >(initialSelectedReturnAnalysis?.metricName);
+  const [selectedBenchmarkMetricName, setSelectedBenchmarkMetricName] =
+    useState<string | undefined>(initialSelectedBenchmarkReturnAnalysis?.metricName);
 
   const ts = useMemo(() => product?.timeSeries ?? [], [product?.timeSeries]);
+
+  useEffect(() => {
+    if (
+      selectedReturnMetricName &&
+      !returnAnalysisDropdownOptions.some(
+        (option) => option.label === selectedReturnMetricName
+      )
+    ) {
+      setSelectedReturnMetricName(returnAnalysisDropdownOptions[0]?.label);
+      return;
+    }
+
+    if (!selectedReturnMetricName && returnAnalysisDropdownOptions.length > 0) {
+      setSelectedReturnMetricName(returnAnalysisDropdownOptions[0].label);
+    }
+  }, [selectedReturnMetricName, returnAnalysisDropdownOptions]);
+
+  useEffect(() => {
+    if (
+      selectedBenchmarkMetricName &&
+      !benchmarkReturnAnalysisDropdownOptions.some(
+        (option) => option.label === selectedBenchmarkMetricName
+      )
+    ) {
+      setSelectedBenchmarkMetricName(
+        benchmarkReturnAnalysisDropdownOptions[0]?.label
+      );
+      return;
+    }
+
+    if (
+      !selectedBenchmarkMetricName &&
+      benchmarkReturnAnalysisDropdownOptions.length > 0
+    ) {
+      setSelectedBenchmarkMetricName(
+        benchmarkReturnAnalysisDropdownOptions[0].label
+      );
+    }
+  }, [selectedBenchmarkMetricName, benchmarkReturnAnalysisDropdownOptions]);
+
+  const selectedReturnAnalysis = useMemo(
+    () =>
+      returnAnalysis?.find((x) => x.metricName === selectedReturnMetricName) ??
+      initialSelectedReturnAnalysis,
+    [returnAnalysis, selectedReturnMetricName, initialSelectedReturnAnalysis]
+  );
+
+  const selectedBenchmarkReturnAnalysis = useMemo(
+    () =>
+      benchmarkReturnAnalysis?.find(
+        (x) => x.metricName === selectedBenchmarkMetricName
+      ) ?? initialSelectedBenchmarkReturnAnalysis,
+    [
+      benchmarkReturnAnalysis,
+      selectedBenchmarkMetricName,
+      initialSelectedBenchmarkReturnAnalysis,
+    ]
+  );
 
   const factsheet = useMemo(() => {
     const anyP = product as any;
@@ -257,7 +308,7 @@ export const ProductDetailSummaryDesktop: FC<
     ];
   }, [simulationRunBreakdown]);
 
-  const metricsToggle = (
+  const MetricsToggle = () => (
     <div
       onClick={(e) => {
         e.stopPropagation();
@@ -292,30 +343,66 @@ export const ProductDetailSummaryDesktop: FC<
     </div>
   );
 
+  const PoolWeightsCard = () => (
+    <Card
+      className={styles['product-detail-summary__cardDesktop']}
+      title="Pool weights"
+      extra={
+        <Segmented
+          value={weightsView}
+          onChange={(v) => setWeightsView(v as 'product' | 'benchmark')}
+          options={[
+            { label: 'Product', value: 'product' },
+            { label: 'Benchmark', value: 'benchmark' },
+          ]}
+        />
+      }
+    >
+      <div className={styles['product-detail-summary__chart']}>
+        <ProductTokenWeightChangeOverTimeGraph
+          product={product}
+          isBenchmark={weightsView === 'benchmark'}
+          yAxisOverride={{ label: { enabled: false } }}
+        />
+      </div>
+    </Card>
+  );
+
+  const ReturnDistributionCard = () => (
+    <Card
+      className={styles['product-detail-summary__cardDesktop']}
+      title="Return distribution"
+      extra={
+        <Segmented
+          value={returnsView}
+          onChange={(v) => setReturnsView(v as 'product' | 'benchmark')}
+          options={[
+            { label: 'Product', value: 'product' },
+            { label: 'Benchmark', value: 'benchmark' },
+          ]}
+        />
+      }
+    >
+      <div className={styles['product-detail-summary__chart']}>
+        {ts.length > 0 ? (
+          <ReturnDistributionGraph
+            yAxisOverride={{ title: { enabled: false } }}
+            marketValues={
+              returnsView === 'benchmark'
+                ? marketValuesBenchmark
+                : marketValuesProduct
+            }
+          />
+        ) : (
+          <Text type="secondary">No Data</Text>
+        )}
+      </div>
+    </Card>
+  );
+
   return (
     <div className={styles['product-detail-summary__desktop']}>
-      <Card
-        className={styles['product-detail-summary__cardDesktop']}
-        title="Pool weights"
-        extra={
-          <Segmented
-            value={weightsView}
-            onChange={(v) => setWeightsView(v as 'product' | 'benchmark')}
-            options={[
-              { label: 'Product', value: 'product' },
-              { label: 'Benchmark', value: 'benchmark' },
-            ]}
-          />
-        }
-      >
-        <div className={styles['product-detail-summary__chart']}>
-          <ProductTokenWeightChangeOverTimeGraph
-            product={product}
-            isBenchmark={weightsView === 'benchmark'}
-            yAxisOverride={{ label: { enabled: false } }}
-          />
-        </div>
-      </Card>
+      <PoolWeightsCard />
 
       {
         /* hidden as the subgraph has still not been pushed to prod*/
@@ -371,7 +458,7 @@ export const ProductDetailSummaryDesktop: FC<
               </Tooltip>
             </div>
           }
-          extra={metricsToggle}
+          extra={<MetricsToggle />}
         >
           {metricsView === 'table' ? (
             isLoading ? (
@@ -397,7 +484,7 @@ export const ProductDetailSummaryDesktop: FC<
                     <ProductDetailDropdown
                       items={returnAnalysisDropdownOptions}
                       isLoading={isLoading}
-                      onChangeItem={handleReturnAnalysisChange}
+                      onChangeItem={setSelectedReturnMetricName}
                     />
                   </div>
                 }
@@ -487,7 +574,7 @@ export const ProductDetailSummaryDesktop: FC<
                     <ProductDetailDropdown
                       items={benchmarkReturnAnalysisDropdownOptions}
                       isLoading={isLoading}
-                      onChangeItem={handleBenchmarkAnalysisChange}
+                      onChangeItem={setSelectedBenchmarkMetricName}
                     />
                   </div>
                 }
@@ -536,36 +623,7 @@ export const ProductDetailSummaryDesktop: FC<
         </Panel>
       </Collapse>
 
-      {/* Return distribution */}
-      <Card
-        className={styles['product-detail-summary__cardDesktop']}
-        title="Return distribution"
-        extra={
-          <Segmented
-            value={returnsView}
-            onChange={(v) => setReturnsView(v as 'product' | 'benchmark')}
-            options={[
-              { label: 'Product', value: 'product' },
-              { label: 'Benchmark', value: 'benchmark' },
-            ]}
-          />
-        }
-      >
-        <div className={styles['product-detail-summary__chart']}>
-          {ts.length > 0 ? (
-            <ReturnDistributionGraph
-              yAxisOverride={{ title: { enabled: false } }}
-              marketValues={
-                returnsView === 'benchmark'
-                  ? marketValuesBenchmark
-                  : marketValuesProduct
-              }
-            />
-          ) : (
-            <Text type="secondary">No Data</Text>
-          )}
-        </div>
-      </Card>
+      <ReturnDistributionCard />
     </div>
   );
 };
