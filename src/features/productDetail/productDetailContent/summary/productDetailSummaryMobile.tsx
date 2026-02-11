@@ -165,7 +165,7 @@ export const ProductDetailSummaryMobile = ({
 }: ProductDetailSummaryMobileProps) => {
   const [isCompareProductOpen, setIsCompareProductOpen] = useState(true);
 
-  const handleSelectComparableProduct = (_poolId: string) => {
+  const handleSelectComparableProduct = () => {
     setIsCompareProductOpen(false);
   };
 
