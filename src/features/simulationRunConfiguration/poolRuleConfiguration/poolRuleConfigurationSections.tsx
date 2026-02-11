@@ -1,11 +1,11 @@
 import { Button, Col, Row } from 'antd';
-import { ConfiguredSimulationsToRunSummary } from './configuredSimulationsToRunSummary';
+import { ConfiguredSimulationsToRunSummary } from '../configuredSimulationsToRunSummary';
 import {
   LiquidityPoolCoin,
   PoolType,
   UpdateRule,
-} from './simulationRunConfigModels';
-import styles from './simulationRunConfiguration.module.css';
+} from '../simulationRunConfigModels';
+import styles from '../simulationRunConfiguration.module.css';
 
 interface AddPoolButtonSectionProps {
   coinDataLoaded: boolean;

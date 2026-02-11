@@ -1,7 +1,7 @@
 import { Col, Divider, Row, Tooltip } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
-import { PoolRuleConfiguration } from '../simulationRunConfiguration/poolRuleConfiguration';
-import runnerStyles from './simulationRunnerCommon.module.css';
+import { PoolRuleConfiguration } from '../../simulationRunConfiguration/poolRuleConfiguration/poolRuleConfiguration';
+import runnerStyles from '../simulationRunnerCommon.module.css';
 
 export function PoolConstituentSelectionStep() {
   return (

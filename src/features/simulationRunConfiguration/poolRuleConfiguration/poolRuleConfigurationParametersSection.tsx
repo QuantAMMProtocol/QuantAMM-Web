@@ -6,10 +6,10 @@ import {
   PoolType,
   UpdateRule,
   UpdateRuleParameter,
-} from './simulationRunConfigModels';
+} from '../simulationRunConfigModels';
 import { UpdateRuleConfiguration } from './updateRuleConfiguration';
 import { PoolRuleConfigurationUniversalToggle } from './poolRuleConfigurationUniversalToggle';
-import styles from './simulationRunConfiguration.module.css';
+import styles from '../simulationRunConfiguration.module.css';
 
 interface PoolRuleConfigurationParametersSectionProps {
   coinDataLoaded: boolean;

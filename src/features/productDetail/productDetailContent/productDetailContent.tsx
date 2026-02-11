@@ -5,7 +5,7 @@ import { selectProductById } from '../../productExplorer/productExplorerSlice';
 import { ProductDetailPoolGraph } from './productDetailPoolGraph';
 import { ProductDetailStats } from './productDetailStats';
 import { ProductDetailNav } from './productDetailNav';
-import { ProductDetailEvents } from './productDetailEvents';
+import { ProductDetailEvents } from './events/productDetailEvents';
 
 import sharedStyles from '../../../shared.module.scss';
 import { ProductDetailInfo } from '../productDetailSidebar/productDetailInfo';

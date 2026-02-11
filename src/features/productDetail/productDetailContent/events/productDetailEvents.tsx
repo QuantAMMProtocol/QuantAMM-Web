@@ -1,19 +1,19 @@
 import { FC, memo, useMemo, useRef } from 'react';
 import { Col, Empty, Row, Spin } from 'antd';
 import { AgGridReact } from 'ag-grid-react';
-import { GqlChain, GqlPoolEvent } from '../../../__generated__/graphql-types';
-import { useFetchPoolEventsData } from '../../../hooks/useFetchPoolEventsData';
-import { useAppSelector } from '../../../app/hooks';
-import { selectAgGridTheme, selectAgChartTheme } from '../../themes/themeSlice';
-import { selectProductById } from '../../productExplorer/productExplorerSlice';
-import { CURRENT_LIVE_FACTSHEETS } from '../../documentation/factSheets/liveFactsheets';
+import { GqlChain, GqlPoolEvent } from '../../../../__generated__/graphql-types';
+import { useFetchPoolEventsData } from '../../../../hooks/useFetchPoolEventsData';
+import { useAppSelector } from '../../../../app/hooks';
+import { selectAgGridTheme, selectAgChartTheme } from '../../../themes/themeSlice';
+import { selectProductById } from '../../../productExplorer/productExplorerSlice';
+import { CURRENT_LIVE_FACTSHEETS } from '../../../documentation/factSheets/liveFactsheets';
 
 import { ProductDetailEventsHeader } from './productDetailEventsHeader';
 import { ProductDetailEventsGrid } from './productDetailEventsGrid';
 import { ProductDetailEventsHeatmap } from './productDetailEventsHeatmap';
-import { useExplorerBase } from './productDetailUseExplorerBase';
-import { useBadgeThresholds } from './productDetailUseBadgeThresholds';
-import { useHeatmapData } from './productDetailUseHeatmapData';
+import { useExplorerBase } from '../productDetailUseExplorerBase';
+import { useBadgeThresholds } from '../productDetailUseBadgeThresholds';
+import { useHeatmapData } from '../productDetailUseHeatmapData';
 import styles from './productDetailEvents.module.scss';
 
 export interface ProductDetailEventsProps {

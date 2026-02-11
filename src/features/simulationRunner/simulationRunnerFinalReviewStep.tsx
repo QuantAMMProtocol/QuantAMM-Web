@@ -21,8 +21,8 @@ import {
 import { SimulationResult } from '../simulationRunner/simulationRunnerDtos';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/dist/query';
 import { useMemo } from 'react';
-import { SimulationRunnerPoolSummary } from './simulationRunnerPoolSummary';
-import { SimulationRunnerHistoricRunReview } from './simulationRunnerHistoricRunReview';
+import { SimulationRunnerPoolSummary } from './sections/simulationRunnerPoolSummary';
+import { SimulationRunnerHistoricRunReview } from './sections/simulationRunnerHistoricRunReview';
 
 export interface Success {
   data: SimulationResult;

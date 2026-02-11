@@ -2,7 +2,7 @@ import {
   LiquidityPoolCoin,
   UpdateRule,
   UpdateRuleParameter,
-} from './simulationRunConfigModels';
+} from '../simulationRunConfigModels';
 
 export function getUpdatedRuleForFactorChange(
   prevRule: UpdateRule,

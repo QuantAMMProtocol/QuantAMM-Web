@@ -5,7 +5,7 @@ import {
   PoolType,
   UpdateRule,
   UpdateRuleParameter,
-} from './simulationRunConfigModels';
+} from '../simulationRunConfigModels';
 import { PoolRuleConfigurationTypeSection } from './poolRuleConfigurationTypeSection';
 import { PoolRuleConfigurationStrategySelectorSection } from './poolRuleConfigurationStrategySelectorSection';
 import { PoolRuleConfigurationParametersSection } from './poolRuleConfigurationParametersSection';

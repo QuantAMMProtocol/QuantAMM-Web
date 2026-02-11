@@ -1,6 +1,6 @@
 import { Col, Input, Row, Tabs } from 'antd';
-import { SimulationRunButton } from './simulationRunButton';
-import runnerStyles from './simulationRunnerCommon.module.css';
+import { SimulationRunButton } from '../simulationRunButton';
+import runnerStyles from '../simulationRunnerCommon.module.css';
 
 interface HistoricRunReviewProps {
   startDate: string;

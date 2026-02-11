@@ -1,8 +1,8 @@
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { Col, Radio, Row, Select, Tooltip } from 'antd';
 import { Dispatch, SetStateAction } from 'react';
-import { PoolType, UpdateRule } from './simulationRunConfigModels';
-import styles from './simulationRunConfiguration.module.css';
+import { PoolType, UpdateRule } from '../simulationRunConfigModels';
+import styles from '../simulationRunConfiguration.module.css';
 
 const { Option } = Select;
 

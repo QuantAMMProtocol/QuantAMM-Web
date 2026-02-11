@@ -1,11 +1,11 @@
 import { Col, InputNumber, Row, Space, Tooltip } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
-import styles from './simulationRunConfiguration.module.css';
+import styles from '../simulationRunConfiguration.module.css';
 import {
   LiquidityPoolCoin,
   UpdateRule,
   UpdateRuleParameter,
-} from './simulationRunConfigModels';
+} from '../simulationRunConfigModels';
 
 export type GroupedParameters = Record<
   string,

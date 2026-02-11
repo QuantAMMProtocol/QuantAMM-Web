@@ -1,4 +1,4 @@
-import { UpdateRule } from './simulationRunConfigModels';
+import { UpdateRule } from '../simulationRunConfigModels';
 
 export const getDefaultUpdateRuleForPoolType = (
   poolTypeName: string,

@@ -3,12 +3,12 @@ import {
   Col,
 } from 'antd';
 import { useState } from 'react';
-import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import { useAppSelector, useAppDispatch } from '../../../app/hooks';
 import {
   changeSimulationRunnerCurrentStepIndex,
   selectSimulationRunStatusStepIndex,
-} from '../simulationRunner/simulationRunnerSlice';
-import styles from './simulationRunConfiguration.module.css';
+} from '../../simulationRunner/simulationRunnerSlice';
+import styles from '../simulationRunConfiguration.module.css';
 import {
   selectCoinPriceDataLoaded,
   selectAvailableUpdateRules,
@@ -19,21 +19,21 @@ import {
   setPoolCoinNumeraire,
   selectPoolNumeraire,
   selectSimulationPools,
-} from './simulationRunConfigurationSlice';
+} from '../simulationRunConfigurationSlice';
 import {
   LiquidityPoolCoin,
   PoolType,
   UpdateRule,
   UpdateRuleParameter,
-} from './simulationRunConfigModels';
-import { LiquidityPoolConfiguration } from './liquidityPoolConfiguration';
+} from '../simulationRunConfigModels';
+import { LiquidityPoolConfiguration } from '../liquidityPoolConfiguration';
 import {
   AddPoolButtonSection,
   SummaryAndContinueSection,
 } from './poolRuleConfigurationSections';
-import { getDefaultUpdateRuleForPoolType } from './poolRuleConfigurationUtils';
+import { getDefaultUpdateRuleForPoolType } from '../utils/poolRuleConfigurationUtils';
 import { PoolRuleConfigurationCenterColumn } from './poolRuleConfigurationCenterColumn';
-import { getUpdatedRuleForFactorChange } from './poolRuleConfigurationUpdateRuleFactor';
+import { getUpdatedRuleForFactorChange } from '../utils/poolRuleConfigurationUpdateRuleFactor';
 
 export function PoolRuleConfiguration() {
   const availableUpdateRules = useAppSelector(selectAvailableUpdateRules);

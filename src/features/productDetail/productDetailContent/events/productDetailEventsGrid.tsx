@@ -1,10 +1,10 @@
 import { forwardRef, useMemo } from 'react';
 import type { GridOptions, ICellRendererParams, ValueFormatterParams } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
-import { GqlPoolEvent, GqlPoolEventType } from '../../../__generated__/graphql-types';
+import { GqlPoolEvent, GqlPoolEventType } from '../../../../__generated__/graphql-types';
 import { format } from 'date-fns';
 import { Tag, Tooltip } from 'antd';
-import { truncateMiddle } from './utils';
+import { truncateMiddle } from '../utils';
 import styles from './productDetailEventsGrid.module.scss';
 
 export interface Thresholds {

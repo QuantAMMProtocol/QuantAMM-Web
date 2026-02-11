@@ -1,8 +1,8 @@
 import { Checkbox, Col, DatePicker, Divider, Row, Select, Tooltip } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
 import { InfoCircleOutlined } from '@ant-design/icons';
-import { SimulationRunButton } from './simulationRunButton';
-import runnerStyles from './simulationRunnerCommon.module.css';
+import { SimulationRunButton } from '../simulationRunButton';
+import runnerStyles from '../simulationRunnerCommon.module.css';
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;

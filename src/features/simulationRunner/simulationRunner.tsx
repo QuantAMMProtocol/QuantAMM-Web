@@ -17,7 +17,7 @@ import { SimulationRunnerHookTimePeriodStep } from './simulationRunnerHookTimePe
 import {
   handleDownloadResults,
   handleDownloadParams,
-} from './SimulationHelper/index';
+} from './index';
 
 import { SimulationRunnerFinalReviewStep } from './simulationRunnerFinalReviewStep';
 import { SimulationResultsSummaryStep } from '../simulationResults/simulationResultsSummaryStep';
@@ -25,9 +25,9 @@ import { SimulationResultSaveToCompareTab } from '../simulationResults/simulatio
 import { SimulationRunnerHistoricInProgress } from './simulationRunnerHistoricInProgress';
 import { useRef, useState } from 'react';
 import { SimulatorOptions } from './simulationOptions';
-import { PoolConstituentSelectionStep } from './poolConstituentSelectionStep';
-import { SimulationRunnerHeader } from './simulationRunnerHeader';
-import { SimulationRunnerImportResultsModal } from './simulationRunnerImportResultsModal';
+import { PoolConstituentSelectionStep } from './sections/poolConstituentSelectionStep';
+import { SimulationRunnerHeader } from './sections/simulationRunnerHeader';
+import { SimulationRunnerImportResultsModal } from './sections/simulationRunnerImportResultsModal';
 
 export default function SimulationRunner() {
   const dispatch = useAppDispatch();

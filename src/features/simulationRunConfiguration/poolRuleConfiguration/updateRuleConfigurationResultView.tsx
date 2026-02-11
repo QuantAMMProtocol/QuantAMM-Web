@@ -2,8 +2,8 @@ import { Col, InputNumber, Row, Space } from 'antd';
 import {
   LiquidityPool,
   UpdateRuleParameter,
-} from './simulationRunConfigModels';
-import styles from './simulationRunConfiguration.module.css';
+} from '../simulationRunConfigModels';
+import styles from '../simulationRunConfiguration.module.css';
 import { GroupedParameters } from './updateRuleConfiguration';
 
 const toNumericValue = (value: string | number | null | undefined) => {

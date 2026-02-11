@@ -1,7 +1,7 @@
 import { Radio } from 'antd';
 import { Dispatch, SetStateAction } from 'react';
-import { LiquidityPoolCoin, UpdateRule } from './simulationRunConfigModels';
-import styles from './simulationRunConfiguration.module.css';
+import { LiquidityPoolCoin, UpdateRule } from '../simulationRunConfigModels';
+import styles from '../simulationRunConfiguration.module.css';
 
 interface PoolRuleConfigurationUniversalToggleProps {
   localUpdateRule: UpdateRule;

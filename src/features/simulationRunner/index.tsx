@@ -1,5 +1,5 @@
 import { ChangeEvent } from 'react';
-import { AppDispatch } from '../../../app/store';
+import { AppDispatch } from '../../app/store';
 import {
   generateAndAddPoolToSim,
   setDateRange,
@@ -7,14 +7,14 @@ import {
   setStartDate,
   updateCoinPriceHistoryLoaded,
   updateCoinPriceHistoryLoadedStatus,
-} from '../../simulationRunConfiguration/simulationRunConfigurationSlice';
+} from '../simulationRunConfiguration/simulationRunConfigurationSlice';
 import {
   importSimRunResults,
   changeSimulationRunnerCurrentStepIndex,
   updateStatus,
-} from './../simulationRunnerSlice';
-import { Chain } from '../../simulationRunConfiguration/simulationRunConfigModels';
-import { loadPriceHistoryAsync } from '../../coinData/loadPriceHistoryThunk';
+} from './simulationRunnerSlice';
+import { Chain } from '../simulationRunConfiguration/simulationRunConfigModels';
+import { loadPriceHistoryAsync } from '../coinData/loadPriceHistoryThunk';
 
 const isJsonFile = (file: File) =>
   file.type === 'application/json' || file.name.toLowerCase().endsWith('.json');

@@ -9,8 +9,8 @@ import {
   RiseOutlined,
   SaveOutlined,
 } from '@ant-design/icons';
-import styles from '../simulationResults/simulationResultSummary.module.css';
-import runnerStyles from './simulationRunnerCommon.module.css';
+import styles from '../../simulationResults/simulationResultSummary.module.css';
+import runnerStyles from '../simulationRunnerCommon.module.css';
 
 interface RunnerHeaderProps {
   currentStepIndex: number;

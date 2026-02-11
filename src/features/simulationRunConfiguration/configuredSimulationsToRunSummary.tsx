@@ -7,7 +7,7 @@ import {
   selectSimulationPools,
 } from './simulationRunConfigurationSlice';
 import styles from './simulationRunConfiguration.module.css';
-import { UpdateRuleConfigurationResultView } from './updateRuleConfigurationResultView';
+import { UpdateRuleConfigurationResultView } from './poolRuleConfiguration/updateRuleConfigurationResultView';
 
 export function ConfiguredSimulationsToRunSummary() {
   const simulationPools = useAppSelector(selectSimulationPools);

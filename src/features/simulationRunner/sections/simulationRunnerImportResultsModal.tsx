@@ -1,7 +1,7 @@
 import { Button, Col, Modal } from 'antd';
 import { ChangeEvent, RefObject } from 'react';
-import styles from '../simulationResults/simulationResultSummary.module.css';
-import runnerStyles from './simulationRunnerCommon.module.css';
+import styles from '../../simulationResults/simulationResultSummary.module.css';
+import runnerStyles from '../simulationRunnerCommon.module.css';
 
 interface ImportResultsModalProps {
   isOpen: boolean;

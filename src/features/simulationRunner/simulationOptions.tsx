@@ -1,4 +1,4 @@
-import { Col, Row } from 'antd';
+import { Button, Col, Divider, Row } from 'antd';
 
 import dayjs, { Dayjs } from 'dayjs';
 import { SimulatorGuide } from '../documentation/simulatorGuide';
@@ -24,11 +24,7 @@ import {
 } from '../simulationRunConfiguration/simulationRunConfigurationSlice';
 import { useMemo } from 'react';
 import runnerStyles from './simulationRunnerCommon.module.css';
-import { SimpleRunnerSection } from './simulationSimpleRunnerSection';
-import {
-  AdvancedRunnerSection,
-  SimulatorIntroSection,
-} from './simulationOptionsSections';
+import { SimpleRunnerSection } from './sections/simulationSimpleRunnerSection';
 
 export function SimulatorOptions() {
   const coinDataLoaded = useAppSelector(selectCoinPriceDataLoaded);
@@ -77,7 +73,30 @@ export function SimulatorOptions() {
     <div>
       <Row>
         <Col span={12} className={runnerStyles.panelPadding}>
-          <SimulatorIntroSection />
+          <Row>
+            <Col span={24}>
+              <h1 className={runnerStyles.optionsHeader}>
+                QuantAMM Historic Simulator
+              </h1>
+            </Col>
+            <Col span={24}>
+              <p>
+                Not sure what to run? We have run some interesting examples for
+                you.
+              </p>
+            </Col>
+            <Col span={24}>
+              <Button
+                href="/examples"
+                type="primary"
+                size="large"
+                className={runnerStyles.greenButton}
+              >
+                View Example Results
+              </Button>
+            </Col>
+            <Divider />
+          </Row>
           <SimpleRunnerSection
             coinDataLoaded={coinDataLoaded}
             selectedCoinCodes={selectedCoinCodes}
@@ -112,9 +131,28 @@ export function SimulatorOptions() {
               );
             }}
           />
-          <AdvancedRunnerSection
-            onBegin={() => dispatch(changeSimulationRunnerCurrentStepIndex(1))}
-          />
+          <Row>
+            <Col span={24}>
+              <Col span={24}>
+                <h3>Advanced Simulation Runner</h3>
+              </Col>
+              <Col span={24}>
+                <p>
+                  For those wanting to test specific parameter settings, specific
+                  pool initial values and configurations, you can access the
+                  advanced simulator.
+                </p>
+              </Col>
+              <Button
+                type="primary"
+                size="large"
+                className={runnerStyles.greenButton}
+                onClick={() => dispatch(changeSimulationRunnerCurrentStepIndex(1))}
+              >
+                Begin Advanced Simulation Runner
+              </Button>
+            </Col>
+          </Row>
         </Col>
         <Col span={12} className={runnerStyles.panelPadding}>
           <SimulatorGuide />

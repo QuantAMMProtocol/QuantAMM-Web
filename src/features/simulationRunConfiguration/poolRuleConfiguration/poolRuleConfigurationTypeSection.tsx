@@ -5,9 +5,9 @@ import {
   LiquidityPoolCoin,
   PoolType,
   UpdateRule,
-} from './simulationRunConfigModels';
-import { getDefaultUpdateRuleForPoolType } from './poolRuleConfigurationUtils';
-import styles from './simulationRunConfiguration.module.css';
+} from '../simulationRunConfigModels';
+import { getDefaultUpdateRuleForPoolType } from '../utils/poolRuleConfigurationUtils';
+import styles from '../simulationRunConfiguration.module.css';
 
 const { Option } = Select;
 

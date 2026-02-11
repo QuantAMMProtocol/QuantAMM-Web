@@ -2,9 +2,9 @@ import { Button, Col, Divider, InputNumber, Row, Space } from 'antd';
 import {
   LiquidityPool,
   UpdateRuleParameter,
-} from '../simulationRunConfiguration/simulationRunConfigModels';
-import { GroupedParameters } from '../simulationRunConfiguration/updateRuleConfiguration';
-import runnerStyles from './simulationRunnerCommon.module.css';
+} from '../../simulationRunConfiguration/simulationRunConfigModels';
+import { GroupedParameters } from '../../simulationRunConfiguration/poolRuleConfiguration/updateRuleConfiguration';
+import runnerStyles from '../simulationRunnerCommon.module.css';
 
 const getGroupedParameters = (pool: LiquidityPool): GroupedParameters =>
   pool.updateRule.updateRuleParameters.reduce(
