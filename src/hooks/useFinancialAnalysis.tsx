@@ -30,8 +30,8 @@ export const useFinancialAnalysis = ({
   const dispatch = useAppDispatch();
   const [runFinancialAnalysis] = useRunFinancialAnalysisMutation();
   const livePools = CURRENT_LIVE_FACTSHEETS;
-  const hasCacheForProduct = livePools.factsheets.find(
-    (x) => x.poolId == (product?.id ?? '')
+  const hasCacheForProduct = livePools.factsheets.some(
+    (x) => x.poolId === (product?.id ?? '')
   );
 
   useEffect(() => {
@@ -42,25 +42,20 @@ export const useFinancialAnalysis = ({
         return;
       }
       try {
-        const ts = product?.timeSeries ?? [];
-        const hasValidTs = ts.length > 0 && !!ts[0]?.timestamp;
+        const ts = product.timeSeries ?? [];
+        const hasValidTimeseries = ts.length > 0 && !!ts[0]?.timestamp;
 
-        if (!hasCacheForProduct && hasValidTs) {
+        if (!hasCacheForProduct && hasValidTimeseries) {
           dispatch(loadingSimulationRunBreakdown(product.id));
         }
 
-        if (
-          !hasCacheForProduct &&
-          (product?.timeSeries?.length ?? 0) > 0 &&
-          product?.timeSeries?.[0]?.timestamp
-        ) {
-          product?.timeSeries[product?.timeSeries.length - 1].timestamp;
-
-          const portfolioReturns = product?.timeSeries?.map((step, i) => {
+        if (!hasCacheForProduct && hasValidTimeseries) {
+          const portfolioReturns = ts
+            .map((step, i) => {
             if (i === 0) {
               return [step.timestamp * 1000, 0, 0];
             }
-            const prevStep = product?.timeSeries?.[i - 1];
+            const prevStep = ts[i - 1];
             if (!prevStep) {
               return null;
             }
@@ -71,31 +66,28 @@ export const useFinancialAnalysis = ({
               prevStep?.hodlSharePrice;
 
             return [step.timestamp * 1000, portfolio_return, hodl_return];
-          });
+          })
+            .filter(
+              (
+                portfolioReturn
+              ): portfolioReturn is [number, number, number] =>
+                portfolioReturn !== null
+            );
 
-          const tokens = [
-            ...(product?.poolConstituents.map((pc) => pc.coin) ?? []),
-          ];
+          const tokens = [...(product.poolConstituents.map((pc) => pc.coin) ?? [])];
+          const startTimestamp = ts[0]?.timestamp;
+          const endTimestamp = ts[ts.length - 1]?.timestamp;
 
           const result = await runFinancialAnalysis({
             request: {
-              startDateString: product?.timeSeries[0].timestamp
-                ? new Date(
-                    product.timeSeries[0].timestamp * 1000
-                  ).toLocaleString()
+              startDateString: startTimestamp
+                ? new Date(startTimestamp * 1000).toLocaleString()
                 : '',
-              endDateString: product?.timeSeries[product?.timeSeries.length - 1]
-                .timestamp
-                ? new Date(
-                    product.timeSeries[product.timeSeries.length - 1]
-                      .timestamp * 1000
-                  ).toLocaleString()
+              endDateString: endTimestamp
+                ? new Date(endTimestamp * 1000).toLocaleString()
                 : '',
               tokens: tokens,
-              returns:
-                portfolioReturns.filter(
-                  (portfolioReturn) => portfolioReturn !== null
-                ) ?? [],
+              returns: portfolioReturns,
               benchmarks: [benchmark],
             },
           });
@@ -115,7 +107,6 @@ export const useFinancialAnalysis = ({
         if (success?.data && product) {
           const simBreakdown = {
             simulationRunResultAnalysis: success.data.analysis,
-            
             simulationRun: {
               id: product.id,
               enableAutomaticArbBots: false,

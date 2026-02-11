@@ -7,19 +7,21 @@ import {
   FinancialAnalysisRequestDto,
   FinancialAnalysisResultDto,
 } from '../models';
+import { getCookie } from './getCookie';
 
-function getCookie(name: string) {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) return parts?.pop()?.split(';').shift();
+interface RunFinancialAnalysisParams {
+  request: FinancialAnalysisRequestDto;
 }
 
 export const financialAnalysisService = createApi({
   reducerPath: 'financialAnalysisService',
   baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_BASE_URL }),
   endpoints: (builder) => ({
-    runFinancialAnalysis: builder.mutation({
-      query: (bodyParam: { request: FinancialAnalysisRequestDto }) => ({
+    runFinancialAnalysis: builder.mutation<
+      FinancialAnalysisResultDto | null,
+      RunFinancialAnalysisParams
+    >({
+      query: ({ request }) => ({
         url: '/runFinancialAnalysis',
         method: 'POST',
         credentials: 'same-origin',
@@ -27,7 +29,7 @@ export const financialAnalysisService = createApi({
           'content-type': 'application/json',
           'ROBODEX-X-CSRF-TOKEN': getCookie('csrf_access_token'),
         },
-        body: JSON.stringify(bodyParam.request),
+        body: JSON.stringify(request),
       }),
       transformResponse: (
         response: string,
@@ -35,8 +37,6 @@ export const financialAnalysisService = createApi({
       ): FinancialAnalysisResultDto | null => {
         if (meta?.response?.status === 200 && response) {
           try {
-            //It is possible for a certain product that a certain ratio cannot be calculated, instead of defaulting to 0
-            //we can pass NaN so that a warning/error can be displayed for a given metric on a give product
             const sanitizedResponse = response
               .replace(/:\s*NaN/g, ': null')
               .replace(/: NaN/g, ': null')

@@ -1,12 +1,10 @@
-import React, { ChangeEvent, Dispatch } from 'react';
-import { AppThunk } from '../../../app/store';
+import { ChangeEvent } from 'react';
+import { AppDispatch } from '../../../app/store';
 import {
   generateAndAddPoolToSim,
   setDateRange,
   setEndDate,
   setStartDate,
-  updateCoinLoadStatus,
-  updateCoinPriceHistory,
   updateCoinPriceHistoryLoaded,
   updateCoinPriceHistoryLoadedStatus,
 } from '../../simulationRunConfiguration/simulationRunConfigurationSlice';
@@ -15,83 +13,19 @@ import {
   changeSimulationRunnerCurrentStepIndex,
   updateStatus,
 } from './../simulationRunnerSlice';
-import { useLoadHistoricDailyPricesMutation } from '../../coinData/coinPriceRetrievalService';
-import {
-  Chain,
-  CoinComparison,
-  CoinPrice,
-} from '../../simulationRunConfiguration/simulationRunConfigModels';
-import { ReturnTimeStep } from '../../simulationResults/simulationResultSummaryModels';
+import { Chain } from '../../simulationRunConfiguration/simulationRunConfigModels';
+import { loadPriceHistoryAsync } from '../../coinData/loadPriceHistoryThunk';
 
-interface Success {
-  data: CoinPrice[];
-}
-
-export const loadPriceHistoryAsync =
-  (): AppThunk => async (dispatch, getState) => {
-    const [loadHistoricPrices] = useLoadHistoricDailyPricesMutation();
-    dispatch(updateCoinPriceHistoryLoadedStatus('loading'));
-    for (const coin of getState().simConfig.availableCoins) {
-      const response = await loadHistoricPrices({
-        coinCode: coin.coinCode,
-      }).catch();
-      dispatch(updateCoinLoadStatus('Daily ' + coin.coinCode + ' prices '));
-
-      const fullPriceMap = new Map<number, CoinPrice>();
-
-      const success = response as Success;
-      const data = success.data || [];
-
-      const dailyPriceHistory = data;
-
-      data.forEach((element) => {
-        fullPriceMap.set(element.unix, element);
-      });
-
-      const timesteps: Map<number, ReturnTimeStep> = new Map<
-        number,
-        ReturnTimeStep
-      >();
-
-      for (let i = 0; i < dailyPriceHistory.length; i++) {
-        let returnVal = 0;
-
-        if (i != 0) {
-          returnVal =
-            dailyPriceHistory[i].close / dailyPriceHistory[i - 1].close - 1;
-        }
-
-        timesteps.set(dailyPriceHistory[i].unix, {
-          date: dailyPriceHistory[i].date,
-          unix: dailyPriceHistory[i].unix,
-          return: returnVal,
-        });
-      }
-
-      dispatch(
-        updateCoinPriceHistory({
-          coinCode: coin.coinCode,
-          coinName: coin.coinName,
-          dailyPriceHistory: dailyPriceHistory,
-          dailyPriceHistoryMap: fullPriceMap,
-          dailyReturns: timesteps,
-          coinComparisons: new Map<string, CoinComparison>(),
-          deploymentByChain: coin.deploymentByChain,
-        })
-      );
-    }
-
-    dispatch(updateCoinPriceHistoryLoaded(true));
-    dispatch(updateCoinPriceHistoryLoadedStatus('loaded'));
-  };
+const isJsonFile = (file: File) =>
+  file.type === 'application/json' || file.name.toLowerCase().endsWith('.json');
 
 export const handleDownloadParams = (
   event: ChangeEvent<HTMLInputElement>,
-  dispatch: Dispatch<any>
+  dispatch: AppDispatch
 ) => {
   const file = event.target.files?.[0];
 
-  if (file && file.type === 'application/json') {
+  if (file && isJsonFile(file)) {
     // Ensure it's a JSON file
     const reader = new FileReader();
 
@@ -99,9 +33,9 @@ export const handleDownloadParams = (
       const jsonContent = loadEvent.target?.result;
       try {
         const jsonData = JSON.parse(jsonContent as string);
-        dispatch(loadPriceHistoryAsync());
         dispatch(updateCoinPriceHistoryLoaded(false));
         dispatch(updateCoinPriceHistoryLoadedStatus('pending'));
+        dispatch(loadPriceHistoryAsync({ includePerCoinLoadStatus: true }));
         // Dispatch actions to set initial state elements
 
         // Example updates based on your state structure, customize as needed
@@ -132,7 +66,8 @@ export const handleDownloadParams = (
               updateRuleParameters: [],
               applicablePoolTypes:
                 jsonData.simulationRun.updateRule.applicablePoolTypes,
-              chainDeploymentDetails:jsonData.simulationRun.updateRule.chainDeploymentDetails
+              chainDeploymentDetails:
+                jsonData.simulationRun.updateRule.chainDeploymentDetails,
             },
             poolConstituents: jsonData.simulationRun.poolConstituents,
             poolType: jsonData.simulationRun.poolType,
@@ -141,6 +76,7 @@ export const handleDownloadParams = (
               jsonData.simulationRun.enableAutomaticArbBots,
           })
         );
+        dispatch(changeSimulationRunnerCurrentStepIndex(5));
       } catch (error) {
         console.error('Error parsing JSON file:', error);
         alert('Error parsing JSON file. Please check the file format.');
@@ -156,18 +92,16 @@ export const handleDownloadParams = (
   } else {
     alert('Please upload a valid JSON file.');
   }
-
-  dispatch(changeSimulationRunnerCurrentStepIndex(5));
 };
 
 export const handleDownloadResults = (
-  event: React.ChangeEvent<HTMLInputElement>,
-  dispatch: Dispatch<any>,
+  event: ChangeEvent<HTMLInputElement>,
+  dispatch: AppDispatch,
   setForceViewResults: (value: boolean) => void
 ) => {
   const file = event.target.files?.[0];
 
-  if (file && file.type === 'application/json') {
+  if (file && isJsonFile(file)) {
     // Ensure it's a JSON file
     const reader = new FileReader();
 
@@ -190,6 +124,7 @@ export const handleDownloadResults = (
           })
         );
         setForceViewResults(true);
+        dispatch(changeSimulationRunnerCurrentStepIndex(6));
       } catch (error) {
         console.error('Error parsing JSON file:', error);
         alert('Error parsing JSON file. Please check the file format.');
@@ -208,19 +143,16 @@ export const handleDownloadResults = (
     alert('Please upload a valid JSON file.');
     setForceViewResults(false);
   }
-
-  dispatch(changeSimulationRunnerCurrentStepIndex(6));
 };
 
 export const handleFileChange = (
-  event: React.ChangeEvent<HTMLInputElement>,
-  dispatch: any,
-  loadPriceHistoryAsync: () => AppThunk,
+  event: ChangeEvent<HTMLInputElement>,
+  dispatch: AppDispatch,
   setForceViewResults?: (value: boolean) => void
 ) => {
   const file = event.target.files?.[0];
 
-  if (file && file.type === 'application/json') {
+  if (file && isJsonFile(file)) {
     const reader = new FileReader();
 
     reader.onload = (loadEvent) => {
@@ -244,9 +176,9 @@ export const handleFileChange = (
           );
           setForceViewResults(true);
         } else {
-          dispatch(loadPriceHistoryAsync());
           dispatch(updateCoinPriceHistoryLoaded(false));
           dispatch(updateCoinPriceHistoryLoadedStatus('pending'));
+          dispatch(loadPriceHistoryAsync({ includePerCoinLoadStatus: true }));
           // Example updates based on your state structure, customize as needed
           dispatch(setStartDate(jsonData.timeRange.startDate));
           dispatch(setEndDate(jsonData.timeRange.endDate));

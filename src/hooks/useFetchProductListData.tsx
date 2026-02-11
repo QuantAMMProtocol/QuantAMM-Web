@@ -49,23 +49,17 @@ export const useFetchProductListData = (
     const whereClause: GqlPoolFilter = {};
     if (activeFilters.chain) {
       whereClause.chainIn = activeFilters.chain as GqlChain[];
-    } else if (activeFilters.chain === undefined) {
-      delete whereClause.chainIn;
     }
 
     if (activeFilters.poolType) {
       whereClause.poolTypeIn = activeFilters.poolType as GqlPoolType[];
-    } else if (activeFilters.poolType === undefined) {
-      delete whereClause.poolTypeIn;
     }
 
     if (activeFilters.minTvl) {
       whereClause.minTvl = parseFloat(activeFilters.minTvl[0]);
-    } else if (activeFilters.minTvl === undefined) {
-      delete whereClause.minTvl;
     }
 
-    whereClause.tagNotIn = ['BLACK_LISTED']
+    whereClause.tagNotIn = ['BLACK_LISTED'];
 
     return whereClause;
   }, [activeFilters.chain, activeFilters.poolType, activeFilters.minTvl]);
@@ -104,16 +98,19 @@ export const useFetchProductListData = (
 
   // fetch the snapshot data for the pool data
   const { poolSnapshotsMap, poolSnapshotsMapLoading } = useFetchSnapshotData(
-    poolData!,
+    poolData,
     {
       skip: IS_STUB_DATA,
     }
   );
 
   // fetch the token prices for the pool data
-  const { tokenPrices, tokenPricesLoading } = useFetchTokenHistoricalPrices(poolData!, {
-    skip: IS_STUB_DATA,
-  });
+  const { tokenPrices, tokenPricesLoading } = useFetchTokenHistoricalPrices(
+    poolData,
+    {
+      skip: IS_STUB_DATA,
+    }
+  );
 
   // generate the full products from the pool data
   const { fullProductsData, fullProductsLoading, fullProductsError } =
@@ -122,15 +119,23 @@ export const useFetchProductListData = (
       poolSnapshotsMap,
       tokenPrices,
       {
-        skip: IS_STUB_DATA && poolSnapshotsMapLoading && tokenPricesLoading,
+        skip: IS_STUB_DATA || poolSnapshotsMapLoading || tokenPricesLoading,
       }
     );
 
   useEffect(() => {
     if (baseProductsError) {
       setError(baseProductsError);
+      setLoading(false);
     }
   }, [baseProductsError]);
+
+  useEffect(() => {
+    if (fullProductsError) {
+      setError(fullProductsError);
+      setLoading(false);
+    }
+  }, [fullProductsError]);
 
   useEffect(() => {
     if (!baseProductsLoading && !baseProductsError && baseProductsData) {
@@ -149,13 +154,14 @@ export const useFetchProductListData = (
   useEffect(() => {
     setProductMap({});
     setLoading(true);
-  }, [activeFilters]);
+    setError(null);
+  }, [activeFilters, textSearch, page, pageSize]);
 
   const productMapLoading = useMemo(() => {
     if (IS_STUB_DATA) {
-      return loading ?? stubDataLoading;
+      return loading || stubDataLoading;
     }
-    return loading ?? baseProductsLoading;
+    return loading || baseProductsLoading;
   }, [stubDataLoading, baseProductsLoading, loading]);
 
   return {

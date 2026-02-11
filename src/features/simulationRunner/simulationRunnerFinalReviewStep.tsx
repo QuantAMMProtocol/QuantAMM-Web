@@ -10,7 +10,7 @@ import {
   selectSimulationRunnerTimeRangeSelection,
 } from '../simulationRunner/simulationRunnerSlice';
 
-import { Button, Col, Divider, InputNumber, Row, Space, Tabs } from 'antd';
+import { Button, Col, Divider, Input, InputNumber, Row, Space, Tabs } from 'antd';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
   removeSim,
@@ -23,6 +23,8 @@ import { SimulationResult } from '../simulationRunner/simulationRunnerDtos';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/dist/query';
 import { SimulationRunButton } from './simulationRunButton';
 import { GroupedParameters } from '../simulationRunConfiguration/poolRuleConfiguration';
+import { useMemo } from 'react';
+import runnerStyles from './simulationRunnerCommon.module.css';
 
 export interface Success {
   data: SimulationResult;
@@ -38,6 +40,7 @@ export interface RunSetting {
 
 const { TabPane } = Tabs;
 
+//TODO CH split into subcomponents
 export function SimulationRunnerFinalReviewStep() {
   const dispatch = useAppDispatch();
   const configuredPools = useAppSelector(selectSimulationPools);
@@ -49,9 +52,13 @@ export function SimulationRunnerFinalReviewStep() {
   );
   const coinDataLoaded = useAppSelector(selectCoinPriceDataLoaded);
 
-  function onlyUnique(value: string, index: number, self: string[]) {
-    return self.indexOf(value) === index;
-  }
+  const uniqueUpdateRules = useMemo(
+    () =>
+      Array.from(
+        new Set(configuredPools.map((pool) => pool.updateRule.updateRuleName))
+      ),
+    [configuredPools]
+  );
 
 
   return (
@@ -63,14 +70,11 @@ export function SimulationRunnerFinalReviewStep() {
             <h4 hidden={configuredPools.length > 0}>
               No simulations have been selected to run
             </h4>
-            {configuredPools
-              .map((x) => x.updateRule.updateRuleName)
-              .filter(onlyUnique)
-              .map((x, index) => {
+            {uniqueUpdateRules.map((x) => {
                 return (
-                  <div key={index}>
+                  <div key={x}>
                     {configuredPools
-                      .filter((y) => y.updateRule.updateRuleName == x)
+                      .filter((y) => y.updateRule.updateRuleName === x)
                       .map((z) => {
                         const groupedParameters =
                           z.updateRule.updateRuleParameters.reduce(
@@ -111,25 +115,18 @@ export function SimulationRunnerFinalReviewStep() {
                                   <Space
                                     direction="vertical"
                                     align="start"
-                                    style={{
-                                      width: '100%',
-                                      justifyContent: 'space-around',
-                                    }}
+                                    className={`${runnerStyles.fullWidth} ${runnerStyles.spaceAround}`}
                                   >
                                     {Object.entries(groupedParameters).map(
                                       ([coinCode, items]) => (
                                         <div
                                           key={coinCode}
-                                          style={{ width: '100%' }}
+                                          className={runnerStyles.fullWidth}
                                         >
                                           {items[0].coin && (
                                             <Row>
                                               <Col span={24}>
-                                                <h5
-                                                  style={{
-                                                    marginBottom: 8,
-                                                  }}
-                                                >
+                                                <h5 className={runnerStyles.marginBottom8}>
                                                   {items[0].coin.coin.coinName}
                                                 </h5>
                                               </Col>
@@ -142,18 +139,18 @@ export function SimulationRunnerFinalReviewStep() {
                                                 span={10}
                                               >
                                                 <InputNumber
-                                                  disabled={true}
+                                                  disabled
                                                   id={`${param.factorName}-${coinCode}-${index}`}
                                                   addonBefore={param.factorName}
                                                   value={
-                                                    param.applicableCoins
-                                                      .length > 0
+                                                    (param.applicableCoins
+                                                      ?.length ?? 0) > 0
                                                       ? items[index]?.coin
                                                           ?.factorValue ??
                                                         param.factorValue
                                                       : param.factorValue
                                                   }
-                                                  style={{ width: '100%' }}
+                                                  className={runnerStyles.fullWidth}
                                                 />
                                               </Col>
                                             ))}
@@ -165,14 +162,14 @@ export function SimulationRunnerFinalReviewStep() {
                                 </Row>
                               </Col>
                               <Col span={4}>
-                                <div style={{ padding: 5 }}>
+                                <div className={runnerStyles.padding5}>
                                   <Space
                                     direction="vertical"
-                                    style={{ width: '100%' }}
+                                    className={runnerStyles.fullWidth}
                                   >
                                     <Button
                                       disabled={
-                                        !coinDataLoaded || runStatusIndex == 2
+                                        !coinDataLoaded || runStatusIndex === 2
                                       }
                                       type="primary"
                                       onClick={() => {
@@ -201,20 +198,18 @@ export function SimulationRunnerFinalReviewStep() {
           <TabPane tab={'Historic Run'} key={'Historic Run'}>
             <Row>
               <Col span={24}>
-                <Row hidden={currentTimeRangeSelection != 'custom'}>
+                <Row hidden={currentTimeRangeSelection !== 'custom'}>
                   <Col span={12}>
-                    <InputNumber
-                      disabled={true}
-                      defaultValue={startDate}
+                    <Input
+                      disabled
                       addonBefore="Start Date"
                       value={startDate}
                     />
                   </Col>
                   <Col span={12}>
-                    <InputNumber
-                      style={{ marginLeft: '10px' }}
-                      disabled={true}
-                      defaultValue={endDate}
+                    <Input
+                      className={runnerStyles.marginLeft10}
+                      disabled
                       addonBefore="End Date"
                       value={endDate}
                     />

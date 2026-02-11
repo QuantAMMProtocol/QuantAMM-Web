@@ -1,10 +1,12 @@
+import type { FinancialMetricThresholds } from './productModels';
+
 export const CURRENT_PERFORMANCE_PERIOD = '3m';
 
 export const INITIAL_LOAD_POOLS_COUNT = 20;
 
 export const INITIAL_PAGE = 1;
 
-export const returnMetricThresholds = [
+export const returnMetricThresholds: FinancialMetricThresholds[] = [
   {
     key: 'Absolute Return (%)',
     veryLow: 0,
@@ -227,7 +229,7 @@ export const returnMetricThresholds = [
   },
 ];
 
-export const benchmarkMetricThresholds = [
+export const benchmarkMetricThresholds: FinancialMetricThresholds[] = [
   {
     key: 'Annualized Information Ratio',
     veryLow: 0,

@@ -281,13 +281,19 @@ export const getBreakdown = async (
   };
 
   const poolFilePath = poolFileMapping[poolName];
-  console.log(`Fetching breakdown for pool: ${poolName} from ${poolFilePath}`);
   if (!poolFilePath) {
     throw new Error(`No MessagePack file found for pool: ${poolName}`);
   }
 
-  // Fetch the MessagePack file dynamically
+  console.log(`Fetching breakdown for pool: ${poolName} from ${poolFilePath}`);
+
   const response = await fetch(poolFilePath);
+  if (!response.ok) {
+    throw new Error(
+      `Failed to fetch MessagePack for pool ${poolName}: ${response.status} ${response.statusText}`
+    );
+  }
+
   const buffer = await response.arrayBuffer();
   const decodedData = decode(new Uint8Array(buffer));
   return convertBreakdownDtoToBreakdown(

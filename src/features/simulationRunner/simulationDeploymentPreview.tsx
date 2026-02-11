@@ -27,6 +27,7 @@ import {
   reorderReadoutStringArray,
   sortTokenAddresses,
 } from '../simulationRunConfiguration/simulationUtils';
+import runnerStyles from './simulationRunnerCommon.module.css';
 
 const { Text } = Typography;
 
@@ -79,6 +80,7 @@ interface LocalCreationNewPoolParams {
   initialMovingAverages: string;
   initialIntermediateValues: string;
   oracleStalenessThreshold: string;
+  tokens: LocalTokenConfig[];
   poolRegistry: string;
   poolDetails: string;
 }
@@ -98,6 +100,7 @@ function getDeploymentForChain(
   }
 }
 
+//TODO CH split into subcomponents
 export function PoolDeploymentConfigReview({
   pool,
   initialisationData,
@@ -154,13 +157,14 @@ export function PoolDeploymentConfigReview({
 
   const [targetChain, setTargetChain] = useState<Chain>(Chain.Ethereum);
 
-  const [deploymentInput] = useState<LocalQuantAMMDeploymentInputParams>({
+  const [deploymentInput, setDeploymentInput] =
+    useState<LocalQuantAMMDeploymentInputParams>({
     Vault: '',
     PauseWindowDuration: null,
     UpdateWeightRunner: '',
     FactoryVersion: '',
     PoolVersion: '',
-  });
+    });
 
   const sortedTokenAddresses = useMemo(() => {
     const addresses = pool.poolConstituents
@@ -201,6 +205,7 @@ export function PoolDeploymentConfigReview({
     initialMovingAverages: '',
     initialIntermediateValues: '',
     oracleStalenessThreshold: '',
+    tokens: [],
     poolRegistry: '',
     poolDetails: '',
   });
@@ -263,12 +268,12 @@ export function PoolDeploymentConfigReview({
   return (
     <Row className={styles.simRunSection} gutter={[24, 24]}>
       <Col span={24}>
-        <Space direction="vertical" style={{ width: '100%' }} size="large">
+        <Space direction="vertical" className={runnerStyles.fullWidth} size="large">
           {/* Simulation & Pool Overview */}
           <Divider>Simulation &amp; Pool Overview</Divider>
-          <Space direction="vertical" style={{ width: '100%' }}>
+          <Space direction="vertical" className={runnerStyles.fullWidth}>
             <Select
-              style={{ width: '100%' }}
+              className={runnerStyles.fullWidth}
               value={targetChain}
               onChange={(value) => setTargetChain(value as Chain)}
               options={Object.values(Chain).map((c) => ({
@@ -362,7 +367,7 @@ export function PoolDeploymentConfigReview({
           <Divider orientation="left">
             QuantAMMDeploymentInputParams (input.ts)
           </Divider>
-          <Space direction="vertical" style={{ width: '100%' }}>
+          <Space direction="vertical" className={runnerStyles.fullWidth}>
             <Input
               addonBefore="Vault"
               value={
@@ -392,22 +397,25 @@ export function PoolDeploymentConfigReview({
             />
             <InputNumber
               type="number"
-              style={{ width: '100%' }}
+              className={runnerStyles.fullWidth}
               addonBefore="PauseWindowDuration"
               value={deploymentInput.PauseWindowDuration}
               onChange={(value) =>
-                (deploymentInput.PauseWindowDuration = value)
+                setDeploymentInput((prev) => ({
+                  ...prev,
+                  PauseWindowDuration: value,
+                }))
               }
             />
             <Input addonBefore="FactoryVersion" value="v1" readOnly disabled />
-            <Input addonBefore="PoolVersion" value="v1" />
+            <Input addonBefore="PoolVersion" value="v1" readOnly disabled />
           </Space>
 
           {/* Creation / pool params */}
           <Divider orientation="left">
             CreationNewPoolParams (input.ts / index.ts)
           </Divider>
-          <Space direction="vertical" style={{ width: '100%' }}>
+          <Space direction="vertical" className={runnerStyles.fullWidth}>
             <Input
               addonBefore="Pool Name"
               value={poolParams.name}
@@ -463,26 +471,40 @@ export function PoolDeploymentConfigReview({
             <Divider orientation="left">Initial State</Divider>
             <Input
               addonBefore="_initialWeights"
-              value={reorderReadoutStringArray(pool,initialisationData?.final_weights_strings ?? [], sortedTokenAddresses, targetChain).join(', ') ?? 'UNKNOWN'}
+              value={reorderReadoutStringArray(
+                pool,
+                initialisationData?.final_weights_strings ?? [],
+                sortedTokenAddresses,
+                targetChain
+              ).join(', ')}
             />
             <Input
               addonBefore="_initialMovingAverages"
               value={
-                reorderReadoutStringArray(pool,initialisationData?.readouts.strings.ewma ?? [], sortedTokenAddresses, targetChain).join(', ') ??
-                'UNKNOWN'
+                reorderReadoutStringArray(
+                  pool,
+                  initialisationData?.readouts?.strings?.ewma ?? [],
+                  sortedTokenAddresses,
+                  targetChain
+                ).join(', ')
               }
             />
             <Input
               addonBefore="_initialIntermediateValues"
               value={
-                reorderReadoutStringArray(pool,initialisationData?.readouts.strings.running_a ?? [], sortedTokenAddresses, targetChain).join(', ') ??
-                'UNKNOWN'
+                reorderReadoutStringArray(
+                  pool,
+                  initialisationData?.readouts?.strings?.running_a ?? [],
+                  sortedTokenAddresses,
+                  targetChain
+                ).join(', ')
               }
             />
             <Input
               addonBefore="_oracleStalenessThreshold"
               value={
-                initialisationData?.jax_parameters.chunk_period[0] ?? 'UNKNOWN'
+                initialisationData?.jax_parameters?.chunk_period?.[0] ??
+                'UNKNOWN'
               }
             />
             <Divider orientation="left">Pool Settings</Divider>
@@ -491,12 +513,13 @@ export function PoolDeploymentConfigReview({
               value={poolParams.poolSettings.rule}
               onChange={(e) => handlePoolSettingsChange('rule', e.target.value)}
             />
-            <InputNumber
-              style={{ width: '100%' }}
+            <Input
               addonBefore="updateInterval"
               value={
-                initialisationData?.jax_parameters.chunk_period[0] ?? 'UNKNOWN'
+                initialisationData?.jax_parameters?.chunk_period?.[0] ??
+                'UNKNOWN'
               }
+              disabled
             />
             <Input
               addonBefore="lambda"
@@ -526,7 +549,7 @@ export function PoolDeploymentConfigReview({
               value={pool.updateRule.updateRuleName}
               disabled
             />
-            <Space direction="vertical" style={{ width: '100%' }}>
+            <Space direction="vertical" className={runnerStyles.fullWidth}>
               <Text>ruleParameters</Text>
               <Input.TextArea
                 rows={4}
@@ -545,7 +568,7 @@ export function PoolDeploymentConfigReview({
             />
 
             <Divider orientation="left">Registry Permissions (bitmask)</Divider>
-            <Space direction="vertical" style={{ width: '100%' }} size="middle">
+            <Space direction="vertical" className={runnerStyles.fullWidth} size="middle">
               <Checkbox.Group
                 options={REGISTRY_PERMISSION_OPTIONS}
                 value={registryMaskSelections}

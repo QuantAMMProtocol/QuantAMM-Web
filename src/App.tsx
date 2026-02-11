@@ -1,4 +1,5 @@
-import { Outlet } from 'react-router-dom';
+import { Suspense, useCallback, useEffect } from 'react';
+import { Outlet, useLocation } from 'react-router-dom';
 import { Layout } from 'antd';
 import { ModuleRegistry } from 'ag-grid-community';
 import { EnterpriseCoreModule, LicenseManager } from 'ag-grid-enterprise';
@@ -9,11 +10,15 @@ import { AppThunk } from './app/store';
 import { initializeSimulationsToRun } from './features/simulationRunner/simulationRunnerSlice';
 import { AntDesignThemeProvider } from './AntDesignThemeProvider';
 import { MenuComponent } from './Menu';
+import { ROUTES } from './routesEnum';
 
 import style from './app.module.scss';
-import { loadPriceHistoryAsync } from './features/simulationRunner/SimulationHelper';
+import { loadPriceHistoryAsync } from './features/coinData/loadPriceHistoryThunk';
 
 const { Content, Header } = Layout;
+
+const isRoute = (value: string): value is ROUTES =>
+  (Object.values(ROUTES) as string[]).includes(value);
 
 const AG_GRID_LICENSE_KEY = import.meta.env.AG_GRID_LICENCE_KEY ?? '';
 
@@ -33,21 +38,30 @@ AgChartsEnterprise.setLicenseKey(AG_GRID_LICENSE_KEY);
 
 function App() {
   const dispatch = useAppDispatch();
+  const location = useLocation();
 
-  function initialisePage(page: string) {
-    switch (page) {
-      case 'simrunner': {
-        dispatch(initialiseSimsToRun());
-        break;
+  const initialisePage = useCallback(
+    (page: string) => {
+      if (!isRoute(page)) {
+        return;
       }
-    }
 
-    dispatch(loadPriceHistoryAsync());
-  }
+      if (page === ROUTES.SIMULATION_RUNNER) {
+        dispatch(initialiseSimsToRun());
+      }
+    },
+    [dispatch]
+  );
 
-  setTimeout(() => {
+  useEffect(() => {
     dispatch(loadPriceHistoryAsync());
-  }, 100);
+  }, [dispatch]);
+
+  useEffect(() => {
+    const segment = location.pathname.split('/')[1] ?? '';
+    const page = isRoute(segment) ? segment : ROUTES.HOME;
+    initialisePage(page);
+  }, [location.pathname, initialisePage]);
 
   return (
     <AntDesignThemeProvider>
@@ -56,12 +70,13 @@ function App() {
           <MenuComponent initialise={initialisePage} />
         </Header>
         <Content>
-          <Outlet />
+          <Suspense fallback={<div />}>
+            <Outlet />
+          </Suspense>
         </Content>
       </Layout>
     </AntDesignThemeProvider>
   );
 }
-
 
 export default App;

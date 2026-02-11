@@ -2,8 +2,6 @@ import { AppThunk } from '../../app/store';
 import { useRunSimulationMutation } from './simulationRunnerService';
 
 import { convertApiResponse } from '../simulationResults/simulationReturnCalculator';
-import { LiquidityPool } from '../simulationRunConfiguration/simulationRunConfigModels';
-
 import {
   addSimRunResults,
   startRun,
@@ -25,6 +23,7 @@ import {
   SimulationResult,
 } from './simulationRunnerDtos';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/dist/query';
+import runnerStyles from './simulationRunnerCommon.module.css';
 
 export interface Success {
   data: SimulationResult;
@@ -34,10 +33,14 @@ export interface Failure {
   error: FetchBaseQueryError;
 }
 
-export interface RunSetting {
-  pool: LiquidityPool;
-  startDate: number;
-  endDate: number;
+function getFailureMessage(error: FetchBaseQueryError): string {
+  if ('data' in error && typeof error.data === 'string') {
+    return error.data;
+  }
+  if ('error' in error && typeof error.error === 'string') {
+    return error.error;
+  }
+  return 'Simulation failed';
 }
 
 export function SimulationSimplifiedRunButton() {
@@ -54,137 +57,112 @@ export function SimulationSimplifiedRunButton() {
 
   const runSimulationsThunk =
     (runTimeRange: string): AppThunk =>
-    (dispatch, getState) => {
-      if (getState().simRunner.simulationRunStatus == 'Pending') {
-        dispatch(
-          initializeTimeRangeToRun({
-            name: runTimeRange,
-            custStartDate: getState().simConfig.startDate,
-            custEndDate: getState().simConfig.endDate,
-          })
-        );
-
-        dispatch(updateStatus('Running'));
-
-        // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        setTimeout(async () => {
-          const poolsToRun = getState().simConfig.simulationLiquidityPools;
-
-          dispatch(initializeSimulationsToRun({ pools: poolsToRun }));
-          await Promise.all(
-            getState().simRunner.runTimePeriodRanges.map(async (x) => {
-              const simulationsToRun = getState().simRunner.simulationsToRun;
-              for (const sim of simulationsToRun) {
-                let targetSim = sim;
-                dispatch(startRun({ pool: targetSim, timeRange: x }));
-                targetSim = getState().simRunner.simulationsToRun.find(
-                  (x) => sim.id == x.id
-                )!;
-
-                if (targetSim.updateRule.updateRuleRunUrl != undefined) {
-                  try {
-                    const response = await runSimulation({
-                      url: targetSim.updateRule.updateRuleRunUrl,
-                      simulationRunDto: {
-                        startUnix: new Date(x.startDate).getTime(),
-                        endUnix: new Date(x.endDate).getTime(),
-                        pool: ConvertToLiquidityPoolDto(targetSim),
-                        startDateString: x.startDate,
-                        endDateString: x.endDate,
-                        feeHooks: targetSim.feeHooks,
-                        swapImports: targetSim.swapImports,
-                        gasPriceImports: getState().simConfig.gasPriceImport,
-                      },
-                    });
-
-                    const success = response as Success;
-                    if (success.data == undefined) {
-                      const error = response as Failure;
-                      dispatch(
-                        failRun({
-                          id: targetSim.id,
-                          timeRangeName: x.name,
-                          errorMessage: error.error.data as string,
-                        })
-                      );
-                      continue;
-                    }
-
-                    // Convert API response to required format
-                    const convertedData = convertApiResponse(success.data);
-
-                    dispatch(
-                      addSimRunResults({
-                        id: {
-                          runId: targetSim?.id ?? 'unknown',
-                          timeRangeName: x.name,
-                        },
-                        results: convertedData.results,
-                        analysisResults: convertedData.analysisResults,
-                      })
-                    );
-                    dispatch(
-                      completeRun({
-                        id: targetSim?.id ?? 'unknown',
-                        timeRangeName: x.name,
-                      })
-                    );
-                  } catch (e: any) {
-                    console.log(e);
-                    dispatch(
-                      failRun({
-                        id: sim.id,
-                        timeRangeName: x.name,
-                        errorMessage: e.toString(),
-                      })
-                    );
-                    continue;
-                  }
-                }
-                //Import disabled given that v3 api has not been released yet
-                //else if (sim.poolType.name == 'LIVE') {
-                //  const selectedPoolData as ProductDto = balancerPools.find(
-                //    dispatch(
-                //      useFinancialAnalysis({
-                //        product: selectedPoolData!,
-                //        benchmark: Benchmark.HODL,
-                //        loadToSimulator: true,
-                //      })
-                //    );
-                //      benchmark: Benchmark.HODL,
-                //      loadToSimulator: true,
-                //    });
-                //  }
-                //}
-              }
-            })
-          );
-
-          dispatch(updateStatus('Complete'));
-          dispatch(changeSimulationRunnerCurrentStepIndex(6));
-        }, 10);
+    async (dispatch, getState) => {
+      if (getState().simRunner.simulationRunStatus !== 'Pending') {
+        return;
       }
+
+      dispatch(
+        initializeTimeRangeToRun({
+          name: runTimeRange,
+          custStartDate: getState().simConfig.startDate,
+          custEndDate: getState().simConfig.endDate,
+        })
+      );
+
+      dispatch(updateStatus('Running'));
+
+      const poolsToRun = getState().simConfig.simulationLiquidityPools;
+      dispatch(initializeSimulationsToRun({ pools: poolsToRun }));
+
+      await Promise.all(
+        getState().simRunner.runTimePeriodRanges.map(async (timeRange) => {
+          const simulationsToRun = getState().simRunner.simulationsToRun;
+          for (const targetSim of simulationsToRun) {
+            dispatch(startRun({ pool: targetSim, timeRange }));
+
+            if (!targetSim.updateRule.updateRuleRunUrl) {
+              continue;
+            }
+
+            try {
+              const response = await runSimulation({
+                url: targetSim.updateRule.updateRuleRunUrl,
+                simulationRunDto: {
+                  startUnix: new Date(timeRange.startDate).getTime(),
+                  endUnix: new Date(timeRange.endDate).getTime(),
+                  pool: ConvertToLiquidityPoolDto(targetSim),
+                  startDateString: timeRange.startDate,
+                  endDateString: timeRange.endDate,
+                  feeHooks: targetSim.feeHooks,
+                  swapImports: targetSim.swapImports,
+                  gasPriceImports: getState().simConfig.gasPriceImport,
+                },
+              });
+
+              const success = response as Success;
+              if (success.data === undefined) {
+                const error = response as Failure;
+                dispatch(
+                  failRun({
+                    id: targetSim.id,
+                    timeRangeName: timeRange.name,
+                    errorMessage: getFailureMessage(error.error),
+                  })
+                );
+                continue;
+              }
+
+              const convertedData = convertApiResponse(success.data);
+
+              dispatch(
+                addSimRunResults({
+                  id: {
+                    runId: targetSim.id,
+                    timeRangeName: timeRange.name,
+                  },
+                  results: convertedData.results,
+                  analysisResults: convertedData.analysisResults,
+                })
+              );
+              dispatch(
+                completeRun({
+                  id: targetSim.id,
+                  timeRangeName: timeRange.name,
+                })
+              );
+            } catch (error) {
+              dispatch(
+                failRun({
+                  id: targetSim.id,
+                  timeRangeName: timeRange.name,
+                  errorMessage:
+                    error instanceof Error ? error.message : String(error),
+                })
+              );
+            }
+          }
+        })
+      );
+
+      dispatch(updateStatus('Complete'));
+      dispatch(changeSimulationRunnerCurrentStepIndex(6));
     };
 
   return (
     <Col span={24}>
-      <Row hidden={currentTimeRangeSelection != 'custom'}>
+      <Row hidden={currentTimeRangeSelection !== 'custom'}>
         <Col span={24}>
-          <div style={{ padding: 10 }}>
+          <div className={runnerStyles.padding10}>
             <Button
               type="primary"
               size="large"
-              style={{ backgroundColor: 'green' }}
-              disabled={runStatusIndex == 2}
+              className={runnerStyles.greenButton}
+              disabled={runStatusIndex === 2}
               onClick={() => {
                 dispatch(changeSimulationRunnerCurrentStepIndex(5));
                 dispatch(changeSimulationRunnerCurrentRunTypeIndex(1));
                 dispatch(runSimulationsThunk('custom'));
-                dispatch(
-                  changeSimulationRunnerCurrentStepIndex(
-                    runStatusIndex == 2 ? 6 : 5
-                  )
-                );
               }}
             >
               Run Simulation

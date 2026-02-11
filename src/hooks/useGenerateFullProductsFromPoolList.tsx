@@ -24,37 +24,43 @@ export const useGenerateFullProductsFromPoolList = (
   >(undefined);
 
   useEffect(() => {
+    if (skip) {
+      setFullProductsLoading(false);
+      return;
+    }
+
     if (
-      baseProductsData &&
-      poolSnapshots &&
-      Object.keys(poolSnapshots).length !== 0 &&
-      tokenPrices &&
-      !skip
+      !poolSnapshots ||
+      Object.keys(poolSnapshots).length === 0 ||
+      !tokenPrices
     ) {
-      setFullProductsLoading(true);
-      try {
-        const timeSeriesData: ProductTimeSeriesData[] =
-          getTimeSeriesDataForProductList(
-            baseProductsData,
-            poolSnapshots,
-            tokenPrices
-          );
+      setFullProductsLoading(false);
+      return;
+    }
 
-        console.log('timeSeriesData:', timeSeriesData);
-
-        const productsData: ProductMap = getFullProductsFromSnapshots(
+    setFullProductsLoading(true);
+    try {
+      const timeSeriesData: ProductTimeSeriesData[] =
+        getTimeSeriesDataForProductList(
           baseProductsData,
-          timeSeriesData
+          poolSnapshots,
+          tokenPrices
         );
-        setFullProductsLoading(false);
-        setFullProductsData(productsData);
-      } catch (error) {
-        console.log('Error generating full products from pool list:', error);
-        setFullProductsError(
-          error as FetchBaseQueryError | SerializedError | ApolloError
-        );
-        setFullProductsLoading(false);
-      }
+
+      const productsData: ProductMap = getFullProductsFromSnapshots(
+        baseProductsData,
+        timeSeriesData
+      );
+
+      setFullProductsError(undefined);
+      setFullProductsData(productsData);
+    } catch (error) {
+      console.error('Error generating full products from pool list:', error);
+      setFullProductsError(
+        error as FetchBaseQueryError | SerializedError | ApolloError
+      );
+    } finally {
+      setFullProductsLoading(false);
     }
   }, [baseProductsData, poolSnapshots, tokenPrices, skip]);
 

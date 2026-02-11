@@ -5,8 +5,4 @@ export enum Benchmark {
   RISK_FREE = 'Rf',
 }
 
-export type BenchmarkType =
-  | Benchmark.HODL
-  | Benchmark.BTC
-  | Benchmark.MOMENTUM
-  | Benchmark.RISK_FREE;
+export type BenchmarkType = Benchmark;

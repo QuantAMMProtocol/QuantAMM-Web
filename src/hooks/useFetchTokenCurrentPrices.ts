@@ -20,7 +20,7 @@ type TokenPricesMap = Record<string, TokenPriceItem>;
  * - tokenPricesError: ApolloError | undefined
  */
 export const useFetchTokenCurrentPrices = (
-  poolData: GetPoolsQuery,
+  poolData: GetPoolsQuery | undefined,
   { skip }: { skip: boolean }
 ) => {
   // Derive unique chains from pool data

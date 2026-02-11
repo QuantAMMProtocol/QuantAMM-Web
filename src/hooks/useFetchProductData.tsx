@@ -15,7 +15,7 @@ export const useFetchProductData = (id: string, chain: GqlChain) => {
       id,
       chain,
     },
-    skip: !id || !chain || id == '',
+    skip: !id || !chain || id === '',
   });
 
   const { productData, error, loading } = useGenerateProductDataFromPool(
@@ -25,7 +25,7 @@ export const useFetchProductData = (id: string, chain: GqlChain) => {
   );
 
   useEffect(() => {
-    if (!loading && !error && productData?.id && productData.id != '') {
+    if (!loading && !error && productData?.id && productData.id !== '') {
       setProduct((prev) => {
         if (prev && shallowEqual(prev, productData)) {
           return prev;
@@ -34,7 +34,7 @@ export const useFetchProductData = (id: string, chain: GqlChain) => {
       });
     }
   }, [loading, error, productData]);
-  console.log('useFetchProductData', { id, chain, product, loading, error });
+
   return {
     product,
     productLoading: loading,

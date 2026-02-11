@@ -17,94 +17,124 @@ import {
   selectStartDate,
   setDateRange,
 } from '../simulationRunConfiguration/simulationRunConfigurationSlice';
-import { ChangeEvent, Dispatch, useRef } from 'react';
+import { ChangeEvent, useRef } from 'react';
 import { AgCharts } from 'ag-charts-react';
 import * as agCharts from 'ag-charts-community';
 import { selectAgChartTheme } from '../themes/themeSlice';
 import { changeSimulationRunnerCurrentStepIndex } from './simulationRunnerSlice';
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
+import { AppDispatch } from '../../app/store';
+import runnerStyles from './simulationRunnerCommon.module.css';
 
 const { RangePicker } = DatePicker;
 const dateFormat = 'YYYY/MM/DD';
 
+const isCsvFile = (file: File) =>
+  file.type === 'text/csv' || file.name.toLowerCase().endsWith('.csv');
+
+function parseCsvContent(csvContent: string) {
+  const rows = csvContent
+    .split(/\r?\n/)
+    .map((row) => row.trim())
+    .filter((row) => row.length > 0);
+
+  if (rows.length < 2) {
+    throw new Error('CSV must include headers and at least one data row.');
+  }
+
+  const headers = rows[0]
+    .split(',')
+    .map((header) => header.trim().toLowerCase());
+  const dataRows = rows
+    .slice(1)
+    .map((row) => row.split(',').map((cell) => cell.trim()));
+
+  return { headers, dataRows };
+}
+
+function getHeaderIndex(headers: string[], headerName: string): number {
+  const index = headers.indexOf(headerName.toLowerCase());
+  if (index === -1) {
+    throw new Error(`Missing CSV header: ${headerName}`);
+  }
+  return index;
+}
+
 const handleDownloadSwaps = (
   event: ChangeEvent<HTMLInputElement>,
-  dispatch: Dispatch<any>
+  dispatch: AppDispatch
 ) => {
   const file = event.target.files?.[0];
 
-  if (file && file.type === 'text/csv') {
-    // Ensure it's a CSV file
+  if (file && isCsvFile(file)) {
     const reader = new FileReader();
     reader.onload = (loadEvent) => {
       const csvContent = loadEvent.target?.result;
       try {
-        const rows = (csvContent as string).split('\n');
-        const headers = rows[0].split(',');
+        const { headers, dataRows } = parseCsvContent(String(csvContent ?? ''));
+        const unixIndex = getHeaderIndex(headers, 'unix');
+        const tokenInIndex = getHeaderIndex(headers, 'tokenIn');
+        const tokenOutIndex = getHeaderIndex(headers, 'tokenOut');
+        const amountInIndex = getHeaderIndex(headers, 'amountIn');
 
-        const rowsWithoutHeader = rows.slice(1, rows.length - 1);
-        // Assuming SwapImport has properties: property1, property2, property3, etc.
-        const swapImports: SwapImport[] = rowsWithoutHeader.map((row) => {
-          const values = row.split(',');
+        const swapImports: SwapImport[] = dataRows.map((values) => {
+          const unix = Number(values[unixIndex]);
+          const amountIn = Number(values[amountInIndex]);
+
           return {
-            unix: Number(values[headers.indexOf('unix')]),
-            tokenIn: values[headers.indexOf('tokenIn')],
-            tokenOut: values[headers.indexOf('tokenOut')],
-            amountIn:
-              Number(values[headers.indexOf('amountIn')]) > 0 //could fail the import here but -ve to 0 is fine
-                ? Number(values[headers.indexOf('amountIn')])
-                : 0,
-          } as unknown as SwapImport;
+            unix: Number.isFinite(unix) ? unix : 0,
+            tokenIn: values[tokenInIndex],
+            tokenOut: values[tokenOutIndex],
+            amountIn: Number.isFinite(amountIn) && amountIn > 0 ? amountIn : 0,
+          };
         });
 
         dispatch(
           addSwapImportToPools({
-            swapImports: swapImports,
+            swapImports,
           })
         );
       } catch (error) {
-        console.error('Error parsing JSON file:', error);
-        alert('Error parsing JSON file. Please check the file format.');
+        alert('Error parsing CSV file. Please check the file format.');
       }
+      event.target.value = '';
     };
 
     reader.onerror = () => {
-      console.error('Error reading the file');
       alert('Error reading the file.');
+      event.target.value = '';
     };
 
-    reader.readAsText(file); // Read the file as a text string
+    reader.readAsText(file);
   } else {
-    alert('Please upload a valid JSON file.');
+    alert('Please upload a valid CSV file.');
+    event.target.value = '';
   }
 };
 
 const handleDownloadGas = (
   event: ChangeEvent<HTMLInputElement>,
-  dispatch: Dispatch<any>
+  dispatch: AppDispatch
 ) => {
   const file = event.target.files?.[0];
 
-  if (file && file.type === 'text/csv') {
-    // Ensure it's a CSV file
+  if (file && isCsvFile(file)) {
     const reader = new FileReader();
     reader.onload = (loadEvent) => {
       const csvContent = loadEvent.target?.result;
       try {
-        const rows = (csvContent as string).split('\n');
-        const headers = rows[0].split(',');
+        const { headers, dataRows } = parseCsvContent(String(csvContent ?? ''));
+        const unixIndex = getHeaderIndex(headers, 'unix');
+        const usdIndex = getHeaderIndex(headers, 'usd');
 
-        const rowsWithoutHeader = rows.slice(1, rows.length - 1);
-        // Assuming SwapImport has properties: property1, property2, property3, etc.
-        const gasSteps: GasStep[] = rowsWithoutHeader.map((row) => {
-          const values = row.split(',');
+        const gasSteps: GasStep[] = dataRows.map((values) => {
+          const unix = Number(values[unixIndex]);
+          const usdValue = Number(values[usdIndex]);
+
           return {
-            unix: Number(values[headers.indexOf('unix')]),
-            value:
-              Number(values[headers.indexOf('USD')]) > 0
-                ? Number(values[headers.indexOf('USD')])
-                : 0,
-          } as unknown as GasStep;
+            unix: Number.isFinite(unix) ? unix : 0,
+            value: Number.isFinite(usdValue) && usdValue > 0 ? usdValue : 0,
+          };
         });
 
         dispatch(
@@ -113,30 +143,28 @@ const handleDownloadGas = (
           })
         );
       } catch (error) {
-        console.error('Error parsing JSON file:', error);
-        alert('Error parsing JSON file. Please check the file format.');
+        alert('Error parsing CSV file. Please check the file format.');
       }
+      event.target.value = '';
     };
 
     reader.onerror = () => {
-      console.error('Error reading the file');
       alert('Error reading the file.');
+      event.target.value = '';
     };
 
-    reader.readAsText(file); // Read the file as a text string
+    reader.readAsText(file);
   } else {
-    alert('Please upload a valid JSON file.');
+    alert('Please upload a valid CSV file.');
+    event.target.value = '';
   }
 };
 
+//TODO CH split into subcomponents
 export function SimulationRunnerTimePeriodStep() {
-  const disabledDate = (current: any) => {
-    // Can not select days before today and today
-    const yesterdayStr = dayjs().subtract(1, 'day').format('YYYY-MM-DD'); // Can not select days before today and today
-    return (
-      current < dayjs('2021-11-20', 'YYYY-MM-DD') ||
-      current > dayjs(yesterdayStr, 'YYYY-MM-DD')
-    );
+  const disabledDate = (current: Dayjs) => {
+    const yesterday = dayjs().subtract(1, 'day').endOf('day');
+    return current < dayjs('2021-11-20', 'YYYY-MM-DD') || current > yesterday;
   };
 
   const dispatch = useAppDispatch();
@@ -162,24 +190,24 @@ export function SimulationRunnerTimePeriodStep() {
               <Divider orientation="center">
                 Select Time Range
                 <Tooltip title="Select the backtest range period">
-                  <InfoCircleOutlined style={{ paddingLeft: '5px' }} />
+                  <InfoCircleOutlined className={runnerStyles.infoIcon} />
                 </Tooltip>
               </Divider>
               <RangePicker
                 style={{
+                  //staying inline given rendering priorities
                   marginLeft: '10px',
                   width: '100%',
                 }}
                 disabledDate={disabledDate}
-                defaultValue={[
-                  dayjs(startDate, dateFormat),
-                  dayjs(endDate, dateFormat),
-                ]}
                 value={[
                   dayjs(startDate, dateFormat),
                   dayjs(endDate, dateFormat),
                 ]}
                 onChange={(_dates, dateStrings) => {
+                  if (!dateStrings[0] || !dateStrings[1]) {
+                    return;
+                  }
                   dispatch(
                     setDateRange({
                       startDate: dateStrings[0] + ' 00:00:00',
@@ -189,7 +217,7 @@ export function SimulationRunnerTimePeriodStep() {
                 }}
               />
             </Col>
-            <Col span={24} style={{ paddingLeft: '10px' }}>
+            <Col span={24} className={runnerStyles.leftPadding10}>
               <Divider orientation="center">
                 Import Swaps
                 <Tooltip
@@ -200,71 +228,67 @@ export function SimulationRunnerTimePeriodStep() {
                 V2 will allow multiple trades ordered on the same unix timestamp. 
                 The import will be rejected if there are multiple"
                 >
-                  <InfoCircleOutlined style={{ paddingLeft: '5px' }} />
+                  <InfoCircleOutlined className={runnerStyles.infoIcon} />
                 </Tooltip>
               </Divider>
             </Col>
-            <Col span={24} style={{ paddingLeft: '10px' }}>
+            <Col span={24} className={runnerStyles.leftPadding10}>
               <p
                 hidden={simulationPools.length > 0}
-                style={{ marginBottom: '10px' }}
+                className={runnerStyles.marginBottom10}
               >
                 You need to configure pools to run in the pool step before
                 importing swaps.
               </p>
-              <div hidden={simulationPools.length == 0}>
+              <div hidden={simulationPools.length === 0}>
                 <input
                   type="file"
                   accept=".csv"
                   ref={swapInputRef}
-                  style={{ display: 'none' }}
+                  className={runnerStyles.hiddenFileInput}
                   onChange={(event) => handleDownloadSwaps(event, dispatch)}
                 />
-                <label htmlFor="csvUpload">
-                  <Button
-                    type="primary"
-                    onClick={() => swapInputRef.current?.click()}
-                    disabled={!coinDataLoaded}
-                  >
-                    Load Swap CSV (optional)
-                  </Button>
-                </label>
+                <Button
+                  type="primary"
+                  onClick={() => swapInputRef.current?.click()}
+                  disabled={!coinDataLoaded}
+                >
+                  Load Swap CSV (optional)
+                </Button>
 
                 <p>Expected CSV header format:</p>
-                <p>unix, tokenIn, tokenOut, AmountIn</p>
+                <p>unix, tokenIn, tokenOut, amountIn</p>
               </div>
             </Col>
-            <Col span={24} style={{ paddingLeft: '10px' }}>
+            <Col span={24} className={runnerStyles.leftPadding10}>
               <Divider orientation="center">
                 Gas Settings
                 <Tooltip title="Default is 0 gas cost. However you can import daily gas costs in USD which allow more accurate no arbitrage/no trade region modelling.">
-                  <InfoCircleOutlined style={{ paddingLeft: '5px' }} />
+                  <InfoCircleOutlined className={runnerStyles.infoIcon} />
                 </Tooltip>
               </Divider>
               <p
                 hidden={simulationPools.length > 0}
-                style={{ marginBottom: '10px' }}
+                className={runnerStyles.marginBottom10}
               >
                 You need to configure pools to run in the pool step before
                 importing swaps.
               </p>
-              <div hidden={simulationPools.length == 0}>
+              <div hidden={simulationPools.length === 0}>
                 <input
                   type="file"
                   accept=".csv"
                   ref={gasInputRef}
-                  style={{ display: 'none' }}
+                  className={runnerStyles.hiddenFileInput}
                   onChange={(event) => handleDownloadGas(event, dispatch)}
                 />
-                <label htmlFor="gasUpload">
-                  <Button
-                    type="primary"
-                    onClick={() => gasInputRef.current?.click()}
-                    disabled={!coinDataLoaded}
-                  >
-                    Load Swap Cost (optional)
-                  </Button>
-                </label>
+                <Button
+                  type="primary"
+                  onClick={() => gasInputRef.current?.click()}
+                  disabled={!coinDataLoaded}
+                >
+                  Load Gas Cost CSV (optional)
+                </Button>
 
                 <p>Expected CSV header format:</p>
                 <p>unix, USD</p>
@@ -274,7 +298,7 @@ export function SimulationRunnerTimePeriodStep() {
             </Col>
             <Col span={24}>
               <Button
-                style={{ backgroundColor: 'green', marginLeft: '10px' }}
+                className={`${runnerStyles.greenButton} ${runnerStyles.marginLeft10}`}
                 onClick={() => {
                   dispatch(changeSimulationRunnerCurrentStepIndex(3));
                 }}
@@ -284,11 +308,11 @@ export function SimulationRunnerTimePeriodStep() {
             </Col>
           </Row>
         </Col>
-        <Col span={18} hidden={currentTimeRangeSelection != 'custom'}>
+        <Col span={18} hidden={currentTimeRangeSelection !== 'custom'}>
           <CustomTimePeriodPoolPriceHistoryChart />
           <Row>
             <Col span={24}>
-              <div hidden={gasSteps.length == 0}>
+              <div hidden={gasSteps.length === 0}>
                 <AgCharts
                   options={{
                     height: 300,

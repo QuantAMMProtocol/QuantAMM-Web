@@ -1,9 +1,9 @@
 import {
   Button,
+  Checkbox,
   Col,
   DatePicker,
   Divider,
-  Radio,
   Row,
   Select,
   Tooltip,
@@ -11,7 +11,7 @@ import {
 
 import { InfoCircleOutlined } from '@ant-design/icons';
 
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import { SimulatorGuide } from '../documentation/simulatorGuide';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { changeSimulationRunnerCurrentStepIndex } from './simulationRunnerSlice';
@@ -35,10 +35,12 @@ import {
 } from '../simulationRunConfiguration/simulationRunConfigurationSlice';
 import { SimulationRunButton } from './simulationRunButton';
 import { useMemo } from 'react';
+import runnerStyles from './simulationRunnerCommon.module.css';
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 
+//TODO CH split into subcomponents
 export function SimulatorOptions() {
   const coinDataLoaded = useAppSelector(selectCoinPriceDataLoaded);
   const simplifiedPools = useAppSelector(selectedSimplifiedPools);
@@ -58,14 +60,12 @@ export function SimulatorOptions() {
   const simplifiedIncludeRvr = useAppSelector(
     selectSimulationSimplifiedIncludeRvrRuns
   );
-    const disabledDate = (current: any) => {
-      // Can not select days before today and today
-      const yesterdayStr = dayjs().subtract(1, 'day').format('YYYY-MM-DD'); // Can not select days before today and today
-      return (
-        current < dayjs('2021-11-20', 'YYYY-MM-DD') ||
-        current > dayjs(yesterdayStr, 'YYYY-MM-DD')
-      );
-    };
+  const disabledDate = (current: Dayjs) => {
+    const yesterday = dayjs().subtract(1, 'day').endOf('day');
+    return (
+      current < dayjs('2021-11-20', 'YYYY-MM-DD') || current > yesterday
+    );
+  };
 
   const selectedCoinCodes = useMemo(() => {
     return selectedCoins.map((x) => x.coinCode);
@@ -75,10 +75,10 @@ export function SimulatorOptions() {
   return (
     <div>
       <Row>
-        <Col span={12} style={{ paddingLeft: 30, paddingRight:30, paddingTop:0 }}>
+        <Col span={12} className={runnerStyles.panelPadding}>
           <Row>
             <Col span={24}>
-              <h1 style={{ color: '#e6ce97' }}>
+              <h1 className={runnerStyles.optionsHeader}>
                 QuantAMM Historic Simulator
               </h1>
             </Col>
@@ -93,7 +93,7 @@ export function SimulatorOptions() {
                 href="/examples"
                 type="primary"
                 size="large"
-                style={{ backgroundColor: 'green' }}
+                className={runnerStyles.greenButton}
               >
                 View Example Results
               </Button>
@@ -120,10 +120,7 @@ export function SimulatorOptions() {
                       disabled={!coinDataLoaded}
                       allowClear
                       value={selectedCoinCodes}
-                      style={{
-                        marginTop: '10px',
-                        width: '150px',
-                      }}
+                      className={runnerStyles.optionsCoinSelect}
                       placeholder="Select coins"
                       onSelect={(item: string) =>
                         dispatch(upsertSelectedCoins(item))
@@ -131,19 +128,20 @@ export function SimulatorOptions() {
                       onDeselect={(item: string) => {
                         dispatch(removeSelectedCoins(item));
                       }}
-                      children={availableCoins.map((object) => (
+                    >
+                      {availableCoins.map((object) => (
                         <Option key={object.coinCode} value={object.coinCode}>
                           {object.coinCode}
                         </Option>
                       ))}
-                    />
+                    </Select>
                   </Col>
                 </Col>
                 <Col span={10}>
                   <Col span={24}>
                     2. Choose pools
                     <Tooltip title="Gyroscope requires token specific configuration, use the advanced simulator to configure">
-                      <InfoCircleOutlined style={{ paddingLeft: '5px' }} />
+                      <InfoCircleOutlined className={runnerStyles.infoIcon} />
                     </Tooltip>
                   </Col>
                   <Col span={24}>
@@ -153,10 +151,7 @@ export function SimulatorOptions() {
                       disabled={!coinDataLoaded}
                       allowClear
                       value={simplifiedPools}
-                      style={{
-                        marginTop: '10px',
-                        width: '250px',
-                      }}
+                      className={runnerStyles.optionsPoolSelect}
                       placeholder="Select pools to run"
                       onSelect={(item: string) =>
                         dispatch(upsertSelectedSimplifiedPool(item))
@@ -164,11 +159,12 @@ export function SimulatorOptions() {
                       onDeselect={(item: string) => {
                         dispatch(removeSelectedSimplifiedPool(item));
                       }}
-                      children={(selectedCoins.length > 2
+                    >
+                      {(selectedCoins.length > 2
                         ? simplifiedPoolVariations.filter(
                             (x) =>
-                              x.toLowerCase().indexOf('cow') == -1 &&
-                              x.toLowerCase().indexOf('gyroscope') == -1
+                              x.toLowerCase().indexOf('cow') === -1 &&
+                              x.toLowerCase().indexOf('gyroscope') === -1
                           )
                         : simplifiedPoolVariations
                       ).map((object) => (
@@ -176,30 +172,28 @@ export function SimulatorOptions() {
                           {object}
                         </Option>
                       ))}
-                    />
+                    </Select>
                   </Col>
                   <Col
                     span={24}
-                    style={{ marginTop: '10px', marginLeft: '5px' }}
+                    className={runnerStyles.optionsToggleRow}
                   >
-                    <Radio
-                      value={simplifiedIncludeLvr}
+                    <Checkbox
                       checked={simplifiedIncludeLvr}
-                      onClick={() => {
+                      onChange={() => {
                         dispatch(changeSimulationSimplifiedIncludeLvrRuns());
                       }}
                     >
                       Show LVR
-                    </Radio>
-                    <Radio
-                      value={simplifiedIncludeLvr}
+                    </Checkbox>
+                    <Checkbox
                       checked={simplifiedIncludeRvr}
-                      onClick={() => {
+                      onChange={() => {
                         dispatch(changeSimulationSimplifiedIncludeRvRuns());
                       }}
                     >
                       Show RVR
-                    </Radio>
+                    </Checkbox>
                   </Col>
                 </Col>
                 <Col span={8}>
@@ -207,17 +201,16 @@ export function SimulatorOptions() {
                   <Col span={24}>
                     <RangePicker
                       size="small"
-                      style={{ marginTop: '10px', fontSize: '7x' }}
+                      className={runnerStyles.optionsRangePicker}
                       disabledDate={disabledDate}
-                      defaultValue={[
-                        dayjs(startDate, dateFormat),
-                        dayjs(endDate, dateFormat),
-                      ]}
                       value={[
                         dayjs(startDate, dateFormat),
                         dayjs(endDate, dateFormat),
                       ]}
                       onChange={(_dates, dateStrings) => {
+                        if (!dateStrings[0] || !dateStrings[1]) {
+                          return;
+                        }
                         dispatch(
                           setDateRange({
                             startDate: dateStrings[0] + ' 00:00:00',
@@ -248,7 +241,7 @@ export function SimulatorOptions() {
               <Button
                 type="primary"
                 size="large"
-                style={{ backgroundColor: 'green' }}
+                className={runnerStyles.greenButton}
                 onClick={() => {
                   dispatch(changeSimulationRunnerCurrentStepIndex(1));
                 }}
@@ -258,7 +251,7 @@ export function SimulatorOptions() {
             </Col>
           </Row>
         </Col>
-        <Col span={12}  style={{ paddingLeft: 30, paddingRight:30, paddingTop:0 }}>
+        <Col span={12} className={runnerStyles.panelPadding}>
           <SimulatorGuide />
         </Col>
       </Row>

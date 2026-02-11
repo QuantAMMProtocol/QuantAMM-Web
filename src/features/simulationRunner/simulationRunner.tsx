@@ -39,8 +39,10 @@ import { SimulationResultSaveToCompareTab } from '../simulationResults/simulatio
 import { SimulationRunnerHistoricInProgress } from './simulationRunnerHistoricInProgress';
 import { useRef, useState } from 'react';
 import { SimulatorOptions } from './simulationOptions';
+import runnerStyles from './simulationRunnerCommon.module.css';
 
 
+//TODO CH split into subcomponents
 export default function SimulationRunner() {
   const dispatch = useAppDispatch();
 
@@ -54,36 +56,34 @@ export default function SimulationRunner() {
     selectSimulationRunnerCurrentStepIndex
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
-  const [forceViewResults, setForceViewResults] = useState(false); //DEV TODO
+  const [forceViewResults, setForceViewResults] = useState(false);
 
   const showModal = () => {
     setIsModalOpen(true);
   };
 
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleCancel = () => {
+  const closeModal = () => {
     setIsModalOpen(false);
   };
 
 
   const onChange = (value: number) => {
-    if (value == 5 && runStatusIndex != 2) {
+    if (value === 5 && runStatusIndex !== 2) {
       return;
     }
 
     dispatch(changeSimulationRunnerCurrentStepIndex(value));
   };
 
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const paramsFileInputRef = useRef<HTMLInputElement | null>(null);
+  const resultsFileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const handleButtonClick = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click(); // Only click if the ref is not null
-    }
+  const handleParamsImportClick = () => {
+    paramsFileInputRef.current?.click();
+  };
+
+  const handleResultsImportClick = () => {
+    resultsFileInputRef.current?.click();
   };
 
   function getPoolConstituentSelectionStep(): JSX.Element {
@@ -96,7 +96,7 @@ export default function SimulationRunner() {
               <Divider>
                 1. Choose Pool Constituents
                 <Tooltip title="Pool constituents need to be selected. The TVL can be modified to change the starting weights.">
-                  <InfoCircleOutlined style={{ paddingLeft: '5px' }} />
+                  <InfoCircleOutlined className={runnerStyles.infoIcon} />
                 </Tooltip>
               </Divider>
             </Col>
@@ -104,7 +104,7 @@ export default function SimulationRunner() {
               <Divider>
                 2. Choose Pools
                 <Tooltip title="Balancer-v3 can run various pool invariants and dynamic AMM types. Select those AMM types you would like to simulate here.">
-                  <InfoCircleOutlined style={{ paddingLeft: '5px' }} />
+                  <InfoCircleOutlined className={runnerStyles.infoIcon} />
                 </Tooltip>
               </Divider>
             </Col>
@@ -112,7 +112,7 @@ export default function SimulationRunner() {
               <Divider>
                 3. Review Selected Pools
                 <Tooltip title="Review the pools you have configured and delete any that you do not want to run.">
-                  <InfoCircleOutlined style={{ paddingLeft: '5px' }} />
+                  <InfoCircleOutlined className={runnerStyles.infoIcon} />
                 </Tooltip>
               </Divider>
             </Col>
@@ -142,10 +142,10 @@ export default function SimulationRunner() {
       case 4:
         return <SimulationRunnerFinalReviewStep />;
       case 5:
-        if (runTypeIndex == 1) {
+        if (runTypeIndex === 1) {
           return <SimulationRunnerHistoricInProgress />;
-        } else if (runTypeIndex == 2) {
-          return <div>Traning progress</div>;
+        } else if (runTypeIndex === 2) {
+          return <div>Training progress</div>;
         } else {
           return <SimulationRunnerFinalReviewStep />;
         }
@@ -163,21 +163,15 @@ export default function SimulationRunner() {
             forceViewResults={false}
           />
         );
+      default:
+        return <div />;
     }
-    return <div></div>;
   }
 
   return (
     <div>
-      <Row style={{ padding: 10, display: 'flex', alignItems: 'center' }}>
-        <Col
-          span={2}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
+      <Row className={runnerStyles.runnerHeaderRow}>
+        <Col span={2} className={runnerStyles.centerAlignedCol}>
           <Button
             type="primary"
             className={styles.importResetButton}
@@ -198,13 +192,13 @@ export default function SimulationRunner() {
                 title: 'Options',
                 icon: (
                   <Tooltip title="Choose your tokens and initial weights. Select which trading functions and strategies you want to test.">
-                    <OrderedListOutlined style={{ paddingLeft: '5px' }} />
+                    <OrderedListOutlined className={runnerStyles.infoIcon} />
                   </Tooltip>
                 ),
                 status:
                   runStatusIndex > 0
                     ? 'wait'
-                    : runStatusIndex == 0
+                    : runStatusIndex === 0
                       ? 'process'
                       : 'finish',
               },
@@ -212,13 +206,13 @@ export default function SimulationRunner() {
                 title: 'Pool',
                 icon: (
                   <Tooltip title="Choose your tokens and initial weights. Select which trading functions and strategies you want to test.">
-                    <PieChartOutlined style={{ paddingLeft: '5px' }} />
+                    <PieChartOutlined className={runnerStyles.infoIcon} />
                   </Tooltip>
                 ),
                 status:
                   runStatusIndex > 0
                     ? 'wait'
-                    : runStatusIndex == 0
+                    : runStatusIndex === 0
                       ? 'process'
                       : 'finish',
               },
@@ -226,13 +220,13 @@ export default function SimulationRunner() {
                 title: 'Time Range',
                 icon: (
                   <Tooltip title="Select the time range you want to model and optionally add a time series of retail swaps.">
-                    <RiseOutlined style={{ paddingLeft: '5px' }} />
+                    <RiseOutlined className={runnerStyles.infoIcon} />
                   </Tooltip>
                 ),
                 status:
                   runStatusIndex > 0
                     ? 'wait'
-                    : runStatusIndex == 0
+                    : runStatusIndex === 0
                       ? 'process'
                       : 'finish',
               },
@@ -240,13 +234,13 @@ export default function SimulationRunner() {
                 title: 'Hooks',
                 icon: (
                   <Tooltip title="You can add swap fees as a hook to the simulation. This is useful for modeling fee changes over time. V1 allows you to import fees as a time series from an externally-calculated model.">
-                    <ClockCircleOutlined style={{ paddingLeft: '5px' }} />
+                    <ClockCircleOutlined className={runnerStyles.infoIcon} />
                   </Tooltip>
                 ),
                 status:
                   runStatusIndex > 0
                     ? 'wait'
-                    : runStatusIndex == 0
+                    : runStatusIndex === 0
                       ? 'process'
                       : 'finish',
               },
@@ -254,13 +248,13 @@ export default function SimulationRunner() {
                 title: 'Final Review',
                 icon: (
                   <Tooltip title="Review all the settings before running the simulation.">
-                    <CheckCircleOutlined style={{ paddingLeft: '5px' }} />
+                    <CheckCircleOutlined className={runnerStyles.infoIcon} />
                   </Tooltip>
                 ),
                 status:
                   runStatusIndex > 0
                     ? 'wait'
-                    : runStatusIndex == 0
+                    : runStatusIndex === 0
                       ? 'process'
                       : 'finish',
               },
@@ -268,13 +262,13 @@ export default function SimulationRunner() {
                 title: 'Run status',
                 icon: (
                   <Tooltip title="Provides status updates while the backend is running the simulations">
-                    <RedoOutlined style={{ paddingLeft: '5px' }} />
+                    <RedoOutlined className={runnerStyles.infoIcon} />
                   </Tooltip>
                 ),
                 status:
                   runStatusIndex > 0
                     ? 'wait'
-                    : runStatusIndex == 0
+                    : runStatusIndex === 0
                       ? 'process'
                       : 'finish',
                 disabled: runStatusIndex < 1,
@@ -283,13 +277,13 @@ export default function SimulationRunner() {
                 title: 'Results',
                 icon: (
                   <Tooltip title="View and compare performance of different pools and parameters in the simulation run. This includes day by day changes to see how market conditions affect rebalancing.">
-                    <DotChartOutlined style={{ paddingLeft: '5px' }} />
+                    <DotChartOutlined className={runnerStyles.infoIcon} />
                   </Tooltip>
                 ),
                 status:
                   runStatusIndex > 0
                     ? 'wait'
-                    : runStatusIndex == 0
+                    : runStatusIndex === 0
                       ? 'process'
                       : 'finish',
                 disabled: runStatusIndex < 2,
@@ -298,13 +292,13 @@ export default function SimulationRunner() {
                 title: 'Save Results',
                 icon: (
                   <Tooltip title="You can either download a copy of the results to analyse or import at a later date. You can also save the results for comparison in the multi-run comparison tool">
-                    <SaveOutlined style={{ paddingLeft: '5px' }} />
+                    <SaveOutlined className={runnerStyles.infoIcon} />
                   </Tooltip>
                 ),
                 status:
                   runStatusIndex > 0
                     ? 'wait'
-                    : runStatusIndex == 0
+                    : runStatusIndex === 0
                       ? 'process'
                       : 'finish',
                 disabled: runStatusIndex < 2,
@@ -312,14 +306,7 @@ export default function SimulationRunner() {
             ]}
           ></Steps>
         </Col>
-        <Col
-          span={2}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
+        <Col span={2} className={runnerStyles.centerAlignedCol}>
           <Button
             type="primary"
             className={styles.importResetButton}
@@ -339,32 +326,32 @@ export default function SimulationRunner() {
       <Modal
         title="Import File or Select Balancer Pool"
         open={isModalOpen}
-        onOk={handleOk}
-        onCancel={handleCancel}
+        onOk={closeModal}
+        onCancel={closeModal}
       >
         <Col span={24} className={styles.modalContent}>
           <h4>Import from File:</h4>
-          <Button onClick={handleButtonClick}>
-            <input
-              type="file"
-              style={{ display: 'none' }}
-              ref={fileInputRef}
-              onChange={(event) => handleDownloadParams(event, dispatch)}
-            />
+          <input
+            type="file"
+            className={runnerStyles.hiddenFileInput}
+            ref={paramsFileInputRef}
+            onChange={(event) => handleDownloadParams(event, dispatch)}
+          />
+          <Button onClick={handleParamsImportClick}>
             Set Parameters to downloaded Run Params
           </Button>
 
           <div className={styles.orDivider}>OR</div>
 
-          <Button onClick={handleButtonClick}>
-            <input
-              type="file"
-              style={{ display: 'none' }}
-              ref={fileInputRef}
-              onChange={(event) =>
-                handleDownloadResults(event, dispatch, setForceViewResults)
-              }
-            />
+          <input
+            type="file"
+            className={runnerStyles.hiddenFileInput}
+            ref={resultsFileInputRef}
+            onChange={(event) =>
+              handleDownloadResults(event, dispatch, setForceViewResults)
+            }
+          />
+          <Button onClick={handleResultsImportClick}>
             Import Results from Run
           </Button>
 

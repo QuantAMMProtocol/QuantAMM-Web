@@ -25,23 +25,26 @@ export const useGenerateProductDataFromPool = (
   >(undefined);
 
   useEffect(() => {
+    let isMounted = true;
+
     if (
       !isLoadingPools &&
       !poolError &&
       poolData?.poolGetPool?.id &&
-      poolData?.poolGetPool?.id != ''
+      poolData.poolGetPool.id !== ''
     ) {
       const fetchData = async () => {
         setLoading(true);
+        setError(undefined);
         try {
           const pool = {
-            id: poolData.poolGetPool?.id,
-            chain: poolData.poolGetPool?.chain,
+            id: poolData.poolGetPool.id,
+            chain: poolData.poolGetPool.chain,
           };
 
           const poolSnapshotsMap = await getPoolSnapshotsMap([pool]);
 
-          const tokens = poolData.poolGetPool?.poolTokens.map(
+          const tokens = poolData.poolGetPool.poolTokens.map(
             (token) => `${pool.chain}:${getTokenAddress(token)}`
           );
 
@@ -61,31 +64,37 @@ export const useGenerateProductDataFromPool = (
             timeSeriesData
           );
 
-          setProductData(generatedProduct);
+          if (isMounted) {
+            setProductData(generatedProduct);
+          }
         } catch (error) {
           console.error(
             'useGenerateProductDataFromPool - Error fetching data:',
             error
           );
-          setError(
-            error as FetchBaseQueryError | SerializedError | ApolloError
-          );
+          if (isMounted) {
+            setError(
+              error as FetchBaseQueryError | SerializedError | ApolloError
+            );
+          }
         } finally {
-          setLoading(false);
+          if (isMounted) {
+            setLoading(false);
+          }
         }
       };
 
-      fetchData().catch((error) => {
-        console.error(
-          'useGenerateProductDataFromPool - Error in fetchData:',
-          error
-        );
-        setError(error as FetchBaseQueryError | SerializedError | ApolloError);
-        setLoading(false);
-      });
+      void fetchData();
     } else {
-      setLoading(false);
+      if (poolError) {
+        setError(poolError);
+      }
+      setLoading(Boolean(isLoadingPools));
     }
+
+    return () => {
+      isMounted = false;
+    };
   }, [poolData, poolError, isLoadingPools]);
 
   return {

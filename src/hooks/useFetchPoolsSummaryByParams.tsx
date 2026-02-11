@@ -14,18 +14,19 @@ const DEFAULT_SKIPPED_POOLS = 0;
 export const useFetchPoolsSummaryByParams = (
   params: GetPoolsSummaryQueryVariables
 ) => {
+  const { first, orderBy, orderDirection, skip, where } = params;
+
   const { data, loading, error } = useGetPoolsSummaryQuery({
     variables: {
-      first: DEFAULT_POOLS_LIMIT,
-      orderBy: DEFAULT_ORDER_BY,
-      orderDirection: DEFAULT_ORDER_DIRECTION,
-      skip: DEFAULT_SKIPPED_POOLS,
+      first: first ?? DEFAULT_POOLS_LIMIT,
+      orderBy: orderBy ?? DEFAULT_ORDER_BY,
+      orderDirection: orderDirection ?? DEFAULT_ORDER_DIRECTION,
+      skip: skip ?? DEFAULT_SKIPPED_POOLS,
       where: {
         minTvl: DEFAULT_MIN_TVL,
-        tagNotIn:["BLACK_LISTED"],
-        ...params.where,
+        tagNotIn: ['BLACK_LISTED'],
+        ...where,
       },
-      ...params,
     },
   });
 
