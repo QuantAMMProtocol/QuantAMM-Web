@@ -189,8 +189,7 @@ export function ChannelFollowingUpdateRule(props: DocProps) {
                     {
                       rules.find(
                         (x) => x.updateRuleName === 'Channel Following'
-                      )
-                        ?.updateRuleResultProfileSummary
+                      )?.updateRuleResultProfileSummary
                     }
                   </p>
                 </div>

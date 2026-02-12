@@ -231,8 +231,8 @@ export function SimulationRunnerTimePeriodStep() {
             hidden={simulationPools.length > 0}
             className={runnerStyles.marginBottom10}
           >
-            You need to configure pools to run in the pool step before
-            importing swaps.
+            You need to configure pools to run in the pool step before importing
+            swaps.
           </p>
           <div hidden={simulationPools.length === 0}>
             <input
@@ -265,8 +265,8 @@ export function SimulationRunnerTimePeriodStep() {
             hidden={simulationPools.length > 0}
             className={runnerStyles.marginBottom10}
           >
-            You need to configure pools to run in the pool step before
-            importing swaps.
+            You need to configure pools to run in the pool step before importing
+            swaps.
           </p>
           <div hidden={simulationPools.length === 0}>
             <input
@@ -317,7 +317,9 @@ export function SimulationRunnerTimePeriodStep() {
                   {
                     type: 'time',
                     interval: {
-                      step: agCharts.time.month.every(gasSteps.length > 150 ? 3 : 1),
+                      step: agCharts.time.month.every(
+                        gasSteps.length > 150 ? 3 : 1
+                      ),
                     },
                     label: {
                       format: '%m/%y',

@@ -6,8 +6,7 @@ import {
   useGetCurrentPricesQuery,
 } from '../__generated__/graphql-types';
 
-type TokenPriceItem =
-  GetCurrentPricesQuery['tokenGetCurrentPrices'][number];
+type TokenPriceItem = GetCurrentPricesQuery['tokenGetCurrentPrices'][number];
 
 type TokenPricesMap = Record<string, TokenPriceItem>;
 

@@ -57,7 +57,9 @@ export function AddPoolButtonSection({
           {isRunLocked ? 'Reset Sim' : 'Add pool to simulator'}
         </Button>
         <p
-          hidden={!(localPoolType.requiresPoolNumeraire && poolNumeraire === '')}
+          hidden={
+            !(localPoolType.requiresPoolNumeraire && poolNumeraire === '')
+          }
           className={styles.errorText}
         >
           Mandatory Pool Numeraire Required
@@ -86,7 +88,9 @@ export function SummaryAndContinueSection({
         <Col span={24}>
           <ConfiguredSimulationsToRunSummary />
           <Button
-            disabled={!coinDataLoaded || isRunLocked || simulationPoolsLength === 0}
+            disabled={
+              !coinDataLoaded || isRunLocked || simulationPoolsLength === 0
+            }
             className={styles.continueButton}
             onClick={onContinue}
           >

@@ -250,9 +250,7 @@ export function LiquidityPoolConfiguration() {
               <Col span={20}>
                 <InputNumber
                   disabled={
-                    !coinDataLoaded ||
-                    isRunLocked ||
-                    totalSelectedPoolSize > 8
+                    !coinDataLoaded || isRunLocked || totalSelectedPoolSize > 8
                   }
                   status={isInitialValueInvalid ? 'error' : undefined}
                   addonBefore={'$'}

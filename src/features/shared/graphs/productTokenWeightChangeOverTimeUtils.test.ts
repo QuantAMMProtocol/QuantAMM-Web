@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { Product, ProductPoolConstituents, TimeSeriesData } from '../../../models';
+import {
+  Product,
+  ProductPoolConstituents,
+  TimeSeriesData,
+} from '../../../models';
 import {
   getBenchmarkEqualWeightedAmounts,
   getFilteredConstituents,
@@ -66,9 +70,7 @@ describe('productTokenWeightChangeOverTimeUtils view-model logic', () => {
       createTimeStep(4000, [], {}),
     ]);
     expect(threePointsAxis.interval?.values).toEqual([
-      1000000,
-      2500000,
-      4000000,
+      1000000, 2500000, 4000000,
     ]);
   });
 
@@ -87,7 +89,9 @@ describe('productTokenWeightChangeOverTimeUtils view-model logic', () => {
     const result = getBenchmarkEqualWeightedAmounts(true, series, constituents);
 
     expect(result).toEqual([4, 2]);
-    expect(getBenchmarkEqualWeightedAmounts(false, series, constituents)).toEqual([]);
+    expect(
+      getBenchmarkEqualWeightedAmounts(false, series, constituents)
+    ).toEqual([]);
   });
 
   it('generates normalised area data for benchmark and non-benchmark modes', () => {

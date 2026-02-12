@@ -101,8 +101,10 @@ export function UpdateRuleConfiguration({
                 max={toNumericValue(param.maxValue)}
                 step={0.0001}
                 onChange={(e) => {
-                  const selectedCoin = items[index].coin ?? param.applicableCoins[index];
-                  const coins = isUniversal || !selectedCoin ? [] : [selectedCoin];
+                  const selectedCoin =
+                    items[index].coin ?? param.applicableCoins[index];
+                  const coins =
+                    isUniversal || !selectedCoin ? [] : [selectedCoin];
                   onUpdateRuleFactor(param, e, coins);
                 }}
               />

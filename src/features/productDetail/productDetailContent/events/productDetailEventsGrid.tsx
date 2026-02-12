@@ -1,7 +1,14 @@
 import { forwardRef, useMemo } from 'react';
-import type { GridOptions, ICellRendererParams, ValueFormatterParams } from 'ag-grid-community';
+import type {
+  GridOptions,
+  ICellRendererParams,
+  ValueFormatterParams,
+} from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
-import { GqlPoolEvent, GqlPoolEventType } from '../../../../__generated__/graphql-types';
+import {
+  GqlPoolEvent,
+  GqlPoolEventType,
+} from '../../../../__generated__/graphql-types';
 import { format } from 'date-fns';
 import { Tag, Tooltip } from 'antd';
 import { truncateMiddle } from '../utils';
@@ -28,10 +35,10 @@ interface EventsGridProps {
   thresholds: Thresholds;
 }
 
-export const ProductDetailEventsGrid = forwardRef<AgGridReact<GqlPoolEvent>, EventsGridProps>(function EventsGrid(
-  { rowData, explorerBase, thresholds },
-  ref
-) {
+export const ProductDetailEventsGrid = forwardRef<
+  AgGridReact<GqlPoolEvent>,
+  EventsGridProps
+>(function EventsGrid({ rowData, explorerBase, thresholds }, ref) {
   const columnDefs = useMemo(
     () => [
       {
@@ -51,7 +58,8 @@ export const ProductDetailEventsGrid = forwardRef<AgGridReact<GqlPoolEvent>, Eve
             else if (val >= thresholds.bronzeThreshold) level = 'bronze';
           }
 
-          const hasValidPrefix = !!thresholds.srcPrefix && thresholds.srcPrefix !== 'UNKNOWN';
+          const hasValidPrefix =
+            !!thresholds.srcPrefix && thresholds.srcPrefix !== 'UNKNOWN';
 
           if (!level || !hasValidPrefix) {
             return <span className={styles.badgePlaceholder} />;
@@ -87,7 +95,9 @@ export const ProductDetailEventsGrid = forwardRef<AgGridReact<GqlPoolEvent>, Eve
         width: 165,
         enableRowGroup: true,
         valueFormatter: (p: ValueFormatterParams) =>
-          p.value ? format(new Date(Number(p.value) * 1000), 'yyyy-MM-dd HH:mm:ss') : '',
+          p.value
+            ? format(new Date(Number(p.value) * 1000), 'yyyy-MM-dd HH:mm:ss')
+            : '',
       },
       {
         colId: 'valueUSD',
@@ -117,7 +127,12 @@ export const ProductDetailEventsGrid = forwardRef<AgGridReact<GqlPoolEvent>, Eve
           const url = `${explorerBase}/address/${p.value}`;
           return (
             <Tag className={styles.addressTag}>
-              <a href={url} target="_blank" rel="noopener noreferrer" className={styles.tagLink}>
+              <a
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.tagLink}
+              >
                 {truncateMiddle(String(p.value))}
               </a>
             </Tag>
@@ -134,7 +149,12 @@ export const ProductDetailEventsGrid = forwardRef<AgGridReact<GqlPoolEvent>, Eve
           const url = `${explorerBase}/tx/${p.value}`;
           return (
             <Tag className={styles.addressTag}>
-              <a href={url} target="_blank" rel="noopener noreferrer" className={styles.tagLink}>
+              <a
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.tagLink}
+              >
                 {truncateMiddle(String(p.value))}
               </a>
             </Tag>

@@ -37,7 +37,9 @@ export function SimulationResultReturnChart(props: BreakdownProps) {
     () =>
       simulationBreakdownResults
         .filter((result) => result.simulationRunStatus === 'Complete')
-        .filter((result) => result.timeRange.name === simulationTimeRangeSelected),
+        .filter(
+          (result) => result.timeRange.name === simulationTimeRangeSelected
+        ),
     [simulationBreakdownResults, simulationTimeRangeSelected]
   );
 
@@ -49,80 +51,80 @@ export function SimulationResultReturnChart(props: BreakdownProps) {
       <Row className={styles.resultChartRow}>
         <Col span={24}>
           {visibleBreakdowns.map((result, index) => (
-              <Row key={index}>
-                <Col span={4}>
-                  <div className={styles.weightChartDescription}>
-                    <h4>{result.simulationRun.updateRule.updateRuleName}</h4>
-                    <p>For time period:&nbsp;{result.timeRange.name}</p>
-                    <p>start date:&nbsp;{result.timeRange.startDate}</p>
-                    <p>end date:&nbsp;{result.timeRange.endDate}</p>
-                  </div>
-                </Col>
-                <Col span={16}>
-                  <ReturnDistributionGraph
-                    marketValues={result.timeSteps.map(
-                      (x) => x.totalPoolMarketValue
-                    )}
-                  />
-                </Col>
-                <Col span={4}>
-                  <Row>
-                    <Col span={24}>
-                      <p style={{ margin: 0 }}>
-                        mean:{' '}
-                        {getMetricName(
-                          result.simulationRunResultAnalysis?.return_analysis ??
-                            [],
-                          'mean',
-                          true
-                        )}
-                      </p>
-                    </Col>
-                    <Col span={24}>
-                      <p style={{ margin: 0 }}>
-                        std:{' '}
-                        {getMetricName(
-                          result.simulationRunResultAnalysis?.return_analysis ??
-                            [],
-                          'std',
-                          true
-                        )}
-                      </p>
-                    </Col>
-                    <Col span={24}>
-                      <p style={{ margin: 0 }}>
-                        skewness:{' '}
-                        {getMetricName(
-                          result.simulationRunResultAnalysis?.return_analysis ??
-                            [],
-                          'skewness'
-                        )}
-                      </p>
-                    </Col>
-                    <Col span={24}>
-                      <p style={{ margin: 0 }}>
-                        Kurtosis:{' '}
-                        {getMetricName(
-                          result.simulationRunResultAnalysis?.return_analysis ??
-                            [],
-                          'kurtosis'
-                        )}
-                      </p>
-                    </Col>
-                    <Col span={24}>
-                      <p style={{ margin: 0 }}>
-                        Jaque Bera:{' '}
-                        {getMetricName(
-                          result.simulationRunResultAnalysis?.return_analysis ??
-                            [],
-                          ['jarqueBera', 'jarque_bera', 'jaqueBera']
-                        )}
-                      </p>
-                    </Col>
-                  </Row>
-                </Col>
-              </Row>
-            ))}
+            <Row key={index}>
+              <Col span={4}>
+                <div className={styles.weightChartDescription}>
+                  <h4>{result.simulationRun.updateRule.updateRuleName}</h4>
+                  <p>For time period:&nbsp;{result.timeRange.name}</p>
+                  <p>start date:&nbsp;{result.timeRange.startDate}</p>
+                  <p>end date:&nbsp;{result.timeRange.endDate}</p>
+                </div>
+              </Col>
+              <Col span={16}>
+                <ReturnDistributionGraph
+                  marketValues={result.timeSteps.map(
+                    (x) => x.totalPoolMarketValue
+                  )}
+                />
+              </Col>
+              <Col span={4}>
+                <Row>
+                  <Col span={24}>
+                    <p style={{ margin: 0 }}>
+                      mean:{' '}
+                      {getMetricName(
+                        result.simulationRunResultAnalysis?.return_analysis ??
+                          [],
+                        'mean',
+                        true
+                      )}
+                    </p>
+                  </Col>
+                  <Col span={24}>
+                    <p style={{ margin: 0 }}>
+                      std:{' '}
+                      {getMetricName(
+                        result.simulationRunResultAnalysis?.return_analysis ??
+                          [],
+                        'std',
+                        true
+                      )}
+                    </p>
+                  </Col>
+                  <Col span={24}>
+                    <p style={{ margin: 0 }}>
+                      skewness:{' '}
+                      {getMetricName(
+                        result.simulationRunResultAnalysis?.return_analysis ??
+                          [],
+                        'skewness'
+                      )}
+                    </p>
+                  </Col>
+                  <Col span={24}>
+                    <p style={{ margin: 0 }}>
+                      Kurtosis:{' '}
+                      {getMetricName(
+                        result.simulationRunResultAnalysis?.return_analysis ??
+                          [],
+                        'kurtosis'
+                      )}
+                    </p>
+                  </Col>
+                  <Col span={24}>
+                    <p style={{ margin: 0 }}>
+                      Jaque Bera:{' '}
+                      {getMetricName(
+                        result.simulationRunResultAnalysis?.return_analysis ??
+                          [],
+                        ['jarqueBera', 'jarque_bera', 'jaqueBera']
+                      )}
+                    </p>
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
+          ))}
         </Col>
       </Row>
     </div>

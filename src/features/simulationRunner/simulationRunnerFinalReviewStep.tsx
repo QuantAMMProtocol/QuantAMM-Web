@@ -1,8 +1,6 @@
 import styles from '../simulationResults/simulationResultSummary.module.css';
 
-import {
-  LiquidityPool,
-} from '../simulationRunConfiguration/simulationRunConfigModels';
+import { LiquidityPool } from '../simulationRunConfiguration/simulationRunConfigModels';
 
 import {
   selectSimulationRunStatusStepIndex,

@@ -24,25 +24,25 @@ export const ProductDetailSidebarStrategySummary: FC<
       <Collapse
         items={[
           {
-        key: 'strategy',
-        label: `About ${strategyName ?? ''} Strategy`,
-        children: (
-          <>
-            <ProductDetailSidebarElement
-          side="left"
-          insideTag={false}
-          text={
-            <Eli5
-              strategy={
-            product.strategy == 'NONE'
-              ? product.tokenType
-              : product.strategy
-              }
-            />
-          }
-            />
-          </>
-        ),
+            key: 'strategy',
+            label: `About ${strategyName ?? ''} Strategy`,
+            children: (
+              <>
+                <ProductDetailSidebarElement
+                  side="left"
+                  insideTag={false}
+                  text={
+                    <Eli5
+                      strategy={
+                        product.strategy == 'NONE'
+                          ? product.tokenType
+                          : product.strategy
+                      }
+                    />
+                  }
+                />
+              </>
+            ),
           },
         ]}
       />

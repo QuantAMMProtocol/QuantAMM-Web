@@ -41,16 +41,16 @@ export const simulationResultSlice = createSlice({
   initialState: initialState,
   reducers: {
     addRunResult: (state, action: PayloadAction<SimulationRunBreakdown>) => {
-      const current = state.breakdowns.find(
-        (x) => isSameBreakdown(x, action.payload)
+      const current = state.breakdowns.find((x) =>
+        isSameBreakdown(x, action.payload)
       );
       if (current === undefined) {
         state.breakdowns.push(cloneBreakdown(action.payload));
       }
     },
     removeRunResult: (state, action: PayloadAction<SimulationRunBreakdown>) => {
-      const current = state.breakdowns.find(
-        (x) => isSameBreakdown(x, action.payload)
+      const current = state.breakdowns.find((x) =>
+        isSameBreakdown(x, action.payload)
       );
       if (current !== undefined) {
         state.breakdowns = state.breakdowns.filter(
@@ -65,8 +65,8 @@ export const simulationResultSlice = createSlice({
       state,
       action: PayloadAction<SimulationRunBreakdown>
     ) => {
-      const current = state.selectedBreakdowns.find(
-        (x) => isSameBreakdown(x, action.payload)
+      const current = state.selectedBreakdowns.find((x) =>
+        isSameBreakdown(x, action.payload)
       );
       if (current === undefined) {
         state.selectedBreakdowns.push(action.payload);
@@ -76,8 +76,8 @@ export const simulationResultSlice = createSlice({
       state,
       action: PayloadAction<SimulationRunBreakdown>
     ) => {
-      const current = state.selectedBreakdowns.find(
-        (x) => isSameBreakdown(x, action.payload)
+      const current = state.selectedBreakdowns.find((x) =>
+        isSameBreakdown(x, action.payload)
       );
       if (current !== undefined) {
         state.selectedBreakdowns = state.selectedBreakdowns.filter(

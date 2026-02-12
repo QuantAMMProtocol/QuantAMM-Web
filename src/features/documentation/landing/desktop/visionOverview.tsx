@@ -86,9 +86,7 @@ export function VisionOverview({
             </Col>
             <Col span={4}></Col>
           </Row>
-          <Row
-            className={styles.logoRow}
-          >
+          <Row className={styles.logoRow}>
             <Col span={4}></Col>
             <Col span={1}>
               <img

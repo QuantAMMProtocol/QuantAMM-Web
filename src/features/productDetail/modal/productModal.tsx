@@ -14,9 +14,7 @@ import {
 
 // Pre‑load the FingerprintJS agent once per bundle load
 const fpPromise: Promise<Agent | null> =
-  typeof window !== 'undefined'
-    ? FingerprintJS.load()
-    : Promise.resolve(null);
+  typeof window !== 'undefined' ? FingerprintJS.load() : Promise.resolve(null);
 
 interface ProductModalProps {
   isVisible: boolean;

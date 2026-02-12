@@ -18,7 +18,7 @@ describe('productDetailContent/utils view-model logic', () => {
   });
 
   it('normalizes strings for robust comparisons', () => {
-    expect(norm("  QuantAMM’s   \"Alpha\"!  ")).toBe("quantamm's 'alpha'");
+    expect(norm('  QuantAMM’s   "Alpha"!  ')).toBe("quantamm's 'alpha'");
     expect(norm('BTC/ETH   +   USDC')).toBe('btc eth usdc');
   });
 });

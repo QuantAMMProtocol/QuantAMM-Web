@@ -63,7 +63,11 @@ export const ProductDetailDropdownSelect: FC<
           <Text
             className={styles['product-detail-dropdown-select__placeholder']}
           >
-            {isLoading ? 'Calculating' : options.length > 0 ? placeholder : 'No Analysis Available'}
+            {isLoading
+              ? 'Calculating'
+              : options.length > 0
+                ? placeholder
+                : 'No Analysis Available'}
           </Text>
         }
       />

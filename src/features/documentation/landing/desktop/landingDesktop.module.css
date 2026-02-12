@@ -1,5 +1,5 @@
 :global(:root) {
-  --ld-bg-cream: #FFFEF2;
+  --ld-bg-cream: #fffef2;
   --ld-bg-deep: #2c496b;
   --ld-bg-ink: #162536;
   --ld-border-cream: #f6f4ef;
@@ -13,7 +13,7 @@
   --ld-card-glass: linear-gradient(
     90deg,
     rgba(255, 255, 255, 0.04),
-    rgba(255, 255, 255, 0.10)
+    rgba(255, 255, 255, 0.1)
   );
   --ld-space-1: 4px;
   --ld-space-2: 8px;
@@ -70,7 +70,11 @@
 .bannerUnderline {
   width: 80px;
   height: 2px;
-  background: linear-gradient(90deg, var(--ld-accent-warm-1), var(--ld-accent-warm-2));
+  background: linear-gradient(
+    90deg,
+    var(--ld-accent-warm-1),
+    var(--ld-accent-warm-2)
+  );
   margin: 0 auto;
   border-radius: 2px;
 }
@@ -83,7 +87,9 @@
   text-align: center;
   border: transparent;
   background: transparent;
-  transition: box-shadow 0.2s ease, transform 0.15s ease;
+  transition:
+    box-shadow 0.2s ease,
+    transform 0.15s ease;
 }
 
 .productIcon {
@@ -134,7 +140,6 @@
 .actionRow {
   margin-top: 10px;
 }
-
 
 .faqLayout {
   height: 100%;
@@ -303,7 +308,6 @@
   color: var(--ld-accent-gold);
 }
 
-
 .bannerTitleLarge {
   color: var(--ld-ink-contrast);
   text-align: center;
@@ -396,7 +400,6 @@
   align-items: center;
   height: 100%;
 }
-
 
 .explainerImageWrap {
   height: 10vh;

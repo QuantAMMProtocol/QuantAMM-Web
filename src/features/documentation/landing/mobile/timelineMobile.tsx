@@ -1,5 +1,5 @@
-import { Timeline, Typography } from "antd";
-import styles from "./landingMobile.module.css";
+import { Timeline, Typography } from 'antd';
+import styles from './landingMobile.module.css';
 
 const { Title } = Typography;
 
@@ -16,8 +16,10 @@ export function TimelineMobile() {
     { color: 'green', children: 'May 2025 - QuantAMM Launches BTF' },
   ];
 
-    return <div className={styles.mobileSection}>
-    <Title level={3}>Our Journey</Title>
-    <Timeline items={items} />
-  </div>
+  return (
+    <div className={styles.mobileSection}>
+      <Title level={3}>Our Journey</Title>
+      <Timeline items={items} />
+    </div>
+  );
 }

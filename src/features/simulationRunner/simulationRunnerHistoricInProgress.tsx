@@ -15,7 +15,9 @@ import { useAppSelector } from '../../app/hooks';
 
 const { Step } = Steps;
 
-function getStepStatus(status: string): 'wait' | 'process' | 'finish' | 'error' {
+function getStepStatus(
+  status: string
+): 'wait' | 'process' | 'finish' | 'error' {
   const normalizedStatus = status.toLowerCase();
 
   if (normalizedStatus === 'pending') {
@@ -67,7 +69,10 @@ export function SimulationRunnerHistoricInProgress() {
         <Row>
           <Col span={1}></Col>
           {stepColumns.map((column, columnIndex) => (
-            <Col key={columnIndex} span={columnIndex === 0 || columnIndex === 3 ? 5 : 6}>
+            <Col
+              key={columnIndex}
+              span={columnIndex === 0 || columnIndex === 3 ? 5 : 6}
+            >
               <div hidden={column.length === 0}>
                 <Steps direction="vertical">
                   {column.map((result) => (

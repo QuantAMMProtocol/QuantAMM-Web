@@ -27,9 +27,7 @@ interface ProductItemProps {
 export const ProductItemWide: FC<ProductItemProps> = ({ product }) => {
   const isDarkTheme = useAppSelector(selectTheme);
 
-  const acceptedTerms = useAppSelector(
-    selectAcceptedTermsAndConditions
-  );
+  const acceptedTerms = useAppSelector(selectAcceptedTermsAndConditions);
 
   const [productModalUrl, setProductModalUrl] = useState<string | undefined>(
     undefined
@@ -68,7 +66,9 @@ export const ProductItemWide: FC<ProductItemProps> = ({ product }) => {
     <Col
       span={3}
       className={
-        product.overview.length > 0 ? styles['product-item__card-column'] : undefined
+        product.overview.length > 0
+          ? styles['product-item__card-column']
+          : undefined
       }
     >
       {product.overview.length > 0 ? (
@@ -141,7 +141,11 @@ export const ProductItemWide: FC<ProductItemProps> = ({ product }) => {
             : undefined
         }
       >
-        {shouldShow ? <ProductItemTokenList product={product} /> : <LoadingGraph />}
+        {shouldShow ? (
+          <ProductItemTokenList product={product} />
+        ) : (
+          <LoadingGraph />
+        )}
       </Col>
     </>
   );

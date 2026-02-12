@@ -147,9 +147,7 @@ export function QuantAmmExplainer() {
                       }}
                     >
                       {/* LEFT (FACT) fixed width */}
-                      <div
-                        className={styles.stepFact}
-                      >
+                      <div className={styles.stepFact}>
                         {pair[0].icon}
                         <div
                           className={styles.stepText}

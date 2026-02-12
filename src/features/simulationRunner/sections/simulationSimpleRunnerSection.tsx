@@ -53,11 +53,11 @@ export function SimpleRunnerSection({
       <Col span={24}>
         <h3>ELI5: Simple Simulation Runner</h3>
         <p>
-          Don&apos;t care about fine tuning parameters? Just choose your tokens and
-          your pool types you want to run. This chooses default parameters and
-          will likely be less performant given that the default parameters have
-          not undergone optimisation and are not basket-aware. It is still useful
-          though for quick comparisons.
+          Don&apos;t care about fine tuning parameters? Just choose your tokens
+          and your pool types you want to run. This chooses default parameters
+          and will likely be less performant given that the default parameters
+          have not undergone optimisation and are not basket-aware. It is still
+          useful though for quick comparisons.
         </p>
         <Row>
           <Col span={6}>
@@ -124,7 +124,10 @@ export function SimpleRunnerSection({
                 size="small"
                 className={runnerStyles.optionsRangePicker}
                 disabledDate={disabledDate}
-                value={[dayjs(startDate, dateFormat), dayjs(endDate, dateFormat)]}
+                value={[
+                  dayjs(startDate, dateFormat),
+                  dayjs(endDate, dateFormat),
+                ]}
                 onChange={(_dates, dateStrings) => {
                   if (!dateStrings[0] || !dateStrings[1]) {
                     return;

@@ -30,7 +30,9 @@ export function FAQ() {
             <div className={styles.centeredColumn}>
               <Row>
                 <Col span={24}>
-                  <h1 className={styles.faqTitle}>FREQUENTLY ASKED QUESTIONS</h1>
+                  <h1 className={styles.faqTitle}>
+                    FREQUENTLY ASKED QUESTIONS
+                  </h1>
                 </Col>
                 <Col
                   span={24}

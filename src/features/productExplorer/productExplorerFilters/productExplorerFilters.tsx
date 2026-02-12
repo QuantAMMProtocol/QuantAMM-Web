@@ -195,7 +195,10 @@ export const ProductExplorerFilters: FC<ProductExplorerFiltersProps> = ({
         const filterCategory = Object.keys(filterGroup)[0];
 
         return (
-          <div key={filterCategory} className={styles['filter-bar__filter-group']}>
+          <div
+            key={filterCategory}
+            className={styles['filter-bar__filter-group']}
+          >
             <Title level={4}>
               {productExplorerTranslation[Object.keys(filterGroup)[0]]}
             </Title>
@@ -229,7 +232,9 @@ export const ProductExplorerFilters: FC<ProductExplorerFiltersProps> = ({
           min={0}
           max={1000000000}
           value={tvlInput}
-          formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+          formatter={(value) =>
+            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+          }
           parser={(value) =>
             value?.replace(/\$\s?|(,*)/g, '') as unknown as number
           }

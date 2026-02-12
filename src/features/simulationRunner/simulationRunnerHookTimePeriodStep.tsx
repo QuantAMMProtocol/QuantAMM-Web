@@ -17,9 +17,7 @@ import {
   selectCoinPriceDataLoaded,
 } from '../simulationRunConfiguration/simulationRunConfigurationSlice';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
-import {
-  HookTimePeriodChart,
-} from '../simulationRunConfiguration/hookTimePeriodChart';
+import { HookTimePeriodChart } from '../simulationRunConfiguration/hookTimePeriodChart';
 import { ItemType } from 'antd/es/menu/interface';
 import { AppDispatch } from '../../app/store';
 import runnerStyles from './simulationRunnerCommon.module.css';
@@ -49,7 +47,9 @@ const handleDownloadFees = (
       try {
         const rows = parseCsvRows(String(csvContent ?? ''));
         if (rows.length < 2) {
-          throw new Error('CSV must include headers and at least one data row.');
+          throw new Error(
+            'CSV must include headers and at least one data row.'
+          );
         }
 
         const headers = rows[0].map((header) => header.toLowerCase());
@@ -119,7 +119,9 @@ export function SimulationRunnerHookTimePeriodStep() {
       return;
     }
 
-    if (!simulationPools.find((pool) => pool.id === selectedSimulationPool.id)) {
+    if (
+      !simulationPools.find((pool) => pool.id === selectedSimulationPool.id)
+    ) {
       setSelectedSimulationPool(simulationPools[0]);
     }
   }, [simulationPools, selectedSimulationPool]);
@@ -172,7 +174,9 @@ export function SimulationRunnerHookTimePeriodStep() {
           <Menu
             hidden={simulationPools.length === 0}
             className={runnerStyles.menuFont15}
-            selectedKeys={selectedSimulationPool ? [selectedSimulationPool.id] : []}
+            selectedKeys={
+              selectedSimulationPool ? [selectedSimulationPool.id] : []
+            }
             items={simulationPools.map((x) => {
               return getItem(
                 x?.updateRule.updateRuleName,
@@ -251,7 +255,11 @@ export function SimulationRunnerHookTimePeriodStep() {
             ref={fileInputRef}
             className={runnerStyles.hiddenFileInput}
             onChange={(event) =>
-              handleDownloadFees(event, selectedSimulationPool?.id ?? '', dispatch)
+              handleDownloadFees(
+                event,
+                selectedSimulationPool?.id ?? '',
+                dispatch
+              )
             }
           />
           <Button

@@ -7,7 +7,10 @@ import {
 } from '../simulationRunConfigModels';
 import { getUpdatedRuleForFactorChange } from './poolRuleConfigurationUpdateRuleFactor';
 
-const createCoin = (coinCode: string, factorValue: string | null): LiquidityPoolCoin => ({
+const createCoin = (
+  coinCode: string,
+  factorValue: string | null
+): LiquidityPoolCoin => ({
   coin: {
     coinName: coinCode,
     coinCode,
@@ -56,7 +59,9 @@ const createRule = (parameters: UpdateRuleParameter[]): UpdateRule => ({
 describe('getUpdatedRuleForFactorChange', () => {
   it('updates matching parameter value and clears applicable coins in universal mode', () => {
     const coinA = createCoin('ETH', '1.0000');
-    const prevRule = createRule([createParameter('k_per_day', '1.0000', [coinA])]);
+    const prevRule = createRule([
+      createParameter('k_per_day', '1.0000', [coinA]),
+    ]);
 
     const result = getUpdatedRuleForFactorChange(
       prevRule,

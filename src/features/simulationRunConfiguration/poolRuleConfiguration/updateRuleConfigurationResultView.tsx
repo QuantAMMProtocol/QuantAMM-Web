@@ -46,7 +46,11 @@ export function UpdateRuleConfigurationResultView({
       <Row>
         <Col span={8}>
           <Col span={24}>
-            <p>{pool.poolConstituents.map((token) => token.coin.coinCode).join('-')}</p>
+            <p>
+              {pool.poolConstituents
+                .map((token) => token.coin.coinCode)
+                .join('-')}
+            </p>
           </Col>
           <Col span={24}>
             <p>{pool.updateRule.updateRuleName}</p>
@@ -57,7 +61,9 @@ export function UpdateRuleConfigurationResultView({
           <Row>
             <Col span={24}>
               <span>Automatic Arb Bots:</span>
-              <span>{pool.enableAutomaticArbBots ? '  Enabled' : '  Disabled'}</span>
+              <span>
+                {pool.enableAutomaticArbBots ? '  Enabled' : '  Disabled'}
+              </span>
             </Col>
           </Row>
           {Object.keys(groupedParameters).length === 0 && (
@@ -78,7 +84,10 @@ export function UpdateRuleConfigurationResultView({
               )}
               <Row gutter={[16, 16]}>
                 {items.map(({ param }, index) => (
-                  <Col key={`${param.factorName}-${coinCode}-${index}`} span={24}>
+                  <Col
+                    key={`${param.factorName}-${coinCode}-${index}`}
+                    span={24}
+                  >
                     <InputNumber
                       disabled
                       id={`${param.factorName}-${coinCode}-${index}`}

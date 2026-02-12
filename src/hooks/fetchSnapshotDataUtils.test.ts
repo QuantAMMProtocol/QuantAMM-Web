@@ -52,13 +52,18 @@ const createSnapshot = (
 
 describe('fetchSnapshotDataUtils view-model logic', () => {
   it('maps the known arbitrum wrapped ETH alias address', () => {
-    expect(getTokenAddress({ address: ARBITRUM_WETH_ALIAS })).toBe(ARBITRUM_WETH);
+    expect(getTokenAddress({ address: ARBITRUM_WETH_ALIAS })).toBe(
+      ARBITRUM_WETH
+    );
     expect(getTokenAddress({ address: '0xabc' })).toBe('0xabc');
   });
 
   it('deduplicates chains and chain-address tokens across pools', () => {
     const pools = [
-      createMinimalPool('p1', GqlChain.Arbitrum, [ARBITRUM_WETH_ALIAS, '0xabc']),
+      createMinimalPool('p1', GqlChain.Arbitrum, [
+        ARBITRUM_WETH_ALIAS,
+        '0xabc',
+      ]),
       createMinimalPool('p2', GqlChain.Arbitrum, ['0xabc']),
       createMinimalPool('p3', GqlChain.Base, ['0xdef']),
     ];
@@ -66,7 +71,9 @@ describe('fetchSnapshotDataUtils view-model logic', () => {
     const chains = getChains(pools);
     const tokens = getTokens(pools);
 
-    expect(chains).toEqual(expect.arrayContaining([GqlChain.Arbitrum, GqlChain.Base]));
+    expect(chains).toEqual(
+      expect.arrayContaining([GqlChain.Arbitrum, GqlChain.Base])
+    );
     expect(tokens).toEqual(
       expect.arrayContaining([
         `${GqlChain.Arbitrum}:${ARBITRUM_WETH}`,
@@ -74,7 +81,9 @@ describe('fetchSnapshotDataUtils view-model logic', () => {
         `${GqlChain.Base}:0xdef`,
       ])
     );
-    expect(tokens.filter((token) => token === `${GqlChain.Arbitrum}:0xabc`)).toHaveLength(1);
+    expect(
+      tokens.filter((token) => token === `${GqlChain.Arbitrum}:0xabc`)
+    ).toHaveLength(1);
   });
 
   it('builds a chain-address price history map from historical token responses', () => {

@@ -11,7 +11,11 @@ export default function SonicMacroFactSheet() {
 
   return (
     <>
-      {isMobile ? <FactSheetMobile model={sonicMacroFactsheetData} /> : <FactSheetDesktop model={sonicMacroFactsheetData} />}
+      {isMobile ? (
+        <FactSheetMobile model={sonicMacroFactsheetData} />
+      ) : (
+        <FactSheetDesktop model={sonicMacroFactsheetData} />
+      )}
     </>
   );
 }

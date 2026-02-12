@@ -77,7 +77,7 @@ export function FactSheetMobile(props: FactsheetDesktopProps) {
   const [faqEli5, setFAQEli5] = useState('ELI5');
   const isDarkTheme = useAppSelector(selectTheme);
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     const loadBreakdowns = async (
       poolNames: Pool[]
@@ -226,9 +226,7 @@ export function FactSheetMobile(props: FactsheetDesktopProps) {
                   <Col span={1}></Col>
                   <Col span={22}>
                     <Col span={24}>
-                      <h5 className={styles.listHeading}>
-                        Deployment Links
-                      </h5>
+                      <h5 className={styles.listHeading}>Deployment Links</h5>
                     </Col>
                     {props.model.deploymentLinks.contractLinks.map(
                       (link, index) => {
@@ -250,9 +248,7 @@ export function FactSheetMobile(props: FactsheetDesktopProps) {
                   <Col span={1}></Col>
                   <Col span={22}>
                     <Col span={24}>
-                      <h5 className={styles.listHeading}>
-                        Fixed Settings
-                      </h5>
+                      <h5 className={styles.listHeading}>Fixed Settings</h5>
                     </Col>
                     {props.model.fixedSettings.map((link, index) => {
                       return (
@@ -569,10 +565,7 @@ export function FactSheetMobile(props: FactsheetDesktopProps) {
         <Col span={22}>
           <Row className={styles.rowHeight250}>
             <Col span={24}>
-              <Card
-                title="Advantages"
-                className={styles.cardHeight250Scroll}
-              >
+              <Card title="Advantages" className={styles.cardHeight250Scroll}>
                 <Row>
                   {props.model.advantages.map((advantage, index) => (
                     <Col span={24} key={index}>
@@ -595,10 +588,7 @@ export function FactSheetMobile(props: FactsheetDesktopProps) {
         <Row>
           <Col span={1}></Col>
           <Col span={22} className={styles.colHeight250}>
-            <Card
-              className={styles.cardHeight250Scroll}
-              title={'Risks'}
-            >
+            <Card className={styles.cardHeight250Scroll} title={'Risks'}>
               <Row>
                 {props.model.risks.map((risk, index) => (
                   <Col span={24} key={index}>

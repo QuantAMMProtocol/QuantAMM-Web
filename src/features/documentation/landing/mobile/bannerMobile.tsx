@@ -8,25 +8,25 @@ const { Title } = Typography;
 
 export function BannerMobile(props: ProductBannerProps) {
   return (
-    <>      
-    <CurrentPricePollingGate />    
-    <div className={styles.bannerRoot}>
-      <div>
-        <Title level={4} className={styles.bannerTitle}>
-          MOVE BEYOND LIQUIDITY PROVIDING
-        </Title>
-        <p className={styles.bannerSubtitle}>
-          DYNAMIC STRATEGY POOLS THAT CAPITALISE ON PRICE VOLATILITY WHILE STILL
-          EARNING FEES AND YIELD
-        </p>
-      </div>
-      <div className={styles.bannerContent}>
-        <div className={styles.bannerContentInner}>
-          <BannerProductSection productData={props.productData} />
+    <>
+      <CurrentPricePollingGate />
+      <div className={styles.bannerRoot}>
+        <div>
+          <Title level={4} className={styles.bannerTitle}>
+            MOVE BEYOND LIQUIDITY PROVIDING
+          </Title>
+          <p className={styles.bannerSubtitle}>
+            DYNAMIC STRATEGY POOLS THAT CAPITALISE ON PRICE VOLATILITY WHILE
+            STILL EARNING FEES AND YIELD
+          </p>
+        </div>
+        <div className={styles.bannerContent}>
+          <div className={styles.bannerContentInner}>
+            <BannerProductSection productData={props.productData} />
+          </div>
         </div>
       </div>
-    </div>
-    <div className={styles.bannerExtension}></div>
+      <div className={styles.bannerExtension}></div>
     </>
   );
 }

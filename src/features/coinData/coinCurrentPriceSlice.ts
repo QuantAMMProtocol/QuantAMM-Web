@@ -111,10 +111,10 @@ export const fetchCoinCurrentPrices = createAsyncThunk<
     })
   );
 
-  const perChain: Record<GqlChain, Record<string, CoinPriceEntry>> = {} as Record<
+  const perChain: Record<
     GqlChain,
     Record<string, CoinPriceEntry>
-  >;
+  > = {} as Record<GqlChain, Record<string, CoinPriceEntry>>;
   for (const { chain, mapForChain } of results) {
     perChain[chain] = mapForChain;
   }

@@ -36,10 +36,8 @@ export function calculateTrackingError(
     return 0;
   }
 
-  const { min: rPortfolioMin, max: rPortfolioMax } =
-    getMinMaxUnix(rPortfolio);
-  const { min: rBenchmarkMin, max: rBenchmarkMax } =
-    getMinMaxUnix(rBenchmark);
+  const { min: rPortfolioMin, max: rPortfolioMax } = getMinMaxUnix(rPortfolio);
+  const { min: rBenchmarkMin, max: rBenchmarkMax } = getMinMaxUnix(rBenchmark);
 
   const rangeMin = Math.max(rPortfolioMin, rBenchmarkMin);
   const rangeMax = Math.min(rPortfolioMax, rBenchmarkMax);
@@ -104,10 +102,8 @@ export function calculateCovariance(
     return 0;
   }
 
-  const { min: rPortfolioMin, max: rPortfolioMax } =
-    getMinMaxUnix(rPortfolio);
-  const { min: rBenchmarkMin, max: rBenchmarkMax } =
-    getMinMaxUnix(rBenchmark);
+  const { min: rPortfolioMin, max: rPortfolioMax } = getMinMaxUnix(rPortfolio);
+  const { min: rBenchmarkMin, max: rBenchmarkMax } = getMinMaxUnix(rBenchmark);
 
   const rangeMin = Math.max(rPortfolioMin, rBenchmarkMin);
   const rangeMax = Math.min(rPortfolioMax, rBenchmarkMax);

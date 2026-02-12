@@ -35,18 +35,20 @@ export function PoolRuleConfigurationUniversalToggle({
           if (!nextIsUniversal) {
             setLocalUpdateRule((prevRule) => ({
               ...prevRule,
-              updateRuleParameters: prevRule.updateRuleParameters.map((param) => ({
-                ...param,
-                applicableCoins: poolConstituents.map((token) => ({
-                  coin: token.coin,
-                  weight: token.weight,
-                  currentPrice: token.currentPrice,
-                  currentPriceUnix: token.currentPriceUnix,
-                  amount: token.amount,
-                  marketValue: token.marketValue,
-                  factorValue: param.factorValue,
-                })),
-              })),
+              updateRuleParameters: prevRule.updateRuleParameters.map(
+                (param) => ({
+                  ...param,
+                  applicableCoins: poolConstituents.map((token) => ({
+                    coin: token.coin,
+                    weight: token.weight,
+                    currentPrice: token.currentPrice,
+                    currentPriceUnix: token.currentPriceUnix,
+                    amount: token.amount,
+                    marketValue: token.marketValue,
+                    factorValue: param.factorValue,
+                  })),
+                })
+              ),
             }));
           } else {
             const foundRule = availableUpdateRules.find(

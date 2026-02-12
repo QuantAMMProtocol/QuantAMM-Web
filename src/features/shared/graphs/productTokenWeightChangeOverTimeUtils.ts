@@ -1,6 +1,10 @@
 import { AgAreaSeriesOptions, AgTimeAxisOptions } from 'ag-charts-community';
 import { format } from 'date-fns';
-import { Product, ProductPoolConstituents, TimeSeriesData } from '../../../models';
+import {
+  Product,
+  ProductPoolConstituents,
+  TimeSeriesData,
+} from '../../../models';
 import { getChartTimeStepsFromProduct } from './helpers';
 
 export interface TokenWeightTimeStep {
@@ -135,9 +139,8 @@ export const getNormalisedAreaData = (
             (benchmarkEqualWeightedAmounts[index] ?? 0) *
             item.tokenPrices[constituent.address];
         } else {
-          timeStep[normalisedTokenName(constituent.coin.toLowerCase())] = Number(
-            item.amounts[index] * item.tokenPrices[constituent.address]
-          );
+          timeStep[normalisedTokenName(constituent.coin.toLowerCase())] =
+            Number(item.amounts[index] * item.tokenPrices[constituent.address]);
         }
       }
     );

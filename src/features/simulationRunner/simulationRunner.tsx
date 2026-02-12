@@ -9,15 +9,10 @@ import {
 } from './simulationRunnerSlice';
 
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import {
-  resetSims,
-} from '../simulationRunConfiguration/simulationRunConfigurationSlice';
+import { resetSims } from '../simulationRunConfiguration/simulationRunConfigurationSlice';
 import { SimulationRunnerTimePeriodStep } from './simulationRunnerTimePeriodStep';
 import { SimulationRunnerHookTimePeriodStep } from './simulationRunnerHookTimePeriodStep';
-import {
-  handleDownloadResults,
-  handleDownloadParams,
-} from './index';
+import { handleDownloadResults, handleDownloadParams } from './index';
 
 import { SimulationRunnerFinalReviewStep } from './simulationRunnerFinalReviewStep';
 import { SimulationResultsSummaryStep } from '../simulationResults/simulationResultsSummaryStep';
@@ -51,7 +46,6 @@ export default function SimulationRunner() {
   const closeModal = () => {
     setIsModalOpen(false);
   };
-
 
   const onChange = (value: number) => {
     if (value === 5 && runStatusIndex !== 2) {

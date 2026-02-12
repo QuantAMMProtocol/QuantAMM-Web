@@ -117,7 +117,8 @@ export function SimulationResultWeightChart({ breakdowns }: BreakdownProps) {
       </Row>
       <Row className={styles.resultChartRow}>
         <Col span={24}>
-          {visibleBreakdowns.map((result: SimulationRunBreakdown, index: number) => (
+          {visibleBreakdowns.map(
+            (result: SimulationRunBreakdown, index: number) => (
               <Row key={index}>
                 <Col span={4}>
                   <div className={styles.weightChartDescription}>
@@ -163,7 +164,8 @@ export function SimulationResultWeightChart({ breakdowns }: BreakdownProps) {
                   <WeightChangeOverTimeGraph simulationRunBreakdown={result} />
                 </Col>
               </Row>
-            ))}
+            )
+          )}
         </Col>
       </Row>
     </div>

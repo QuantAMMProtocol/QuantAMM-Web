@@ -160,7 +160,9 @@ export const BaseAprTooltip = ({
           displayValueFormatter={usedDisplayValueFormatter}
           title={getDynamicSwapFeesLabel(hookType)}
           valueFontColor="var(--secondary-text-color)"
-          tooltipText={dynamicSwapFeesTooltipText[hookType as SupportedHookType]}
+          tooltipText={
+            dynamicSwapFeesTooltipText[hookType as SupportedHookType]
+          }
         />
       </>
     );

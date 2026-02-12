@@ -25,10 +25,7 @@ import {
   TruflationBitcoinSimulatorExample,
 } from './routeComponents';
 
-import {
-  Navigate,
-  createBrowserRouter,
-} from 'react-router-dom';
+import { Navigate, createBrowserRouter } from 'react-router-dom';
 import App from './App';
 import { ROUTES } from './routesEnum';
 import RouteErrorBoundary from './routeErrorBoundary';

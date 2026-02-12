@@ -15,12 +15,13 @@ const makePool = () => ({
     ...ConfigInitialState.initialLiquidityPool.updateRule,
     updateRuleRunUrl: 'run-sim',
   },
-  poolConstituents: ConfigInitialState.initialLiquidityPool.poolConstituents.map(
-    (constituent) => ({
-      ...constituent,
-      coin: constituent.coin,
-    })
-  ),
+  poolConstituents:
+    ConfigInitialState.initialLiquidityPool.poolConstituents.map(
+      (constituent) => ({
+        ...constituent,
+        coin: constituent.coin,
+      })
+    ),
   feeHooks: [],
   swapImports: [],
 });

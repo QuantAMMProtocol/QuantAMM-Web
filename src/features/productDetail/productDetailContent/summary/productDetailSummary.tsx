@@ -186,8 +186,8 @@ export const ProductDetailSummary: FC<ProductDetailSummaryProps> = ({
 
   const addressKey = product.address?.toLowerCase() ?? '';
   const specialPoolKey =
-    live_pools.factsheets.find((x) => x.poolId === addressKey)?.targetPoolJson ??
-    '';
+    live_pools.factsheets.find((x) => x.poolId === addressKey)
+      ?.targetPoolJson ?? '';
 
   const existingReturnAnalysis = useAppSelector((state) =>
     selectReturnAnalysisByProductId(state, product.id)
@@ -280,7 +280,9 @@ export const ProductDetailSummary: FC<ProductDetailSummaryProps> = ({
               selectedReturnAnalysis={selectedReturnAnalysis}
               returnAnalysisThresholds={returnAnalysisThresholds}
               selectedBenchmarkReturnAnalysis={selectedBenchmarkAnalysis}
-              benchmarkReturnAnalysisThresholds={benchmarkReturnAnalysisThresholds}
+              benchmarkReturnAnalysisThresholds={
+                benchmarkReturnAnalysisThresholds
+              }
               comparingProductReturnAnalysis={comparingProductReturnAnalysis}
               comparingProductBenchmarkAnalysis={
                 comparingProductBenchmarkReturnAnalysis

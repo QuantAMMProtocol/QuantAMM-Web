@@ -77,12 +77,14 @@ export function Banner(props: ProductBannerProps) {
           </Row>
         </ParallaxLayer>
         <ParallaxLayer speed={0.04} factor={1}>
-          <Row id="featured"
+          <Row
+            id="featured"
             justify="center"
             style={{
               paddingTop: '60vh',
               position: 'relative',
-            }}>
+            }}
+          >
             <Col md={22} lg={22} xl={20}>
               <BannerProductSection productData={props.productData} />
             </Col>

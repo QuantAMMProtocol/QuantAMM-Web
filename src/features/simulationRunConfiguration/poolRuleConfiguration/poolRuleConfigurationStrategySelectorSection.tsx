@@ -61,8 +61,9 @@ export function PoolRuleConfigurationStrategySelectorSection({
             {availableUpdateRules
               .filter(
                 (x) =>
-                  x.applicablePoolTypes?.some((y) => y === localPoolType.name) ??
-                  false
+                  x.applicablePoolTypes?.some(
+                    (y) => y === localPoolType.name
+                  ) ?? false
               )
               .map((x) => (
                 <Option key={x.updateRuleName} value={x.updateRuleName}>

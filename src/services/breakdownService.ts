@@ -100,19 +100,19 @@ export type Pool =
   | 'arbitrumMacroHodlAugTestFull'
   | 'arbitrumMacroBTF2025TestFull'
   | 'arbitrumMacroCFMM2025TestFull'
-  | 'arbitrumMacroHodl2025TestFull'  
-  |  'truflationBitcoinBTFJuneTrain'
-  |  'truflationBitcoinCFMMJuneTrain'
-  |  'truflationBitcoinHodlJuneTrain'
-  |  'truflationBitcoinBTF2025Test'
-  |  'truflationBitcoinCFMM2025Test'
-  |  'truflationBitcoinHodl2025Test'  
-  |  'truflationBitcoinBTFJuneTrainFull'
-  |  'truflationBitcoinCFMMJuneTrainFull'
-  |  'truflationBitcoinHodlJuneTrainFull'
-  |  'truflationBitcoinBTF2025TestFull'
-  |  'truflationBitcoinCFMM2025TestFull'
-  |  'truflationBitcoinHodl2025TestFull';
+  | 'arbitrumMacroHodl2025TestFull'
+  | 'truflationBitcoinBTFJuneTrain'
+  | 'truflationBitcoinCFMMJuneTrain'
+  | 'truflationBitcoinHodlJuneTrain'
+  | 'truflationBitcoinBTF2025Test'
+  | 'truflationBitcoinCFMM2025Test'
+  | 'truflationBitcoinHodl2025Test'
+  | 'truflationBitcoinBTFJuneTrainFull'
+  | 'truflationBitcoinCFMMJuneTrainFull'
+  | 'truflationBitcoinHodlJuneTrainFull'
+  | 'truflationBitcoinBTF2025TestFull'
+  | 'truflationBitcoinCFMM2025TestFull'
+  | 'truflationBitcoinHodl2025TestFull';
 
 // Helper to convert MessagePack data to breakdown DTO
 export const convertBreakdownDtoToBreakdown = (
@@ -194,12 +194,14 @@ export const getBreakdown = async (
     hodlBtcEthUsdc:
       '/prerun_sims/Momentum[k_per_day_50][memory_days_5]_-ETH-BTC-USDC.msgpack', // Example; replace with actual path
     solExampleMomentum: '/prerun_sims/BTC-ETH-SOL-USDC-momentum-daily.msgpack',
-    solExampleAntimomentum: '/prerun_sims/BTC-ETH-SOL-USDC-antimomentum.msgpack',
-    solExamplePowerChannel: '/prerun_sims/BTC-ETH-SOL-USDC-power-channel-daily.msgpack',
+    solExampleAntimomentum:
+      '/prerun_sims/BTC-ETH-SOL-USDC-antimomentum.msgpack',
+    solExamplePowerChannel:
+      '/prerun_sims/BTC-ETH-SOL-USDC-power-channel-daily.msgpack',
     solExampleChannelFollowing:
       '/prerun_sims/BTC-ETH-SOL-USDC-channel-following-daily.msgpack',
     solExampleHodl: '/prerun_sims/BTC-ETH-SOL-USDC-hodl-daily.msgpack',
-    solExampleWeighted:'/prerun_sims/BTC-ETH-SOL-USDC-weighted.msgpack',
+    solExampleWeighted: '/prerun_sims/BTC-ETH-SOL-USDC-weighted.msgpack',
     safeHavenBTF2025Test: '/prerun_sims/SAFE_HAVEN_BTF_2025_TEST.msgpack',
     safeHavenBTFAugTest: '/prerun_sims/SAFE_HAVEN_BTF_AUG_TEST.msgpack',
     safeHavenBTFAugTrain: '/prerun_sims/SAFE_HAVEN_BTF_AUG_TRAIN.msgpack',
@@ -209,15 +211,24 @@ export const getBreakdown = async (
     safeHavenHodl2025Test: '/prerun_sims/SAFE_HAVEN_HODL_2025_TEST.msgpack',
     safeHavenHodlAugTest: '/prerun_sims/SAFE_HAVEN_HODL_AUG_TEST.msgpack',
     safeHavenHodlAugTrain: '/prerun_sims/SAFE_HAVEN_HODL_AUG_TRAIN.msgpack',
-    safeHavenBTF2025TestFull: '/prerun_sims/SAFE_HAVEN_BTF_2025_TEST_FULL.msgpack',
-    safeHavenBTFAugTestFull: '/prerun_sims/SAFE_HAVEN_BTF_AUG_TEST_FULL.msgpack',
-    safeHavenBTFAugTrainFull: '/prerun_sims/SAFE_HAVEN_BTF_AUG_TRAIN_FULL.msgpack',
-    safeHavenCFMM2025TestFull: '/prerun_sims/SAFE_HAVEN_CFMM_2025_TEST_FULL.msgpack',
-    safeHavenCFMMAugTestFull: '/prerun_sims/SAFE_HAVEN_CFMM_AUG_TEST_FULL.msgpack',
-    safeHavenCFMMAugTrainFull: '/prerun_sims/SAFE_HAVEN_CFMM_AUG_TRAIN_FULL.msgpack',
-    safeHavenHodl2025TestFull: '/prerun_sims/SAFE_HAVEN_HODL_2025_TEST_FULL.msgpack',
-    safeHavenHodlAugTestFull: '/prerun_sims/SAFE_HAVEN_HODL_AUG_TEST_FULL.msgpack',
-    safeHavenHodlAugTrainFull: '/prerun_sims/SAFE_HAVEN_HODL_AUG_TRAIN_FULL.msgpack',
+    safeHavenBTF2025TestFull:
+      '/prerun_sims/SAFE_HAVEN_BTF_2025_TEST_FULL.msgpack',
+    safeHavenBTFAugTestFull:
+      '/prerun_sims/SAFE_HAVEN_BTF_AUG_TEST_FULL.msgpack',
+    safeHavenBTFAugTrainFull:
+      '/prerun_sims/SAFE_HAVEN_BTF_AUG_TRAIN_FULL.msgpack',
+    safeHavenCFMM2025TestFull:
+      '/prerun_sims/SAFE_HAVEN_CFMM_2025_TEST_FULL.msgpack',
+    safeHavenCFMMAugTestFull:
+      '/prerun_sims/SAFE_HAVEN_CFMM_AUG_TEST_FULL.msgpack',
+    safeHavenCFMMAugTrainFull:
+      '/prerun_sims/SAFE_HAVEN_CFMM_AUG_TRAIN_FULL.msgpack',
+    safeHavenHodl2025TestFull:
+      '/prerun_sims/SAFE_HAVEN_HODL_2025_TEST_FULL.msgpack',
+    safeHavenHodlAugTestFull:
+      '/prerun_sims/SAFE_HAVEN_HODL_AUG_TEST_FULL.msgpack',
+    safeHavenHodlAugTrainFull:
+      '/prerun_sims/SAFE_HAVEN_HODL_AUG_TRAIN_FULL.msgpack',
     baseMacroBTF2025Test: '/prerun_sims/BASE_MACRO_BTF_2025_TEST.msgpack',
     baseMacroBTFAugTest: '/prerun_sims/BASE_MACRO_BTF_AUG_TEST.msgpack',
     baseMacroBTFAugTrain: '/prerun_sims/BASE_MACRO_BTF_AUG_TRAIN.msgpack',
@@ -227,57 +238,101 @@ export const getBreakdown = async (
     baseMacroHodl2025Test: '/prerun_sims/BASE_MACRO_HODL_2025_TEST.msgpack',
     baseMacroHodlAugTest: '/prerun_sims/BASE_MACRO_HODL_AUG_TEST.msgpack',
     baseMacroHodlAugTrain: '/prerun_sims/BASE_MACRO_HODL_AUG_TRAIN.msgpack',
-    baseMacroBTF2025TestFull: '/prerun_sims/BASE_MACRO_BTF_2025_TEST_FULL.msgpack',
-    baseMacroBTFAugTestFull: '/prerun_sims/BASE_MACRO_BTF_AUG_TEST_FULL.msgpack',
-    baseMacroBTFAugTrainFull: '/prerun_sims/BASE_MACRO_BTF_AUG_TRAIN_FULL.msgpack',
-    baseMacroCFMM2025TestFull: '/prerun_sims/BASE_MACRO_CFMM_2025_TEST_FULL.msgpack',
-    baseMacroCFMMAugTestFull: '/prerun_sims/BASE_MACRO_CFMM_AUG_TEST_FULL.msgpack',
-    baseMacroCFMMAugTrainFull: '/prerun_sims/BASE_MACRO_CFMM_AUG_TRAIN_FULL.msgpack',
-    baseMacroHodl2025TestFull: '/prerun_sims/BASE_MACRO_HODL_2025_TEST_FULL.msgpack',
-    baseMacroHodlAugTestFull: '/prerun_sims/BASE_MACRO_HODL_AUG_TEST_FULL.msgpack',
-    baseMacroHodlAugTrainFull: '/prerun_sims/BASE_MACRO_HODL_AUG_TRAIN_FULL.msgpack',
+    baseMacroBTF2025TestFull:
+      '/prerun_sims/BASE_MACRO_BTF_2025_TEST_FULL.msgpack',
+    baseMacroBTFAugTestFull:
+      '/prerun_sims/BASE_MACRO_BTF_AUG_TEST_FULL.msgpack',
+    baseMacroBTFAugTrainFull:
+      '/prerun_sims/BASE_MACRO_BTF_AUG_TRAIN_FULL.msgpack',
+    baseMacroCFMM2025TestFull:
+      '/prerun_sims/BASE_MACRO_CFMM_2025_TEST_FULL.msgpack',
+    baseMacroCFMMAugTestFull:
+      '/prerun_sims/BASE_MACRO_CFMM_AUG_TEST_FULL.msgpack',
+    baseMacroCFMMAugTrainFull:
+      '/prerun_sims/BASE_MACRO_CFMM_AUG_TRAIN_FULL.msgpack',
+    baseMacroHodl2025TestFull:
+      '/prerun_sims/BASE_MACRO_HODL_2025_TEST_FULL.msgpack',
+    baseMacroHodlAugTestFull:
+      '/prerun_sims/BASE_MACRO_HODL_AUG_TEST_FULL.msgpack',
+    baseMacroHodlAugTrainFull:
+      '/prerun_sims/BASE_MACRO_HODL_AUG_TRAIN_FULL.msgpack',
     sonicMacroBTFAprilTest: '/prerun_sims/SONIC_MACRO_BTF_APRIL_TEST.msgpack',
     sonicMacroBTFAugTrain: '/prerun_sims/SONIC_MACRO_BTF_APRIL_TRAIN.msgpack',
     sonicMacroCFMMAprilTest: '/prerun_sims/SONIC_MACRO_CFMM_APRIL_TEST.msgpack',
     sonicMacroCFMMAugTrain: '/prerun_sims/SONIC_MACRO_CFMM_APRIL_TRAIN.msgpack',
     sonicMacroHodlAprilTest: '/prerun_sims/SONIC_MACRO_HODL_APRIL_TEST.msgpack',
     sonicMacroHodlAugTrain: '/prerun_sims/SONIC_MACRO_HODL_APRIL_TRAIN.msgpack',
-    sonicMacroBTFAprilTestFull: '/prerun_sims/SONIC_MACRO_BTF_APRIL_TEST_FULL.msgpack',
-    sonicMacroBTFAugTrainFull: '/prerun_sims/SONIC_MACRO_BTF_APRIL_TRAIN_FULL.msgpack',
-    sonicMacroCFMMAprilTestFull: '/prerun_sims/SONIC_MACRO_CFMM_APRIL_TEST_FULL.msgpack',
-    sonicMacroCFMMAugTrainFull: '/prerun_sims/SONIC_MACRO_CFMM_APRIL_TRAIN_FULL.msgpack',
-    sonicMacroHodlAprilTestFull: '/prerun_sims/SONIC_MACRO_HODL_APRIL_TEST_FULL.msgpack',
-    sonicMacroHodlAugTrainFull: '/prerun_sims/SONIC_MACRO_HODL_APRIL_TRAIN_FULL.msgpack',
-    arbitrumMacroBTFAugTrain: '/prerun_sims/ARBITRUM_MACRO_BTF_APRIL_TRAIN.msgpack',
-    arbitrumMacroCFMMAugTrain: '/prerun_sims/ARBITRUM_MACRO_CFMM_APRIL_TRAIN.msgpack',
-    arbitrumMacroHodlAugTrain: '/prerun_sims/ARBITRUM_MACRO_HODL_APRIL_TRAIN.msgpack',
-    arbitrumMacroBTFAugTrainFull: '/prerun_sims/ARBITRUM_MACRO_BTF_APRIL_TRAIN_FULL.msgpack',
-    arbitrumMacroCFMMAugTrainFull: '/prerun_sims/ARBITRUM_MACRO_CFMM_APRIL_TRAIN_FULL.msgpack',
-    arbitrumMacroHodlAugTrainFull: '/prerun_sims/ARBITRUM_MACRO_HODL_APRIL_TRAIN_FULL.msgpack',
-    arbitrumMacroCFMMAugTest: '/prerun_sims/ARBITRUM_MACRO_CFMM_AUG_TEST.msgpack',
+    sonicMacroBTFAprilTestFull:
+      '/prerun_sims/SONIC_MACRO_BTF_APRIL_TEST_FULL.msgpack',
+    sonicMacroBTFAugTrainFull:
+      '/prerun_sims/SONIC_MACRO_BTF_APRIL_TRAIN_FULL.msgpack',
+    sonicMacroCFMMAprilTestFull:
+      '/prerun_sims/SONIC_MACRO_CFMM_APRIL_TEST_FULL.msgpack',
+    sonicMacroCFMMAugTrainFull:
+      '/prerun_sims/SONIC_MACRO_CFMM_APRIL_TRAIN_FULL.msgpack',
+    sonicMacroHodlAprilTestFull:
+      '/prerun_sims/SONIC_MACRO_HODL_APRIL_TEST_FULL.msgpack',
+    sonicMacroHodlAugTrainFull:
+      '/prerun_sims/SONIC_MACRO_HODL_APRIL_TRAIN_FULL.msgpack',
+    arbitrumMacroBTFAugTrain:
+      '/prerun_sims/ARBITRUM_MACRO_BTF_APRIL_TRAIN.msgpack',
+    arbitrumMacroCFMMAugTrain:
+      '/prerun_sims/ARBITRUM_MACRO_CFMM_APRIL_TRAIN.msgpack',
+    arbitrumMacroHodlAugTrain:
+      '/prerun_sims/ARBITRUM_MACRO_HODL_APRIL_TRAIN.msgpack',
+    arbitrumMacroBTFAugTrainFull:
+      '/prerun_sims/ARBITRUM_MACRO_BTF_APRIL_TRAIN_FULL.msgpack',
+    arbitrumMacroCFMMAugTrainFull:
+      '/prerun_sims/ARBITRUM_MACRO_CFMM_APRIL_TRAIN_FULL.msgpack',
+    arbitrumMacroHodlAugTrainFull:
+      '/prerun_sims/ARBITRUM_MACRO_HODL_APRIL_TRAIN_FULL.msgpack',
+    arbitrumMacroCFMMAugTest:
+      '/prerun_sims/ARBITRUM_MACRO_CFMM_AUG_TEST.msgpack',
     arbitrumMacroBTFAugTest: '/prerun_sims/ARBITRUM_MACRO_BTF_AUG_TEST.msgpack',
-    arbitrumMacroHodlAugTest: '/prerun_sims/ARBITRUM_MACRO_HODL_AUG_TEST.msgpack',
-    arbitrumMacroBTF2025Test: '/prerun_sims/ARBITRUM_MACRO_BTF_2025_TEST.msgpack',
-    arbitrumMacroCFMM2025Test: '/prerun_sims/ARBITRUM_MACRO_CFMM_2025_TEST.msgpack',
-    arbitrumMacroHodl2025Test: '/prerun_sims/ARBITRUM_MACRO_HODL_2025_TEST.msgpack',
-    arbitrumMacroCFMMAugTestFull: '/prerun_sims/ARBITRUM_MACRO_BTF_AUG_TEST_FULL.msgpack',
-    arbitrumMacroBTFAugTestFull: '/prerun_sims/ARBITRUM_MACRO_CFMM_AUG_TEST_FULL.msgpack',
-    arbitrumMacroHodlAugTestFull: '/prerun_sims/ARBITRUM_MACRO_HODL_AUG_TEST_FULL.msgpack',
-    arbitrumMacroBTF2025TestFull: '/prerun_sims/ARBITRUM_MACRO_BTF_2025_TEST_FULL.msgpack',
-    arbitrumMacroCFMM2025TestFull: '/prerun_sims/ARBITRUM_MACRO_CFMM_2025_TEST_FULL.msgpack',
-    arbitrumMacroHodl2025TestFull: '/prerun_sims/ARBITRUM_MACRO_HODL_2025_TEST_FULL.msgpack',
-    truflationBitcoinBTFJuneTrain:"/prerun_sims/TRUFLATION_BITCOIN_BTF_JUNE_TRAIN.msgpack",
-    truflationBitcoinCFMMJuneTrain:"/prerun_sims/TRUFLATION_BITCOIN_CFMM_JUNE_TRAIN.msgpack",
-    truflationBitcoinHodlJuneTrain:"/prerun_sims/TRUFLATION_BITCOIN_HODL_JUNE_TRAIN.msgpack",
-    truflationBitcoinBTF2025Test:"/prerun_sims/TRUFLATION_BITCOIN_BTF_2025_TEST.msgpack",
-    truflationBitcoinCFMM2025Test:"/prerun_sims/TRUFLATION_BITCOIN_CFMM_2025_TEST.msgpack",
-    truflationBitcoinHodl2025Test:"/prerun_sims/TRUFLATION_BITCOIN_HODL_2025_TEST.msgpack",
-    truflationBitcoinBTFJuneTrainFull:"/prerun_sims/TRUFLATION_BITCOIN_BTF_JUNE_TRAIN_FULL.msgpack",
-    truflationBitcoinCFMMJuneTrainFull:"/prerun_sims/TRUFLATION_BITCOIN_CFMM_JUNE_TRAIN_FULL.msgpack",
-    truflationBitcoinHodlJuneTrainFull:"/prerun_sims/TRUFLATION_BITCOIN_HODL_JUNE_TRAIN_FULL.msgpack",
-    truflationBitcoinBTF2025TestFull:"/prerun_sims/TRUFLATION_BITCOIN_BTF_2025_TEST_FULL.msgpack",
-    truflationBitcoinCFMM2025TestFull:"/prerun_sims/TRUFLATION_BITCOIN_CFMM_2025_TEST_FULL.msgpack",
-    truflationBitcoinHodl2025TestFull:"/prerun_sims/TRUFLATION_BITCOIN_HODL_2025_TEST_FULL.msgpack",
+    arbitrumMacroHodlAugTest:
+      '/prerun_sims/ARBITRUM_MACRO_HODL_AUG_TEST.msgpack',
+    arbitrumMacroBTF2025Test:
+      '/prerun_sims/ARBITRUM_MACRO_BTF_2025_TEST.msgpack',
+    arbitrumMacroCFMM2025Test:
+      '/prerun_sims/ARBITRUM_MACRO_CFMM_2025_TEST.msgpack',
+    arbitrumMacroHodl2025Test:
+      '/prerun_sims/ARBITRUM_MACRO_HODL_2025_TEST.msgpack',
+    arbitrumMacroCFMMAugTestFull:
+      '/prerun_sims/ARBITRUM_MACRO_BTF_AUG_TEST_FULL.msgpack',
+    arbitrumMacroBTFAugTestFull:
+      '/prerun_sims/ARBITRUM_MACRO_CFMM_AUG_TEST_FULL.msgpack',
+    arbitrumMacroHodlAugTestFull:
+      '/prerun_sims/ARBITRUM_MACRO_HODL_AUG_TEST_FULL.msgpack',
+    arbitrumMacroBTF2025TestFull:
+      '/prerun_sims/ARBITRUM_MACRO_BTF_2025_TEST_FULL.msgpack',
+    arbitrumMacroCFMM2025TestFull:
+      '/prerun_sims/ARBITRUM_MACRO_CFMM_2025_TEST_FULL.msgpack',
+    arbitrumMacroHodl2025TestFull:
+      '/prerun_sims/ARBITRUM_MACRO_HODL_2025_TEST_FULL.msgpack',
+    truflationBitcoinBTFJuneTrain:
+      '/prerun_sims/TRUFLATION_BITCOIN_BTF_JUNE_TRAIN.msgpack',
+    truflationBitcoinCFMMJuneTrain:
+      '/prerun_sims/TRUFLATION_BITCOIN_CFMM_JUNE_TRAIN.msgpack',
+    truflationBitcoinHodlJuneTrain:
+      '/prerun_sims/TRUFLATION_BITCOIN_HODL_JUNE_TRAIN.msgpack',
+    truflationBitcoinBTF2025Test:
+      '/prerun_sims/TRUFLATION_BITCOIN_BTF_2025_TEST.msgpack',
+    truflationBitcoinCFMM2025Test:
+      '/prerun_sims/TRUFLATION_BITCOIN_CFMM_2025_TEST.msgpack',
+    truflationBitcoinHodl2025Test:
+      '/prerun_sims/TRUFLATION_BITCOIN_HODL_2025_TEST.msgpack',
+    truflationBitcoinBTFJuneTrainFull:
+      '/prerun_sims/TRUFLATION_BITCOIN_BTF_JUNE_TRAIN_FULL.msgpack',
+    truflationBitcoinCFMMJuneTrainFull:
+      '/prerun_sims/TRUFLATION_BITCOIN_CFMM_JUNE_TRAIN_FULL.msgpack',
+    truflationBitcoinHodlJuneTrainFull:
+      '/prerun_sims/TRUFLATION_BITCOIN_HODL_JUNE_TRAIN_FULL.msgpack',
+    truflationBitcoinBTF2025TestFull:
+      '/prerun_sims/TRUFLATION_BITCOIN_BTF_2025_TEST_FULL.msgpack',
+    truflationBitcoinCFMM2025TestFull:
+      '/prerun_sims/TRUFLATION_BITCOIN_CFMM_2025_TEST_FULL.msgpack',
+    truflationBitcoinHodl2025TestFull:
+      '/prerun_sims/TRUFLATION_BITCOIN_HODL_2025_TEST_FULL.msgpack',
   };
 
   const poolFilePath = poolFileMapping[poolName];

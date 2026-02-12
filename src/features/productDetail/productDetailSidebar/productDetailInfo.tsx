@@ -60,7 +60,8 @@ export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({
   }, [product, selectedTimeRange]);
 
   const latestSharePrice = useMemo(() => {
-    const value = product.timeSeries?.[product.timeSeries.length - 1]?.sharePrice;
+    const value =
+      product.timeSeries?.[product.timeSeries.length - 1]?.sharePrice;
     return typeof value === 'number' ? value : null;
   }, [product.timeSeries]);
 
@@ -98,7 +99,10 @@ export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({
             <Col span={24}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Title style={{ margin: 0, textAlign: 'left' }} level={2}>
-                  ${latestSharePrice != null ? latestSharePrice.toFixed(2) : 'N/A'}
+                  $
+                  {latestSharePrice != null
+                    ? latestSharePrice.toFixed(2)
+                    : 'N/A'}
                 </Title>
                 <span
                   style={{

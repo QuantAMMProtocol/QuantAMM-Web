@@ -85,6 +85,6 @@ export default function ProductDetail() {
       </Layout>
     </>
   );
-};
+}
 
 export { ProductDetail };

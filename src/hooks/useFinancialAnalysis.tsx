@@ -37,7 +37,8 @@ export const buildPortfolioReturns = (timeSeries: TimeSeriesData[]) =>
       const portfolioReturn =
         (step.sharePrice - prevStep.sharePrice) / prevStep.sharePrice;
       const hodlReturn =
-        (step.hodlSharePrice - prevStep.hodlSharePrice) / prevStep.hodlSharePrice;
+        (step.hodlSharePrice - prevStep.hodlSharePrice) /
+        prevStep.hodlSharePrice;
 
       return [step.timestamp * 1000, portfolioReturn, hodlReturn] as [
         number,
@@ -46,9 +47,8 @@ export const buildPortfolioReturns = (timeSeries: TimeSeriesData[]) =>
       ];
     })
     .filter(
-      (
-        portfolioReturn
-      ): portfolioReturn is [number, number, number] => portfolioReturn !== null
+      (portfolioReturn): portfolioReturn is [number, number, number] =>
+        portfolioReturn !== null
     );
 
 export const buildFinancialAnalysisBreakdown = ({
@@ -134,7 +134,9 @@ export const useFinancialAnalysis = ({
         if (!hasCacheForProduct && hasValidTimeseries) {
           const portfolioReturns = buildPortfolioReturns(ts);
 
-          const tokens = [...(product.poolConstituents.map((pc) => pc.coin) ?? [])];
+          const tokens = [
+            ...(product.poolConstituents.map((pc) => pc.coin) ?? []),
+          ];
           const startTimestamp = ts[0]?.timestamp;
           const endTimestamp = ts[ts.length - 1]?.timestamp;
 

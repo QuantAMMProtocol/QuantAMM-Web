@@ -28,7 +28,9 @@ export const LandingPage = lazy(
   () => import('./features/documentation/landing/landingPage')
 );
 export const Research = lazy(() => import('./features/documentation/research'));
-export const CompanyPage = lazy(() => import('./features/documentation/company'));
+export const CompanyPage = lazy(
+  () => import('./features/documentation/company')
+);
 export const ContactCompany = lazy(
   () => import('./features/documentation/landing/desktop/contactCompany')
 );

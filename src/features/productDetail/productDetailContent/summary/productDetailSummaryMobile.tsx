@@ -260,19 +260,24 @@ export const ProductDetailSummaryMobile = ({
           <div style={{ height: '100%', width: '100%' }}>
             {(product.timeSeries?.length ?? 0) > 0 && (
               <ReturnDistributionGraph
-                marketValues={product.timeSeries?.map((x) => x.sharePrice) ?? []}
+                marketValues={
+                  product.timeSeries?.map((x) => x.sharePrice) ?? []
+                }
                 yAxisOverride={{ title: { enabled: false } }}
               />
             )}
           </div>
 
           <Text strong>
-            {selectedBenchmarkReturnAnalysis?.metricName ?? 'No benchmark selected'}
+            {selectedBenchmarkReturnAnalysis?.metricName ??
+              'No benchmark selected'}
           </Text>
           <div style={{ height: '100%', width: '100%' }}>
             {(product.timeSeries?.length ?? 0) > 0 && (
               <ReturnDistributionGraph
-                marketValues={product.timeSeries?.map((x) => x.hodlSharePrice) ?? []}
+                marketValues={
+                  product.timeSeries?.map((x) => x.hodlSharePrice) ?? []
+                }
                 yAxisOverride={{ title: { enabled: false } }}
               />
             )}
@@ -285,7 +290,8 @@ export const ProductDetailSummaryMobile = ({
                 {(comparingProduct?.timeSeries?.length ?? 0) > 0 && (
                   <ReturnDistributionGraph
                     marketValues={
-                      comparingProduct?.timeSeries?.map((x) => x.sharePrice) ?? []
+                      comparingProduct?.timeSeries?.map((x) => x.sharePrice) ??
+                      []
                     }
                     yAxisOverride={{ title: { enabled: false } }}
                   />

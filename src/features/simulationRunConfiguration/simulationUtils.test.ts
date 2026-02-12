@@ -15,17 +15,13 @@ const createPool = (): LiquidityPool =>
       {
         coin: {
           coinCode: 'BTC',
-          deploymentByChain: new Map([
-            [Chain.Base, { address: btcAddress }],
-          ]),
+          deploymentByChain: new Map([[Chain.Base, { address: btcAddress }]]),
         },
       },
       {
         coin: {
           coinCode: 'ETH',
-          deploymentByChain: new Map([
-            [Chain.Base, { address: ethAddress }],
-          ]),
+          deploymentByChain: new Map([[Chain.Base, { address: ethAddress }]]),
         },
       },
     ],

@@ -11,7 +11,11 @@ export default function TruflationBitcoinFactSheet() {
 
   return (
     <>
-      {isMobile ? <TruflationFactSheetMobile model={truflationBitcoinFactsheetData} /> : <TruflationFactSheetDesktop model={truflationBitcoinFactsheetData} />}
+      {isMobile ? (
+        <TruflationFactSheetMobile model={truflationBitcoinFactsheetData} />
+      ) : (
+        <TruflationFactSheetDesktop model={truflationBitcoinFactsheetData} />
+      )}
     </>
   );
 }

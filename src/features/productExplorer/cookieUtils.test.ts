@@ -7,7 +7,9 @@ describe('productExplorer/cookieUtils view-model logic', () => {
   });
 
   it('uses fallback values in non-browser environments', async () => {
-    const { getCookieBool, setCookie, deleteCookie } = await import('./cookieUtils');
+    const { getCookieBool, setCookie, deleteCookie } = await import(
+      './cookieUtils'
+    );
 
     expect(getCookieBool('missing')).toBe(false);
     expect(getCookieBool('missing', true)).toBe(true);
@@ -23,12 +25,13 @@ describe('productExplorer/cookieUtils view-model logic', () => {
       cookie: '',
     } as any);
 
-    const { getCookieBool, setCookie, setCookieBool, deleteCookie } = await import(
-      './cookieUtils'
-    );
+    const { getCookieBool, setCookie, setCookieBool, deleteCookie } =
+      await import('./cookieUtils');
 
     setCookie('test_cookie', 'hello world', 1);
-    expect((globalThis as any).document.cookie).toContain('test_cookie=hello%20world');
+    expect((globalThis as any).document.cookie).toContain(
+      'test_cookie=hello%20world'
+    );
     expect((globalThis as any).document.cookie).toContain('Secure');
 
     setCookieBool('feature_x', true);

@@ -93,7 +93,9 @@ export default function Research() {
                               {item.title}
                             </h3>
                             <p>
-                              <span className={styles.fontWeightBold}>TLDR</span>{' '}
+                              <span className={styles.fontWeightBold}>
+                                TLDR
+                              </span>{' '}
                               {item.tldr}
                             </p>
                           </Col>
@@ -135,17 +137,20 @@ export default function Research() {
                   <Col span={24}>
                     <Row>
                       <Col span={4} className={styles.researchDesktopLeftCol}>
-                        <h3 className={styles.secondaryText}>
-                          {item.title}
-                        </h3>
+                        <h3 className={styles.secondaryText}>{item.title}</h3>
                         <p>
                           <span className={styles.fontWeightBold}>TLDR</span>{' '}
                           {item.tldr}
                         </p>
                       </Col>
-                      <Col span={17} className={styles.researchDesktopMiddleCol}>
+                      <Col
+                        span={17}
+                        className={styles.researchDesktopMiddleCol}
+                      >
                         <p>
-                          <span className={styles.fontWeightBold}>ABSTRACT:</span>{' '}
+                          <span className={styles.fontWeightBold}>
+                            ABSTRACT:
+                          </span>{' '}
                           {item.abstract.map((paragraph, pIndex) => (
                             <p key={pIndex}>{paragraph}</p>
                           ))}
@@ -157,7 +162,7 @@ export default function Research() {
                           padding: 10,
                           display: 'flex',
                           alignItems: 'center',
-                        }}      
+                        }}
                       >
                         <Button href={item.link} type="primary">
                           View Full Article

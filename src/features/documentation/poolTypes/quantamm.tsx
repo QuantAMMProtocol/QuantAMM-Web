@@ -24,21 +24,19 @@ export function QuantAMMPoolDescription(props: OptionalProps) {
             </Col>
             <Col span={24}>
               <div hidden={props.fixedEL15}>
-              <Form.Item className={sharedStyles.formItemTop5}>
-                <Radio.Group
-                  size="small"
-                  value={eli5}
-                  onChange={(e) => setEli5(e.target.value)}
-                >
-                  <Radio.Button disabled={true}>
-                    User Knowledge Level:{' '}
-                  </Radio.Button>
-                  <Radio.Button value={'ELI5'}>ELI5</Radio.Button>
-                  <Radio.Button value={'Quant'}>
-                    Quant
-                  </Radio.Button>
-                </Radio.Group>
-              </Form.Item>
+                <Form.Item className={sharedStyles.formItemTop5}>
+                  <Radio.Group
+                    size="small"
+                    value={eli5}
+                    onChange={(e) => setEli5(e.target.value)}
+                  >
+                    <Radio.Button disabled={true}>
+                      User Knowledge Level:{' '}
+                    </Radio.Button>
+                    <Radio.Button value={'ELI5'}>ELI5</Radio.Button>
+                    <Radio.Button value={'Quant'}>Quant</Radio.Button>
+                  </Radio.Group>
+                </Form.Item>
               </div>
             </Col>
             <div hidden={eli5 !== 'ELI5'}>
@@ -57,7 +55,9 @@ export function QuantAMMPoolDescription(props: OptionalProps) {
                 swap one token for another at an automated price. The holdings
                 within the liquidity pool are kept at constant equal weights.
               </p>
-              <h3 className={sharedStyles.secondaryText}>How QuantAMM BTFs work</h3>
+              <h3 className={sharedStyles.secondaryText}>
+                How QuantAMM BTFs work
+              </h3>
               <p className={sharedStyles.secondaryText}>
                 QuantAMM BTFs are automated market maker pools. However instead
                 of offering a competitive market price, BTFs offer a slightly
@@ -65,8 +65,8 @@ export function QuantAMMPoolDescription(props: OptionalProps) {
                 traders to rebalance the holdings in the direction of the off
                 market drift. How is the off market price decided? On-chain,
                 automatic rules determine what weights the pool should hold
-                given market movements. This means that QuantAMM BTFs can run index and vault like
-                rebalancing continuously and efficiently.
+                given market movements. This means that QuantAMM BTFs can run
+                index and vault like rebalancing continuously and efficiently.
               </p>
             </div>
             <div hidden={eli5 === 'ELI5'}>

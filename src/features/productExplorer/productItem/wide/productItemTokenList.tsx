@@ -114,9 +114,7 @@ export const ProductItemTokenList: FC<ProductItemTokenListProps> = ({
             }}
           >
             <Button size="small" type="link" onClick={() => setShowGraph(true)}>
-              <Text style={{ fontSize: 10 }}>
-                Token Composition
-              </Text>
+              <Text style={{ fontSize: 10 }}>Token Composition</Text>
             </Button>
           </div>
         </div>

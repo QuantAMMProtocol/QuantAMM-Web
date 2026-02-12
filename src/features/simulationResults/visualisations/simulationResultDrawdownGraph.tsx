@@ -26,7 +26,10 @@ export function SimulationResultDrawdownChart(props: BreakdownProps) {
   };
 
   const visibleBreakdowns = useMemo(
-    () => props.breakdowns.filter((x) => x.timeRange.name === simulationTimeRangeSelected),
+    () =>
+      props.breakdowns.filter(
+        (x) => x.timeRange.name === simulationTimeRangeSelected
+      ),
     [props.breakdowns, simulationTimeRangeSelected]
   );
 

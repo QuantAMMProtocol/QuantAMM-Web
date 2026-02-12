@@ -6,9 +6,7 @@ import { useMemo } from 'react';
 import styles from '../simulationResultSummary.module.css';
 import { useAppSelector } from '../../../app/hooks';
 import { Row, Col, Divider } from 'antd';
-import {
-  SimulationRunLiquidityPoolSnapshot,
-} from '../simulationResultSummaryModels';
+import { SimulationRunLiquidityPoolSnapshot } from '../simulationResultSummaryModels';
 import { selectSimulationResultTimeRangeSelection } from '../../simulationRunner/simulationRunnerSlice';
 import { selectAgChartTheme } from '../../themes/themeSlice';
 import { BreakdownProps } from '../simulationResultsSummaryStep';
@@ -55,43 +53,44 @@ export function SimulationResultMarketValueChart(props: BreakdownProps) {
     const currentNameIndex: Record<string, number> = {};
 
     visibleBreakdowns.forEach((x) => {
-        let stokeOverride = undefined;
-        if (props.overrideSeriesStrokeColor !== undefined) {
-          const override =
-            props.overrideSeriesStrokeColor[
-              x.simulationRun.updateRule.updateRuleName
-            ];
-          if (override != null) {
-            stokeOverride = override;
-          }
+      let stokeOverride = undefined;
+      if (props.overrideSeriesStrokeColor !== undefined) {
+        const override =
+          props.overrideSeriesStrokeColor[
+            x.simulationRun.updateRule.updateRuleName
+          ];
+        if (override != null) {
+          stokeOverride = override;
         }
+      }
 
-        const baseRuleName = x.simulationRun.updateRule.updateRuleName;
-        currentNameIndex[baseRuleName] = (currentNameIndex[baseRuleName] ?? 0) + 1;
-        let nameOverride =
-          nameCounts[baseRuleName] > 1
-            ? `${baseRuleName} (${currentNameIndex[baseRuleName]})`
-            : baseRuleName;
+      const baseRuleName = x.simulationRun.updateRule.updateRuleName;
+      currentNameIndex[baseRuleName] =
+        (currentNameIndex[baseRuleName] ?? 0) + 1;
+      let nameOverride =
+        nameCounts[baseRuleName] > 1
+          ? `${baseRuleName} (${currentNameIndex[baseRuleName]})`
+          : baseRuleName;
 
-        if (props.overrideSeriesName !== undefined) {
-          const override =
-            props.overrideSeriesName[x.simulationRun.updateRule.updateRuleName];
-          if (override != null) {
-            nameOverride = override;
-          }
+      if (props.overrideSeriesName !== undefined) {
+        const override =
+          props.overrideSeriesName[x.simulationRun.updateRule.updateRuleName];
+        if (override != null) {
+          nameOverride = override;
         }
-        if (x.timeSteps.length !== 0) {
-          const data = getChartTimeSteps(x);
-          seriesArray.push({
-            xKey: 'unix',
-            yKey: 'totalPoolMarketValue',
-            yName: nameOverride,
-            data: [...data],
-            marker: { enabled: false },
-            stroke: stokeOverride,
-          });
-        }
-      });
+      }
+      if (x.timeSteps.length !== 0) {
+        const data = getChartTimeSteps(x);
+        seriesArray.push({
+          xKey: 'unix',
+          yKey: 'totalPoolMarketValue',
+          yName: nameOverride,
+          data: [...data],
+          marker: { enabled: false },
+          stroke: stokeOverride,
+        });
+      }
+    });
 
     return seriesArray;
   }, [
@@ -119,7 +118,8 @@ export function SimulationResultMarketValueChart(props: BreakdownProps) {
     };
   }
 
-  const visibleBreakdownStepsLength = visibleBreakdowns[0]?.timeSteps.length ?? 1;
+  const visibleBreakdownStepsLength =
+    visibleBreakdowns[0]?.timeSteps.length ?? 1;
 
   return (
     <div>

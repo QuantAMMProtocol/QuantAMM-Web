@@ -31,13 +31,13 @@ export default function SonicMacroSimulatorExample() {
         poolNames = [
           'sonicMacroBTFAugTrainFull',
           'sonicMacroCFMMAugTrainFull',
-          'sonicMacroHodlAugTrainFull'
+          'sonicMacroHodlAugTrainFull',
         ];
       } else if (key === '2') {
         poolNames = [
           'sonicMacroCFMMAprilTestFull',
           'sonicMacroBTFAprilTestFull',
-          'sonicMacroHodlAprilTestFull'
+          'sonicMacroHodlAprilTestFull',
         ];
       }
 
@@ -50,15 +50,15 @@ export default function SonicMacroSimulatorExample() {
     }); // Trigger loading of breakdowns
   }, [key]); // Dependency array ensures that effect runs when `key` changes
 
-  const seriesName= {
+  const seriesName = {
     'Power Channel': '#c7b283',
     'Balancer Weighted': '#528aae',
     HODL: '#52ad80',
-  }
-  const seriesStrokeColor= {
+  };
+  const seriesStrokeColor = {
     'Power Channel': 'BASE MACRO BTF',
     'Balancer Weighted': 'Traditional DEX',
-  }
+  };
   return (
     <div>
       <Row>
@@ -76,8 +76,8 @@ export default function SonicMacroSimulatorExample() {
                 <SimulationResultsSummaryStep
                   breakdowns={breakdowns}
                   forceViewResults={true}
-                  overrideSeriesName= {seriesName}
-                  overrideSeriesStrokeColor= {seriesStrokeColor}
+                  overrideSeriesName={seriesName}
+                  overrideSeriesStrokeColor={seriesStrokeColor}
                 />
               )}
             </TabPane>
@@ -88,8 +88,8 @@ export default function SonicMacroSimulatorExample() {
                 <SimulationResultsSummaryStep
                   breakdowns={breakdowns}
                   forceViewResults={true}
-                  overrideSeriesName= {seriesName}
-                  overrideSeriesStrokeColor= {seriesStrokeColor}
+                  overrideSeriesName={seriesName}
+                  overrideSeriesStrokeColor={seriesStrokeColor}
                 />
               )}
             </TabPane>

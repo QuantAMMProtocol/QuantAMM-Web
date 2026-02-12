@@ -2,7 +2,13 @@
 import { Button, Col, Row, Tag, Tooltip, Spin } from 'antd';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+} from 'react';
 import { useSelector, shallowEqual } from 'react-redux';
 import { useFetchPoolsSummaryByParams } from '../../../../hooks/useFetchPoolsSummaryByParams';
 import type { GqlChain } from '../../../../__generated__/graphql-types';

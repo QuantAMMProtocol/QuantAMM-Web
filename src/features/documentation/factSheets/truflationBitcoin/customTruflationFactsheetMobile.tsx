@@ -355,7 +355,9 @@ export function TruflationFactSheetMobile(props: FactsheetDesktopProps) {
                     }
                     overrideXAxisInterval={Math.max(
                       1,
-                      Math.ceil(((breakdowns[btfTest]?.timeSteps.length ?? 0) / 30) / 2.5)
+                      Math.ceil(
+                        (breakdowns[btfTest]?.timeSteps.length ?? 0) / 30 / 2.5
+                      )
                     )}
                   />
                 </Col>
@@ -400,9 +402,11 @@ export function TruflationFactSheetMobile(props: FactsheetDesktopProps) {
                   props.model.cumulativePerformanceOverrideSeriesName
                 }
                 overrideXAxisInterval={Math.max(
-                      1,
-                      Math.ceil(((breakdowns[btfTest]?.timeSteps.length ?? 0) / 30) / 1)
-                    )}
+                  1,
+                  Math.ceil(
+                    (breakdowns[btfTest]?.timeSteps.length ?? 0) / 30 / 1
+                  )
+                )}
                 forceViewResults={true}
               />
             </div>
@@ -446,7 +450,9 @@ export function TruflationFactSheetMobile(props: FactsheetDesktopProps) {
                           style={{
                             color: getColorFor(
                               metric,
-                              breakdowns[btfMetrics]?.simulationRunResultAnalysis?.[
+                              breakdowns[
+                                btfMetrics
+                              ]?.simulationRunResultAnalysis?.[
                                 `${category}_analysis` as
                                   | 'return_analysis'
                                   | 'benchmark_analysis'
@@ -457,7 +463,9 @@ export function TruflationFactSheetMobile(props: FactsheetDesktopProps) {
                         >
                           {loading
                             ? 'Loading...'
-                            : breakdowns[btfMetrics]?.simulationRunResultAnalysis?.[
+                            : breakdowns[
+                                btfMetrics
+                              ]?.simulationRunResultAnalysis?.[
                                 `${category}_analysis` as
                                   | 'return_analysis'
                                   | 'benchmark_analysis'
@@ -472,7 +480,9 @@ export function TruflationFactSheetMobile(props: FactsheetDesktopProps) {
                           style={{
                             color: getColorFor(
                               metric,
-                              breakdowns[hodlMetrics]?.simulationRunResultAnalysis?.[
+                              breakdowns[
+                                hodlMetrics
+                              ]?.simulationRunResultAnalysis?.[
                                 `${category}_analysis` as
                                   | 'return_analysis'
                                   | 'benchmark_analysis'
@@ -483,7 +493,9 @@ export function TruflationFactSheetMobile(props: FactsheetDesktopProps) {
                         >
                           {loading
                             ? 'Loading...'
-                            : breakdowns[hodlMetrics]?.simulationRunResultAnalysis?.[
+                            : breakdowns[
+                                hodlMetrics
+                              ]?.simulationRunResultAnalysis?.[
                                 `${category}_analysis` as
                                   | 'return_analysis'
                                   | 'benchmark_analysis'
@@ -534,10 +546,7 @@ export function TruflationFactSheetMobile(props: FactsheetDesktopProps) {
         <Col span={22}>
           <Row className={styles.rowHeight250}>
             <Col span={24}>
-              <Card
-                title="Advantages"
-                className={styles.cardHeight250Scroll}
-              >
+              <Card title="Advantages" className={styles.cardHeight250Scroll}>
                 <Row>
                   {props.model.advantages.map((advantage, index) => (
                     <Col span={24} key={index}>
@@ -561,10 +570,7 @@ export function TruflationFactSheetMobile(props: FactsheetDesktopProps) {
         <Row>
           <Col span={1}></Col>
           <Col span={22} className={styles.colHeight250}>
-            <Card
-              className={styles.cardHeight250Scroll}
-              title={'Risks'}
-            >
+            <Card className={styles.cardHeight250Scroll} title={'Risks'}>
               <Row>
                 {props.model.risks.map((risk, index) => (
                   <Col span={24} key={index}>
@@ -663,9 +669,13 @@ export function TruflationFactSheetMobile(props: FactsheetDesktopProps) {
                             props.model.cumulativePerformanceOverrideSeriesName
                           }
                           overrideXAxisInterval={Math.max(
-                      1,
-                      Math.ceil(((breakdowns[btfTest]?.timeSteps.length ?? 0) / 30) / 1)
-                    )}
+                            1,
+                            Math.ceil(
+                              (breakdowns[btfTest]?.timeSteps.length ?? 0) /
+                                30 /
+                                1
+                            )
+                          )}
                           forceViewResults={true}
                         />
                       </>
@@ -680,9 +690,13 @@ export function TruflationFactSheetMobile(props: FactsheetDesktopProps) {
                             isDarkTheme ? 'ag-default-dark' : 'ag-default'
                           }
                           overrideXAxisInterval={Math.max(
-                      1,
-                      Math.ceil(((breakdowns[btfTest]?.timeSteps.length ?? 0) / 30) / 1)
-                    )}
+                            1,
+                            Math.ceil(
+                              (breakdowns[btfTest]?.timeSteps.length ?? 0) /
+                                30 /
+                                1
+                            )
+                          )}
                         />
                       </>
                     )}
@@ -766,18 +780,26 @@ export function TruflationFactSheetMobile(props: FactsheetDesktopProps) {
                 }
                 className={styles.cardHeight110Scroll}
               >
-                    <Radio.Group
-                        size="small"
-                        buttonStyle="solid"
-                        value={faqEli5}
-                        onChange={(e) => setFAQEli5(e.target.value)}
-                        className={styles.radioGroupStacked}
-                    >
-                        <Radio.Button value="ELI5" className={styles.radioButtonFullWidth}>ELI5</Radio.Button>
-                        <Radio.Button value="Crypto Native" className={styles.radioButtonFullWidth}>
-                            Crypto Native
-                        </Radio.Button>
-                    </Radio.Group>
+                <Radio.Group
+                  size="small"
+                  buttonStyle="solid"
+                  value={faqEli5}
+                  onChange={(e) => setFAQEli5(e.target.value)}
+                  className={styles.radioGroupStacked}
+                >
+                  <Radio.Button
+                    value="ELI5"
+                    className={styles.radioButtonFullWidth}
+                  >
+                    ELI5
+                  </Radio.Button>
+                  <Radio.Button
+                    value="Crypto Native"
+                    className={styles.radioButtonFullWidth}
+                  >
+                    Crypto Native
+                  </Radio.Button>
+                </Radio.Group>
                 <Collapse
                   defaultActiveKey={['1']}
                   className={`${styles.collapseBase} ${styles.collapseMarginTop10}`}

@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { GqlPoolAprItem, GqlPoolAprItemType } from '../../../../../__generated__/graphql-types';
+import {
+  GqlPoolAprItem,
+  GqlPoolAprItemType,
+} from '../../../../../__generated__/graphql-types';
 import { getTotalApr, getTotalAprLabel, isProduct } from './pool.utils';
 
 const createAprItem = (

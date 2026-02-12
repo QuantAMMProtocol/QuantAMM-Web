@@ -16,10 +16,7 @@ root.render(
   <React.StrictMode>
     <ApolloProvider client={apolloClient}>
       <Provider store={store}>
-        <RouterProvider
-          router={routes}
-          future={{ v7_startTransition: true }}
-        />
+        <RouterProvider router={routes} future={{ v7_startTransition: true }} />
       </Provider>
     </ApolloProvider>
   </React.StrictMode>

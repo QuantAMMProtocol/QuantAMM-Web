@@ -179,26 +179,27 @@ export function FactSheetDesktop(props: FactsheetDesktopProps) {
                   <div className={styles.titleRow}>
                     <span>GENERAL DETAILS</span>
                     <ButtonGroup>
-                    <Button
-                      size="small"
-                      onClick={() =>
-                        navigate(
-                          '/factsheet/example/' + props.model.poolId
-                        )
-                      }
-                    >
-                      View Simulation Results
-                    </Button>
-                    <Button
-                      size="small"
-                      onClick={() =>
-                        navigate(
-                          '/product-explorer/' + props.model.poolChain + '/' + props.model.poolId
-                        )
-                      }
-                    >
-                      View Live Pool
-                    </Button>
+                      <Button
+                        size="small"
+                        onClick={() =>
+                          navigate('/factsheet/example/' + props.model.poolId)
+                        }
+                      >
+                        View Simulation Results
+                      </Button>
+                      <Button
+                        size="small"
+                        onClick={() =>
+                          navigate(
+                            '/product-explorer/' +
+                              props.model.poolChain +
+                              '/' +
+                              props.model.poolId
+                          )
+                        }
+                      >
+                        View Live Pool
+                      </Button>
                     </ButtonGroup>
                   </div>
                 }
@@ -208,9 +209,7 @@ export function FactSheetDesktop(props: FactsheetDesktopProps) {
                   <Col span={2}></Col>
                   <Col span={10}>
                     <Col span={24}>
-                      <h5 className={styles.listHeading}>
-                        Deployment Links
-                      </h5>
+                      <h5 className={styles.listHeading}>Deployment Links</h5>
                     </Col>
                     {props.model.deploymentLinks.contractLinks.map(
                       (link, index) => {
@@ -230,9 +229,7 @@ export function FactSheetDesktop(props: FactsheetDesktopProps) {
                   </Col>
                   <Col span={10}>
                     <Col span={24}>
-                      <h5 className={styles.listHeading}>
-                        Fixed Settings
-                      </h5>
+                      <h5 className={styles.listHeading}>Fixed Settings</h5>
                     </Col>
                     {props.model.fixedSettings.map((setting, index) => {
                       return (
@@ -446,9 +443,7 @@ export function FactSheetDesktop(props: FactsheetDesktopProps) {
               >
                 <AnalysisSimplifiedBreakdownTable
                   simulationRunBreakdowns={
-                    loading
-                      ? []
-                      : [breakdowns[btf], breakdowns[cfmm]]
+                    loading ? [] : [breakdowns[btf], breakdowns[cfmm]]
                   }
                   benchmarkBreakdown={breakdowns[hodl]}
                   visibleMetrics={[
@@ -498,10 +493,7 @@ export function FactSheetDesktop(props: FactsheetDesktopProps) {
         <Col span={10}>
           <Row className={styles.rowHeight130}>
             <Col span={24}>
-              <Card
-                title="Advantages"
-                className={styles.cardHeight130Scroll}
-              >
+              <Card title="Advantages" className={styles.cardHeight130Scroll}>
                 <Row>
                   {props.model.advantages.map((advantage, index) => (
                     <Col span={12} key={index}>
@@ -522,10 +514,7 @@ export function FactSheetDesktop(props: FactsheetDesktopProps) {
         </Col>
         <Col span={1}></Col>
         <Col span={11}>
-          <Card
-            className={styles.cardHeight130Scroll}
-            title={'Risks'}
-          >
+          <Card className={styles.cardHeight130Scroll} title={'Risks'}>
             <Row>
               {props.model.risks.map((risk, index) => (
                 <Col span={12} key={index}>
@@ -609,49 +598,46 @@ export function FactSheetDesktop(props: FactsheetDesktopProps) {
         </Col>
         <Col span={1}></Col>
         <Col span={11}>
-            <Card
-              title={'Parameters Selected'}
-              className={styles.cardHeightAuto}
-            >
+          <Card title={'Parameters Selected'} className={styles.cardHeightAuto}>
             <Row>
               {props.model.trainedParameters.map((parameter, index) => (
-              <Col span={12} key={index}>
-                <Card
-                className={styles.cardMarginSmall}
-                title={
-                  <Tooltip
-                  title={`The following represent different forms of the ${parameter.name} setting used for different tooling.`}
-                  >
-                  {parameter.name}
-                  </Tooltip>
-                }
-                >
-                <Row>
-                  {parameter.variations.map((variation, variationIndex) => (
-                  <Col span={24} key={variationIndex}>
-                    <Tooltip title={variation.tooltip}>
-                    <p>
-                      {variation.name}:{'  '} <InfoCircleOutlined />
-                    </p>
-                    {variation.value.map((val, valIndex) => (
-                      <Button
-                      size="small"
-                      disabled={true}
-                      className={styles.buttonMarginSmall}
-                      key={valIndex}
+                <Col span={12} key={index}>
+                  <Card
+                    className={styles.cardMarginSmall}
+                    title={
+                      <Tooltip
+                        title={`The following represent different forms of the ${parameter.name} setting used for different tooling.`}
                       >
-                      {val}
-                      </Button>
-                    ))}
-                    </Tooltip>
-                  </Col>
-                  ))}
-                </Row>
-                </Card>
-              </Col>
+                        {parameter.name}
+                      </Tooltip>
+                    }
+                  >
+                    <Row>
+                      {parameter.variations.map((variation, variationIndex) => (
+                        <Col span={24} key={variationIndex}>
+                          <Tooltip title={variation.tooltip}>
+                            <p>
+                              {variation.name}:{'  '} <InfoCircleOutlined />
+                            </p>
+                            {variation.value.map((val, valIndex) => (
+                              <Button
+                                size="small"
+                                disabled={true}
+                                className={styles.buttonMarginSmall}
+                                key={valIndex}
+                              >
+                                {val}
+                              </Button>
+                            ))}
+                          </Tooltip>
+                        </Col>
+                      ))}
+                    </Row>
+                  </Card>
+                </Col>
               ))}
             </Row>
-            </Card>
+          </Card>
         </Col>
         <Col span={1}></Col>
       </Row>

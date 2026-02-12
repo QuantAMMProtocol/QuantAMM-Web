@@ -74,7 +74,9 @@ export function HookTimePeriodChart(selectedPool: SelectedProps) {
           (pool) =>
             pool.id === selectedPool.id &&
             pool.feeHooks.some((hook) =>
-              hook.hookTargetTokens.some((targetToken) => targetToken === coin.coinCode)
+              hook.hookTargetTokens.some(
+                (targetToken) => targetToken === coin.coinCode
+              )
             )
         );
 
@@ -179,7 +181,9 @@ export function HookTimePeriodChart(selectedPool: SelectedProps) {
                     options={{
                       height: 300,
                       axes: [
-                        getTimeAxisOption(priceHistorySeries?.[0]?.data?.length ?? 0),
+                        getTimeAxisOption(
+                          priceHistorySeries?.[0]?.data?.length ?? 0
+                        ),
                         {
                           type: 'number',
                           position: 'left',

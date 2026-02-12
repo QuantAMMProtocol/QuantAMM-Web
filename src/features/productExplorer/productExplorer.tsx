@@ -62,28 +62,27 @@ export default function ProductExplorer() {
 
   return (
     <>
-    <TermsOfServiceGateModal
-      tosUrl="https://quantamm.fi/tos"
-      onClose={handleGateClose}
-      page='productExplorer'
-    />
-    <Layout style={{ minHeight: '100vh', padding: 12 }}>
-      {productMapError ? (
-        <ProductExplorerError />
-      ) : (
-        <>
-          <ProductExplorerFilters
-            horizontalView={horizontalView}
-            setHorizontalView={setHorizontalView}
-            isDark={isDark}
-          />
-          <ProductItemGrid wide={horizontalView} />
-        </>
-      )}
-    </Layout>
+      <TermsOfServiceGateModal
+        tosUrl="https://quantamm.fi/tos"
+        onClose={handleGateClose}
+        page="productExplorer"
+      />
+      <Layout style={{ minHeight: '100vh', padding: 12 }}>
+        {productMapError ? (
+          <ProductExplorerError />
+        ) : (
+          <>
+            <ProductExplorerFilters
+              horizontalView={horizontalView}
+              setHorizontalView={setHorizontalView}
+              isDark={isDark}
+            />
+            <ProductItemGrid wide={horizontalView} />
+          </>
+        )}
+      </Layout>
     </>
-    
   );
-};
+}
 
 export { ProductExplorer };

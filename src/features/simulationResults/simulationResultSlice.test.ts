@@ -44,8 +44,14 @@ describe('simulationResultSlice view-model logic', () => {
     const baseState = simulationResultReducer(undefined, { type: '@@INIT' });
     const breakdown = createBreakdown('pool-a', '1m');
 
-    const onceAdded = simulationResultReducer(baseState, addRunResult(breakdown));
-    const twiceAdded = simulationResultReducer(onceAdded, addRunResult(breakdown));
+    const onceAdded = simulationResultReducer(
+      baseState,
+      addRunResult(breakdown)
+    );
+    const twiceAdded = simulationResultReducer(
+      onceAdded,
+      addRunResult(breakdown)
+    );
 
     expect(onceAdded.breakdowns).toHaveLength(1);
     expect(twiceAdded.breakdowns).toHaveLength(1);

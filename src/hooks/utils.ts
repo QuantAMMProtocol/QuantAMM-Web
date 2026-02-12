@@ -7,7 +7,7 @@ import { Product, TimeSeriesData } from '../models';
 
 export const generatePoolSnapshotsQuery = (
   pools: { id: string; chain: GqlChain }[],
-  range: GqlPoolSnapshotDataRange,
+  range: GqlPoolSnapshotDataRange
 ) => {
   const baseQuery = `
     poolId

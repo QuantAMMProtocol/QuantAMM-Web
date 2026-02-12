@@ -1,8 +1,7 @@
-import { Typography } from "antd";
-import styles from "./landingDesktop.module.css";
+import { Typography } from 'antd';
+import styles from './landingDesktop.module.css';
 
 const { Title } = Typography;
-
 
 export default function ContactCompany() {
   return (

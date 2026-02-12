@@ -134,7 +134,8 @@ export const createRunSimulationsThunk = ({
               failRun({
                 id: targetSim.id,
                 timeRangeName: timeRange.name,
-                errorMessage: error instanceof Error ? error.message : String(error),
+                errorMessage:
+                  error instanceof Error ? error.message : String(error),
               })
             );
           }

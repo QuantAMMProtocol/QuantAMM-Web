@@ -1,12 +1,4 @@
-import {
-  Button,
-  Card,
-  Col,
-  Collapse,
-  Row,
-  Space,
-  Tooltip,
-} from 'antd';
+import { Button, Card, Col, Collapse, Row, Space, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
 import { useMemo } from 'react';
 import { Radio } from 'antd';
@@ -116,7 +108,9 @@ export function TruflationFactSheetDesktop(props: FactsheetDesktopProps) {
     }
   }, [loading, breakdowns, props.model.pools]);
 
-  const [testPeriod, setTestPeriod] = useState<string>(props.model.defaultPeriod[0]);
+  const [testPeriod, setTestPeriod] = useState<string>(
+    props.model.defaultPeriod[0]
+  );
   const [period, setPeriod] = useState<string>(props.model.trainPeriod);
 
   const btf = useMemo(
@@ -162,7 +156,11 @@ export function TruflationFactSheetDesktop(props: FactsheetDesktopProps) {
 
   const renderPeriodSelector = (includeTrainPeriod: boolean) => (
     <Radio.Group
-      onChange={(e) => includeTrainPeriod ? setPeriod(e.target.value) : setTestPeriod(e.target.value)}
+      onChange={(e) =>
+        includeTrainPeriod
+          ? setPeriod(e.target.value)
+          : setTestPeriod(e.target.value)
+      }
       value={includeTrainPeriod ? period : testPeriod}
       buttonStyle="solid"
       size="small"
@@ -185,7 +183,6 @@ export function TruflationFactSheetDesktop(props: FactsheetDesktopProps) {
       ) : null}
     </Radio.Group>
   );
-
 
   const trainXAxisMonthInterval = useMemo(() => {
     return props.model.xAxisIntervals.get(props.model.trainPeriod);
@@ -583,10 +580,7 @@ export function TruflationFactSheetDesktop(props: FactsheetDesktopProps) {
         <Col span={10}>
           <Row className={styles.rowHeight130}>
             <Col span={24}>
-              <Card
-                title="Advantages"
-                className={styles.cardHeight130Scroll}
-              >
+              <Card title="Advantages" className={styles.cardHeight130Scroll}>
                 <Row>
                   {props.model.advantages.map((advantage, index) => (
                     <Col span={12} key={index}>

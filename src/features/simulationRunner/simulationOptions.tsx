@@ -47,9 +47,7 @@ export function SimulatorOptions() {
 
   const disabledDate = (current: Dayjs) => {
     const yesterday = dayjs().subtract(1, 'day').endOf('day');
-    return (
-      current < dayjs('2021-11-20', 'YYYY-MM-DD') || current > yesterday
-    );
+    return current < dayjs('2021-11-20', 'YYYY-MM-DD') || current > yesterday;
   };
 
   const selectedCoinCodes = useMemo(() => {
@@ -138,16 +136,18 @@ export function SimulatorOptions() {
               </Col>
               <Col span={24}>
                 <p>
-                  For those wanting to test specific parameter settings, specific
-                  pool initial values and configurations, you can access the
-                  advanced simulator.
+                  For those wanting to test specific parameter settings,
+                  specific pool initial values and configurations, you can
+                  access the advanced simulator.
                 </p>
               </Col>
               <Button
                 type="primary"
                 size="large"
                 className={runnerStyles.greenButton}
-                onClick={() => dispatch(changeSimulationRunnerCurrentStepIndex(1))}
+                onClick={() =>
+                  dispatch(changeSimulationRunnerCurrentStepIndex(1))
+                }
               >
                 Begin Advanced Simulation Runner
               </Button>

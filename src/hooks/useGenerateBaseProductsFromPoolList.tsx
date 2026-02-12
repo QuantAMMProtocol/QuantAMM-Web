@@ -42,7 +42,10 @@ export const useGenerateBaseProductsFromPoolList = (
       setBaseProductsError(undefined);
       setBaseProductsData(productData);
     } catch (error) {
-      console.error('useGenerateProductsFromPoolList -Error fetching data:', error);
+      console.error(
+        'useGenerateProductsFromPoolList -Error fetching data:',
+        error
+      );
       setBaseProductsError(
         error as FetchBaseQueryError | SerializedError | ApolloError
       );

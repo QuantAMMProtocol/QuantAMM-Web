@@ -122,7 +122,7 @@ export const WeightChangeOverTimeGraph: FC<WeightChangeOverTimeGraphProps> = ({
             position: 'left',
             label: {
               formatter: (params: AgAxisLabelFormatterParams) => {
-                return (params.value.toFixed(2)) + '%';
+                return params.value.toFixed(2) + '%';
               },
             },
             ...yAxisOverride,

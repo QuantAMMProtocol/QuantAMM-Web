@@ -177,10 +177,7 @@ export default function Documentation() {
         <Col span={6} className={styles.documentationMenuCol}>
           <Button
             onClick={() =>
-              window.open(
-                'https://quantammsim.readthedocs.io/',
-                '_blank'
-              )
+              window.open('https://quantammsim.readthedocs.io/', '_blank')
             }
             className={styles.documentationMenuButton}
           >

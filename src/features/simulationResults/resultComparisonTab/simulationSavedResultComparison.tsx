@@ -39,7 +39,9 @@ export default function SimulationSavedResultComparison() {
       );
     } else if (key === '3') {
       if (!selectedBreakdown) {
-        return <div>Select exactly one saved result to view deployment preview.</div>;
+        return (
+          <div>Select exactly one saved result to view deployment preview.</div>
+        );
       }
       return (
         <PoolDeploymentConfigReview
@@ -56,10 +58,7 @@ export default function SimulationSavedResultComparison() {
     <div>
       <Row>
         <Col span={24} style={{ paddingLeft: 30, paddingRight: 30 }}>
-          <Tabs
-            activeKey={key}
-            onChange={(key) => setKey(key)}
-          >
+          <Tabs activeKey={key} onChange={(key) => setKey(key)}>
             <TabPane
               tab={
                 'Selected Saved Results (' +

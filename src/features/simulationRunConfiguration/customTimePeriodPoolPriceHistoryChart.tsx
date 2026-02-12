@@ -146,7 +146,9 @@ export function CustomTimePeriodPoolPriceHistoryChart() {
                     options={{
                       height: 300,
                       axes: [
-                        getTimeAxisOption(priceHistorySeries?.[0]?.data?.length ?? 0),
+                        getTimeAxisOption(
+                          priceHistorySeries?.[0]?.data?.length ?? 0
+                        ),
                         {
                           type: 'number',
                           position: 'left',

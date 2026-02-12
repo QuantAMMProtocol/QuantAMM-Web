@@ -12,7 +12,11 @@ export default function SafeHavenFactSheet() {
 
   return (
     <>
-      {isMobile ? <FactSheetMobile model={safeHavenFactsheetData} /> : <FactSheetDesktop model={safeHavenFactsheetData} />}
+      {isMobile ? (
+        <FactSheetMobile model={safeHavenFactsheetData} />
+      ) : (
+        <FactSheetDesktop model={safeHavenFactsheetData} />
+      )}
     </>
   );
 }

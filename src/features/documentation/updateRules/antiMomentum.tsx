@@ -32,9 +32,7 @@ export function AntiMomentumUpdateRule() {
                       User Knowledge Level:{' '}
                     </Radio.Button>
                     <Radio.Button value={'ELI5'}>ELI5</Radio.Button>
-                    <Radio.Button value={'Quant'}>
-                      Quant
-                    </Radio.Button>
+                    <Radio.Button value={'Quant'}>Quant</Radio.Button>
                   </Radio.Group>
                 </Form.Item>
               </Col>

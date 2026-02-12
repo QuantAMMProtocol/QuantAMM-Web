@@ -7,8 +7,8 @@ export const PowerChannel = () => {
     <>
       <Title level={3}>
         <Text style={{ fontSize: 'inherit' }}>
-          Ignore the noise of small price movements, act fast on large
-          price movements
+          Ignore the noise of small price movements, act fast on large price
+          movements
         </Text>
       </Title>
 
@@ -35,18 +35,16 @@ export const PowerChannel = () => {
         </Text>
       </p>
       <p>
-        <Text strong>
-          More detail:{' '}
-        </Text>
+        <Text strong>More detail: </Text>
       </p>
 
       <div style={{ paddingLeft: 16 }}>
         <p>
-          Somewhere between momentum and channel following, there is an
-          argument that small price movement noise distorts or delays acting on
-          a good momentum signal. This strategy addresses that by ignoring
-          those small price movements. When a large price move is detected this
-          strategy moves aggressively to capture the movement.
+          Somewhere between momentum and channel following, there is an argument
+          that small price movement noise distorts or delays acting on a good
+          momentum signal. This strategy addresses that by ignoring those small
+          price movements. When a large price move is detected this strategy
+          moves aggressively to capture the movement.
         </p>
         <p>
           This works well if one constituent is moving more erratically than

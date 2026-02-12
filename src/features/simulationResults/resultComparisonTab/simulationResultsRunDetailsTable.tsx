@@ -91,7 +91,11 @@ function ResultSummaryGridView({
       <Row>
         <Col span={24} style={{ paddingLeft: 30, paddingRight: 30 }}>
           <div className="wrapper">
-            <div id="myGrid" className={darkThemeAg} style={{ height: tableHeight }}>
+            <div
+              id="myGrid"
+              className={darkThemeAg}
+              style={{ height: tableHeight }}
+            >
               <AgGridReact
                 className={styles.summaryTableParent}
                 autoSizePadding={20}
@@ -148,9 +152,9 @@ export function SimulationResultsRunDetailsTable(props: RunDetailProps) {
 
   const isFirstColumn = useCallback(
     (
-    params:
-      | CheckboxSelectionCallbackParams
-      | HeaderCheckboxSelectionCallbackParams
+      params:
+        | CheckboxSelectionCallbackParams
+        | HeaderCheckboxSelectionCallbackParams
     ) => {
       const displayedColumns = params.columnApi.getAllDisplayedColumns();
       const thisIsFirstColumn = displayedColumns[0] === params.column;
@@ -376,20 +380,18 @@ export function SimulationResultsRunDetailsTable(props: RunDetailProps) {
       } else {
         results.push({
           updateRule: x.simulationRun.updateRule.updateRuleName,
-          parameters:
-            (x.simulationRun.updateRule.updateRuleParameters || []).reduce<string>(
-              (accumulator, current) => {
-                return (
-                  accumulator +
-                  '[' +
-                  current.factorName +
-                  ':' +
-                  current.factorValue +
-                  '] '
-                );
-              },
-              ''
-            ),
+          parameters: (
+            x.simulationRun.updateRule.updateRuleParameters || []
+          ).reduce<string>((accumulator, current) => {
+            return (
+              accumulator +
+              '[' +
+              current.factorName +
+              ':' +
+              current.factorValue +
+              '] '
+            );
+          }, ''),
           timePeriodName: x.timeRange.name,
           starDate: x.timeRange.startDate,
           endDate: x.timeRange.endDate,

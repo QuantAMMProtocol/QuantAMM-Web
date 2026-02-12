@@ -1,7 +1,4 @@
-import {
-  Row,
-  Col,
-} from 'antd';
+import { Row, Col } from 'antd';
 import { useState } from 'react';
 import { useAppSelector, useAppDispatch } from '../../../app/hooks';
 import {

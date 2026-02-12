@@ -27,9 +27,7 @@ import {
   ReturnDistributionGraph,
   ProductTokenWeightChangeOverTimeGraph,
 } from '../../../shared/graphs';
-import {
-  SimulationRunMetric,
-} from '../../../simulationResults/simulationResultSummaryModels';
+import { SimulationRunMetric } from '../../../simulationResults/simulationResultSummaryModels';
 import { ProductDetailDropdown } from '../components/productDetailDropdown';
 
 import { CURRENT_LIVE_FACTSHEETS } from '../../../documentation/factSheets/liveFactsheets';
@@ -153,7 +151,9 @@ export const ProductDetailSummaryDesktop: FC<
     string | undefined
   >(initialSelectedReturnAnalysis?.metricName);
   const [selectedBenchmarkMetricName, setSelectedBenchmarkMetricName] =
-    useState<string | undefined>(initialSelectedBenchmarkReturnAnalysis?.metricName);
+    useState<string | undefined>(
+      initialSelectedBenchmarkReturnAnalysis?.metricName
+    );
 
   const ts = useMemo(() => product?.timeSeries ?? [], [product?.timeSeries]);
 
@@ -302,9 +302,9 @@ export const ProductDetailSummaryDesktop: FC<
 
     return [
       ...(returnAnalysis.map((x) => x.metricName) ?? []),
-      ...((benchmarkAnalysisArr
+      ...(benchmarkAnalysisArr
         .filter((x) => x.benchmarkName !== 'benchmark_return_analysis')
-        .map((x) => x.metricName) ?? [])),
+        .map((x) => x.metricName) ?? []),
     ];
   }, [simulationRunBreakdown]);
 

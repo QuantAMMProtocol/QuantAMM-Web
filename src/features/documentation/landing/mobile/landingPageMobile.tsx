@@ -9,7 +9,6 @@ import { ProductBannerProps } from '../desktop/bannerProductSection';
 import styles from './landingMobile.module.css';
 
 export function LandingPageMobile(props: ProductBannerProps) {
-  
   return (
     <div className={styles.landingRoot}>
       <BannerMobile productData={props.productData} />

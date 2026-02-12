@@ -40,11 +40,19 @@ export const useSort = () => {
           comparableA = productA.currentPerformance ?? 0;
           comparableB = productB.currentPerformance ?? 0;
         } else if (sortingMetric === 'tvl') {
-          comparableA = toComparableNumber(productA.dynamicData?.totalLiquidity);
-          comparableB = toComparableNumber(productB.dynamicData?.totalLiquidity);
+          comparableA = toComparableNumber(
+            productA.dynamicData?.totalLiquidity
+          );
+          comparableB = toComparableNumber(
+            productB.dynamicData?.totalLiquidity
+          );
         } else if (sortingMetric === 'yield') {
-          comparableA = toComparableNumber(productA.dynamicData?.yieldCapture48h);
-          comparableB = toComparableNumber(productB.dynamicData?.yieldCapture48h);
+          comparableA = toComparableNumber(
+            productA.dynamicData?.yieldCapture48h
+          );
+          comparableB = toComparableNumber(
+            productB.dynamicData?.yieldCapture48h
+          );
         } else if (sortingMetric === 'sharePrice') {
           comparableA =
             productA.timeSeries?.[productA.timeSeries?.length - 1]

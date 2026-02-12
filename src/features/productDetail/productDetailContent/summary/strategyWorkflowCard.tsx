@@ -542,7 +542,9 @@ export const StrategyWorkflowCard: FC<{
         key="current-and-intermediates"
         header={
           <div className={styles['product-detail-summary__collapseHeader']}>
-            <span className={styles['product-detail-summary__stepNumber']}>2</span>
+            <span className={styles['product-detail-summary__stepNumber']}>
+              2
+            </span>
             <Text strong>Current weights & intermediate values</Text>
             <Text
               type="secondary"
@@ -579,7 +581,9 @@ export const StrategyWorkflowCard: FC<{
                   dataIndex: 'weightPct',
                   key: 'weightPct',
                   render: (v: number) => (
-                    <div className={styles['product-detail-summary__weightCell']}>
+                    <div
+                      className={styles['product-detail-summary__weightCell']}
+                    >
                       <Tag>{v.toFixed(2)}%</Tag>
                       <Progress percent={clamp(v, 0, 100)} showInfo={false} />
                     </div>
@@ -687,7 +691,11 @@ export const StrategyWorkflowCard: FC<{
         />
 
         <div className={styles['product-detail-summary__workflowActions']}>
-          <Button type="primary" onClick={() => void onPredict()} loading={predicting}>
+          <Button
+            type="primary"
+            onClick={() => void onPredict()}
+            loading={predicting}
+          >
             Predict target weights
           </Button>
           <Tag className={styles['product-detail-summary__stubTag']}>

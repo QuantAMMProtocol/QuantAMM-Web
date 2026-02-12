@@ -158,11 +158,11 @@ export function PoolDeploymentConfigReview({
 
   const [deploymentInput, setDeploymentInput] =
     useState<LocalQuantAMMDeploymentInputParams>({
-    Vault: '',
-    PauseWindowDuration: null,
-    UpdateWeightRunner: '',
-    FactoryVersion: '',
-    PoolVersion: '',
+      Vault: '',
+      PauseWindowDuration: null,
+      UpdateWeightRunner: '',
+      FactoryVersion: '',
+      PoolVersion: '',
     });
 
   const sortedTokenAddresses = useMemo(() => {
@@ -175,7 +175,7 @@ export function PoolDeploymentConfigReview({
       .filter((addr) => addr && addr.length > 0);
     return sortTokenAddresses(addresses);
   }, [pool.poolConstituents, targetChain]);
-  
+
   const [poolParams, setPoolParams] = useState<LocalCreationNewPoolParams>({
     name: pool.name,
     symbol: pool.name.replace(/\s+/g, ''),
@@ -193,12 +193,24 @@ export function PoolDeploymentConfigReview({
         .join(', '),
       rule: pool.updateRule.updateRuleName,
       updateInterval: null,
-      lambda: buildRuleParametersString(pool, initialisationData?.smart_contract_parameters?.strings ?? {}, sortedTokenAddresses, targetChain, true),
+      lambda: buildRuleParametersString(
+        pool,
+        initialisationData?.smart_contract_parameters?.strings ?? {},
+        sortedTokenAddresses,
+        targetChain,
+        true
+      ),
       epsilonMax: '0.432',
       absoluteWeightGuardRail: '0.03',
       maxTradeSizeRatio: '0.1',
       // initialise from update rule parameters in smart-contract order
-      ruleParameters: buildRuleParametersString(pool, initialisationData?.smart_contract_parameters?.strings ?? {}, sortedTokenAddresses, targetChain, false),
+      ruleParameters: buildRuleParametersString(
+        pool,
+        initialisationData?.smart_contract_parameters?.strings ?? {},
+        sortedTokenAddresses,
+        targetChain,
+        false
+      ),
       poolManager: '',
     },
     initialMovingAverages: '',
@@ -208,7 +220,6 @@ export function PoolDeploymentConfigReview({
     poolRegistry: '',
     poolDetails: '',
   });
-
 
   // Whenever targetChain changes, hydrate token addresses from deploymentByChain
   useEffect(() => {
@@ -343,14 +354,12 @@ export function PoolDeploymentConfigReview({
               </Col>
               <Col span={3}>
                 <Input
-                  value={
-                    sortedTokenAddresses.indexOf(
-                      getDeploymentForChain(
-                        poolCoin.coin.deploymentByChain,
-                        targetChain
-                      )?.address ?? ''
-                    )
-                  }
+                  value={sortedTokenAddresses.indexOf(
+                    getDeploymentForChain(
+                      poolCoin.coin.deploymentByChain,
+                      targetChain
+                    )?.address ?? ''
+                  )}
                   disabled
                 />
               </Col>
@@ -509,7 +518,9 @@ export function PoolDeploymentConfigReview({
         />
         <Input
           addonBefore="updateInterval"
-          value={initialisationData?.jax_parameters?.chunk_period?.[0] ?? 'UNKNOWN'}
+          value={
+            initialisationData?.jax_parameters?.chunk_period?.[0] ?? 'UNKNOWN'
+          }
           disabled
         />
         <Input
@@ -550,7 +561,9 @@ export function PoolDeploymentConfigReview({
         <Input
           addonBefore="poolManager"
           value={poolParams.poolSettings.poolManager}
-          onChange={(e) => handlePoolSettingsChange('poolManager', e.target.value)}
+          onChange={(e) =>
+            handlePoolSettingsChange('poolManager', e.target.value)
+          }
         />
 
         <Divider orientation="left">Registry Permissions (bitmask)</Divider>

@@ -89,7 +89,7 @@ export function StrategySummary() {
       image: '/documentation/vanilla_momentum.svg',
       description:
         "It's hard to buy low and sell high. It's easier to buy high and sell higher. Follow the trend.",
-      imgWidth:'85%'
+      imgWidth: '85%',
     },
     {
       title: 'Price Mean Reversion',
@@ -97,7 +97,7 @@ export function StrategySummary() {
       image: '/documentation/mean_reversion.svg',
       description:
         'Deviations will revert back to the mean. Buy and sell assuming prices will revert.',
-      imgWidth:'100%'
+      imgWidth: '100%',
     },
     {
       title: 'Channel Following',
@@ -105,7 +105,7 @@ export function StrategySummary() {
       image: '/documentation/channel_following.svg',
       description:
         'Everything will revert to the mean on small movements but act fast on larger movements.',
-      imgWidth:'90%'
+      imgWidth: '90%',
     },
     {
       title: 'Power Channel',
@@ -113,7 +113,7 @@ export function StrategySummary() {
       image: '/documentation/power_channel.svg',
       description:
         'Ignore the noise of small price movements, act fast on large price movements.',
-      imgWidth:'100%'
+      imgWidth: '100%',
     },
   ];
 
@@ -127,7 +127,9 @@ export function StrategySummary() {
   const StrategySelectorPanel = () => (
     <div className={styles.strategyPanel}>
       <h4 className={styles.textCenter}>ADAPTIVE STRATEGIES</h4>
-      <p className={styles.textCenter}>FULLY DECENTRALISED, FULLY TRANSPARENT</p>
+      <p className={styles.textCenter}>
+        FULLY DECENTRALISED, FULLY TRANSPARENT
+      </p>
       <Row gutter={[8, 8]} className={styles.strategyGrid}>
         {strategies.map((strategyItem) => (
           <Col
@@ -183,7 +185,9 @@ export function StrategySummary() {
         </p>
         <div
           className={styles.chartWrap}
-          hidden={(loading && breakdowns.length === 0) || !traditionalDexBreakdown}
+          hidden={
+            (loading && breakdowns.length === 0) || !traditionalDexBreakdown
+          }
         >
           <WeightChangeOverTimeGraph
             simulationRunBreakdown={traditionalDexBreakdown}
@@ -200,10 +204,14 @@ export function StrategySummary() {
           </span>{' '}
           Pool Holdings
         </h4>
-        <p className={styles.chartSubtitle}>React to markets while earning fees.</p>
+        <p className={styles.chartSubtitle}>
+          React to markets while earning fees.
+        </p>
         <div
           className={styles.chartWrapNoTop}
-          hidden={(loading && breakdowns.length === 0) || !selectedStrategyBreakdown}
+          hidden={
+            (loading && breakdowns.length === 0) || !selectedStrategyBreakdown
+          }
         >
           <WeightChangeOverTimeGraph
             simulationRunBreakdown={selectedStrategyBreakdown}
@@ -261,7 +269,7 @@ export function StrategySummary() {
                     AntiMomentum: 'QuantAMM',
                     'Channel Following': 'QuantAMM',
                     'Power Channel': 'QuantAMM',
-                    'Balancer Weighted': 'Traditional DEX'
+                    'Balancer Weighted': 'Traditional DEX',
                   }}
                 />
               </div>

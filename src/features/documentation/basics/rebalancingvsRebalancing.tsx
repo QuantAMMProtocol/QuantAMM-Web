@@ -36,90 +36,42 @@ const RebalancingVsRebalancing: React.FC = () => {
               <table className={styles.comparisonTable}>
                 <thead>
                   <tr>
-                    <th className={styles.tableCell}>
-                      Model Features
-                    </th>
-                    <th className={styles.tableCell}>
-                      LVR
-                    </th>
-                    <th className={styles.tableCell}>
-                      ARB
-                    </th>
-                    <th className={styles.tableCell}>
-                      RVR
-                    </th>
+                    <th className={styles.tableCell}>Model Features</th>
+                    <th className={styles.tableCell}>LVR</th>
+                    <th className={styles.tableCell}>ARB</th>
+                    <th className={styles.tableCell}>RVR</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td className={styles.tableCell}>
-                      CEX Spread
-                    </td>
-                    <td className={styles.tableCell}>
-                      0
-                    </td>
-                    <td className={styles.tableCell}>
-                      0
-                    </td>
-                    <td className={styles.tableCell}>
-                      TradFi model
-                    </td>
+                    <td className={styles.tableCell}>CEX Spread</td>
+                    <td className={styles.tableCell}>0</td>
+                    <td className={styles.tableCell}>0</td>
+                    <td className={styles.tableCell}>TradFi model</td>
                   </tr>
                   <tr>
-                    <td className={styles.tableCell}>
-                      CEX Fees
-                    </td>
-                    <td className={styles.tableCell}>
-                      0
-                    </td>
-                    <td className={styles.tableCell}>
-                      0
-                    </td>
-                    <td className={styles.tableCell}>
-                      Fee Present
-                    </td>
+                    <td className={styles.tableCell}>CEX Fees</td>
+                    <td className={styles.tableCell}>0</td>
+                    <td className={styles.tableCell}>0</td>
+                    <td className={styles.tableCell}>Fee Present</td>
                   </tr>
                   <tr>
-                    <td className={styles.tableCell}>
-                      AMM Fees
-                    </td>
-                    <td className={styles.tableCell}>
-                      0
-                    </td>
-                    <td className={styles.tableCell}>
-                      Fee Present
-                    </td>
-                    <td className={styles.tableCell}>
-                      Fee Present
-                    </td>
+                    <td className={styles.tableCell}>AMM Fees</td>
+                    <td className={styles.tableCell}>0</td>
+                    <td className={styles.tableCell}>Fee Present</td>
+                    <td className={styles.tableCell}>Fee Present</td>
                   </tr>
                   <tr>
-                    <td className={styles.tableCell}>
-                      AMM Gas Cost
-                    </td>
-                    <td className={styles.tableCell}>
-                      0
-                    </td>
-                    <td className={styles.tableCell}>
-                      0
-                    </td>
-                    <td className={styles.tableCell}>
-                      Fixed Costs
-                    </td>
+                    <td className={styles.tableCell}>AMM Gas Cost</td>
+                    <td className={styles.tableCell}>0</td>
+                    <td className={styles.tableCell}>0</td>
+                    <td className={styles.tableCell}>Fixed Costs</td>
                   </tr>
                   <tr>
-                    <td className={styles.tableCell}>
-                      AMM tokens
-                    </td>
-                    <td className={styles.tableCell}>
-                      2
-                    </td>
-                    <td className={styles.tableCell}>
-                      2
-                    </td>
-                    <td className={styles.tableCell}>
-                      N
-                    </td>
+                    <td className={styles.tableCell}>AMM tokens</td>
+                    <td className={styles.tableCell}>2</td>
+                    <td className={styles.tableCell}>2</td>
+                    <td className={styles.tableCell}>N</td>
                   </tr>
                 </tbody>
               </table>

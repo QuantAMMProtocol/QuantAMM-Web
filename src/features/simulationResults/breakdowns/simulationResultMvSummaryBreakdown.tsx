@@ -106,7 +106,7 @@ export function SimulationRunMvSummaryBreakdown(props: BreakdownProps) {
 
     return original;
   };
-  
+
   const resultSummary = useMemo((): FlatResultSummaryBreakdown[] => {
     const results: FlatResultSummaryBreakdown[] = [];
 

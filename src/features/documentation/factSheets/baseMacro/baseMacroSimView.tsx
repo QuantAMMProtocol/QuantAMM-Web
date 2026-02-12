@@ -31,19 +31,19 @@ export default function BaseMacroSimulatorExample() {
         poolNames = [
           'baseMacroBTFAugTrainFull',
           'baseMacroCFMMAugTrainFull',
-          'baseMacroHodlAugTrainFull'
+          'baseMacroHodlAugTrainFull',
         ];
       } else if (key === '2') {
         poolNames = [
           'baseMacroCFMMAugTestFull',
           'baseMacroBTFAugTestFull',
-          'baseMacroHodlAugTestFull'
+          'baseMacroHodlAugTestFull',
         ];
       } else if (key === '3') {
         poolNames = [
           'baseMacroBTF2025TestFull',
           'baseMacroCFMM2025TestFull',
-          'baseMacroHodl2025TestFull'
+          'baseMacroHodl2025TestFull',
         ];
       }
 
@@ -56,15 +56,15 @@ export default function BaseMacroSimulatorExample() {
     }); // Trigger loading of breakdowns
   }, [key]); // Dependency array ensures that effect runs when `key` changes
 
-  const seriesName= {
+  const seriesName = {
     'Power Channel': '#c7b283',
     'Balancer Weighted': '#528aae',
     HODL: '#52ad80',
-  }
-  const seriesStrokeColor= {
+  };
+  const seriesStrokeColor = {
     'Power Channel': 'BASE MACRO BTF',
     'Balancer Weighted': 'Traditional DEX',
-  }
+  };
   return (
     <div>
       <Row>
@@ -82,32 +82,38 @@ export default function BaseMacroSimulatorExample() {
                 <SimulationResultsSummaryStep
                   breakdowns={breakdowns}
                   forceViewResults={true}
-                  overrideSeriesName= {seriesName}
-                  overrideSeriesStrokeColor= {seriesStrokeColor}
+                  overrideSeriesName={seriesName}
+                  overrideSeriesStrokeColor={seriesStrokeColor}
                 />
               )}
             </TabPane>
-            <TabPane tab="Base Macro Test Period: Aug 2024 - Apr 2025" key={'2'}>
+            <TabPane
+              tab="Base Macro Test Period: Aug 2024 - Apr 2025"
+              key={'2'}
+            >
               {loading ? (
                 <Spin size="large" />
               ) : (
                 <SimulationResultsSummaryStep
                   breakdowns={breakdowns}
                   forceViewResults={true}
-                  overrideSeriesName= {seriesName}
-                  overrideSeriesStrokeColor= {seriesStrokeColor}
+                  overrideSeriesName={seriesName}
+                  overrideSeriesStrokeColor={seriesStrokeColor}
                 />
               )}
             </TabPane>
-            <TabPane tab="Base Macro Test Period: Jan 2025 - Apr 2025" key={'3'}>
+            <TabPane
+              tab="Base Macro Test Period: Jan 2025 - Apr 2025"
+              key={'3'}
+            >
               {loading ? (
                 <Spin size="large" />
               ) : (
                 <SimulationResultsSummaryStep
                   breakdowns={breakdowns}
                   forceViewResults={true}
-                  overrideSeriesName= {seriesName}
-                  overrideSeriesStrokeColor= {seriesStrokeColor}
+                  overrideSeriesName={seriesName}
+                  overrideSeriesStrokeColor={seriesStrokeColor}
                 />
               )}
             </TabPane>

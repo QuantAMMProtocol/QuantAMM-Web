@@ -1,5 +1,5 @@
-import { Card, Grid, Timeline, Typography } from "antd";
-import { VisionOverview } from "./landing/desktop/visionOverview";
+import { Card, Grid, Timeline, Typography } from 'antd';
+import { VisionOverview } from './landing/desktop/visionOverview';
 import styles from './documentation.module.css';
 
 const { Title } = Typography;
@@ -10,8 +10,8 @@ export default function CompanyPage() {
   const screens = useBreakpoint();
   const isMobile = !screens.lg && !screens.xl && !screens.xxl;
 
-    return (
-      isMobile ? <div>
+  return isMobile ? (
+    <div>
       {/* Company Section */}
       <div className={styles.companySection}>
         <Title level={3}>Our Vision</Title>
@@ -59,9 +59,7 @@ export default function CompanyPage() {
         ))}
 
         {/* Updated Company Images */}
-        <div
-          className={styles.companyPartnersWrap}
-        >
+        <div className={styles.companyPartnersWrap}>
           {[
             '8vc.png',
             '369.png',
@@ -100,6 +98,9 @@ export default function CompanyPage() {
             May 2025 - QuantAMM Launches BTF
           </Timeline.Item>
         </Timeline>
-      </div></div> : <VisionOverview backgroundColor="#162536"/>
-    );
-    }
+      </div>
+    </div>
+  ) : (
+    <VisionOverview backgroundColor="#162536" />
+  );
+}

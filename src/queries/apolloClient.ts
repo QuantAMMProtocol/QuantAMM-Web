@@ -11,9 +11,9 @@ const quantammLink = setContext((_, { headers }) => {
   return {
     headers: {
       ...headers,
-      'x-graphql-client-name': 'quantAmmFrontend', 
+      'x-graphql-client-name': 'quantAmmFrontend',
       'x-graphql-client-version': '1.0.0',
-    }
+    },
   };
 });
 

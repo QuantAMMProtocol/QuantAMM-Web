@@ -6,11 +6,7 @@ export const Gyro = () => {
   return (
     <>
       <Title level={3}>
-        <Text
-          style={{  fontSize: 'inherit' }}
-        >
-          Gyroscope E-CLP
-        </Text>
+        <Text style={{ fontSize: 'inherit' }}>Gyroscope E-CLP</Text>
       </Title>
       <p>
         Elliptic Concentrated Liquidity Pools (E-CLPs) introduce asymmetric

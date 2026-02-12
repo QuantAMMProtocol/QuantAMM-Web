@@ -44,42 +44,45 @@ export function SimulationResultVaRChart(props: BreakdownProps) {
   ];
 
   const visibleBreakdowns = useMemo(
-    () => props.breakdowns.filter((x) => x.timeRange.name === simulationTimeRangeSelected),
+    () =>
+      props.breakdowns.filter(
+        (x) => x.timeRange.name === simulationTimeRangeSelected
+      ),
     [props.breakdowns, simulationTimeRangeSelected]
   );
 
   const series = useMemo((): agCharts.AgCartesianSeriesOptions[] => {
     const seriesArray: agCharts.AgCartesianSeriesOptions[] = [];
     visibleBreakdowns.forEach((x) => {
-        const timeSeries =
-          x.simulationRunResultAnalysis?.return_timeseries_analysis.find(
-            (y) => y.metricName === varType
-          );
-        let timeSeriesValues: SimulationResultTimestepDto[] = [];
+      const timeSeries =
+        x.simulationRunResultAnalysis?.return_timeseries_analysis.find(
+          (y) => y.metricName === varType
+        );
+      let timeSeriesValues: SimulationResultTimestepDto[] = [];
 
-        if (timeSeries) {
-          timeSeriesValues = [
-            ...timeSeries.timeSteps.map((x) => {
-              return {
-                unix: x.unix * 1000,
-                timeStepTotal: x.timeStepTotal,
-                coinsHeld: x.coinsHeld,
-              };
-            }),
-          ];
-        }
+      if (timeSeries) {
+        timeSeriesValues = [
+          ...timeSeries.timeSteps.map((x) => {
+            return {
+              unix: x.unix * 1000,
+              timeStepTotal: x.timeStepTotal,
+              coinsHeld: x.coinsHeld,
+            };
+          }),
+        ];
+      }
 
-        if (timeSeriesValues.length > 0) {
-          seriesArray.push({
-            type: 'line',
-            xKey: 'unix',
-            yKey: 'timeStepTotal',
-            yName: `${x.simulationRun?.updateRule?.updateRuleKey || 'Unknown'} ${varType}`,
-            data: timeSeriesValues,
-            marker: { enabled: false },
-          });
-        }
-      });
+      if (timeSeriesValues.length > 0) {
+        seriesArray.push({
+          type: 'line',
+          xKey: 'unix',
+          yKey: 'timeStepTotal',
+          yName: `${x.simulationRun?.updateRule?.updateRuleKey || 'Unknown'} ${varType}`,
+          data: timeSeriesValues,
+          marker: { enabled: false },
+        });
+      }
+    });
 
     return seriesArray;
   }, [varType, visibleBreakdowns]);

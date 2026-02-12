@@ -53,9 +53,7 @@ export function MomentumUpdateRule() {
                       User Knowledge Level:{' '}
                     </Radio.Button>
                     <Radio.Button value={'ELI5'}>ELI5</Radio.Button>
-                    <Radio.Button value={'Quant'}>
-                      Quant
-                    </Radio.Button>
+                    <Radio.Button value={'Quant'}>Quant</Radio.Button>
                   </Radio.Group>
                 </Form.Item>
               </Col>
@@ -65,11 +63,11 @@ export function MomentumUpdateRule() {
               <div hidden={eli5 !== 'ELI5'}>
                 <Row>
                   <Col span={8}>
-                      <img
-                        loading="lazy"
-                        src={'/documentation/vanilla_momentum.svg'}
-                        className={styles.imagePadRight5Top15}
-                      />
+                    <img
+                      loading="lazy"
+                      src={'/documentation/vanilla_momentum.svg'}
+                      className={styles.imagePadRight5Top15}
+                    />
                   </Col>
                   <Col span={16}>
                     <Eli5 strategy="MOMENTUM" />

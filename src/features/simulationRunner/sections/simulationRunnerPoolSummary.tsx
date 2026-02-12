@@ -71,14 +71,18 @@ export function SimulationRunnerPoolSummary({
                   )}
                   <Row gutter={[16, 16]}>
                     {items.map(({ param }, index) => (
-                      <Col key={`${param.factorName}-${coinCode}-${index}`} span={10}>
+                      <Col
+                        key={`${param.factorName}-${coinCode}-${index}`}
+                        span={10}
+                      >
                         <InputNumber
                           disabled
                           id={`${param.factorName}-${coinCode}-${index}`}
                           addonBefore={param.factorName}
                           value={
                             (param.applicableCoins?.length ?? 0) > 0
-                              ? items[index]?.coin?.factorValue ?? param.factorValue
+                              ? items[index]?.coin?.factorValue ??
+                                param.factorValue
                               : param.factorValue
                           }
                           className={runnerStyles.fullWidth}

@@ -39,7 +39,8 @@ export default function ProductHealthMonitor() {
             opacity: 0.8,
           }}
         >
-          Live overview of pool update cadence, liquidity and recent flow metrics.
+          Live overview of pool update cadence, liquidity and recent flow
+          metrics.
         </p>
 
         <div
@@ -222,6 +223,6 @@ export default function ProductHealthMonitor() {
       </div>
     </div>
   );
-};
+}
 
 export { ProductHealthMonitor };

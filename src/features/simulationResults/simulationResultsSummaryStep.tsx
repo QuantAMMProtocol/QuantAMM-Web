@@ -40,16 +40,16 @@ const { TabPane } = Tabs;
 export interface BreakdownProps {
   breakdowns: SimulationRunBreakdown[];
   forceViewResults: boolean;
-  overrideHeight?:number;
+  overrideHeight?: number;
   overrideXAxisInterval?: number;
   overrideYAxisInterval?: number[];
   overrideYAxisMax?: number;
   overrideYAxisMin?: number;
-  overrideSeriesStrokeColor?:Dictionary<string>;
-  overrideSeriesName?:Dictionary<string>;
-  overrideNagivagtion?:boolean;
-  overrideTitle?:string;
-  hideTitle?:boolean;
+  overrideSeriesStrokeColor?: Dictionary<string>;
+  overrideSeriesName?: Dictionary<string>;
+  overrideNagivagtion?: boolean;
+  overrideTitle?: string;
+  hideTitle?: boolean;
 }
 
 function getMenuItem(

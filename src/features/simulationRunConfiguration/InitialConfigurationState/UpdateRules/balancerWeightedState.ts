@@ -14,7 +14,6 @@ export const BalancerWeightedState: UpdateRule = {
   chainDeploymentDetails: new Map<Chain, string>(),
 };
 
-
 export const LvrBalancerWeightedState: UpdateRule = {
   updateRuleName: 'LVR - Balancer Weighted',
   updateRuleKey: 'lvr__balancer',
@@ -28,7 +27,6 @@ export const LvrBalancerWeightedState: UpdateRule = {
   applicablePoolTypes: ['LVR for Balancer Weighted'],
   chainDeploymentDetails: new Map<Chain, string>(),
 };
-
 
 export const RvrBalancerWeightedState: UpdateRule = {
   updateRuleName: 'RVR - Balancer Weighted',

@@ -30,7 +30,9 @@ describe('numbers utilities view-model logic', () => {
     expect(isValidNumber('123.45')).toBe(true);
     expect(isValidNumber('abc')).toBe(false);
     expect(isGreaterThanZeroValidation('1')).toBe(true);
-    expect(isGreaterThanZeroValidation('0')).toBe('Amount must be greater than 0');
+    expect(isGreaterThanZeroValidation('0')).toBe(
+      'Amount must be greater than 0'
+    );
   });
 
   it('blocks invalid number input keys for numeric fields', () => {

@@ -74,8 +74,14 @@ describe('simulationRunnerSlice view-model logic', () => {
   it('updates status and only advances step index for positive mapped statuses', () => {
     const baseState = simulationRunnerReducer(undefined, { type: '@@INIT' });
 
-    const runningState = simulationRunnerReducer(baseState, updateStatus('Running'));
-    const pendingState = simulationRunnerReducer(runningState, updateStatus('Pending'));
+    const runningState = simulationRunnerReducer(
+      baseState,
+      updateStatus('Running')
+    );
+    const pendingState = simulationRunnerReducer(
+      runningState,
+      updateStatus('Pending')
+    );
 
     expect(runningState.simulationRunStatus).toBe('Running');
     expect(runningState.simulationRunStatusStepIndex).toBe(1);
@@ -97,7 +103,10 @@ describe('simulationRunnerSlice view-model logic', () => {
       ],
     };
 
-    const nextState = simulationRunnerReducer(seededState, updateProgressPercent());
+    const nextState = simulationRunnerReducer(
+      seededState,
+      updateProgressPercent()
+    );
 
     expect(nextState.simulationRunProgressPercent).toBeCloseTo(66.6666, 3);
   });
@@ -145,7 +154,9 @@ describe('simulationRunnerSlice view-model logic', () => {
       })
     );
 
-    expect(nextState.runTimePeriodRanges).toEqual(baseState.runTimePeriodRanges);
+    expect(nextState.runTimePeriodRanges).toEqual(
+      baseState.runTimePeriodRanges
+    );
     expect(nextState.simulationResultTimeRangeSelection).toBe(
       baseState.runTimePeriodRanges[0].name
     );
@@ -163,7 +174,9 @@ describe('simulationRunnerSlice view-model logic', () => {
       seededState,
       completeRun({ id: 'target', timeRangeName: 'custom' })
     );
-    expect(completedState.simulationRunBreakdowns[0].simulationComplete).toBe(true);
+    expect(completedState.simulationRunBreakdowns[0].simulationComplete).toBe(
+      true
+    );
     expect(completedState.simulationRunBreakdowns[0].simulationRunStatus).toBe(
       'Complete'
     );
@@ -176,7 +189,9 @@ describe('simulationRunnerSlice view-model logic', () => {
         errorMessage: 'backend timeout',
       })
     );
-    expect(failedState.simulationRunBreakdowns[0].simulationComplete).toBe(true);
+    expect(failedState.simulationRunBreakdowns[0].simulationComplete).toBe(
+      true
+    );
     expect(failedState.simulationRunBreakdowns[0].simulationRunStatus).toBe(
       'backend timeout'
     );
