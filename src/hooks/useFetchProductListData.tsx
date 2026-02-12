@@ -23,7 +23,47 @@ import { ApolloError } from '@apollo/client';
 import { SerializedError } from '@reduxjs/toolkit';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 
-const IS_STUB_DATA = import.meta.env.VITE_USE_STUBS_DATA === 'true';
+export const isStubDataEnabled = (flagValue: string | undefined) =>
+  flagValue === 'true';
+
+export const buildWhereClauseFromFilters = (
+  activeFilters: FilterMap
+): GqlPoolFilter => {
+  const whereClause: GqlPoolFilter = {};
+  if (activeFilters.chain) {
+    whereClause.chainIn = activeFilters.chain as GqlChain[];
+  }
+
+  if (activeFilters.poolType) {
+    whereClause.poolTypeIn = activeFilters.poolType as GqlPoolType[];
+  }
+
+  if (activeFilters.minTvl) {
+    whereClause.minTvl = parseFloat(activeFilters.minTvl[0]);
+  }
+
+  whereClause.tagNotIn = ['BLACK_LISTED'];
+  return whereClause;
+};
+
+export const getProductMapLoadingState = ({
+  loading,
+  stubDataLoading,
+  baseProductsLoading,
+  isStubData,
+}: {
+  loading: boolean;
+  stubDataLoading: boolean;
+  baseProductsLoading: boolean;
+  isStubData: boolean;
+}) => {
+  if (isStubData) {
+    return loading || stubDataLoading;
+  }
+  return loading || baseProductsLoading;
+};
+
+const IS_STUB_DATA = isStubDataEnabled(import.meta.env.VITE_USE_STUBS_DATA);
 
 export const useFetchProductListData = (
   pageSize: number,
@@ -45,24 +85,10 @@ export const useFetchProductListData = (
     error: stubDataError,
   } = useRetrieveProductsQuery(undefined, { skip: !IS_STUB_DATA });
 
-  const where: GqlPoolFilter = useMemo(() => {
-    const whereClause: GqlPoolFilter = {};
-    if (activeFilters.chain) {
-      whereClause.chainIn = activeFilters.chain as GqlChain[];
-    }
-
-    if (activeFilters.poolType) {
-      whereClause.poolTypeIn = activeFilters.poolType as GqlPoolType[];
-    }
-
-    if (activeFilters.minTvl) {
-      whereClause.minTvl = parseFloat(activeFilters.minTvl[0]);
-    }
-
-    whereClause.tagNotIn = ['BLACK_LISTED'];
-
-    return whereClause;
-  }, [activeFilters.chain, activeFilters.poolType, activeFilters.minTvl]);
+  const where: GqlPoolFilter = useMemo(
+    () => buildWhereClauseFromFilters(activeFilters),
+    [activeFilters]
+  );
 
   const count = useGetPoolsCountQuery({
     variables: {
@@ -157,12 +183,16 @@ export const useFetchProductListData = (
     setError(null);
   }, [activeFilters, textSearch, page, pageSize]);
 
-  const productMapLoading = useMemo(() => {
-    if (IS_STUB_DATA) {
-      return loading || stubDataLoading;
-    }
-    return loading || baseProductsLoading;
-  }, [stubDataLoading, baseProductsLoading, loading]);
+  const productMapLoading = useMemo(
+    () =>
+      getProductMapLoadingState({
+        loading,
+        stubDataLoading,
+        baseProductsLoading,
+        isStubData: IS_STUB_DATA,
+      }),
+    [stubDataLoading, baseProductsLoading, loading]
+  );
 
   return {
     productMap,

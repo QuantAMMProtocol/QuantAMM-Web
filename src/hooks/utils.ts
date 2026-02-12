@@ -67,15 +67,20 @@ export const findClosestPrice = (
 ) => {
   const range = 24 * 60 * 60; // 24 hours in seconds
 
-  if (!prices) return 0;
+  if (!prices || prices.length === 0) return 0;
+
+  let bestPrice = 0;
+  let bestDiff = Number.POSITIVE_INFINITY;
 
   for (const priceEntry of prices) {
     const diff = Math.abs(Number(priceEntry.timestamp) - targetTimestamp);
-    if (diff < range) {
-      return priceEntry.price;
+    if (diff < range && diff < bestDiff) {
+      bestDiff = diff;
+      bestPrice = priceEntry.price;
     }
   }
-  return 0;
+
+  return bestPrice;
 };
 
 export const filterOutBptToken = (

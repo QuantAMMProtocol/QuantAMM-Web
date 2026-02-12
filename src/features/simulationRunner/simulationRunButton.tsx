@@ -17,7 +17,7 @@ import {
   selectSelectedCoinsToAddToPool,
 } from '../simulationRunConfiguration/simulationRunConfigurationSlice';
 import runnerStyles from './simulationRunnerCommon.module.css';
-import { createRunSimulationsThunk } from './simulationRunButton.logic';
+import { createRunSimulationsThunk } from './simulationRunButtonLogic';
 
 interface PoolRunButtonProps {
   simplifiedPoolRun: boolean;

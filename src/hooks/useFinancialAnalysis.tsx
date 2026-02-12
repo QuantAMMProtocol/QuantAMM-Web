@@ -2,7 +2,12 @@ import { useEffect } from 'react';
 import { SerializedError } from '@reduxjs/toolkit';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { useAppDispatch } from '../app/hooks';
-import { Benchmark, FinancialAnalysisResultDto, Product } from '../models';
+import {
+  Benchmark,
+  FinancialAnalysisResultDto,
+  Product,
+  TimeSeriesData,
+} from '../models';
 import { useRunFinancialAnalysisMutation } from '../services';
 import {
   loadingSimulationRunBreakdown,
@@ -11,10 +16,87 @@ import {
 import { addImportedSimRunResults } from '../features/simulationRunner/simulationRunnerSlice';
 import { CURRENT_LIVE_FACTSHEETS } from '../features/documentation/factSheets/liveFactsheets';
 import { Chain } from '../features/simulationRunConfiguration/simulationRunConfigModels';
+import { SimulationRunBreakdown } from '../features/simulationResults/simulationResultSummaryModels';
 
 export type Success =
   | { data: FinancialAnalysisResultDto; error?: never }
   | { data?: never; error: FetchBaseQueryError | SerializedError | Error };
+
+export const buildPortfolioReturns = (timeSeries: TimeSeriesData[]) =>
+  timeSeries
+    .map((step, i) => {
+      if (i === 0) {
+        return [step.timestamp * 1000, 0, 0] as [number, number, number];
+      }
+
+      const prevStep = timeSeries[i - 1];
+      if (!prevStep) {
+        return null;
+      }
+
+      const portfolioReturn =
+        (step.sharePrice - prevStep.sharePrice) / prevStep.sharePrice;
+      const hodlReturn =
+        (step.hodlSharePrice - prevStep.hodlSharePrice) / prevStep.hodlSharePrice;
+
+      return [step.timestamp * 1000, portfolioReturn, hodlReturn] as [
+        number,
+        number,
+        number,
+      ];
+    })
+    .filter(
+      (
+        portfolioReturn
+      ): portfolioReturn is [number, number, number] => portfolioReturn !== null
+    );
+
+export const buildFinancialAnalysisBreakdown = ({
+  product,
+  analysis,
+}: {
+  product: Product;
+  analysis: FinancialAnalysisResultDto['analysis'];
+}): SimulationRunBreakdown => ({
+  simulationRunResultAnalysis: analysis,
+  simulationRun: {
+    id: product.id,
+    enableAutomaticArbBots: false,
+    poolNumeraireCoinCode: '',
+    poolConstituents: [],
+    updateRule: {
+      updateRuleName: product.name,
+      updateRuleKey: product.id,
+      updateRuleParameters: [],
+      updateRuleResultProfileSummary: '',
+      heatmapKeys: [],
+      updateRuleRunUrl: '',
+      updateRuleTrainUrl: '',
+      updateRuleSimKey: '',
+      applicablePoolTypes: [],
+      chainDeploymentDetails: new Map<Chain, string>(),
+    },
+    runStatus: 'completed',
+    name: product.name,
+    feeHooks: [],
+    swapImports: [],
+    poolType: {
+      name: 'LIVE',
+      mandatoryProperties: [],
+      shortDescription: 'live product pool',
+      requiresPoolNumeraire: false,
+    },
+  },
+  flatSimulationRunResult: undefined,
+  simulationRunStatus: 'Complete',
+  simulationComplete: true,
+  timeSteps: [],
+  timeRange: {
+    name: 'live',
+    startDate: product.createTime,
+    endDate: product.createTime,
+  },
+});
 
 export const useFinancialAnalysis = ({
   product,
@@ -50,29 +132,7 @@ export const useFinancialAnalysis = ({
         }
 
         if (!hasCacheForProduct && hasValidTimeseries) {
-          const portfolioReturns = ts
-            .map((step, i) => {
-            if (i === 0) {
-              return [step.timestamp * 1000, 0, 0];
-            }
-            const prevStep = ts[i - 1];
-            if (!prevStep) {
-              return null;
-            }
-            const portfolio_return =
-              (step.sharePrice - prevStep?.sharePrice) / prevStep?.sharePrice;
-            const hodl_return =
-              (step.hodlSharePrice - prevStep?.hodlSharePrice) /
-              prevStep?.hodlSharePrice;
-
-            return [step.timestamp * 1000, portfolio_return, hodl_return];
-          })
-            .filter(
-              (
-                portfolioReturn
-              ): portfolioReturn is [number, number, number] =>
-                portfolioReturn !== null
-            );
+          const portfolioReturns = buildPortfolioReturns(ts);
 
           const tokens = [...(product.poolConstituents.map((pc) => pc.coin) ?? [])];
           const startTimestamp = ts[0]?.timestamp;
@@ -105,46 +165,10 @@ export const useFinancialAnalysis = ({
         }
 
         if (success?.data && product) {
-          const simBreakdown = {
-            simulationRunResultAnalysis: success.data.analysis,
-            simulationRun: {
-              id: product.id,
-              enableAutomaticArbBots: false,
-              poolNumeraireCoinCode: '',
-              poolConstituents: [],
-              updateRule: {
-                updateRuleName: product.name,
-                updateRuleKey: product.id,
-                updateRuleParameters: [],
-                updateRuleResultProfileSummary: '',
-                heatmapKeys: [],
-                updateRuleRunUrl: '',
-                updateRuleTrainUrl: '',
-                updateRuleSimKey: '',
-                applicablePoolTypes: [],
-                chainDeploymentDetails: new Map<Chain, string>(),
-              },
-              runStatus: 'completed',
-              name: product.name,
-              feeHooks: [],
-              swapImports: [],
-              poolType: {
-                name: 'LIVE',
-                mandatoryProperties: [],
-                shortDescription: 'live product pool',
-                requiresPoolNumeraire: false,
-              },
-            },
-            flatSimulationRunResult: undefined,
-            simulationRunStatus: 'Complete',
-            simulationComplete: true,
-            timeSteps: [],
-            timeRange: {
-              name: 'live',
-              startDate: product.createTime,
-              endDate: product.createTime,
-            },
-          };
+          const simBreakdown = buildFinancialAnalysisBreakdown({
+            product,
+            analysis: success.data.analysis,
+          });
           dispatch(
             setProductSimulationRunBreakdown({
               productId: product.id,
