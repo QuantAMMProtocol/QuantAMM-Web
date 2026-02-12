@@ -28,38 +28,12 @@ import {
 import {
   Navigate,
   createBrowserRouter,
-  isRouteErrorResponse,
-  useRouteError,
 } from 'react-router-dom';
 import App from './App';
 import { ROUTES } from './routesEnum';
+import RouteErrorBoundary from './routeErrorBoundary';
 
 const BASE_ROUTE = '/';
-
-function RouteErrorBoundary() {
-  const error = useRouteError();
-
-  if (isRouteErrorResponse(error)) {
-    return (
-      <div style={{ padding: 16 }}>
-        <h2>
-          {error.status} {error.statusText}
-        </h2>
-        <p>
-          {typeof error.data === 'string'
-            ? error.data
-            : 'Something went wrong.'}
-        </p>
-      </div>
-    );
-  }
-
-  return (
-    <div style={{ padding: 16 }}>
-      <h2>Something went wrong.</h2>
-    </div>
-  );
-}
 
 export const routes = createBrowserRouter([
   {

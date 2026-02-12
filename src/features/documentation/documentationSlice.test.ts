@@ -44,9 +44,9 @@ describe('documentationSlice view-model logic', () => {
       decay_lr_plateau: 3,
       decay_lr_ratio: '0.5',
       optimiser: 'adam',
-      objective: [1, 2, 3],
-      train_objective: [0.8, 0.9],
-      test_objective: [0.7, 0.75],
+      objective: [[1], [2], [3]],
+      train_objective: [[0.8], [0.9]],
+      test_objective: [[0.7], [0.75]],
     };
 
     const nextState = documentationReducer(

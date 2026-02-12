@@ -10,7 +10,7 @@ import {
 
 const createCoin = (
   coinCode: string,
-  prices: Array<{ unix: number; close: number }>
+  prices: { unix: number; close: number }[]
 ): Coin => {
   const dailyPriceHistory: CoinPrice[] = prices.map((p) => ({
     unix: p.unix,
@@ -25,18 +25,26 @@ const createCoin = (
     coinName: coinCode,
     coinCode,
     dailyPriceHistory,
-    dailyPriceHistoryMap: new Map(prices.map((p) => [p.unix, {
-      unix: p.unix,
-      close: p.close,
-      open: p.close,
-      high: p.close,
-      low: p.close,
-      date: new Date(p.unix).toISOString(),
-    }])),
+    dailyPriceHistoryMap: new Map(
+      prices.map((p) => [
+        p.unix,
+        {
+          unix: p.unix,
+          close: p.close,
+          open: p.close,
+          high: p.close,
+          low: p.close,
+          date: new Date(p.unix).toISOString(),
+        },
+      ])
+    ),
     dailyReturns: new Map(),
     coinComparisons: new Map(),
     deploymentByChain: new Map([
-      [Chain.Base, { address: `0x${coinCode}`, oracles: new Map(), approvalStatus: true }],
+      [
+        Chain.Base,
+        { address: `0x${coinCode}`, oracles: new Map(), approvalStatus: true },
+      ],
     ]),
   };
 };

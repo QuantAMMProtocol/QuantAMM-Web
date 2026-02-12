@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { Product } from '../../../../models';
+import { Product } from '../../../models';
 import { getCurrentPrice, getTvl } from './productItemHelpers';
 
 describe('productItemHelpers view-model logic', () => {

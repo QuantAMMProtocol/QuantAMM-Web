@@ -23,7 +23,10 @@ const secondsToHuman = (seconds: number): string => {
   return `${hours.toFixed(2)}h`;
 };
 
-const formatNumber = (value: number | null | undefined, decimals = 2): string => {
+const formatNumber = (
+  value: number | null | undefined,
+  decimals = 2
+): string => {
   if (value === null || value === undefined || Number.isNaN(value)) return '—';
   return value.toLocaleString(undefined, {
     minimumFractionDigits: decimals,
@@ -49,10 +52,9 @@ const valueStyle: React.CSSProperties = {
   fontWeight: 500,
 };
 
-export const ProductDetailHealthMonitor: React.FC<ProductDetailHealthMonitorProps> = ({
-  factsheet,
-  isMobile = false,
-}) => {
+export const ProductDetailHealthMonitor: React.FC<
+  ProductDetailHealthMonitorProps
+> = ({ factsheet, isMobile = false }) => {
   const { poolId, poolChain, mainTitle } = factsheet;
 
   const { product, productLoading, productError } = useFetchProductData(
@@ -120,7 +122,9 @@ export const ProductDetailHealthMonitor: React.FC<ProductDetailHealthMonitorProp
             marginBottom: '0.9rem',
           }}
         >
-          <div style={{ ...labelStyle, marginBottom: '0.25rem' }}>{mainTitle}</div>
+          <div style={{ ...labelStyle, marginBottom: '0.25rem' }}>
+            {mainTitle}
+          </div>
           <div style={{ fontSize: '0.9rem', opacity: 0.8 }}>Loading…</div>
         </div>
       );
@@ -147,8 +151,12 @@ export const ProductDetailHealthMonitor: React.FC<ProductDetailHealthMonitorProp
             marginBottom: '0.9rem',
           }}
         >
-          <div style={{ ...labelStyle, marginBottom: '0.25rem' }}>{mainTitle}</div>
-          <div style={{ fontSize: '0.9rem', color: '#ff4d4f' }}>Error loading data</div>
+          <div style={{ ...labelStyle, marginBottom: '0.25rem' }}>
+            {mainTitle}
+          </div>
+          <div style={{ fontSize: '0.9rem', color: '#ff4d4f' }}>
+            Error loading data
+          </div>
         </div>
       );
     }
@@ -174,7 +182,11 @@ export const ProductDetailHealthMonitor: React.FC<ProductDetailHealthMonitorProp
     return renderLoading();
   }
 
-  if (productError || !metrics) {
+  if (productError) {
+    return renderError();
+  }
+
+  if (!metrics) {
     return renderError();
   }
 
@@ -238,7 +250,9 @@ export const ProductDetailHealthMonitor: React.FC<ProductDetailHealthMonitorProp
                 fontWeight: 600,
                 letterSpacing: '0.03em',
                 textTransform: 'uppercase',
-                backgroundColor: isHealthy ? 'rgba(0, 163, 92, 0.18)' : 'rgba(255, 77, 79, 0.18)',
+                backgroundColor: isHealthy
+                  ? 'rgba(0, 163, 92, 0.18)'
+                  : 'rgba(255, 77, 79, 0.18)',
                 color: healthColor,
               }}
             >
@@ -291,12 +305,14 @@ export const ProductDetailHealthMonitor: React.FC<ProductDetailHealthMonitorProp
                   liquidityChange24h == null
                     ? 'rgba(255, 255, 255, 0.55)'
                     : liquidityChange24h >= 0
-                    ? '#00a35c'
-                    : '#ffb84d',
+                      ? '#00a35c'
+                      : '#ffb84d',
               }}
             >
               Liquidity Δ 24h:{' '}
-              {liquidityChange24h == null ? '—' : `${formatNumber(liquidityChange24h)}%`}
+              {liquidityChange24h == null
+                ? '—'
+                : `${formatNumber(liquidityChange24h)}%`}
             </div>
           </div>
 
@@ -310,8 +326,8 @@ export const ProductDetailHealthMonitor: React.FC<ProductDetailHealthMonitorProp
                   volumeChange24h == null
                     ? 'rgba(255, 255, 255, 0.9)'
                     : volumeChange24h >= 0
-                    ? '#00a35c'
-                    : '#ffb84d',
+                      ? '#00a35c'
+                      : '#ffb84d',
               }}
             >
               {formatNumber(volumeChange24h)}
@@ -340,9 +356,7 @@ export const ProductDetailHealthMonitor: React.FC<ProductDetailHealthMonitorProp
         borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
       }}
     >
-      <td style={{ ...baseCellStyle }}>
-        {product?.name ?? mainTitle}
-      </td>
+      <td style={{ ...baseCellStyle }}>{product?.name ?? mainTitle}</td>
 
       <td style={{ ...baseCellStyle }}>
         <span
@@ -354,7 +368,9 @@ export const ProductDetailHealthMonitor: React.FC<ProductDetailHealthMonitorProp
             fontWeight: 600,
             letterSpacing: '0.03em',
             textTransform: 'uppercase',
-            backgroundColor: isHealthy ? 'rgba(0, 163, 92, 0.12)' : 'rgba(255, 77, 79, 0.12)',
+            backgroundColor: isHealthy
+              ? 'rgba(0, 163, 92, 0.12)'
+              : 'rgba(255, 77, 79, 0.12)',
             color: healthColor,
           }}
         >
@@ -362,9 +378,7 @@ export const ProductDetailHealthMonitor: React.FC<ProductDetailHealthMonitorProp
         </span>
       </td>
 
-      <td style={{ ...baseCellStyle }}>
-        {secondsToHuman(actualLag)}
-      </td>
+      <td style={{ ...baseCellStyle }}>{secondsToHuman(actualLag)}</td>
 
       <td style={{ ...baseCellStyle }}>
         {new Date(lastUpdate * 1000).toLocaleString()}
@@ -387,11 +401,13 @@ export const ProductDetailHealthMonitor: React.FC<ProductDetailHealthMonitorProp
             liquidityChange24h == null
               ? undefined
               : liquidityChange24h >= 0
-              ? '#00a35c'
-              : '#ffb84d',
+                ? '#00a35c'
+                : '#ffb84d',
         }}
       >
-        {liquidityChange24h == null ? '—' : `${formatNumber(liquidityChange24h)}%`}
+        {liquidityChange24h == null
+          ? '—'
+          : `${formatNumber(liquidityChange24h)}%`}
       </td>
 
       <td
@@ -402,8 +418,8 @@ export const ProductDetailHealthMonitor: React.FC<ProductDetailHealthMonitorProp
             volumeChange24h == null
               ? undefined
               : volumeChange24h >= 0
-              ? '#00a35c'
-              : '#ffb84d',
+                ? '#00a35c'
+                : '#ffb84d',
         }}
       >
         {formatNumber(volumeChange24h)}
