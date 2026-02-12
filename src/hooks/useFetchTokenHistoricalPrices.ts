@@ -11,7 +11,7 @@ import {
 } from './fetchSnapshotDataUtils';
 
 export const useFetchTokenHistoricalPrices = (
-  poolData: GetPoolsQuery,
+  poolData: GetPoolsQuery | undefined,
   { skip }: { skip: boolean }
 ) => {
   const [tokenPrices, setTokenPrices] = useState<
@@ -28,27 +28,49 @@ export const useFetchTokenHistoricalPrices = (
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
+    let isMounted = true;
+
     const fetchData = async () => {
       if (!poolData) {
         return;
       }
 
-      const tokens = getTokens(poolData.poolGetPools as GqlPoolMinimal[]);
-      const pricesResponses = await getHistoricalTokenPrices(tokens);
+      setLoading(true);
+      setError(null);
 
-      const tokenPricesMap = getTokenPriceMap(pricesResponses);
+      try {
+        const tokens = getTokens(poolData.poolGetPools as GqlPoolMinimal[]);
+        const pricesResponses = await getHistoricalTokenPrices(tokens);
 
-      setTokenPrices(tokenPricesMap);
-      setLoading(false);
+        const tokenPricesMap = getTokenPriceMap(pricesResponses);
+
+        if (isMounted) {
+          setTokenPrices(tokenPricesMap);
+        }
+      } catch (error) {
+        console.error('useFetchTokenPrices:', error);
+        if (isMounted) {
+          setError(error instanceof Error ? error : new Error(String(error)));
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
     };
 
-    if (!skip) {
-      setLoading(true);
-      fetchData().catch((error) => {
-        console.error('useFetchTokenPrices:', error);
-        setError(error);
-      });
+    if (skip) {
+      setLoading(false);
+      return () => {
+        isMounted = false;
+      };
     }
+
+    void fetchData();
+
+    return () => {
+      isMounted = false;
+    };
   }, [poolData, skip]);
 
   return {

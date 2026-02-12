@@ -5,6 +5,7 @@ import { SimulationRunBreakdown } from '../../../simulationResults/simulationRes
 import { getBreakdown, Pool } from '../../../../services/breakdownService';
 import { WeightChangeOverTimeGraph } from '../../../shared';
 import { SimulationResultMarketValueChart } from '../../../simulationResults/visualisations/simulationResultMarketValueChart';
+import styles from './landingDesktop.module.css';
 
 const { Title } = Typography;
 
@@ -88,7 +89,7 @@ export function StrategySummary() {
       image: '/documentation/vanilla_momentum.svg',
       description:
         "It's hard to buy low and sell high. It's easier to buy high and sell higher. Follow the trend.",
-      imgWidth:'85%'
+      imgWidth: '85%',
     },
     {
       title: 'Price Mean Reversion',
@@ -96,7 +97,7 @@ export function StrategySummary() {
       image: '/documentation/mean_reversion.svg',
       description:
         'Deviations will revert back to the mean. Buy and sell assuming prices will revert.',
-      imgWidth:'100%'
+      imgWidth: '100%',
     },
     {
       title: 'Channel Following',
@@ -104,7 +105,7 @@ export function StrategySummary() {
       image: '/documentation/channel_following.svg',
       description:
         'Everything will revert to the mean on small movements but act fast on larger movements.',
-      imgWidth:'90%'
+      imgWidth: '90%',
     },
     {
       title: 'Power Channel',
@@ -112,9 +113,115 @@ export function StrategySummary() {
       image: '/documentation/power_channel.svg',
       description:
         'Ignore the noise of small price movements, act fast on large price movements.',
-      imgWidth:'100%'
+      imgWidth: '100%',
     },
   ];
+
+  const traditionalDexBreakdown = breakdowns.find(
+    (x) => x.simulationRun.updateRule.updateRuleName === 'Balancer Weighted'
+  );
+  const selectedStrategyBreakdown = breakdowns.find(
+    (x) => x.simulationRun.updateRule.updateRuleName === strategy
+  );
+
+  const StrategySelectorPanel = () => (
+    <div className={styles.strategyPanel}>
+      <h4 className={styles.textCenter}>ADAPTIVE STRATEGIES</h4>
+      <p className={styles.textCenter}>
+        FULLY DECENTRALISED, FULLY TRANSPARENT
+      </p>
+      <Row gutter={[8, 8]} className={styles.strategyGrid}>
+        {strategies.map((strategyItem) => (
+          <Col
+            span={24}
+            className={`${styles.zeroSpacing} ${styles.fullHeight}`}
+            key={strategyItem.name}
+          >
+            <Row className={styles.strategyRow}>
+              <Col span={8}>
+                <div className={styles.centeredRow}>
+                  <img
+                    loading="lazy"
+                    style={{ width: strategyItem.imgWidth }}
+                    className={styles.strategyImage}
+                    src={strategyItem.image}
+                  />
+                </div>
+              </Col>
+              <Col span={16}>
+                <div className={styles.strategyButtonWrap}>
+                  <Tooltip title={strategyItem.description}>
+                    <Button
+                      disabled={strategy === strategyItem.name}
+                      size="small"
+                      className={
+                        strategy === strategyItem.name
+                          ? `${styles.strategyButton} ${styles.strategyButtonActive}`
+                          : styles.strategyButton
+                      }
+                      onClick={() => {
+                        setStrategy(strategyItem.name);
+                        setAutoCycle(false);
+                      }}
+                    >
+                      {strategyItem.title}
+                    </Button>
+                  </Tooltip>
+                </div>
+              </Col>
+            </Row>
+          </Col>
+        ))}
+      </Row>
+    </div>
+  );
+
+  const HoldingsChartsSection = () => (
+    <Row>
+      <Col span={24} className={styles.chartSection}>
+        <h4 className={styles.chartTitle}>Traditional DEX Pool Holdings</h4>
+        <p className={styles.chartSubtitle}>
+          Focus on earning fees, ignore price movements
+        </p>
+        <div
+          className={styles.chartWrap}
+          hidden={
+            (loading && breakdowns.length === 0) || !traditionalDexBreakdown
+          }
+        >
+          <WeightChangeOverTimeGraph
+            simulationRunBreakdown={traditionalDexBreakdown}
+            overrideChartTheme="ag-default-dark"
+            overrideXAxisInterval={22}
+          />
+        </div>
+      </Col>
+      <Col span={24}>
+        <h4 className={styles.chartTitle}>
+          QuantAMM{' '}
+          <span className={styles.accentText}>
+            {strategy === 'AntiMomentum' ? 'Price Reversion' : strategy}
+          </span>{' '}
+          Pool Holdings
+        </h4>
+        <p className={styles.chartSubtitle}>
+          React to markets while earning fees.
+        </p>
+        <div
+          className={styles.chartWrapNoTop}
+          hidden={
+            (loading && breakdowns.length === 0) || !selectedStrategyBreakdown
+          }
+        >
+          <WeightChangeOverTimeGraph
+            simulationRunBreakdown={selectedStrategyBreakdown}
+            overrideChartTheme="ag-default-dark"
+            overrideXAxisInterval={22}
+          />
+        </div>
+      </Col>
+    </Row>
+  );
 
   return (
     <Row id="final_section_row">
@@ -127,215 +234,26 @@ export function StrategySummary() {
         >
           <Row>
             <Col span={24}>
-              <Title style={{ textAlign: 'center', marginBottom: 0 }}>
+              <Title className={styles.sectionTitleDark}>
                 EXPLORE QUANTAMM REVOLUTIONARY ARCHITECTURE
               </Title>
             </Col>
           </Row>
           <Row>
             <Col span={6}>
-              <div
-                style={{
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  paddingTop: '40px',
-                  marginLeft: '20px',
-                }}
-              >
-                <h4 style={{ textAlign: 'center', margin: 0 }}>
-                  ADAPTIVE STRATEGIES
-                </h4>
-                <p style={{ textAlign: 'center', margin: 0 }}>
-                  FULLY DECENTRALISED, FULLY TRANSPARENT
-                </p>
-                <Row gutter={[8, 8]} style={{ marginTop: '2vh', padding: 0 }}>
-                  {strategies.map((strategyItem) => (
-                    <Col
-                      span={24}
-                      style={{ margin: 0, padding: 0, height: '100%' }}
-                      key={strategyItem.name}
-                      
-                    >
-                      <Row style={{marginTop:'2vh'}}>
-                        <Col span={8}>
-                          <div
-                            style={{
-                              justifyContent: 'center',
-                              alignItems: 'center',
-                            }}
-                          >
-                            <img
-                              loading="lazy"
-                              style={{
-                                width: strategyItem.imgWidth,
-                                height: 'auto',
-                                padding: '15px',
-                              }}
-                              src={strategyItem.image}
-                            />
-                          </div>
-                        </Col>
-                        <Col span={16}>
-                            <div
-                            style={{
-                              display: 'flex',
-                              flexDirection: 'column',
-                              justifyContent: 'center',
-                              alignItems: 'center',
-                              height: '100%',
-                            }}
-                            >
-                            <Tooltip title={strategyItem.description}>
-                              <Button
-                              disabled={strategy === strategyItem.name}
-                              size="small"
-                              style={{
-                                width: '100%',
-                                height: '60%',
-                                backgroundColor:
-                                strategy === strategyItem.name
-                                  ? '#c7b283'
-                                  : undefined,
-                                color:
-                                strategy === strategyItem.name
-                                  ? '#2c496b'
-                                  : undefined,
-                              }}
-                              onClick={() => {
-                                setStrategy(strategyItem.name);
-                                setAutoCycle(false);
-                              }}
-                              >
-                              {strategyItem.title}
-                              </Button>
-                            </Tooltip>
-                            </div>
-                        </Col>
-                      </Row>
-                    </Col>
-                  ))}
-                </Row>
-              </div>
+              <StrategySelectorPanel />
             </Col>
             <Col span={10}>
-              <Row>
-                <Col span={24} style={{ paddingTop: '40px' }}>
-                  <h4
-                    style={{
-                      textAlign: 'center',
-                      margin: 0,
-                      paddingLeft: '50px',
-                      paddingRight: '30px',
-                    }}
-                  >
-                    Traditional DEX Pool Holdings
-                  </h4>
-                  <p
-                    style={{
-                      textAlign: 'center',
-                      margin: 0,
-                      paddingLeft: '50px',
-                      paddingRight: '30px',
-                    }}
-                  >
-                    Focus on earning fees, ignore price movements
-                  </p>
-                  <div
-                    style={{
-                      paddingLeft: '70px',
-                      paddingRight: '30px',
-                      marginTop: '2vh',
-                    }}
-                    hidden={
-                      (loading && breakdowns.length == 0) ||
-                      breakdowns.filter(
-                        (x) =>
-                          x.simulationRun.updateRule.updateRuleName ==
-                          'Balancer Weighted'
-                      ).length == 0
-                    }
-                  >
-                    <WeightChangeOverTimeGraph
-                      simulationRunBreakdown={
-                        breakdowns.filter(
-                          (x) =>
-                            x.simulationRun.updateRule.updateRuleName ==
-                            'Balancer Weighted'
-                        )[0]
-                      }
-                      overrideChartTheme="ag-default-dark"
-                      overrideXAxisInterval={22}
-                    />
-                  </div>
-                </Col>
-                <Col span={24}>
-                  <h4
-                    style={{
-                      textAlign: 'center',
-                      margin: 0,
-                      paddingLeft: '50px',
-                      paddingRight: '30px',
-                    }}
-                  >
-                    QuantAMM{' '}
-                    <span style={{ color: '#c7b283' }}>
-                      {strategy == 'AntiMomentum'
-                        ? 'Price Reversion'
-                        : strategy}
-                    </span>{' '}
-                    Pool Holdings
-                  </h4>
-                  <p
-                    style={{
-                      textAlign: 'center',
-                      margin: 0,
-                      paddingLeft: '50px',
-                      paddingRight: '30px',
-                    }}
-                  >
-                    React to markets while earning fees.
-                  </p>
-                  <div
-                    style={{ paddingLeft: '70px', paddingRight: '30px' }}
-                    hidden={
-                      (loading && breakdowns.length == 0) ||
-                      breakdowns.filter(
-                        (x) =>
-                          x.simulationRun.updateRule.updateRuleName ==
-                          'Balancer Weighted'
-                      ).length == 0
-                    }
-                  >
-                    <WeightChangeOverTimeGraph
-                      simulationRunBreakdown={
-                        breakdowns.filter(
-                          (x) =>
-                            x.simulationRun.updateRule.updateRuleName ==
-                            strategy
-                        )[0]
-                      }
-                      overrideChartTheme="ag-default-dark"
-                      overrideXAxisInterval={22}
-                    />
-                  </div>
-                </Col>
-              </Row>
+              <HoldingsChartsSection />
             </Col>
             <Col span={8}>
-              <div
-                style={{
-                  height: '100%',
-                  width: '100%',
-                  paddingLeft: '20px',
-                  paddingRight: '20px',
-                  paddingTop: '20px',
-                }}
-              >
+              <div className={styles.summaryChartPanel}>
                 <SimulationResultMarketValueChart
                   breakdowns={breakdowns.filter(
                     (x) =>
-                      x.simulationRun.updateRule.updateRuleName == strategy ||
-                      x.simulationRun.updateRule.updateRuleName == 'Balancer Weighted'
+                      x.simulationRun.updateRule.updateRuleName === strategy ||
+                      x.simulationRun.updateRule.updateRuleName ===
+                        'Balancer Weighted'
                   )}
                   forceViewResults={true}
                   overrideXAxisInterval={24}
@@ -351,21 +269,15 @@ export function StrategySummary() {
                     AntiMomentum: 'QuantAMM',
                     'Channel Following': 'QuantAMM',
                     'Power Channel': 'QuantAMM',
-                    'Balancer Weighted' : 'Traditional DEX'
+                    'Balancer Weighted': 'Traditional DEX',
                   }}
                 />
               </div>
             </Col>
           </Row>
-          <Row style={{ margin: 0, padding: 0 }}>
-            <Col span={24} style={{ padding: 0, margin: 0 }}>
-              <div
-                style={{
-                  textAlign: 'center',
-                  paddingBottom: '5vh',
-                  paddingRight: '80px',
-                }}
-              >
+          <Row className={styles.footerRow}>
+            <Col span={24} className={styles.footerCol}>
+              <div className={styles.footerControls}>
                 <Button size="small" onClick={() => setAutoCycle(!autoCycle)}>
                   {autoCycle ? 'Pause' : 'Resume'}
                 </Button>

@@ -2,6 +2,7 @@ import { Col, Row } from 'antd';
 import { useAppSelector } from '../../../../app/hooks';
 import { HeatMap } from '../../../simulationRunConfiguration/simulationRunConfigModels';
 import { selectTheme } from '../../../themes/themeSlice';
+import styles from '../updateRules.module.css';
 
 export interface HeatMapProp {
   heatMap: HeatMap;
@@ -17,14 +18,14 @@ export function HeatMapGraph(props: HeatMapProp) {
           loading="lazy"
           src={'/heatmaps/' + props.heatMap.imageName + '_light.png'}
           alt=""
-          style={{ width: '100%' }}
+          className={styles.imageFull}
         />
         <img
           hidden={!isDarkTheme}
           loading="lazy"
           src={'/heatmaps/' + props.heatMap.imageName + '_dark.png'}
           alt=""
-          style={{ width: '100%' }}
+          className={styles.imageFull}
         />
       </Col>
     </Row>

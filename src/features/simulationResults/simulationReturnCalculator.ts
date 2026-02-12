@@ -40,6 +40,10 @@ export interface simpRet {
 }
 
 const csvmaker = function (data: ReturnTimeStep[]) {
+  if (data.length === 0) {
+    return '';
+  }
+
   const downloadData: simpRet[] = data.map((x) => {
     return { unix: x.unix, return: x.return };
   });
@@ -68,6 +72,9 @@ const csvmaker = function (data: ReturnTimeStep[]) {
 };
 
 export function downloadReturns(data: ReturnTimeStep[]) {
+  if (data.length === 0) {
+    return;
+  }
   const csvdata = csvmaker(data);
   download(csvdata);
 }
@@ -94,9 +101,9 @@ export function findLastAvailableReturn(
 ): ReturnTimeStep | undefined {
   let result: ReturnTimeStep | undefined = undefined;
 
-  result = returns.find((y) => y.unix == unixTime);
+  result = returns.find((y) => y.unix === unixTime);
 
-  if (result != undefined) {
+  if (result !== undefined) {
     return result;
   }
   for (let i = 0; i <= timeStepTolerance; i++) {
@@ -104,17 +111,17 @@ export function findLastAvailableReturn(
       const xDate = new Date(unixTime - i * offsetInterval);
       const yDate = new Date(y.unix);
       return (
-        xDate.getFullYear() == yDate.getFullYear() &&
-        xDate.getDate() == yDate.getDate() &&
-        xDate.getMonth() == yDate.getMonth()
+        xDate.getFullYear() === yDate.getFullYear() &&
+        xDate.getDate() === yDate.getDate() &&
+        xDate.getMonth() === yDate.getMonth()
       );
     });
 
-    if (result == undefined) {
-      result = returns.find((y) => y.unix / 1000 == i * offsetInterval);
+    if (result === undefined) {
+      result = returns.find((y) => y.unix / 1000 === i * offsetInterval);
     }
 
-    if (result != undefined) {
+    if (result !== undefined) {
       break;
     }
   }
@@ -127,6 +134,10 @@ export function calculateCovariance(
   ri: ReturnTimeStep[],
   rj: ReturnTimeStep[]
 ) {
+  if (ri.length < 2 || rj.length < 2) {
+    return 0;
+  }
+
   const riMean =
     ri
       .map((x) => x.return)
@@ -146,8 +157,7 @@ export function calculateCovariance(
   ri.forEach((i) => {
     const j = findLastAvailableReturn(rj, i.unix, 1, 604800000);
 
-    if (j == undefined) {
-    } else {
+    if (j !== undefined) {
       sumRiRj += (i.return - riMean) * (j.return - rjMean);
     }
   });
@@ -158,7 +168,13 @@ export function calculateCovariance(
 export function calculateReturnDistribution(
   returns: ReturnTimeStep[]
 ): ReturnDistribution[] {
-  const sortedReturns = returns.map((x) => x.return).sort((a, b) => a - b);
+  const sortedReturns = returns
+    .map((x) => x.return)
+    .filter((value) => Number.isFinite(value))
+    .sort((a, b) => a - b);
+  if (sortedReturns.length === 0) {
+    return [];
+  }
   const returnRange =
     (sortedReturns[sortedReturns.length - 1] - sortedReturns[0]) / 100;
 
@@ -188,6 +204,15 @@ export function calculateReturnDistribution(
 export function generateReturnTimestepSeries(marketValues: number[]) {
   const result: ReturnTimeStep[] = [];
   for (let i = 0; i < marketValues.length; i++) {
+    if (i === 0) {
+      result.push({
+        date: new Date().toLocaleString(),
+        unix: i,
+        return: 0,
+      });
+      continue;
+    }
+
     let returnValue: number;
     if (marketValues[i] === 0 || marketValues[i - 1] === 0) {
       returnValue = 0;
@@ -199,7 +224,7 @@ export function generateReturnTimestepSeries(marketValues: number[]) {
     result.push({
       date: new Date().toLocaleString(),
       unix: i,
-      return: i == 0 ? 0 : returnValue,
+      return: returnValue,
     });
   }
   return result;
@@ -212,6 +237,10 @@ export function calculateTrackingError(
   rPortfolio: ReturnTimeStep[],
   rBenchmark: ReturnTimeStep[]
 ) {
+  if (rPortfolio.length < 2 || rBenchmark.length < 2) {
+    return 0;
+  }
+
   const rPortfolioMean =
     rPortfolio
       .map((x) => x.return)
@@ -229,8 +258,8 @@ export function calculateTrackingError(
   const meanDif = rPortfolioMean - rBenchmarkMean;
   const numerator = rPortfolio
     .map((x) => {
-      let rbEquiv = rBenchmark.find((y) => x.unix == y.unix)?.return;
-      if (rbEquiv == undefined) {
+      let rbEquiv = rBenchmark.find((y) => x.unix === y.unix)?.return;
+      if (rbEquiv === undefined) {
         rbEquiv = findLastAvailableReturn(
           rBenchmark,
           x.unix,
@@ -238,7 +267,7 @@ export function calculateTrackingError(
           604800000
         )?.return;
 
-        if (rbEquiv == undefined) {
+        if (rbEquiv === undefined) {
           rbEquiv = x.return;
         }
       }

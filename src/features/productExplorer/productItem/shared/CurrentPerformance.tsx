@@ -3,8 +3,12 @@ import { Product } from '../../../../models';
 export const getCurrentPerformanceComponent = (product: Product) => {
   const { currentPerformance } = product;
 
-  if (!currentPerformance) {
+  if (currentPerformance == null || Number.isNaN(currentPerformance)) {
     return <span style={{ color: 'var(--grey)' }}>N/A</span>;
+  }
+
+  if (currentPerformance === 0) {
+    return <span style={{ color: 'var(--grey)' }}>0%</span>;
   }
 
   const compactPerformance = Intl.NumberFormat('en', {
@@ -12,9 +16,7 @@ export const getCurrentPerformanceComponent = (product: Product) => {
     maximumSignificantDigits: 3,
   }).format(currentPerformance);
 
-  return currentPerformance === 0 ? (
-    <span style={{ color: 'var(--grey)' }}>0%</span>
-  ) : (
+  return (
     <span
       style={{
         color: currentPerformance > 0 ? 'var(--green)' : 'var(--red)',

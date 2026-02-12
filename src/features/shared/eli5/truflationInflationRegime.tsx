@@ -5,7 +5,7 @@ const { Title, Text } = Typography;
 export interface TruflationInflationRegimeProps {
   hideTitle?: boolean;
   hideImage?: boolean;
-};
+}
 
 export const TruflationInflationRegime = ({
   hideTitle = false,
@@ -29,15 +29,18 @@ export const TruflationInflationRegime = ({
       </p>
       <p>
         <Text strong style={{ color: 'var(--secondary-text-color)' }}>
-          Determine {"\"inflation regimes\""} where BTC price is predicted by inflation:{' '}
+          Determine {'"inflation regimes"'} where BTC price is predicted by
+          inflation:{' '}
         </Text>
-        Determine how sensitive and how correlated BTC price is to inflation changes
+        Determine how sensitive and how correlated BTC price is to inflation
+        changes
       </p>
       <p>
         <Text strong style={{ color: 'var(--secondary-text-color)' }}>
           Allocate to BTC accordingly:{' '}
         </Text>
-        Allocate to BTC in 3 regimes: high positive correlation, mixed signal, negative correlation
+        Allocate to BTC in 3 regimes: high positive correlation, mixed signal,
+        negative correlation
       </p>
     </>
   );

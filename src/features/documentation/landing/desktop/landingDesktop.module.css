@@ -1,0 +1,465 @@
+:global(:root) {
+  --ld-bg-cream: #fffef2;
+  --ld-bg-deep: #2c496b;
+  --ld-bg-ink: #162536;
+  --ld-border-cream: #f6f4ef;
+  --ld-ink: #162536;
+  --ld-ink-contrast: #ffffff;
+  --ld-muted: #aaaaaa;
+  --ld-accent-gold: #c7b283;
+  --ld-accent-blue: #528aae;
+  --ld-accent-warm-1: #f59e0b;
+  --ld-accent-warm-2: #fde047;
+  --ld-card-glass: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.04),
+    rgba(255, 255, 255, 0.1)
+  );
+  --ld-space-1: 4px;
+  --ld-space-2: 8px;
+  --ld-space-3: 12px;
+  --ld-space-4: 16px;
+  --ld-space-5: 20px;
+  --ld-space-6: 24px;
+  --ld-space-7: 32px;
+  --ld-space-8: 40px;
+  --ld-space-9: 60px;
+}
+
+.fullHeight {
+  height: 100%;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.centeredRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.centeredColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.textCenter {
+  text-align: center;
+}
+
+.zeroSpacing {
+  margin: 0;
+  padding: 0;
+}
+
+.bannerHeaderRow {
+  margin-bottom: var(--ld-space-6);
+}
+
+.bannerTitle {
+  color: var(--ld-ink-contrast);
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  margin-bottom: var(--ld-space-1);
+}
+
+.bannerUnderline {
+  width: 80px;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    var(--ld-accent-warm-1),
+    var(--ld-accent-warm-2)
+  );
+  margin: 0 auto;
+  border-radius: 2px;
+}
+
+.productTag {
+  width: 100%;
+  max-width: 280px;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  border: transparent;
+  background: transparent;
+  transition:
+    box-shadow 0.2s ease,
+    transform 0.15s ease;
+}
+
+.productIcon {
+  width: 30%;
+  max-width: 60px;
+  height: auto;
+}
+
+.statsRow {
+  padding: 8px 14px;
+  border-radius: 12px;
+  background: var(--ld-card-glass);
+  backdrop-filter: blur(5px);
+}
+
+.statLabel {
+  margin: 0;
+  font-size: 0.62rem;
+  color: var(--ld-muted);
+  letter-spacing: 0.4px;
+}
+
+.statValue {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--ld-ink-contrast);
+  font-weight: 500;
+}
+
+.statDivider {
+  width: 1px;
+  height: 18px;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.perfValue {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border-radius: 6px;
+  padding: 2px 6px;
+  display: inline-block;
+  transition: background-color 0.5s ease;
+  background: var(--perf-bg, transparent);
+  color: var(--perf-color, var(--ld-muted));
+}
+
+.actionRow {
+  margin-top: 10px;
+}
+
+.faqLayout {
+  height: 100%;
+  width: 100%;
+}
+
+.faqImageWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.faqImage {
+  width: 100%;
+  border-radius: 20px;
+}
+
+.faqTitle {
+  color: var(--ld-ink);
+  text-align: center;
+  width: 100%;
+  margin: 0 0 var(--ld-space-3);
+}
+
+.faqLabel {
+  margin-right: var(--ld-space-2);
+  color: var(--ld-ink);
+}
+
+.faqCollapse {
+  width: 100%;
+  background-color: var(--ld-bg-deep);
+}
+
+.faqCollapse:global(.ant-collapse),
+.faqCollapse :global(.ant-collapse-item) {
+  background-color: var(--ld-bg-deep);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.faqCollapse :global(.ant-collapse-header) {
+  color: #ffffff;
+}
+
+.faqCollapse :global(.ant-collapse-content) {
+  background-color: var(--ld-bg-deep);
+  color: #ffffff;
+}
+
+.faqCollapse :global(.ant-collapse-content-box) {
+  color: #ffffff;
+}
+
+.sectionTitleLight {
+  color: var(--ld-ink);
+  text-align: center;
+  margin: 0;
+}
+
+.sectionSubtitleLight {
+  color: var(--ld-ink);
+  text-align: center;
+  margin: 0;
+}
+
+.sectionTitleDark {
+  color: var(--ld-ink-contrast);
+  text-align: center;
+  margin: 0;
+}
+
+.strategyPanel {
+  padding-top: 40px;
+  margin-left: 20px;
+}
+
+.strategyGrid {
+  margin-top: 2vh;
+  padding: 0;
+}
+
+.strategyRow {
+  margin-top: 2vh;
+}
+
+.strategyImage {
+  height: auto;
+  padding: 15px;
+}
+
+.strategyButtonWrap {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.strategyButton {
+  width: 100%;
+  min-height: 40px;
+  height: 40px;
+  padding: 6px 10px;
+}
+
+.strategyButtonActive {
+  background-color: var(--ld-accent-gold);
+  color: var(--ld-bg-deep);
+}
+
+.chartSection {
+  padding-top: 40px;
+}
+
+.chartTitle {
+  text-align: center;
+  margin: 0;
+  padding-left: 50px;
+  padding-right: 30px;
+}
+
+.chartSubtitle {
+  text-align: center;
+  margin: 0;
+  padding-left: 50px;
+  padding-right: 30px;
+}
+
+.chartWrap {
+  padding-left: 70px;
+  padding-right: 30px;
+  margin-top: 2vh;
+}
+
+.chartWrapNoTop {
+  padding-left: 70px;
+  padding-right: 30px;
+}
+
+.summaryChartPanel {
+  height: 100%;
+  width: 100%;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 20px;
+}
+
+.footerRow {
+  margin: 0;
+  padding: 0;
+}
+
+.footerCol {
+  padding: 0;
+  margin: 0;
+}
+
+.footerControls {
+  text-align: center;
+  padding-bottom: 5vh;
+  padding-right: 80px;
+}
+
+.accentText {
+  color: var(--ld-accent-gold);
+}
+
+.bannerTitleLarge {
+  color: var(--ld-ink-contrast);
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 0;
+  font-weight: 400;
+}
+
+.bannerSubtitle {
+  color: var(--ld-ink-contrast);
+  text-align: center;
+  margin-top: 0;
+}
+
+.bannerFeaturedRow {
+  padding-top: 58vh;
+  position: relative;
+}
+
+.landingRoot {
+  width: 100%;
+  height: calc(100vh - 40px);
+  padding: 0;
+}
+
+.sectionRow {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.sectionRowCentered {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.researchRoot {
+  height: 100%;
+  margin-top: 5vh;
+}
+
+.researchCard {
+  width: 90%;
+}
+
+.researchGrid {
+  width: 33.33%;
+  text-align: center;
+  padding: 10px;
+}
+
+.researchTitleArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.researchIcon {
+  font-size: 60px;
+  margin-top: 10px;
+}
+
+.researchTitle {
+  margin-top: 10px;
+  min-height: 45px;
+}
+
+.contactRoot {
+  padding: 20px;
+  text-align: center;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.contactLogo {
+  width: 100px;
+  height: auto;
+}
+
+.explainerRoot {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.explainerImageWrap {
+  height: 10vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.explainerImage {
+  max-width: 100%;
+  max-height: 100%;
+  margin-top: 1vh;
+}
+
+.stepRow {
+  display: flex;
+  align-items: center;
+}
+
+.stepFact {
+  display: flex;
+  align-items: center;
+  width: 170px;
+}
+
+.stepText {
+  margin-left: 8px;
+  font-size: 14px;
+  line-height: 1.5;
+  max-width: 170px;
+}
+
+.visionHeader {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.visionSpacer {
+  margin-top: 10vh;
+}
+
+.researchSpacer {
+  margin-top: 5vh;
+}
+
+.visionSteps {
+  margin-top: 5vh;
+}
+
+.logoRow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 14vh;
+}
+
+.logoImage {
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}

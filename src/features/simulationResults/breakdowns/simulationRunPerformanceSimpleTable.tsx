@@ -1,5 +1,10 @@
-import { FC, useCallback, useMemo, useRef } from 'react';
-import { ColDef, SideBarDef, CellStyle, ValueGetterParams } from 'ag-grid-community';
+import { FC, RefObject, useCallback, useMemo, useRef } from 'react';
+import {
+  ColDef,
+  SideBarDef,
+  CellStyle,
+  ValueGetterParams,
+} from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-quartz.css';
@@ -10,7 +15,10 @@ import {
   SimulationRunBreakdown,
   SimulationRunMetric,
 } from '../../simulationResults/simulationResultSummaryModels';
-import { benchmarkMetricThresholds, returnMetricThresholds } from '../../../models';
+import {
+  benchmarkMetricThresholds,
+  returnMetricThresholds,
+} from '../../../models';
 
 interface AnalysisBreakdownTableProps {
   simulationRunBreakdowns: SimulationRunBreakdown[];
@@ -19,7 +27,54 @@ interface AnalysisBreakdownTableProps {
   height?: number;
 }
 
-export const AnalysisSimplifiedBreakdownTable: FC<AnalysisBreakdownTableProps> = ({
+interface BreakdownGridProps {
+  darkThemeAg: string;
+  height: number;
+  gridRef: RefObject<AgGridReact>;
+  colDefs: ColDef[];
+  rowData: Record<string, string | number | null>[];
+  sideBar: SideBarDef;
+  onGridReady: (params: { api: any; columnApi: any }) => void;
+  onFirstDataRendered: (params: { api: any; columnApi: any }) => void;
+}
+
+function BreakdownGrid({
+  darkThemeAg,
+  height,
+  gridRef,
+  colDefs,
+  rowData,
+  sideBar,
+  onGridReady,
+  onFirstDataRendered,
+}: BreakdownGridProps) {
+  return (
+    <div style={{ width: '100%' }}>
+      <div
+        className={`${darkThemeAg} ag-theme-quartz`}
+        style={{ width: '100%', height }}
+      >
+        <AgGridReact
+          ref={gridRef}
+          columnDefs={colDefs}
+          rowData={rowData}
+          defaultColDef={{ resizable: true }}
+          rowHeight={28}
+          rowSelection="single"
+          sideBar={sideBar}
+          onGridReady={onGridReady}
+          onFirstDataRendered={onFirstDataRendered}
+          tooltipShowDelay={200}
+          tooltipMouseTrack={true}
+        />
+      </div>
+    </div>
+  );
+}
+
+export const AnalysisSimplifiedBreakdownTable: FC<
+  AnalysisBreakdownTableProps
+> = ({
   simulationRunBreakdowns,
   benchmarkBreakdown,
   visibleMetrics,
@@ -30,7 +85,8 @@ export const AnalysisSimplifiedBreakdownTable: FC<AnalysisBreakdownTableProps> =
 
   const benchmarkHeaderName = useMemo(() => {
     if (!benchmarkBreakdown) {
-      return null;}
+      return null;
+    }
     return benchmarkBreakdown.simulationRun.updateRule.updateRuleName;
   }, [benchmarkBreakdown]);
 
@@ -52,25 +108,30 @@ export const AnalysisSimplifiedBreakdownTable: FC<AnalysisBreakdownTableProps> =
       const ruleName = br.simulationRun.updateRule.updateRuleName;
       const analysis = br.simulationRunResultAnalysis;
       if (!analysis) {
-        return;}
+        return;
+      }
 
       const metrics: SimulationRunMetric[] = [
         ...(analysis.return_analysis || []),
         ...(analysis.benchmark_analysis || []),
       ];
-      console.log('Metrics for rule', ruleName, metrics);
-      
-
-      metrics.filter(x => x.benchmarkName !== 'benchmark_return_analysis' && x.metricValue != undefined).forEach((m) => {
-        out.push({
-          updateRule: ruleName,
-          metric: m.metricName,
-          benchmark: m.benchmarkName ?? "",
-          value: m.metricValue as number,
+      metrics
+        .filter(
+          (x) =>
+            x.benchmarkName !== 'benchmark_return_analysis' &&
+            x.metricValue !== undefined &&
+            x.metricValue !== null &&
+            Number.isFinite(x.metricValue)
+        )
+        .forEach((m) => {
+          out.push({
+            updateRule: ruleName,
+            metric: m.metricName,
+            benchmark: m.benchmarkName ?? '',
+            value: m.metricValue!,
+          });
         });
-      });
     });
-    console.log('Flat Summary:', out);
     return out;
   }, [allBreakdowns]);
 
@@ -105,14 +166,18 @@ export const AnalysisSimplifiedBreakdownTable: FC<AnalysisBreakdownTableProps> =
     return '#01ec38';
   }, []);
 
-  const vsCellStyle = useCallback((value: number | null): CellStyle | undefined => {
-    if (value == null) return undefined;
+  const vsCellStyle = useCallback(
+    (value: number | null): CellStyle | undefined => {
+      if (value == null) return undefined;
 
-    // Light green if > 0, dark green if > 100%, red if < 0
-    if (value > 0) return { backgroundColor: 'rgba(2, 189, 46, 0.6)', color: '#ffffff' };
-    if (value < 0) return { backgroundColor: 'rgba(166, 0, 0, 0.6)' };
-    return undefined;
-  }, []);
+      // Light green if > 0, dark green if > 100%, red if < 0
+      if (value > 0)
+        return { backgroundColor: 'rgba(2, 189, 46, 0.6)', color: '#ffffff' };
+      if (value < 0) return { backgroundColor: 'rgba(166, 0, 0, 0.6)' };
+      return undefined;
+    },
+    []
+  );
 
   const colDefs = useMemo<ColDef[]>(() => {
     let baseCols: ColDef[] = [
@@ -129,11 +194,12 @@ export const AnalysisSimplifiedBreakdownTable: FC<AnalysisBreakdownTableProps> =
           const t = returnMetricThresholds.find((x) => x.key === params.value);
           return t?.tooltipDescription;
         },
-      }
+      },
     ];
 
-    baseCols = [...baseCols,
-          {
+    baseCols = [
+      ...baseCols,
+      {
         colId: 'benchmark',
         field: 'benchmark',
         headerName: 'Benchmark',
@@ -141,9 +207,11 @@ export const AnalysisSimplifiedBreakdownTable: FC<AnalysisBreakdownTableProps> =
         filter: 'agSetColumnFilter',
         resizable: true,
         width: 320,
-      },]
+      },
+    ];
 
-    baseCols = [...baseCols,
+    baseCols = [
+      ...baseCols,
       ...updateRules.map((rule) => ({
         colId: rule,
         field: rule,
@@ -162,8 +230,9 @@ export const AnalysisSimplifiedBreakdownTable: FC<AnalysisBreakdownTableProps> =
           if (!color) return undefined;
           return { backgroundColor: color };
         },
-      })),]
-console.log('Column Definitions:', [...baseCols]);
+      })),
+    ];
+
     if (!benchmarkHeaderName) return baseCols;
 
     const vsCols: ColDef[] = updateRules
@@ -176,7 +245,7 @@ console.log('Column Definitions:', [...baseCols]);
           sortable: true,
           filter: 'agNumberColumnFilter',
           resizable: true,
-        width: 300,
+          width: 300,
           valueGetter: (params: ValueGetterParams) => {
             const row = params.data as Record<string, unknown> | undefined;
             if (!row) return null;
@@ -187,18 +256,22 @@ console.log('Column Definitions:', [...baseCols]);
             if (typeof a !== 'number' || typeof b !== 'number') return null;
             if (b === 0) return null;
 
-            // Overperformance (%) relative to benchmark:
-            // ((value - benchmark) / |benchmark|) * 100
-            return ((a - b));
+            return a - b;
           },
           valueFormatter: (params: { value: number | null | undefined }) =>
-            typeof params.value === 'number' ? params.value > 0 ? `+${params.value.toFixed(2)}` : `${params.value.toFixed(2)}` : '',
-          cellStyle: (params: { value: number | null }): CellStyle | undefined =>
-            vsCellStyle(params.value),
+            typeof params.value === 'number'
+              ? params.value > 0
+                ? `+${params.value.toFixed(2)}`
+                : `${params.value.toFixed(2)}`
+              : '',
+          cellStyle: (params: {
+            value: number | null;
+          }): CellStyle | undefined => vsCellStyle(params.value),
         } as ColDef;
       });
     return [...baseCols, ...vsCols];
   }, [updateRules, benchmarkHeaderName, getColorFor, vsCellStyle]);
+
   const rowData = useMemo(() => {
     // Build rows keyed by (metric, benchmark) so each flatSummary entry maps to exactly one cell.
     const rowsByKey = new Map<string, Record<string, string | number | null>>();
@@ -214,7 +287,6 @@ console.log('Column Definitions:', [...baseCols]);
         let row = rowsByKey.get(key);
         if (!row) {
           row = { metric: f.metric, benchmark };
-          // Initialize all rule columns so the grid has stable fields
           updateRules.forEach((rule) => {
             row![rule] = null;
           });
@@ -227,33 +299,35 @@ console.log('Column Definitions:', [...baseCols]);
     return Array.from(rowsByKey.values());
   }, [flatSummary, updateRules, visibleMetrics]);
 
-    console.log('Row Data:', rowData);
-  const sideBar: SideBarDef = {
-    toolPanels: [
-      {
-        id: 'columns',
-        labelDefault: 'Columns',
-        labelKey: 'columns',
-        iconKey: 'columns',
-        toolPanel: 'agColumnsToolPanel',
-        minWidth: 100,
-        maxWidth: 300,
-        width: 200,
-      },
-      {
-        id: 'filters',
-        labelDefault: 'Filters',
-        labelKey: 'filters',
-        iconKey: 'filter',
-        toolPanel: 'agFiltersToolPanel',
-        minWidth: 100,
-        maxWidth: 300,
-        width: 200,
-      },
-    ],
-    position: 'right',
-    defaultToolPanel: 'none',
-  };
+  const sideBar: SideBarDef = useMemo(
+    () => ({
+      toolPanels: [
+        {
+          id: 'columns',
+          labelDefault: 'Columns',
+          labelKey: 'columns',
+          iconKey: 'columns',
+          toolPanel: 'agColumnsToolPanel',
+          minWidth: 100,
+          maxWidth: 300,
+          width: 200,
+        },
+        {
+          id: 'filters',
+          labelDefault: 'Filters',
+          labelKey: 'filters',
+          iconKey: 'filter',
+          toolPanel: 'agFiltersToolPanel',
+          minWidth: 100,
+          maxWidth: 300,
+          width: 200,
+        },
+      ],
+      position: 'right',
+      defaultToolPanel: 'none',
+    }),
+    []
+  );
 
   const onGridReady = useCallback(
     (params: { api: any; columnApi: any }) => {
@@ -278,22 +352,15 @@ console.log('Column Definitions:', [...baseCols]);
   );
 
   return (
-    <div style={{ width: '100%' }}>
-      <div className={`${darkThemeAg} ag-theme-quartz`} style={{ width: '100%', height }}>
-        <AgGridReact
-          ref={gridRef}
-          columnDefs={colDefs}
-          rowData={rowData}
-          defaultColDef={{ resizable: true }}
-          rowHeight={28}
-          rowSelection="single"
-          sideBar={sideBar}
-          onGridReady={onGridReady}
-          onFirstDataRendered={onFirstDataRendered}
-          tooltipShowDelay={200}
-          tooltipMouseTrack={true}
-        />
-      </div>
-    </div>
+    <BreakdownGrid
+      darkThemeAg={darkThemeAg}
+      height={height}
+      gridRef={gridRef}
+      colDefs={colDefs}
+      rowData={rowData}
+      sideBar={sideBar}
+      onGridReady={onGridReady}
+      onFirstDataRendered={onFirstDataRendered}
+    />
   );
 };

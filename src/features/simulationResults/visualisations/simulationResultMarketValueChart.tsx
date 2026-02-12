@@ -1,14 +1,12 @@
 import { AgCharts } from 'ag-charts-react';
 import * as agCharts from 'ag-charts-community';
 import { AgTimeAxisOptions } from 'ag-charts-community';
+import { useMemo } from 'react';
 
 import styles from '../simulationResultSummary.module.css';
 import { useAppSelector } from '../../../app/hooks';
 import { Row, Col, Divider } from 'antd';
-import {
-  SimulationRunBreakdown,
-  SimulationRunLiquidityPoolSnapshot,
-} from '../simulationResultSummaryModels';
+import { SimulationRunLiquidityPoolSnapshot } from '../simulationResultSummaryModels';
 import { selectSimulationResultTimeRangeSelection } from '../../simulationRunner/simulationRunnerSlice';
 import { selectAgChartTheme } from '../../themes/themeSlice';
 import { BreakdownProps } from '../simulationResultsSummaryStep';
@@ -33,87 +31,80 @@ export function SimulationResultMarketValueChart(props: BreakdownProps) {
   );
   const chartTheme = useAppSelector(selectAgChartTheme);
 
-  function getDuplicateUpdateRuleNames(
-    breakdowns: SimulationRunBreakdown[],
-    targetUpdateRuleName: string
-  ): string {
-    const updateRuleNameCounts: Record<string, number> = {};
-    breakdowns.forEach((breakdown) => {
-      const updateRuleName = breakdown.simulationRun.updateRule.updateRuleKey;
-      if (updateRuleNameCounts[updateRuleName]) {
-        updateRuleNameCounts[updateRuleName]++;
-      } else {
-        updateRuleNameCounts[updateRuleName] = 1;
+  const visibleBreakdowns = useMemo(
+    () =>
+      simulationBreakdownResults
+        .filter((x) => x.simulationRunStatus === 'Complete')
+        .filter((x) => x.timeRange.name === simulationTimeRangeSelected),
+    [simulationBreakdownResults, simulationTimeRangeSelected]
+  );
+
+  const series = useMemo((): SeriesConfig[] => {
+    const seriesArray: SeriesConfig[] = [];
+
+    const nameCounts = visibleBreakdowns.reduce<Record<string, number>>(
+      (accumulator, breakdown) => {
+        const ruleName = breakdown.simulationRun.updateRule.updateRuleName;
+        accumulator[ruleName] = (accumulator[ruleName] ?? 0) + 1;
+        return accumulator;
+      },
+      {}
+    );
+    const currentNameIndex: Record<string, number> = {};
+
+    visibleBreakdowns.forEach((x) => {
+      let stokeOverride = undefined;
+      if (props.overrideSeriesStrokeColor !== undefined) {
+        const override =
+          props.overrideSeriesStrokeColor[
+            x.simulationRun.updateRule.updateRuleName
+          ];
+        if (override != null) {
+          stokeOverride = override;
+        }
+      }
+
+      const baseRuleName = x.simulationRun.updateRule.updateRuleName;
+      currentNameIndex[baseRuleName] =
+        (currentNameIndex[baseRuleName] ?? 0) + 1;
+      let nameOverride =
+        nameCounts[baseRuleName] > 1
+          ? `${baseRuleName} (${currentNameIndex[baseRuleName]})`
+          : baseRuleName;
+
+      if (props.overrideSeriesName !== undefined) {
+        const override =
+          props.overrideSeriesName[x.simulationRun.updateRule.updateRuleName];
+        if (override != null) {
+          nameOverride = override;
+        }
+      }
+      if (x.timeSteps.length !== 0) {
+        const data = getChartTimeSteps(x);
+        seriesArray.push({
+          xKey: 'unix',
+          yKey: 'totalPoolMarketValue',
+          yName: nameOverride,
+          data: [...data],
+          marker: { enabled: false },
+          stroke: stokeOverride,
+        });
       }
     });
 
-    const duplicateNames = Object.keys(updateRuleNameCounts).filter(
-      (key) => updateRuleNameCounts[key] > 1 && key === targetUpdateRuleName
-    );
-
-    if (duplicateNames.length > 0) {
-      return duplicateNames.map((name, index) => `${index}_${name}`).join(', ');
-    }
-
-    return '';
-  }
-
-  function getSimulationResultSeries(
-    breakdowns: SimulationRunBreakdown[]
-  ): SeriesConfig[] {
-    const seriesArray: SeriesConfig[] = [];
-
-    breakdowns
-      .filter((x) => x.simulationRunStatus == 'Complete')
-      .filter((x) => x.timeRange.name == simulationTimeRangeSelected)
-      .forEach((x) => {
-        let stokeOverride = undefined;
-        if (props.overrideSeriesStrokeColor != undefined) {
-          const override =
-            props.overrideSeriesStrokeColor[
-              x.simulationRun.updateRule.updateRuleName
-            ];
-          if (override != null) {
-            stokeOverride = override;
-          }
-        }
-
-        let nameOverride =
-          x.simulationRun.updateRule.updateRuleName +
-          getDuplicateUpdateRuleNames(
-            breakdowns,
-            x.simulationRun.updateRule.updateRuleName
-          );
-
-        if (props.overrideSeriesName != undefined) {
-          const override =
-            props.overrideSeriesName[x.simulationRun.updateRule.updateRuleName];
-          if (override != null) {
-            nameOverride = override;
-          }
-        }
-        if (x.timeSteps.length != 0) {
-          const data = getChartTimeSteps(x);
-          seriesArray.push({
-            xKey: 'unix',
-            yKey: 'totalPoolMarketValue',
-            yName: nameOverride,
-            data: [...data],
-            marker: { enabled: false },
-            stroke: stokeOverride,
-          });
-        }
-      });
-
     return seriesArray;
-  }
+  }, [
+    props.overrideSeriesName,
+    props.overrideSeriesStrokeColor,
+    visibleBreakdowns,
+  ]);
 
   function getTimeAxisOption(dataLength: number): AgTimeAxisOptions {
     return {
       type: 'time',
       interval: {
         step:
-          props.overrideXAxisInterval != undefined
+          props.overrideXAxisInterval !== undefined
             ? agCharts.time.month.every(props.overrideXAxisInterval)
             : dataLength > 350
               ? agCharts.time.month.every(6)
@@ -126,6 +117,9 @@ export function SimulationResultMarketValueChart(props: BreakdownProps) {
       },
     };
   }
+
+  const visibleBreakdownStepsLength =
+    visibleBreakdowns[0]?.timeSteps.length ?? 1;
 
   return (
     <div>
@@ -150,11 +144,7 @@ export function SimulationResultMarketValueChart(props: BreakdownProps) {
                     right: 40,
                   },
                   axes: [
-                    getTimeAxisOption(
-                      simulationBreakdownResults.filter(
-                        (x) => x.timeRange.name == simulationTimeRangeSelected
-                      )?.[0]?.timeSteps.length
-                    ),
+                    getTimeAxisOption(visibleBreakdownStepsLength),
                     {
                       type: 'number',
                       position: 'left',
@@ -170,7 +160,7 @@ export function SimulationResultMarketValueChart(props: BreakdownProps) {
                         : undefined,
                     },
                   ],
-                  series: getSimulationResultSeries(simulationBreakdownResults),
+                  series,
                   legend: {
                     position: 'top',
                   },

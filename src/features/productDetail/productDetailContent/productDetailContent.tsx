@@ -5,7 +5,7 @@ import { selectProductById } from '../../productExplorer/productExplorerSlice';
 import { ProductDetailPoolGraph } from './productDetailPoolGraph';
 import { ProductDetailStats } from './productDetailStats';
 import { ProductDetailNav } from './productDetailNav';
-import { ProductDetailEvents } from './productDetailEvents';
+import { ProductDetailEvents } from './events/productDetailEvents';
 
 import sharedStyles from '../../../shared.module.scss';
 import { ProductDetailInfo } from '../productDetailSidebar/productDetailInfo';
@@ -13,6 +13,7 @@ import { GqlChain } from '../../../__generated__/graphql-types';
 import { ProductDetailSidebarSocials } from '../productDetailSidebar/productDetailSidebarSocials';
 import { ProductDetailSidebarStrategySummary } from '../productDetailSidebar/productDetailSidebarStrategySummary';
 import { ProductDetailTable } from './components/productDetailTable';
+import styles from './productDetailContent.module.scss';
 
 const { Content } = Layout;
 
@@ -49,7 +50,7 @@ export const ProductDetailContent: FC<ProductDetailContentProps> = ({
               <></>
             )}
             <Row>
-              <Col span={24} style={{ padding: '16px' }}>
+              <Col span={24} className={styles.strategyCol}>
                 <ProductDetailSidebarStrategySummary product={product} />
               </Col>
             </Row>
@@ -67,20 +68,9 @@ export const ProductDetailContent: FC<ProductDetailContentProps> = ({
                 />
               </Col>
             </Row>
-            {!isMobile ? (
-              <></>
-            ) : (
-              <Row id="details" style={{ marginTop: 20 }} hidden={isMobile}>
-                <Col
-                  span={24}
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    marginTop: 20,
-                    paddingLeft: 12,
-                  }}
-                >
+            {isMobile ? (
+              <Row id="details" className={styles.detailsRow}>
+                <Col span={24} className={styles.detailsCol}>
                   <ProductDetailTable
                     simulationRunBreakdown={product.simulationRunBreakdown}
                     productId={product.address ?? product.id}
@@ -88,11 +78,17 @@ export const ProductDetailContent: FC<ProductDetailContentProps> = ({
                   />
                 </Col>
               </Row>
+            ) : (
+              <></>
             )}
           </div>
-          <div>
-            <ProductDetailSidebarSocials />
-          </div>
+          {isMobile ? (
+            <div>
+              <ProductDetailSidebarSocials />
+            </div>
+          ) : (
+            <></>
+          )}
         </>
       )}
     </Content>

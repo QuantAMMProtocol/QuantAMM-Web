@@ -1,0 +1,145 @@
+.centeredHero {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.heroImage {
+  height: auto;
+}
+
+.heroTitle {
+  text-align: center;
+  margin: 0;
+}
+
+.heroDescription {
+  text-align: center;
+}
+
+.sectionTitle {
+  margin-left: 10px;
+}
+
+.rowHeight52 {
+  height: 52vh;
+}
+
+.rowHeight75 {
+  height: 75vh;
+}
+
+.rowHeight80 {
+  height: 80vh;
+}
+
+.rowHeight110 {
+  height: 110vh;
+}
+
+.rowHeight130 {
+  height: 130vh;
+}
+
+.rowMarginTop5 {
+  margin-top: 5px;
+}
+
+.fullHeight {
+  height: 100%;
+}
+
+.cardHeightFull {
+  height: 100%;
+}
+
+.cardHeight80 {
+  height: 80vh;
+}
+
+.cardHeight110 {
+  height: 110vh;
+}
+
+.cardHeight130 {
+  height: 130vh;
+}
+
+.cardHeightAuto {
+  height: auto;
+}
+
+.cardHeight80Scroll {
+  height: 80vh;
+  overflow-y: auto;
+}
+
+.cardHeight110Scroll {
+  height: 110vh;
+  overflow-y: auto;
+}
+
+.cardHeight130Scroll {
+  height: 130vh;
+  overflow-y: auto;
+}
+
+.cardMarginSmall {
+  margin: 5px;
+}
+
+.cardMarginHeight57 {
+  margin: 5px;
+  height: 57vh;
+}
+
+.titleRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.titleRowGap {
+  gap: 12px;
+}
+
+.listHeading {
+  margin: 10px;
+  width: 80%;
+  text-align: center;
+}
+
+.listButton {
+  margin: 10px;
+  width: 80%;
+}
+
+.listButtonMuted {
+  margin: 10px;
+  width: 80%;
+  background-color: transparent !important;
+  color: var(--tooltip-text-color) !important;
+}
+
+.paddingTop30 {
+  padding-top: 30px;
+}
+
+.radioGroupNormal {
+  font-weight: normal;
+}
+
+.collapseBase {
+  width: 100%;
+}
+
+.scrollArea55 {
+  overflow-y: auto;
+  height: 55vh;
+}
+
+.buttonMarginSmall {
+  margin: 5px;
+}

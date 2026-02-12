@@ -7,6 +7,7 @@ import {
   ProductBannerProps,
 } from './bannerProductSection';
 import { CurrentPricePollingGate } from '../../../coinData/coinCurrentPricesPolling';
+import styles from './landingDesktop.module.css';
 
 const { Title } = Typography;
 
@@ -53,15 +54,7 @@ export function Banner(props: ProductBannerProps) {
                   scale: { type: 'spring', visualDuration: 2, bounce: 0.1 },
                 }}
               >
-                <Title
-                  style={{
-                    color: 'white',
-                    textAlign: 'center',
-                    marginTop: '10px',
-                    marginBottom: '0px',
-                    fontWeight: '400',
-                  }}
-                >
+                <Title className={styles.bannerTitleLarge}>
                   MOVE BEYOND LIQUIDITY PROVIDING
                 </Title>
               </motion.div>
@@ -74,13 +67,7 @@ export function Banner(props: ProductBannerProps) {
                   scale: { type: 'spring', visualDuration: 3, bounce: 0.1 },
                 }}
               >
-                <p
-                  style={{
-                    color: 'white',
-                    textAlign: 'center',
-                    marginTop: '0px',
-                  }}
-                >
+                <p className={styles.bannerSubtitle}>
                   DYNAMIC STRATEGY POOLS THAT CAPITALISE ON PRICE VOLATILITY
                   WHILE STILL EARNING FEES AND YIELD
                 </p>
@@ -94,7 +81,7 @@ export function Banner(props: ProductBannerProps) {
             id="featured"
             justify="center"
             style={{
-              paddingTop: '58vh',
+              paddingTop: '60vh',
               position: 'relative',
             }}
           >

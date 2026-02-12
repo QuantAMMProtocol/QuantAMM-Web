@@ -1,0 +1,24 @@
+.badgePlaceholder {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+}
+
+.badgeImage {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+.addressTag {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tagLink {
+  text-align: center;
+}

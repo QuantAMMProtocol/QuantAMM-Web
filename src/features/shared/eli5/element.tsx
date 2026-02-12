@@ -6,9 +6,7 @@ export const ElementPool = () => {
   return (
     <>
       <Title level={3}>
-        <Text
-          style={{ fontSize: 'inherit' }}
-        >
+        <Text style={{ fontSize: 'inherit' }}>
           &ldquo;A balancer element pool &rdquo;
         </Text>
       </Title>

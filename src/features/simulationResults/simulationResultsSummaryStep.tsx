@@ -10,6 +10,7 @@ import {
 } from '../simulationRunner/simulationRunnerSlice';
 
 import { Col, Menu, Row, Tabs } from 'antd';
+import { useEffect } from 'react';
 
 import {
   LineChartOutlined,
@@ -39,16 +40,64 @@ const { TabPane } = Tabs;
 export interface BreakdownProps {
   breakdowns: SimulationRunBreakdown[];
   forceViewResults: boolean;
-  overrideHeight?:number;
+  overrideHeight?: number;
   overrideXAxisInterval?: number;
   overrideYAxisInterval?: number[];
   overrideYAxisMax?: number;
   overrideYAxisMin?: number;
-  overrideSeriesStrokeColor?:Dictionary<string>;
-  overrideSeriesName?:Dictionary<string>;
-  overrideNagivagtion?:boolean;
-  overrideTitle?:string;
-  hideTitle?:boolean;
+  overrideSeriesStrokeColor?: Dictionary<string>;
+  overrideSeriesName?: Dictionary<string>;
+  overrideNagivagtion?: boolean;
+  overrideTitle?: string;
+  hideTitle?: boolean;
+}
+
+function getMenuItem(
+  label: string,
+  key: string,
+  icon: JSX.Element,
+  disabled: boolean
+): ItemType {
+  return {
+    key,
+    label,
+    icon,
+    disabled,
+  } as ItemType;
+}
+
+function getGraphMenuItems(): ItemType[] {
+  return [
+    getMenuItem('Select Visualisation', 'placeholder', <DownOutlined />, true),
+    getMenuItem(
+      'Pool $ value over time',
+      'MarketValueOverTime',
+      <LineChartOutlined />,
+      false
+    ),
+    getMenuItem('MV Weight over time', 'Weights', <PieChartOutlined />, false),
+    getMenuItem('Amount over time', 'Amounts', <LineChartOutlined />, false),
+    getMenuItem('Drawdowns', 'Drawdowns', <BoxPlotOutlined />, false),
+    getMenuItem('Return Distribution', 'Returns', <BarChartOutlined />, false),
+  ];
+}
+
+function getBreakdownMenuItems(): ItemType[] {
+  return [
+    getMenuItem('Select Breakdown', 'placeholder', <DownOutlined />, true),
+    getMenuItem(
+      'Market Value Summary',
+      'MvSummary',
+      <OrderedListOutlined />,
+      false
+    ),
+    getMenuItem(
+      'Performance Analysis',
+      'PerformanceAnalysis',
+      <HeatMapOutlined />,
+      false
+    ),
+  ];
 }
 
 export function SimulationResultsSummaryStep(props: BreakdownProps) {
@@ -66,113 +115,49 @@ export function SimulationResultsSummaryStep(props: BreakdownProps) {
 
   const dispatch = useAppDispatch();
 
-  if (
-    props.breakdowns.length > 0 &&
-    props.breakdowns.find((x) => x.timeRange.name == timeRangeSelected) ==
-      undefined
-  ) {
-    dispatch(
-      changeVisualisationTimeRangeSelected(props.breakdowns[0].timeRange.name)
-    );
-  }
-
-  function getItem(
-    label: string,
-    key: string,
-    icon: JSX.Element,
-    disabled: boolean
-  ): ItemType {
-    return {
-      key,
-      label,
-      icon,
-      disabled,
-    } as ItemType;
-  }
-
-  function getGraphMenu(): ItemType[] {
-    const menu: ItemType[] = [];
-    menu.push(
-      getItem('Select Visualisation', 'placeholder', <DownOutlined />, true)
-    );
-    menu.push(
-      getItem(
-        'Pool $ value over time',
-        'MarketValueOverTime',
-        <LineChartOutlined />,
-        false
-      )
-    );
-    menu.push(
-      getItem('MV Weight over time', 'Weights', <PieChartOutlined />, false)
-    );
-    menu.push(
-      getItem('Amount over time', 'Amounts', <LineChartOutlined />, false)
-    );
-    menu.push(getItem('Drawdowns', 'Drawdowns', <BoxPlotOutlined />, false));
-    menu.push(
-      getItem('Return Distribution', 'Returns', <BarChartOutlined />, false)
-    );
-
-    return menu;
-  }
-
-  function getBreakdownMenu(): ItemType[] {
-    const menu: ItemType[] = [];
-    menu.push(
-      getItem('Select Breakdown', 'placeholder', <DownOutlined />, true)
-    );
-    menu.push(
-      getItem(
-        'Market Value Summary',
-        'MvSummary',
-        <OrderedListOutlined />,
-        false
-      )
-    );
-    menu.push(
-      getItem(
-        'Performance Analysis',
-        'PerformanceAnalysis',
-        <HeatMapOutlined />,
-        false
-      )
-    );
-
-    return menu;
-  }
+  useEffect(() => {
+    if (
+      props.breakdowns.length > 0 &&
+      props.breakdowns.find((x) => x.timeRange.name === timeRangeSelected) ===
+        undefined
+    ) {
+      dispatch(
+        changeVisualisationTimeRangeSelected(props.breakdowns[0].timeRange.name)
+      );
+    }
+  }, [dispatch, props.breakdowns, timeRangeSelected]);
 
   function getChart(): JSX.Element {
-    if (resultChartSelection == 'MarketValueOverTime') {
+    if (resultChartSelection === 'MarketValueOverTime') {
       return (
         <SimulationResultMarketValueChart
           breakdowns={props.breakdowns}
           forceViewResults={props.forceViewResults}
         />
       );
-    } else if (resultChartSelection == 'Weights') {
+    } else if (resultChartSelection === 'Weights') {
       return (
         <SimulationResultWeightChart
           breakdowns={props.breakdowns}
           forceViewResults={props.forceViewResults}
         />
       );
-    } else if (resultChartSelection == 'Drawdowns') {
+    } else if (resultChartSelection === 'Drawdowns') {
       return (
         <SimulationResultDrawdownChart
           breakdowns={props.breakdowns}
           forceViewResults={props.forceViewResults}
-                  hideTitle={false}
+          hideTitle={false}
         />
       );
-    } else if (resultChartSelection == 'Returns') {
+    } else if (resultChartSelection === 'Returns') {
       return (
         <SimulationResultReturnChart
           breakdowns={props.breakdowns}
           forceViewResults={props.forceViewResults}
         />
       );
-    } else if (resultChartSelection == 'Amounts') {
+    } else if (resultChartSelection === 'Amounts') {
       return (
         <SimulationResultAmountChart
           breakdowns={props.breakdowns}
@@ -185,74 +170,82 @@ export function SimulationResultsSummaryStep(props: BreakdownProps) {
   }
 
   function getBreakdown(): JSX.Element {
-    if (resultBreakdownSelection == 'MvSummary') {
+    if (resultBreakdownSelection === 'MvSummary') {
       return (
         <SimulationRunMvSummaryBreakdown
           breakdowns={props.breakdowns}
           forceViewResults={props.forceViewResults}
         ></SimulationRunMvSummaryBreakdown>
       );
-    } else if (resultBreakdownSelection == 'PerformanceAnalysis') {
+    } else if (resultBreakdownSelection === 'PerformanceAnalysis') {
       return <SimulationRunPerformanceAnalysisBreakdown {...props} />;
     }
     return <div>No Breakdown</div>;
   }
+
+  const VisualisationTab = () => (
+    <Row>
+      <Col span={4}>
+        <Row justify="center">
+          <Col span={24}>
+            <Menu
+              style={{
+                width: 200,
+                fontSize: 10,
+              }}
+              defaultSelectedKeys={[chartSelection]}
+              items={getGraphMenuItems()}
+              activeKey={chartSelection}
+              onClick={(x) => {
+                dispatch(changeChartSelected(x.key));
+              }}
+            />
+          </Col>
+        </Row>
+      </Col>
+      <Col span={20}>
+        {runStatusIndex === 2 || props.forceViewResults ? (
+          getChart()
+        ) : (
+          <h2>Simulation not finished yet</h2>
+        )}
+      </Col>
+    </Row>
+  );
+
+  const BreakdownTab = () => (
+    <Row>
+      <Col span={4}>
+        <Row justify="center">
+          <Col span={24}>
+            <Menu
+              style={{
+                width: 200,
+                fontSize: 10,
+              }}
+              defaultSelectedKeys={[resultBreakdownSelection]}
+              items={getBreakdownMenuItems()}
+              onClick={(x) => {
+                dispatch(changeBreakdownSelected(x.key));
+              }}
+              activeKey={resultBreakdownSelection}
+            />
+          </Col>
+        </Row>
+      </Col>
+      <Col span={20}>{getBreakdown()}</Col>
+    </Row>
+  );
 
   return (
     <Row className={styles.simRunSection}>
       <Col span={24}>
         <Tabs>
           <TabPane tab="Result Visualisation" key={'vis'}>
-            <Row>
-              <Col span={4}>
-                <Row justify="center">
-                  <Col span={24}>
-                    <Menu
-                      style={{
-                        width: 200,
-                        fontSize: 10,
-                      }}
-                      defaultSelectedKeys={[chartSelection]}
-                      items={getGraphMenu()}
-                      activeKey={chartSelection}
-                      onClick={(x) => {
-                        dispatch(changeChartSelected(x.key));
-                      }}
-                    />
-                  </Col>
-                </Row>
-              </Col>
-              <Col span={20}>
-                {runStatusIndex == 2 || props.forceViewResults ? (
-                  getChart()
-                ) : (
-                  <h2>Simulation not finished yet</h2>
-                )}
-              </Col>
-            </Row>
+            <VisualisationTab />
           </TabPane>
           <TabPane tab="Result Breakdown" key={'breakdown'}>
-            <Row>
-              <Col span={4}>
-                <Row justify="center">
-                  <Col span={24}>
-                    <Menu
-                      style={{
-                        width: 200,
-                        fontSize: 10,
-                      }}
-                      defaultSelectedKeys={[resultBreakdownSelection]}
-                      items={getBreakdownMenu()}
-                      onClick={(x) => {
-                        dispatch(changeBreakdownSelected(x.key));
-                      }}
-                      activeKey={resultBreakdownSelection}
-                    />
-                  </Col>
-                </Row>
-              </Col>
-              <Col span={20}>{getBreakdown()}</Col>
-            </Row>
+            <BreakdownTab />
           </TabPane>
         </Tabs>
       </Col>

@@ -64,12 +64,12 @@ export const ProductItem: FC<ProductItemProps> = ({ product }) => {
               product.inceptionPerformance ? (
                 <ProductItemPerformanceAreaGraph
                   data={[
+                    product.inceptionPerformance,
                     product.oneWeekPerformance,
                     product.oneMonthPerformance,
                     product.threeMonthPerformance,
                     product.sixMonthPerformance,
                     product.oneYearPerformance,
-                    product.inceptionPerformance,
                   ]}
                 />
               ) : (

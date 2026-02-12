@@ -16,65 +16,81 @@ import {
   addFixedFeeToPool,
   selectCoinPriceDataLoaded,
 } from '../simulationRunConfiguration/simulationRunConfigurationSlice';
-import { ChangeEvent, Dispatch, useRef, useState } from 'react';
-import {
-  HookTimePeriodChart,
-  SelectedProps,
-} from '../simulationRunConfiguration/hookTimePeriodChart';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { HookTimePeriodChart } from '../simulationRunConfiguration/hookTimePeriodChart';
 import { ItemType } from 'antd/es/menu/interface';
+import { AppDispatch } from '../../app/store';
+import runnerStyles from './simulationRunnerCommon.module.css';
+
+const isCsvFile = (file: File) =>
+  file.type === 'text/csv' || file.name.toLowerCase().endsWith('.csv');
+
+const parseCsvRows = (csvContent: string) =>
+  csvContent
+    .split(/\r?\n/)
+    .map((row) => row.trim())
+    .filter((row) => row.length > 0)
+    .map((row) => row.split(',').map((cell) => cell.trim()));
 
 const handleDownloadFees = (
   event: ChangeEvent<HTMLInputElement>,
   poolId: string,
-  dispatch: Dispatch<any>
+  dispatch: AppDispatch
 ) => {
   const file = event.target.files?.[0];
 
-  if (file && file.type === 'text/csv') {
-    // Ensure it's a CSV file
+  if (file && isCsvFile(file)) {
     const reader = new FileReader();
 
     reader.onload = (loadEvent) => {
       const csvContent = loadEvent.target?.result;
       try {
-        const rows = (csvContent as string).split('\n');
-        const headers = rows[0].split(',');
+        const rows = parseCsvRows(String(csvContent ?? ''));
+        if (rows.length < 2) {
+          throw new Error(
+            'CSV must include headers and at least one data row.'
+          );
+        }
 
-        const rowsWithoutHeader = rows.slice(1, rows.length - 1);
+        const headers = rows[0].map((header) => header.toLowerCase());
+        const unixIndex = headers.indexOf('unix');
+        const bpsIndex = headers.indexOf('bps');
 
-        // Assuming SwapImport has properties: property1, property2, property3, etc.
-        const fees: FeeHookStep[] = rowsWithoutHeader.map((row) => {
-          const values = row.split(',');
+        if (unixIndex === -1 || bpsIndex === -1) {
+          throw new Error('Missing required headers.');
+        }
+
+        const fees: FeeHookStep[] = rows.slice(1).map((values) => {
+          const unix = Number(values[unixIndex]);
+          const bps = Number(values[bpsIndex]);
           return {
-            unix: Number(values[headers.indexOf('unix')]),
-            value:
-              Number(values[headers.indexOf('bps')]) < 10000 //100% fees might make sense in some dynamic fee scenario where you dont want any trades.
-                ? Number(values[headers.indexOf('bps')])
-                : 10000,
-          } as unknown as FeeHookStep;
+            unix: Number.isFinite(unix) ? unix : 0,
+            value: Number.isFinite(bps) && bps < 10000 ? bps : 10000,
+          };
         });
 
         dispatch(
           addFeeHooksToPool({
             feeHookName: 'timeSeriesFeeImport',
-            poolId: poolId,
-            fees: fees,
+            poolId,
+            fees,
           })
         );
       } catch (error) {
-        console.error('Error parsing JSON file:', error);
-        alert('Error parsing JSON file. Please check the file format.');
+        alert('Error parsing CSV file. Please check the file format.');
       }
+      event.target.value = '';
     };
 
     reader.onerror = () => {
-      console.error('Error reading the file');
       alert('Error reading the file.');
+      event.target.value = '';
     };
 
-    reader.readAsText(file); // Read the file as a text string
+    reader.readAsText(file);
   } else {
-    alert('Please upload a valid JSON file.');
+    alert('Please upload a valid CSV file.');
+    event.target.value = '';
   }
 };
 
@@ -91,24 +107,41 @@ export function SimulationRunnerHookTimePeriodStep() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const coinDataLoaded = useAppSelector(selectCoinPriceDataLoaded);
   const [initialFixedFeeValue, setInitialFixedFee] = useState<number>(0);
-  ('');
-  function getSelectedPoolId() {
-    return { id: selectedSimulationPool?.id ?? 'z' };
-  }
+
+  useEffect(() => {
+    if (simulationPools.length === 0) {
+      setSelectedSimulationPool(undefined);
+      return;
+    }
+
+    if (!selectedSimulationPool) {
+      setSelectedSimulationPool(simulationPools[0]);
+      return;
+    }
+
+    if (
+      !simulationPools.find((pool) => pool.id === selectedSimulationPool.id)
+    ) {
+      setSelectedSimulationPool(simulationPools[0]);
+    }
+  }, [simulationPools, selectedSimulationPool]);
+
   function addFixedFeeToState() {
+    if (!selectedSimulationPool) {
+      return;
+    }
+
     dispatch(
       addFixedFeeToPool({
         fixedFee: initialFixedFeeValue,
-        poolId: selectedSimulationPool?.id ?? '',
+        poolId: selectedSimulationPool.id,
         feeHookName: 'timeSeriesFeeImport',
       })
     );
-    setSelectedSimulationPool(selectedSimulationPool);
   }
+
   const handleButtonClick = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click(); // Only click if the ref is not null
-    }
+    fileInputRef.current?.click();
   };
 
   function getItem(
@@ -125,142 +158,147 @@ export function SimulationRunnerHookTimePeriodStep() {
     } as ItemType;
   }
 
+  const HookConfigurationPanel = () => (
+    <Col span={6}>
+      <Row>
+        <Col span={24}>
+          <Divider orientation="center">
+            Select Target Pool:
+            <Tooltip title="Hooks are per pool not a market setting">
+              <InfoCircleOutlined className={runnerStyles.infoIcon} />
+            </Tooltip>
+          </Divider>
+          <p hidden={simulationPools.length !== 0}>No Pools Selected</p>
+        </Col>
+        <Col span={24}>
+          <Menu
+            hidden={simulationPools.length === 0}
+            className={runnerStyles.menuFont15}
+            selectedKeys={
+              selectedSimulationPool ? [selectedSimulationPool.id] : []
+            }
+            items={simulationPools.map((x) => {
+              return getItem(
+                x?.updateRule.updateRuleName,
+                x.id,
+                <OrderedListOutlined />,
+                false
+              );
+            })}
+            onClick={(x) => {
+              const selectedPool = simulationPools.find((y) => y.id === x.key);
+              if (selectedPool) {
+                setSelectedSimulationPool(selectedPool);
+              }
+            }}
+          />
+        </Col>
+      </Row>
+      <Row className={runnerStyles.leftPadding10}>
+        <Col span={24}>
+          <Divider orientation="center">
+            Fixed fees
+            <Tooltip title="Fees that do not change over time defined in bps">
+              <InfoCircleOutlined className={runnerStyles.infoIcon} />
+            </Tooltip>
+          </Divider>
+        </Col>
+        <Col span={16}>
+          <InputNumber
+            disabled={!coinDataLoaded || selectedSimulationPool === undefined}
+            addonAfter={'bps'}
+            value={initialFixedFeeValue}
+            placeholder="value"
+            min={0}
+            max={10000}
+            onChange={(e) => {
+              setInitialFixedFee(e ?? 0);
+            }}
+          />
+        </Col>
+        <Col span={2}></Col>
+        <Col span={6} className={runnerStyles.marginTop10}>
+          <Button
+            onClick={addFixedFeeToState}
+            disabled={selectedSimulationPool === undefined}
+            type="primary"
+          >
+            Add
+          </Button>
+        </Col>
+      </Row>
+      <Row className={runnerStyles.leftPadding10}>
+        <Col span={24}>
+          <p className={runnerStyles.centerText}>or</p>
+          <Divider orientation="center">
+            Dynamic Fees
+            <Tooltip title="Import dynamic fees, the fee vector calculated in your own tooling">
+              <InfoCircleOutlined className={runnerStyles.infoIcon} />
+            </Tooltip>
+          </Divider>
+        </Col>
+      </Row>
+      <Row className={runnerStyles.leftPadding10}>
+        <Col span={16}>
+          <p>Expected CSV header format:</p>
+          <p>
+            <b>unix, bps</b>
+          </p>
+          <p>unix col in ms format</p>
+          <p>Minimum resolution: 1 minute</p>
+        </Col>
+        <Col span={2} />
+        <Col span={6}>
+          <input
+            type="file"
+            accept=".csv"
+            ref={fileInputRef}
+            className={runnerStyles.hiddenFileInput}
+            onChange={(event) =>
+              handleDownloadFees(
+                event,
+                selectedSimulationPool?.id ?? '',
+                dispatch
+              )
+            }
+          />
+          <Button
+            disabled={!coinDataLoaded || selectedSimulationPool === undefined}
+            type="primary"
+            onClick={handleButtonClick}
+            className={runnerStyles.fullHeight}
+          >
+            Import
+          </Button>
+        </Col>
+      </Row>
+      <Row className={runnerStyles.leftPadding10}>
+        <Col span={24} className={runnerStyles.leftPadding10}>
+          <Divider />
+          <Button
+            className={runnerStyles.greenButton}
+            onClick={() => {
+              dispatch(changeSimulationRunnerCurrentStepIndex(4));
+            }}
+          >
+            Continue
+          </Button>
+        </Col>
+      </Row>
+    </Col>
+  );
+
+  const HookChartPanel = () => (
+    <Col span={18} hidden={currentTimeRangeSelection !== 'custom'}>
+      <HookTimePeriodChart id={selectedSimulationPool?.id ?? ''} />
+    </Col>
+  );
+
   return (
     <div>
       <Row>
-        <Col span={6}>
-          <Row>
-            <Col span={24}>
-              <Divider orientation="center">
-                Select Target Pool:
-                <Tooltip title="Hooks are per pool not a market setting">
-                  <InfoCircleOutlined style={{ paddingLeft: '5px' }} />
-                </Tooltip>
-              </Divider>
-              <p hidden={simulationPools.length != 0}>No Pools Selected</p>
-            </Col>
-            <Col span={24}>
-              <Menu
-                hidden={simulationPools.length == 0}
-                style={{
-                  fontSize: 15,
-                }}
-                defaultSelectedKeys={[currentTimeRangeSelection]}
-                items={simulationPools.map((x) => {
-                  return getItem(
-                    x?.updateRule.updateRuleName,
-                    x.id,
-                    <OrderedListOutlined />,
-                    false
-                  );
-                })}
-                onClick={(x) => {
-                  const selectedPool = simulationPools.find(
-                    (y) => y.id == x.key
-                  );
-                  if (selectedPool) {
-                    setSelectedSimulationPool(selectedPool);
-                  }
-                }}
-                activeKey={currentTimeRangeSelection}
-              />
-            </Col>
-          </Row>
-          <Row style={{ paddingLeft: '10px' }}>
-            <Col span={24}>
-              <Divider orientation="center">
-                Fixed fees
-                <Tooltip title="Fees that do not change over time defined in bps">
-                  <InfoCircleOutlined style={{ paddingLeft: '5px' }} />
-                </Tooltip>
-              </Divider>
-            </Col>
-            <Col span={16}>
-              <InputNumber
-                disabled={
-                  !coinDataLoaded || selectedSimulationPool == undefined
-                }
-                addonAfter={'bps'}
-                value={initialFixedFeeValue}
-                placeholder="value"
-                onChange={(e) => {
-                  setInitialFixedFee(e ?? 0);
-                }}
-              />
-            </Col>
-            <Col span={2}></Col>
-            <Col span={6} style={{ marginTop: '10px' }}>
-              <Button
-                onClick={addFixedFeeToState}
-                disabled={selectedSimulationPool == undefined}
-                type="primary"
-              >
-                Add
-              </Button>
-            </Col>
-          </Row>
-          <Row style={{ paddingLeft: '10px' }}>
-            <Col span={24}>
-              <p style={{ textAlign: 'center' }}>or</p>
-              <Divider orientation="center">
-                Dynamic Fees
-                <Tooltip title="Import dynamic fees, the fee vector calculated in your own tooling">
-                  <InfoCircleOutlined style={{ paddingLeft: '5px' }} />
-                </Tooltip>
-              </Divider>
-            </Col>
-          </Row>
-          <Row style={{ paddingLeft: '10px' }}>
-            <Col span={16}>
-              <p>Expected CSV header format:</p>
-              <p>
-                <b>unix, bps</b>
-              </p>
-              <p>unix col in ms format</p>
-              <p>Minimum resolution: 1 minute</p>
-            </Col>
-            <Col span={2} />
-            <Col span={6}>
-              <input
-                type="file"
-                accept=".csv"
-                ref={fileInputRef}
-                style={{ display: 'none' }}
-                onChange={(event) =>
-                  handleDownloadFees(
-                    event,
-                    selectedSimulationPool?.id ?? '',
-                    dispatch
-                  )
-                }
-              />
-              <Button
-                disabled={selectedSimulationPool == undefined}
-                type="primary"
-                onClick={handleButtonClick}
-                style={{ height: '100%' }}
-              >
-                Import
-              </Button>
-            </Col>
-          </Row>
-          <Row style={{ paddingLeft: '10px' }}>
-            <Col span={24} style={{ paddingLeft: '10px' }}>
-              <Divider />
-              <Button
-                style={{ backgroundColor: 'green' }}
-                onClick={() => {
-                  dispatch(changeSimulationRunnerCurrentStepIndex(4));
-                }}
-              >
-                Continue
-              </Button>
-            </Col>
-          </Row>
-        </Col>
-        <Col span={18} hidden={currentTimeRangeSelection != 'custom'}>
-          <HookTimePeriodChart {...(getSelectedPoolId() as SelectedProps)} />
-        </Col>
+        <HookConfigurationPanel />
+        <HookChartPanel />
       </Row>
     </div>
   );

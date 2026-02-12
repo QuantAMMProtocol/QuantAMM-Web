@@ -4,7 +4,7 @@ import { ROUTES } from '../../../../routesEnum';
 
 export const sonicMacroFactsheetData: FactsheetModel = {
   poolId: ROUTES.SONICMACROFACTSHEET,
-  inceptionLpPrice:3023,
+  inceptionLpPrice: 3023,
   poolChain: 'SONIC',
   pools: [
     'sonicMacroBTFAugTrain',
@@ -19,14 +19,15 @@ export const sonicMacroFactsheetData: FactsheetModel = {
     width: '30%',
     alt: 'SONIC MACRO BTF Icon',
   },
-  launchUnixTimestamp:undefined,
+  launchUnixTimestamp: undefined,
   depositorBadges: {
-    prefix:'Sonic_Macro_',
-    gold:1754434800,
-    silver:1755644400,
-    bronze:1756854000
+    prefix: 'Sonic_Macro_',
+    gold: 1754434800,
+    silver: 1755644400,
+    bronze: 1756854000,
   },
-  objective: 'The Sonic Macro BTF provides exposure to some of the mega cap tokens on Sonic. The BTF was trained on more bullish market conditions.',
+  objective:
+    'The Sonic Macro BTF provides exposure to some of the mega cap tokens on Sonic. The BTF was trained on more bullish market conditions.',
   deploymentLinks: {
     contractLinks: [
       [
@@ -157,7 +158,8 @@ export const sonicMacroFactsheetData: FactsheetModel = {
           </p>
           <p>
             S is the Sonic native token. While this token carries potential
-            protocol risk and higher volatility, it is key token of the Sonic ecosystem.
+            protocol risk and higher volatility, it is key token of the Sonic
+            ecosystem.
           </p>
         </>
       ),
@@ -248,9 +250,9 @@ export const sonicMacroFactsheetData: FactsheetModel = {
   trainingDescription: (
     <>
       <p>
-        The channel following strategy has parameters that determine how aggressive
-        a strategy re-weights to different assets as well as the memory of
-        prices that get taken into account.
+        The channel following strategy has parameters that determine how
+        aggressive a strategy re-weights to different assets as well as the
+        memory of prices that get taken into account.
       </p>
       <p>
         A training period of Jan 2023 - March 2025 was selected and parameters
@@ -259,10 +261,10 @@ export const sonicMacroFactsheetData: FactsheetModel = {
         QuantAMM simulator framework. A parameter set was selected that
         maximised the Sharpe Ratio of the strategy. This was selected over other
         objectives such as maximising Ulcer or Calmar Ratios as the parameter
-        set showed better test set statistics. Random 73-day length windows
-        were selected within the training price range and optimisation was
-        performed via stochastic gradient descent for 6000 steps with batches of
-        6 windows per step.
+        set showed better test set statistics. Random 73-day length windows were
+        selected within the training price range and optimisation was performed
+        via stochastic gradient descent for 6000 steps with batches of 6 windows
+        per step.
       </p>
     </>
   ),
@@ -273,8 +275,14 @@ export const sonicMacroFactsheetData: FactsheetModel = {
       variations: [
         {
           name: 'Memory Days',
-          tooltip: 'Memory days is the number of days of prices used in the strategy.',
-          value: ['BTC - 50.35461604', 'ETH - 5.03696308', 'S - 15.77315714', 'USDC - 7.05245484'],
+          tooltip:
+            'Memory days is the number of days of prices used in the strategy.',
+          value: [
+            'BTC - 50.35461604',
+            'ETH - 5.03696308',
+            'S - 15.77315714',
+            'USDC - 7.05245484',
+          ],
         },
       ],
     },
@@ -283,7 +291,8 @@ export const sonicMacroFactsheetData: FactsheetModel = {
       variations: [
         {
           name: 'Lambda',
-          tooltip: 'Lambda is the parameter used in the gradient estimators for the channel following.',
+          tooltip:
+            'Lambda is the parameter used in the gradient estimators for the channel following.',
           value: [
             'BTC - 0.929563018539273',
             'ETH - 0.4479412201204208',
@@ -298,7 +307,8 @@ export const sonicMacroFactsheetData: FactsheetModel = {
       variations: [
         {
           name: 'k',
-          tooltip: 'k is the on-chain value stored in the contracts and is the exact parameter used in the strategy calculations.',
+          tooltip:
+            'k is the on-chain value stored in the contracts and is the exact parameter used in the strategy calculations.',
           value: [
             'BTC - 2601.9593723570410',
             'ETH - 89.055850228512313',
@@ -313,7 +323,8 @@ export const sonicMacroFactsheetData: FactsheetModel = {
       variations: [
         {
           name: 'Exponent',
-          tooltip: 'The exponent is a variable used in the channel following strategy that dictates how big a price change has to be before the strategy starts to notice it.',
+          tooltip:
+            'The exponent is a variable used in the channel following strategy that dictates how big a price change has to be before the strategy starts to notice it.',
           value: [
             'BTC - 0.7832038911979993',
             'ETH - 2.3558801968659950',
@@ -328,7 +339,8 @@ export const sonicMacroFactsheetData: FactsheetModel = {
       variations: [
         {
           name: 'Width',
-          tooltip: 'Width is the parameter that defines the channel width for the mean reversion strategy.',
+          tooltip:
+            'Width is the parameter that defines the channel width for the mean reversion strategy.',
           value: [
             'BTC - 0.0086388441051054223',
             'ETH - 0.010606898165675289',
@@ -343,7 +355,8 @@ export const sonicMacroFactsheetData: FactsheetModel = {
       variations: [
         {
           name: 'Amplitude',
-          tooltip: 'Amplitude is the parameter that defines the oscillation amplitude for the mean reversion strategy.',
+          tooltip:
+            'Amplitude is the parameter that defines the oscillation amplitude for the mean reversion strategy.',
           value: [
             'BTC - 0.074853775497883593',
             'ETH - 0.0027628351279059180',
@@ -358,7 +371,8 @@ export const sonicMacroFactsheetData: FactsheetModel = {
       variations: [
         {
           name: 'Pre-exp Scaling',
-          tooltip: 'Pre-exp scaling is the parameter used for scaling before exponentiation in the strategy calculations.',
+          tooltip:
+            'Pre-exp scaling is the parameter used for scaling before exponentiation in the strategy calculations.',
           value: [
             'BTC - 0.0002015493093145',
             'ETH - 0.0002238654967055',
@@ -374,5 +388,5 @@ export const sonicMacroFactsheetData: FactsheetModel = {
   status: 'LIVE',
   iconOpacity: 1,
   iconFocus: true,
-  targetPoolJson:'sonicMacroBTFAprilTest'
+  targetPoolJson: 'sonicMacroBTFAprilTest',
 };

@@ -2,66 +2,31 @@ import { Typography } from 'antd';
 import { BannerProductSection } from '../desktop/bannerProductSection';
 import { ProductBannerProps } from '../desktop/bannerProductSection';
 import { CurrentPricePollingGate } from '../../../coinData/coinCurrentPricesPolling';
+import styles from './landingMobile.module.css';
 
 const { Title } = Typography;
 
 export function BannerMobile(props: ProductBannerProps) {
   return (
-    <>      
-    <CurrentPricePollingGate />    
-    <div
-      style={{
-        height: '85vh',
-        backgroundImage: 'url(./background/Hourglass_Dune_80.avif)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        padding: '20px',
-        color: 'white',
-        width: '100%',
-      }}
-    >
-      <div>
-        <Title level={4} style={{ textAlign: 'center', margin: 0, padding: 0 }}>
-          MOVE BEYOND LIQUIDITY PROVIDING
-        </Title>
-        <p
-          style={{
-            textAlign: 'center',
-            fontSize: '7px',
-            marginTop: 0,
-            paddingTop: 0,
-          }}
-        >
-          DYNAMIC STRATEGY POOLS THAT CAPITALISE ON PRICE VOLATILITY WHILE STILL
-          EARNING FEES AND YIELD
-        </p>
-      </div>
-      <div style={{ marginTop: '35vh', height: '95vh', width: '100%' }}>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            height: '100%',
-            padding: '5px 0',
-          }}
-        >
-          <BannerProductSection productData={props.productData} />
+    <>
+      <CurrentPricePollingGate />
+      <div className={styles.bannerRoot}>
+        <div>
+          <Title level={4} className={styles.bannerTitle}>
+            MOVE BEYOND LIQUIDITY PROVIDING
+          </Title>
+          <p className={styles.bannerSubtitle}>
+            DYNAMIC STRATEGY POOLS THAT CAPITALISE ON PRICE VOLATILITY WHILE
+            STILL EARNING FEES AND YIELD
+          </p>
+        </div>
+        <div className={styles.bannerContent}>
+          <div className={styles.bannerContentInner}>
+            <BannerProductSection productData={props.productData} />
+          </div>
         </div>
       </div>
-    </div>
-    <div style={{height:'85vh', width:'100%', 
-        backgroundImage: 'url(./background/hourglass_bottom_extension.png)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        padding: '20px',
-        color: 'white',}}></div>
+      <div className={styles.bannerExtension}></div>
     </>
   );
 }

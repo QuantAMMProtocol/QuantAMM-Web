@@ -24,16 +24,16 @@ export function HeatMapGraphs(props: HeatMapProps) {
         options={props.heatMaps.map((x) => ({ value: x.name, label: x.name }))}
       />
       <Divider></Divider>
-      <div hidden={props.heatMaps.length == 0}>
+      <div hidden={props.heatMaps.length === 0}>
         {props.heatMaps
-          .filter((x) => x.name == currentTimeRange)
+          .filter((x) => x.name === currentTimeRange)
           .map((x) => (
             <div key={x.name}>
               <HeatMapGraph heatMap={x} />
             </div>
           ))}
       </div>
-      <div hidden={props.heatMaps.length != 0}>
+      <div hidden={props.heatMaps.length !== 0}>
         <p color="red">No heatmaps available for this basket.</p>
         <p>
           It may be that heatmaps are not the right tool for this rule. If there

@@ -3,16 +3,15 @@
    ----------------------------- */
 .ag-theme-quartz-dark {
   /* Map of requested “withParams” values to Quartz CSS variables. */
-  --ag-active-color: #E6CE97 !important;            /* accentColor */
-  --ag-background-color: #162536  !important;        /* backgroundColor */
-  --ag-foreground-color: #ffffff !important;        /* foregroundColor */
-  --ag-border-color: #E6CE975C !important;          /* borderColor */
-  --ag-secondary-border-color: #E6CE975C !important;
+  --ag-active-color: #e6ce97 !important; /* accentColor */
+  --ag-background-color: #162536 !important; /* backgroundColor */
+  --ag-foreground-color: #ffffff !important; /* foregroundColor */
+  --ag-border-color: #e6ce975c !important; /* borderColor */
+  --ag-secondary-border-color: #e6ce975c !important;
 
-  --ag-header-background-color: #0B1827 !important; /* headerBackgroundColor */
-  --ag-control-panel-background-color: #13202F !important; /* chromeBackgroundColor */
-  --ag-tooltip-background-color: #13202F !important;       /* chromeBackgroundColor */
-
+  --ag-header-background-color: #0b1827 !important; /* headerBackgroundColor */
+  --ag-control-panel-background-color: #13202f !important; /* chromeBackgroundColor */
+  --ag-tooltip-background-color: #13202f !important; /* chromeBackgroundColor */
 
   /* Ensure consistent text colour in header areas even if your core CSS doesn’t define these vars. */
   --ag-header-foreground-color: var(--ag-foreground-color);

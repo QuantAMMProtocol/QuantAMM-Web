@@ -7,6 +7,7 @@ import {
   selectProductById,
 } from '../../productExplorer/productExplorerSlice';
 import { ProductDetailSummary } from './summary/productDetailSummary';
+import styles from './productDetailStats.module.scss';
 
 const { useBreakpoint } = Grid;
 
@@ -28,17 +29,8 @@ const ProductDetailStatsInternal: FC<ProductDetailStatsProps> = ({
 
   if (!product) {
     return (
-      <Row id="details" style={{ marginTop: 20 }}>
-        <Col
-          span={24}
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginTop: 20,
-            paddingLeft: 12,
-          }}
-        >
+      <Row id="details" className={styles.detailsRow}>
+        <Col span={24} className={styles.detailsCol}>
           <Spin />
         </Col>
       </Row>

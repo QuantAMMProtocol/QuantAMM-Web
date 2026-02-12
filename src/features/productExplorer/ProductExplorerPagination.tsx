@@ -29,7 +29,6 @@ export const ProductExplorerPagination = () => {
       <Pagination
         align="center"
         current={page}
-        defaultCurrent={1}
         pageSize={pageSize}
         total={totalPools}
         onChange={handleChange}

@@ -1,6 +1,8 @@
 import { Col, Radio, Row, Form } from 'antd';
 import { MathJax, MathJaxContext } from 'better-react-mathjax';
 import { useState } from 'react';
+import styles from './poolTypes.module.css';
+import sharedStyles from '../documentation.module.css';
 interface OptionalProps {
   hideTitle?: boolean;
   fixedEL15?: boolean;
@@ -22,24 +24,22 @@ export function QuantAMMPoolDescription(props: OptionalProps) {
             </Col>
             <Col span={24}>
               <div hidden={props.fixedEL15}>
-              <Form.Item style={{ marginTop: '5px' }}>
-                <Radio.Group
-                  size="small"
-                  value={eli5}
-                  onChange={(e) => setEli5(e.target.value)}
-                >
-                  <Radio.Button disabled={true}>
-                    User Knowledge Level:{' '}
-                  </Radio.Button>
-                  <Radio.Button value={'ELI5'}>ELI5</Radio.Button>
-                  <Radio.Button value={'Quant'}>
-                    Quant
-                  </Radio.Button>
-                </Radio.Group>
-              </Form.Item>
+                <Form.Item className={sharedStyles.formItemTop5}>
+                  <Radio.Group
+                    size="small"
+                    value={eli5}
+                    onChange={(e) => setEli5(e.target.value)}
+                  >
+                    <Radio.Button disabled={true}>
+                      User Knowledge Level:{' '}
+                    </Radio.Button>
+                    <Radio.Button value={'ELI5'}>ELI5</Radio.Button>
+                    <Radio.Button value={'Quant'}>Quant</Radio.Button>
+                  </Radio.Group>
+                </Form.Item>
               </div>
             </Col>
-            <div hidden={eli5 != 'ELI5'}>
+            <div hidden={eli5 !== 'ELI5'}>
               <h3>How vaults and indexes normally work</h3>
               <p>
                 Crypto vaults usually involve an off-chain manager who decides
@@ -55,19 +55,21 @@ export function QuantAMMPoolDescription(props: OptionalProps) {
                 swap one token for another at an automated price. The holdings
                 within the liquidity pool are kept at constant equal weights.
               </p>
-              <h3 style={{ color: 'var(--secondary-text-color)' }}>How QuantAMM BTFs work</h3>
-              <p style={{ color: 'var(--secondary-text-color)' }}>
+              <h3 className={sharedStyles.secondaryText}>
+                How QuantAMM BTFs work
+              </h3>
+              <p className={sharedStyles.secondaryText}>
                 QuantAMM BTFs are automated market maker pools. However instead
                 of offering a competitive market price, BTFs offer a slightly
                 off market price. The aim of this off market price is to allow
                 traders to rebalance the holdings in the direction of the off
                 market drift. How is the off market price decided? On-chain,
                 automatic rules determine what weights the pool should hold
-                given market movements. This means that QuantAMM BTFs can run index and vault like
-                rebalancing continuously and efficiently.
+                given market movements. This means that QuantAMM BTFs can run
+                index and vault like rebalancing continuously and efficiently.
               </p>
             </div>
-            <div hidden={eli5 == 'ELI5'}>
+            <div hidden={eli5 === 'ELI5'}>
               <Col span={24}>
                 <p>
                   <span>QuantAMM updates</span>
@@ -231,11 +233,13 @@ export function QuantAMMPoolDescription(props: OptionalProps) {
                     corresponding change in value for one combined update is:
                   </span>
                 </p>
-                <MathJax style={{ fontSize: 12 }}>
-                  {
-                    " \\[V_{\\mathrm{quantAMM}}(t') = \\sum_{i=1}^N p_i(t') R(t')_{\\mathrm{quantAMM}, i} = \\sum_{i=1}^N p_i(t_0) R_i(t_0) \\frac{p_i(t_0)}{p_i(t')}\\frac{w_i(t')}{w_i(t_0)}\\prod_{k=1}^N \\left(\\frac{p_k(t')}{p_k(t_0)}\\right)^{w_k(t_0)}\\prod_{\\ell=1}^N \\left(\\frac{w_\\ell(t_0)}{w_\\ell(t')}\\right)^{w_\\ell(t')}\\] "
-                  }
-                </MathJax>
+                <div className={styles.mathSmall}>
+                  <MathJax>
+                    {
+                      " \\[V_{\\mathrm{quantAMM}}(t') = \\sum_{i=1}^N p_i(t') R(t')_{\\mathrm{quantAMM}, i} = \\sum_{i=1}^N p_i(t_0) R_i(t_0) \\frac{p_i(t_0)}{p_i(t')}\\frac{w_i(t')}{w_i(t_0)}\\prod_{k=1}^N \\left(\\frac{p_k(t')}{p_k(t_0)}\\right)^{w_k(t_0)}\\prod_{\\ell=1}^N \\left(\\frac{w_\\ell(t_0)}{w_\\ell(t')}\\right)^{w_\\ell(t')}\\] "
+                    }
+                  </MathJax>
+                </div>
                 <p>
                   <span>We cannot write a simple equivalent to the</span>
                   <MathJax inline>{' \\(\\Delta V\\) '}</MathJax>

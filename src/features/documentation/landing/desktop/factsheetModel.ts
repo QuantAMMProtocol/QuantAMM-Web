@@ -36,24 +36,24 @@ export interface FactsheetTrainedParamVariation {
   value: string[];
 }
 
-export interface DepositorBadges{
-  prefix:string;
-  gold:number;
-  silver:number;
-  bronze:number;
+export interface DepositorBadges {
+  prefix: string;
+  gold: number;
+  silver: number;
+  bronze: number;
 }
 
 export interface FactsheetModel {
-  inceptionLpPrice:number;
+  inceptionLpPrice: number;
   mainTitle: string;
   mainDescription: string;
-  iconTitle:string;
-  iconDescription:string[];
+  iconTitle: string;
+  iconDescription: string[];
   status: string;
   iconOpacity: number;
   iconFocus: boolean;
   poolId: string;
-  poolChain:string;
+  poolChain: string;
   pools: Pool[];
   factsheetImage: FactsheetImage;
   objective: string;
@@ -72,7 +72,7 @@ export interface FactsheetModel {
   trainedParameters: FactsheetTrainedParameters[];
   deploymentLinks: FactsheetDeploymentLinks;
   fixedSettings: [string, string][];
-  depositorBadges:DepositorBadges;
-  targetPoolJson:Pool;
-  launchUnixTimestamp:number | undefined;
+  depositorBadges: DepositorBadges;
+  targetPoolJson: Pool;
+  launchUnixTimestamp: number | undefined;
 }

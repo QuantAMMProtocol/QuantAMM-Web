@@ -461,6 +461,326 @@ export const StrategyWorkflowCard: FC<{
     });
   }, [tokenUniverse, currentWeights, predicted]);
 
+  const RuleParametersSection = () => (
+    <Collapse
+      defaultActiveKey={[]}
+      className={styles['product-detail-summary__collapse']}
+      bordered={false}
+    >
+      <Panel
+        key="params"
+        header={
+          <div className={styles['product-detail-summary__collapseHeader']}>
+            <Text strong>Rule parameters</Text>
+            <Text
+              type="secondary"
+              className={styles['product-detail-summary__collapseHint']}
+            ></Text>
+          </div>
+        }
+      >
+        <div className={styles['product-detail-summary__ruleSummaryGrid']}>
+          {ruleSummaryRows.map((r) => (
+            <div
+              key={r.k}
+              className={styles['product-detail-summary__ruleSummaryItem']}
+            >
+              <Text type="secondary">{r.k}</Text>
+              <Text>{r.v}</Text>
+            </div>
+          ))}
+        </div>
+        <Table
+          size="small"
+          pagination={false}
+          className={styles['product-detail-summary__tableCompact']}
+          columns={[
+            {
+              title: 'Parameter',
+              dataIndex: 'parameter',
+              key: 'parameter',
+              width: 240,
+              render: (v: string, row: any) =>
+                row?.tooltip ? (
+                  <Tooltip title={row.tooltip}>
+                    <Text strong>{v}</Text>
+                  </Tooltip>
+                ) : (
+                  <Text strong>{v}</Text>
+                ),
+            },
+            {
+              title: 'Values',
+              dataIndex: 'values',
+              key: 'values',
+              render: (vals: { asset: string; value: string }[]) => (
+                <Space size={6} wrap>
+                  {vals.map((x, idx) => (
+                    <Tag key={`${x.asset}-${idx}`}>
+                      {x.asset !== 'All' ? `${x.asset}: ` : ''}
+                      {x.value}
+                    </Tag>
+                  ))}
+                </Space>
+              ),
+            },
+          ]}
+          dataSource={factsheetParamTable}
+          rowKey="key"
+        />
+      </Panel>
+    </Collapse>
+  );
+
+  const CurrentAndIntermediatesSection = () => (
+    <Collapse
+      defaultActiveKey={[]}
+      className={styles['product-detail-summary__collapse']}
+      bordered={false}
+    >
+      <Panel
+        key="current-and-intermediates"
+        header={
+          <div className={styles['product-detail-summary__collapseHeader']}>
+            <span className={styles['product-detail-summary__stepNumber']}>
+              2
+            </span>
+            <Text strong>Current weights & intermediate values</Text>
+            <Text
+              type="secondary"
+              className={styles['product-detail-summary__collapseHint']}
+            ></Text>
+          </div>
+        }
+      >
+        <div className={styles['product-detail-summary__twoColSection']}>
+          <div className={styles['product-detail-summary__twoColCard']}>
+            <div className={styles['product-detail-summary__twoColTitle']}>
+              <Text strong style={{ marginRight: 8 }}>
+                Current weights
+              </Text>
+              <Tooltip title="Weights at the last update interval (normalised).">
+                <InfoCircleOutlined />
+              </Tooltip>
+            </div>
+
+            <Table
+              size="small"
+              pagination={false}
+              className={styles['product-detail-summary__tableCompact']}
+              columns={[
+                {
+                  title: 'Asset',
+                  dataIndex: 'asset',
+                  key: 'asset',
+                  width: 120,
+                  render: (v: string) => <Text strong>{v}</Text>,
+                },
+                {
+                  title: 'Weight',
+                  dataIndex: 'weightPct',
+                  key: 'weightPct',
+                  render: (v: number) => (
+                    <div
+                      className={styles['product-detail-summary__weightCell']}
+                    >
+                      <Tag>{v.toFixed(2)}%</Tag>
+                      <Progress percent={clamp(v, 0, 100)} showInfo={false} />
+                    </div>
+                  ),
+                },
+              ]}
+              dataSource={currentWeightTableData}
+              rowKey="key"
+            />
+          </div>
+
+          <div className={styles['product-detail-summary__twoColCard']}>
+            <div className={styles['product-detail-summary__twoColTitle']}>
+              <Text strong style={{ marginRight: 8 }}>
+                Intermediate values
+              </Text>
+              <Tooltip title="New subgraph fields rendered to 2dp.">
+                <InfoCircleOutlined />
+              </Tooltip>
+            </div>
+
+            <Table
+              size="small"
+              pagination={false}
+              className={styles['product-detail-summary__tableCompact']}
+              columns={[
+                {
+                  title: 'Asset',
+                  dataIndex: 'asset',
+                  key: 'asset',
+                  width: 120,
+                  render: (v: string) => <Text strong>{v}</Text>,
+                },
+                {
+                  title: 'Gradient (2dp)',
+                  dataIndex: 'gradient',
+                  key: 'gradient',
+                  width: 160,
+                  render: (v: string) => <Text code>{v}</Text>,
+                },
+                {
+                  title: 'Moving avg (2dp)',
+                  dataIndex: 'movingAvg',
+                  key: 'movingAvg',
+                  width: 180,
+                  render: (v: string) => <Text code>{v}</Text>,
+                },
+              ]}
+              dataSource={intermediateTableData}
+              rowKey="key"
+            />
+          </div>
+        </div>
+      </Panel>
+    </Collapse>
+  );
+
+  const PredictionSection = () => (
+    <div className={styles['product-detail-summary__twoColSection']}>
+      <div className={styles['product-detail-summary__twoColCard']}>
+        <div className={styles['product-detail-summary__twoColTitle']}>
+          <Text strong style={{ marginRight: '8px' }}>
+            Tomorrow prices
+          </Text>
+          <Tooltip title="Per token input. Flask integration is stubbed.">
+            <InfoCircleOutlined />
+          </Tooltip>
+        </div>
+
+        <Table
+          size="small"
+          pagination={false}
+          className={styles['product-detail-summary__tableCompact']}
+          columns={[
+            {
+              title: 'Asset',
+              dataIndex: 'asset',
+              key: 'asset',
+              width: 120,
+              render: (v: string) => <Text strong>{v}</Text>,
+            },
+            {
+              title: 'Tomorrow price',
+              dataIndex: 'price',
+              key: 'price',
+              render: (_: any, row: any) => (
+                <InputNumber
+                  style={{ width: '100%' }}
+                  min={0}
+                  precision={2}
+                  placeholder="Enter price"
+                  value={tomorrowPrices[row.asset]}
+                  onChange={(val) => {
+                    setTomorrowPrices((prev) => ({
+                      ...prev,
+                      [row.asset]: typeof val === 'number' ? val : null,
+                    }));
+                  }}
+                />
+              ),
+            },
+          ]}
+          dataSource={newPricesTableData}
+          rowKey="key"
+        />
+
+        <div className={styles['product-detail-summary__workflowActions']}>
+          <Button
+            type="primary"
+            onClick={() => void onPredict()}
+            loading={predicting}
+          >
+            Predict target weights
+          </Button>
+          <Tag className={styles['product-detail-summary__stubTag']}>
+            Flask: stubbed
+          </Tag>
+        </div>
+      </div>
+
+      <div className={styles['product-detail-summary__twoColCard']}>
+        <div className={styles['product-detail-summary__twoColTitle']}>
+          <Text strong style={{ marginRight: '8px' }}>
+            Predicted weights
+          </Text>
+          <Tooltip title="Current vs predicted and delta per asset.">
+            <InfoCircleOutlined />
+          </Tooltip>
+        </div>
+
+        <Table
+          size="small"
+          pagination={false}
+          className={styles['product-detail-summary__tableCompact']}
+          columns={[
+            {
+              title: 'Asset',
+              dataIndex: 'asset',
+              key: 'asset',
+              width: 120,
+              render: (v: string) => <Text strong>{v}</Text>,
+            },
+            {
+              title: 'Current',
+              dataIndex: 'current',
+              key: 'current',
+              width: 200,
+              render: (v: number) => (
+                <div className={styles['product-detail-summary__weightCell']}>
+                  <Tag>{v.toFixed(2)}%</Tag>
+                  <Progress percent={clamp(v, 0, 100)} showInfo={false} />
+                </div>
+              ),
+            },
+            {
+              title: 'Predicted',
+              dataIndex: 'predicted',
+              key: 'predicted',
+              width: 200,
+              render: (v: number | null) =>
+                v == null ? (
+                  <Text type="secondary">—</Text>
+                ) : (
+                  <div className={styles['product-detail-summary__weightCell']}>
+                    <Tag color="blue">{v.toFixed(2)}%</Tag>
+                    <Progress
+                      percent={clamp(v, 0, 100)}
+                      showInfo={false}
+                      status="active"
+                    />
+                  </div>
+                ),
+            },
+            {
+              title: 'Δ',
+              dataIndex: 'delta',
+              key: 'delta',
+              width: 90,
+              render: (v: number | null) => {
+                if (v == null) return <Text type="secondary">—</Text>;
+                const pos = v >= 0;
+                return (
+                  <Tag color={pos ? 'green' : 'red'}>
+                    {pos ? '+' : ''}
+                    {v.toFixed(2)}%
+                  </Tag>
+                );
+              },
+            },
+          ]}
+          dataSource={predictedTableData}
+          rowKey="key"
+        />
+      </div>
+    </div>
+  );
+
   if (!tokenUniverse.length) {
     return (
       <Card
@@ -484,331 +804,15 @@ export const StrategyWorkflowCard: FC<{
 
   return (
     <Card className={styles['product-detail-summary__cardDesktop']}>
-      {/* Collapsible & collapsed by default: factsheet parameters */}
-      <Collapse
-        defaultActiveKey={[]}
-        className={styles['product-detail-summary__collapse']}
-        bordered={false}
-      >
-        <Panel
-          key="params"
-          header={
-            <div className={styles['product-detail-summary__collapseHeader']}>
-              <Text strong>Rule parameters</Text>
-              <Text
-                type="secondary"
-                className={styles['product-detail-summary__collapseHint']}
-              ></Text>
-            </div>
-          }
-        >
-          <div className={styles['product-detail-summary__ruleSummaryGrid']}>
-            {ruleSummaryRows.map((r) => (
-              <div
-                key={r.k}
-                className={styles['product-detail-summary__ruleSummaryItem']}
-              >
-                <Text type="secondary">{r.k}</Text>
-                <Text>{r.v}</Text>
-              </div>
-            ))}
-          </div>
-          <Table
-            size="small"
-            pagination={false}
-            className={styles['product-detail-summary__tableCompact']}
-            columns={[
-              {
-                title: 'Parameter',
-                dataIndex: 'parameter',
-                key: 'parameter',
-                width: 240,
-                render: (v: string, row: any) =>
-                  row?.tooltip ? (
-                    <Tooltip title={row.tooltip}>
-                      <Text strong>{v}</Text>
-                    </Tooltip>
-                  ) : (
-                    <Text strong>{v}</Text>
-                  ),
-              },
-              {
-                title: 'Values',
-                dataIndex: 'values',
-                key: 'values',
-                render: (vals: { asset: string; value: string }[]) => (
-                  <Space size={6} wrap>
-                    {vals.map((x, idx) => (
-                      <Tag key={`${x.asset}-${idx}`}>
-                        {x.asset !== 'All' ? `${x.asset}: ` : ''}
-                        {x.value}
-                      </Tag>
-                    ))}
-                  </Space>
-                ),
-              },
-            ]}
-            dataSource={factsheetParamTable}
-            rowKey="key"
-          />
-        </Panel>
-      </Collapse>
+      <RuleParametersSection />
 
       <Divider className={styles['product-detail-summary__dividerCompact']} />
 
-      {/* 2) Collapsible section: Current weights + Intermediate values (collapsed by default) */}
-      <Collapse
-        defaultActiveKey={[]}
-        className={styles['product-detail-summary__collapse']}
-        bordered={false}
-      >
-        <Panel
-          key="current-and-intermediates"
-          header={
-            <div className={styles['product-detail-summary__collapseHeader']}>
-              <span className={styles['product-detail-summary__stepNumber']}>
-                2
-              </span>
-              <Text strong>Current weights & intermediate values</Text>
-              <Text
-                type="secondary"
-                className={styles['product-detail-summary__collapseHint']}
-              ></Text>
-            </div>
-          }
-        >
-          <div className={styles['product-detail-summary__twoColSection']}>
-            {/* Current weights */}
-            <div className={styles['product-detail-summary__twoColCard']}>
-              <div className={styles['product-detail-summary__twoColTitle']}>
-                <Text strong style={{ marginRight: 8 }}>
-                  Current weights
-                </Text>
-                <Tooltip title="Weights at the last update interval (normalised).">
-                  <InfoCircleOutlined />
-                </Tooltip>
-              </div>
-
-              <Table
-                size="small"
-                pagination={false}
-                className={styles['product-detail-summary__tableCompact']}
-                columns={[
-                  {
-                    title: 'Asset',
-                    dataIndex: 'asset',
-                    key: 'asset',
-                    width: 120,
-                    render: (v: string) => <Text strong>{v}</Text>,
-                  },
-                  {
-                    title: 'Weight',
-                    dataIndex: 'weightPct',
-                    key: 'weightPct',
-                    render: (v: number) => (
-                      <div
-                        className={styles['product-detail-summary__weightCell']}
-                      >
-                        <Tag>{v.toFixed(2)}%</Tag>
-                        <Progress percent={clamp(v, 0, 100)} showInfo={false} />
-                      </div>
-                    ),
-                  },
-                ]}
-                dataSource={currentWeightTableData}
-                rowKey="key"
-              />
-            </div>
-
-            {/* Intermediate values */}
-            <div className={styles['product-detail-summary__twoColCard']}>
-              <div className={styles['product-detail-summary__twoColTitle']}>
-                <Text strong style={{ marginRight: 8 }}>
-                  Intermediate values
-                </Text>
-                <Tooltip title="New subgraph fields rendered to 2dp.">
-                  <InfoCircleOutlined />
-                </Tooltip>
-              </div>
-
-              <Table
-                size="small"
-                pagination={false}
-                className={styles['product-detail-summary__tableCompact']}
-                columns={[
-                  {
-                    title: 'Asset',
-                    dataIndex: 'asset',
-                    key: 'asset',
-                    width: 120,
-                    render: (v: string) => <Text strong>{v}</Text>,
-                  },
-                  {
-                    title: 'Gradient (2dp)',
-                    dataIndex: 'gradient',
-                    key: 'gradient',
-                    width: 160,
-                    render: (v: string) => <Text code>{v}</Text>,
-                  },
-                  {
-                    title: 'Moving avg (2dp)',
-                    dataIndex: 'movingAvg',
-                    key: 'movingAvg',
-                    width: 180,
-                    render: (v: string) => <Text code>{v}</Text>,
-                  },
-                ]}
-                dataSource={intermediateTableData}
-                rowKey="key"
-              />
-            </div>
-          </div>
-        </Panel>
-      </Collapse>
+      <CurrentAndIntermediatesSection />
 
       <Divider className={styles['product-detail-summary__dividerCompact']} />
 
-      <div className={styles['product-detail-summary__twoColSection']}>
-        {/* Future prices */}
-        <div className={styles['product-detail-summary__twoColCard']}>
-          <div className={styles['product-detail-summary__twoColTitle']}>
-            <Text strong style={{ marginRight: '8px' }}>
-              Tomorrow prices
-            </Text>
-            <Tooltip title="Per token input. Flask integration is stubbed.">
-              <InfoCircleOutlined />
-            </Tooltip>
-          </div>
-
-          <Table
-            size="small"
-            pagination={false}
-            className={styles['product-detail-summary__tableCompact']}
-            columns={[
-              {
-                title: 'Asset',
-                dataIndex: 'asset',
-                key: 'asset',
-                width: 120,
-                render: (v: string) => <Text strong>{v}</Text>,
-              },
-              {
-                title: 'Tomorrow price',
-                dataIndex: 'price',
-                key: 'price',
-                render: (_: any, row: any) => (
-                  <InputNumber
-                    style={{ width: '100%' }}
-                    min={0}
-                    precision={2}
-                    placeholder="Enter price"
-                    value={tomorrowPrices[row.asset]}
-                    onChange={(val) => {
-                      setTomorrowPrices((prev) => ({
-                        ...prev,
-                        [row.asset]: typeof val === 'number' ? val : null,
-                      }));
-                    }}
-                  />
-                ),
-              },
-            ]}
-            dataSource={newPricesTableData}
-            rowKey="key"
-          />
-
-          <div className={styles['product-detail-summary__workflowActions']}>
-            <Button
-              type="primary"
-              onClick={() => void onPredict()}
-              loading={predicting}
-            >
-              Predict target weights
-            </Button>
-            <Tag className={styles['product-detail-summary__stubTag']}>
-              Flask: stubbed
-            </Tag>
-          </div>
-        </div>
-
-        {/* Predicted weights */}
-        <div className={styles['product-detail-summary__twoColCard']}>
-          <div className={styles['product-detail-summary__twoColTitle']}>
-            <Text strong style={{ marginRight: '8px' }}>
-              Predicted weights
-            </Text>
-            <Tooltip title="Current vs predicted and delta per asset.">
-              <InfoCircleOutlined />
-            </Tooltip>
-          </div>
-
-          <Table
-            size="small"
-            pagination={false}
-            className={styles['product-detail-summary__tableCompact']}
-            columns={[
-              {
-                title: 'Asset',
-                dataIndex: 'asset',
-                key: 'asset',
-                width: 120,
-                render: (v: string) => <Text strong>{v}</Text>,
-              },
-              {
-                title: 'Current',
-                dataIndex: 'current',
-                key: 'current',
-                width: 200,
-                render: (v: number) => (
-                  <div className={styles['product-detail-summary__weightCell']}>
-                    <Tag>{v.toFixed(2)}%</Tag>
-                    <Progress percent={clamp(v, 0, 100)} showInfo={false} />
-                  </div>
-                ),
-              },
-              {
-                title: 'Predicted',
-                dataIndex: 'predicted',
-                key: 'predicted',
-                width: 200,
-                render: (v: number | null) =>
-                  v == null ? (
-                    <Text type="secondary">—</Text>
-                  ) : (
-                    <div
-                      className={styles['product-detail-summary__weightCell']}
-                    >
-                      <Tag color="blue">{v.toFixed(2)}%</Tag>
-                      <Progress
-                        percent={clamp(v, 0, 100)}
-                        showInfo={false}
-                        status="active"
-                      />
-                    </div>
-                  ),
-              },
-              {
-                title: 'Δ',
-                dataIndex: 'delta',
-                key: 'delta',
-                width: 90,
-                render: (v: number | null) => {
-                  if (v == null) return <Text type="secondary">—</Text>;
-                  const pos = v >= 0;
-                  return (
-                    <Tag color={pos ? 'green' : 'red'}>
-                      {pos ? '+' : ''}
-                      {v.toFixed(2)}%
-                    </Tag>
-                  );
-                },
-              },
-            ]}
-            dataSource={predictedTableData}
-            rowKey="key"
-          />
-        </div>
-      </div>
+      <PredictionSection />
     </Card>
   );
 };

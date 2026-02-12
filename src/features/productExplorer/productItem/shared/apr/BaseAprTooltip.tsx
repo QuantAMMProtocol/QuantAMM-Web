@@ -141,6 +141,187 @@ export const BaseAprTooltip = ({
       ? totalBaseText(hasVeBalBoost)
       : totalBaseText;
 
+  const renderHookSwapFeeRows = () => {
+    if (!hookType) {
+      return null;
+    }
+
+    return (
+      <>
+        <TooltipAprItem
+          {...getSubitemPopoverAprItemProps(isDark)}
+          apr={bn(swapFeesDisplayed).minus(dynamicSwapFeesDisplayed)}
+          displayValueFormatter={usedDisplayValueFormatter}
+          title="Regular swap fees"
+        />
+        <TooltipAprItem
+          {...getSubitemPopoverAprItemProps(isDark)}
+          apr={dynamicSwapFeesDisplayed}
+          displayValueFormatter={usedDisplayValueFormatter}
+          title={getDynamicSwapFeesLabel(hookType)}
+          valueFontColor="var(--secondary-text-color)"
+          tooltipText={
+            dynamicSwapFeesTooltipText[hookType as SupportedHookType]
+          }
+        />
+      </>
+    );
+  };
+
+  const renderVeBalBreakdown = () => {
+    if (!isVebal) {
+      return null;
+    }
+
+    return (
+      <>
+        <Divider style={{ margin: 0 }} />
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 0,
+          }}
+        >
+          <TooltipAprItem
+            {...{ paddingTop: '6px' }}
+            apr={lockingAprDisplayed}
+            aprOpacity={isLockingAprPresent ? 1 : 0.5}
+            displayValueFormatter={usedDisplayValueFormatter}
+            title="Protocol revenue share (max)"
+            tooltipText={lockingIncentivesTooltipText}
+            valueFontColor="var(--secondary-text-color)"
+          />
+          <TooltipAprItem
+            apr={votingAprDisplayed}
+            aprOpacity={isVotingPresent ? 1 : 0.5}
+            displayValueFormatter={usedDisplayValueFormatter}
+            title="Voting incentives (average)"
+            tooltipText={votingIncentivesTooltipText}
+            valueFontColor="var(--secondary-text-color)"
+          />
+          <Divider style={{ margin: 0 }} />
+          <TooltipAprItem
+            {...{
+              paddingLeft: '2px',
+              paddingTop: '6px',
+              paddingRight: '4px',
+            }}
+            apr={totalCombinedDisplayed}
+            displayValueFormatter={usedDisplayValueFormatter}
+            title={totalVeBalTitle ?? 'Total APR'}
+            fontWeight={600}
+          />
+        </div>
+      </>
+    );
+  };
+
+  const renderVeBalBoostBreakdown = () => {
+    if (!hasVeBalBoost) {
+      return null;
+    }
+
+    return (
+      <>
+        <Divider style={{ margin: 0 }} />
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 0,
+            borderRadius: '4px',
+          }}
+        >
+          <TooltipAprItem
+            {...{ paddingTop: '6px' }}
+            apr={extraBalAprDisplayed}
+            displayValueFormatter={usedDisplayValueFormatter}
+            fontColor={isDark ? 'var(--gray-400)' : 'var(--gray-600)'}
+            fontWeight={500}
+            title="Extra BAL (veBAL boost)"
+            tooltipText={extraBalTooltipText}
+            valueFontColor="var(--secondary-text-color)"
+          />
+          <Divider style={{ margin: 0 }} />
+          <TooltipAprItem
+            {...{
+              paddingLeft: '4px',
+              paddingTop: '6px',
+            }}
+            apr={maxVeBalDisplayed}
+            boxBackground={balRewardGradient}
+            displayValueFormatter={usedDisplayValueFormatter}
+            title={maxVeBalText || 'Max veBAL APR'}
+            fontWeight={600}
+            fontColor={'var(--secondary-color)'}
+            tooltipText={
+              shouldDisplayMaxVeBalTooltip
+                ? `${defaultDisplayValueFormatter(
+                    defaultNumberFormatter(maxVeBal.toString())
+                  )} APR`
+                : ''
+            }
+          />
+        </div>
+      </>
+    );
+  };
+
+  const renderMaBeetsBreakdown = () => {
+    if (!isMaBeetsPresent) {
+      return null;
+    }
+
+    return (
+      <>
+        <Divider style={{ margin: 0 }} />
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 0,
+          }}
+        >
+          <TooltipAprItem
+            {...{
+              paddingLeft: '12px',
+              paddingTop: '6px',
+            }}
+            apr={maxMaBeetsRewardDisplayed}
+            displayValueFormatter={usedDisplayValueFormatter}
+            fontColor={isDark ? 'var(--gray-400)' : 'var(--gray-600)'}
+            fontWeight={500}
+            title="Extra BEETS (max maturity boost)"
+            tooltipText={maBeetsRewardTooltipText}
+          />
+          <TooltipAprItem
+            {...{
+              paddingLeft: '12px',
+            }}
+            apr={maxMaBeetsVotingRewardDisplayed}
+            displayValueFormatter={usedDisplayValueFormatter}
+            fontColor={isDark ? 'var(--gray-400)' : 'var(--gray-600)'}
+            fontWeight={500}
+            title="Extra Voting APR"
+            tooltipText={maBeetsVotingRewardsTooltipText}
+          />
+          <Divider style={{ margin: 0 }} />
+          <TooltipAprItem
+            {...{
+              paddingLeft: '2px',
+              paddingTop: '6px',
+            }}
+            apr={maBeetsTotalAprDisplayed}
+            boxBackground={balRewardGradient}
+            displayValueFormatter={usedDisplayValueFormatter}
+            title="Max total APR"
+          />
+        </div>
+      </>
+    );
+  };
+
   const popoverContent = customPopoverContent ?? (
     <div className={styles['popover-content']}>
       <TooltipAprItem
@@ -152,26 +333,7 @@ export const BaseAprTooltip = ({
         title="Swap fees"
         tooltipText={swapFeesTooltipText}
       >
-        {hookType ? (
-          <>
-            <TooltipAprItem
-              {...getSubitemPopoverAprItemProps(isDark)}
-              apr={bn(swapFeesDisplayed).minus(dynamicSwapFeesDisplayed)}
-              displayValueFormatter={usedDisplayValueFormatter}
-              title="Regular swap fees"
-            />
-            <TooltipAprItem
-              {...getSubitemPopoverAprItemProps(isDark)}
-              apr={dynamicSwapFeesDisplayed}
-              displayValueFormatter={usedDisplayValueFormatter}
-              title={getDynamicSwapFeesLabel(hookType)}
-              valueFontColor="var(--secondary-text-color)"
-              tooltipText={
-                dynamicSwapFeesTooltipText[hookType as SupportedHookType]
-              }
-            />
-          </>
-        ) : null}
+        {renderHookSwapFeeRows()}
       </TooltipAprItem>
 
       {isMaBeetsPresent && (
@@ -265,139 +427,9 @@ export const BaseAprTooltip = ({
             : ''
         }
       />
-      {isVebal ? (
-        <>
-          <Divider style={{ margin: 0 }} />
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 0,
-            }}
-          >
-            <TooltipAprItem
-              {...{ paddingTop: '6px' }}
-              apr={lockingAprDisplayed}
-              aprOpacity={isLockingAprPresent ? 1 : 0.5}
-              displayValueFormatter={usedDisplayValueFormatter}
-              title="Protocol revenue share (max)"
-              tooltipText={lockingIncentivesTooltipText}
-              valueFontColor="var(--secondary-text-color)"
-            />
-            <TooltipAprItem
-              apr={votingAprDisplayed}
-              aprOpacity={isVotingPresent ? 1 : 0.5}
-              displayValueFormatter={usedDisplayValueFormatter}
-              title="Voting incentives (average)"
-              tooltipText={votingIncentivesTooltipText}
-              valueFontColor="var(--secondary-text-color)"
-            />
-            <Divider style={{ margin: 0 }} />
-            <TooltipAprItem
-              {...{
-                paddingLeft: '2px',
-                paddingTop: '6px',
-                paddingRight: '4px',
-              }}
-              apr={totalCombinedDisplayed}
-              displayValueFormatter={usedDisplayValueFormatter}
-              title={totalVeBalTitle ?? 'Total APR'}
-              fontWeight={600}
-            />
-          </div>
-        </>
-      ) : null}
-      {hasVeBalBoost ? (
-        <>
-          <Divider style={{ margin: 0 }} />
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 0,
-              borderRadius: '4px',
-            }}
-          >
-            <TooltipAprItem
-              {...{ paddingTop: '6px' }}
-              apr={extraBalAprDisplayed}
-              displayValueFormatter={usedDisplayValueFormatter}
-              fontColor={isDark ? 'var(--gray-400)' : 'var(--gray-600)'}
-              fontWeight={500}
-              title="Extra BAL (veBAL boost)"
-              tooltipText={extraBalTooltipText}
-              valueFontColor="var(--secondary-text-color)"
-            />
-            <Divider style={{ margin: 0 }} />
-            <TooltipAprItem
-              {...{
-                paddingLeft: '4px',
-                paddingTop: '6px',
-              }}
-              apr={maxVeBalDisplayed}
-              boxBackground={balRewardGradient}
-              displayValueFormatter={usedDisplayValueFormatter}
-              title={maxVeBalText || 'Max veBAL APR'}
-              fontWeight={600}
-              fontColor={'var(--secondary-color)'}
-              tooltipText={
-                shouldDisplayMaxVeBalTooltip
-                  ? `${defaultDisplayValueFormatter(
-                      defaultNumberFormatter(maxVeBal.toString())
-                    )} APR`
-                  : ''
-              }
-            />
-          </div>
-        </>
-      ) : null}
-      {isMaBeetsPresent && (
-        <>
-          <Divider style={{ margin: 0 }} />
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 0,
-            }}
-          >
-            <TooltipAprItem
-              {...{
-                paddingLeft: '12px',
-                paddingTop: '6px',
-              }}
-              apr={maxMaBeetsRewardDisplayed}
-              displayValueFormatter={usedDisplayValueFormatter}
-              fontColor={isDark ? 'var(--gray-400)' : 'var(--gray-600)'}
-              fontWeight={500}
-              title="Extra BEETS (max maturity boost)"
-              tooltipText={maBeetsRewardTooltipText}
-            />
-            <TooltipAprItem
-              {...{
-                paddingLeft: '12px',
-              }}
-              apr={maxMaBeetsVotingRewardDisplayed}
-              displayValueFormatter={usedDisplayValueFormatter}
-              fontColor={isDark ? 'var(--gray-400)' : 'var(--gray-600)'}
-              fontWeight={500}
-              title="Extra Voting APR"
-              tooltipText={maBeetsVotingRewardsTooltipText}
-            />
-            <Divider style={{ margin: 0 }} />
-            <TooltipAprItem
-              {...{
-                paddingLeft: '2px',
-                paddingTop: '6px',
-              }}
-              apr={maBeetsTotalAprDisplayed}
-              boxBackground={balRewardGradient}
-              displayValueFormatter={usedDisplayValueFormatter}
-              title="Max total APR"
-            />
-          </div>
-        </>
-      )}
+      {renderVeBalBreakdown()}
+      {renderVeBalBoostBreakdown()}
+      {renderMaBeetsBreakdown()}
     </div>
   );
 

@@ -4,7 +4,7 @@ import { ROUTES } from '../../../../routesEnum';
 
 export const arbitrumMacroFactsheetData: FactsheetModel = {
   poolId: ROUTES.ARBITRUMMACROFACTSHEET,
-  inceptionLpPrice:3023,
+  inceptionLpPrice: 3023,
   poolChain: 'ARBITRUM',
   pools: [
     'arbitrumMacroBTFAugTrain',
@@ -22,7 +22,8 @@ export const arbitrumMacroFactsheetData: FactsheetModel = {
     width: '30%',
     alt: 'ARBITRUM MACRO BTF Icon',
   },
-  objective: 'The Arbitrum Macro BTF provides exposure to some of the mega cap tokens on Arbitrum. The BTF was trained on more bullish market conditions.',
+  objective:
+    'The Arbitrum Macro BTF provides exposure to some of the mega cap tokens on Arbitrum. The BTF was trained on more bullish market conditions.',
   deploymentLinks: {
     contractLinks: [
       [
@@ -153,7 +154,8 @@ export const arbitrumMacroFactsheetData: FactsheetModel = {
           </p>
           <p>
             ARB is the Arbitrum native token. While this token carries potential
-            protocol risk and higher volatility, it is key token of the Arbitrum ecosystem.
+            protocol risk and higher volatility, it is key token of the Arbitrum
+            ecosystem.
           </p>
         </>
       ),
@@ -244,9 +246,9 @@ export const arbitrumMacroFactsheetData: FactsheetModel = {
   trainingDescription: (
     <>
       <p>
-        The channel following strategy has parameters that determine how aggressive
-        a strategy re-weights to different assets as well as the memory of
-        prices that get taken into account.
+        The channel following strategy has parameters that determine how
+        aggressive a strategy re-weights to different assets as well as the
+        memory of prices that get taken into account.
       </p>
       <p>
         A training period of Jan 2023 - March 2025 was selected and parameters
@@ -255,10 +257,10 @@ export const arbitrumMacroFactsheetData: FactsheetModel = {
         QuantAMM simulator framework. A parameter set was selected that
         maximised the Sharpe Ratio of the strategy. This was selected over other
         objectives such as maximising Ulcer or Calmar Ratios as the parameter
-        set showed better test set statistics. Random 73-day length windows
-        were selected within the training price range and optimisation was
-        performed via stochastic gradient descent for 6000 steps with batches of
-        6 windows per step.
+        set showed better test set statistics. Random 73-day length windows were
+        selected within the training price range and optimisation was performed
+        via stochastic gradient descent for 6000 steps with batches of 6 windows
+        per step.
       </p>
     </>
   ),
@@ -269,7 +271,8 @@ export const arbitrumMacroFactsheetData: FactsheetModel = {
       variations: [
         {
           name: 'Memory Days',
-          tooltip: 'Memory days is the number of days of prices used in the strategy.',
+          tooltip:
+            'Memory days is the number of days of prices used in the strategy.',
           value: [
             'ARB - 0.0225783657',
             'BTC - 44.0194313',
@@ -284,7 +287,8 @@ export const arbitrumMacroFactsheetData: FactsheetModel = {
       variations: [
         {
           name: 'Lambda',
-          tooltip: 'Lambda is the parameter used in the gradient estimators for the channel following.',
+          tooltip:
+            'Lambda is the parameter used in the gradient estimators for the channel following.',
           value: [
             'ARB - 0.0000002397926992946897',
             'BTC - 0.9197115276049956',
@@ -299,7 +303,8 @@ export const arbitrumMacroFactsheetData: FactsheetModel = {
       variations: [
         {
           name: 'k',
-          tooltip: 'k is the on-chain value stored in the contracts and is the exact parameter used in the strategy calculations.',
+          tooltip:
+            'k is the on-chain value stored in the contracts and is the exact parameter used in the strategy calculations.',
           value: [
             'ARB - 0.0000095013382493053445',
             'BTC - 150654832.73345056',
@@ -314,7 +319,8 @@ export const arbitrumMacroFactsheetData: FactsheetModel = {
       variations: [
         {
           name: 'Exponent',
-          tooltip: 'The exponent is a variable used in the channel following strategy that dictates how big a price change has to be before the strategy starts to notice it.',
+          tooltip:
+            'The exponent is a variable used in the channel following strategy that dictates how big a price change has to be before the strategy starts to notice it.',
           value: [
             'ARB - 0.2256153584663592',
             'BTC - 10.6676706071348804',
@@ -329,7 +335,8 @@ export const arbitrumMacroFactsheetData: FactsheetModel = {
       variations: [
         {
           name: 'Width',
-          tooltip: 'Width is the parameter that defines the channel width for the mean reversion strategy.',
+          tooltip:
+            'Width is the parameter that defines the channel width for the mean reversion strategy.',
           value: [
             'ARB - 0.000002022137814235886',
             'BTC - 12.633082257097033',
@@ -344,7 +351,8 @@ export const arbitrumMacroFactsheetData: FactsheetModel = {
       variations: [
         {
           name: 'Amplitude',
-          tooltip: 'Amplitude is the parameter that defines the oscillation amplitude for the mean reversion strategy.',
+          tooltip:
+            'Amplitude is the parameter that defines the oscillation amplitude for the mean reversion strategy.',
           value: [
             'ARB - 0.0000000053211805246145698',
             'BTC - 604.39416486194204',
@@ -359,7 +367,8 @@ export const arbitrumMacroFactsheetData: FactsheetModel = {
       variations: [
         {
           name: 'Pre-exp Scaling',
-          tooltip: 'Pre-exp scaling is the parameter used for scaling before exponentiation in the strategy calculations.',
+          tooltip:
+            'Pre-exp scaling is the parameter used for scaling before exponentiation in the strategy calculations.',
           value: [
             'ARB - 71.02225192700019887',
             'BTC - 52117.4385457861571922',
@@ -371,16 +380,19 @@ export const arbitrumMacroFactsheetData: FactsheetModel = {
     },
   ],
   iconTitle: 'Arbitrum Macro',
-  iconDescription: ['The arbitrum ecosystem basket', 'Mega Caps with Yield Focus'],
+  iconDescription: [
+    'The arbitrum ecosystem basket',
+    'Mega Caps with Yield Focus',
+  ],
   status: 'LIVE',
   iconOpacity: 1,
   iconFocus: true,
   depositorBadges: {
-    prefix:'Safe_Haven_',
-    gold:1748213999,
-    silver:1749423599,
-    bronze:1750633199
+    prefix: 'Safe_Haven_',
+    gold: 1748213999,
+    silver: 1749423599,
+    bronze: 1750633199,
   },
-  targetPoolJson:'safeHavenBTFAugTest',
-  launchUnixTimestamp:1747267200
+  targetPoolJson: 'safeHavenBTFAugTest',
+  launchUnixTimestamp: 1747267200,
 };

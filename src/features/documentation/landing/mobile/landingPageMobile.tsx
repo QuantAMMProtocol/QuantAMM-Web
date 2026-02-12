@@ -6,11 +6,11 @@ import { TimelineMobile } from './timelineMobile';
 import { ContactCompanyMobile } from './contactCompany';
 import { StrategySummaryMobile } from './strategySummaryMobile';
 import { ProductBannerProps } from '../desktop/bannerProductSection';
+import styles from './landingMobile.module.css';
 
 export function LandingPageMobile(props: ProductBannerProps) {
-  
   return (
-    <div style={{ width: '100%', padding: '10px', textAlign: 'center' }}>
+    <div className={styles.landingRoot}>
       <BannerMobile productData={props.productData} />
       <QuantAMMExplainerMobile />
       <StrategySummaryMobile />

@@ -27,7 +27,7 @@ export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({
   product,
   isMobile,
 }) => {
-  const panelStyle: React.CSSProperties = {
+  const panelStyle: CSSProperties = {
     background: 'transparent',
     border: 'none',
   };
@@ -59,6 +59,17 @@ export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({
     return 0;
   }, [product, selectedTimeRange]);
 
+  const latestSharePrice = useMemo(() => {
+    const value =
+      product.timeSeries?.[product.timeSeries.length - 1]?.sharePrice;
+    return typeof value === 'number' ? value : null;
+  }, [product.timeSeries]);
+
+  const factsheetAddressKey = product.address.toLowerCase();
+  const hasFactsheet = live_pools.factsheets.some(
+    (x) => x.poolId === factsheetAddressKey
+  );
+
   const getItems: (panelStyle: CSSProperties) => CollapseProps['items'] = (
     panelStyle
   ) => [
@@ -89,9 +100,9 @@ export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Title style={{ margin: 0, textAlign: 'left' }} level={2}>
                   $
-                  {product.timeSeries?.[
-                    product.timeSeries.length - 1
-                  ]?.sharePrice.toFixed(2)}
+                  {latestSharePrice != null
+                    ? latestSharePrice.toFixed(2)
+                    : 'N/A'}
                 </Title>
                 <span
                   style={{
@@ -100,10 +111,12 @@ export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({
                     color: performanceSummaryColour(),
                   }}
                 >
-                  {productPerformance && productPerformance < 0 ? (
+                  {productPerformance != null && productPerformance < 0 ? (
                     <CaretDownOutlined />
-                  ) : (
+                  ) : productPerformance != null && productPerformance > 0 ? (
                     <CaretUpOutlined />
+                  ) : (
+                    <></>
                   )}
                 </span>
                 <span
@@ -113,7 +126,9 @@ export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({
                     color: performanceSummaryColour(),
                   }}
                 >
-                  {productPerformance ? productPerformance.toFixed(2) : 'N/A'}%
+                  {productPerformance != null
+                    ? `${productPerformance.toFixed(2)}%`
+                    : 'N/A'}
                 </span>
                 <span
                   style={{
@@ -127,7 +142,7 @@ export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({
               </div>
             </Col>
           </Row>
-          {live_pools.factsheets.find((x) => x.poolId == product.id) ? (
+          {hasFactsheet ? (
             <div
               style={{ display: 'flex', alignItems: 'center', marginTop: 10 }}
             >
@@ -217,9 +232,13 @@ export const ProductDetailInfo: FC<ProductDetailInfoProps> = ({
   ];
 
   function performanceSummaryColour(): string {
-    if (productPerformance && productPerformance < 0) {
+    if (productPerformance == null) {
+      return 'var(--grey)';
+    }
+    if (productPerformance < 0) {
       return 'var(--red)';
-    } else if (productPerformance && productPerformance === 0) {
+    }
+    if (productPerformance === 0) {
       return 'var(--grey)';
     }
     return 'var(--green)';

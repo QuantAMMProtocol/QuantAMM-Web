@@ -35,13 +35,11 @@ export const getPoolSnapshotsMap = async (
   if (pools.length === 0) {
     return {};
   }
-  const [poolSnapshotsResponse] = await Promise.all([
-    apolloClient.query({
-      query: gql`
-        ${generatePoolSnapshotsQuery(pools, GqlPoolSnapshotDataRange.AllTime)}
-      `,
-    }),
-  ]);
+  const poolSnapshotsResponse = await apolloClient.query({
+    query: gql`
+      ${generatePoolSnapshotsQuery(pools, GqlPoolSnapshotDataRange.AllTime)}
+    `,
+  });
 
   return poolSnapshotsResponse.data;
 };
@@ -58,7 +56,7 @@ export const getTokenAddress = (token: { address: string }) => {
 
 // Gather all unique chains
 export const getChains = (pools: GqlPoolMinimal[]) => {
-  const chainSet = new Set<string>();
+  const chainSet = new Set<GqlChain>();
   pools.forEach((pool) => {
     chainSet.add(pool.chain);
   });
@@ -78,14 +76,16 @@ export const getTokens = (pools: GqlPoolMinimal[]) => {
 };
 export const getCurrentTokenPrices = async (
   chains: string[]
-): Promise<
-  ApolloQueryResult<{ tokenGetCurrentPrices: GqlTokenPrice[] }>[]
-> => {
+): Promise<ApolloQueryResult<{ tokenGetCurrentPrices: GqlTokenPrice[] }>[]> => {
   const pricesResponses = await Promise.all(
     chains.map((chain) => {
       const query = {
         query: gql`
-          ${generateTokenPricesQuery([], chain as GqlChain, GqlTokenChartDataRange.All)}
+          ${generateTokenPricesQuery(
+            [],
+            chain as GqlChain,
+            GqlTokenChartDataRange.All
+          )}
         `,
       };
 
@@ -171,10 +171,7 @@ export const getTimeSeriesDataForProductList = (
   poolSnapshotsMap: Record<string, TimeSeriesData[]>,
   tokenPricesMap: Record<
     string,
-    Record<
-      string,
-      Pick<GqlHistoricalTokenPriceEntry, 'timestamp' | 'price'>[]
-    >
+    Record<string, Pick<GqlHistoricalTokenPriceEntry, 'timestamp' | 'price'>[]>
   >
 ): ProductTimeSeriesData[] => {
   const result: ProductTimeSeriesData[] = [];
@@ -183,8 +180,8 @@ export const getTimeSeriesDataForProductList = (
 
   for (const product of products) {
     const poolAddress = product.id;
-    const snapshots = poolSnapshotsMap["poolSnapshot_" + poolAddress] ?? [];
-    
+    const snapshots = poolSnapshotsMap[`poolSnapshot_${poolAddress}`] ?? [];
+
     if (!snapshots.length) {
       result.push({
         productId: product.id,
@@ -196,39 +193,33 @@ export const getTimeSeriesDataForProductList = (
 
     const chainKey =
       typeof product.chain === 'string'
-        ? product.chain.toUpperCase?.() ?? product.chain
+        ? product.chain.toUpperCase()
         : String(product.chain);
 
     const constituents = product.poolConstituents ?? [];
-
-    //const live_pools = CURRENT_LIVE_FACTSHEETS;
-
-    // Build base time series with tokenPrices filled in
     const timeSeries: TimeSeriesData[] = snapshots.map((snapshot) => {
       const tokenPrices: Record<string, number> = {};
 
       for (const token of constituents) {
-        const tokenAddress = getTokenAddress(token); // existing helper
-        const priceHistory =
-          tokenPricesMap[chainKey]?.[tokenAddress] ?? [];
+        const tokenAddress = getTokenAddress(token);
+        const priceHistory = tokenPricesMap[chainKey]?.[tokenAddress] ?? [];
 
-        tokenPrices[tokenAddress] = findClosestPrice(priceHistory, snapshot.timestamp);;
+        tokenPrices[tokenAddress] = findClosestPrice(
+          priceHistory,
+          snapshot.timestamp
+        );
       }
 
-      // Keep the rest of the structure identical to before
       return {
         ...snapshot,
         tokenPrices,
-        // sharePrice / hodlSharePrice will be recomputed below
       };
     });
 
-    // Filter out timesteps where any token price is zero (as in the per-product function)
     const noZeroPriceTimeSeries = timeSeries.filter((timestep) => {
       return constituents.every((token, idx) => {
         const addr = getTokenAddress(token);
         const price = timestep.tokenPrices[addr];
-        // allow zero amounts to have zero price, but otherwise require positive price
         if ((timestep.amounts?.[idx] ?? 0) === 0) {
           return true;
         }
@@ -238,40 +229,26 @@ export const getTimeSeriesDataForProductList = (
 
     if (!noZeroPriceTimeSeries.length) {
       result.push({
-          productId: product.id,
-        chain: product.chain, 
+        productId: product.id,
+        chain: product.chain,
         timeSeries: [],
       });
       continue;
     }
-
-    // --- Updated hodl / sharePrice logic to match the individual function ---
-
-    // Base timestep: first non-zero priced entry
     const base = noZeroPriceTimeSeries[0];
 
-    // 1) Compute hodlAmounts and initialTotalShares
-    // (mirroring the newer per-product behaviour)
     const baseAmounts = base.amounts ?? [];
-    
-    // Initial total shares:
-    // - if snapshot has non-zero totalShares, use that
-    // - otherwise fall back to DEFAULT_INITIAL_TOTAL_SHARES
+
     const initialTotalShares =
       base.totalShares && base.totalShares > 0
         ? base.totalShares
         : DEFAULT_INITIAL_TOTAL_SHARES;
 
-    // Derive hodlAmounts to be consistent with base snapshot
-    // (you can change this to any scheme your single-product function uses;
-    // here we just stick to the base snapshot's amounts)
     const hodlAmounts = baseAmounts.slice();
 
-    // 2) Recompute totalLiquidity, sharePrice and hodlSharePrice for each timestep
     for (const timestep of noZeroPriceTimeSeries) {
       const amounts = timestep.amounts ?? [];
 
-      // Total liquidity of the product at this timestep
       let totalLiquidity = 0;
       for (let i = 0; i < amounts.length; i++) {
         const token = constituents[i];
@@ -280,7 +257,6 @@ export const getTimeSeriesDataForProductList = (
         totalLiquidity += amounts[i] * price;
       }
 
-      // Share price: use real totalShares if available, otherwise normalise with initialTotalShares
       const effectiveTotalShares =
         timestep.totalShares && timestep.totalShares > 0
           ? timestep.totalShares
@@ -289,7 +265,6 @@ export const getTimeSeriesDataForProductList = (
       const sharePrice =
         effectiveTotalShares > 0 ? totalLiquidity / effectiveTotalShares : 0;
 
-      // Hodl liquidity (fixed amounts from base, prices from this timestep)
       let hodlTotalLiquidity = 0;
       for (let i = 0; i < hodlAmounts.length; i++) {
         const token = constituents[i];
@@ -299,15 +274,12 @@ export const getTimeSeriesDataForProductList = (
       }
 
       const hodlSharePrice =
-        initialTotalShares > 0
-          ? hodlTotalLiquidity / initialTotalShares
-          : 0;
+        initialTotalShares > 0 ? hodlTotalLiquidity / initialTotalShares : 0;
 
       timestep.sharePrice = sharePrice;
       timestep.hodlSharePrice = hodlSharePrice;
     }
 
-    // Keep the outer structure identical – we still return per-product timeSeries
     result.push({
       productId: product.id,
       chain: product.chain,
@@ -326,11 +298,26 @@ export const getTimeSeriesDataForProduct = (
     Record<string, Pick<GqlHistoricalTokenPriceEntry, 'timestamp' | 'price'>[]>
   >
 ): ProductTimeSeriesData => {
-  let snapshots = poolSnapshotsMap[`poolSnapshot_${pool.poolGetPool?.id}`];
-  
-  const live_pools = CURRENT_LIVE_FACTSHEETS;
-  snapshots = snapshots.filter((x) => x.timestamp >= (live_pools.factsheets.find(y => y.poolId == pool.poolGetPool?.id)?.launchUnixTimestamp ?? 0));
-  
+  const poolId = pool.poolGetPool?.id ?? '';
+  const poolChain = pool.poolGetPool?.chain ?? '';
+  const poolTokens = pool.poolGetPool?.poolTokens ?? [];
+  const launchUnixTimestamp =
+    CURRENT_LIVE_FACTSHEETS.factsheets.find(
+      (factSheet) => factSheet.poolId === poolId
+    )?.launchUnixTimestamp ?? 0;
+
+  const snapshots = (poolSnapshotsMap[`poolSnapshot_${poolId}`] ?? []).filter(
+    (snapshot) => snapshot.timestamp >= launchUnixTimestamp
+  );
+
+  if (snapshots.length === 0) {
+    return {
+      productId: poolId,
+      chain: poolChain,
+      timeSeries: [],
+    };
+  }
+
   let hodlAmounts: number[] | undefined;
 
   let initialTotalShares =
@@ -340,27 +327,26 @@ export const getTimeSeriesDataForProduct = (
 
   const tempTimeSeries = snapshots.map((snapshot: TimeSeriesData) => {
     const tokenPrices = Object.fromEntries(
-      pool.poolGetPool?.poolTokens.map((token) => {
+      poolTokens.map((token) => {
         const priceData =
-          tokenPricesMap[pool.poolGetPool?.chain.toUpperCase()]?.[
-            getTokenAddress(token)
-          ] || [];
+          tokenPricesMap[poolChain.toUpperCase()]?.[getTokenAddress(token)] ||
+          [];
         const closestPrice = findClosestPrice(priceData, snapshot.timestamp);
         return [token.address, closestPrice];
       })
     );
 
-    const tokenPriceArray = pool.poolGetPool?.poolTokens.map((token: { address: string }) => {
+    const tokenPriceArray = poolTokens.map((token: { address: string }) => {
       const priceData =
-        tokenPricesMap[pool.poolGetPool?.chain]?.[getTokenAddress(token)] || [];
+        tokenPricesMap[poolChain.toUpperCase()]?.[getTokenAddress(token)] || [];
       return findClosestPrice(priceData, snapshot.timestamp);
     });
-    
+
     const amounts = filterOutBptToken(
       {
-        id: pool.poolGetPool?.id,
-        chain: pool.poolGetPool?.chain,
-        poolConstituents: pool.poolGetPool?.poolTokens.map((token) => ({
+        id: poolId,
+        chain: poolChain,
+        poolConstituents: poolTokens.map((token) => ({
           address: token.address,
           weight: token.weight,
         })),
@@ -383,7 +369,7 @@ export const getTimeSeriesDataForProduct = (
       volume24h: Number(snapshot.volume24h),
       tokenPrices,
       hodlSharePrice: 0,
-      tokenPriceArray: tokenPriceArray,
+      tokenPriceArray,
     };
   });
 
@@ -391,57 +377,61 @@ export const getTimeSeriesDataForProduct = (
     return Object.values(item.tokenPrices).some((price) => price > 0);
   });
 
-  const noZeroPriceTimeSeries = tempTimeSeries.slice(firstNonZeroPriceIndex);
-
+  const noZeroPriceTimeSeries =
+    firstNonZeroPriceIndex === -1
+      ? []
+      : tempTimeSeries.slice(firstNonZeroPriceIndex);
 
   if (noZeroPriceTimeSeries.length > 0) {
     const totalLiquidity = noZeroPriceTimeSeries[0].totalLiquidity;
     const initialSharePrice = noZeroPriceTimeSeries[0].sharePrice;
+    const baseTimestamp = noZeroPriceTimeSeries[0].timestamp;
 
-    hodlAmounts = pool.poolGetPool?.poolTokens.map((token) => {
+    hodlAmounts = poolTokens.map((token) => {
       const priceData =
-        tokenPricesMap[pool.poolGetPool?.chain.toUpperCase()]?.[
-          getTokenAddress(token)
-        ] || [];
-      const closestPrice = findClosestPrice(priceData, snapshots[0].timestamp);
-      
-      return totalLiquidity / pool.poolGetPool?.poolTokens.length / closestPrice;
+        tokenPricesMap[poolChain.toUpperCase()]?.[getTokenAddress(token)] || [];
+      const closestPrice = findClosestPrice(priceData, baseTimestamp);
+      if (closestPrice <= 0) {
+        return 0;
+      }
+
+      return totalLiquidity / poolTokens.length / closestPrice;
     });
 
     if (initialSharePrice > 0) {
       initialTotalShares = totalLiquidity / initialSharePrice;
     }
   }
+
   let totalLiquidityScalingFactor: number | undefined;
-  // eslint-disable-next-line @typescript-eslint/prefer-for-of
   for (let i = 0; i < noZeroPriceTimeSeries.length; i++) {
     const timestep = noZeroPriceTimeSeries[i];
     let hodlTotalLiquidity = 0;
     let totalLiquidity = 0;
     for (let j = 0; j < timestep.amounts.length; j++) {
       hodlTotalLiquidity +=
-      hodlAmounts![j] *
-      timestep.tokenPrices[pool.poolGetPool?.poolTokens[j].address];
+        (hodlAmounts?.[j] ?? 0) * timestep.tokenPrices[poolTokens[j].address];
 
       totalLiquidity +=
-      timestep.amounts[j] *
-      timestep.tokenPrices[pool.poolGetPool?.poolTokens[j].address];
+        timestep.amounts[j] * timestep.tokenPrices[poolTokens[j].address];
     }
 
     if (i === 0) {
       totalLiquidityScalingFactor = hodlTotalLiquidity / totalLiquidity;
     }
 
-    timestep.hodlSharePrice = (hodlTotalLiquidity / initialTotalShares) / (totalLiquidityScalingFactor ?? 1);
+    timestep.hodlSharePrice =
+      hodlTotalLiquidity /
+      initialTotalShares /
+      (totalLiquidityScalingFactor ?? 1);
 
     timestep.sharePrice =
-      (totalLiquidity / timestep.totalShares)
-
+      timestep.totalShares > 0 ? totalLiquidity / timestep.totalShares : 0;
   }
 
   const timeSeriesData: ProductTimeSeriesData = {
-    productId: pool.poolGetPool?.id,
-    chain: pool.poolGetPool?.chain,
+    productId: poolId,
+    chain: poolChain,
     timeSeries: noZeroPriceTimeSeries,
   };
 

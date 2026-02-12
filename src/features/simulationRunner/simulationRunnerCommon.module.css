@@ -1,0 +1,110 @@
+.infoIcon {
+  padding-left: 5px;
+}
+
+.runnerHeaderRow {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.centerAlignedCol {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hiddenFileInput {
+  display: none;
+}
+
+.greenButton {
+  background-color: green !important;
+  border-color: green !important;
+}
+
+.leftPadding10 {
+  padding-left: 10px;
+}
+
+.marginTop10 {
+  margin-top: 10px;
+}
+
+.centerText {
+  text-align: center;
+}
+
+.fullHeight {
+  height: 100%;
+}
+
+.padding10 {
+  padding: 10px;
+}
+
+.paddingTop15 {
+  padding-top: 15px;
+}
+
+.padding5 {
+  padding: 5px;
+}
+
+.marginBottom10 {
+  margin-bottom: 10px;
+}
+
+.marginBottom8 {
+  margin-bottom: 8px;
+}
+
+.marginLeft10 {
+  margin-left: 10px;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.spaceAround {
+  justify-content: space-around;
+}
+
+.menuFont15 {
+  font-size: 15px;
+}
+
+.panelPadding {
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-top: 0;
+}
+
+.optionsHeader {
+  color: #e6ce97;
+}
+
+.optionsCoinSelect {
+  margin-top: 10px;
+  width: 150px;
+}
+
+.optionsPoolSelect {
+  margin-top: 10px;
+  width: 250px;
+}
+
+.optionsToggleRow {
+  margin-top: 10px;
+  margin-left: 5px;
+}
+
+.optionsRangePicker {
+  margin-top: 10px;
+}
+
+.timeRangePicker {
+  margin-left: 10px;
+  width: 100%;
+}

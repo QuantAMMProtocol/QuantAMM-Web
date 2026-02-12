@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { useAppSelector } from '../../../app/hooks';
 import { selectAvailableUpdateRules } from '../../simulationRunConfiguration/simulationRunConfigurationSlice';
 import { Eli5 } from '../../shared';
+import styles from './updateRules.module.css';
+import sharedStyles from '../documentation.module.css';
 
 interface DocProps {
   hideTitle?: boolean;
@@ -19,7 +21,7 @@ export function ChannelFollowingUpdateRule(props: DocProps) {
       <MathJaxContext>
         <Row>
           <Col span={1}></Col>
-          <Col style={{ padding: 10 }} span={23}>
+          <Col className={styles.containerPad10} span={23}>
             <Row>
               <Col span={24}>
                 <div hidden={props.hideTitle}>
@@ -27,7 +29,7 @@ export function ChannelFollowingUpdateRule(props: DocProps) {
                 </div>
               </Col>
               <Col span={24}>
-                <Form.Item style={{ marginTop: '5px' }}>
+                <Form.Item className={sharedStyles.formItemTop5}>
                   <Radio.Group
                     size="small"
                     value={eli5}
@@ -43,36 +45,39 @@ export function ChannelFollowingUpdateRule(props: DocProps) {
               </Col>
             </Row>
             <Row>
-              <Col span={24} style={{ padding: 10 }}>
-                <div hidden={eli5 != 'ELI5'|| props.hideImage}>
+              <Col span={24} className={styles.containerPad10}>
+                <div hidden={eli5 !== 'ELI5' || props.hideImage}>
                   <Row>
                     <Col span={8}>
                       <img
                         loading="lazy"
                         src={'/documentation/channel_following.svg'}
-                        style={{
-                          width: '100%',
-                          paddingLeft: '10%',
-                          paddingRight: '10%',
-                          paddingBottom: '10%',
-                        }}
+                        className={styles.imagePadLeft10Right10Bottom10}
                       />
                     </Col>
                     <Col span={16}>
-                      <div style={{ marginTop: '20px' }}>
+                      <div className={styles.marginTop20}>
                         <Eli5 strategy="CHANNEL_FOLLOWING" />
                       </div>
                     </Col>
                   </Row>
                 </div>
-                <div hidden={eli5 != 'ELI5' || (eli5 == 'ELI5' && !props.hideImage)}>
+                <div
+                  hidden={
+                    eli5 !== 'ELI5' || (eli5 === 'ELI5' && !props.hideImage)
+                  }
+                >
                   <Row>
                     <Col span={24}>
                       <Eli5 strategy="CHANNEL_FOLLOWING" />
                     </Col>
                   </Row>
                 </div>
-                <div hidden={eli5 == 'ELI5' || (eli5 == 'ELI5' && !props.hideImage)}>
+                <div
+                  hidden={
+                    eli5 === 'ELI5' || (eli5 === 'ELI5' && !props.hideImage)
+                  }
+                >
                   <h3>Summary</h3>
                   <p>
                     Often associated with weighted moving averages, this
@@ -182,8 +187,9 @@ export function ChannelFollowingUpdateRule(props: DocProps) {
                   <h3>Parameter Guide {'&'} Return Profile Summary</h3>
                   <p>
                     {
-                      rules.find((x) => x.updateRuleName == 'Channel Following')
-                        ?.updateRuleResultProfileSummary
+                      rules.find(
+                        (x) => x.updateRuleName === 'Channel Following'
+                      )?.updateRuleResultProfileSummary
                     }
                   </p>
                 </div>

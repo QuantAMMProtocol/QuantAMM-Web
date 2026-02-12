@@ -21,14 +21,17 @@ export const useFetchPoolEventsData = ({
   loading: boolean;
   error: ApolloError | undefined;
 } => {
-  const live_pools = CURRENT_LIVE_FACTSHEETS;
+  const launchUnixTimestamp =
+    CURRENT_LIVE_FACTSHEETS.factsheets.find(
+      (factSheet) => factSheet.poolId === poolId
+    )?.launchUnixTimestamp ?? 0;
 
   const { data, loading, error } = useGetPoolEventsQuery({
     variables: {
       first,
       skip,
       where: {
-        poolId: poolId,
+        poolId,
         chainIn: [chain],
       },
     },
@@ -41,8 +44,8 @@ export const useFetchPoolEventsData = ({
         logIndex: 0,
         userAddress: '',
       }))
-      .filter((x) => !live_pools.factsheets.find(x => x.poolId == poolId) || x.timestamp >= (live_pools.factsheets.find(x => x.poolId == poolId)?.launchUnixTimestamp ?? 0)),
+      .filter((event) => event.timestamp >= launchUnixTimestamp),
     loading,
-    error: error,
+    error,
   };
 };

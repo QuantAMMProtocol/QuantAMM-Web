@@ -6,8 +6,8 @@ import {
 import { Product, TimeSeriesData } from '../models';
 
 export const generatePoolSnapshotsQuery = (
-  pools: { id: string; chain: string }[],
-  range: GqlPoolSnapshotDataRange,
+  pools: { id: string; chain: GqlChain }[],
+  range: GqlPoolSnapshotDataRange
 ) => {
   const baseQuery = `
     poolId
@@ -67,15 +67,20 @@ export const findClosestPrice = (
 ) => {
   const range = 24 * 60 * 60; // 24 hours in seconds
 
-  if (!prices) return 0;
-  
+  if (!prices || prices.length === 0) return 0;
+
+  let bestPrice = 0;
+  let bestDiff = Number.POSITIVE_INFINITY;
+
   for (const priceEntry of prices) {
     const diff = Math.abs(Number(priceEntry.timestamp) - targetTimestamp);
-    if (diff < range) {
-      return priceEntry.price;
+    if (diff < range && diff < bestDiff) {
+      bestDiff = diff;
+      bestPrice = priceEntry.price;
     }
   }
-  return 0;
+
+  return bestPrice;
 };
 
 export const filterOutBptToken = (
@@ -88,12 +93,10 @@ export const filterOutBptToken = (
     (token: { address: string }) => token.address === poolBptTokenAddress
   );
 
-  let filteredAmounts;
-  if (bptIndex !== undefined) {
-    filteredAmounts = snapshot.amounts.filter((_, index) => index !== bptIndex);
-  } else {
-    filteredAmounts = snapshot.amounts;
-  }
+  const filteredAmounts =
+    bptIndex !== -1
+      ? snapshot.amounts.filter((_, index) => index !== bptIndex)
+      : snapshot.amounts;
 
   return filteredAmounts.map(Number);
 };

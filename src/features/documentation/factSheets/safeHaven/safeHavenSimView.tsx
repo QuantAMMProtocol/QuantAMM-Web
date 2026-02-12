@@ -3,10 +3,11 @@ import { useState, useEffect } from 'react';
 import { SimulationResultsSummaryStep } from '../../../simulationResults/simulationResultsSummaryStep';
 import { getBreakdown, Pool } from '../../../../services/breakdownService';
 import { SimulationRunBreakdown } from '../../../simulationResults/simulationResultSummaryModels';
+import sharedStyles from '../../documentation.module.css';
 
 const { TabPane } = Tabs;
 
-export function SafeHavenSimulatorExample() {
+export default function SafeHavenSimulatorExample() {
   const [key, setKey] = useState<string>('2');
   const [breakdowns, setBreakdowns] = useState<SimulationRunBreakdown[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -30,19 +31,19 @@ export function SafeHavenSimulatorExample() {
         poolNames = [
           'safeHavenBTFAugTrainFull',
           'safeHavenCFMMAugTrainFull',
-          'safeHavenHodlAugTrainFull'
+          'safeHavenHodlAugTrainFull',
         ];
       } else if (key === '2') {
         poolNames = [
           'safeHavenCFMMAugTestFull',
           'safeHavenBTFAugTestFull',
-          'safeHavenHodlAugTestFull'
+          'safeHavenHodlAugTestFull',
         ];
       } else if (key === '3') {
         poolNames = [
           'safeHavenBTF2025TestFull',
           'safeHavenCFMM2025TestFull',
-          'safeHavenHodl2025TestFull'
+          'safeHavenHodl2025TestFull',
         ];
       }
 
@@ -55,15 +56,15 @@ export function SafeHavenSimulatorExample() {
     }); // Trigger loading of breakdowns
   }, [key]); // Dependency array ensures that effect runs when `key` changes
 
-  const seriesName= {
+  const seriesName = {
     'Power Channel': '#c7b283',
     'Balancer Weighted': '#528aae',
     HODL: '#52ad80',
-  }
-  const seriesStrokeColor= {
+  };
+  const seriesStrokeColor = {
     'Power Channel': 'SAFE HAVEN BTF',
     'Balancer Weighted': 'Traditional DEX',
-  }
+  };
   return (
     <div>
       <Row>
@@ -72,7 +73,7 @@ export function SafeHavenSimulatorExample() {
             defaultActiveKey={key}
             key={key}
             onChange={(key) => setKey(key)}
-            style={{ paddingLeft: 20, paddingRight: 20 }}
+            className={sharedStyles.simViewTabs}
           >
             <TabPane tab="Safe Haven Training Period" key={'1'}>
               {loading ? (
@@ -81,32 +82,38 @@ export function SafeHavenSimulatorExample() {
                 <SimulationResultsSummaryStep
                   breakdowns={breakdowns}
                   forceViewResults={true}
-                  overrideSeriesName= {seriesName}
-                  overrideSeriesStrokeColor= {seriesStrokeColor}
+                  overrideSeriesName={seriesName}
+                  overrideSeriesStrokeColor={seriesStrokeColor}
                 />
               )}
             </TabPane>
-            <TabPane tab="Safe Haven Test Period: Aug 2024 - Apr 2025" key={'2'}>
+            <TabPane
+              tab="Safe Haven Test Period: Aug 2024 - Apr 2025"
+              key={'2'}
+            >
               {loading ? (
                 <Spin size="large" />
               ) : (
                 <SimulationResultsSummaryStep
                   breakdowns={breakdowns}
                   forceViewResults={true}
-                  overrideSeriesName= {seriesName}
-                  overrideSeriesStrokeColor= {seriesStrokeColor}
+                  overrideSeriesName={seriesName}
+                  overrideSeriesStrokeColor={seriesStrokeColor}
                 />
               )}
             </TabPane>
-            <TabPane tab="Safe Haven Test Period: Jan 2025 - Apr 2025" key={'3'}>
+            <TabPane
+              tab="Safe Haven Test Period: Jan 2025 - Apr 2025"
+              key={'3'}
+            >
               {loading ? (
                 <Spin size="large" />
               ) : (
                 <SimulationResultsSummaryStep
                   breakdowns={breakdowns}
                   forceViewResults={true}
-                  overrideSeriesName= {seriesName}
-                  overrideSeriesStrokeColor= {seriesStrokeColor}
+                  overrideSeriesName={seriesName}
+                  overrideSeriesStrokeColor={seriesStrokeColor}
                 />
               )}
             </TabPane>
@@ -116,3 +123,5 @@ export function SafeHavenSimulatorExample() {
     </div>
   );
 }
+
+export { SafeHavenSimulatorExample };

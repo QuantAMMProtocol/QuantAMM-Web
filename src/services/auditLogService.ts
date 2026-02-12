@@ -1,9 +1,7 @@
-import {
-  createApi,
-  fetchBaseQuery,
-} from '@reduxjs/toolkit/query/react';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { getCookie } from './getCookie';
 
-interface AuditLogInfo{
+interface AuditLogInfo {
   timestamp: string;
   user: string;
   page: string;
@@ -11,18 +9,16 @@ interface AuditLogInfo{
   tosAgreement: string;
 }
 
-function getCookie(name: string) {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) return parts?.pop()?.split(';').shift();
+interface RunAuditLogParams {
+  request: AuditLogInfo;
 }
 
 export const auditLogService = createApi({
   reducerPath: 'auditLogService',
   baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_BASE_URL }),
   endpoints: (builder) => ({
-    runAuditLog: builder.mutation({
-      query: (bodyParam: { request: AuditLogInfo }) => ({
+    runAuditLog: builder.mutation<unknown, RunAuditLogParams>({
+      query: ({ request }) => ({
         url: '/runAuditLog',
         method: 'POST',
         credentials: 'same-origin',
@@ -30,7 +26,7 @@ export const auditLogService = createApi({
           'content-type': 'application/json',
           'ROBODEX-X-CSRF-TOKEN': getCookie('csrf_access_token'),
         },
-        body: JSON.stringify(bodyParam.request),
+        body: JSON.stringify(request),
       }),
     }),
   }),

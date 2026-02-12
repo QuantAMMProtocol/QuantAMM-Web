@@ -6,11 +6,7 @@ export const CowAMM = () => {
   return (
     <>
       <Title level={3}>
-        <Text
-          style={{ fontSize: 'inherit' }}
-        >
-          CoW AMM
-        </Text>
+        <Text style={{ fontSize: 'inherit' }}>CoW AMM</Text>
       </Title>
       <p>
         CoW AMM introduces clearing-price consistency to AMM design. Unlike
@@ -26,7 +22,7 @@ export const CowAMM = () => {
         weights, similar to traditional AMMs.
       </p>
 
-      <p>
+      <div>
         For more background, implementation details, and detailed mathematical
         analysis, see:
         <ul>
@@ -44,7 +40,7 @@ export const CowAMM = () => {
             </a>
           </li>
         </ul>
-      </p>
+      </div>
     </>
   );
 };

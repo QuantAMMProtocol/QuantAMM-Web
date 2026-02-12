@@ -64,16 +64,16 @@ const TermsOfService: React.FC = () => {
           </Paragraph>
           <Title level={2}>MODIFICATIONS TO THESE TERMS</Title>
           <Paragraph>
-          <span style={{fontWeight:'bold'}}>1.</span> QuantAMM reserves the right, in its sole discretion, to modify
-            these Terms from time to time. If QuantAMM makes changes, QuantAMM
-            will provide you with notice of such changes, such as by providing
-            notice through the Services or updating the “Last Updated” date at
-            the top of these Terms. Unless QuantAMM states otherwise in a
-            notice, all such modifications are effective immediately, and your
-            continued use of the Site and the Services after QuantAMM provides
-            that notice will confirm your acceptance of the changes. If you do
-            not agree to the amended Terms, then you must stop using the Site
-            and the Services.
+            <span style={{ fontWeight: 'bold' }}>1.</span> QuantAMM reserves the
+            right, in its sole discretion, to modify these Terms from time to
+            time. If QuantAMM makes changes, QuantAMM will provide you with
+            notice of such changes, such as by providing notice through the
+            Services or updating the “Last Updated” date at the top of these
+            Terms. Unless QuantAMM states otherwise in a notice, all such
+            modifications are effective immediately, and your continued use of
+            the Site and the Services after QuantAMM provides that notice will
+            confirm your acceptance of the changes. If you do not agree to the
+            amended Terms, then you must stop using the Site and the Services.
           </Paragraph>
           <Title level={3}>USE OF SERVICES</Title>
           <Paragraph>
@@ -131,10 +131,11 @@ const TermsOfService: React.FC = () => {
             illegal activity.
           </Paragraph>
           <Paragraph>
-          <span style={{fontWeight:'bold'}}>2.2</span> As a condition to accessing or using the Services or the Site,
-            you acknowledge, understand, and agree to the following: from time
-            to time, the Site and the Services may be inaccessible or inoperable
-            for any reason, including: (a) equipment malfunctions;
+            <span style={{ fontWeight: 'bold' }}>2.2</span> As a condition to
+            accessing or using the Services or the Site, you acknowledge,
+            understand, and agree to the following: from time to time, the Site
+            and the Services may be inaccessible or inoperable for any reason,
+            including: (a) equipment malfunctions;
           </Paragraph>
           <Paragraph>
             (b) periodic maintenance procedures or repairs that QuantAMM or any
@@ -212,10 +213,11 @@ const TermsOfService: React.FC = () => {
             you are eligible to participate;
           </Paragraph>
           <Paragraph>
-          <span style={{fontWeight:'bold'}}>2.3</span> As a condition to accessing or using the Services or the Site,
-            you covenant to QuantAMM the following: in connection with using the
-            Services, you only will transfer legally-obtained Digital Assets
-            that belong to you;
+            <span style={{ fontWeight: 'bold' }}>2.3</span> As a condition to
+            accessing or using the Services or the Site, you covenant to
+            QuantAMM the following: in connection with using the Services, you
+            only will transfer legally-obtained Digital Assets that belong to
+            you;
           </Paragraph>
           <Paragraph>
             you will obey all Applicable Laws in connection with using the
@@ -301,9 +303,10 @@ const TermsOfService: React.FC = () => {
             provided for information purposes and directed only at investment
             professionals (as defined under the Financial Services and Markets
             Act 2000 (Financial Promotion) Order 2005 as amended from time to
-            time). UK professionals are not permitted to use the Site to interact with or deposit into QuantAMM
-            product. Neither the Issuer nor its products are authorised or
-            regulated by the UK Financial Conduct Authority.
+            time). UK professionals are not permitted to use the Site to
+            interact with or deposit into QuantAMM product. Neither the Issuer
+            nor its products are authorised or regulated by the UK Financial
+            Conduct Authority.
           </Paragraph>
           <Title level={3}>5. PROHIBITED ACTIVITY</Title>
           <Paragraph>
@@ -453,14 +456,15 @@ const TermsOfService: React.FC = () => {
           </Paragraph>
           <Title level={3}>7. PROPRIETARY RIGHTS</Title>
           <Paragraph>
-          <span style={{fontWeight:'bold'}}>7.1</span> You acknowledge that certain aspects of the Site or the Services
-            may use, incorporate or link to certain open-source components and
-            that your use of the Site or Services is subject to, and you will
-            comply with, any applicable open-source licenses that govern any
-            such open-source components (collectively, the “Open-Source
-            Licenses”). Without limiting the generality of the foregoing, you
-            may not (a) resell, lease, lend, share, distribute, or otherwise
-            permit any third party to use the Site or the Services;{' '}
+            <span style={{ fontWeight: 'bold' }}>7.1</span> You acknowledge that
+            certain aspects of the Site or the Services may use, incorporate or
+            link to certain open-source components and that your use of the Site
+            or Services is subject to, and you will comply with, any applicable
+            open-source licenses that govern any such open-source components
+            (collectively, the “Open-Source Licenses”). Without limiting the
+            generality of the foregoing, you may not (a) resell, lease, lend,
+            share, distribute, or otherwise permit any third party to use the
+            Site or the Services;{' '}
           </Paragraph>
           <Paragraph>
             (b) use the Site or the Services for time-sharing or service bureau
@@ -471,34 +475,37 @@ const TermsOfService: React.FC = () => {
             violates the Open-Source Licenses.
           </Paragraph>
           <Paragraph>
-          <span style={{fontWeight:'bold'}}>7.2</span> Excluding third-party software that the Site or the Services
-            incorporates, as between you and QuantAMM, QuantAMM owns the Site
-            and the Services, including all technology, content and other
-            materials used, displayed or provided on the Site or in connection
-            with the Services (including all intellectual property rights
-            subsisting therein, whether or not subject to the Open-Source
-            Licenses), and hereby grants you a limited, non-exclusive,
-            revocable, non-transferable, non-sublicensable license to access and
-            use those portions of the Site and the Services that are proprietary
-            to QuantAMM and not available pursuant to the Open-Source Licenses.
+            <span style={{ fontWeight: 'bold' }}>7.2</span> Excluding
+            third-party software that the Site or the Services incorporates, as
+            between you and QuantAMM, QuantAMM owns the Site and the Services,
+            including all technology, content and other materials used,
+            displayed or provided on the Site or in connection with the Services
+            (including all intellectual property rights subsisting therein,
+            whether or not subject to the Open-Source Licenses), and hereby
+            grants you a limited, non-exclusive, revocable, non-transferable,
+            non-sublicensable license to access and use those portions of the
+            Site and the Services that are proprietary to QuantAMM and not
+            available pursuant to the Open-Source Licenses.
           </Paragraph>
           <Paragraph>
-          <span style={{fontWeight:'bold'}}>7.3</span> Any of QuantAMM’s product or service names, logos, and other
-            marks used on the Site or as a part of the Services, including
-            QuantAMM&apos;s name and logo, are trademarks owned by QuantAMM or
-            its licensors. You may not copy, imitate, or use them without the
-            prior written consent of QuantAMM or the applicable licensors, and
-            these Terms do not grant you any rights in those trademarks. You may
-            not remove, obscure, or alter any legal notices displayed in or
-            along with the Site or the Services.
+            <span style={{ fontWeight: 'bold' }}>7.3</span> Any of QuantAMM’s
+            product or service names, logos, and other marks used on the Site or
+            as a part of the Services, including QuantAMM&apos;s name and logo,
+            are trademarks owned by QuantAMM or its licensors. You may not copy,
+            imitate, or use them without the prior written consent of QuantAMM
+            or the applicable licensors, and these Terms do not grant you any
+            rights in those trademarks. You may not remove, obscure, or alter
+            any legal notices displayed in or along with the Site or the
+            Services.
           </Paragraph>
           <Paragraph>
-          <span style={{fontWeight:'bold'}}>7.4</span> The Services are non-custodial. When you deposit Digital Assets
-            into any QuantAMM-developed smart contract, you retain control over
-            those Digital Assets at all times. The private key associated with
-            the Ethereum address from which you transfer Digital Assets is the
-            only private key that can control the Digital Assets you transfer
-            into the QuantAMM-developed smart contracts. In some cases, you may
+            <span style={{ fontWeight: 'bold' }}>7.4</span> The Services are
+            non-custodial. When you deposit Digital Assets into any
+            QuantAMM-developed smart contract, you retain control over those
+            Digital Assets at all times. The private key associated with the
+            Ethereum address from which you transfer Digital Assets is the only
+            private key that can control the Digital Assets you transfer into
+            the QuantAMM-developed smart contracts. In some cases, you may
             withdraw Digital Assets from any QuantAMM-developed smart contract
             only to the Ethereum address from which you deposited the Digital
             Assets.
@@ -536,93 +543,97 @@ const TermsOfService: React.FC = () => {
           </Paragraph>
           <Title level={3}>10. RISKS</Title>
           <Paragraph>
-          <span style={{fontWeight:'bold'}}>10.1</span> By using the Services or interacting with the Site, you
-            acknowledge the inherent risks involved. These include risks
-            associated with cryptographic systems, blockchain networks, and
-            digital assets such as ether (ETH), fungible tokens, and NFTs. You
-            also accept the risks tied to using smart contracts and systems that
-            interact with blockchain technology. QuantAMM does not own or
-            control any of the underlying software through which blockchain
-            networks are formed. In general, the software underlying blockchain
-            networks, including the Ethereum blockchain, is open source, such
-            that anyone can use, copy, modify, and distribute it. By using the
-            Services, you acknowledge and agree (a) that QuantAMM is not
-            responsible for the operation of the blockchain-based software and
-            networks underlying the Services, (b) that there exists no guarantee
-            of the functionality, security, or availability of that software and
-            networks, and (c) that the underlying blockchain-based networks are
-            subject to sudden changes in operating rules, such as those commonly
-            referred to as “forks,” which may materially affect the Services.
-            Blockchain networks use public and private key cryptography. You
-            alone are responsible for securing your private key(s). QuantAMM
-            does not have access to your private key(s). Losing control of your
-            private key(s) will permanently and irreversibly deny you access to
-            Digital Assets on the Ethereum blockchain or other blockchain-based
-            network. Neither QuantAMM nor any other person or entity will be
-            able to retrieve or protect your Digital Assets. If your private
-            key(s) are lost, then you will not be able to transfer your Digital
-            Assets to any other blockchain address or wallet. If this occurs,
-            then you will not be able to realize any value or utility from the
-            Digital Assets that you may hold. Technologies such as smart
-            contracts, cryptographic tokens, and other nascent software,
-            applications, and systems that interact with blockchain-based
-            networks are experimental, speculative, inherently risky, and
-            subject to change. Among other risks, bugs, malfunctions,
-            cyberattacks, or changes to the applicable blockchain (e.g., forks)
-            could disrupt these technologies and even result in a total loss of
-            digital assets. We assume no liability or responsibility for any
-            such risks. If you are not comfortable assuming these risks, you
-            should not access or engage in transactions using blockchain-based
-            technology.
+            <span style={{ fontWeight: 'bold' }}>10.1</span> By using the
+            Services or interacting with the Site, you acknowledge the inherent
+            risks involved. These include risks associated with cryptographic
+            systems, blockchain networks, and digital assets such as ether
+            (ETH), fungible tokens, and NFTs. You also accept the risks tied to
+            using smart contracts and systems that interact with blockchain
+            technology. QuantAMM does not own or control any of the underlying
+            software through which blockchain networks are formed. In general,
+            the software underlying blockchain networks, including the Ethereum
+            blockchain, is open source, such that anyone can use, copy, modify,
+            and distribute it. By using the Services, you acknowledge and agree
+            (a) that QuantAMM is not responsible for the operation of the
+            blockchain-based software and networks underlying the Services, (b)
+            that there exists no guarantee of the functionality, security, or
+            availability of that software and networks, and (c) that the
+            underlying blockchain-based networks are subject to sudden changes
+            in operating rules, such as those commonly referred to as “forks,”
+            which may materially affect the Services. Blockchain networks use
+            public and private key cryptography. You alone are responsible for
+            securing your private key(s). QuantAMM does not have access to your
+            private key(s). Losing control of your private key(s) will
+            permanently and irreversibly deny you access to Digital Assets on
+            the Ethereum blockchain or other blockchain-based network. Neither
+            QuantAMM nor any other person or entity will be able to retrieve or
+            protect your Digital Assets. If your private key(s) are lost, then
+            you will not be able to transfer your Digital Assets to any other
+            blockchain address or wallet. If this occurs, then you will not be
+            able to realize any value or utility from the Digital Assets that
+            you may hold. Technologies such as smart contracts, cryptographic
+            tokens, and other nascent software, applications, and systems that
+            interact with blockchain-based networks are experimental,
+            speculative, inherently risky, and subject to change. Among other
+            risks, bugs, malfunctions, cyberattacks, or changes to the
+            applicable blockchain (e.g., forks) could disrupt these technologies
+            and even result in a total loss of digital assets. We assume no
+            liability or responsibility for any such risks. If you are not
+            comfortable assuming these risks, you should not access or engage in
+            transactions using blockchain-based technology.
           </Paragraph>
           <Paragraph>
-          <span style={{fontWeight:'bold'}}>10.2</span> The Services and your Digital Assets could be impacted by one
-            or more regulatory inquiries or regulatory actions, which could
-            impede or limit the ability of QuantAMM to continue to make
-            available QuantAMM’s proprietary software and could impede or limit
-            your ability to access or use the Services.
+            <span style={{ fontWeight: 'bold' }}>10.2</span> The Services and
+            your Digital Assets could be impacted by one or more regulatory
+            inquiries or regulatory actions, which could impede or limit the
+            ability of QuantAMM to continue to make available QuantAMM’s
+            proprietary software and could impede or limit your ability to
+            access or use the Services.
           </Paragraph>
           <Paragraph>
-          <span style={{fontWeight:'bold'}}>10.3</span> You acknowledge and understand that cryptography is a
-            developing field with advances in code cracking or other technical
-            advancements, such as the development of quantum computers, which
-            may present risks to Digital Assets and the Services, and could
-            result in the theft or loss of your Digital Assets. To the extent
-            possible, QuantAMM intends to update QuantAMM-developed smart
-            contracts related to the Services to account for any advances in
-            cryptography and to incorporate additional security measures
-            necessary to address risks presented from technological
-            advancements, but that intention does not guarantee or otherwise
-            ensure full security of the Services.
+            <span style={{ fontWeight: 'bold' }}>10.3</span> You acknowledge and
+            understand that cryptography is a developing field with advances in
+            code cracking or other technical advancements, such as the
+            development of quantum computers, which may present risks to Digital
+            Assets and the Services, and could result in the theft or loss of
+            your Digital Assets. To the extent possible, QuantAMM intends to
+            update QuantAMM-developed smart contracts related to the Services to
+            account for any advances in cryptography and to incorporate
+            additional security measures necessary to address risks presented
+            from technological advancements, but that intention does not
+            guarantee or otherwise ensure full security of the Services.
           </Paragraph>
           <Paragraph>
-          <span style={{fontWeight:'bold'}}>10.4</span> You understand that the Ethereum blockchain remains under
-            development, which creates technological and security risks when
-            using the Services in addition to uncertainty relating to Digital
-            Assets and transactions therein. You acknowledge that the cost of
-            transacting on the Ethereum blockchain is variable and may increase
-            at any time causing impact to any activities taking place on the
-            Ethereum blockchain, which may result in price fluctuations or
-            increased costs when using the Services.
+            <span style={{ fontWeight: 'bold' }}>10.4</span> You understand that
+            the Ethereum blockchain remains under development, which creates
+            technological and security risks when using the Services in addition
+            to uncertainty relating to Digital Assets and transactions therein.
+            You acknowledge that the cost of transacting on the Ethereum
+            blockchain is variable and may increase at any time causing impact
+            to any activities taking place on the Ethereum blockchain, which may
+            result in price fluctuations or increased costs when using the
+            Services.
           </Paragraph>
           <Paragraph>
-          <span style={{fontWeight:'bold'}}>10.5</span> You acknowledge that the Services may contain flaws or
-            vulnerabilities. You are solely responsible for reviewing and
-            evaluating any code or functionality provided through the Site,
-            Services or repositories. This warning and other warnings that
-            QuantAMM provides in these Terms are in no way evidence or represent
-            an on-going duty to alert you to all of the potential risks of
-            utilizing the Services or accessing the Site.
+            <span style={{ fontWeight: 'bold' }}>10.5</span> You acknowledge
+            that the Services may contain flaws or vulnerabilities. You are
+            solely responsible for reviewing and evaluating any code or
+            functionality provided through the Site, Services or repositories.
+            This warning and other warnings that QuantAMM provides in these
+            Terms are in no way evidence or represent an on-going duty to alert
+            you to all of the potential risks of utilizing the Services or
+            accessing the Site.
           </Paragraph>
           <Paragraph>
-          <span style={{fontWeight:'bold'}}>10.6</span> Although QuantAMM intends to provide accurate and timely
-            information and data on the Site and during your use of the
-            Services, the Site and other information available when using the
-            Services may not always be entirely accurate, complete, or current
-            and may also include technical inaccuracies or typographical errors.
-            To continue to provide you with as complete and accurate information
-            as possible, information may be changed or updated from time to time
-            without notice, including information regarding QuantAMM’s policies.
+            <span style={{ fontWeight: 'bold' }}>10.6</span> Although QuantAMM
+            intends to provide accurate and timely information and data on the
+            Site and during your use of the Services, the Site and other
+            information available when using the Services may not always be
+            entirely accurate, complete, or current and may also include
+            technical inaccuracies or typographical errors. To continue to
+            provide you with as complete and accurate information as possible,
+            information may be changed or updated from time to time without
+            notice, including information regarding QuantAMM’s policies.
             Accordingly, you should verify all information before relying on it,
             and all decisions based on information contained on the Site or as
             part of the Services are your sole responsibility. No representation
@@ -633,31 +644,32 @@ const TermsOfService: React.FC = () => {
             platforms providing similar services.
           </Paragraph>
           <Paragraph>
-          <span style={{fontWeight:'bold'}}>10.7</span> Any use or interaction with the Services requires a
-            comprehensive understanding of applied cryptography and computer
-            science to appreciate the inherent risks, including those listed
-            above. You represent and warrant that you possess relevant knowledge
-            and skills to understand the cryptography and computer technology
-            associated with the Services. Any reference to a type of Digital
-            Asset on the Site or otherwise during the use of the Services does
-            not indicate QuantAMM’s approval or disapproval of the technology on
-            which any Digital Assets rely, and should not be used as a
-            substitute for your understanding of the risks specific to each type
-            of Digital Asset.
+            <span style={{ fontWeight: 'bold' }}>10.7</span> Any use or
+            interaction with the Services requires a comprehensive understanding
+            of applied cryptography and computer science to appreciate the
+            inherent risks, including those listed above. You represent and
+            warrant that you possess relevant knowledge and skills to understand
+            the cryptography and computer technology associated with the
+            Services. Any reference to a type of Digital Asset on the Site or
+            otherwise during the use of the Services does not indicate
+            QuantAMM’s approval or disapproval of the technology on which any
+            Digital Assets rely, and should not be used as a substitute for your
+            understanding of the risks specific to each type of Digital Asset.
           </Paragraph>
           <Paragraph>
-          <span style={{fontWeight:'bold'}}>10.8</span> Use of the Services, in particular for trading Digital Assets
-            and entering into Perpetual Contracts, may carry financial risk.
-            Digital Assets, especially in connection with Perpetual Contracts,
-            are, by their nature, highly experimental, risky, and volatile.
-            Transactions entered into in connection with the Services are
-            irreversible, final and there are no refunds. You acknowledge and
-            agree that you will access and use the Site and the Services at your
-            own risk. The risk of loss in trading Digital Assets, especially
-            entering into Perpetual Contracts, can be substantial. You should,
-            therefore, carefully consider whether such trading is suitable for
-            you in light of your circumstances and financial resources. By using
-            the Services, you represent and warrant that you have been, are, and
+            <span style={{ fontWeight: 'bold' }}>10.8</span> Use of the
+            Services, in particular for trading Digital Assets and entering into
+            Perpetual Contracts, may carry financial risk. Digital Assets,
+            especially in connection with Perpetual Contracts, are, by their
+            nature, highly experimental, risky, and volatile. Transactions
+            entered into in connection with the Services are irreversible, final
+            and there are no refunds. You acknowledge and agree that you will
+            access and use the Site and the Services at your own risk. The risk
+            of loss in trading Digital Assets, especially entering into
+            Perpetual Contracts, can be substantial. You should, therefore,
+            carefully consider whether such trading is suitable for you in light
+            of your circumstances and financial resources. By using the
+            Services, you represent and warrant that you have been, are, and
             will be solely responsible for making your independent appraisal and
             investigations into the risks of a given transaction and the
             underlying Digital Assets, including Perpetual Contracts. You
@@ -674,58 +686,60 @@ const TermsOfService: React.FC = () => {
             entering into Perpetual Contracts.
           </Paragraph>
           <Paragraph>
-          <span style={{fontWeight:'bold'}}>10.9</span> QuantAMM must comply with Applicable Law, which may require
-            QuantAMM to, upon request by government agencies, take certain
-            actions or provide information, which may not be in your best
-            interests.
+            <span style={{ fontWeight: 'bold' }}>10.9</span> QuantAMM must
+            comply with Applicable Law, which may require QuantAMM to, upon
+            request by government agencies, take certain actions or provide
+            information, which may not be in your best interests.
           </Paragraph>
           <Paragraph>
-          <span style={{fontWeight:'bold'}}>10.10</span> You understand that you are responsible for all deposits and
-            trades you place, including any erroneous orders that may be filled.
-            QuantAMM does not take any action to resolve erroneous deposits or
-            trades that result from your errors.
+            <span style={{ fontWeight: 'bold' }}>10.10</span> You understand
+            that you are responsible for all deposits and trades you place,
+            including any erroneous orders that may be filled. QuantAMM does not
+            take any action to resolve erroneous deposits or trades that result
+            from your errors.
           </Paragraph>
           <Paragraph>
-          <span style={{fontWeight:'bold'}}>10.11</span> You hereby assume and agree that QuantAMM will have no
-            responsibility or liability for the risks set forth in this Section
-            10. You hereby irrevocably waive, release and discharge all claims,
-            whether known or unknown to you, against QuantAMM and QuantAMM’s
-            affiliates, shareholders, members, directors, officers, employees,
-            agents, and representatives, suppliers, and contractors related to
-            any of the risks set forth in this Section 10.
+            <span style={{ fontWeight: 'bold' }}>10.11</span> You hereby assume
+            and agree that QuantAMM will have no responsibility or liability for
+            the risks set forth in this Section 10. You hereby irrevocably
+            waive, release and discharge all claims, whether known or unknown to
+            you, against QuantAMM and QuantAMM’s affiliates, shareholders,
+            members, directors, officers, employees, agents, and
+            representatives, suppliers, and contractors related to any of the
+            risks set forth in this Section 10.
           </Paragraph>
           <Paragraph>
-          <span style={{fontWeight:'bold'}}>10.12</span> You hereby acknowledge that borrowing money to invest is
-            risky. If you are considering borrowing money used to purchase
-            digital assets you hereby represent that: you have a stable income
-            and are comfortable with taking investment risks; you are
-            comfortable taking on debt to buy investments that may go up or down
-            in value; and you are investing for the long-term. You agree that
-            you will NOT borrow to invest if: you have a low tolerance for risk;
-            you are investing for a short period of time; you intend to rely on
-            returns from the investments to pay living expenses; you intend to
-            rely on returns from the investments to repay the loan; if you lose
-            money on leveraged investments you may not be able to pay back the
-            loan.
+            <span style={{ fontWeight: 'bold' }}>10.12</span> You hereby
+            acknowledge that borrowing money to invest is risky. If you are
+            considering borrowing money used to purchase digital assets you
+            hereby represent that: you have a stable income and are comfortable
+            with taking investment risks; you are comfortable taking on debt to
+            buy investments that may go up or down in value; and you are
+            investing for the long-term. You agree that you will NOT borrow to
+            invest if: you have a low tolerance for risk; you are investing for
+            a short period of time; you intend to rely on returns from the
+            investments to pay living expenses; you intend to rely on returns
+            from the investments to repay the loan; if you lose money on
+            leveraged investments you may not be able to pay back the loan.
           </Paragraph>
           <Paragraph>
-          <span style={{fontWeight:'bold'}}>10.13</span> You hereby acknowledge that you can end up losing money if
-            investments go down in value and that, if you have borrowed money,
-            your losses would be larger than had you invested using your own
-            money. (i.e. If a $100,000 investment is purchased and paid for with
-            $25,000 from available cash and $75,000 with borrowed monies, and
-            the value of the investment declines by 10% to $90,000, your equity
-            interest (the difference between the value of the investment and the
-            amount borrowed) has declined by 40%, i.e. from $25,000 to
-            $15,000.).
+            <span style={{ fontWeight: 'bold' }}>10.13</span> You hereby
+            acknowledge that you can end up losing money if investments go down
+            in value and that, if you have borrowed money, your losses would be
+            larger than had you invested using your own money. (i.e. If a
+            $100,000 investment is purchased and paid for with $25,000 from
+            available cash and $75,000 with borrowed monies, and the value of
+            the investment declines by 10% to $90,000, your equity interest (the
+            difference between the value of the investment and the amount
+            borrowed) has declined by 40%, i.e. from $25,000 to $15,000.).
           </Paragraph>
           <Paragraph>
-          <span style={{fontWeight:'bold'}}>10.14</span> You hereby acknowledge that whether your investment makes
-            money or not you are still required to pay back borrowed money plus
-            interest; you may have to sell other assets or use money intended
-            for other purposes to pay back the loan; and even if the investments
-            go up in value, you may not make enough money to cover the costs of
-            borrowing.
+            <span style={{ fontWeight: 'bold' }}>10.14</span> You hereby
+            acknowledge that whether your investment makes money or not you are
+            still required to pay back borrowed money plus interest; you may
+            have to sell other assets or use money intended for other purposes
+            to pay back the loan; and even if the investments go up in value,
+            you may not make enough money to cover the costs of borrowing.
           </Paragraph>
           <Title level={3}>11. INDEMNIFICATION</Title>
           <Paragraph>
@@ -855,81 +869,88 @@ const TermsOfService: React.FC = () => {
           </Paragraph>
           <Title level={3}>16. GENERAL INFORMATION</Title>
           <Paragraph>
-          <span style={{fontWeight:'bold'}}>17.1</span> Please refer to the QuantAMM privacy policy for information
-            about how QuantAMM collects, use, share and otherwise process
-            information about you.
+            <span style={{ fontWeight: 'bold' }}>17.1</span> Please refer to the
+            QuantAMM privacy policy for information about how QuantAMM collects,
+            use, share and otherwise process information about you.
           </Paragraph>
           <Paragraph>
-          <span style={{fontWeight:'bold'}}>17.2</span> You consent to receive all communications, agreements,
-            documents, receipts, notices, and disclosures electronically
-            (collectively, QuantAMM’s “Communications”) that QuantAMM provide in
-            connection with these Terms, the Site or any Services. You agree
-            that QuantAMM may provide Communications to you by posting them on
-            the Site, by emailing them to you at the email address you provide
-            in connection with using the Services, if any, to the account of any
-            social media or other communications platform you provided to
-            QuantAMM during the course of your use of the Site or the Services.
-            You should maintain copies of QuantAMM’s Communications by printing
-            a paper copy or saving an electronic copy. You may also contact
-            QuantAMM with questions, complaints, or claims concerning the
-            Services at legal@quantammfi.
+            <span style={{ fontWeight: 'bold' }}>17.2</span> You consent to
+            receive all communications, agreements, documents, receipts,
+            notices, and disclosures electronically (collectively, QuantAMM’s
+            “Communications”) that QuantAMM provide in connection with these
+            Terms, the Site or any Services. You agree that QuantAMM may provide
+            Communications to you by posting them on the Site, by emailing them
+            to you at the email address you provide in connection with using the
+            Services, if any, to the account of any social media or other
+            communications platform you provided to QuantAMM during the course
+            of your use of the Site or the Services. You should maintain copies
+            of QuantAMM’s Communications by printing a paper copy or saving an
+            electronic copy. You may also contact QuantAMM with questions,
+            complaints, or claims concerning the Services at legal@quantammfi.
           </Paragraph>
           <Paragraph>
-          <span style={{fontWeight:'bold'}}>17.3</span> Any right or remedy of QuantAMM set forth in these Terms is in
-            addition to, and not in lieu of, any other right or remedy whether
-            described in these Terms, under Applicable Law, at law, or in
-            equity. The failure or delay of QuantAMM in exercising any right,
-            power, or privilege under these Terms will not operate as a waiver
-            thereof.
+            <span style={{ fontWeight: 'bold' }}>17.3</span> Any right or remedy
+            of QuantAMM set forth in these Terms is in addition to, and not in
+            lieu of, any other right or remedy whether described in these Terms,
+            under Applicable Law, at law, or in equity. The failure or delay of
+            QuantAMM in exercising any right, power, or privilege under these
+            Terms will not operate as a waiver thereof.
           </Paragraph>
           <Paragraph>
-          <span style={{fontWeight:'bold'}}>17.4</span> The invalidity or unenforceability of any of these Terms will
-            not affect the validity or enforceability of any other of these
-            Terms, all of which will remain in full force and effect.
+            <span style={{ fontWeight: 'bold' }}>17.4</span> The invalidity or
+            unenforceability of any of these Terms will not affect the validity
+            or enforceability of any other of these Terms, all of which will
+            remain in full force and effect.
           </Paragraph>
           <Paragraph>
-          <span style={{fontWeight:'bold'}}>17.5</span> QuantAMM will have no responsibility or liability for any
-            failure or delay in performance of the Site or any of the Services,
-            or any loss or damage that you may incur, due to any circumstance or
-            event beyond its control, including any flood, extraordinary weather
-            conditions, earthquake, or other act of God, pandemic or other
-            health emergency, fire, war, insurrection, riot, labor dispute,
-            accident, action of government, communications, power failure, or
-            equipment or software malfunction.
+            <span style={{ fontWeight: 'bold' }}>17.5</span> QuantAMM will have
+            no responsibility or liability for any failure or delay in
+            performance of the Site or any of the Services, or any loss or
+            damage that you may incur, due to any circumstance or event beyond
+            its control, including any flood, extraordinary weather conditions,
+            earthquake, or other act of God, pandemic or other health emergency,
+            fire, war, insurrection, riot, labor dispute, accident, action of
+            government, communications, power failure, or equipment or software
+            malfunction.
           </Paragraph>
           <Paragraph>
-          <span style={{fontWeight:'bold'}}>17.6</span> You may not assign or transfer any right to use the Site or the
-            Services, or any of your rights or obligations under these Terms,
-            without QuantAMM’s express prior written consent, including by
-            operation of law or in connection with any change of control.
-            QuantAMM may assign or transfer any or all of its rights or
-            obligations under these Terms, in whole or in part, with or without
-            notice or obtaining your consent or approval.
+            <span style={{ fontWeight: 'bold' }}>17.6</span> You may not assign
+            or transfer any right to use the Site or the Services, or any of
+            your rights or obligations under these Terms, without QuantAMM’s
+            express prior written consent, including by operation of law or in
+            connection with any change of control. QuantAMM may assign or
+            transfer any or all of its rights or obligations under these Terms,
+            in whole or in part, with or without notice or obtaining your
+            consent or approval.
           </Paragraph>
           <Paragraph>
-          <span style={{fontWeight:'bold'}}>17.7</span> Except to the extent otherwise provided or unless the context
-            otherwise requires, for the purposes of these Terms: (a) headings of
-            sections are for convenience only and will not be used to limit or
-            construe such sections; (b) whenever the words “include,” “includes”
-            or “including” are used in these Terms, they are deemed to be
-            followed by the words “without limitation”; and (c) the use of “or”
-            is not intended to be exclusive.
+            <span style={{ fontWeight: 'bold' }}>17.7</span> Except to the
+            extent otherwise provided or unless the context otherwise requires,
+            for the purposes of these Terms: (a) headings of sections are for
+            convenience only and will not be used to limit or construe such
+            sections; (b) whenever the words “include,” “includes” or
+            “including” are used in these Terms, they are deemed to be followed
+            by the words “without limitation”; and (c) the use of “or” is not
+            intended to be exclusive.
           </Paragraph>
           <Paragraph>
-          <span style={{fontWeight:'bold'}}>17.8</span> These Terms contain the entire agreement between you and
-            QuantAMM, and supersede all prior and contemporaneous understandings
-            between the parties with respect to the Site and the Services.
+            <span style={{ fontWeight: 'bold' }}>17.8</span> These Terms contain
+            the entire agreement between you and QuantAMM, and supersede all
+            prior and contemporaneous understandings between the parties with
+            respect to the Site and the Services.
           </Paragraph>
           <Paragraph>
-          <span style={{fontWeight:'bold'}}>17.9</span> In the event of any conflict between these Terms and any other
-            agreement you may have with QuantAMM, these Terms will control
-            unless such other agreement specifically identifies these Terms and
-            declares that such other agreement supersedes these Terms.
+            <span style={{ fontWeight: 'bold' }}>17.9</span> In the event of any
+            conflict between these Terms and any other agreement you may have
+            with QuantAMM, these Terms will control unless such other agreement
+            specifically identifies these Terms and declares that such other
+            agreement supersedes these Terms.
           </Paragraph>
           <Paragraph>
-            <span style={{fontWeight:'bold'}}>17.10</span> You agree that, except as otherwise expressly provided in this
-            Agreement, there is no third-party beneficiaries to the Agreement
-            other than the Indemnified Parties.
+            <span style={{ fontWeight: 'bold' }}>17.10</span> You agree that,
+            except as otherwise expressly provided in this Agreement, there is
+            no third-party beneficiaries to the Agreement other than the
+            Indemnified Parties.
           </Paragraph>
           <Title level={3}>17. QUANTAMM SIMULATOR</Title>
           <Paragraph>

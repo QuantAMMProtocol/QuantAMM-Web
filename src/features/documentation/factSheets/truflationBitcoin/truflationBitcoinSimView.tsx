@@ -3,10 +3,11 @@ import { useState, useEffect } from 'react';
 import { SimulationResultsSummaryStep } from '../../../simulationResults/simulationResultsSummaryStep';
 import { getBreakdown, Pool } from '../../../../services/breakdownService';
 import { SimulationRunBreakdown } from '../../../simulationResults/simulationResultSummaryModels';
+import sharedStyles from '../../documentation.module.css';
 
 const { TabPane } = Tabs;
 
-export function TruflationBitcoinSimulatorExample() {
+export default function TruflationBitcoinSimulatorExample() {
   const [key, setKey] = useState<string>('2');
   const [breakdowns, setBreakdowns] = useState<SimulationRunBreakdown[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -64,7 +65,7 @@ export function TruflationBitcoinSimulatorExample() {
             defaultActiveKey={key}
             key={key}
             onChange={(key) => setKey(key)}
-            style={{ paddingLeft: 20, paddingRight: 20 }}
+            className={sharedStyles.simViewTabs}
           >
             <TabPane tab="Truflation BTC Training Period" key={'1'}>
               {loading ? (
@@ -99,3 +100,5 @@ export function TruflationBitcoinSimulatorExample() {
     </div>
   );
 }
+
+export { TruflationBitcoinSimulatorExample };

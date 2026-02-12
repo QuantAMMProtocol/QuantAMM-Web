@@ -64,7 +64,7 @@ export interface TimeSeriesData {
   totalSwapVolume: number;
   volume24h: number;
   tokenPrices: Record<string, number>;
-  tokenPriceArray:number[];
+  tokenPriceArray: number[];
   hodlSharePrice: number;
 }
 
@@ -104,7 +104,7 @@ export interface Product {
   basketTheme: string;
   type: GqlPoolType;
   hook?: Maybe<GqlHook>;
-  tokenType: string;
+  tokenType: GqlPoolType;
   strategy: Strategy;
   chain: string;
   frequency: string;
@@ -172,11 +172,11 @@ export interface FinancialMetricThresholds {
 }
 
 export interface ProductExplorer {
-  acceptedTermsAndConditions:boolean;
+  acceptedTermsAndConditions: boolean;
   loadingProducts: boolean;
   loadingFilters: boolean;
   loadingError: boolean;
-  loadingJsonProductSimulations:boolean;
+  loadingJsonProductSimulations: boolean;
   loadingSimulationRunBreakdown: Record<string, boolean>;
   asOfUnixTime: number;
   blockIndex: number;

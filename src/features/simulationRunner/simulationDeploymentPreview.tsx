@@ -27,6 +27,7 @@ import {
   reorderReadoutStringArray,
   sortTokenAddresses,
 } from '../simulationRunConfiguration/simulationUtils';
+import runnerStyles from './simulationRunnerCommon.module.css';
 
 const { Text } = Typography;
 
@@ -79,6 +80,7 @@ interface LocalCreationNewPoolParams {
   initialMovingAverages: string;
   initialIntermediateValues: string;
   oracleStalenessThreshold: string;
+  tokens: LocalTokenConfig[];
   poolRegistry: string;
   poolDetails: string;
 }
@@ -154,13 +156,14 @@ export function PoolDeploymentConfigReview({
 
   const [targetChain, setTargetChain] = useState<Chain>(Chain.Ethereum);
 
-  const [deploymentInput] = useState<LocalQuantAMMDeploymentInputParams>({
-    Vault: '',
-    PauseWindowDuration: null,
-    UpdateWeightRunner: '',
-    FactoryVersion: '',
-    PoolVersion: '',
-  });
+  const [deploymentInput, setDeploymentInput] =
+    useState<LocalQuantAMMDeploymentInputParams>({
+      Vault: '',
+      PauseWindowDuration: null,
+      UpdateWeightRunner: '',
+      FactoryVersion: '',
+      PoolVersion: '',
+    });
 
   const sortedTokenAddresses = useMemo(() => {
     const addresses = pool.poolConstituents
@@ -172,7 +175,7 @@ export function PoolDeploymentConfigReview({
       .filter((addr) => addr && addr.length > 0);
     return sortTokenAddresses(addresses);
   }, [pool.poolConstituents, targetChain]);
-  
+
   const [poolParams, setPoolParams] = useState<LocalCreationNewPoolParams>({
     name: pool.name,
     symbol: pool.name.replace(/\s+/g, ''),
@@ -190,21 +193,33 @@ export function PoolDeploymentConfigReview({
         .join(', '),
       rule: pool.updateRule.updateRuleName,
       updateInterval: null,
-      lambda: buildRuleParametersString(pool, initialisationData?.smart_contract_parameters?.strings ?? {}, sortedTokenAddresses, targetChain, true),
+      lambda: buildRuleParametersString(
+        pool,
+        initialisationData?.smart_contract_parameters?.strings ?? {},
+        sortedTokenAddresses,
+        targetChain,
+        true
+      ),
       epsilonMax: '0.432',
       absoluteWeightGuardRail: '0.03',
       maxTradeSizeRatio: '0.1',
       // initialise from update rule parameters in smart-contract order
-      ruleParameters: buildRuleParametersString(pool, initialisationData?.smart_contract_parameters?.strings ?? {}, sortedTokenAddresses, targetChain, false),
+      ruleParameters: buildRuleParametersString(
+        pool,
+        initialisationData?.smart_contract_parameters?.strings ?? {},
+        sortedTokenAddresses,
+        targetChain,
+        false
+      ),
       poolManager: '',
     },
     initialMovingAverages: '',
     initialIntermediateValues: '',
     oracleStalenessThreshold: '',
+    tokens: [],
     poolRegistry: '',
     poolDetails: '',
   });
-
 
   // Whenever targetChain changes, hydrate token addresses from deploymentByChain
   useEffect(() => {
@@ -260,311 +275,334 @@ export function PoolDeploymentConfigReview({
     }));
   };
 
-  return (
-    <Row className={styles.simRunSection} gutter={[24, 24]}>
-      <Col span={24}>
-        <Space direction="vertical" style={{ width: '100%' }} size="large">
-          {/* Simulation & Pool Overview */}
-          <Divider>Simulation &amp; Pool Overview</Divider>
-          <Space direction="vertical" style={{ width: '100%' }}>
-            <Select
-              style={{ width: '100%' }}
-              value={targetChain}
-              onChange={(value) => setTargetChain(value as Chain)}
-              options={Object.values(Chain).map((c) => ({
-                label: String(c),
-                value: c,
-              }))}
-              placeholder="Select target chain"
-            />
+  const SimulationPoolOverviewSection = () => (
+    <>
+      <Divider>Simulation &amp; Pool Overview</Divider>
+      <Space direction="vertical" className={runnerStyles.fullWidth}>
+        <Select
+          className={runnerStyles.fullWidth}
+          value={targetChain}
+          onChange={(value) => setTargetChain(value as Chain)}
+          options={Object.values(Chain).map((c) => ({
+            label: String(c),
+            value: c,
+          }))}
+          placeholder="Select target chain"
+        />
 
-            <Divider orientation="left">Pool Constituents</Divider>
-            <Row gutter={[8, 8]}>
-              <Col span={2}>Token Code</Col>
-              <Col span={8}>Token {targetChain} Address</Col>
-              <Col span={8}>Oracle Address</Col>
-              <Col span={3}>Approved</Col>
-              <Col span={3}>Order</Col>
-            </Row>
-            {pool.poolConstituents
-              .slice()
-              .sort((a, b) => {
-              const aAddr =
-                getDeploymentForChain(a.coin.deploymentByChain, targetChain)
+        <Divider orientation="left">Pool Constituents</Divider>
+        <Row gutter={[8, 8]}>
+          <Col span={2}>Token Code</Col>
+          <Col span={8}>Token {targetChain} Address</Col>
+          <Col span={8}>Oracle Address</Col>
+          <Col span={3}>Approved</Col>
+          <Col span={3}>Order</Col>
+        </Row>
+        {pool.poolConstituents
+          .slice()
+          .sort((a, b) => {
+            const aAddr =
+              getDeploymentForChain(a.coin.deploymentByChain, targetChain)
                 ?.address ?? '';
-              const bAddr =
-                getDeploymentForChain(b.coin.deploymentByChain, targetChain)
+            const bAddr =
+              getDeploymentForChain(b.coin.deploymentByChain, targetChain)
                 ?.address ?? '';
-              return (
-                sortedTokenAddresses.indexOf(aAddr) -
-                sortedTokenAddresses.indexOf(bAddr)
-              );
-              })
-              .map((poolCoin, index) => (
-              <Row key={`${poolCoin.coin.coinCode}-${index}`} gutter={[8, 8]}>
-                <Col span={2}>
+            return (
+              sortedTokenAddresses.indexOf(aAddr) -
+              sortedTokenAddresses.indexOf(bAddr)
+            );
+          })
+          .map((poolCoin, index) => (
+            <Row key={`${poolCoin.coin.coinCode}-${index}`} gutter={[8, 8]}>
+              <Col span={2}>
                 <Input value={`${poolCoin.coin.coinCode}`} disabled />
-                </Col>
-                <Col span={8}>
-                <Input
-                  value={
-                  getDeploymentForChain(
-                    poolCoin.coin.deploymentByChain,
-                    targetChain
-                  )?.address ?? 'UNKNOWN'
-                  }
-                  disabled
-                />
-                </Col>
-                <Col span={8}>
-                <Input
-                  value={
-                  getDeploymentForChain(
-                    poolCoin.coin.deploymentByChain,
-                    targetChain
-                  )?.oracles.get('Chainlink') ?? 'UNKNOWN'
-                  }
-                  disabled
-                />
-                </Col>
-                <Col span={3}>
-                <Input
-                  value={
-                  getDeploymentForChain(
-                    poolCoin.coin.deploymentByChain,
-                    targetChain
-                  )?.approvalStatus
-                    ? 'APPROVED'
-                    : 'NOT APPROVED'
-                  }
-                  disabled
-                />
-                </Col>
-                <Col span={3}>
-                <Input
-                  value={
-                  sortedTokenAddresses.indexOf(
-                    getDeploymentForChain(
-                    poolCoin.coin.deploymentByChain,
-                    targetChain
-                    )?.address ?? ''
-                  )
-                  }
-                  disabled
-                />
-                </Col>
-              </Row>
-              ))}
-          </Space>
-          {/* Deployment parameters shared across scripts */}
-          <Divider>Deployment Parameters (input.ts / index.ts)</Divider>
-
-          <Divider orientation="left">
-            QuantAMMDeploymentInputParams (input.ts)
-          </Divider>
-          <Space direction="vertical" style={{ width: '100%' }}>
-            <Input
-              addonBefore="Vault"
-              value={
-                chainDeploymentSettings?.get(targetChain)
-                  ?.balancerVaultAddress ?? 'NOT DEPLOYED'
-              }
-              readOnly
-              disabled
-            />
-            <Input
-              addonBefore="UpdateWeightRunner"
-              value={
-                chainDeploymentSettings?.get(targetChain)
-                  ?.updateWeightRunnerAddress ?? 'NOT DEPLOYED'
-              }
-              readOnly
-              disabled
-            />
-            <Input
-              addonBefore="QuantAMM Pool Factory"
-              value={
-                chainDeploymentSettings?.get(targetChain)
-                  ?.quantammWeightedPoolFactoryAddress ?? 'NOT DEPLOYED'
-              }
-              readOnly
-              disabled
-            />
-            <InputNumber
-              type="number"
-              style={{ width: '100%' }}
-              addonBefore="PauseWindowDuration"
-              value={deploymentInput.PauseWindowDuration}
-              onChange={(value) =>
-                (deploymentInput.PauseWindowDuration = value)
-              }
-            />
-            <Input addonBefore="FactoryVersion" value="v1" readOnly disabled />
-            <Input addonBefore="PoolVersion" value="v1" />
-          </Space>
-
-          {/* Creation / pool params */}
-          <Divider orientation="left">
-            CreationNewPoolParams (input.ts / index.ts)
-          </Divider>
-          <Space direction="vertical" style={{ width: '100%' }}>
-            <Input
-              addonBefore="Pool Name"
-              value={poolParams.name}
-              onChange={(e) => handlePoolParamChange('name', e.target.value)}
-            />
-            <Input
-              addonBefore="Symbol"
-              value={poolParams.symbol}
-              onChange={(e) => handlePoolParamChange('symbol', e.target.value)}
-            />
-            <Divider orientation="left">Swap &amp; Hooks</Divider>
-            <Input
-              addonBefore="swapFeePercentage"
-              value={poolParams.swapFeePercentage}
-              onChange={(e) =>
-                handlePoolParamChange('swapFeePercentage', e.target.value)
-              }
-            />
-            <Input
-              addonBefore="poolHooksContract"
-              value={poolParams.poolHooksContract}
-              onChange={(e) =>
-                handlePoolParamChange('poolHooksContract', e.target.value)
-              }
-            />
-            <Row gutter={[16, 16]}>
-              <Col span={12}>
-                <Space>
-                  <Text>enableDonation</Text>
-                  <Switch
-                    checked={poolParams.enableDonation}
-                    onChange={(checked) =>
-                      handlePoolParamChange('enableDonation', checked)
-                    }
-                  />
-                </Space>
               </Col>
-              <Col span={12}>
-                <Space>
-                  <Text>disableUnbalancedLiquidity</Text>
-                  <Switch
-                    checked={poolParams.disableUnbalancedLiquidity}
-                    onChange={(checked) =>
-                      handlePoolParamChange(
-                        'disableUnbalancedLiquidity',
-                        checked
-                      )
-                    }
-                  />
-                </Space>
+              <Col span={8}>
+                <Input
+                  value={
+                    getDeploymentForChain(
+                      poolCoin.coin.deploymentByChain,
+                      targetChain
+                    )?.address ?? 'UNKNOWN'
+                  }
+                  disabled
+                />
+              </Col>
+              <Col span={8}>
+                <Input
+                  value={
+                    getDeploymentForChain(
+                      poolCoin.coin.deploymentByChain,
+                      targetChain
+                    )?.oracles.get('Chainlink') ?? 'UNKNOWN'
+                  }
+                  disabled
+                />
+              </Col>
+              <Col span={3}>
+                <Input
+                  value={
+                    getDeploymentForChain(
+                      poolCoin.coin.deploymentByChain,
+                      targetChain
+                    )?.approvalStatus
+                      ? 'APPROVED'
+                      : 'NOT APPROVED'
+                  }
+                  disabled
+                />
+              </Col>
+              <Col span={3}>
+                <Input
+                  value={sortedTokenAddresses.indexOf(
+                    getDeploymentForChain(
+                      poolCoin.coin.deploymentByChain,
+                      targetChain
+                    )?.address ?? ''
+                  )}
+                  disabled
+                />
               </Col>
             </Row>
-            <Divider orientation="left">Initial State</Divider>
-            <Input
-              addonBefore="_initialWeights"
-              value={reorderReadoutStringArray(pool,initialisationData?.final_weights_strings ?? [], sortedTokenAddresses, targetChain).join(', ') ?? 'UNKNOWN'}
-            />
-            <Input
-              addonBefore="_initialMovingAverages"
-              value={
-                reorderReadoutStringArray(pool,initialisationData?.readouts.strings.ewma ?? [], sortedTokenAddresses, targetChain).join(', ') ??
-                'UNKNOWN'
-              }
-            />
-            <Input
-              addonBefore="_initialIntermediateValues"
-              value={
-                reorderReadoutStringArray(pool,initialisationData?.readouts.strings.running_a ?? [], sortedTokenAddresses, targetChain).join(', ') ??
-                'UNKNOWN'
-              }
-            />
-            <Input
-              addonBefore="_oracleStalenessThreshold"
-              value={
-                initialisationData?.jax_parameters.chunk_period[0] ?? 'UNKNOWN'
-              }
-            />
-            <Divider orientation="left">Pool Settings</Divider>
-            <Input
-              addonBefore="rule"
-              value={poolParams.poolSettings.rule}
-              onChange={(e) => handlePoolSettingsChange('rule', e.target.value)}
-            />
-            <InputNumber
-              style={{ width: '100%' }}
-              addonBefore="updateInterval"
-              value={
-                initialisationData?.jax_parameters.chunk_period[0] ?? 'UNKNOWN'
-              }
-            />
-            <Input
-              addonBefore="lambda"
-              value={poolParams.poolSettings.lambda}
-              disabled
-            />
-            <Input
-              addonBefore="absoluteWeightGuardRail"
-              value={poolParams.poolSettings.absoluteWeightGuardRail}
-              onChange={(e) =>
-                handlePoolSettingsChange(
-                  'absoluteWeightGuardRail',
-                  e.target.value
-                )
-              }
-            />
-            <Input
-              addonBefore="maxTradeSizeRatio"
-              value={poolParams.poolSettings.maxTradeSizeRatio}
-              onChange={(e) =>
-                handlePoolSettingsChange('maxTradeSizeRatio', e.target.value)
-              }
-            />
+          ))}
+      </Space>
+    </>
+  );
 
-            <Input
-              addonBefore="Update Rule"
-              value={pool.updateRule.updateRuleName}
-              disabled
-            />
-            <Space direction="vertical" style={{ width: '100%' }}>
-              <Text>ruleParameters</Text>
-              <Input.TextArea
-                rows={4}
-                value={poolParams.poolSettings.ruleParameters}
-                onChange={(e) =>
-                  handlePoolSettingsChange('ruleParameters', e.target.value)
+  const DeploymentInputParamsSection = () => (
+    <>
+      <Divider>Deployment Parameters (input.ts / index.ts)</Divider>
+      <Divider orientation="left">
+        QuantAMMDeploymentInputParams (input.ts)
+      </Divider>
+      <Space direction="vertical" className={runnerStyles.fullWidth}>
+        <Input
+          addonBefore="Vault"
+          value={
+            chainDeploymentSettings?.get(targetChain)?.balancerVaultAddress ??
+            'NOT DEPLOYED'
+          }
+          readOnly
+          disabled
+        />
+        <Input
+          addonBefore="UpdateWeightRunner"
+          value={
+            chainDeploymentSettings?.get(targetChain)
+              ?.updateWeightRunnerAddress ?? 'NOT DEPLOYED'
+          }
+          readOnly
+          disabled
+        />
+        <Input
+          addonBefore="QuantAMM Pool Factory"
+          value={
+            chainDeploymentSettings?.get(targetChain)
+              ?.quantammWeightedPoolFactoryAddress ?? 'NOT DEPLOYED'
+          }
+          readOnly
+          disabled
+        />
+        <InputNumber
+          type="number"
+          className={runnerStyles.fullWidth}
+          addonBefore="PauseWindowDuration"
+          value={deploymentInput.PauseWindowDuration}
+          onChange={(value) =>
+            setDeploymentInput((prev) => ({
+              ...prev,
+              PauseWindowDuration: value,
+            }))
+          }
+        />
+        <Input addonBefore="FactoryVersion" value="v1" readOnly disabled />
+        <Input addonBefore="PoolVersion" value="v1" readOnly disabled />
+      </Space>
+    </>
+  );
+
+  const CreationNewPoolParamsSection = () => (
+    <>
+      <Divider orientation="left">
+        CreationNewPoolParams (input.ts / index.ts)
+      </Divider>
+      <Space direction="vertical" className={runnerStyles.fullWidth}>
+        <Input
+          addonBefore="Pool Name"
+          value={poolParams.name}
+          onChange={(e) => handlePoolParamChange('name', e.target.value)}
+        />
+        <Input
+          addonBefore="Symbol"
+          value={poolParams.symbol}
+          onChange={(e) => handlePoolParamChange('symbol', e.target.value)}
+        />
+        <Divider orientation="left">Swap &amp; Hooks</Divider>
+        <Input
+          addonBefore="swapFeePercentage"
+          value={poolParams.swapFeePercentage}
+          onChange={(e) =>
+            handlePoolParamChange('swapFeePercentage', e.target.value)
+          }
+        />
+        <Input
+          addonBefore="poolHooksContract"
+          value={poolParams.poolHooksContract}
+          onChange={(e) =>
+            handlePoolParamChange('poolHooksContract', e.target.value)
+          }
+        />
+        <Row gutter={[16, 16]}>
+          <Col span={12}>
+            <Space>
+              <Text>enableDonation</Text>
+              <Switch
+                checked={poolParams.enableDonation}
+                onChange={(checked) =>
+                  handlePoolParamChange('enableDonation', checked)
                 }
               />
             </Space>
-            <Input
-              addonBefore="poolManager"
-              value={poolParams.poolSettings.poolManager}
-              onChange={(e) =>
-                handlePoolSettingsChange('poolManager', e.target.value)
-              }
-            />
-
-            <Divider orientation="left">Registry Permissions (bitmask)</Divider>
-            <Space direction="vertical" style={{ width: '100%' }} size="middle">
-              <Checkbox.Group
-                options={REGISTRY_PERMISSION_OPTIONS}
-                value={registryMaskSelections}
-                onChange={handleRegistryPermissionsChange}
-              />
-              <Input
-                addonBefore="poolRegistry (combined mask)"
-                value={poolParams.poolRegistry}
-                disabled
+          </Col>
+          <Col span={12}>
+            <Space>
+              <Text>disableUnbalancedLiquidity</Text>
+              <Switch
+                checked={poolParams.disableUnbalancedLiquidity}
+                onChange={(checked) =>
+                  handlePoolParamChange('disableUnbalancedLiquidity', checked)
+                }
               />
             </Space>
-            <Input
-              addonBefore="poolDetails"
-              value={poolParams.poolDetails}
-              onChange={(e) =>
-                handlePoolParamChange('poolDetails', e.target.value)
-              }
-            />
-          </Space>
+          </Col>
+        </Row>
+        <Divider orientation="left">Initial State</Divider>
+        <Input
+          addonBefore="_initialWeights"
+          value={reorderReadoutStringArray(
+            pool,
+            initialisationData?.final_weights_strings ?? [],
+            sortedTokenAddresses,
+            targetChain
+          ).join(', ')}
+        />
+        <Input
+          addonBefore="_initialMovingAverages"
+          value={reorderReadoutStringArray(
+            pool,
+            initialisationData?.readouts?.strings?.ewma ?? [],
+            sortedTokenAddresses,
+            targetChain
+          ).join(', ')}
+        />
+        <Input
+          addonBefore="_initialIntermediateValues"
+          value={reorderReadoutStringArray(
+            pool,
+            initialisationData?.readouts?.strings?.running_a ?? [],
+            sortedTokenAddresses,
+            targetChain
+          ).join(', ')}
+        />
+        <Input
+          addonBefore="_oracleStalenessThreshold"
+          value={
+            initialisationData?.jax_parameters?.chunk_period?.[0] ?? 'UNKNOWN'
+          }
+        />
+        <Divider orientation="left">Pool Settings</Divider>
+        <Input
+          addonBefore="rule"
+          value={poolParams.poolSettings.rule}
+          onChange={(e) => handlePoolSettingsChange('rule', e.target.value)}
+        />
+        <Input
+          addonBefore="updateInterval"
+          value={
+            initialisationData?.jax_parameters?.chunk_period?.[0] ?? 'UNKNOWN'
+          }
+          disabled
+        />
+        <Input
+          addonBefore="lambda"
+          value={poolParams.poolSettings.lambda}
+          disabled
+        />
+        <Input
+          addonBefore="absoluteWeightGuardRail"
+          value={poolParams.poolSettings.absoluteWeightGuardRail}
+          onChange={(e) =>
+            handlePoolSettingsChange('absoluteWeightGuardRail', e.target.value)
+          }
+        />
+        <Input
+          addonBefore="maxTradeSizeRatio"
+          value={poolParams.poolSettings.maxTradeSizeRatio}
+          onChange={(e) =>
+            handlePoolSettingsChange('maxTradeSizeRatio', e.target.value)
+          }
+        />
+
+        <Input
+          addonBefore="Update Rule"
+          value={pool.updateRule.updateRuleName}
+          disabled
+        />
+        <Space direction="vertical" className={runnerStyles.fullWidth}>
+          <Text>ruleParameters</Text>
+          <Input.TextArea
+            rows={4}
+            value={poolParams.poolSettings.ruleParameters}
+            onChange={(e) =>
+              handlePoolSettingsChange('ruleParameters', e.target.value)
+            }
+          />
+        </Space>
+        <Input
+          addonBefore="poolManager"
+          value={poolParams.poolSettings.poolManager}
+          onChange={(e) =>
+            handlePoolSettingsChange('poolManager', e.target.value)
+          }
+        />
+
+        <Divider orientation="left">Registry Permissions (bitmask)</Divider>
+        <Space
+          direction="vertical"
+          className={runnerStyles.fullWidth}
+          size="middle"
+        >
+          <Checkbox.Group
+            options={REGISTRY_PERMISSION_OPTIONS}
+            value={registryMaskSelections}
+            onChange={handleRegistryPermissionsChange}
+          />
+          <Input
+            addonBefore="poolRegistry (combined mask)"
+            value={poolParams.poolRegistry}
+            disabled
+          />
+        </Space>
+        <Input
+          addonBefore="poolDetails"
+          value={poolParams.poolDetails}
+          onChange={(e) => handlePoolParamChange('poolDetails', e.target.value)}
+        />
+      </Space>
+    </>
+  );
+
+  return (
+    <Row className={styles.simRunSection} gutter={[24, 24]}>
+      <Col span={24}>
+        <Space
+          direction="vertical"
+          className={runnerStyles.fullWidth}
+          size="large"
+        >
+          <SimulationPoolOverviewSection />
+          <DeploymentInputParamsSection />
+          <CreationNewPoolParamsSection />
         </Space>
       </Col>
     </Row>

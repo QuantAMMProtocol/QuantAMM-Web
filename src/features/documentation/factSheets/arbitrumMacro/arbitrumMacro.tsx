@@ -11,7 +11,11 @@ export default function ArbitrumMacroFactSheet() {
 
   return (
     <>
-      {isMobile ? <FactSheetMobile model={arbitrumMacroFactsheetData} /> : <FactSheetDesktop model={arbitrumMacroFactsheetData} />}
+      {isMobile ? (
+        <FactSheetMobile model={arbitrumMacroFactsheetData} />
+      ) : (
+        <FactSheetDesktop model={arbitrumMacroFactsheetData} />
+      )}
     </>
   );
 }

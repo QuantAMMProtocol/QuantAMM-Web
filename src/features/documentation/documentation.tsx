@@ -22,6 +22,7 @@ import { BalancerPoolDescription } from './poolTypes/balancer';
 import AMMDescription from './basics/amm';
 import RebalancingVsRebalancing from './basics/rebalancingvsRebalancing';
 import { useParams } from 'react-router-dom';
+import styles from './documentation.module.css';
 
 const items = [
   {
@@ -127,13 +128,13 @@ const submenuKeys = [
   'MinVariance',
 ];
 
-export function Documentation() {
+export default function Documentation() {
   const { id } = useParams();
   const [openKeys, setOpenKeys] = useState(rootSubmenuKeys);
   const [current, updateCurrent] = useState(id ? id : 'AutomatedMarketMakers');
 
   const onClick = (e: any) => {
-    if (submenuKeys.indexOf(e.key) != -1) {
+    if (submenuKeys.indexOf(e.key) !== -1) {
       updateCurrent(e.key);
     }
   };
@@ -173,15 +174,12 @@ export function Documentation() {
   return (
     <div>
       <Row>
-        <Col span={6} style={{ maxHeight: '95vh', overflowY: 'auto' }}>
+        <Col span={6} className={styles.documentationMenuCol}>
           <Button
             onClick={() =>
-              window.open(
-                'https://quantammsim.readthedocs.io/',
-                '_blank'
-              )
+              window.open('https://quantammsim.readthedocs.io/', '_blank')
             }
-            style={{ marginTop: '15px', marginBottom: '15px', width: '80%', margin:'10px'  }}
+            className={styles.documentationMenuButton}
           >
             Open Simulator Technical Code Docs
           </Button>
@@ -192,7 +190,7 @@ export function Documentation() {
                 '_blank'
               )
             }
-            style={{ marginTop: '15px', marginBottom: '15px', width: '80%', margin:'10px' }}
+            className={styles.documentationMenuButton}
           >
             Open Protocol Contracts GitBook
           </Button>
@@ -206,10 +204,12 @@ export function Documentation() {
             defaultValue={current}
           />
         </Col>
-        <Col span={18} style={{ paddingBottom: 40 }}>
+        <Col span={18} className={styles.documentationContentCol}>
           {components[current]}
         </Col>
       </Row>
     </div>
   );
 }
+
+export { Documentation };

@@ -25,7 +25,11 @@ export const ProductItemCompositionGraph: FC<
 > = ({ data, wide, showTokenNames, onTokenNamesClick }) => {
   const chartTheme = useAppSelector(selectAgChartTheme);
 
-  const totalWeight = data.reduce((acc, item) => acc + item.weight, 0);
+  const totalWeight = useMemo(
+    () => data.reduce((acc, item) => acc + item.weight, 0),
+    [data]
+  );
+  const safeTotalWeight = totalWeight > 0 ? totalWeight : 1;
 
   const series: AgPolarSeriesOptions[] = useMemo(() => {
     return [
@@ -46,13 +50,13 @@ export const ProductItemCompositionGraph: FC<
                 style: 'percent',
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
-              }).format(Number(params.datum.weight / totalWeight)),
+              }).format(Number(params.datum.weight / safeTotalWeight)),
             };
           },
         },
       },
     ];
-  }, [wide, totalWeight]);
+  }, [wide, safeTotalWeight]);
 
   return (
     <div className={styles['product-item__graph-overlay']}>

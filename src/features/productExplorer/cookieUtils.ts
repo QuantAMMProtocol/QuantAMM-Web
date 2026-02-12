@@ -1,4 +1,3 @@
-
 export const TOS_COOKIE = 'quantamm_tos_accepted_v1.0';
 
 export const LOC_COOKIE = 'quantamm_tos_location_v1.0';
@@ -29,13 +28,16 @@ export function deleteCookie(name: string) {
 
 function getCookie(name: string): string | null {
   if (!isBrowser) return null;
-  const match = document.cookie.match(new RegExp('(?:^|; )' + name.replace(/[-[\]/{}()*+?.\\^$|]/g, '\\$&') + '=([^;]*)'));
+  const match = document.cookie.match(
+    new RegExp(
+      '(?:^|; )' + name.replace(/[-[\]/{}()*+?.\\^$|]/g, '\\$&') + '=([^;]*)'
+    )
+  );
   return match ? decodeURIComponent(match[1]) : null;
 }
 
 export function getCookieBool(name: string, fallback = false): boolean {
   const v = getCookie(name);
   if (v === null) return fallback;
-  console.log('Cookie', name, 'is', v);
   return v === '1';
 }

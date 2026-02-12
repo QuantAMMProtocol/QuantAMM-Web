@@ -70,7 +70,11 @@ export const truflationBitcoinFactsheetData: FactsheetModel = {
         <>
           <p>BTFs are dynamically weighted pools.</p>
           <p>
-            Unlike traditional ETPs that rely on inefficient periodic rebalancing, the BTF pool continuously aligns with its target weights through natural market arbitrage. This autonomous mechanism ensures the portfolio tracks its strategy in real-time without the need for centralized custodians or a complex execution stack.
+            Unlike traditional ETPs that rely on inefficient periodic
+            rebalancing, the BTF pool continuously aligns with its target
+            weights through natural market arbitrage. This autonomous mechanism
+            ensures the portfolio tracks its strategy in real-time without the
+            need for centralized custodians or a complex execution stack.
           </p>
         </>
       ),
@@ -80,10 +84,9 @@ export const truflationBitcoinFactsheetData: FactsheetModel = {
       description: (
         <>
           <p>
-
-            The re-weighting strategy and parameters are run on Chainlink's Runtime Environment (CRE).
-            The runtime environment is fixed and the workflow cannot be altered
-            without admin permissions.
+            The re-weighting strategy and parameters are run on Chainlink&apos;s
+            Runtime Environment (CRE). The runtime environment is fixed and the
+            workflow cannot be altered without admin permissions.
           </p>
           <p>
             Chainlink CRE is institutional grade infrastructure that provides
@@ -103,9 +106,9 @@ export const truflationBitcoinFactsheetData: FactsheetModel = {
             with advanced disaster recovery features.
           </p>
           <p>
-            QuantAMM has performed competitive and private audits of its
-            own, the Balancer Vault has had its own numerous audits, large bug
-            bounties and real-time monitoring. 
+            QuantAMM has performed competitive and private audits of its own,
+            the Balancer Vault has had its own numerous audits, large bug
+            bounties and real-time monitoring.
           </p>
           <p>
             While the level of audits and monitoring is higher than normal new
@@ -119,11 +122,13 @@ export const truflationBitcoinFactsheetData: FactsheetModel = {
       description: (
         <>
           <p>
-            TRUF network provides Truflation's realtime CPI inflation data that is more timely than traditional inflation data sources.
+            TRUF network provides Truflation&apos;s realtime CPI inflation data
+            that is more timely than traditional inflation data sources.
           </p>
           <p>
-            This granular, daily data stream allows the strategy to identify regime shifts and rebalance positions significantly faster than traditional models dependent on lagged monthly reports.
-
+            This granular, daily data stream allows the strategy to identify
+            regime shifts and rebalance positions significantly faster than
+            traditional models dependent on lagged monthly reports.
           </p>
         </>
       ),
@@ -205,8 +210,8 @@ export const truflationBitcoinFactsheetData: FactsheetModel = {
           </p>
           <p>
             Manipulation of the inflation data can put the weights into one of 3
-            regimes, however it cannot determine wholy new weights. Those weights are
-            controlled by CRE.
+            regimes, however it cannot determine wholy new weights. Those
+            weights are controlled by CRE.
           </p>
         </>
       ),
@@ -222,13 +227,13 @@ export const truflationBitcoinFactsheetData: FactsheetModel = {
       <p>
         A training period of June 2023 - Dec 2024 was selected and parameters
         were selected using the machine learning optimization method Adam. This
-        was performed using the QuantAMM simulator
-        framework. A parameter set was selected that maximised the Sharpe ratio
-        of the strategy. This was selected over other objectives such as
-        maximising Ulcer or Calmar Ratios as the parameter set showed better
-        test set statistics. Random 6 month length windows were selected within
-        the training price range and optimisation was performed via
-        gradient descent for 1000 steps with batches of 8 windows per step.
+        was performed using the QuantAMM simulator framework. A parameter set
+        was selected that maximised the Sharpe ratio of the strategy. This was
+        selected over other objectives such as maximising Ulcer or Calmar Ratios
+        as the parameter set showed better test set statistics. Random 6 month
+        length windows were selected within the training price range and
+        optimisation was performed via gradient descent for 1000 steps with
+        batches of 8 windows per step.
       </p>
     </>
   ),

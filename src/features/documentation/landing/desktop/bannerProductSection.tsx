@@ -2,12 +2,19 @@
 import { Button, Col, Row, Tag, Tooltip, Spin } from 'antd';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+} from 'react';
 import { useSelector, shallowEqual } from 'react-redux';
 import { useFetchPoolsSummaryByParams } from '../../../../hooks/useFetchPoolsSummaryByParams';
 import type { GqlChain } from '../../../../__generated__/graphql-types';
 import type { RootState } from '../../../../app/store';
 import { selectCoinPrice } from '../../../../features/coinData/coinCurrentPriceSlice';
+import styles from './landingDesktop.module.css';
 
 interface ProductBannerProp {
   title: string;
@@ -144,37 +151,24 @@ export function BannerProductSection({ productData }: ProductBannerProps) {
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.6, ease: 'easeOut' }}
     >
-      <Row style={{ marginBottom: 24 }}>
-        <Col span={24} style={{ textAlign: 'center' }}>
-          <h3
-            style={{
-              color: '#fff',
-              fontWeight: 500,
-              letterSpacing: '0.5px',
-              marginBottom: 4,
-            }}
-          >
+      <Row className={styles.bannerHeaderRow}>
+        <Col span={24} className={styles.textCenter}>
+          <h3 className={styles.bannerTitle}>
             Featured Blockchain Traded Funds
           </h3>
-          <div
-            style={{
-              width: 80,
-              height: 2,
-              background: 'linear-gradient(90deg, #f59e0b, #fde047)',
-              margin: '0 auto',
-              borderRadius: 2,
-            }}
-          />
+          <div className={styles.bannerUnderline} />
         </Col>
       </Row>
 
       {loading ? (
         <Row justify="center">
-          <Spin tip="Loading pool data..." />
+          <Spin spinning tip="Loading pool data...">
+            <div style={{ minHeight: 48, minWidth: 240 }} />
+          </Spin>
         </Row>
       ) : (
         <Row gutter={[24, 24]} justify="center">
-          {productData.map((tag, index) => {
+          {productData.map((tag) => {
             const key = `${tag.poolChain}:${tag.poolId}`;
             const keyLower = `${tag.poolChain}:${tag.poolId.toLowerCase()}`;
 
@@ -196,25 +190,23 @@ export function BannerProductSection({ productData }: ProductBannerProps) {
 
             return (
               <Col
-                key={index}
+                key={key}
                 xs={24}
                 sm={24}
                 md={24}
                 lg={6}
                 xl={6}
-                style={{ display: 'flex', justifyContent: 'center' }}
+                className={styles.centeredRow}
               >
                 <Tag
+                  className={styles.productTag}
                   style={{
-                    width: '100%',
-                    maxWidth: 280,
-                    margin: 0,
-                    padding: 0,
-                    textAlign: 'center',
-                    border: 'transparent',
-                    background: 'transparent',
                     opacity: tag.opacity,
-                    transition: 'box-shadow .2s ease, transform .15s ease',
+                    background: 'transparent',
+                    border: 'transparent',
+                    padding: 0,
+                    margin: 0,
+                    textAlign: 'center',
                   }}
                 >
                   <Row gutter={[0, 8]} justify="center">
@@ -223,7 +215,7 @@ export function BannerProductSection({ productData }: ProductBannerProps) {
                         <img
                           src={tag.imgSrc}
                           alt={tag.title}
-                          style={{ width: '30%', maxWidth: 60, height: 'auto' }}
+                          className={styles.productIcon}
                         />
                       </Row>
                     </Col>
@@ -250,103 +242,40 @@ export function BannerProductSection({ productData }: ProductBannerProps) {
                       <Row
                         justify="space-around"
                         align="middle"
-                        style={{
-                          padding: '8px 14px',
-                          borderRadius: 12,
-                          background:
-                            'linear-gradient(90deg, rgba(255,255,255,0.04), rgba(255,255,255,0.10))',
-                          backdropFilter: 'blur(5px)',
-                        }}
+                        className={styles.statsRow}
                       >
-                        <Col flex="1" style={{ textAlign: 'center' }}>
-                          <p
-                            style={{
-                              margin: 0,
-                              fontSize: '0.62rem',
-                              color: '#aaa',
-                              letterSpacing: 0.4,
-                            }}
-                          >
-                            TVL
-                          </p>
-                          <p
-                            style={{
-                              margin: 0,
-                              fontSize: '0.8rem',
-                              color: '#fff',
-                              fontWeight: 500,
-                            }}
-                          >
+                        <Col flex="1" className={styles.textCenter}>
+                          <p className={styles.statLabel}>TVL</p>
+                          <p className={styles.statValue}>
                             {pool ? formatUsd(pool.tvl) : '--'}
                           </p>
                         </Col>
 
                         <Col flex="0 0 1px">
-                          <div
-                            style={{
-                              width: 1,
-                              height: 18,
-                              background: 'rgba(255,255,255,0.25)',
-                            }}
-                          />
+                          <div className={styles.statDivider} />
                         </Col>
 
-                        <Col flex="1" style={{ textAlign: 'center' }}>
-                          <p
-                            style={{
-                              margin: 0,
-                              fontSize: '0.62rem',
-                              color: '#aaa',
-                              letterSpacing: 0.4,
-                            }}
-                          >
-                            Volume
-                          </p>
-                          <p
-                            style={{
-                              margin: 0,
-                              fontSize: '0.8rem',
-                              color: '#fff',
-                              fontWeight: 500,
-                            }}
-                          >
+                        <Col flex="1" className={styles.textCenter}>
+                          <p className={styles.statLabel}>Volume</p>
+                          <p className={styles.statValue}>
                             {pool ? formatUsd(pool.volume) : '--'}
                           </p>
                         </Col>
 
                         <Col flex="0 0 1px">
-                          <div
-                            style={{
-                              width: 1,
-                              height: 18,
-                              background: 'rgba(255,255,255,0.25)',
-                            }}
-                          />
+                          <div className={styles.statDivider} />
                         </Col>
 
-                        <Col flex="1" style={{ textAlign: 'center' }}>
+                        <Col flex="1" className={styles.textCenter}>
+                          <p className={styles.statLabel}>ITD P&L</p>
                           <p
-                            style={{
-                              margin: 0,
-                              fontSize: '0.62rem',
-                              color: '#aaa',
-                              letterSpacing: 0.4,
-                            }}
-                          >
-                            ITD P&L
-                          </p>
-                          <p
-                            style={{
-                              margin: 0,
-                              fontSize: '0.8rem',
-                              color: basePerfColor,
-                              fontWeight: 500,
-                              borderRadius: 6,
-                              background: flashBg,
-                              transition: 'background-color 0.5s ease',
-                              padding: '2px 6px',
-                              display: 'inline-block',
-                            }}
+                            className={styles.perfValue}
+                            style={
+                              {
+                                '--perf-bg': flashBg,
+                                '--perf-color': basePerfColor,
+                              } as CSSProperties
+                            }
                           >
                             {perf != null ? formatPct(perf) : '--'}
                           </p>
@@ -357,7 +286,7 @@ export function BannerProductSection({ productData }: ProductBannerProps) {
                       <Row
                         justify="center"
                         gutter={10}
-                        style={{ marginTop: 10 }}
+                        className={styles.actionRow}
                       >
                         <Col flex="0 0 auto" xs={24} sm={24} md={24}>
                           <Button
@@ -374,6 +303,11 @@ export function BannerProductSection({ productData }: ProductBannerProps) {
                               color: '#fff',
                               fontSize: '0.78rem',
                               lineHeight: 1,
+                              opacity:
+                                tag.status !== 'LIVE' &&
+                                tag.status !== 'PREVIEW'
+                                  ? 0.7
+                                  : 1,
                               cursor:
                                 tag.status !== 'LIVE' &&
                                 tag.status !== 'PREVIEW'
@@ -396,12 +330,12 @@ export function BannerProductSection({ productData }: ProductBannerProps) {
                               borderRadius: 6,
                               background:
                                 'linear-gradient(90deg, #fafaf96c, #f5f5f43d)',
-                              border: '#fafaf9d2',
-                              borderWidth: 1,
+                              border: '1px solid #fafaf9d2',
                               color: '#fafaf9fa',
                               fontWeight: 600,
                               fontSize: '0.78rem',
                               lineHeight: 1,
+                              opacity: tag.status !== 'LIVE' ? 0.7 : 1,
                               cursor:
                                 tag.status !== 'LIVE'
                                   ? 'not-allowed'

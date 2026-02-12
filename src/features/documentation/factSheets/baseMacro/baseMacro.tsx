@@ -11,7 +11,11 @@ export default function BaseMacroFactSheet() {
 
   return (
     <>
-      {isMobile ? <FactSheetMobile model={baseMacroFactsheetData} /> : <FactSheetDesktop model={baseMacroFactsheetData} />}
+      {isMobile ? (
+        <FactSheetMobile model={baseMacroFactsheetData} />
+      ) : (
+        <FactSheetDesktop model={baseMacroFactsheetData} />
+      )}
     </>
   );
 }

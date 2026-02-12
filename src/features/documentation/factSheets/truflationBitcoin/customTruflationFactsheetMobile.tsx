@@ -16,9 +16,57 @@ import { FactsheetModel } from '../../landing/desktop/factsheetModel';
 import { FAQItems } from '../../landing/faqItems';
 import { useNavigate } from 'react-router-dom';
 import { TruflationInflationRegime } from '../../../shared/eli5/truflationInflationRegime';
+import styles from '../factsheetMobile.module.css';
 
 interface FactsheetDesktopProps {
   model: FactsheetModel;
+}
+
+function FactsheetHeroObjectiveSection({ model }: FactsheetDesktopProps) {
+  return (
+    <Row>
+      <Col span={1}></Col>
+      <Col span={22}>
+        <div className={styles.centeredHero}>
+          <img
+            src={model.factsheetImage.image}
+            alt={model.factsheetImage.alt}
+            style={{
+              width: model.factsheetImage.width,
+            }}
+            className={styles.heroImage}
+          />
+          <h1 className={styles.heroTitle}>{model.mainTitle}</h1>
+          <p className={styles.heroDescription}>{model.mainDescription}</p>
+        </div>
+      </Col>
+      <Col span={1}></Col>
+
+      <Col span={1}></Col>
+      <Col span={22}>
+        <h4>BTF Objective</h4>
+        <p>{model.objective}</p>
+        <h4>Responsive Strategy Objective</h4>
+        <p>
+          The BTF structure allows this to be done in a feeless manner for the
+          LP with continuous on-chain rebalancing rather than the traditional
+          monthly or quarterly rebalances. Re-weighting is performed daily.
+        </p>
+        <p>
+          BTFs also augment returns with swap fees associated with providing a
+          decentralised liquidity pool and provide an ERC20 token that can be
+          used in other DeFi applications.
+        </p>
+        <p>
+          It is crucial to recognize that BTFs carry risks. Reallocation
+          strategies are not market-neutral and involve directional assumptions
+          about asset allocation. Furthermore, the value of assets can be
+          affected by macro economic factors and global events.
+        </p>
+      </Col>
+      <Col span={1}></Col>
+    </Row>
+  );
 }
 
 type ExplorerView = 'drawdowns' | 'composition';
@@ -143,15 +191,24 @@ export function TruflationFactSheetMobile(props: FactsheetDesktopProps) {
         props.model.trainPeriod &&
         props.model.trainPeriod !== props.model.defaultPeriod[0] &&
         props.model.trainPeriod !== props.model.alternatePeriod[0] && (
-          <Radio.Button value={props.model.trainPeriod} style={{width:'100%'}}>
+          <Radio.Button
+            value={props.model.trainPeriod}
+            className={styles.radioButtonFullWidth}
+          >
             {props.model.trainingWindowTitle}
           </Radio.Button>
         )}
-      <Radio.Button value={props.model.defaultPeriod[0]} style={{width:'100%'}}>
+      <Radio.Button
+        value={props.model.defaultPeriod[0]}
+        className={styles.radioButtonFullWidth}
+      >
         {props.model.defaultPeriod[1]}
       </Radio.Button>
-      {props.model.alternatePeriod[0] != '' ? (
-        <Radio.Button value={props.model.alternatePeriod[0]} style={{width:'100%'}}>
+      {props.model.alternatePeriod[0] !== '' ? (
+        <Radio.Button
+          value={props.model.alternatePeriod[0]}
+          className={styles.radioButtonFullWidth}
+        >
           {props.model.alternatePeriod[1]}
         </Radio.Button>
       ) : (
@@ -195,81 +252,30 @@ export function TruflationFactSheetMobile(props: FactsheetDesktopProps) {
 
   return (
     <div>
-      <Row>
-        <Col span={1}></Col>
-        <Col span={22}>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: '100%',
-            }}
-          >
-            <img
-              src={props.model.factsheetImage.image}
-              alt={props.model.factsheetImage.alt}
-              style={{
-                width: props.model.factsheetImage.width,
-                height: 'auto',
-              }}
-            />
-            <h1 style={{ textAlign: 'center', margin: 0 }}>
-              {props.model.mainTitle}
-            </h1>
-            <p style={{ textAlign: 'center' }}>{props.model.mainDescription}</p>
-          </div>
-        </Col>
-        <Col span={1}></Col>
-
-        <Col span={1}></Col>
-        <Col span={22}>
-          <h4>BTF Objective</h4>
-          <p>{props.model.objective}</p>
-          <h4>Responsive Strategy Objective</h4>
-          <p>
-            The BTF structure allows this to be done in a feeless manner for the
-            LP with continuous on-chain rebalancing rather than the traditional
-            monthly or quarterly rebalances. Re-weighting is performed daily.
-          </p>
-          <p>
-            BTFs also augment returns with swap fees associated with providing a
-            decentralised liquidity pool and provide an ERC20 token that can be
-            used in other DeFi applications.
-          </p>
-          <p>
-            It is crucial to recognize that BTFs carry risks. Reallocation
-            strategies are not market-neutral and involve directional
-            assumptions about asset allocation. Furthermore, the value of assets
-            can be affected by macro economic factors and global events.
-          </p>
-        </Col>
-        <Col span={1}></Col>
-      </Row>
+      <FactsheetHeroObjectiveSection model={props.model} />
 
       <Row>
         <Col span={1}></Col>
         <Col span={22}>
-          <h1 style={{ marginLeft: '10px' }}>TEST WINDOW PERFORMANCE</h1>
+          <h1 className={styles.sectionTitle}>TEST WINDOW PERFORMANCE</h1>
         </Col>
         <Col span={1}></Col>
       </Row>
 
-      <Row style={{ height: '155vh' }}>
+      <Row className={styles.rowHeight155}>
         <Col span={1}></Col>
         <Col span={22}>
-          <Row style={{ height: '65vh' }}>
+          <Row className={styles.rowHeight65}>
             <Col span={24}>
-              <Card title="STRATEGY DETAILS" style={{ height: '65vh' }}>
+              <Card title="STRATEGY DETAILS" className={styles.cardHeight65}>
                 <Space
                   direction="vertical"
                   size="small"
-                  style={{ width: '100%', marginBottom: 12 }}
+                  className={styles.spaceFullWidth}
                 >
                   <Button
                     size="small"
-                    style={{ width: '100%' }}
+                    className={styles.buttonFullWidth}
                     onClick={() =>
                       navigate('/factsheet/example/' + props.model.poolId)
                     }
@@ -280,7 +286,7 @@ export function TruflationFactSheetMobile(props: FactsheetDesktopProps) {
                     disabled={props.model.status !== 'LIVE'}
                     size="small"
                     type="primary"
-                    style={{ width: '100%' }}
+                    className={styles.buttonFullWidth}
                     onClick={() =>
                       navigate(
                         '/product-explorer/' +
@@ -294,7 +300,7 @@ export function TruflationFactSheetMobile(props: FactsheetDesktopProps) {
                   </Button>
                 </Space>
 
-                <div style={{ overflowY: 'auto', height: '48vh' }}>
+                <div className={styles.scrollArea48}>
                   <TruflationInflationRegime />
                 </div>
               </Card>
@@ -307,19 +313,19 @@ export function TruflationFactSheetMobile(props: FactsheetDesktopProps) {
         <Col span={22}>
           <Card
             title="Test Window Strategy Explorer"
-            style={{ height: '80vh', marginTop: '15px' }}
+            className={`${styles.cardHeight80} ${styles.cardMarginTop15}`}
           >
             <Space
               direction="vertical"
               size="small"
-              style={{ width: '100%', marginBottom: 12 }}
+              className={styles.spaceFullWidth}
             >
               {viewOptions.map((opt) => (
                 <Button
                   key={opt.value}
                   size="small"
                   type={view === opt.value ? 'primary' : 'default'}
-                  style={{ width: '100%' }}
+                  className={styles.buttonFullWidth}
                   onClick={() => setView(opt.value as ExplorerView)}
                 >
                   {opt.label}
@@ -341,7 +347,7 @@ export function TruflationFactSheetMobile(props: FactsheetDesktopProps) {
               </Row>
             ) : (
               <Row>
-                <Col span={24} style={{ paddingTop: '10px' }}>
+                <Col span={24} className={styles.paddingTop10}>
                   <WeightChangeOverTimeGraph
                     simulationRunBreakdown={breakdowns[btfTest]}
                     overrideChartTheme={
@@ -349,7 +355,9 @@ export function TruflationFactSheetMobile(props: FactsheetDesktopProps) {
                     }
                     overrideXAxisInterval={Math.max(
                       1,
-                      Math.ceil(((breakdowns[btfTest]?.timeSteps.length ?? 0) / 30) / 2.5)
+                      Math.ceil(
+                        (breakdowns[btfTest]?.timeSteps.length ?? 0) / 30 / 2.5
+                      )
                     )}
                   />
                 </Col>
@@ -360,10 +368,10 @@ export function TruflationFactSheetMobile(props: FactsheetDesktopProps) {
         <Col span={1}></Col>
       </Row>
 
-      <Row style={{ marginTop: '100px' }}>
+      <Row className={styles.rowMarginTop100}>
         <Col span={1}></Col>
         <Col span={22}>
-          <h1 style={{ marginLeft: '10px' }}>SIMULATED PERFORMANCE</h1>
+          <h1 className={styles.sectionTitle}>SIMULATED PERFORMANCE</h1>
         </Col>
         <Col span={1}></Col>
       </Row>
@@ -373,18 +381,11 @@ export function TruflationFactSheetMobile(props: FactsheetDesktopProps) {
         <Col span={22}>
           <Card
             title={
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  gap: 12,
-                }}
-              >
+              <div className={`${styles.titleRow} ${styles.titleRowGap}`}>
                 <span>SIMULATED BTF TOTAL $ VALUE OVER TIME</span>
               </div>
             }
-            style={{ margin: '5px' }}
+            className={styles.cardMarginSmall}
           >
             {renderPeriodSelector(false, testPeriod, setTestPeriod)}
             <div hidden={loading}>
@@ -401,9 +402,11 @@ export function TruflationFactSheetMobile(props: FactsheetDesktopProps) {
                   props.model.cumulativePerformanceOverrideSeriesName
                 }
                 overrideXAxisInterval={Math.max(
-                      1,
-                      Math.ceil(((breakdowns[btfTest]?.timeSteps.length ?? 0) / 30) / 1)
-                    )}
+                  1,
+                  Math.ceil(
+                    (breakdowns[btfTest]?.timeSteps.length ?? 0) / 30 / 1
+                  )
+                )}
                 forceViewResults={true}
               />
             </div>
@@ -415,7 +418,7 @@ export function TruflationFactSheetMobile(props: FactsheetDesktopProps) {
       <Row>
         <Col span={1}></Col>
         <Col span={22}>
-          <h1 style={{ marginLeft: '10px' }}>
+          <h1 className={styles.sectionTitle}>
             QUANTITATIVE FINANCIAL ANALYSIS
           </h1>
         </Col>
@@ -430,22 +433,15 @@ export function TruflationFactSheetMobile(props: FactsheetDesktopProps) {
             <Col span={22}>
               <Card
                 title={
-                  <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      gap: 12,
-                    }}
-                  >
+                  <div className={`${styles.titleRow} ${styles.titleRowGap}`}>
                     <span>SIMULATED FINANCIAL METRICS</span>
                   </div>
                 }
-                style={{ margin: '5px' }}
+                className={styles.cardMarginSmall}
               >
                 {renderPeriodSelector(true, metricsPeriod, setMetricsPeriod)}
                 {visibleMetrics.map(([category, metric]) => (
-                  <div key={metric} style={{ marginBottom: '20px' }}>
+                  <div key={metric} className={styles.metricItem}>
                     <h4>{metric}</h4>
                     <Row>
                       <Col span={24}>
@@ -454,22 +450,26 @@ export function TruflationFactSheetMobile(props: FactsheetDesktopProps) {
                           style={{
                             color: getColorFor(
                               metric,
-                              breakdowns[btfMetrics]?.simulationRunResultAnalysis?.[
+                              breakdowns[
+                                btfMetrics
+                              ]?.simulationRunResultAnalysis?.[
                                 `${category}_analysis` as
                                   | 'return_analysis'
                                   | 'benchmark_analysis'
-                              ]?.find((x) => x.metricName == metric)
+                              ]?.find((x) => x.metricName === metric)
                                 ?.metricValue ?? 0
                             ),
                           }}
                         >
                           {loading
                             ? 'Loading...'
-                            : breakdowns[btfMetrics]?.simulationRunResultAnalysis?.[
+                            : breakdowns[
+                                btfMetrics
+                              ]?.simulationRunResultAnalysis?.[
                                 `${category}_analysis` as
                                   | 'return_analysis'
                                   | 'benchmark_analysis'
-                              ]?.find((x) => x.metricName == metric)
+                              ]?.find((x) => x.metricName === metric)
                                 ?.metricValue ?? 'N/A'}
                         </span>
                       </Col>
@@ -480,22 +480,26 @@ export function TruflationFactSheetMobile(props: FactsheetDesktopProps) {
                           style={{
                             color: getColorFor(
                               metric,
-                              breakdowns[hodlMetrics]?.simulationRunResultAnalysis?.[
+                              breakdowns[
+                                hodlMetrics
+                              ]?.simulationRunResultAnalysis?.[
                                 `${category}_analysis` as
                                   | 'return_analysis'
                                   | 'benchmark_analysis'
-                              ]?.find((x) => x.metricName == metric)
+                              ]?.find((x) => x.metricName === metric)
                                 ?.metricValue ?? 0
                             ),
                           }}
                         >
                           {loading
                             ? 'Loading...'
-                            : breakdowns[hodlMetrics]?.simulationRunResultAnalysis?.[
+                            : breakdowns[
+                                hodlMetrics
+                              ]?.simulationRunResultAnalysis?.[
                                 `${category}_analysis` as
                                   | 'return_analysis'
                                   | 'benchmark_analysis'
-                              ]?.find((x) => x.metricName == metric)
+                              ]?.find((x) => x.metricName === metric)
                                 ?.metricValue ?? 'N/A'}
                         </span>
                       </Col>
@@ -532,25 +536,22 @@ export function TruflationFactSheetMobile(props: FactsheetDesktopProps) {
       <Row>
         <Col span={1}></Col>
         <Col span={22}>
-          <h1 style={{ marginLeft: '10px' }}>KEY FACTS</h1>
+          <h1 className={styles.sectionTitle}>KEY FACTS</h1>
         </Col>
         <Col span={1}></Col>
       </Row>
 
-      <Row style={{ height: '500vh' }}>
+      <Row className={styles.rowHeight500}>
         <Col span={1}></Col>
         <Col span={22}>
-          <Row style={{ height: '250vh' }}>
+          <Row className={styles.rowHeight250}>
             <Col span={24}>
-              <Card
-                title="Advantages"
-                style={{ height: '250vh', overflowY: 'auto' }}
-              >
+              <Card title="Advantages" className={styles.cardHeight250Scroll}>
                 <Row>
                   {props.model.advantages.map((advantage, index) => (
                     <Col span={24} key={index}>
                       <Card
-                        style={{ margin: '5px', height: '57vh' }}
+                        className={styles.cardMarginHeight57}
                         title={advantage.title}
                       >
                         <Row>
@@ -568,16 +569,13 @@ export function TruflationFactSheetMobile(props: FactsheetDesktopProps) {
 
         <Row>
           <Col span={1}></Col>
-          <Col span={22} style={{ height: '250vh' }}>
-            <Card
-              style={{ height: '250vh', overflowY: 'auto' }}
-              title={'Risks'}
-            >
+          <Col span={22} className={styles.colHeight250}>
+            <Card className={styles.cardHeight250Scroll} title={'Risks'}>
               <Row>
                 {props.model.risks.map((risk, index) => (
                   <Col span={24} key={index}>
                     <Card
-                      style={{ margin: '5px', height: '57vh' }}
+                      className={styles.cardMarginHeight57}
                       title={risk.title}
                     >
                       <Row>
@@ -596,7 +594,7 @@ export function TruflationFactSheetMobile(props: FactsheetDesktopProps) {
       <Row>
         <Col span={1}></Col>
         <Col span={22}>
-          <h1 style={{ marginLeft: '10px' }}>
+          <h1 className={styles.sectionTitle}>
             RE-WEIGHTING STRATEGY PARAMETER SELECTION
           </h1>
         </Col>
@@ -614,19 +612,19 @@ export function TruflationFactSheetMobile(props: FactsheetDesktopProps) {
           <Col span={24}>
             <Card
               title={props.model.trainingWindowTitle}
-              style={{ height: '130vh' }}
+              className={styles.cardHeight130}
             >
               <Space
                 direction="vertical"
                 size="small"
-                style={{ width: '100%', marginBottom: 12 }}
+                className={styles.spaceFullWidth}
               >
                 {trainingViewOptions.map((opt) => (
                   <Button
                     key={opt.value}
                     size="small"
                     type={trainingView === opt.value ? 'primary' : 'default'}
-                    style={{ width: '100%' }}
+                    className={styles.buttonFullWidth}
                     onClick={() => setTrainingView(opt.value as TrainingView)}
                   >
                     {opt.label}
@@ -671,9 +669,13 @@ export function TruflationFactSheetMobile(props: FactsheetDesktopProps) {
                             props.model.cumulativePerformanceOverrideSeriesName
                           }
                           overrideXAxisInterval={Math.max(
-                      1,
-                      Math.ceil(((breakdowns[btfTest]?.timeSteps.length ?? 0) / 30) / 1)
-                    )}
+                            1,
+                            Math.ceil(
+                              (breakdowns[btfTest]?.timeSteps.length ?? 0) /
+                                30 /
+                                1
+                            )
+                          )}
                           forceViewResults={true}
                         />
                       </>
@@ -688,9 +690,13 @@ export function TruflationFactSheetMobile(props: FactsheetDesktopProps) {
                             isDarkTheme ? 'ag-default-dark' : 'ag-default'
                           }
                           overrideXAxisInterval={Math.max(
-                      1,
-                      Math.ceil(((breakdowns[btfTest]?.timeSteps.length ?? 0) / 30) / 1)
-                    )}
+                            1,
+                            Math.ceil(
+                              (breakdowns[btfTest]?.timeSteps.length ?? 0) /
+                                30 /
+                                1
+                            )
+                          )}
                         />
                       </>
                     )}
@@ -706,13 +712,13 @@ export function TruflationFactSheetMobile(props: FactsheetDesktopProps) {
         <Col span={22}>
           <Card
             title={'Parameters Selected'}
-            style={{ height: 'auto', marginTop: '20px' }}
+            className={styles.cardHeightAutoMarginTop20}
           >
             <Row>
               {props.model.trainedParameters.map((parameter, index) => (
                 <Col span={24} key={index}>
                   <Card
-                    style={{ margin: '5px' }}
+                    className={styles.cardMarginSmall}
                     title={
                       <Tooltip
                         title={`The following represent different forms of the ${parameter.name} setting used for different tooling.`}
@@ -732,7 +738,7 @@ export function TruflationFactSheetMobile(props: FactsheetDesktopProps) {
                               <Button
                                 size="small"
                                 disabled={true}
-                                style={{ margin: '5px' }}
+                                className={styles.buttonMarginSmall}
                                 key={valIndex}
                               >
                                 {val}
@@ -754,51 +760,51 @@ export function TruflationFactSheetMobile(props: FactsheetDesktopProps) {
       <Row>
         <Col span={1}></Col>
         <Col span={22}>
-          <h1 style={{ marginLeft: '10px' }}>
+          <h1 className={styles.sectionTitle}>
             QUANTAMM FREQUENTLY ASKED QUESTIONS
           </h1>
         </Col>
         <Col span={1}></Col>
       </Row>
 
-      <Row style={{ height: '110vh' }}>
+      <Row className={styles.rowHeight110}>
         <Col span={1}></Col>
         <Col span={22}>
           <Row>
             <Col span={24}>
               <Card
                 title={
-                  <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      gap: 12,
-                    }}
-                  >
+                  <div className={`${styles.titleRow} ${styles.titleRowGap}`}>
                     <span>QUANTAMM REBALANCING</span>
                   </div>
                 }
-                style={{ height: '110vh', overflowY: 'auto' }}
+                className={styles.cardHeight110Scroll}
               >
-                    <Radio.Group
-                        size="small"
-                        buttonStyle="solid"
-                        value={faqEli5}
-                        onChange={(e) => setFAQEli5(e.target.value)}
-                        style={{ fontWeight: 'normal', display: 'flex', flexDirection: 'column', gap: 8, width: '100%' }}
-                    >
-                        <Radio.Button value="ELI5" style={{ width: '100%' }}>ELI5</Radio.Button>
-                        <Radio.Button value="Crypto Native" style={{ width: '100%' }}>
-                            Crypto Native
-                        </Radio.Button>
-                    </Radio.Group>
+                <Radio.Group
+                  size="small"
+                  buttonStyle="solid"
+                  value={faqEli5}
+                  onChange={(e) => setFAQEli5(e.target.value)}
+                  className={styles.radioGroupStacked}
+                >
+                  <Radio.Button
+                    value="ELI5"
+                    className={styles.radioButtonFullWidth}
+                  >
+                    ELI5
+                  </Radio.Button>
+                  <Radio.Button
+                    value="Crypto Native"
+                    className={styles.radioButtonFullWidth}
+                  >
+                    Crypto Native
+                  </Radio.Button>
+                </Radio.Group>
                 <Collapse
                   defaultActiveKey={['1']}
+                  className={`${styles.collapseBase} ${styles.collapseMarginTop10}`}
                   style={{
-                    width: '100%',
                     backgroundColor: isDarkTheme ? '#162536' : '#fff',
-                    marginTop: '10px',
                   }}
                   accordion
                   items={FAQItems.map((x) => {
@@ -807,13 +813,13 @@ export function TruflationFactSheetMobile(props: FactsheetDesktopProps) {
                       label: x.label,
                       children: (
                         <>
-                          <div hidden={faqEli5 != 'ELI5'}>
+                          <div hidden={faqEli5 !== 'ELI5'}>
                             {x.eli5Description}
                           </div>
-                          <div hidden={faqEli5 != 'Crypto Native'}>
+                          <div hidden={faqEli5 !== 'Crypto Native'}>
                             {x.cryptoNativeDescription}
                           </div>
-                          <div hidden={faqEli5 != 'Quant'}>
+                          <div hidden={faqEli5 !== 'Quant'}>
                             {x.quantDescription}
                           </div>
                         </>

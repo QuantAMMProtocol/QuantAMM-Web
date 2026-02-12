@@ -1,0 +1,17 @@
+.comparisonTable {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.tableCell {
+  padding: 5px;
+  border: 1px solid white;
+}
+
+.noteBlock {
+  margin: 20px 0;
+  padding: 15px 20px;
+  border-left: 3px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.03);
+  font-size: 0.95em;
+}

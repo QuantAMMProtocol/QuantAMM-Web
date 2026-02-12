@@ -70,38 +70,14 @@ export const getAnalysisSummary = (
     .filter((x) => x.simulationRunStatus === 'Complete')
     .forEach((x) => {
       if (x.simulationRunResultAnalysis) {
-        x.simulationRunResultAnalysis.return_analysis.forEach((y) => {
-          const breakdown: FlatQuantDynamicAnalysisBreakdown = {
-            updateRule: x.simulationRun.updateRule.updateRuleName,
-            parameters: (
-              x.simulationRun.updateRule.updateRuleParameters || []
-            ).reduce<string>((accumulator, current) => {
-              return (
-                accumulator +
-                '[' +
-                current.factorName +
-                ':' +
-                current.factorValue +
-                '] '
-              );
-            }, ''),
-            timePeriodName: x.timeRange.name,
-            startDate: x.timeRange.startDate,
-            endDate: x.timeRange.endDate,
-            benchmark: 'N/A',
-            rf: y.Rf,
-            metricName: y.metricName,
-            metricValue: y.metricValue,
-          };
-
-          results.push(breakdown);
-        });
-
-        x.simulationRunResultAnalysis?.benchmark_analysis.forEach((z) => {
-          if (
-            z.benchmarkName?.toLowerCase() !=
-            x.simulationRun.updateRule.updateRuleName.toLowerCase()
-          ) {
+        x.simulationRunResultAnalysis.return_analysis
+          .filter(
+            (y) =>
+              y.metricValue !== undefined &&
+              y.metricValue !== null &&
+              Number.isFinite(y.metricValue)
+          )
+          .forEach((y) => {
             const breakdown: FlatQuantDynamicAnalysisBreakdown = {
               updateRule: x.simulationRun.updateRule.updateRuleName,
               parameters: (
@@ -119,15 +95,53 @@ export const getAnalysisSummary = (
               timePeriodName: x.timeRange.name,
               startDate: x.timeRange.startDate,
               endDate: x.timeRange.endDate,
-              benchmark: z.benchmarkName ?? '',
-              rf: z.Rf,
-              metricName: z.metricName,
-              metricValue: z.metricValue,
+              benchmark: 'N/A',
+              rf: y.Rf,
+              metricName: y.metricName,
+              metricValue: y.metricValue,
             };
 
             results.push(breakdown);
-          }
-        });
+          });
+
+        x.simulationRunResultAnalysis?.benchmark_analysis
+          .filter(
+            (z) =>
+              z.metricValue !== undefined &&
+              z.metricValue !== null &&
+              Number.isFinite(z.metricValue)
+          )
+          .forEach((z) => {
+            if (
+              z.benchmarkName?.toLowerCase() !==
+              x.simulationRun.updateRule.updateRuleName.toLowerCase()
+            ) {
+              const breakdown: FlatQuantDynamicAnalysisBreakdown = {
+                updateRule: x.simulationRun.updateRule.updateRuleName,
+                parameters: (
+                  x.simulationRun.updateRule.updateRuleParameters || []
+                ).reduce<string>((accumulator, current) => {
+                  return (
+                    accumulator +
+                    '[' +
+                    current.factorName +
+                    ':' +
+                    current.factorValue +
+                    '] '
+                  );
+                }, ''),
+                timePeriodName: x.timeRange.name,
+                startDate: x.timeRange.startDate,
+                endDate: x.timeRange.endDate,
+                benchmark: z.benchmarkName ?? '',
+                rf: z.Rf,
+                metricName: z.metricName,
+                metricValue: z.metricValue,
+              };
+
+              results.push(breakdown);
+            }
+          });
       }
     });
 

@@ -3,10 +3,11 @@ import { useState, useEffect } from 'react';
 import { SimulationResultsSummaryStep } from '../../../simulationResults/simulationResultsSummaryStep';
 import { getBreakdown, Pool } from '../../../../services/breakdownService';
 import { SimulationRunBreakdown } from '../../../simulationResults/simulationResultSummaryModels';
+import sharedStyles from '../../documentation.module.css';
 
 const { TabPane } = Tabs;
 
-export function SonicMacroSimulatorExample() {
+export default function SonicMacroSimulatorExample() {
   const [key, setKey] = useState<string>('2');
   const [breakdowns, setBreakdowns] = useState<SimulationRunBreakdown[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -30,13 +31,13 @@ export function SonicMacroSimulatorExample() {
         poolNames = [
           'sonicMacroBTFAugTrainFull',
           'sonicMacroCFMMAugTrainFull',
-          'sonicMacroHodlAugTrainFull'
+          'sonicMacroHodlAugTrainFull',
         ];
       } else if (key === '2') {
         poolNames = [
           'sonicMacroCFMMAprilTestFull',
           'sonicMacroBTFAprilTestFull',
-          'sonicMacroHodlAprilTestFull'
+          'sonicMacroHodlAprilTestFull',
         ];
       }
 
@@ -49,15 +50,15 @@ export function SonicMacroSimulatorExample() {
     }); // Trigger loading of breakdowns
   }, [key]); // Dependency array ensures that effect runs when `key` changes
 
-  const seriesName= {
+  const seriesName = {
     'Power Channel': '#c7b283',
     'Balancer Weighted': '#528aae',
     HODL: '#52ad80',
-  }
-  const seriesStrokeColor= {
+  };
+  const seriesStrokeColor = {
     'Power Channel': 'BASE MACRO BTF',
     'Balancer Weighted': 'Traditional DEX',
-  }
+  };
   return (
     <div>
       <Row>
@@ -66,7 +67,7 @@ export function SonicMacroSimulatorExample() {
             defaultActiveKey={key}
             key={key}
             onChange={(key) => setKey(key)}
-            style={{ paddingLeft: 20, paddingRight: 20 }}
+            className={sharedStyles.simViewTabs}
           >
             <TabPane tab="Sonic Macro Training Period" key={'1'}>
               {loading ? (
@@ -75,8 +76,8 @@ export function SonicMacroSimulatorExample() {
                 <SimulationResultsSummaryStep
                   breakdowns={breakdowns}
                   forceViewResults={true}
-                  overrideSeriesName= {seriesName}
-                  overrideSeriesStrokeColor= {seriesStrokeColor}
+                  overrideSeriesName={seriesName}
+                  overrideSeriesStrokeColor={seriesStrokeColor}
                 />
               )}
             </TabPane>
@@ -87,8 +88,8 @@ export function SonicMacroSimulatorExample() {
                 <SimulationResultsSummaryStep
                   breakdowns={breakdowns}
                   forceViewResults={true}
-                  overrideSeriesName= {seriesName}
-                  overrideSeriesStrokeColor= {seriesStrokeColor}
+                  overrideSeriesName={seriesName}
+                  overrideSeriesStrokeColor={seriesStrokeColor}
                 />
               )}
             </TabPane>
@@ -98,3 +99,4 @@ export function SonicMacroSimulatorExample() {
     </div>
   );
 }
+export { SonicMacroSimulatorExample };

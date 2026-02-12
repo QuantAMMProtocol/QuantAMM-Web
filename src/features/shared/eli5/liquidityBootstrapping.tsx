@@ -6,11 +6,7 @@ export const LiquidityBoostrap = () => {
   return (
     <>
       <Title level={3}>
-        <Text
-          style={{ fontSize: 'inherit' }}
-        >
-          A liquidity boostrap pool
-        </Text>
+        <Text style={{ fontSize: 'inherit' }}>A liquidity boostrap pool</Text>
       </Title>
       <p>
         <Text strong style={{ color: 'var(--secondary-text-color)' }}>

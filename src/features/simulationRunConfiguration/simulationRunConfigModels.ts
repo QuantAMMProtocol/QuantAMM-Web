@@ -23,7 +23,7 @@ export interface CoinComparison {
   trackingError: number;
 }
 
-export interface DeployedToken{
+export interface DeployedToken {
   address: string;
   oracles: Map<string, string>;
   approvalStatus: boolean;
@@ -178,7 +178,7 @@ export interface RunTimePeriodRange {
   name: string;
 }
 
-export interface ChainDeploymentDetails{
+export interface ChainDeploymentDetails {
   updateWeightRunnerAddress: string;
   balancerVaultAddress: string;
   quantammWeightedPoolFactoryAddress: string;

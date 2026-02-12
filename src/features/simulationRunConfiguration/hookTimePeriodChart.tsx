@@ -15,6 +15,7 @@ import { Row, Col, Spin, Divider } from 'antd';
 import styles from './simulationRunConfiguration.module.css';
 import { AgNumberAxisOptions, AgTimeAxisOptions } from 'ag-charts-community';
 import { selectAgChartTheme } from '../themes/themeSlice';
+import { useCallback } from 'react';
 
 export interface Marker {
   enabled: boolean;
@@ -39,79 +40,77 @@ export function HookTimePeriodChart(selectedPool: SelectedProps) {
   const endDate = useAppSelector(selectEndDate);
   const loadingCoins = useAppSelector(selectCoinPriceDataLoaded);
   const chartTheme = useAppSelector(selectAgChartTheme);
-  function getPriceHistorySeries(coinCode: string) {
-    const seriesArray: agCharts.AgCartesianSeriesOptions[] = [];
-    const unixStart = new Date(startDate).getTime();
-    const unixEnd = new Date(endDate).getTime();
+  const getPriceHistorySeries = useCallback(
+    (coinCode: string) => {
+      const seriesArray: agCharts.AgCartesianSeriesOptions[] = [];
+      const unixStart = new Date(startDate).getTime();
+      const unixEnd = new Date(endDate).getTime();
 
-    const coin: Coin | undefined = availableCoins.find(
-      (y) => y.coinCode == coinCode
-    );
-
-    if (coin != undefined) {
-      let miliDateData = coin.dailyPriceHistory.filter(
-        (x) => x.unix > unixStart && x.unix < unixEnd
+      const coin: Coin | undefined = availableCoins.find(
+        (y) => y.coinCode === coinCode
       );
-      if (miliDateData.length == 0) {
-        miliDateData = coin.dailyPriceHistory.filter(
-          (x) => x.unix > unixStart / 1000 && x.unix < unixEnd / 1000
+
+      if (coin !== undefined) {
+        let miliDateData = coin.dailyPriceHistory.filter(
+          (x) => x.unix > unixStart && x.unix < unixEnd
         );
-      }
-
-      seriesArray.push({
-        type: 'line',
-        xKey: 'unix',
-        yKey: 'close',
-        yName: coin.coinCode,
-        data: [...miliDateData].reverse(),
-        stroke: '#DAAB43',
-        marker: { enabled: false },
-      });
-
-      const poolWithHooks = simulationPools.filter(
-        (x) =>
-          x.id == selectedPool.id &&
-          x.feeHooks.length > 0 &&
-          (x.feeHooks.filter(
-            (y) =>
-              y.hookTargetTokens.filter((y) => y == coin.coinCode).length > 0
-          ).length > 0 ||
-            x.feeHooks.filter(
-              (y) =>
-                y.hookTargetTokens.filter((y) => y == coin.coinCode).length > 0
-            ).length > 0)
-      );
-
-      //swap imports can currently only add to all pools, so we can just check the first pool
-      if (poolWithHooks.length > 0) {
-        poolWithHooks.forEach((x) => {
-          const dailyTimesteps: FeeHookStep[] = miliDateData.map(
-            (dataPoint) => {
-              const hookDataPoint = x.feeHooks[0].hookTimeSteps?.find(
-                (step) => step.unix === dataPoint.unix
-              );
-              return {
-                unix: dataPoint.unix,
-                value: hookDataPoint ? hookDataPoint.value : 0,
-              };
-            }
+        if (miliDateData.length === 0) {
+          miliDateData = coin.dailyPriceHistory.filter(
+            (x) => x.unix > unixStart / 1000 && x.unix < unixEnd / 1000
           );
+        }
 
-          seriesArray.push({
-            type: 'bar',
-            xKey: 'unix',
-            yKey: 'value',
-            yName: x.poolType.name + ' ' + 'Fees',
-            data: dailyTimesteps,
-            stroke: '#DAAB43',
-            min: 0,
-          } as agCharts.AgCartesianSeriesOptions);
+        seriesArray.push({
+          type: 'line',
+          xKey: 'unix',
+          yKey: 'close',
+          yName: coin.coinCode,
+          data: [...miliDateData].reverse(),
+          stroke: '#DAAB43',
+          marker: { enabled: false },
         });
-      }
-    }
 
-    return seriesArray;
-  }
+        const poolWithHooks = simulationPools.filter(
+          (pool) =>
+            pool.id === selectedPool.id &&
+            pool.feeHooks.some((hook) =>
+              hook.hookTargetTokens.some(
+                (targetToken) => targetToken === coin.coinCode
+              )
+            )
+        );
+
+        if (poolWithHooks.length > 0) {
+          poolWithHooks.forEach((pool) => {
+            const dailyTimesteps: FeeHookStep[] = miliDateData.map(
+              (dataPoint) => {
+                const hookDataPoint = pool.feeHooks[0].hookTimeSteps?.find(
+                  (step) => step.unix === dataPoint.unix
+                );
+                return {
+                  unix: dataPoint.unix,
+                  value: hookDataPoint ? hookDataPoint.value : 0,
+                };
+              }
+            );
+
+            seriesArray.push({
+              type: 'bar',
+              xKey: 'unix',
+              yKey: 'value',
+              yName: `${pool.poolType.name} Fees`,
+              data: dailyTimesteps,
+              stroke: '#DAAB43',
+              min: 0,
+            } as agCharts.AgCartesianSeriesOptions);
+          });
+        }
+      }
+
+      return seriesArray;
+    },
+    [availableCoins, endDate, selectedPool.id, simulationPools, startDate]
+  );
 
   function getTimeAxisOption(dataLength: number): AgTimeAxisOptions {
     return {
@@ -130,32 +129,34 @@ export function HookTimePeriodChart(selectedPool: SelectedProps) {
     };
   }
 
-  function getAxes(poolId: string) {
-    const result: (AgNumberAxisOptions | AgTimeAxisOptions)[] = [];
+  const getAxes = useCallback(
+    (poolId: string): (AgNumberAxisOptions | AgTimeAxisOptions)[] => {
+      const hookValues = simulationPools
+        .filter((pool) => pool.id === poolId)
+        .flatMap((pool) =>
+          pool.feeHooks.flatMap(
+            (hook) => hook.hookTimeSteps?.map((step) => step.value) ?? []
+          )
+        );
 
-    const poolWithHooks = simulationPools.filter(
-      (x) => x.feeHooks.length > 0 && x.id == poolId
-    );
-    const maxHookValue = Math.max(
-      ...poolWithHooks.flatMap((x) =>
-        x.feeHooks.flatMap(
-          (y) => y?.hookTimeSteps?.flatMap((z) => z.value ?? 0) ?? 0
-        )
-      )
-    );
+      if (hookValues.length === 0) {
+        return [];
+      }
 
-    result.push({
-      type: 'number',
-      title: {
-        text: 'bps',
-      },
-      position: 'right',
-      keys: ['value'],
-      max: maxHookValue * 5,
-    });
-
-    return result;
-  }
+      return [
+        {
+          type: 'number',
+          title: {
+            text: 'bps',
+          },
+          position: 'right',
+          keys: ['value'],
+          max: Math.max(1, Math.max(...hookValues) * 5),
+        },
+      ];
+    },
+    [simulationPools]
+  );
 
   return (
     <div>
@@ -171,62 +172,64 @@ export function HookTimePeriodChart(selectedPool: SelectedProps) {
       <Divider>Token Prices For Selected Time Range</Divider>
       <Row hidden={!loadingCoins} className={styles.initialPoolChartDiv}>
         <Col span={24}>
-          {initialPoolConstituents.map((x, indexX: number) => (
-            <Row key={indexX}>
-              <Col span={24}>
-                <AgCharts
-                  options={{
-                    height: 300,
-                    axes: [
-                      getTimeAxisOption(
-                        getPriceHistorySeries(x.coin.coinCode)?.[0]?.data
-                          ?.length ?? 0
-                      ),
-                      {
-                        type: 'number',
-                        position: 'left',
-                        keys: ['close'],
-                        label: {
-                          format: '$~s',
-                        },
-                      },
-                      ...getAxes(selectedPool.id),
-                    ],
-                    series: getPriceHistorySeries(x.coin.coinCode),
-                    legend: {
-                      position: 'top',
-                    },
-                    overlays: {
-                      noData: {
-                        text: 'No data',
-                      },
-                    },
-                    theme: {
-                      baseTheme: chartTheme,
-                      overrides: {
-                        common: {
-                          background: {
-                            fill: 'transparent',
+          {initialPoolConstituents.map((x) => {
+            const priceHistorySeries = getPriceHistorySeries(x.coin.coinCode);
+            return (
+              <Row key={x.coin.coinCode}>
+                <Col span={24}>
+                  <AgCharts
+                    options={{
+                      height: 300,
+                      axes: [
+                        getTimeAxisOption(
+                          priceHistorySeries?.[0]?.data?.length ?? 0
+                        ),
+                        {
+                          type: 'number',
+                          position: 'left',
+                          keys: ['close'],
+                          label: {
+                            format: '$~s',
                           },
                         },
-                        line: {
-                          series: {
-                            stroke: '#DAAB43',
-                            cursor: 'crosshair',
-                            marker: {
+                        ...getAxes(selectedPool.id),
+                      ],
+                      series: priceHistorySeries,
+                      legend: {
+                        position: 'top',
+                      },
+                      overlays: {
+                        noData: {
+                          text: 'No data',
+                        },
+                      },
+                      theme: {
+                        baseTheme: chartTheme,
+                        overrides: {
+                          common: {
+                            background: {
+                              fill: 'transparent',
+                            },
+                          },
+                          line: {
+                            series: {
                               stroke: '#DAAB43',
-                              fill: '#DAAB43',
-                              enabled: false,
+                              cursor: 'crosshair',
+                              marker: {
+                                stroke: '#DAAB43',
+                                fill: '#DAAB43',
+                                enabled: false,
+                              },
                             },
                           },
                         },
                       },
-                    },
-                  }}
-                />
-              </Col>
-            </Row>
-          ))}
+                    }}
+                  />
+                </Col>
+              </Row>
+            );
+          })}
         </Col>
       </Row>
     </div>

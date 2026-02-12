@@ -1,7 +1,7 @@
 import { AgCharts } from 'ag-charts-react';
 import * as agCharts from 'ag-charts-community';
 import { AgTimeAxisOptions } from 'ag-charts-community';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import styles from '../simulationResultSummary.module.css';
 import { useAppSelector } from '../../../app/hooks';
@@ -65,11 +65,11 @@ export function SimulationResultAmountChart(props: BreakdownProps) {
 
       current.coinsHeld.forEach((coinHeld) => {
         const lowerCode = coinHeld.coin.coinCode.toLowerCase();
-        if (coinHeld.amount) {
+        if (coinHeld.amount !== undefined && coinHeld.amount !== null) {
           timeStep[normalisedTokenName(lowerCode)] = Math.abs(
             coinHeld.amount -
               (prev?.coinsHeld.find(
-                (z) => z.coin.coinCode == coinHeld.coin.coinCode
+                (z) => z.coin.coinCode === coinHeld.coin.coinCode
               )?.amount ?? 0)
           );
         }
@@ -114,7 +114,7 @@ export function SimulationResultAmountChart(props: BreakdownProps) {
       series.push({
         type: 'line',
         xKey: 'unix',
-        yKey: x.coin.coinCode.toLowerCase(),
+        yKey: normalisedTokenName(x.coin.coinCode.toLowerCase()),
         yName: x.coin.coinCode.toLowerCase(),
         marker: { enabled: false },
       });
@@ -139,146 +139,161 @@ export function SimulationResultAmountChart(props: BreakdownProps) {
     };
   }
 
+  const visibleBreakdowns = useMemo(
+    () =>
+      simulationBreakdownResults
+        .filter((x) => x.simulationRun.updateRule.updateRuleName !== 'HODL')
+        .filter((x) => x.simulationRunStatus === 'Complete')
+        .filter((x) => x.timeRange.name === simulationTimeRangeSelected),
+    [simulationBreakdownResults, simulationTimeRangeSelected]
+  );
+
+  const ChartDataTypeSelector = () => (
+    <Row>
+      <Col span={24}>
+        <Divider className={styles.simResultDividers}>Amount Changes</Divider>
+      </Col>
+      <Col span={8}>
+        <Form.Item label="Chart Data">
+          <Radio.Group
+            value={volumeType}
+            onChange={(e) => setVolumeType(e.target.value)}
+          >
+            <Radio.Button value={'tradingVolume'}>Trading Volume</Radio.Button>
+            <Radio.Button value={'reserveQuantity'}>
+              Reserve Quantity
+            </Radio.Button>
+          </Radio.Group>
+        </Form.Item>
+      </Col>
+    </Row>
+  );
+
+  const BreakdownAmountRows = () => (
+    <Row className={styles.resultChartRow}>
+      <Col span={24}>
+        {visibleBreakdowns.map((x, index) => {
+          const amountDeltaData = getAmountDeltaData(x);
+          const amountData = getAmountData(x);
+          const amountSeries = getAmountSeries(x);
+
+          return (
+            <Row key={index}>
+              <Col span={4}>
+                <div className={styles.weightChartDescription}>
+                  <h4>{x.simulationRun.updateRule.updateRuleName}</h4>
+                  <p>For time period:&nbsp;{x.timeRange.name}</p>
+                  <p>start date:&nbsp;{x.timeRange.startDate}</p>
+                  <p>end date:&nbsp;{x.timeRange.endDate}</p>
+                </div>
+              </Col>
+              <Col
+                span={20}
+                style={{
+                  display: volumeType === 'reserveQuantity' ? 'none' : 'block',
+                }}
+              >
+                <AgCharts
+                  options={{
+                    height: 350,
+                    data: amountDeltaData,
+                    navigator: {
+                      enabled: true,
+                      height: 5,
+                      spacing: 6,
+                    },
+                    axes: [
+                      getTimeAxisOption(amountDeltaData.length),
+                      {
+                        type: 'log',
+                        position: 'left',
+                        base: 2,
+                        label: {
+                          format: '~s',
+                        },
+                      },
+                    ],
+                    series: amountSeries,
+                    legend: {
+                      position: 'bottom',
+                    },
+                    overlays: {
+                      noData: {
+                        text: 'No data',
+                      },
+                    },
+                    theme: {
+                      baseTheme: chartTheme,
+                      overrides: {
+                        common: {
+                          background: {
+                            fill: 'transparent',
+                          },
+                        },
+                      },
+                    },
+                  }}
+                />
+              </Col>
+              <Col
+                span={20}
+                style={{
+                  display: volumeType !== 'reserveQuantity' ? 'none' : 'block',
+                }}
+              >
+                <AgCharts
+                  options={{
+                    height: 350,
+                    data: amountData,
+                    navigator: {
+                      enabled: true,
+                      height: 5,
+                      spacing: 6,
+                    },
+                    axes: [
+                      getTimeAxisOption(amountData.length),
+                      {
+                        type: 'log',
+                        position: 'left',
+                        base: 2,
+                        label: {
+                          format: '~s',
+                        },
+                      },
+                    ],
+                    series: amountSeries,
+                    legend: {
+                      position: 'bottom',
+                    },
+                    overlays: {
+                      noData: {
+                        text: 'No data',
+                      },
+                    },
+                    theme: {
+                      baseTheme: chartTheme,
+                      overrides: {
+                        common: {
+                          background: {
+                            fill: 'transparent',
+                          },
+                        },
+                      },
+                    },
+                  }}
+                />
+              </Col>
+            </Row>
+          );
+        })}
+      </Col>
+    </Row>
+  );
+
   return (
     <div>
-      <Row>
-        <Col span={24}>
-          <Divider className={styles.simResultDividers}>Amount Changes</Divider>
-        </Col>
-        <Col span={8}>
-          <Form.Item label="Chart Data">
-            <Radio.Group
-              value={volumeType}
-              onChange={(e) => setVolumeType(e.target.value)}
-            >
-              <Radio.Button value={'tradingVolume'}>
-                Trading Volume
-              </Radio.Button>
-              <Radio.Button value={'reserveQuantity'}>
-                Reserve Quantity
-              </Radio.Button>
-            </Radio.Group>
-          </Form.Item>
-        </Col>
-      </Row>
-      <Row className={styles.resultChartRow}>
-        <Col span={24}>
-          {simulationBreakdownResults
-            .filter((x) => x.simulationRun.updateRule.updateRuleName != 'HODL')
-            .filter((x) => x.simulationRunStatus == 'Complete')
-            .filter((x) => x.timeRange.name == simulationTimeRangeSelected)
-            .map((x, index) => (
-              <Row key={index}>
-                <Col span={4}>
-                  <div className={styles.weightChartDescription}>
-                    <h4>{x.simulationRun.updateRule.updateRuleName}</h4>
-                    <p>For time period:&nbsp;{x.timeRange.name}</p>
-                    <p>start date:&nbsp;{x.timeRange.startDate}</p>
-                    <p>end date:&nbsp;{x.timeRange.endDate}</p>
-                  </div>
-                </Col>
-                <Col
-                  span={20}
-                  style={{
-                    display:
-                      volumeType === 'reserveQuantity' ? 'none' : 'block',
-                  }}
-                >
-                  <AgCharts
-                    options={{
-                      height: 350,
-                      data: getAmountDeltaData(x),
-                      navigator: {
-                        enabled: true,
-                        height: 5,
-                        spacing: 6,
-                      },
-                      axes: [
-                        getTimeAxisOption(getAmountDeltaData(x).length),
-                        {
-                          type: 'log',
-                          position: 'left',
-                          base: 2,
-                          label: {
-                            format: '~s',
-                          },
-                        },
-                      ],
-                      series: getAmountSeries(x),
-                      legend: {
-                        position: 'bottom',
-                      },
-                      overlays: {
-                        noData: {
-                          text: 'No data',
-                        },
-                      },
-                      theme: {
-                        baseTheme: chartTheme,
-                        overrides: {
-                          common: {
-                            background: {
-                              fill: 'transparent',
-                            },
-                          },
-                        },
-                      },
-                    }}
-                  />
-                </Col>
-                <Col
-                  span={20}
-                  style={{
-                    display:
-                      volumeType !== 'reserveQuantity' ? 'none' : 'block',
-                  }}
-                >
-                  <AgCharts
-                    options={{
-                      height: 350,
-                      data: getAmountData(x),
-                      navigator: {
-                        enabled: true,
-                        height: 5,
-                        spacing: 6,
-                      },
-                      axes: [
-                        getTimeAxisOption(getAmountDeltaData(x).length),
-                        {
-                          type: 'log',
-                          position: 'left',
-                          base: 2,
-                          label: {
-                            format: '~s',
-                          },
-                        },
-                      ],
-                      series: getAmountSeries(x),
-                      legend: {
-                        position: 'bottom',
-                      },
-                      overlays: {
-                        noData: {
-                          text: 'No data',
-                        },
-                      },
-                      theme: {
-                        baseTheme: chartTheme,
-                        overrides: {
-                          common: {
-                            background: {
-                              fill: 'transparent',
-                            },
-                          },
-                        },
-                      },
-                    }}
-                  />
-                </Col>
-              </Row>
-            ))}
-        </Col>
-      </Row>
+      <ChartDataTypeSelector />
+      <BreakdownAmountRows />
     </div>
   );
 }

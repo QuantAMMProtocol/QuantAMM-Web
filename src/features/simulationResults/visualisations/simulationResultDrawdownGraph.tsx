@@ -8,7 +8,7 @@ import { DownOutlined } from '@ant-design/icons';
 import { selectSimulationResultTimeRangeSelection } from '../../simulationRunner/simulationRunnerSlice';
 import { selectAgChartTheme } from '../../themes/themeSlice';
 import { BreakdownProps } from '../simulationResultsSummaryStep';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { SimulationResultTimestepDto } from '../../simulationRunner/simulationRunnerDtos';
 
 export function SimulationResultDrawdownChart(props: BreakdownProps) {
@@ -25,31 +25,13 @@ export function SimulationResultDrawdownChart(props: BreakdownProps) {
     setDrawdownType(key);
   };
 
-  function getTimeAxisOption(): AgTimeAxisOptions {
-    let dataLength = 1;
-    const visibleBreakdown = props.breakdowns.filter(
-      (x) => x.timeRange.name == simulationTimeRangeSelected
-    );
-
-    if (visibleBreakdown.length > 0) {
-      dataLength = visibleBreakdown[0].timeSteps.length;
-    }
-
-    return {
-      type: 'time',
-      interval: {
-        step:
-          dataLength > 350
-            ? agCharts.time.month.every(6)
-            : dataLength > 150
-              ? agCharts.time.month.every(3)
-              : agCharts.time.month.every(1),
-      },
-      label: {
-        format: '%m/%y',
-      },
-    };
-  }
+  const visibleBreakdowns = useMemo(
+    () =>
+      props.breakdowns.filter(
+        (x) => x.timeRange.name === simulationTimeRangeSelected
+      ),
+    [props.breakdowns, simulationTimeRangeSelected]
+  );
 
   const items = [
     {
@@ -76,43 +58,60 @@ export function SimulationResultDrawdownChart(props: BreakdownProps) {
     { label: 'Monthly CDaR', key: 'Monthly CDaR' },
   ];
 
-  function getSeriesForSelectedDrawdownType(): agCharts.AgCartesianSeriesOptions[] {
+  const series = useMemo((): agCharts.AgCartesianSeriesOptions[] => {
     const seriesArray: agCharts.AgCartesianSeriesOptions[] = [];
-    props.breakdowns
-      .filter((x) => x.timeRange.name == simulationTimeRangeSelected)
-      .forEach((x) => {
-        const timeSeries =
-          x.simulationRunResultAnalysis?.return_timeseries_analysis.find(
-            (y) => y.metricName == drawdownType
-          );
-        let timeSeriesValues: SimulationResultTimestepDto[] = [];
+    visibleBreakdowns.forEach((x) => {
+      const timeSeries =
+        x.simulationRunResultAnalysis?.return_timeseries_analysis.find(
+          (y) => y.metricName === drawdownType
+        );
+      let timeSeriesValues: SimulationResultTimestepDto[] = [];
 
-        if (timeSeries) {
-          timeSeriesValues = [
-            ...timeSeries.timeSteps.map((x) => {
-              return {
-                unix: x.unix * 1000,
-                timeStepTotal: x.timeStepTotal,
-                coinsHeld: x.coinsHeld,
-              };
-            }),
-          ];
-        }
+      if (timeSeries) {
+        timeSeriesValues = [
+          ...timeSeries.timeSteps.map((timeStep) => {
+            return {
+              unix: timeStep.unix * 1000,
+              timeStepTotal: timeStep.timeStepTotal,
+              coinsHeld: timeStep.coinsHeld,
+            };
+          }),
+        ];
+      }
 
-        if (timeSeriesValues.length > 0) {
-          seriesArray.push({
-            type: 'line',
-            xKey: 'unix',
-            yKey: 'timeStepTotal',
-            yName: `${x.simulationRun?.updateRule?.updateRuleName || 'Unknown'} ${drawdownType}`,
-            data: timeSeriesValues,
-            marker: { enabled: false },
-          });
-        }
-      });
+      if (timeSeriesValues.length > 0) {
+        seriesArray.push({
+          type: 'line',
+          xKey: 'unix',
+          yKey: 'timeStepTotal',
+          yName: `${x.simulationRun?.updateRule?.updateRuleName || 'Unknown'} ${drawdownType}`,
+          data: timeSeriesValues,
+          marker: { enabled: false },
+        });
+      }
+    });
 
     return seriesArray;
-  }
+  }, [drawdownType, visibleBreakdowns]);
+
+  const timeAxisOption: AgTimeAxisOptions = useMemo(() => {
+    const dataLength = visibleBreakdowns[0]?.timeSteps.length ?? 1;
+
+    return {
+      type: 'time',
+      interval: {
+        step:
+          dataLength > 350
+            ? agCharts.time.month.every(6)
+            : dataLength > 150
+              ? agCharts.time.month.every(3)
+              : agCharts.time.month.every(1),
+      },
+      label: {
+        format: '%m/%y',
+      },
+    };
+  }, [visibleBreakdowns]);
 
   return (
     <div>
@@ -170,13 +169,13 @@ export function SimulationResultDrawdownChart(props: BreakdownProps) {
                 spacing: 6,
               },
               axes: [
-                getTimeAxisOption(),
+                timeAxisOption,
                 {
                   type: 'number',
                   position: 'left',
                 },
               ],
-              series: getSeriesForSelectedDrawdownType(),
+              series,
               legend: {
                 position: 'bottom',
               },

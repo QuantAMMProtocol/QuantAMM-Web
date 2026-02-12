@@ -11,6 +11,13 @@ const initialState: SimulationResults = {
   selectedBreakdowns: [],
 };
 
+const isSameBreakdown = (
+  left: SimulationRunBreakdown,
+  right: SimulationRunBreakdown
+) =>
+  left.simulationRun.id === right.simulationRun.id &&
+  left.timeRange.name === right.timeRange.name;
+
 export function cloneBreakdown(
   origBreakdown: SimulationRunBreakdown
 ): SimulationRunBreakdown {
@@ -34,35 +41,23 @@ export const simulationResultSlice = createSlice({
   initialState: initialState,
   reducers: {
     addRunResult: (state, action: PayloadAction<SimulationRunBreakdown>) => {
-      const current = state.breakdowns.find(
-        (x) =>
-          x.simulationRun.id == action.payload.simulationRun.id &&
-          x.timeRange.name == action.payload.timeRange.name
+      const current = state.breakdowns.find((x) =>
+        isSameBreakdown(x, action.payload)
       );
-      if (current == undefined) {
+      if (current === undefined) {
         state.breakdowns.push(cloneBreakdown(action.payload));
       }
     },
     removeRunResult: (state, action: PayloadAction<SimulationRunBreakdown>) => {
-      const current = state.breakdowns.find(
-        (x) =>
-          x.simulationRun.id == action.payload.simulationRun.id &&
-          x.timeRange.name == action.payload.timeRange.name
+      const current = state.breakdowns.find((x) =>
+        isSameBreakdown(x, action.payload)
       );
-      if (current != undefined) {
+      if (current !== undefined) {
         state.breakdowns = state.breakdowns.filter(
-          (x) =>
-            !(
-              x.simulationRun.id == action.payload.simulationRun.id &&
-              x.timeRange.name == action.payload.timeRange.name
-            )
+          (x) => !isSameBreakdown(x, action.payload)
         );
         state.selectedBreakdowns = state.selectedBreakdowns.filter(
-          (x) =>
-            !(
-              x.simulationRun.id == action.payload.simulationRun.id &&
-              x.timeRange.name == action.payload.timeRange.name
-            )
+          (x) => !isSameBreakdown(x, action.payload)
         );
       }
     },
@@ -70,12 +65,10 @@ export const simulationResultSlice = createSlice({
       state,
       action: PayloadAction<SimulationRunBreakdown>
     ) => {
-      const current = state.selectedBreakdowns.find(
-        (x) =>
-          x.simulationRun.id == action.payload.simulationRun.id &&
-          x.timeRange.name == action.payload.timeRange.name
+      const current = state.selectedBreakdowns.find((x) =>
+        isSameBreakdown(x, action.payload)
       );
-      if (current == undefined) {
+      if (current === undefined) {
         state.selectedBreakdowns.push(action.payload);
       }
     },
@@ -83,18 +76,12 @@ export const simulationResultSlice = createSlice({
       state,
       action: PayloadAction<SimulationRunBreakdown>
     ) => {
-      const current = state.selectedBreakdowns.find(
-        (x) =>
-          x.simulationRun.id == action.payload.simulationRun.id &&
-          x.timeRange.name == action.payload.timeRange.name
+      const current = state.selectedBreakdowns.find((x) =>
+        isSameBreakdown(x, action.payload)
       );
-      if (current != undefined) {
+      if (current !== undefined) {
         state.selectedBreakdowns = state.selectedBreakdowns.filter(
-          (x) =>
-            !(
-              x.simulationRun.id == action.payload.simulationRun.id &&
-              x.timeRange.name == action.payload.timeRange.name
-            )
+          (x) => !isSameBreakdown(x, action.payload)
         );
       }
     },

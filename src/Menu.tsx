@@ -39,7 +39,7 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
   const isDark = useAppSelector(selectTheme);
 
   const location = useLocation();
-  
+
   const liveProducts = CURRENT_LIVE_FACTSHEETS;
 
   useEffect(() => {
@@ -58,7 +58,6 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
 
   const toggleTheme = (isChecked: boolean) => {
     dispatch(changeTheme(isChecked || (current as ROUTES) == ROUTES.HOME));
-    changeTheme(isChecked);
   };
 
   const handleClick: MenuProps['onClick'] = useCallback(
@@ -92,22 +91,24 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
         label: 'View Products',
         type: 'submenu',
         style: { marginLeft: 'auto' }, // Align to the right
-        children: liveProducts.factsheets.filter(x => x.status == "LIVE").map((product) => ({
-          key:
-            ROUTES.PRODUCT_EXPLORER +
-            '/' +
-            product.poolChain +
-            '/' +
-            product.poolId,
-          label: `View ${product.iconTitle}`,
-          icon: (
-            <img
-              src={product.factsheetImage.image}
-              alt={product.iconTitle}
-              style={{ width: '16px', height: '16px' }}
-            />
-          ),
-        })),
+        children: liveProducts.factsheets
+          .filter((x) => x.status == 'LIVE')
+          .map((product) => ({
+            key:
+              ROUTES.PRODUCT_EXPLORER +
+              '/' +
+              product.poolChain +
+              '/' +
+              product.poolId,
+            label: `View ${product.iconTitle}`,
+            icon: (
+              <img
+                src={product.factsheetImage.image}
+                alt={product.iconTitle}
+                style={{ width: '16px', height: '16px' }}
+              />
+            ),
+          })),
       },
       {
         key: 'Education',
@@ -146,22 +147,24 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
         label: 'View Products',
         type: 'submenu',
         style: { marginLeft: 'auto' }, // Align to the right
-        children: liveProducts.factsheets.filter(x => x.status == "LIVE").map((product) => ({
-          key:
-            ROUTES.PRODUCT_EXPLORER +
-            '/' +
-            product.poolChain +
-            '/' +
-            product.poolId,
-          label: `View ${product.iconTitle}`,
-          icon: (
-            <img
-              src={product.factsheetImage.image}
-              alt={product.iconTitle}
-              style={{ width: '16px', height: '16px' }}
-            />
-          ),
-        })),
+        children: liveProducts.factsheets
+          .filter((x) => x.status == 'LIVE')
+          .map((product) => ({
+            key:
+              ROUTES.PRODUCT_EXPLORER +
+              '/' +
+              product.poolChain +
+              '/' +
+              product.poolId,
+            label: `View ${product.iconTitle}`,
+            icon: (
+              <img
+                src={product.factsheetImage.image}
+                alt={product.iconTitle}
+                style={{ width: '16px', height: '16px' }}
+              />
+            ),
+          })),
       },
       {
         key: 'About',

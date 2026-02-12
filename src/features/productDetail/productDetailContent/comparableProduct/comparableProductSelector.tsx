@@ -90,7 +90,8 @@ export const ComparableProductSelector = ({
   const handleMinTvlChange = (value: number | null) => {
     setParams((prev) => {
       const updateWhere = { ...prev.where };
-      updateWhere.minTvl = Number(value) ?? 1000;
+      const minTvl = value ?? 1000;
+      updateWhere.minTvl = Math.max(minTvl, 1000);
 
       return {
         ...prev,

@@ -12,18 +12,18 @@ export function SimulationResultSaveToCompareTab(props: BreakdownProps) {
   const [key, setKey] = useState<string>('1');
 
   function getTab(): JSX.Element {
-    if (key == '1') {
+    if (key === '1') {
       return (
         <SimulationResultsRunDetailsTable
           breakdowns={props.breakdowns
-            .filter((x) => x.simulationRunStatus == 'Complete')
+            .filter((x) => x.simulationRunStatus === 'Complete')
             .filter(
               (x) =>
                 savedBreakdowns.find(
                   (y) =>
-                    y.simulationRun.id == x.simulationRun.id &&
-                    x.timeRange.name == y.timeRange.name
-                ) == undefined
+                    y.simulationRun.id === x.simulationRun.id &&
+                    x.timeRange.name === y.timeRange.name
+                ) === undefined
             )}
           saveButton={true}
           selectButton={false}
@@ -31,7 +31,7 @@ export function SimulationResultSaveToCompareTab(props: BreakdownProps) {
           tableHeight={'60vh'}
         />
       );
-    } else if (key == '2') {
+    } else if (key === '2') {
       return (
         <SimulationResultsRunDetailsTable
           breakdowns={savedBreakdowns ?? []}
@@ -50,7 +50,7 @@ export function SimulationResultSaveToCompareTab(props: BreakdownProps) {
     <div>
       <Row>
         <Col span={24} style={{ paddingLeft: 20, paddingRight: 20 }}>
-          <Tabs defaultActiveKey="1" onChange={(key) => setKey(key)}>
+          <Tabs activeKey={key} onChange={(key) => setKey(key)}>
             <TabPane tab="Current Unsaved Run Results" key="1">
               <Row>
                 <Col span={24}>{getTab()}</Col>

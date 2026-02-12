@@ -27,3 +27,22 @@ button.ag-side-button-button {
 .coinTabSection {
   padding: 10px;
 }
+
+.menuPanel {
+  width: 256px;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.gridWrapper {
+  width: 100%;
+  padding-left: 60px;
+  padding-right: 30px;
+}
+
+.chartWrapper {
+  width: 100%;
+  padding-left: 60px;
+  padding-right: 30px;
+  padding-top: 20px;
+}

@@ -7,6 +7,7 @@ import {
   CheckCircleOutlined,
 } from '@ant-design/icons';
 import { useState } from 'react';
+import styles from './documentation.module.css';
 const { Step } = Steps;
 
 export function SimulatorGuide() {
@@ -17,12 +18,12 @@ export function SimulatorGuide() {
       label: 'Simulator Advanced Guide',
       children: (
         <div>
-          <p style={{ marginBottom: 20 }}>
+          <p className={styles.simGuideParagraph}>
             Follow these steps to configure and run your simulation. Each step
             provides specific options that affect the simulation&apos;s behavior
             and results.
           </p>
-          <p style={{ marginBottom: 20 }}>
+          <p className={styles.simGuideParagraph}>
             Ready to start? Use the button below to begin configuring your
             simulation:
           </p>
@@ -61,16 +62,16 @@ export function SimulatorGuide() {
       label: 'The QuantAMM Balancer Simulator',
       children: (
         <ul>
-          <li style={{ marginBottom: 20 }}>
+          <li className={styles.simGuideListItem}>
             The QuantAMM Balancer Simulator enables users to model, test, and
             optimize various AMM designs through an intuitive web interface. It
             provides deep insights into pool behavior and performance under
             different market conditions.
           </li>
-          <li style={{ marginBottom: 20 }}>
+          <li className={styles.simGuideListItem}>
             The simulator supports a comprehensive range of AMM protocols from
             the Balancer ecosystem and related designs:
-            <ul style={{ marginTop: 10, marginBottom: 10 }}>
+            <ul className={styles.simGuideSubList}>
               <li>
                 <strong>Balancer Base Weighted Pools</strong>: The foundation of
                 many modern AMM designs, supporting arbitrary numbers of tokens
@@ -93,9 +94,9 @@ export function SimulatorGuide() {
               </li>
             </ul>
           </li>
-          <li style={{ marginBottom: 20 }}>
+          <li className={styles.simGuideListItem}>
             <strong>Token Support</strong>:
-            <ul style={{ marginTop: 10, marginBottom: 10 }}>
+            <ul className={styles.simGuideSubList}>
               <li>Balancer pools support 2-8 tokens</li>
               <li>
                 CowAMM & Gyroscope E-CLP pools are limited to 2 tokens only
@@ -110,20 +111,20 @@ export function SimulatorGuide() {
       label: 'AMM Modelling',
       children: (
         <ul>
-          <li style={{ marginBottom: 20 }}>
+          <li className={styles.simGuideListItem}>
             The simulator provides comprehensive modeling of AMM behavior,
             including arbitrage & trades, changes in pool composition, and pool
             performance metrics.
           </li>
-          <li style={{ marginBottom: 20 }}>
+          <li className={styles.simGuideListItem}>
             Dynamic weight AMMs, such as QuantAMM, support a wide range of
             strategies from momentum to mean reversion and channel following.
           </li>
-          <li style={{ marginBottom: 20 }}>
+          <li className={styles.simGuideListItem}>
             Trading fees and gas costs can be included as parameters to
             accurately model AMM pools&apos; rebalancing behaviour.
           </li>
-          <li style={{ marginBottom: 20 }}>
+          <li className={styles.simGuideListItem}>
             The simulator can processes externally-provided sequences of swaps.
             These can either be retail swaps (interleaved with optimal
             calculated arbitrage trades) or constitute the complete sequence of
@@ -137,7 +138,7 @@ export function SimulatorGuide() {
       label: 'Simulator Structure',
       children: (
         <ul>
-          <li style={{ marginBottom: 20 }}>
+          <li className={styles.simGuideListItem}>
             Here we provide a hosted version of the quantamm simulator. The
             simulator is built with a powerful Python backend that provides a
             web API. It leverages{' '}
@@ -147,7 +148,7 @@ export function SimulatorGuide() {
             making setup straightforward. For development or custom deployments,
             the API server can also be run locally.
           </li>
-          <li style={{ marginBottom: 20 }}>
+          <li className={styles.simGuideListItem}>
             Price data is taken from Binance and Coinbase at the minute level.
             The granularity of price data determines how quickly we can model
             arbitrageur responses - faster arbitrage generally leads to more
@@ -155,7 +156,7 @@ export function SimulatorGuide() {
             minute-level data as a conservative baseline, though arbitrageurs
             often act more quickly in practice.
           </li>
-          <li style={{ marginBottom: 20 }}>
+          <li className={styles.simGuideListItem}>
             The simulator provides comprehensive financial analysis capabilities
             using custom functions. For risk-free rate calculations [R(f)], we
             use the 3-Month Treasury Bill rate (DTB3) obtained from FRED
@@ -170,18 +171,18 @@ export function SimulatorGuide() {
       label: 'Extensibility',
       children: (
         <ul>
-          <li style={{ marginBottom: 20 }}>
+          <li className={styles.simGuideListItem}>
             The simulator&apos;s Python backend is designed for customization
             and extension, allowing you to implement and test your own AMM
             innovations. This flexibility enables:
           </li>
-          <ul style={{ marginTop: 10, marginBottom: 10 }}>
+          <ul className={styles.simGuideSubList}>
             <li>Custom trading functions for new pool types</li>
             <li>Novel QuantAMM strategies and parameters</li>
             <li>Specialized optimization objectives</li>
             <li>Integration with existing trading systems</li>
           </ul>
-          <li style={{ marginBottom: 20 }}>
+          <li className={styles.simGuideListItem}>
             The system is extensible through its Python backend package. Power
             users can add custom trading functions and QuantAMM strategies by
             implementing new pool types. The backend maintains full machine
@@ -197,12 +198,12 @@ export function SimulatorGuide() {
       label: 'Local Command Line Only tools',
       children: (
         <ul>
-          <li style={{ marginBottom: 20 }}>
+          <li className={styles.simGuideListItem}>
             The Python package includes additional advanced features:
           </li>
-          <li style={{ marginBottom: 20 }}>
+          <li className={styles.simGuideListItem}>
             Comprehensive Parameter Optimization:
-            <ul style={{ marginTop: 10, marginBottom: 10 }}>
+            <ul className={styles.simGuideSubList}>
               <li>
                 Strategy Optimization: Tune dynamic pool strategies and their
                 parameters to optimize performance metrics
@@ -227,7 +228,7 @@ export function SimulatorGuide() {
               </li>
             </ul>
           </li>
-          <li style={{ marginBottom: 20 }}>
+          <li className={styles.simGuideListItem}>
             Custom Data Preprocessing: Combine and clean price data from
             external sources, with intelligent gap-filling to ensure continuous,
             high-quality price data for simulation.

@@ -2,6 +2,7 @@ import React from 'react';
 import { MathJax, MathJaxContext } from 'better-react-mathjax';
 import { Fade } from 'react-awesome-reveal';
 import { Col, Row } from 'antd';
+import styles from './basics.module.css';
 
 const RebalancingVsRebalancing: React.FC = () => {
   return (
@@ -32,93 +33,45 @@ const RebalancingVsRebalancing: React.FC = () => {
                 The following table compares the core features of LVR, its fee
                 extended model ARB and RVR:
               </p>
-              <table style={{ borderCollapse: 'collapse', width: '100%' }}>
+              <table className={styles.comparisonTable}>
                 <thead>
                   <tr>
-                    <th style={{ padding: '5px', border: '1px solid white' }}>
-                      Model Features
-                    </th>
-                    <th style={{ padding: '5px', border: '1px solid white' }}>
-                      LVR
-                    </th>
-                    <th style={{ padding: '5px', border: '1px solid white' }}>
-                      ARB
-                    </th>
-                    <th style={{ padding: '5px', border: '1px solid white' }}>
-                      RVR
-                    </th>
+                    <th className={styles.tableCell}>Model Features</th>
+                    <th className={styles.tableCell}>LVR</th>
+                    <th className={styles.tableCell}>ARB</th>
+                    <th className={styles.tableCell}>RVR</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td style={{ padding: '5px', border: '1px solid white' }}>
-                      CEX Spread
-                    </td>
-                    <td style={{ padding: '5px', border: '1px solid white' }}>
-                      0
-                    </td>
-                    <td style={{ padding: '5px', border: '1px solid white' }}>
-                      0
-                    </td>
-                    <td style={{ padding: '5px', border: '1px solid white' }}>
-                      TradFi model
-                    </td>
+                    <td className={styles.tableCell}>CEX Spread</td>
+                    <td className={styles.tableCell}>0</td>
+                    <td className={styles.tableCell}>0</td>
+                    <td className={styles.tableCell}>TradFi model</td>
                   </tr>
                   <tr>
-                    <td style={{ padding: '5px', border: '1px solid white' }}>
-                      CEX Fees
-                    </td>
-                    <td style={{ padding: '5px', border: '1px solid white' }}>
-                      0
-                    </td>
-                    <td style={{ padding: '5px', border: '1px solid white' }}>
-                      0
-                    </td>
-                    <td style={{ padding: '5px', border: '1px solid white' }}>
-                      Fee Present
-                    </td>
+                    <td className={styles.tableCell}>CEX Fees</td>
+                    <td className={styles.tableCell}>0</td>
+                    <td className={styles.tableCell}>0</td>
+                    <td className={styles.tableCell}>Fee Present</td>
                   </tr>
                   <tr>
-                    <td style={{ padding: '5px', border: '1px solid white' }}>
-                      AMM Fees
-                    </td>
-                    <td style={{ padding: '5px', border: '1px solid white' }}>
-                      0
-                    </td>
-                    <td style={{ padding: '5px', border: '1px solid white' }}>
-                      Fee Present
-                    </td>
-                    <td style={{ padding: '5px', border: '1px solid white' }}>
-                      Fee Present
-                    </td>
+                    <td className={styles.tableCell}>AMM Fees</td>
+                    <td className={styles.tableCell}>0</td>
+                    <td className={styles.tableCell}>Fee Present</td>
+                    <td className={styles.tableCell}>Fee Present</td>
                   </tr>
                   <tr>
-                    <td style={{ padding: '5px', border: '1px solid white' }}>
-                      AMM Gas Cost
-                    </td>
-                    <td style={{ padding: '5px', border: '1px solid white' }}>
-                      0
-                    </td>
-                    <td style={{ padding: '5px', border: '1px solid white' }}>
-                      0
-                    </td>
-                    <td style={{ padding: '5px', border: '1px solid white' }}>
-                      Fixed Costs
-                    </td>
+                    <td className={styles.tableCell}>AMM Gas Cost</td>
+                    <td className={styles.tableCell}>0</td>
+                    <td className={styles.tableCell}>0</td>
+                    <td className={styles.tableCell}>Fixed Costs</td>
                   </tr>
                   <tr>
-                    <td style={{ padding: '5px', border: '1px solid white' }}>
-                      AMM tokens
-                    </td>
-                    <td style={{ padding: '5px', border: '1px solid white' }}>
-                      2
-                    </td>
-                    <td style={{ padding: '5px', border: '1px solid white' }}>
-                      2
-                    </td>
-                    <td style={{ padding: '5px', border: '1px solid white' }}>
-                      N
-                    </td>
+                    <td className={styles.tableCell}>AMM tokens</td>
+                    <td className={styles.tableCell}>2</td>
+                    <td className={styles.tableCell}>2</td>
+                    <td className={styles.tableCell}>N</td>
                   </tr>
                 </tbody>
               </table>
@@ -213,15 +166,7 @@ const RebalancingVsRebalancing: React.FC = () => {
                 region beyond pure fee considerations.
               </p>
 
-              <div
-                style={{
-                  margin: '20px 0',
-                  padding: '15px 20px',
-                  borderLeft: '3px solid rgba(255, 255, 255, 0.3)',
-                  background: 'rgba(255, 255, 255, 0.03)',
-                  fontSize: '0.95em',
-                }}
-              >
+              <div className={styles.noteBlock}>
                 <strong>Note:</strong> RVR assumes that the market provides
                 infinite liquidity at the bid and ask prices, i.e. RVR maintains
                 the assumption from LVR that there is no slippage. This means

@@ -18,20 +18,16 @@ interface ReturnDistributionGraphProps {
   yAxisOverride?: Partial<AgNumberAxisOptions>;
 }
 
-function getDistributionBarSeries(): AgHistogramSeriesOptions[] {
-  const series: AgHistogramSeriesOptions[] = [];
-
-  series.push({
+const distributionBarSeries: AgHistogramSeriesOptions[] = [
+  {
     type: 'histogram',
     xKey: 'percentile',
     yKey: 'count',
     binCount: 100,
     yName: 'count',
     fill: '#e6ce97',
-  });
-
-  return series;
-}
+  },
+];
 
 export const ReturnDistributionGraph: FC<ReturnDistributionGraphProps> = ({
   marketValues = [],
@@ -57,7 +53,7 @@ export const ReturnDistributionGraph: FC<ReturnDistributionGraphProps> = ({
           bottom: 20,
         },
         data,
-        series: getDistributionBarSeries(),
+        series: distributionBarSeries,
         axes: [
           {
             type: 'number',

@@ -2,6 +2,7 @@ import React from 'react';
 import { Fade } from 'react-awesome-reveal';
 import { Col, Row } from 'antd';
 import { Gyro } from '../../shared/eli5/gyro';
+import sharedStyles from '../documentation.module.css';
 
 const GyroscopePoolDescription: React.FC = () => {
   return (
@@ -9,7 +10,7 @@ const GyroscopePoolDescription: React.FC = () => {
       <Col span={4}></Col>
       <Col span={16}>
         <Fade>
-          <div style={{ padding: '20px' }}>
+          <div className={sharedStyles.pad20}>
             <Gyro />
           </div>
         </Fade>

@@ -1,6 +1,7 @@
 import { Row, Col, Divider } from 'antd';
 import { AgCharts } from 'ag-charts-react';
 import { AgDonutSeriesOptions } from 'ag-charts-community';
+import { useMemo } from 'react';
 import { useAppSelector } from '../../../app/hooks';
 import { selectSimulationResultTimeRangeSelection } from '../../simulationRunner/simulationRunnerSlice';
 import { WeightChangeOverTimeGraph } from '../../shared/graphs/weightChangeOverTime';
@@ -36,12 +37,12 @@ export function SimulationResultWeightChart({ breakdowns }: BreakdownProps) {
     const data: FlatWeightData[] = [];
     const final = breakdown.timeSteps[breakdown.timeSteps.length - 1];
     breakdown.simulationRun.poolConstituents.forEach((x) => {
-      if (x.weight) {
+      if (x.weight !== undefined) {
         data.push({
           coinCode: x.coin.coinCode,
           initialWeight: x.weight,
           finalWeight:
-            final.coinsHeld.find((y) => y.coin.coinCode == x.coin.coinCode)
+            final.coinsHeld.find((y) => y.coin.coinCode === x.coin.coinCode)
               ?.weight ?? x.weight,
         });
       }
@@ -55,7 +56,7 @@ export function SimulationResultWeightChart({ breakdowns }: BreakdownProps) {
   ): AgDonutSeriesOptions[] {
     const seriesArray: AgDonutSeriesOptions[] = [];
 
-    if (breakdown.timeSteps.length != 0) {
+    if (breakdown.timeSteps.length !== 0) {
       seriesArray.push({
         type: 'donut',
         sectorLabelKey: 'coinCode',
@@ -85,6 +86,20 @@ export function SimulationResultWeightChart({ breakdowns }: BreakdownProps) {
     return seriesArray;
   }
 
+  const visibleBreakdowns = useMemo(
+    () =>
+      breakdowns
+        .filter(
+          (result: SimulationRunBreakdown) =>
+            result.simulationRunStatus === 'Complete'
+        )
+        .filter(
+          (result: SimulationRunBreakdown) =>
+            result.timeRange.name === simulationTimeRangeSelected
+        ),
+    [breakdowns, simulationTimeRangeSelected]
+  );
+
   return (
     <div>
       <Row>
@@ -102,16 +117,8 @@ export function SimulationResultWeightChart({ breakdowns }: BreakdownProps) {
       </Row>
       <Row className={styles.resultChartRow}>
         <Col span={24}>
-          {breakdowns
-            .filter(
-              (result: SimulationRunBreakdown) =>
-                result.simulationRunStatus == 'Complete'
-            )
-            .filter(
-              (result: SimulationRunBreakdown) =>
-                result.timeRange.name == simulationTimeRangeSelected
-            )
-            .map((result: SimulationRunBreakdown, index: number) => (
+          {visibleBreakdowns.map(
+            (result: SimulationRunBreakdown, index: number) => (
               <Row key={index}>
                 <Col span={4}>
                   <div className={styles.weightChartDescription}>
@@ -157,7 +164,8 @@ export function SimulationResultWeightChart({ breakdowns }: BreakdownProps) {
                   <WeightChangeOverTimeGraph simulationRunBreakdown={result} />
                 </Col>
               </Row>
-            ))}
+            )
+          )}
         </Col>
       </Row>
     </div>

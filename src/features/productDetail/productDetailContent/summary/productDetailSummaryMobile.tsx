@@ -27,10 +27,6 @@ interface ProductDetailSummaryMobileProps {
   comparingProductLoading: boolean;
   comparingProductReturnAnalysis?: SimulationRunMetric[] | null;
   comparingProductBenchmarkAnalysis?: SimulationRunMetric[] | null;
-  onSelectComparableProduct: (poolId: string) => void;
-  handleBenchmarkChange: (key: string) => void; // kept for props compatibility
-  handleReturnAnalysisChange: (key: string) => void; // kept for props compatibility
-  handleBenchmarkAnalysisChange: (key: string) => void; // kept for props compatibility
 }
 
 /* --------------------------- Helpers (UI + formatting) --------------------------- */
@@ -55,7 +51,7 @@ function withAlpha(color: string, alpha: number) {
     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
   }
   if (color.startsWith('rgb')) {
-    const nums = color.match(/\d+(\.\d+)?/g) || ['0', '0', '0'];
+    const nums = color.match(/\d+(\.\d+)?/g) ?? ['0', '0', '0'];
     const [r, g, b] = nums.map(Number);
     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
   }
@@ -63,7 +59,7 @@ function withAlpha(color: string, alpha: number) {
   const el = document.createElement('canvas').getContext('2d');
   if (el) {
     el.fillStyle = color as any;
-    const parsed = el.fillStyle?.toString() ?? '';
+    const parsed = typeof el.fillStyle === 'string' ? el.fillStyle : '';
     if (parsed.startsWith('#')) return withAlpha(parsed, alpha);
   }
 
@@ -166,12 +162,10 @@ export const ProductDetailSummaryMobile = ({
   comparingProductLoading,
   comparingProductReturnAnalysis,
   comparingProductBenchmarkAnalysis,
-  onSelectComparableProduct,
 }: ProductDetailSummaryMobileProps) => {
   const [isCompareProductOpen, setIsCompareProductOpen] = useState(true);
 
-  const handleSelectComparableProduct = (poolId: string) => {
-    onSelectComparableProduct(poolId);
+  const handleSelectComparableProduct = () => {
     setIsCompareProductOpen(false);
   };
 
@@ -198,63 +192,123 @@ export const ProductDetailSummaryMobile = ({
     grade: getThresholdPostscript(thresholds, metricName, v), // "(VERY GOOD)" etc.
   });
 
+  const CompareProductPanel = () => (
+    <div style={{ width: '95%' }} hidden={true}>
+      <Collapse
+        items={[
+          {
+            key: '1',
+            label: 'Compare Product',
+            children: (
+              <ComparableProductSelector
+                onSelect={handleSelectComparableProduct}
+                comparingProductLoading={comparingProductLoading}
+              />
+            ),
+          },
+        ]}
+        onChange={() => setIsCompareProductOpen((prev) => !prev)}
+        defaultActiveKey={['1']}
+        activeKey={isCompareProductOpen ? ['1'] : []}
+      />
+    </div>
+  );
+
+  const PoolWeightCard = () => (
+    <div style={{ width: '95%', marginTop: 12 }}>
+      <Card title="Pool token weight over time [%]">
+        <div>
+          <Text strong>{product.name}</Text>
+          <div style={{ height: '100%', width: '100%' }}>
+            <ProductTokenWeightChangeOverTimeGraph
+              product={product}
+              yAxisOverride={{ label: { enabled: false } }}
+              legendOverride={{ enabled: false }}
+            />
+          </div>
+          <Text strong>{product.name}</Text>
+          <div style={{ height: '100%', width: '100%' }}>
+            <ProductTokenWeightChangeOverTimeGraph
+              product={product}
+              isBenchmark={true}
+              yAxisOverride={{ label: { enabled: false } }}
+              legendOverride={{ enabled: false }}
+            />
+          </div>
+          {comparingProduct && (
+            <div>
+              <Text strong>{comparingProduct?.name}</Text>
+              <div style={{ height: '100%', width: '100%' }}>
+                <ProductTokenWeightChangeOverTimeGraph
+                  product={comparingProduct}
+                  yAxisOverride={{ label: { enabled: false } }}
+                  legendOverride={{ enabled: false }}
+                />
+              </div>
+            </div>
+          )}
+        </div>
+      </Card>
+    </div>
+  );
+
+  const ReturnDistributionCard = () => (
+    <div style={{ width: '95%' }}>
+      <Card title="Return distribution">
+        <div>
+          <Text strong>{product.name}</Text>
+          <div style={{ height: '100%', width: '100%' }}>
+            {(product.timeSeries?.length ?? 0) > 0 && (
+              <ReturnDistributionGraph
+                marketValues={
+                  product.timeSeries?.map((x) => x.sharePrice) ?? []
+                }
+                yAxisOverride={{ title: { enabled: false } }}
+              />
+            )}
+          </div>
+
+          <Text strong>
+            {selectedBenchmarkReturnAnalysis?.metricName ??
+              'No benchmark selected'}
+          </Text>
+          <div style={{ height: '100%', width: '100%' }}>
+            {(product.timeSeries?.length ?? 0) > 0 && (
+              <ReturnDistributionGraph
+                marketValues={
+                  product.timeSeries?.map((x) => x.hodlSharePrice) ?? []
+                }
+                yAxisOverride={{ title: { enabled: false } }}
+              />
+            )}
+          </div>
+
+          {comparingProduct && (
+            <div>
+              <Text strong>{comparingProduct?.name}</Text>
+              <div style={{ height: '100%', width: '100%' }}>
+                {(comparingProduct?.timeSeries?.length ?? 0) > 0 && (
+                  <ReturnDistributionGraph
+                    marketValues={
+                      comparingProduct?.timeSeries?.map((x) => x.sharePrice) ??
+                      []
+                    }
+                    yAxisOverride={{ title: { enabled: false } }}
+                  />
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      </Card>
+    </div>
+  );
+
   return (
     <div>
       {/* Hidden because currently live analytics is turned off, comparing factsheet with live is not great */}
-      <div style={{ width: '95%' }} hidden={true}>
-        <Collapse
-          items={[
-            {
-              key: '1',
-              label: 'Compare Product',
-              children: (
-                <ComparableProductSelector
-                  onSelect={handleSelectComparableProduct}
-                  comparingProductLoading={comparingProductLoading}
-                />
-              ),
-            },
-          ]}
-          onChange={() => setIsCompareProductOpen((prev) => !prev)}
-          defaultActiveKey={['1']}
-          activeKey={isCompareProductOpen ? ['1'] : []}
-        />
-      </div>
-      <div style={{ width: '95%', marginTop: 12 }}>
-        <Card title="Pool token weight over time [%]">
-          <div>
-            <Text strong>{product.name}</Text>
-            <div style={{ height: '100%', width: '100%' }}>
-              <ProductTokenWeightChangeOverTimeGraph
-                product={product}
-                yAxisOverride={{ label: { enabled: false } }}
-                legendOverride={{ enabled: false }}
-              />
-            </div>
-            <Text strong>{product.name}</Text>
-            <div style={{ height: '100%', width: '100%' }}>
-              <ProductTokenWeightChangeOverTimeGraph
-                product={product}
-                isBenchmark={true}
-                yAxisOverride={{ label: { enabled: false } }}
-                legendOverride={{ enabled: false }}
-              />
-            </div>
-            {comparingProduct && (
-              <div>
-                <Text strong>{comparingProduct?.name}</Text>
-                <div style={{ height: '100%', width: '100%' }}>
-                  <ProductTokenWeightChangeOverTimeGraph
-                    product={comparingProduct}
-                    yAxisOverride={{ label: { enabled: false } }}
-                    legendOverride={{ enabled: false }}
-                  />
-                </div>
-              </div>
-            )}
-          </div>
-        </Card>
-      </div>
+      <CompareProductPanel />
+      <PoolWeightCard />
       <Card
         style={{
           borderRadius: 16,
@@ -274,14 +328,14 @@ export const ProductDetailSummaryMobile = ({
               repr(
                 returnAnalysisThresholds,
                 currentReturnAnalysisLabel,
-                selectedReturnAnalysis?.metricValue ?? 0
+                selectedBenchmarkReturnAnalysis?.metricValue ?? 0
               ).color
             }
             gradeText={
               repr(
                 returnAnalysisThresholds,
                 currentReturnAnalysisLabel,
-                selectedReturnAnalysis?.metricValue ?? 0
+                selectedBenchmarkReturnAnalysis?.metricValue ?? 0
               ).grade
             }
           />
@@ -413,51 +467,7 @@ export const ProductDetailSummaryMobile = ({
         </div>
       </Card>
       <Divider />
-      <div style={{ width: '95%' }}>
-        <Card title="Return distribution">
-          <div>
-            <Text strong>{product.name}</Text>
-            <div style={{ height: '100%', width: '100%' }}>
-              {product.timeSeries?.length && (
-                <ReturnDistributionGraph
-                  marketValues={product.timeSeries.map((x) => x.sharePrice)}
-                  yAxisOverride={{ title: { enabled: false } }}
-                />
-              )}
-            </div>
-
-            <Text strong>
-              {selectedBenchmarkReturnAnalysis?.metricName ??
-                'No benchmark selected'}
-            </Text>
-            <div style={{ height: '100%', width: '100%' }}>
-              {product.timeSeries?.length && (
-                <ReturnDistributionGraph
-                  marketValues={product.timeSeries.map((x) => x.hodlSharePrice)}
-                  yAxisOverride={{ title: { enabled: false } }}
-                />
-              )}
-            </div>
-
-            {comparingProduct && (
-              <div>
-                <Text strong>{comparingProduct?.name}</Text>
-                <div style={{ height: '100%', width: '100%' }}>
-                  {comparingProduct?.timeSeries?.length && (
-                    <ReturnDistributionGraph
-                      marketValues={
-                        comparingProduct?.timeSeries.map((x) => x.sharePrice) ??
-                        []
-                      }
-                      yAxisOverride={{ title: { enabled: false } }}
-                    />
-                  )}
-                </div>
-              </div>
-            )}
-          </div>
-        </Card>
-      </div>
+      <ReturnDistributionCard />
     </div>
   );
 };

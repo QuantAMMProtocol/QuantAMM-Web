@@ -17,7 +17,7 @@ import { ProductExplorerError } from './productExplorerError';
 import { ProductItemGrid } from './productItem';
 import TermsOfServiceGateModal from '../documentation/landing/termsOfServiceModal';
 
-export const ProductExplorer = () => {
+export default function ProductExplorer() {
   const dispatch = useAppDispatch();
   const [horizontalView, setHorizontalView] = useState(true);
 
@@ -40,6 +40,8 @@ export const ProductExplorer = () => {
 
     if (!isLoadingFilters && !filterError && filterList) {
       dispatch(loadFilters(filterList));
+    } else if (!isLoadingFilters && filterError) {
+      dispatch(loadFilters([]));
     }
   }, [dispatch, filterList, filterError, isLoadingFilters]);
 
@@ -53,33 +55,34 @@ export const ProductExplorer = () => {
   }, [productMap, productMapLoading, productMapError, dispatch]);
 
   useEffect(() => {
-    if (productCount) {
+    if (productCount !== undefined) {
       dispatch(setTotalPools(productCount));
     }
   }, [productCount, dispatch]);
 
   return (
     <>
-    <TermsOfServiceGateModal
-      tosUrl="https://quantamm.fi/tos"
-      onClose={handleGateClose}
-      page='productExplorer'
-    />
-    <Layout style={{ minHeight: '100vh', padding: 12 }}>
-      {productMapError ? (
-        <ProductExplorerError />
-      ) : (
-        <>
-          <ProductExplorerFilters
-            setHorizontalView={setHorizontalView}
-            isDark={isDark}
-          />
-          <ProductItemGrid wide={horizontalView} />
-        </>
-      )}
-    </Layout>
+      <TermsOfServiceGateModal
+        tosUrl="https://quantamm.fi/tos"
+        onClose={handleGateClose}
+        page="productExplorer"
+      />
+      <Layout style={{ minHeight: '100vh', padding: 12 }}>
+        {productMapError ? (
+          <ProductExplorerError />
+        ) : (
+          <>
+            <ProductExplorerFilters
+              horizontalView={horizontalView}
+              setHorizontalView={setHorizontalView}
+              isDark={isDark}
+            />
+            <ProductItemGrid wide={horizontalView} />
+          </>
+        )}
+      </Layout>
     </>
-    
   );
-};
+}
 
+export { ProductExplorer };

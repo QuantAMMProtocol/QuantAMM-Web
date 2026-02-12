@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo, useRef, useState } from 'react';
+import { FC, useEffect, useMemo, useRef } from 'react';
 import { Col, Layout, Row } from 'antd';
 import autoAnimate from '@formkit/auto-animate';
 import { ProductItem } from './card/productItem';
@@ -28,7 +28,6 @@ interface ProductItemGridProps {
 
 export const ProductItemGrid: FC<ProductItemGridProps> = ({ wide }) => {
   const parent = useRef<HTMLDivElement | null>(null);
-  const [, setRefVisible] = useState(false);
 
   const products = useAppSelector(selectProducts);
   const loading = useAppSelector(selectLoadingProducts);
@@ -41,8 +40,10 @@ export const ProductItemGrid: FC<ProductItemGridProps> = ({ wide }) => {
   );
 
   useEffect(() => {
-    parent.current && autoAnimate(parent.current);
-  }, [parent.current]);
+    if (parent.current) {
+      autoAnimate(parent.current);
+    }
+  }, []);
 
   const loadingProducts = Array.from(
     {
@@ -52,59 +53,57 @@ export const ProductItemGrid: FC<ProductItemGridProps> = ({ wide }) => {
   );
 
   return (
-
     <StyleProvider hashPriority="low">
-    <Layout>
-      <div className={styles['product-item-grid__header']}>
-        <Row
-          gutter={[0, 16]}
-          justify={{
-            xs: 'center',
-            sm: 'center',
-            md: 'center',
-            lg: 'center',
-            xl: 'start',
-          }}
-          align="middle"
-          style={{ height: 'auto', width: '100%' }}
-        >
-          {!wide && (
-            <>
-              <Col xs={24} sm={24} md={24} lg={12} xl={12}>
-                <ProductExplorerTabOverride />
-              </Col>
-              <Col xs={24} sm={24} md={24} lg={12} xl={12}>
-                <ProductExplorerSort />
-              </Col>
-            </>
-          )}
-        </Row>
-      </div>
-      <Content className={styles['product-item-grid__content']}>
-        <Row
-          ref={(element: HTMLDivElement) => {
-            parent.current = element;
-            setRefVisible(!!element);
-          }}
-          gutter={[8, 8]}
-          justify={{
-            xs: 'center',
-            sm: 'center',
-            md: 'center',
-            lg: 'center',
-            xl: 'start',
-          }}
-        >
-          {wide && <ProductItemGridHeader />}
-          {(loading || !areProductsLoaded) &&
-            loadingProducts.map((loadingProduct) => (
-              <Col xs={wide ? 24 : undefined} key={loadingProduct}>
-                {wide ? <ProductItemWideLoading /> : <ProductItemLoading />}
-              </Col>
-            ))}
-          {!loading &&
-            areProductsLoaded &&
-            sort(Object.values(products)).map((product) => (
+      <Layout>
+        <div className={styles['product-item-grid__header']}>
+          <Row
+            gutter={[0, 16]}
+            justify={{
+              xs: 'center',
+              sm: 'center',
+              md: 'center',
+              lg: 'center',
+              xl: 'start',
+            }}
+            align="middle"
+            style={{ height: 'auto', width: '100%' }}
+          >
+            {!wide && (
+              <>
+                <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                  <ProductExplorerTabOverride />
+                </Col>
+                <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                  <ProductExplorerSort />
+                </Col>
+              </>
+            )}
+          </Row>
+        </div>
+        <Content className={styles['product-item-grid__content']}>
+          <Row
+            ref={(element: HTMLDivElement | null) => {
+              parent.current = element;
+            }}
+            gutter={[8, 8]}
+            justify={{
+              xs: 'center',
+              sm: 'center',
+              md: 'center',
+              lg: 'center',
+              xl: 'start',
+            }}
+          >
+            {wide && <ProductItemGridHeader />}
+            {(loading || !areProductsLoaded) &&
+              loadingProducts.map((loadingProduct) => (
+                <Col xs={wide ? 24 : undefined} key={loadingProduct}>
+                  {wide ? <ProductItemWideLoading /> : <ProductItemLoading />}
+                </Col>
+              ))}
+            {!loading &&
+              areProductsLoaded &&
+              sort(Object.values(products)).map((product) => (
                 <Col xs={wide ? 24 : undefined} key={product.id}>
                   {wide ? (
                     <ProductItemWide product={product} />
@@ -112,15 +111,15 @@ export const ProductItemGrid: FC<ProductItemGridProps> = ({ wide }) => {
                     <ProductItem product={product} />
                   )}
                 </Col>
-            ))}
-        </Row>
-        {!loading && areProductsLoaded && (
-          <Row style={{ marginTop: 16 }} justify="center">
-            <ProductExplorerPagination />
+              ))}
           </Row>
-        )}
-      </Content>
-    </Layout>
+          {!loading && areProductsLoaded && (
+            <Row style={{ marginTop: 16 }} justify="center">
+              <ProductExplorerPagination />
+            </Row>
+          )}
+        </Content>
+      </Layout>
     </StyleProvider>
   );
 };

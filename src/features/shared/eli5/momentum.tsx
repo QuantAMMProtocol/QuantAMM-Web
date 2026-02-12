@@ -17,7 +17,6 @@ export const Momentum = () => {
           >
             Buy low and sell high - Buy high and sell higher
           </Text>{' '}
-          
         </Text>
       </Title>
       <p>

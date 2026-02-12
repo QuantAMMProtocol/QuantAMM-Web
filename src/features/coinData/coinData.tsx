@@ -61,7 +61,7 @@ export interface SeriesConfig {
   marker: Marker;
 }
 
-export function CoinData() {
+export default function CoinData() {
   const [currentCoin, setCurrentCoin] = useState('BTC');
   const availableCoins = useAppSelector(selectAvailableCoins);
   const coinLoadStatus = useAppSelector(selectCoinLoadStatus);
@@ -82,7 +82,9 @@ export function CoinData() {
       colId: 'open',
       headerName: 'open',
       valueGetter: (params: { data: CoinPrice }) => {
-        return params.data.open == 1 / 0 ? undefined : params.data.open;
+        return params.data.open === Number.POSITIVE_INFINITY
+          ? undefined
+          : params.data.open;
       },
       filter: 'agNumberColumnFilter',
       type: ['numericColumn', 'nonEditableColumn'],
@@ -92,7 +94,9 @@ export function CoinData() {
       colId: 'high',
       headerName: 'high',
       valueGetter: (params: { data: CoinPrice }) => {
-        return params.data.high == 1 / 0 ? undefined : params.data.high;
+        return params.data.high === Number.POSITIVE_INFINITY
+          ? undefined
+          : params.data.high;
       },
       filter: 'agNumberColumnFilter',
       type: ['numericColumn', 'nonEditableColumn'],
@@ -102,7 +106,9 @@ export function CoinData() {
       colId: 'low',
       headerName: 'low',
       valueGetter: (params: { data: CoinPrice }) => {
-        return params.data.low == 1 / 0 ? undefined : params.data.low;
+        return params.data.low === Number.POSITIVE_INFINITY
+          ? undefined
+          : params.data.low;
       },
       filter: 'agNumberColumnFilter',
       type: ['numericColumn', 'nonEditableColumn'],
@@ -226,23 +232,25 @@ export function CoinData() {
 
   const getCurrentPriceData = () => {
     const empty: CoinPrice[] = [];
-    if (currentCoin == '3mTbillDaily') {
+    if (currentCoin === '3mTbillDaily') {
       const tbillData = tBillPrices as TBillYield[];
       const tBillCloseData: CoinPrice[] = tbillData.map((x) => {
         return {
           date: x.date,
           unix: new Date(x.date).getTime(),
           close: x.rate,
-          open: 1 / 0,
-          low: 1 / 0,
-          high: 1 / 0,
+          open: Number.POSITIVE_INFINITY,
+          low: Number.POSITIVE_INFINITY,
+          high: Number.POSITIVE_INFINITY,
         };
       });
 
       return tBillCloseData;
     }
 
-    const availableCoin = availableCoins.find((x) => x.coinCode == currentCoin);
+    const availableCoin = availableCoins.find(
+      (x) => x.coinCode === currentCoin
+    );
 
     return availableCoin?.dailyPriceHistory ?? empty;
   };
@@ -286,6 +294,121 @@ export function CoinData() {
     }
   }
 
+  const CoinSelectionPanel = () => (
+    <Col span={4}>
+      <Menu
+        className={styles.menuPanel}
+        defaultSelectedKeys={['Daily']}
+        items={getPriceFrequency()}
+      />
+      <Menu
+        className={styles.menuPanel}
+        defaultSelectedKeys={[currentCoin]}
+        items={getCoinSelections()}
+        onClick={(x) => {
+          setCurrentCoin(String(x.key));
+        }}
+        activeKey={currentCoin}
+      />
+    </Col>
+  );
+
+  const LoadingStatusPanel = () => (
+    <div hidden={priceDataLoaded}>
+      {coinLoadStatus.map((x, index) => (
+        <Row key={index}>
+          <Col span={8}></Col>
+          <Col span={6}>
+            <span style={{ color: getLoadPriceColor() }}>{x}</span>
+            <CheckOutlined />
+          </Col>
+          <Col span={10}></Col>
+        </Row>
+      ))}
+    </div>
+  );
+
+  const DataTablePanel = () => (
+    <Row>
+      <Col span={24}>
+        <div hidden={!priceDataLoaded}>
+          <div
+            id="myGrid"
+            className={`${styles.tableParent} ${styles.gridWrapper} ${darkThemeAg}`}
+          >
+            <AgGridReact
+              className={styles.tableParent}
+              rowData={getCurrentPriceData()}
+              gridOptions={gridOptions}
+              columnDefs={columnDefs}
+              onFirstDataRendered={onFirstDataRendered}
+              sideBar={sideBar}
+            ></AgGridReact>
+          </div>
+        </div>
+      </Col>
+    </Row>
+  );
+
+  const PriceChartPanel = () => (
+    <Row>
+      <Col span={24}>
+        <div hidden={!priceDataLoaded} className={styles.chartWrapper}>
+          <AgCharts
+            options={{
+              height: 300,
+              navigator: {
+                enabled: true,
+                height: 5,
+                spacing: 6,
+              },
+              axes: [
+                getTimeAxisOption(getCoinSeries()[0].data.length),
+                {
+                  type: 'number',
+                  position: 'left',
+                  label: {
+                    format: '$~s',
+                  },
+                },
+              ],
+              series: getCoinSeries(),
+              legend: {
+                position: 'top',
+              },
+              overlays: {
+                noData: {
+                  text: 'No data',
+                },
+              },
+              theme: {
+                baseTheme: chartTheme,
+                overrides: {
+                  common: {
+                    background: {
+                      fill: 'transparent',
+                    },
+                  },
+                  line: {
+                    series: {
+                      stroke: '#DAAB43',
+                      cursor: 'crosshair',
+                      marker: {
+                        stroke: '#DAAB43',
+                        fill: '#DAAB43',
+                        enabled: false,
+                      },
+                    },
+                  },
+                },
+              },
+            }}
+          />
+        </div>
+      </Col>
+    </Row>
+  );
+
   return (
     <div>
       <Row className={styles.coinTabSection}>
@@ -293,133 +416,11 @@ export function CoinData() {
           <Tabs>
             <TabPane tab="Individual Coin/Token Data" key={'coinprices'}>
               <Row>
-                <Col span={4}>
-                  <Menu
-                    style={{
-                      width: 256,
-                      maxHeight: '500px',
-                      overflowY: 'auto',
-                    }}
-                    defaultSelectedKeys={['Daily']}
-                    items={getPriceFrequency()}
-                  />
-                  <Menu
-                    style={{
-                      width: 256,
-                      maxHeight: '500px',
-                      overflowY: 'auto',
-                    }}
-                    defaultSelectedKeys={[currentCoin]}
-                    items={getCoinSelections()}
-                    onClick={(x) => {
-                      setCurrentCoin(x.key);
-                    }}
-                    activeKey={currentCoin}
-                  />
-                </Col>
+                <CoinSelectionPanel />
                 <Col span={20}>
-                  <div hidden={priceDataLoaded}>
-                    {coinLoadStatus.map((x, index) => (
-                      <Row key={index}>
-                        <Col span={8}></Col>
-                        <Col span={6}>
-                          <span style={{ color: getLoadPriceColor() }}>
-                            {x}
-                          </span>
-                          <CheckOutlined />
-                        </Col>
-                        <Col span={10}></Col>
-                      </Row>
-                    ))}
-                  </div>
-                  <Row>
-                    <Col span={24}>
-                      <div hidden={!priceDataLoaded}>
-                        <div
-                          id="myGrid"
-                          className={styles.tableParent + ' ' + darkThemeAg}
-                          style={{
-                            width: '100%',
-                            paddingLeft: '60px',
-                            paddingRight: '30px',
-                          }}
-                        >
-                          <AgGridReact
-                            className={styles.tableParent}
-                            rowData={getCurrentPriceData()}
-                            gridOptions={gridOptions}
-                            columnDefs={columnDefs}
-                            onFirstDataRendered={onFirstDataRendered}
-                            sideBar={sideBar}
-                          ></AgGridReact>
-                        </div>
-                      </div>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col span={24}>
-                      <div
-                        hidden={!priceDataLoaded}
-                        style={{
-                          width: '100%',
-                          paddingLeft: '60px',
-                          paddingRight: '30px',
-                          paddingTop: '20px',
-                        }}
-                      >
-                        <AgCharts
-                          options={{
-                            height: 300,
-                            navigator: {
-                              enabled: true,
-                              height: 5,
-                              spacing: 6,
-                            },
-                            axes: [
-                              getTimeAxisOption(getCoinSeries()[0].data.length),
-                              {
-                                type: 'number',
-                                position: 'left',
-                                label: {
-                                  format: '$~s',
-                                },
-                              },
-                            ],
-                            series: getCoinSeries(),
-                            legend: {
-                              position: 'top',
-                            },
-                            overlays: {
-                              noData: {
-                                text: 'No data',
-                              },
-                            },
-                            theme: {
-                              baseTheme: chartTheme,
-                              overrides: {
-                                common: {
-                                  background: {
-                                    fill: 'transparent',
-                                  },
-                                },
-                                line: {
-                                  series: {
-                                    stroke: '#DAAB43',
-                                    cursor: 'crosshair',
-                                    marker: {
-                                      stroke: '#DAAB43',
-                                      fill: '#DAAB43',
-                                      enabled: false,
-                                    },
-                                  },
-                                },
-                              },
-                            },
-                          }}
-                        />
-                      </div>
-                    </Col>
-                  </Row>
+                  <LoadingStatusPanel />
+                  <DataTablePanel />
+                  <PriceChartPanel />
                 </Col>
               </Row>
             </TabPane>
@@ -429,6 +430,5 @@ export function CoinData() {
     </div>
   );
 }
-/*
 
-*/
+export { CoinData };

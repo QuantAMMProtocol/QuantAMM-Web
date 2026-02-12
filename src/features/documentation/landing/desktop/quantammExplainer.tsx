@@ -3,6 +3,7 @@ import { ProductItemBackground } from '../../../productExplorer/productItem/prod
 import { DownCircleOutlined, UpCircleOutlined } from '@ant-design/icons';
 import { AgGauge } from 'ag-charts-react';
 import './quantammExplainer.css';
+import styles from './landingDesktop.module.css';
 
 const { Title } = Typography;
 
@@ -73,15 +74,7 @@ export function QuantAmmExplainer() {
       backgroundColourOverride="#FFFEF2"
       borderColourOverride="#f6f4ef"
     >
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '100%',
-        }}
-      >
+      <div className={styles.explainerRoot}>
         <Row>
           <Col span={2}></Col>
 
@@ -91,21 +84,10 @@ export function QuantAmmExplainer() {
           >
             <Row>
               <Col span={24} style={{ padding: 0 }}>
-                <div
-                  style={{
-                    height: '10vh',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
+                <div className={styles.explainerImageWrap}>
                   <img
                     src="/background/blueSand.png"
-                    style={{
-                      maxWidth: '100%',
-                      maxHeight: '100%',
-                      marginTop: '1vh',
-                    }}
+                    className={styles.explainerImage}
                   />
                 </div>
               </Col>
@@ -159,29 +141,17 @@ export function QuantAmmExplainer() {
                   {stepData.map((pair, idx) => (
                     <div
                       key={idx}
+                      className={styles.stepRow}
                       style={{
-                        display: 'flex',
-                        alignItems: 'center', // line & icons centered
                         marginBottom: idx < stepData.length - 1 ? 40 : 0,
                       }}
                     >
                       {/* LEFT (FACT) fixed width */}
-                      <div
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          width: 170,
-                        }}
-                      >
+                      <div className={styles.stepFact}>
                         {pair[0].icon}
                         <div
-                          style={{
-                            marginLeft: 8,
-                            color: pair[0].color,
-                            fontSize: 14,
-                            lineHeight: 1.5,
-                            maxWidth: 170,
-                          }}
+                          className={styles.stepText}
+                          style={{ color: pair[0].color }}
                         >
                           <p style={{ margin: 0, fontWeight: 600 }}>
                             {pair[0].title}

@@ -16,8 +16,9 @@ import TermsOfServiceGateModal from '../documentation/landing/termsOfServiceModa
 
 const { useBreakpoint } = Grid;
 
-export const ProductDetail = () => {
+export default function ProductDetail() {
   const { chain, id } = useParams();
+  const normalizedId = id?.toLowerCase() ?? '';
 
   const screens = useBreakpoint();
   const isMobile = !screens.lg && !screens.xl && !screens.xxl;
@@ -27,7 +28,7 @@ export const ProductDetail = () => {
   const handleGateClose = () => dispatch(setAcceptedTermsAndConditions(true));
 
   const { product, productLoading, productError } = useFetchProductData(
-    id!.toLowerCase(),
+    normalizedId,
     chain as GqlChain
   );
 
@@ -40,12 +41,7 @@ export const ProductDetail = () => {
     const ts = product.timeSeries ?? [];
     const last = ts[ts.length - 1];
     return [product.id, ts.length, last?.timestamp, last?.sharePrice].join('|');
-  }, [
-    product?.id,
-    product?.timeSeries?.length,
-    product?.timeSeries?.[product?.timeSeries?.length - 1]?.timestamp,
-    product?.timeSeries?.[product?.timeSeries?.length - 1]?.sharePrice,
-  ]);
+  }, [product]);
 
   const storeSig = useMemo(() => {
     if (!productInStore) return '';
@@ -57,14 +53,7 @@ export const ProductDetail = () => {
       last?.timestamp,
       last?.sharePrice,
     ].join('|');
-  }, [
-    productInStore?.id,
-    productInStore?.timeSeries?.length,
-    productInStore?.timeSeries?.[productInStore?.timeSeries?.length - 1]
-      ?.timestamp,
-    productInStore?.timeSeries?.[productInStore?.timeSeries?.length - 1]
-      ?.sharePrice,
-  ]);
+  }, [productInStore]);
 
   useEffect(() => {
     if (!product || productLoading) return;
@@ -83,17 +72,19 @@ export const ProductDetail = () => {
       />
       <Layout style={{ minHeight: '100vh', padding: 20 }}>
         {productLoading && <Spin />}
-        {!productLoading && !productError && !!id && (
+        {!productLoading && !productError && !!normalizedId && (
           <Layout>
             {isMobile ? (
               <></>
             ) : (
-              <ProductDetailSidebar id={id.toLowerCase()} isDark={isDark} />
+              <ProductDetailSidebar id={normalizedId} isDark={isDark} />
             )}
-            <ProductDetailContent id={id.toLowerCase()} isMobile={isMobile} />
+            <ProductDetailContent id={normalizedId} isMobile={isMobile} />
           </Layout>
         )}
       </Layout>
     </>
   );
-};
+}
+
+export { ProductDetail };

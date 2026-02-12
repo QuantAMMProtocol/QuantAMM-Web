@@ -1,18 +1,44 @@
 import { useMemo } from 'react';
-import { GqlPoolEvent, GqlPoolEventType } from '../../../__generated__/graphql-types';
+import {
+  GqlPoolEvent,
+  GqlPoolEventType,
+} from '../../../__generated__/graphql-types';
 
 interface Product {
-  poolConstituents?: ({ address?: string | null; coin?: string | null } | null)[] | null;
+  poolConstituents?:
+    | ({ address?: string | null; coin?: string | null } | null)[]
+    | null;
 }
 
-export function useHeatmapData(product: Product | undefined | null, poolEvents: GqlPoolEvent[] | undefined) {
-  interface HeatDatum { tokenIn: string; tokenOut: string; usd: number }
+export function useHeatmapData(
+  product: Product | undefined | null,
+  poolEvents: GqlPoolEvent[] | undefined
+) {
+  interface HeatDatum {
+    tokenIn: string;
+    tokenOut: string;
+    usd: number;
+  }
 
   return useMemo(() => {
-    const constituents = (product?.poolConstituents ?? []).filter((c): c is { address: string; coin?: string | null } => !!c?.address);
-    const addrToCoin = new Map(constituents.map((c) => [String(c.address).toLowerCase(), String(c.coin ?? c.address)]));
-    const canonicalCoinOrder = constituents.map((c) => String(c.coin ?? c.address));
-    const addrNameMap = Object.fromEntries(constituents.map((c) => [String(c.address).toLowerCase(), String(c.coin ?? c.address)]));
+    const constituents = (product?.poolConstituents ?? []).filter(
+      (c): c is { address: string; coin?: string | null } => !!c?.address
+    );
+    const addrToCoin = new Map(
+      constituents.map((c) => [
+        String(c.address).toLowerCase(),
+        String(c.coin ?? c.address),
+      ])
+    );
+    const canonicalCoinOrder = constituents.map((c) =>
+      String(c.coin ?? c.address)
+    );
+    const addrNameMap = Object.fromEntries(
+      constituents.map((c) => [
+        String(c.address).toLowerCase(),
+        String(c.coin ?? c.address),
+      ])
+    );
 
     const normAddr = (a?: string) => {
       const v = String(a ?? '').trim();
@@ -51,13 +77,20 @@ export function useHeatmapData(product: Product | undefined | null, poolEvents: 
     const seen = new Set(base);
     const extras: string[] = [];
     for (const d of heatmapData) {
-      if (!seen.has(d.tokenIn)) { seen.add(d.tokenIn); extras.push(d.tokenIn); }
-      if (!seen.has(d.tokenOut)) { seen.add(d.tokenOut); extras.push(d.tokenOut); }
+      if (!seen.has(d.tokenIn)) {
+        seen.add(d.tokenIn);
+        extras.push(d.tokenIn);
+      }
+      if (!seen.has(d.tokenOut)) {
+        seen.add(d.tokenOut);
+        extras.push(d.tokenOut);
+      }
     }
     const domain = [...base, ...extras];
 
     const indexBy = new Map(domain.map((d, i) => [d, i]));
-    const idx = (k: string) => (indexBy.has(k) ? (indexBy.get(k)!) : Number.MAX_SAFE_INTEGER);
+    const idx = (k: string) =>
+      indexBy.has(k) ? indexBy.get(k)! : Number.MAX_SAFE_INTEGER;
 
     heatmapData.sort((a, b) => {
       const ai = idx(a.tokenIn);

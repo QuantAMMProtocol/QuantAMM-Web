@@ -11,15 +11,16 @@ import { PoolDeploymentConfigReview } from '../../simulationRunner/simulationDep
 
 const { TabPane } = Tabs;
 
-export function SimulationSavedResultComparison() {
+export default function SimulationSavedResultComparison() {
   const savedBreakdowns = useAppSelector(selectSimulationResults);
   const savedSelectedBreakdowns = useAppSelector(
     selectSelectedSimulationResults
   );
   const [key, setKey] = useState<string>('1');
+  const selectedBreakdown = savedSelectedBreakdowns[0];
 
   function getTab(): JSX.Element {
-    if (key == '1') {
+    if (key === '1') {
       return (
         <SimulationResultsRunDetailsTable
           breakdowns={savedBreakdowns ?? []}
@@ -29,18 +30,23 @@ export function SimulationSavedResultComparison() {
           tableHeight={'60vh'}
         />
       );
-    } else if (key == '2') {
+    } else if (key === '2') {
       return (
         <SimulationResultsSummaryStep
           breakdowns={savedSelectedBreakdowns}
           forceViewResults={false}
         />
       );
-    } else if (key == '3') {
+    } else if (key === '3') {
+      if (!selectedBreakdown) {
+        return (
+          <div>Select exactly one saved result to view deployment preview.</div>
+        );
+      }
       return (
         <PoolDeploymentConfigReview
-          pool={savedSelectedBreakdowns[0].simulationRun}
-          initialisationData={savedSelectedBreakdowns[0].simulationRunResultAnalysis}
+          pool={selectedBreakdown.simulationRun}
+          initialisationData={selectedBreakdown.simulationRunResultAnalysis}
         />
       );
     }
@@ -52,11 +58,7 @@ export function SimulationSavedResultComparison() {
     <div>
       <Row>
         <Col span={24} style={{ paddingLeft: 30, paddingRight: 30 }}>
-          <Tabs
-            defaultActiveKey={key}
-            key={key}
-            onChange={(key) => setKey(key)}
-          >
+          <Tabs activeKey={key} onChange={(key) => setKey(key)}>
             <TabPane
               tab={
                 'Selected Saved Results (' +
@@ -98,9 +100,18 @@ export function SimulationSavedResultComparison() {
             <TabPane tab="Compare Selected Results" key="2">
               {getTab()}
             </TabPane>
+            <TabPane
+              tab="Deployment Preview"
+              key="3"
+              disabled={savedSelectedBreakdowns.length !== 1}
+            >
+              {getTab()}
+            </TabPane>
           </Tabs>
         </Col>
       </Row>
     </div>
   );
 }
+
+export { SimulationSavedResultComparison };

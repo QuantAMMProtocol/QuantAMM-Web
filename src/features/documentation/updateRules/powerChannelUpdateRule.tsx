@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useAppSelector } from '../../../app/hooks';
 import { selectAvailableUpdateRules } from '../../simulationRunConfiguration/simulationRunConfigurationSlice';
 import { Eli5 } from '../../shared';
+import styles from './updateRules.module.css';
 interface DocProps {
   hideTitle?: boolean;
   hideImage?: boolean;
@@ -17,7 +18,7 @@ export function PowerChannelUpdateRule(props: DocProps) {
       <MathJaxContext>
         <Row>
           <Col span={1}></Col>
-          <Col style={{ padding: 10 }} span={23}>
+          <Col className={styles.containerPad10} span={23}>
             <Row>
               <Col span={24}>
                 <div hidden={props.hideTitle}>
@@ -25,7 +26,7 @@ export function PowerChannelUpdateRule(props: DocProps) {
                 </div>
               </Col>
               <Col span={24}>
-                <Form.Item style={{ marginTop: '5px', marginBottom: '0px' }}>
+                <Form.Item className={styles.formItemTop5NoBottom}>
                   <Radio.Group
                     size="small"
                     value={eli5}
@@ -35,26 +36,20 @@ export function PowerChannelUpdateRule(props: DocProps) {
                       User Knowledge Level:{' '}
                     </Radio.Button>
                     <Radio.Button value={'ELI5'}>ELI5</Radio.Button>
-                    <Radio.Button value={'Quant'}>
-                      Quant
-                    </Radio.Button>
+                    <Radio.Button value={'Quant'}>Quant</Radio.Button>
                   </Radio.Group>
                 </Form.Item>
               </Col>
             </Row>
             <Row>
               <Col span={24}>
-                <div hidden={eli5 != 'ELI5' || props.hideImage}>
+                <div hidden={eli5 !== 'ELI5' || props.hideImage}>
                   <Row>
                     <Col span={8}>
                       <img
                         loading="lazy"
                         src={'/documentation/power_channel.svg'}
-                        style={{
-                          width: '100%',
-                          paddingRight: '5%',
-                          paddingTop: '15%',
-                        }}
+                        className={styles.imagePadRight5Top15}
                       />
                     </Col>
                     <Col span={16}>
@@ -62,14 +57,18 @@ export function PowerChannelUpdateRule(props: DocProps) {
                     </Col>
                   </Row>
                 </div>
-                <div hidden={eli5 != 'ELI5' || (eli5 == 'ELI5' && !props.hideImage)}>
+                <div
+                  hidden={
+                    eli5 !== 'ELI5' || (eli5 === 'ELI5' && !props.hideImage)
+                  }
+                >
                   <Row>
                     <Col span={24}>
                       <Eli5 strategy="POWER_CHANNEL" />
                     </Col>
                   </Row>
                 </div>
-                <div hidden={eli5 == 'ELI5'}>
+                <div hidden={eli5 === 'ELI5'}>
                   <h3>Summary</h3>
                   <p>
                     This update rule applies a soft form of
@@ -130,7 +129,7 @@ export function PowerChannelUpdateRule(props: DocProps) {
                   <h3>Parameter Guide {'&'} Return Profile Summary</h3>
                   <p>
                     {
-                      rules.find((x) => x.updateRuleName == 'Power Channel')
+                      rules.find((x) => x.updateRuleName === 'Power Channel')
                         ?.updateRuleResultProfileSummary
                     }
                   </p>

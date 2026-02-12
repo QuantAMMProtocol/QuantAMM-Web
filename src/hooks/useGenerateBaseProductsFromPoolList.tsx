@@ -18,29 +18,38 @@ export const useGenerateBaseProductsFromPoolList = (
   >(undefined);
 
   useEffect(() => {
-    if (!isLoadingPools && !poolError && poolData) {
-      const fetchData = () => {
-        try {
-          const productData: ProductMap = mapPoolToBaseProduct(
-            poolData.poolGetPools as GqlPoolMinimal[]
-          );
-
-          setBaseProductsData(productData);
-        } catch (error) {
-          console.error(
-            'useGenerateProductsFromPoolList -Error fetching data:',
-            error
-          );
-          setBaseProductsError(
-            error as FetchBaseQueryError | SerializedError | ApolloError
-          );
-        } finally {
-          setBaseProductsLoading(false);
-        }
-      };
+    if (isLoadingPools) {
       setBaseProductsLoading(true);
-      fetchData();
-    } else {
+      return;
+    }
+
+    if (poolError) {
+      setBaseProductsError(poolError);
+      setBaseProductsLoading(false);
+      return;
+    }
+
+    if (!poolData) {
+      setBaseProductsLoading(false);
+      return;
+    }
+
+    setBaseProductsLoading(true);
+    try {
+      const productData: ProductMap = mapPoolToBaseProduct(
+        poolData.poolGetPools as GqlPoolMinimal[]
+      );
+      setBaseProductsError(undefined);
+      setBaseProductsData(productData);
+    } catch (error) {
+      console.error(
+        'useGenerateProductsFromPoolList -Error fetching data:',
+        error
+      );
+      setBaseProductsError(
+        error as FetchBaseQueryError | SerializedError | ApolloError
+      );
+    } finally {
       setBaseProductsLoading(false);
     }
   }, [poolData, poolError, isLoadingPools]);

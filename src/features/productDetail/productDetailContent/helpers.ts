@@ -24,6 +24,8 @@ export const filterByTimeRange = (
   if (selectedTimeRange === 'max') {
     return true;
   }
+
+  return false;
 };
 
 export const filterByExtendedTimeRange = (
@@ -53,4 +55,6 @@ export const filterByExtendedTimeRange = (
   if (selectedTimeRange === 'max') {
     return true;
   }
+
+  return false;
 };

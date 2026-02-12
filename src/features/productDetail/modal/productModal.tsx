@@ -7,9 +7,14 @@ import { useAppSelector } from '../../../app/hooks';
 import { selectAcceptedTermsAndConditions } from '../../productExplorer/productExplorerSlice';
 
 import { useRunAuditLogMutation } from '../../../services/auditLogService';
+import {
+  buildProductModalAuditLogRequest,
+  isProductModalActionDisabled,
+} from './productModalUtils';
 
 // Pre‑load the FingerprintJS agent once per bundle load
-const fpPromise = FingerprintJS.load();
+const fpPromise: Promise<Agent | null> =
+  typeof window !== 'undefined' ? FingerprintJS.load() : Promise.resolve(null);
 
 interface ProductModalProps {
   isVisible: boolean;
@@ -25,9 +30,6 @@ export const ProductModal: React.FC<ProductModalProps> = ({
   onClose,
 }) => {
   const acceptedTerms = useAppSelector(selectAcceptedTermsAndConditions);
-  const [intervalId, setIntervalId] = useState<NodeJS.Timeout | undefined>(
-    undefined
-  );
   const [understandExternalWebsite, setUnderstandExternalWebsite] =
     useState(false);
   const [visitorId, setVisitorId] = useState<string | undefined>(undefined);
@@ -36,9 +38,9 @@ export const ProductModal: React.FC<ProductModalProps> = ({
   useEffect(() => {
     let mounted = true;
     fpPromise
-      .then((fp: Agent) => fp.get())
-      .then((result: GetResult) => {
-        if (mounted) setVisitorId(result.visitorId);
+      .then((fp: Agent | null) => (fp ? fp.get() : null))
+      .then((result: GetResult | null) => {
+        if (mounted && result) setVisitorId(result.visitorId);
       })
       .catch(() => {
         if (mounted) setVisitorId(undefined);
@@ -52,27 +54,21 @@ export const ProductModal: React.FC<ProductModalProps> = ({
 
   const handleClick = useCallback(() => {
     void runAuditLog({
-      request: {
-        timestamp: new Date().toLocaleString(undefined, {
-          timeZoneName: 'long',
-        }),
-        user: visitorId ?? 'unknown', // probabilistic fingerprint id
-        page: isWithdraw
-          ? 'productDetail-withdraw-redirect'
-          : 'productDetail-deposit-redirect',
-        tosAgreement: understandExternalWebsite ? 'accepted' : 'not accepted',
-      },
+      request: buildProductModalAuditLogRequest({
+        isWithdraw,
+        understandExternalWebsite,
+        visitorId,
+      }),
     });
-    window.open(url, '_blank');
-    clearInterval(intervalId);
-    setIntervalId(undefined);
+    if (url) {
+      window.open(url, '_blank');
+    }
     onClose();
   }, [
     runAuditLog,
     isWithdraw,
     understandExternalWebsite,
     url,
-    intervalId,
     onClose,
     visitorId,
   ]);
@@ -129,7 +125,10 @@ export const ProductModal: React.FC<ProductModalProps> = ({
           onClick={handleClick}
           className={styles.modalButton}
           size="large"
-          disabled={!understandExternalWebsite || !acceptedTerms}
+          disabled={isProductModalActionDisabled(
+            understandExternalWebsite,
+            acceptedTerms
+          )}
           style={{
             marginTop: '20px',
             display: 'flex',

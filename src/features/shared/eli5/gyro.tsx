@@ -6,11 +6,7 @@ export const Gyro = () => {
   return (
     <>
       <Title level={3}>
-        <Text
-          style={{  fontSize: 'inherit' }}
-        >
-          Gyroscope E-CLP
-        </Text>
+        <Text style={{ fontSize: 'inherit' }}>Gyroscope E-CLP</Text>
       </Title>
       <p>
         Elliptic Concentrated Liquidity Pools (E-CLPs) introduce asymmetric
@@ -31,7 +27,7 @@ export const Gyro = () => {
         maintaining high capital efficiency.
       </p>
 
-      <p>
+      <div>
         For detailed mathematical analysis and implementation details, see:
         <ul>
           <li>
@@ -43,7 +39,7 @@ export const Gyro = () => {
             <a href="https://docs.gyro.finance/">Gyroscope Protocol</a>
           </li>
         </ul>
-      </p>
+      </div>
     </>
   );
 };

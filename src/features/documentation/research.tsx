@@ -1,5 +1,6 @@
 import { Button, Col, Grid, Row } from 'antd';
 import { MathJaxContext } from 'better-react-mathjax';
+import styles from './documentation.module.css';
 
 interface ResearchProps {
   title: string;
@@ -10,7 +11,7 @@ interface ResearchProps {
 
 const { useBreakpoint } = Grid;
 
-export function Research() {
+export default function Research() {
   const screens = useBreakpoint();
   const isMobile = !screens.lg && !screens.xl && !screens.xxl;
 
@@ -88,19 +89,19 @@ export function Research() {
                       <Col span={24}>
                         <Row>
                           <Col span={24}>
-                            <h3
-                              style={{ color: 'var(--secondary-text-color)' }}
-                            >
+                            <h3 className={styles.secondaryText}>
                               {item.title}
                             </h3>
                             <p>
-                              <span style={{ fontWeight: 'bold' }}>TLDR</span>{' '}
+                              <span className={styles.fontWeightBold}>
+                                TLDR
+                              </span>{' '}
                               {item.tldr}
                             </p>
                           </Col>
                           <Col span={24}>
                             <p>
-                              <span style={{ fontWeight: 'bold' }}>
+                              <span className={styles.fontWeightBold}>
                                 ABSTRACT:
                               </span>{' '}
                               {item.abstract.map((paragraph, pIndex) => (
@@ -110,11 +111,7 @@ export function Research() {
                           </Col>
                           <Col
                             span={24}
-                            style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                            }}
+                            className={styles.researchButtonColMobile}
                           >
                             <Button href={item.link} type="primary">
                               View Full Article
@@ -134,23 +131,26 @@ export function Research() {
         <MathJaxContext>
           <Row>
             <Col span={1}></Col>
-            <Col style={{ padding: 10 }} span={23}>
+            <Col className={styles.researchDesktopContainer} span={23}>
               {research.map((item, index) => (
                 <Row key={index}>
                   <Col span={24}>
                     <Row>
-                      <Col span={4} style={{ padding: 10 }}>
-                        <h3 style={{ color: 'var(--secondary-text-color)' }}>
-                          {item.title}
-                        </h3>
+                      <Col span={4} className={styles.researchDesktopLeftCol}>
+                        <h3 className={styles.secondaryText}>{item.title}</h3>
                         <p>
-                          <span style={{ fontWeight: 'bold' }}>TLDR</span>{' '}
+                          <span className={styles.fontWeightBold}>TLDR</span>{' '}
                           {item.tldr}
                         </p>
                       </Col>
-                      <Col span={17} style={{ padding: 10 }}>
+                      <Col
+                        span={17}
+                        className={styles.researchDesktopMiddleCol}
+                      >
                         <p>
-                          <span style={{ fontWeight: 'bold' }}>ABSTRACT:</span>{' '}
+                          <span className={styles.fontWeightBold}>
+                            ABSTRACT:
+                          </span>{' '}
                           {item.abstract.map((paragraph, pIndex) => (
                             <p key={pIndex}>{paragraph}</p>
                           ))}
@@ -179,3 +179,5 @@ export function Research() {
     </div>
   );
 }
+
+export { Research };

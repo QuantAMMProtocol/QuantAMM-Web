@@ -21,6 +21,12 @@ import {
 import { ROUTES } from '../../../routesEnum';
 import { useRunAuditLogMutation } from '../../../services/auditLogService';
 import { LOC_COOKIE, setCookie } from '../../productExplorer/cookieUtils';
+import {
+  buildTosAuditLogRequest,
+  isContinueEnabledForLocation,
+  LocationChoice,
+  shouldRedirectToIneligible,
+} from './termsOfServiceModalUtils';
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -31,8 +37,6 @@ export interface TermsOfServiceGateModalProps {
   isMobile?: boolean;
   page: string;
 }
-
-type LocationChoice = '' | 'uk' | 'nonUk';
 
 // ---------- (Existing modal content preserved) ----------
 const ToSSummary: React.FC = () => (
@@ -99,7 +103,6 @@ const TermsOfServiceGateModal: React.FC<TermsOfServiceGateModalProps> = ({
 }) => {
   const dispatch = useAppDispatch();
   const acceptedTerms = useAppSelector(selectAcceptedTermsAndConditions);
-  console.log('acceptedTerms', acceptedTerms);
   const [location, setLocation] = useState<LocationChoice>('');
   const [acceptedTos, setAcceptedTos] = useState(false);
   const [continueEnabled, setContinueEnabled] = useState(false);
@@ -108,7 +111,7 @@ const TermsOfServiceGateModal: React.FC<TermsOfServiceGateModalProps> = ({
   const tosHref = tosUrl ?? 'https://quantamm.fi/tos';
 
   useEffect(() => {
-    setContinueEnabled(location === 'nonUk');
+    setContinueEnabled(isContinueEnabledForLocation(location));
   }, [location]);
 
   const handleContinue = useCallback(() => {
@@ -121,8 +124,7 @@ const TermsOfServiceGateModal: React.FC<TermsOfServiceGateModalProps> = ({
 
     setCookie(LOC_COOKIE, location || '');
 
-
-    if (!continueEnabled || location === 'uk') {
+    if (shouldRedirectToIneligible(location, continueEnabled)) {
       window.location.href = '/' + ROUTES.INELIGIBLEUSER;
       return;
     }
@@ -130,15 +132,11 @@ const TermsOfServiceGateModal: React.FC<TermsOfServiceGateModalProps> = ({
     dispatch(setAcceptedTermsAndConditions(true));
 
     void runAuditLog({
-      request: {
-        timestamp: new Date().toLocaleString(undefined, {
-          timeZoneName: 'long',
-        }),
-        user: window.location.hostname,
-        page: page + '-tos-gate',
+      request: buildTosAuditLogRequest({
+        hostname: window.location.hostname,
+        page,
         isMobile,
-        tosAgreement: 'accepted', //this is always accepted if we reach here
-      },
+      }),
     });
 
     onClose();
@@ -249,8 +247,7 @@ const TermsOfServiceGateModal: React.FC<TermsOfServiceGateModalProps> = ({
     </Space>
   );
 
-  return (
-    acceptedTerms ? <></> : 
+  return acceptedTerms ? null : (
     <Modal
       title={'Access Confirmation'}
       centered

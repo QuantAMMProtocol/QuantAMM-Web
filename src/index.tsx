@@ -5,7 +5,6 @@ import { Provider } from 'react-redux';
 import { ApolloProvider } from '@apollo/client';
 import { store } from './app/store';
 import { apolloClient } from './queries/apolloClient';
-import reportWebVitals from './reportWebVitals';
 import { routes } from './routes';
 
 import './index.scss';
@@ -17,13 +16,8 @@ root.render(
   <React.StrictMode>
     <ApolloProvider client={apolloClient}>
       <Provider store={store}>
-        <RouterProvider router={routes} />
+        <RouterProvider router={routes} future={{ v7_startTransition: true }} />
       </Provider>
     </ApolloProvider>
   </React.StrictMode>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();

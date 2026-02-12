@@ -1,5 +1,10 @@
 // Independent exportable coin state constants
-import { Chain, Coin, CoinPrice, DeployedToken } from '../../simulationRunConfigModels';
+import {
+  Chain,
+  Coin,
+  CoinPrice,
+  DeployedToken,
+} from '../../simulationRunConfigModels';
 
 const defaultCoinPrice: CoinPrice = {
   date: '2020-01-01 00:00:00:00',

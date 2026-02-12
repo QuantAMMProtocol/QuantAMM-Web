@@ -6,11 +6,9 @@ export const AntiMomentum = () => {
   return (
     <>
       <Title level={3}>
-        <Text
-          style={{ fontSize: 'inherit' }}
-        >
-          Deviations will revert back to the mean. Buy and sell assuming
-          prices will revert.
+        <Text style={{ fontSize: 'inherit' }}>
+          Deviations will revert back to the mean. Buy and sell assuming prices
+          will revert.
         </Text>
       </Title>
       <p>

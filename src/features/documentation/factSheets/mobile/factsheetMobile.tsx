@@ -16,9 +16,56 @@ import {
 import { FactsheetModel } from '../../landing/desktop/factsheetModel';
 import { FAQItems } from '../../landing/faqItems';
 import { useNavigate } from 'react-router-dom';
+import styles from '../factsheetMobile.module.css';
 
 interface FactsheetDesktopProps {
   model: FactsheetModel;
+}
+
+function FactsheetHeroObjectiveSection({ model }: FactsheetDesktopProps) {
+  return (
+    <Row>
+      <Col span={1}></Col>
+      <Col span={22}>
+        <div className={styles.centeredHero}>
+          <img
+            src={model.factsheetImage.image}
+            alt={model.factsheetImage.alt}
+            style={{
+              width: model.factsheetImage.width,
+            }}
+            className={styles.heroImage}
+          />
+          <h1 className={styles.heroTitle}>{model.mainTitle}</h1>
+          <p className={styles.heroDescription}>{model.mainDescription}</p>
+        </div>
+      </Col>
+      <Col span={1}></Col>
+      <Col span={1}></Col>
+      <Col span={22}>
+        <h4>BTF Objective</h4>
+        <p>{model.objective}</p>
+        <h4>Responsive Strategy Objective</h4>
+        <p>
+          The BTF structure allows this to be done in a feeless manner for the
+          LP with continuous on-chain rebalancing rather than the traditional
+          monthly or quarterly rebalances. Re-weighting is performed daily.
+        </p>
+        <p>
+          BTFs also augment returns with swap fees associated with providing a
+          decentralised liquidity pool and provide an ERC20 token that can be
+          used in other DeFi applications.
+        </p>
+        <p>
+          It is crucial to recognize that BTFs carry risks. Reallocation
+          strategies are not market-neutral and involve directional assumptions
+          about asset allocation. Furthermore, the value of assets can be
+          affected by macro economic factors and global events.
+        </p>
+      </Col>
+      <Col span={1}></Col>
+    </Row>
+  );
 }
 
 export function FactSheetMobile(props: FactsheetDesktopProps) {
@@ -30,7 +77,7 @@ export function FactSheetMobile(props: FactsheetDesktopProps) {
   const [faqEli5, setFAQEli5] = useState('ELI5');
   const isDarkTheme = useAppSelector(selectTheme);
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     const loadBreakdowns = async (
       poolNames: Pool[]
@@ -90,10 +137,13 @@ export function FactSheetMobile(props: FactsheetDesktopProps) {
       <Radio.Button value={props.model.defaultPeriod[0]}>
         {props.model.defaultPeriod[1]}
       </Radio.Button>
-      {props.model.alternatePeriod[0] != '' ? 
-      <Radio.Button value={props.model.alternatePeriod[0]}>
-        {props.model.alternatePeriod[1]}
-      </Radio.Button> : <></>}
+      {props.model.alternatePeriod[0] !== '' ? (
+        <Radio.Button value={props.model.alternatePeriod[0]}>
+          {props.model.alternatePeriod[1]}
+        </Radio.Button>
+      ) : (
+        <></>
+      )}
     </Radio.Group>
   );
 
@@ -137,78 +187,22 @@ export function FactSheetMobile(props: FactsheetDesktopProps) {
 
   return (
     <div>
+      <FactsheetHeroObjectiveSection model={props.model} />
       <Row>
         <Col span={1}></Col>
         <Col span={22}>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: '100%',
-            }}
-          >
-            <img
-              src={props.model.factsheetImage.image}
-              alt={props.model.factsheetImage.alt}
-              style={{
-                width: props.model.factsheetImage.width,
-                height: 'auto',
-              }}
-            />
-            <h1 style={{ textAlign: 'center', margin: 0 }}>
-              {props.model.mainTitle}
-            </h1>
-            <p style={{ textAlign: 'center' }}>{props.model.mainDescription}</p>
-          </div>
-        </Col>
-        <Col span={1}></Col>
-        <Col span={1}></Col>
-        <Col span={22}>
-          <h4>BTF Objective</h4>
-          <p>{props.model.objective}</p>
-          <h4>Responsive Strategy Objective</h4>
-          <p>
-            The BTF structure allows this to be done in a feeless manner for the
-            LP with continuous on-chain rebalancing rather than the traditional
-            monthly or quarterly rebalances. Re-weighting is performed daily.
-          </p>
-          <p>
-            BTFs also augment returns with swap fees associated with providing a
-            decentralised liquidity pool and provide an ERC20 token that can be
-            used in other DeFi applications.
-          </p>
-          <p>
-            It is crucial to recognize that BTFs carry risks. Reallocation
-            strategies are not market-neutral and involve directional
-            assumptions about asset allocation. Furthermore, the value of assets
-            can be affected by macro economic factors and global events.
-          </p>
+          <h1 className={styles.sectionTitle}>OVERVIEW</h1>
         </Col>
         <Col span={1}></Col>
       </Row>
-      <Row>
+      <Row className={styles.rowHeight130}>
         <Col span={1}></Col>
         <Col span={22}>
-          <h1 style={{ marginLeft: '10px' }}>OVERVIEW</h1>
-        </Col>
-        <Col span={1}></Col>
-      </Row>
-      <Row style={{ height: '130vh' }}>
-        <Col span={1}></Col>
-        <Col span={22}>
-          <Row style={{ height: '90vh' }}>
+          <Row className={styles.rowHeight90}>
             <Col span={24}>
               <Card
                 title={
-                  <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                    }}
-                  >
+                  <div className={styles.titleRow}>
                     <span>GENERAL DETAILS</span>
                     <Button
                       size="small"
@@ -226,21 +220,13 @@ export function FactSheetMobile(props: FactsheetDesktopProps) {
                     </Button>
                   </div>
                 }
-                style={{ height: '90vh' }}
+                className={styles.cardHeight90}
               >
                 <Row>
                   <Col span={1}></Col>
                   <Col span={22}>
                     <Col span={24}>
-                      <h5
-                        style={{
-                          margin: 10,
-                          width: '80%',
-                          textAlign: 'center',
-                        }}
-                      >
-                        Deployment Links
-                      </h5>
+                      <h5 className={styles.listHeading}>Deployment Links</h5>
                     </Col>
                     {props.model.deploymentLinks.contractLinks.map(
                       (link, index) => {
@@ -248,7 +234,7 @@ export function FactSheetMobile(props: FactsheetDesktopProps) {
                           <Col span={24} key={index}>
                             <Button
                               size="small"
-                              style={{ margin: 10, width: '80%' }}
+                              className={styles.listButton}
                               color="primary"
                             >
                               <a href={link[1]}>{link[0]}</a>
@@ -262,27 +248,14 @@ export function FactSheetMobile(props: FactsheetDesktopProps) {
                   <Col span={1}></Col>
                   <Col span={22}>
                     <Col span={24}>
-                      <h5
-                        style={{
-                          margin: 10,
-                          width: '80%',
-                          textAlign: 'center',
-                        }}
-                      >
-                        Fixed Settings
-                      </h5>
+                      <h5 className={styles.listHeading}>Fixed Settings</h5>
                     </Col>
                     {props.model.fixedSettings.map((link, index) => {
                       return (
                         <Col span={24} key={index}>
                           <Button
                             size="small"
-                            style={{
-                              margin: 10,
-                              width: '80%',
-                              backgroundColor: 'transparent',
-                              color: 'var(--tooltip-text-color)',
-                            }}
+                            className={styles.listButtonMuted}
                             disabled={true}
                           >
                             {link[0]}:{link[1]}
@@ -302,21 +275,15 @@ export function FactSheetMobile(props: FactsheetDesktopProps) {
         <Col span={22}>
           <Card
             title={
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}
-              >
+              <div className={styles.titleRow}>
                 <span>SIMULATED COMPOSITION OVER TIME</span>
               </div>
             }
-            style={{ height: '100%', marginTop: '15px' }}
+            className={`${styles.cardHeight100} ${styles.cardMarginTop15}`}
           >
             {periodSelector}
             <Row>
-              <Col span={24} style={{ paddingTop: '30px' }}>
+              <Col span={24} className={styles.paddingTop30}>
                 <WeightChangeOverTimeGraph
                   simulationRunBreakdown={breakdowns[btf]}
                   overrideChartTheme={
@@ -331,10 +298,10 @@ export function FactSheetMobile(props: FactsheetDesktopProps) {
         <Col span={1}></Col>
       </Row>
 
-      <Row style={{ marginTop: '100px' }}>
+      <Row className={styles.rowMarginTop100}>
         <Col span={1}></Col>
         <Col span={22}>
-          <h1 style={{ marginLeft: '10px' }}>SIMULATED PERFORMANCE</h1>
+          <h1 className={styles.sectionTitle}>SIMULATED PERFORMANCE</h1>
         </Col>
         <Col span={1}></Col>
       </Row>
@@ -343,17 +310,11 @@ export function FactSheetMobile(props: FactsheetDesktopProps) {
         <Col span={22}>
           <Card
             title={
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}
-              >
+              <div className={styles.titleRow}>
                 <span>SIMULATED BTF TOTAL $ VALUE OVER TIME</span>
               </div>
             }
-            style={{ margin: '5px' }}
+            className={styles.cardMarginSmall}
           >
             {periodSelector}
             <div hidden={loading}>
@@ -382,35 +343,29 @@ export function FactSheetMobile(props: FactsheetDesktopProps) {
       <Row>
         <Col span={1}></Col>
         <Col span={22}>
-          <h1 style={{ marginLeft: '10px' }}>RE-WEIGHTING METHODOLOGY</h1>
+          <h1 className={styles.sectionTitle}>RE-WEIGHTING METHODOLOGY</h1>
         </Col>
         <Col span={1}></Col>
       </Row>
-      <Row style={{ height: '200vh' }}>
+      <Row className={styles.rowHeight200}>
         <Col span={1}></Col>
         <Col span={22}>
           <Row>
             <Col span={24}>
               <Card
                 title={
-                  <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                    }}
-                  >
+                  <div className={styles.titleRow}>
                     <span>QUANTAMM REBALANCING</span>
                   </div>
                 }
-                style={{ height: '100vh', overflowY: 'auto' }}
+                className={styles.cardHeight100Scroll}
               >
                 <Radio.Group
                   size="small"
                   buttonStyle="solid"
                   value={faqEli5}
                   onChange={(e) => setFAQEli5(e.target.value)}
-                  style={{ fontWeight: 'normal' }}
+                  className={styles.radioGroupNormal}
                 >
                   <Radio.Button value="ELI5">ELI5</Radio.Button>
                   <Radio.Button value="Crypto Native">
@@ -420,10 +375,9 @@ export function FactSheetMobile(props: FactsheetDesktopProps) {
                 </Radio.Group>
                 <Collapse
                   defaultActiveKey={['1']}
+                  className={`${styles.collapseBase} ${styles.collapseMarginTop20}`}
                   style={{
-                    width: '100%',
                     backgroundColor: isDarkTheme ? '#162536' : '#fff',
-                    marginTop: '20px',
                   }}
                   accordion
                   items={FAQItems.map((x) => {
@@ -432,13 +386,13 @@ export function FactSheetMobile(props: FactsheetDesktopProps) {
                       label: x.label,
                       children: (
                         <>
-                          <div hidden={faqEli5 != 'ELI5'}>
+                          <div hidden={faqEli5 !== 'ELI5'}>
                             {x.eli5Description}
                           </div>
-                          <div hidden={faqEli5 != 'Crypto Native'}>
+                          <div hidden={faqEli5 !== 'Crypto Native'}>
                             {x.cryptoNativeDescription}
                           </div>
-                          <div hidden={faqEli5 != 'Quant'}>
+                          <div hidden={faqEli5 !== 'Quant'}>
                             {x.quantDescription}
                           </div>
                         </>
@@ -454,11 +408,11 @@ export function FactSheetMobile(props: FactsheetDesktopProps) {
         <Col span={1}></Col>
         <Col span={1}></Col>
         <Col span={22}>
-          <Row style={{ marginTop: '20px' }}>
-            <Col span={24} style={{ height: '100%' }}>
+          <Row className={styles.rowMarginTop20}>
+            <Col span={24} className={styles.fullHeight}>
               <Card
                 title="BTF Re-WEIGHT STRATEGY"
-                style={{ height: '100vh', overflowY: 'auto' }}
+                className={styles.cardHeight100Scroll}
               >
                 {props.model.updateRule}
               </Card>
@@ -468,10 +422,10 @@ export function FactSheetMobile(props: FactsheetDesktopProps) {
         </Col>
         <Col span={1}></Col>
       </Row>
-      <Row style={{ marginTop: '20px' }}>
+      <Row className={styles.rowMarginTop20}>
         <Col span={1}></Col>
         <Col span={22}>
-          <h1 style={{ marginLeft: '10px' }}>
+          <h1 className={styles.sectionTitle}>
             QUANTITATIVE FINANCIAL ANALYSIS
           </h1>
         </Col>
@@ -485,21 +439,15 @@ export function FactSheetMobile(props: FactsheetDesktopProps) {
             <Col span={22}>
               <Card
                 title={
-                  <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                    }}
-                  >
+                  <div className={styles.titleRow}>
                     <span>SIMULATED FINANCIAL METRICS</span>
                   </div>
                 }
-                style={{ margin: '5px' }}
+                className={styles.cardMarginSmall}
               >
                 {periodSelector}
                 {visibleMetrics.map(([category, metric]) => (
-                  <div key={metric} style={{ marginBottom: '20px' }}>
+                  <div key={metric} className={styles.metricItem}>
                     <h4>{metric}</h4>
                     <Row>
                       <Col span={24}>
@@ -512,7 +460,7 @@ export function FactSheetMobile(props: FactsheetDesktopProps) {
                                 `${category}_analysis` as
                                   | 'return_analysis'
                                   | 'benchmark_analysis'
-                              ]?.find((x) => x.metricName == metric)
+                              ]?.find((x) => x.metricName === metric)
                                 ?.metricValue ?? 0
                             ),
                           }}
@@ -523,7 +471,7 @@ export function FactSheetMobile(props: FactsheetDesktopProps) {
                                 `${category}_analysis` as
                                   | 'return_analysis'
                                   | 'benchmark_analysis'
-                              ]?.find((x) => x.metricName == metric)
+                              ]?.find((x) => x.metricName === metric)
                                 ?.metricValue ?? 'N/A'}
                         </span>
                       </Col>
@@ -537,7 +485,7 @@ export function FactSheetMobile(props: FactsheetDesktopProps) {
                                 `${category}_analysis` as
                                   | 'return_analysis'
                                   | 'benchmark_analysis'
-                              ]?.find((x) => x.metricName == metric)
+                              ]?.find((x) => x.metricName === metric)
                                 ?.metricValue ?? 0
                             ),
                           }}
@@ -548,7 +496,7 @@ export function FactSheetMobile(props: FactsheetDesktopProps) {
                                 `${category}_analysis` as
                                   | 'return_analysis'
                                   | 'benchmark_analysis'
-                              ]?.find((x) => x.metricName == metric)
+                              ]?.find((x) => x.metricName === metric)
                                 ?.metricValue ?? 'N/A'}
                         </span>
                       </Col>
@@ -562,7 +510,7 @@ export function FactSheetMobile(props: FactsheetDesktopProps) {
                                 `${category}_analysis` as
                                   | 'return_analysis'
                                   | 'benchmark_analysis'
-                              ]?.find((x) => x.metricName == metric)
+                              ]?.find((x) => x.metricName === metric)
                                 ?.metricValue ?? 0
                             ),
                           }}
@@ -573,7 +521,7 @@ export function FactSheetMobile(props: FactsheetDesktopProps) {
                                 `${category}_analysis` as
                                   | 'return_analysis'
                                   | 'benchmark_analysis'
-                              ]?.find((x) => x.metricName == metric)
+                              ]?.find((x) => x.metricName === metric)
                                 ?.metricValue ?? 'N/A'}
                         </span>
                       </Col>
@@ -608,24 +556,21 @@ export function FactSheetMobile(props: FactsheetDesktopProps) {
       <Row>
         <Col span={1}></Col>
         <Col span={22}>
-          <h1 style={{ marginLeft: '10px' }}>KEY FACTS</h1>
+          <h1 className={styles.sectionTitle}>KEY FACTS</h1>
         </Col>
         <Col span={1}></Col>
       </Row>
-      <Row style={{ height: '500vh' }}>
+      <Row className={styles.rowHeight500}>
         <Col span={1}></Col>
         <Col span={22}>
-          <Row style={{ height: '250vh' }}>
+          <Row className={styles.rowHeight250}>
             <Col span={24}>
-              <Card
-                title="Advantages"
-                style={{ height: '250vh', overflowY: 'auto' }}
-              >
+              <Card title="Advantages" className={styles.cardHeight250Scroll}>
                 <Row>
                   {props.model.advantages.map((advantage, index) => (
                     <Col span={24} key={index}>
                       <Card
-                        style={{ margin: '5px', height: '57vh' }}
+                        className={styles.cardMarginHeight57}
                         title={advantage.title}
                       >
                         <Row>
@@ -642,16 +587,13 @@ export function FactSheetMobile(props: FactsheetDesktopProps) {
         <Col span={1}></Col>
         <Row>
           <Col span={1}></Col>
-          <Col span={22} style={{ height: '250vh' }}>
-            <Card
-              style={{ height: '250vh', overflowY: 'auto' }}
-              title={'Risks'}
-            >
+          <Col span={22} className={styles.colHeight250}>
+            <Card className={styles.cardHeight250Scroll} title={'Risks'}>
               <Row>
                 {props.model.risks.map((risk, index) => (
                   <Col span={24} key={index}>
                     <Card
-                      style={{ margin: '5px', height: '57vh' }}
+                      className={styles.cardMarginHeight57}
                       title={risk.title}
                     >
                       <Row>
@@ -669,7 +611,7 @@ export function FactSheetMobile(props: FactsheetDesktopProps) {
       <Row>
         <Col span={1}></Col>
         <Col span={22}>
-          <h1 style={{ marginLeft: '10px' }}>
+          <h1 className={styles.sectionTitle}>
             RE-WEIGHTING STRATEGY PARAMETER SELECTION
           </h1>
         </Col>
@@ -681,13 +623,13 @@ export function FactSheetMobile(props: FactsheetDesktopProps) {
         <Col span={22}>{props.model.trainingDescription}</Col>
         <Col span={1}></Col>
       </Row>
-      <Row style={{ height: '130vh' }}>
+      <Row className={styles.rowHeight130}>
         <Col span={1}></Col>
         <Col span={22}>
           <Col span={24}>
             <Card
               title={props.model.trainingWindowTitle}
-              style={{ height: '130vh' }}
+              className={styles.cardHeight130}
             >
               <Row>
                 <Col span={24}>
@@ -744,13 +686,13 @@ export function FactSheetMobile(props: FactsheetDesktopProps) {
         <Col span={22}>
           <Card
             title={'Parameters Selected'}
-            style={{ height: 'auto', marginTop: '20px' }}
+            className={styles.cardHeightAutoMarginTop20}
           >
             <Row>
               {props.model.trainedParameters.map((parameter, index) => (
                 <Col span={24} key={index}>
                   <Card
-                    style={{ margin: '5px', height: '57vh' }}
+                    className={styles.cardMarginHeight57}
                     title={
                       <Tooltip
                         title={`The following represent different forms of the ${parameter.name} setting used for different tooling.`}
@@ -770,7 +712,7 @@ export function FactSheetMobile(props: FactsheetDesktopProps) {
                               <Button
                                 size="small"
                                 disabled={true}
-                                style={{ margin: '5px' }}
+                                className={styles.buttonMarginSmall}
                                 key={valIndex}
                               >
                                 {val}

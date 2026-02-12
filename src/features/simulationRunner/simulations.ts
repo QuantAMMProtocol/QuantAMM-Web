@@ -32,12 +32,13 @@ export function runHodl(
   startDateUnix: number,
   endDateUnix: number
 ): SimulationRunLiquidityPoolSnapshot[] {
-  let uniqueTimes: number[] = getUniqueTimes(pool);
+  const allUniqueTimes: number[] = getUniqueTimes(pool);
+  let uniqueTimes: number[] = allUniqueTimes;
   uniqueTimes = uniqueTimes.filter(
     (x) => x >= startDateUnix && x < endDateUnix
   );
   if (uniqueTimes.length == 0) {
-    uniqueTimes = uniqueTimes.filter(
+    uniqueTimes = allUniqueTimes.filter(
       (x) => x > startDateUnix / 1000 && x < endDateUnix / 1000
     );
   }

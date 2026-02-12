@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { useAppSelector } from '../../../app/hooks';
 import { selectAvailableUpdateRules } from '../../simulationRunConfiguration/simulationRunConfigurationSlice';
 import { Eli5 } from '../../shared';
+import styles from './updateRules.module.css';
+import sharedStyles from '../documentation.module.css';
 
 export function AntiMomentumUpdateRule() {
   const [eli5, setEli5] = useState('ELI5');
@@ -14,13 +16,13 @@ export function AntiMomentumUpdateRule() {
       <MathJaxContext>
         <Row>
           <Col span={1}></Col>
-          <Col style={{ padding: 10 }} span={23}>
+          <Col className={styles.containerPad10} span={23}>
             <Row>
               <Col span={24}>
                 <h1>QuantAMM Update Rule: Anti Momentum</h1>
               </Col>
               <Col span={24}>
-                <Form.Item style={{ marginTop: '5px' }}>
+                <Form.Item className={sharedStyles.formItemTop5}>
                   <Radio.Group
                     size="small"
                     value={eli5}
@@ -30,26 +32,20 @@ export function AntiMomentumUpdateRule() {
                       User Knowledge Level:{' '}
                     </Radio.Button>
                     <Radio.Button value={'ELI5'}>ELI5</Radio.Button>
-                    <Radio.Button value={'Quant'}>
-                      Quant
-                    </Radio.Button>
+                    <Radio.Button value={'Quant'}>Quant</Radio.Button>
                   </Radio.Group>
                 </Form.Item>
               </Col>
             </Row>
             <Row>
-              <Col span={24} style={{ padding: '15px' }}>
-                <div hidden={eli5 != 'ELI5'}>
+              <Col span={24} className={styles.containerPad15}>
+                <div hidden={eli5 !== 'ELI5'}>
                   <Row>
                     <Col span={8}>
                       <img
                         loading="lazy"
                         src={'/documentation/mean_reversion.svg'}
-                        style={{
-                          width: '100%',
-                          paddingRight: '5%',
-                          paddingTop: '15%',
-                        }}
+                        className={styles.imagePadRight5Top15}
                       />
                     </Col>
                     <Col span={16}>
@@ -57,7 +53,7 @@ export function AntiMomentumUpdateRule() {
                     </Col>
                   </Row>
                 </div>
-                <div hidden={eli5 == 'ELI5'}>
+                <div hidden={eli5 === 'ELI5'}>
                   <h3>Summary</h3>
                   <p>
                     Under anti-momentum updating, the weights change in negative
@@ -122,7 +118,7 @@ export function AntiMomentumUpdateRule() {
                   <h3>Parameter Guide {'&'} Return Profile Summary</h3>
                   <p>
                     {
-                      rules.find((x) => x.updateRuleName == 'AntiMomentum')
+                      rules.find((x) => x.updateRuleName === 'AntiMomentum')
                         ?.updateRuleResultProfileSummary
                     }
                   </p>

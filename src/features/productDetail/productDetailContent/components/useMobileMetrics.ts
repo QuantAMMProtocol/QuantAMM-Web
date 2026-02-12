@@ -21,7 +21,9 @@ export interface MetricOption {
   value: string;
 }
 
-export function useAnalysisRows(simulationRunBreakdown?: SimulationRunBreakdown) {
+export function useAnalysisRows(
+  simulationRunBreakdown?: SimulationRunBreakdown
+) {
   return useMemo(
     () =>
       simulationRunBreakdown
@@ -35,7 +37,10 @@ export function useBucketsAll(rows: Row[]) {
   return useMemo(() => {
     if (!rows.length) return [];
 
-    const map = new Map<string, { benchmark: string; value: string | number | null }[]>();
+    const map = new Map<
+      string,
+      { benchmark: string; value: string | number | null }[]
+    >();
 
     for (const r of rows) {
       const metric = (r.metricName ?? '').toString().trim();
@@ -45,8 +50,8 @@ export function useBucketsAll(rows: Row[]) {
       if (nMetric.includes('absolute return')) continue;
 
       const benchmarkLabelRaw =
-        ((r.benchmark && String(r.benchmark)) ??
-        (r.updateRule && String(r.updateRule))) ??
+        (r.benchmark && String(r.benchmark)) ??
+        (r.updateRule && String(r.updateRule)) ??
         '—';
 
       const benchKey = benchmarkLabelRaw.trim().toLowerCase();
@@ -79,7 +84,11 @@ export function useDefaultAlpha(metricOptions: MetricOption[]) {
       const n = norm(opt.label);
       return n.includes('jensen') && n.includes('alpha');
     });
-    return target ? [target.value] : (metricOptions[0] ? [metricOptions[0].value] : []);
+    return target
+      ? [target.value]
+      : metricOptions[0]
+        ? [metricOptions[0].value]
+        : [];
   }, [metricOptions]);
 }
 
@@ -95,7 +104,10 @@ export function useSelectedMetrics(defaultAlpha: string[]) {
   return [selectedMetrics, setSelectedMetrics] as const;
 }
 
-export function useBucketsSelected(bucketsAll: MetricBucket[], selectedMetrics: string[]) {
+export function useBucketsSelected(
+  bucketsAll: MetricBucket[],
+  selectedMetrics: string[]
+) {
   return useMemo(() => {
     if (!selectedMetrics.length) return [];
     const selectedSet = new Set(selectedMetrics);

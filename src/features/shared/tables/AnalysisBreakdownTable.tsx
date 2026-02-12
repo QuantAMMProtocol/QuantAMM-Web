@@ -24,8 +24,6 @@ export const AnalysisBreakdownTable: FC<AnalysisBreakdownTableProps> = ({
   const darkThemeAg = useAppSelector(selectAgGridTheme);
   const gridRef = useRef<AgGridReact>(null);
 
-  const livePools = CURRENT_LIVE_FACTSHEETS;
-
   const [finAnalysisColDefs] = useState<ColDef[]>([
     { colId: 'updateRule', field: 'updateRule', headerName: 'Update Rule' },
     {
@@ -90,36 +88,47 @@ export const AnalysisBreakdownTable: FC<AnalysisBreakdownTableProps> = ({
     [finAnalysisColDefs]
   );
 
-  const sideBar: SideBarDef = {
-    toolPanels: [
-      {
-        id: 'columns',
-        labelDefault: 'Columns',
-        labelKey: 'columns',
-        iconKey: 'columns',
-        toolPanel: 'agColumnsToolPanel',
-        minWidth: 100,
-        maxWidth: 300,
-        width: 200,
-      },
-      {
-        id: 'filters',
-        labelDefault: 'Filters',
-        labelKey: 'filters',
-        iconKey: 'filter',
-        toolPanel: 'agFiltersToolPanel',
-        minWidth: 100,
-        maxWidth: 300,
-        width: 200,
-      },
-    ],
-    position: 'right',
-    defaultToolPanel: 'none',
-  };
+  const sideBar: SideBarDef = useMemo(
+    () => ({
+      toolPanels: [
+        {
+          id: 'columns',
+          labelDefault: 'Columns',
+          labelKey: 'columns',
+          iconKey: 'columns',
+          toolPanel: 'agColumnsToolPanel',
+          minWidth: 100,
+          maxWidth: 300,
+          width: 200,
+        },
+        {
+          id: 'filters',
+          labelDefault: 'Filters',
+          labelKey: 'filters',
+          iconKey: 'filter',
+          toolPanel: 'agFiltersToolPanel',
+          minWidth: 100,
+          maxWidth: 300,
+          width: 200,
+        },
+      ],
+      position: 'right',
+      defaultToolPanel: 'none',
+    }),
+    []
+  );
 
   const rowData = useMemo(
     () => getAnalysisSummary(simulationRunBreakdowns),
     [simulationRunBreakdowns]
+  );
+
+  const isLivePool = useMemo(
+    () =>
+      !!CURRENT_LIVE_FACTSHEETS.factsheets.find(
+        (factsheet) => factsheet.poolId === (productId ?? '')
+      ),
+    [productId]
   );
 
   const handleDownloadCSV = () => {
@@ -150,7 +159,11 @@ export const AnalysisBreakdownTable: FC<AnalysisBreakdownTableProps> = ({
           >
             <Row>
               <Col span={20}>
-                <h4>{livePools.factsheets.find(x => x.poolId == (productId ?? '')) ? 'Simulated Backtest Metric Values' : 'Metric Raw Values'}</h4>
+                <h4>
+                  {isLivePool
+                    ? 'Simulated Backtest Metric Values'
+                    : 'Metric Raw Values'}
+                </h4>
               </Col>
               <Col span={4} style={{ textAlign: 'right' }}>
                 <Button

@@ -4,7 +4,7 @@ import { TimeSeriesData } from '../models';
 import { getPoolSnapshotsMap } from './fetchSnapshotDataUtils';
 
 export const useFetchSnapshotData = (
-  poolData: GetPoolsQuery,
+  poolData: GetPoolsQuery | undefined,
   { skip }: { skip: boolean }
 ) => {
   const [poolSnapshotsMap, setPoolSnapshotsMap] = useState<
@@ -15,31 +15,52 @@ export const useFetchSnapshotData = (
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
+    let isMounted = true;
+
     const fetchData = async () => {
-      if (!poolData || loading) {
+      if (!poolData) {
         return;
       }
 
       setLoading(true);
+      setError(null);
 
-      const pools = poolData.poolGetPools.map((pool) => ({
-        id: pool.id,
-        chain: pool.chain,
-      }));
+      try {
+        const pools = poolData.poolGetPools.map((pool) => ({
+          id: pool.id,
+          chain: pool.chain,
+        }));
 
-      const poolSnapshotsMap = await getPoolSnapshotsMap(pools);
+        const poolSnapshotsMap = await getPoolSnapshotsMap(pools);
 
-      setPoolSnapshotsMap(poolSnapshotsMap);
-      setLoading(false);
+        if (isMounted) {
+          setPoolSnapshotsMap(poolSnapshotsMap);
+        }
+      } catch (error) {
+        console.error('useFetchSnapshotData:', error);
+        if (isMounted) {
+          setError(error instanceof Error ? error : new Error(String(error)));
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
     };
 
-    if (!skip) {
-      fetchData().catch((error) => {
-        console.error('useFetchSnapshotData:', error);
-        setError(error);
-      });
+    if (skip) {
+      setLoading(false);
+      return () => {
+        isMounted = false;
+      };
     }
-  }, [poolData, skip, loading]);
+
+    void fetchData();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [poolData, skip]);
 
   return {
     poolSnapshotsMapLoading: loading,

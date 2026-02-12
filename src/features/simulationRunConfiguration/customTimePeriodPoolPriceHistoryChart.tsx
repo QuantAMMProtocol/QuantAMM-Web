@@ -46,60 +46,65 @@ export function CustomTimePeriodPoolPriceHistoryChart() {
     [swapImports]
   );
 
-  function getPriceHistorySeries(coinCode: string) {
-    const seriesArray: agCharts.AgCartesianSeriesOptions[] = [];
-    const unixStart = new Date(startDate).getTime();
-    const unixEnd = new Date(endDate).getTime();
+  const getPriceHistorySeries = useCallback(
+    (coinCode: string) => {
+      const seriesArray: agCharts.AgCartesianSeriesOptions[] = [];
+      const unixStart = new Date(startDate).getTime();
+      const unixEnd = new Date(endDate).getTime();
 
-    const coin: Coin | undefined = availableCoins.find(
-      (y) => y.coinCode == coinCode
-    );
-
-    if (coin != undefined) {
-      let miliDateData = coin.dailyPriceHistory.filter(
-        (x) => x.unix > unixStart && x.unix < unixEnd
+      const coin: Coin | undefined = availableCoins.find(
+        (y) => y.coinCode === coinCode
       );
-      if (miliDateData.length == 0) {
-        miliDateData = coin.dailyPriceHistory.filter(
-          (x) => x.unix > unixStart / 1000 && x.unix < unixEnd / 1000
+
+      if (coin !== undefined) {
+        let miliDateData = coin.dailyPriceHistory.filter(
+          (x) => x.unix > unixStart && x.unix < unixEnd
         );
-      }
-      seriesArray.push({
-        type: 'line',
-        xKey: 'unix',
-        yKey: 'close',
-        yName: coin.coinCode,
-        data: [...miliDateData].reverse(),
-        stroke: '#DAAB43',
-        marker: { enabled: false },
-      });
-
-      if (swapImports.length > 0) {
-        const swapData = swapImports.filter((x) => x.tokenIn == coin.coinCode);
-        const swapSeriesData: SwapImport[] = [];
-
-        for (const data of miliDateData) {
-          const swapDataPoint = swapData.find((x) => x.unix == data.unix);
-          swapSeriesData.push({
-            tokenIn: coin.coinCode,
-            tokenOut: coin.coinCode,
-            unix: data.unix,
-            amountIn: swapDataPoint ? swapDataPoint.amountIn : 0,
-          });
+        if (miliDateData.length === 0) {
+          miliDateData = coin.dailyPriceHistory.filter(
+            (x) => x.unix > unixStart / 1000 && x.unix < unixEnd / 1000
+          );
         }
         seriesArray.push({
-          type: 'bar',
+          type: 'line',
           xKey: 'unix',
-          yKey: 'amountIn',
-          yName: 'Amount In',
-          data: swapSeriesData,
+          yKey: 'close',
+          yName: coin.coinCode,
+          data: [...miliDateData].reverse(),
           stroke: '#DAAB43',
+          marker: { enabled: false },
         });
-      }
-    }
 
-    return seriesArray;
-  }
+        if (swapImports.length > 0) {
+          const swapData = swapImports.filter(
+            (x) => x.tokenIn === coin.coinCode
+          );
+          const swapSeriesData: SwapImport[] = [];
+
+          for (const data of miliDateData) {
+            const swapDataPoint = swapData.find((x) => x.unix === data.unix);
+            swapSeriesData.push({
+              tokenIn: coin.coinCode,
+              tokenOut: coin.coinCode,
+              unix: data.unix,
+              amountIn: swapDataPoint ? swapDataPoint.amountIn : 0,
+            });
+          }
+          seriesArray.push({
+            type: 'bar',
+            xKey: 'unix',
+            yKey: 'amountIn',
+            yName: 'Amount In',
+            data: swapSeriesData,
+            stroke: '#DAAB43',
+          });
+        }
+      }
+
+      return seriesArray;
+    },
+    [availableCoins, endDate, startDate, swapImports]
+  );
 
   function getTimeAxisOption(dataLength: number): AgTimeAxisOptions {
     return {
@@ -132,73 +137,75 @@ export function CustomTimePeriodPoolPriceHistoryChart() {
       </div>
       <Row hidden={!loadingCoins} className={styles.initialPoolChartDiv}>
         <Col span={24}>
-          {initialPoolConstituents.map((x, indexX: number) => (
-            <Row key={indexX}>
-              <Col span={24}>
-                <AgCharts
-                  options={{
-                    height: 300,
-                    axes: [
-                      getTimeAxisOption(
-                        getPriceHistorySeries(x.coin.coinCode)?.[0]?.data
-                          ?.length ?? 0
-                      ),
-                      {
-                        type: 'number',
-                        position: 'left',
-                        keys: ['close'],
-                        label: {
-                          format: '$~s',
-                        },
-                      },
-                      {
-                        type: 'number',
-                        position: 'right',
-                        keys: ['amountIn'],
-                        title: {
-                          text: 'Amount In',
-                        },
-                        label: {
-                          format: '~s',
-                        },
-                        max: getMaxSwapImports(x.coin.coinCode) * 0.8,
-                      },
-                    ],
-                    series: getPriceHistorySeries(x.coin.coinCode),
-                    legend: {
-                      position: 'top',
-                    },
-                    overlays: {
-                      noData: {
-                        text: 'No data',
-                      },
-                    },
-                    theme: {
-                      baseTheme: chartTheme,
-                      overrides: {
-                        common: {
-                          background: {
-                            fill: 'transparent',
+          {initialPoolConstituents.map((x) => {
+            const priceHistorySeries = getPriceHistorySeries(x.coin.coinCode);
+            return (
+              <Row key={x.coin.coinCode}>
+                <Col span={24}>
+                  <AgCharts
+                    options={{
+                      height: 300,
+                      axes: [
+                        getTimeAxisOption(
+                          priceHistorySeries?.[0]?.data?.length ?? 0
+                        ),
+                        {
+                          type: 'number',
+                          position: 'left',
+                          keys: ['close'],
+                          label: {
+                            format: '$~s',
                           },
                         },
-                        line: {
-                          series: {
-                            stroke: '#DAAB43',
-                            cursor: 'crosshair',
-                            marker: {
+                        {
+                          type: 'number',
+                          position: 'right',
+                          keys: ['amountIn'],
+                          title: {
+                            text: 'Amount In',
+                          },
+                          label: {
+                            format: '~s',
+                          },
+                          max: getMaxSwapImports(x.coin.coinCode) * 0.8,
+                        },
+                      ],
+                      series: priceHistorySeries,
+                      legend: {
+                        position: 'top',
+                      },
+                      overlays: {
+                        noData: {
+                          text: 'No data',
+                        },
+                      },
+                      theme: {
+                        baseTheme: chartTheme,
+                        overrides: {
+                          common: {
+                            background: {
+                              fill: 'transparent',
+                            },
+                          },
+                          line: {
+                            series: {
                               stroke: '#DAAB43',
-                              fill: '#DAAB43',
-                              enabled: false,
+                              cursor: 'crosshair',
+                              marker: {
+                                stroke: '#DAAB43',
+                                fill: '#DAAB43',
+                                enabled: false,
+                              },
                             },
                           },
                         },
                       },
-                    },
-                  }}
-                />
-              </Col>
-            </Row>
-          ))}
+                    }}
+                  />
+                </Col>
+              </Row>
+            );
+          })}
         </Col>
       </Row>
     </div>
