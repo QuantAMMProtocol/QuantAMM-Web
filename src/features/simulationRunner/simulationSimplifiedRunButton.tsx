@@ -56,7 +56,7 @@ export function SimulationSimplifiedRunButton() {
   //  useFetchProductListData();
 
   const runSimulationsThunk =
-    (runTimeRange: string): AppThunk =>
+    (runTimeRange: string): AppThunk<Promise<void>> =>
     async (dispatch, getState) => {
       if (getState().simRunner.simulationRunStatus !== 'Pending') {
         return;
@@ -162,7 +162,7 @@ export function SimulationSimplifiedRunButton() {
               onClick={() => {
                 dispatch(changeSimulationRunnerCurrentStepIndex(5));
                 dispatch(changeSimulationRunnerCurrentRunTypeIndex(1));
-                dispatch(runSimulationsThunk('custom'));
+                void dispatch(runSimulationsThunk('custom'));
               }}
             >
               Run Simulation
