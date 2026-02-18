@@ -40,6 +40,9 @@ import { AnalysisSimplifiedBreakdownTable } from '../../../simulationResults/bre
 
 const { Text } = Typography;
 const { Panel } = Collapse;
+const WEIGHT_CHART_Y_AXIS_OVERRIDE = { label: { enabled: false } };
+const RETURN_DISTRIBUTION_Y_AXIS_OVERRIDE = { title: { enabled: false } };
+const SHOW_STRATEGY_WORKFLOW_SECTION = false;
 
 interface ProductDetailSummaryDesktopProps {
   product: Product;
@@ -308,7 +311,7 @@ export const ProductDetailSummaryDesktop: FC<
     ];
   }, [simulationRunBreakdown]);
 
-  const MetricsToggle = () => (
+  const metricsToggle = (
     <div
       onClick={(e) => {
         e.stopPropagation();
@@ -343,7 +346,7 @@ export const ProductDetailSummaryDesktop: FC<
     </div>
   );
 
-  const PoolWeightsCard = () => (
+  const poolWeightsCard = (
     <Card
       className={styles['product-detail-summary__cardDesktop']}
       title="Pool weights"
@@ -362,13 +365,13 @@ export const ProductDetailSummaryDesktop: FC<
         <ProductTokenWeightChangeOverTimeGraph
           product={product}
           isBenchmark={weightsView === 'benchmark'}
-          yAxisOverride={{ label: { enabled: false } }}
+          yAxisOverride={WEIGHT_CHART_Y_AXIS_OVERRIDE}
         />
       </div>
     </Card>
   );
 
-  const ReturnDistributionCard = () => (
+  const returnDistributionCard = (
     <Card
       className={styles['product-detail-summary__cardDesktop']}
       title="Return distribution"
@@ -386,7 +389,7 @@ export const ProductDetailSummaryDesktop: FC<
       <div className={styles['product-detail-summary__chart']}>
         {ts.length > 0 ? (
           <ReturnDistributionGraph
-            yAxisOverride={{ title: { enabled: false } }}
+            yAxisOverride={RETURN_DISTRIBUTION_Y_AXIS_OVERRIDE}
             marketValues={
               returnsView === 'benchmark'
                 ? marketValuesBenchmark
@@ -402,40 +405,33 @@ export const ProductDetailSummaryDesktop: FC<
 
   return (
     <div className={styles['product-detail-summary__desktop']}>
-      <PoolWeightsCard />
+      {poolWeightsCard}
 
-      {
-        /* hidden as the subgraph has still not been pushed to prod*/
-        <div hidden>
-          <Collapse
-            defaultActiveKey={[]}
-            className={styles['product-detail-summary__collapse']}
-            bordered={false}
+      {SHOW_STRATEGY_WORKFLOW_SECTION && (
+        <Collapse
+          defaultActiveKey={[]}
+          className={styles['product-detail-summary__collapse']}
+          bordered={false}
+        >
+          <Panel
+            key="strategy-workflow"
+            header={
+              <div className={styles['product-detail-summary__collapseHeader']}>
+                <span className={styles['product-detail-summary__stepNumber']}>
+                  2
+                </span>
+                <Text strong>Strategy workflow</Text>
+                <Text
+                  type="secondary"
+                  className={styles['product-detail-summary__collapseHint']}
+                ></Text>
+              </div>
+            }
           >
-            <Panel
-              key="strategy-workflow"
-              header={
-                <div
-                  className={styles['product-detail-summary__collapseHeader']}
-                >
-                  <span
-                    className={styles['product-detail-summary__stepNumber']}
-                  >
-                    2
-                  </span>
-                  <Text strong>Strategy workflow</Text>
-                  <Text
-                    type="secondary"
-                    className={styles['product-detail-summary__collapseHint']}
-                  ></Text>
-                </div>
-              }
-            >
-              <StrategyWorkflowCard product={product} factsheet={factsheet} />
-            </Panel>
-          </Collapse>
-        </div>
-      }
+            <StrategyWorkflowCard product={product} factsheet={factsheet} />
+          </Panel>
+        </Collapse>
+      )}
 
       {/* Collapsible metrics section with icon toggle */}
       <Collapse
@@ -458,7 +454,7 @@ export const ProductDetailSummaryDesktop: FC<
               </Tooltip>
             </div>
           }
-          extra={<MetricsToggle />}
+          extra={metricsToggle}
         >
           {metricsView === 'table' ? (
             isLoading ? (
@@ -623,7 +619,7 @@ export const ProductDetailSummaryDesktop: FC<
         </Panel>
       </Collapse>
 
-      <ReturnDistributionCard />
+      {returnDistributionCard}
     </div>
   );
 };
