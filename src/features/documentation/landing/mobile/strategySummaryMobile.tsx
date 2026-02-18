@@ -12,23 +12,34 @@ export function StrategySummaryMobile() {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const loadBreakdowns = async (
-      poolNames: Pool[]
-    ): Promise<SimulationRunBreakdown[]> => {
+    let isMounted = true;
+
+    const loadBreakdowns = async () => {
       setLoading(true);
-      const fetchedBreakdowns = await Promise.all(
-        poolNames.map((poolName) => getBreakdown(poolName))
-      );
-      setBreakdowns(fetchedBreakdowns);
-      return fetchedBreakdowns;
+      try {
+        const fetchedBreakdowns = await Promise.all(
+          (['balancerWeighted', 'quantAMMAntiMomentum'] as Pool[]).map(
+            (poolName) => getBreakdown(poolName)
+          )
+        );
+        if (isMounted) {
+          setBreakdowns(fetchedBreakdowns);
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
     };
 
-    if (loading) {
-      loadBreakdowns(['balancerWeighted', 'quantAMMAntiMomentum'] as Pool[])
-        .catch(console.error)
-        .finally(() => setLoading(false));
-    }
-  }, [loading]);
+    void loadBreakdowns();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   return (
     <div>
