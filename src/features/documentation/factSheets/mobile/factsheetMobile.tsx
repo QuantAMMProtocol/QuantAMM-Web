@@ -123,6 +123,21 @@ export function FactSheetMobile(props: FactsheetDesktopProps) {
     [period, props.model.poolPrefix]
   );
 
+  const btfTrain = useMemo(
+    () => props.model.poolPrefix + `BTF${props.model.trainPeriod}`,
+    [props.model.poolPrefix, props.model.trainPeriod]
+  );
+
+  const cfmmTrain = useMemo(
+    () => props.model.poolPrefix + `CFMM${props.model.trainPeriod}`,
+    [props.model.poolPrefix, props.model.trainPeriod]
+  );
+
+  const hodlTrain = useMemo(
+    () => props.model.poolPrefix + `Hodl${props.model.trainPeriod}`,
+    [props.model.poolPrefix, props.model.trainPeriod]
+  );
+
   const trainXAxisMonthInterval = useMemo(() => {
     return props.model.xAxisIntervals.get(props.model.trainPeriod);
   }, [props.model.trainPeriod, props.model.xAxisIntervals]);
@@ -184,6 +199,26 @@ export function FactSheetMobile(props: FactsheetDesktopProps) {
   const xAxisMonthInterval = useMemo(() => {
     return props.model.xAxisIntervals.get(period);
   }, [period, props.model.xAxisIntervals]);
+
+  const testMarketValueBreakdowns = useMemo(
+    () =>
+      [breakdowns[btf], breakdowns[cfmm], breakdowns[hodl]].filter(
+        (
+          breakdown
+        ): breakdown is SimulationRunBreakdown => breakdown !== undefined
+      ),
+    [breakdowns, btf, cfmm, hodl]
+  );
+
+  const trainMarketValueBreakdowns = useMemo(
+    () =>
+      [breakdowns[btfTrain], breakdowns[cfmmTrain], breakdowns[hodlTrain]].filter(
+        (
+          breakdown
+        ): breakdown is SimulationRunBreakdown => breakdown !== undefined
+      ),
+    [breakdowns, btfTrain, cfmmTrain, hodlTrain]
+  );
 
   return (
     <div>
@@ -317,15 +352,11 @@ export function FactSheetMobile(props: FactsheetDesktopProps) {
             className={styles.cardMarginSmall}
           >
             {periodSelector}
-            <div hidden={loading}>
+            {!loading && (
               <SimulationResultMarketValueChart
                 hideTitle={true}
                 overrideNagivagtion={false}
-                breakdowns={
-                  loading
-                    ? []
-                    : [breakdowns[btf], breakdowns[cfmm], breakdowns[hodl]]
-                }
+                breakdowns={testMarketValueBreakdowns}
                 overrideSeriesStrokeColor={
                   props.model.cumulativePerformanceOverrideSeriesStrokeColor
                 }
@@ -335,7 +366,7 @@ export function FactSheetMobile(props: FactsheetDesktopProps) {
                 overrideXAxisInterval={xAxisMonthInterval}
                 forceViewResults={true}
               />
-            </div>
+            )}
           </Card>
         </Col>
         <Col span={1}></Col>
@@ -633,14 +664,11 @@ export function FactSheetMobile(props: FactsheetDesktopProps) {
             >
               <Row>
                 <Col span={24}>
-                  <div hidden={loading}>
+                  {!loading && (
+                    <>
                     <h5>Constituent weights over time</h5>
                     <WeightChangeOverTimeGraph
-                      simulationRunBreakdown={
-                        breakdowns[
-                          `${props.model.poolPrefix}BTF${props.model.trainPeriod}`
-                        ]
-                      }
+                      simulationRunBreakdown={breakdowns[btfTrain]}
                       overrideChartTheme={
                         isDarkTheme ? 'ag-default-dark' : 'ag-default'
                       }
@@ -649,21 +677,7 @@ export function FactSheetMobile(props: FactsheetDesktopProps) {
                     <h5>Cumulative performance over time</h5>
                     <SimulationResultMarketValueChart
                       hideTitle={true}
-                      breakdowns={
-                        loading
-                          ? []
-                          : [
-                              breakdowns[
-                                `${props.model.poolPrefix}BTF${props.model.trainPeriod}`
-                              ],
-                              breakdowns[
-                                `${props.model.poolPrefix}CFMM${props.model.trainPeriod}`
-                              ],
-                              breakdowns[
-                                `${props.model.poolPrefix}Hodl${props.model.trainPeriod}`
-                              ],
-                            ]
-                      }
+                      breakdowns={trainMarketValueBreakdowns}
                       overrideSeriesStrokeColor={
                         props.model
                           .cumulativePerformanceOverrideSeriesStrokeColor
@@ -675,7 +689,8 @@ export function FactSheetMobile(props: FactsheetDesktopProps) {
                       overrideXAxisInterval={trainXAxisMonthInterval}
                       forceViewResults={true}
                     />
-                  </div>
+                    </>
+                  )}
                 </Col>
               </Row>
             </Card>

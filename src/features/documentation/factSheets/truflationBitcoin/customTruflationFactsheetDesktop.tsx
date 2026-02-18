@@ -191,6 +191,26 @@ export function TruflationFactSheetDesktop(props: FactsheetDesktopProps) {
   const xAxisMonthInterval = useMemo(() => {
     return props.model.xAxisIntervals.get(testPeriod);
   }, [testPeriod, props.model.xAxisIntervals]);
+
+  const testComparisonBreakdowns = useMemo(
+    () =>
+      [breakdowns[btf], breakdowns[hodl]].filter(
+        (
+          breakdown
+        ): breakdown is SimulationRunBreakdown => breakdown !== undefined
+      ),
+    [breakdowns, btf, hodl]
+  );
+
+  const trainingComparisonBreakdowns = useMemo(
+    () =>
+      [breakdowns[btfTrain], breakdowns[hodlTrain]].filter(
+        (
+          breakdown
+        ): breakdown is SimulationRunBreakdown => breakdown !== undefined
+      ),
+    [breakdowns, btfTrain, hodlTrain]
+  );
   console.log(breakdowns[btf]);
   return (
     <div>
@@ -282,9 +302,7 @@ export function TruflationFactSheetDesktop(props: FactsheetDesktopProps) {
                     <Col span={1} />
                     <Col span={22}>
                       <SimulationResultDrawdownChart
-                        breakdowns={
-                          loading ? [] : [breakdowns[btf], breakdowns[hodl]]
-                        }
+                        breakdowns={testComparisonBreakdowns}
                         forceViewResults={true}
                         hideTitle={true}
                       />
@@ -322,11 +340,11 @@ export function TruflationFactSheetDesktop(props: FactsheetDesktopProps) {
             }
             className={styles.cardMarginSmall}
           >
-            <div hidden={loading}>
+            {!loading && (
               <SimulationResultMarketValueChart
                 hideTitle={true}
                 overrideNagivagtion={false}
-                breakdowns={loading ? [] : [breakdowns[btf], breakdowns[hodl]]}
+                breakdowns={testComparisonBreakdowns}
                 overrideSeriesStrokeColor={
                   props.model.cumulativePerformanceOverrideSeriesStrokeColor
                 }
@@ -336,7 +354,7 @@ export function TruflationFactSheetDesktop(props: FactsheetDesktopProps) {
                 overrideXAxisInterval={xAxisMonthInterval}
                 forceViewResults={true}
               />
-            </div>
+            )}
           </Card>
         </Col>
         <Col span={1}></Col>
@@ -393,59 +411,53 @@ export function TruflationFactSheetDesktop(props: FactsheetDesktopProps) {
               </Row>
               <Row>
                 <Col span={24}>
-                  <div hidden={loading}>
-                    {trainingView === 'drawdowns' && (
-                      <>
-                        <h5>Drawdowns</h5>
-                        <SimulationResultDrawdownChart
-                          breakdowns={
-                            loading
-                              ? []
-                              : [breakdowns[btfTrain], breakdowns[hodlTrain]]
-                          }
-                          forceViewResults={true}
-                          hideTitle={true}
-                        />
-                      </>
-                    )}
+                  {!loading && (
+                    <>
+                      {trainingView === 'drawdowns' && (
+                        <>
+                          <h5>Drawdowns</h5>
+                          <SimulationResultDrawdownChart
+                            breakdowns={trainingComparisonBreakdowns}
+                            forceViewResults={true}
+                            hideTitle={true}
+                          />
+                        </>
+                      )}
 
-                    {trainingView === 'marketValue' && (
-                      <>
-                        <h5>Cumulative performance over time</h5>
-                        <SimulationResultMarketValueChart
-                          hideTitle={true}
-                          breakdowns={
-                            loading
-                              ? []
-                              : [breakdowns[btfTrain], breakdowns[hodlTrain]]
-                          }
-                          overrideSeriesStrokeColor={
-                            props.model
-                              .cumulativePerformanceOverrideSeriesStrokeColor
-                          }
-                          overrideSeriesName={
-                            props.model.cumulativePerformanceOverrideSeriesName
-                          }
-                          overrideNagivagtion={false}
-                          overrideXAxisInterval={trainXAxisMonthInterval}
-                          forceViewResults={true}
-                        />
-                      </>
-                    )}
+                      {trainingView === 'marketValue' && (
+                        <>
+                          <h5>Cumulative performance over time</h5>
+                          <SimulationResultMarketValueChart
+                            hideTitle={true}
+                            breakdowns={trainingComparisonBreakdowns}
+                            overrideSeriesStrokeColor={
+                              props.model
+                                .cumulativePerformanceOverrideSeriesStrokeColor
+                            }
+                            overrideSeriesName={
+                              props.model.cumulativePerformanceOverrideSeriesName
+                            }
+                            overrideNagivagtion={false}
+                            overrideXAxisInterval={trainXAxisMonthInterval}
+                            forceViewResults={true}
+                          />
+                        </>
+                      )}
 
-                    {trainingView === 'weightChange' && (
-                      <>
-                        <h5>Constituent weights over time</h5>
-                        <WeightChangeOverTimeGraph
-                          simulationRunBreakdown={breakdowns[btfTrain]}
-                          overrideChartTheme={
-                            isDarkTheme ? 'ag-default-dark' : 'ag-default'
-                          }
-                          overrideXAxisInterval={trainXAxisMonthInterval}
-                        />
-                      </>
-                    )}
-                  </div>
+                      {trainingView === 'weightChange' && (
+                        <>
+                          <h5>Constituent weights over time</h5>
+                          <WeightChangeOverTimeGraph
+                            simulationRunBreakdown={breakdowns[btfTrain]}
+                            overrideChartTheme={
+                              isDarkTheme ? 'ag-default-dark' : 'ag-default'
+                            }
+                            overrideXAxisInterval={trainXAxisMonthInterval}
+                          />
+                        </>
+                      )}
+                    </>
+                  )}
                 </Col>
               </Row>
             </Card>

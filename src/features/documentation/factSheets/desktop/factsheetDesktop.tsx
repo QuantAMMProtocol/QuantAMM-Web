@@ -159,6 +159,26 @@ export function FactSheetDesktop(props: FactsheetDesktopProps) {
     return props.model.xAxisIntervals.get(period);
   }, [period, props.model.xAxisIntervals]);
 
+  const testMarketValueBreakdowns = useMemo(
+    () =>
+      [breakdowns[btf], breakdowns[cfmm], breakdowns[hodl]].filter(
+        (
+          breakdown
+        ): breakdown is SimulationRunBreakdown => breakdown !== undefined
+      ),
+    [breakdowns, btf, cfmm, hodl]
+  );
+
+  const trainMarketValueBreakdowns = useMemo(
+    () =>
+      [breakdowns[btfTrain], breakdowns[cfmmTrain], breakdowns[hodlTrain]].filter(
+        (
+          breakdown
+        ): breakdown is SimulationRunBreakdown => breakdown !== undefined
+      ),
+    [breakdowns, btfTrain, cfmmTrain, hodlTrain]
+  );
+
   return (
     <div>
       <FactsheetHeroObjectiveSection model={props.model} />
@@ -297,15 +317,11 @@ export function FactSheetDesktop(props: FactsheetDesktopProps) {
             }
             className={styles.cardMarginSmall}
           >
-            <div hidden={loading}>
+            {!loading && (
               <SimulationResultMarketValueChart
                 hideTitle={true}
                 overrideNagivagtion={false}
-                breakdowns={
-                  loading
-                    ? []
-                    : [breakdowns[btf], breakdowns[cfmm], breakdowns[hodl]]
-                }
+                breakdowns={testMarketValueBreakdowns}
                 overrideSeriesStrokeColor={
                   props.model.cumulativePerformanceOverrideSeriesStrokeColor
                 }
@@ -315,7 +331,7 @@ export function FactSheetDesktop(props: FactsheetDesktopProps) {
                 overrideXAxisInterval={xAxisMonthInterval}
                 forceViewResults={true}
               />
-            </div>
+            )}
           </Card>
         </Col>
         <Col span={1}></Col>
@@ -558,7 +574,8 @@ export function FactSheetDesktop(props: FactsheetDesktopProps) {
             >
               <Row>
                 <Col span={24}>
-                  <div hidden={loading}>
+                  {!loading && (
+                    <>
                     <h5>Constituent weights over time</h5>
                     <WeightChangeOverTimeGraph
                       simulationRunBreakdown={breakdowns[btfTrain]}
@@ -570,15 +587,7 @@ export function FactSheetDesktop(props: FactsheetDesktopProps) {
                     <h5>Cumulative performance over time</h5>
                     <SimulationResultMarketValueChart
                       hideTitle={true}
-                      breakdowns={
-                        loading
-                          ? []
-                          : [
-                              breakdowns[btfTrain],
-                              breakdowns[cfmmTrain],
-                              breakdowns[hodlTrain],
-                            ]
-                      }
+                      breakdowns={trainMarketValueBreakdowns}
                       overrideSeriesStrokeColor={
                         props.model
                           .cumulativePerformanceOverrideSeriesStrokeColor
@@ -590,7 +599,8 @@ export function FactSheetDesktop(props: FactsheetDesktopProps) {
                       overrideXAxisInterval={trainXAxisMonthInterval}
                       forceViewResults={true}
                     />
-                  </div>
+                    </>
+                  )}
                 </Col>
               </Row>
             </Card>

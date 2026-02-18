@@ -176,6 +176,26 @@ export function TruflationFactSheetMobile(props: FactsheetDesktopProps) {
     [poolKeyFor, metricsPeriod]
   );
 
+  const testComparisonBreakdowns = useMemo(
+    () =>
+      [breakdowns[btfTest], breakdowns[hodlTest]].filter(
+        (
+          breakdown
+        ): breakdown is SimulationRunBreakdown => breakdown !== undefined
+      ),
+    [breakdowns, btfTest, hodlTest]
+  );
+
+  const trainingComparisonBreakdowns = useMemo(
+    () =>
+      [breakdowns[btfTrain], breakdowns[hodlTrain]].filter(
+        (
+          breakdown
+        ): breakdown is SimulationRunBreakdown => breakdown !== undefined
+      ),
+    [breakdowns, btfTrain, hodlTrain]
+  );
+
   const renderPeriodSelector = (
     includeTrainPeriod: boolean,
     value: string,
@@ -337,9 +357,7 @@ export function TruflationFactSheetMobile(props: FactsheetDesktopProps) {
               <Row>
                 <Col span={24}>
                   <SimulationResultDrawdownChart
-                    breakdowns={
-                      loading ? [] : [breakdowns[btfTest], breakdowns[hodlTest]]
-                    }
+                    breakdowns={testComparisonBreakdowns}
                     forceViewResults={true}
                     hideTitle={true}
                   />
@@ -388,13 +406,11 @@ export function TruflationFactSheetMobile(props: FactsheetDesktopProps) {
             className={styles.cardMarginSmall}
           >
             {renderPeriodSelector(false, testPeriod, setTestPeriod)}
-            <div hidden={loading}>
+            {!loading && (
               <SimulationResultMarketValueChart
                 hideTitle={true}
                 overrideNagivagtion={false}
-                breakdowns={
-                  loading ? [] : [breakdowns[btfTest], breakdowns[hodlTest]]
-                }
+                breakdowns={testComparisonBreakdowns}
                 overrideSeriesStrokeColor={
                   props.model.cumulativePerformanceOverrideSeriesStrokeColor
                 }
@@ -409,7 +425,7 @@ export function TruflationFactSheetMobile(props: FactsheetDesktopProps) {
                 )}
                 forceViewResults={true}
               />
-            </div>
+            )}
           </Card>
         </Col>
         <Col span={1}></Col>
@@ -634,73 +650,67 @@ export function TruflationFactSheetMobile(props: FactsheetDesktopProps) {
 
               <Row>
                 <Col span={24}>
-                  <div hidden={loading}>
-                    {trainingView === 'drawdowns' && (
-                      <>
-                        <h5>Drawdowns</h5>
-                        <SimulationResultDrawdownChart
-                          breakdowns={
-                            loading
-                              ? []
-                              : [breakdowns[btfTrain], breakdowns[hodlTrain]]
-                          }
-                          forceViewResults={true}
-                          hideTitle={true}
-                        />
-                      </>
-                    )}
+                  {!loading && (
+                    <>
+                      {trainingView === 'drawdowns' && (
+                        <>
+                          <h5>Drawdowns</h5>
+                          <SimulationResultDrawdownChart
+                            breakdowns={trainingComparisonBreakdowns}
+                            forceViewResults={true}
+                            hideTitle={true}
+                          />
+                        </>
+                      )}
 
-                    {trainingView === 'marketValue' && (
-                      <>
-                        <h5>Cumulative performance over time</h5>
-                        <SimulationResultMarketValueChart
-                          hideTitle={true}
-                          overrideNagivagtion={false}
-                          breakdowns={
-                            loading
-                              ? []
-                              : [breakdowns[btfTrain], breakdowns[hodlTrain]]
-                          }
-                          overrideSeriesStrokeColor={
-                            props.model
-                              .cumulativePerformanceOverrideSeriesStrokeColor
-                          }
-                          overrideSeriesName={
-                            props.model.cumulativePerformanceOverrideSeriesName
-                          }
-                          overrideXAxisInterval={Math.max(
-                            1,
-                            Math.ceil(
-                              (breakdowns[btfTest]?.timeSteps.length ?? 0) /
-                                30 /
-                                1
-                            )
-                          )}
-                          forceViewResults={true}
-                        />
-                      </>
-                    )}
+                      {trainingView === 'marketValue' && (
+                        <>
+                          <h5>Cumulative performance over time</h5>
+                          <SimulationResultMarketValueChart
+                            hideTitle={true}
+                            overrideNagivagtion={false}
+                            breakdowns={trainingComparisonBreakdowns}
+                            overrideSeriesStrokeColor={
+                              props.model
+                                .cumulativePerformanceOverrideSeriesStrokeColor
+                            }
+                            overrideSeriesName={
+                              props.model.cumulativePerformanceOverrideSeriesName
+                            }
+                            overrideXAxisInterval={Math.max(
+                              1,
+                              Math.ceil(
+                                (breakdowns[btfTest]?.timeSteps.length ?? 0) /
+                                  30 /
+                                  1
+                              )
+                            )}
+                            forceViewResults={true}
+                          />
+                        </>
+                      )}
 
-                    {trainingView === 'weightChange' && (
-                      <>
-                        <h5>Constituent weights over time</h5>
-                        <WeightChangeOverTimeGraph
-                          simulationRunBreakdown={breakdowns[btfTrain]}
-                          overrideChartTheme={
-                            isDarkTheme ? 'ag-default-dark' : 'ag-default'
-                          }
-                          overrideXAxisInterval={Math.max(
-                            1,
-                            Math.ceil(
-                              (breakdowns[btfTest]?.timeSteps.length ?? 0) /
-                                30 /
-                                1
-                            )
-                          )}
-                        />
-                      </>
-                    )}
-                  </div>
+                      {trainingView === 'weightChange' && (
+                        <>
+                          <h5>Constituent weights over time</h5>
+                          <WeightChangeOverTimeGraph
+                            simulationRunBreakdown={breakdowns[btfTrain]}
+                            overrideChartTheme={
+                              isDarkTheme ? 'ag-default-dark' : 'ag-default'
+                            }
+                            overrideXAxisInterval={Math.max(
+                              1,
+                              Math.ceil(
+                                (breakdowns[btfTest]?.timeSteps.length ?? 0) /
+                                  30 /
+                                  1
+                              )
+                            )}
+                          />
+                        </>
+                      )}
+                    </>
+                  )}
                 </Col>
               </Row>
             </Card>
