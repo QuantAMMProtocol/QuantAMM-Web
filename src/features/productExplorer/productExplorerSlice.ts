@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
 import {
   FilterList,
@@ -188,70 +188,102 @@ export const selectLoadingSimulationRunBreakdown = (
 export const selectLoadingJsonBreakdown = (state: RootState) =>
   state.productExplorer.loadingJsonProductSimulations;
 
-export const selectReturnAnalysisByProductId = (
-  state: RootState,
-  id: string
-) => {
-  const targetProduct = state.productExplorer.productMap[id];
+const getProductById = (state: RootState, id: string) =>
+  state.productExplorer.productMap[id];
 
-  if (targetProduct) {
-    return (
-      targetProduct.simulationRunBreakdown?.simulationRunResultAnalysis?.return_analysis
-        // filter out absolute return metric
-        .filter((element) => element.metricName !== 'Absolute Return (%)')
+const filterReturnAnalysis = (targetProduct?: Product) =>
+  targetProduct?.simulationRunBreakdown?.simulationRunResultAnalysis?.return_analysis
+    // filter out absolute return metric
+    .filter((element) => element.metricName !== 'Absolute Return (%)') ?? null;
+
+const filterBenchmarkAnalysis = (
+  targetProduct: Product | undefined,
+  benchmarkName: string | null
+) => {
+  if (targetProduct && benchmarkName) {
+    return targetProduct.simulationRunBreakdown?.simulationRunResultAnalysis?.benchmark_analysis.filter(
+      (element) => element.benchmarkName === benchmarkName
     );
   }
-
+  if (targetProduct && !benchmarkName) {
+    // the return analysis metrics of the benchmark itself
+    return targetProduct.simulationRunBreakdown?.simulationRunResultAnalysis?.benchmark_analysis.filter(
+      (element) =>
+        element.benchmarkName === undefined || element.benchmarkName === ''
+    );
+  }
   return null;
 };
+
+const mapTimeseriesAnalysis = (targetProduct?: Product) =>
+  targetProduct?.simulationRunBreakdown?.simulationRunResultAnalysis?.return_timeseries_analysis.map(
+    (element) => ({
+      ...element,
+      metricKey: getMetricKey(element.metricName),
+    })
+  ) ?? null;
+
+const returnAnalysisSelectorCache = new Map<
+  string,
+  (state: RootState) => ReturnType<typeof filterReturnAnalysis>
+>();
+
+export const selectReturnAnalysisByProductId = (state: RootState, id: string) => {
+  let selector = returnAnalysisSelectorCache.get(id);
+  if (!selector) {
+    selector = createSelector(
+      [(rootState: RootState) => getProductById(rootState, id)],
+      (targetProduct) => filterReturnAnalysis(targetProduct)
+    );
+    returnAnalysisSelectorCache.set(id, selector);
+  }
+  return selector(state);
+};
+
+const benchmarkAnalysisSelectorCache = new Map<
+  string,
+  (state: RootState) => ReturnType<typeof filterBenchmarkAnalysis>
+>();
 
 export const selectBenchmarkAnalysisByProductId = (
   state: RootState,
   id: string,
   benchmarkName: string | null
 ) => {
-  const targetProduct = state.productExplorer.productMap[id];
-
-  if (targetProduct && benchmarkName) {
-    return targetProduct.simulationRunBreakdown?.simulationRunResultAnalysis?.benchmark_analysis.filter(
-      (element) => element.benchmarkName === benchmarkName
+  const cacheKey = `${id}::${benchmarkName ?? '__default__'}`;
+  let selector = benchmarkAnalysisSelectorCache.get(cacheKey);
+  if (!selector) {
+    selector = createSelector(
+      [(rootState: RootState) => getProductById(rootState, id)],
+      (targetProduct) => filterBenchmarkAnalysis(targetProduct, benchmarkName)
     );
-  } else if (targetProduct && !benchmarkName) {
-    //the return analysis metrics of the benchmark itself
-    return targetProduct.simulationRunBreakdown?.simulationRunResultAnalysis?.benchmark_analysis.filter(
-      (element) =>
-        element.benchmarkName === undefined || element.benchmarkName === ''
-    );
+    benchmarkAnalysisSelectorCache.set(cacheKey, selector);
   }
-
-  return null;
+  return selector(state);
 };
 
 const getMetricKey = (metricName: string) => {
   return metricName.toLowerCase().replace(/ /g, '_');
 };
 
+const timeseriesAnalysisSelectorCache = new Map<
+  string,
+  (state: RootState) => ReturnType<typeof mapTimeseriesAnalysis>
+>();
+
 export const selectTimeseriesAnalysisByProductId = (
   state: RootState,
   id: string
 ) => {
-  const targetProduct = state.productExplorer.productMap[id];
-
-  if (targetProduct) {
-    const result =
-      targetProduct.simulationRunBreakdown?.simulationRunResultAnalysis?.return_timeseries_analysis.map(
-        (element) => {
-          return {
-            ...element,
-            metricKey: getMetricKey(element.metricName),
-          };
-        }
-      );
-
-    return result;
+  let selector = timeseriesAnalysisSelectorCache.get(id);
+  if (!selector) {
+    selector = createSelector(
+      [(rootState: RootState) => getProductById(rootState, id)],
+      (targetProduct) => mapTimeseriesAnalysis(targetProduct)
+    );
+    timeseriesAnalysisSelectorCache.set(id, selector);
   }
-
-  return null;
+  return selector(state);
 };
 
 export const selectPageSize = (state: RootState) =>
