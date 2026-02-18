@@ -12,11 +12,15 @@ const DEFAULT_MIN_TVL = 10000;
 const DEFAULT_SKIPPED_POOLS = 0;
 
 export const useFetchPoolsSummaryByParams = (
-  params: GetPoolsSummaryQueryVariables
+  params: GetPoolsSummaryQueryVariables,
+  options?: {
+    skip?: boolean;
+  }
 ) => {
   const { first, orderBy, orderDirection, skip, where } = params;
 
   const { data, loading, error } = useGetPoolsSummaryQuery({
+    skip: options?.skip ?? false,
     variables: {
       first: first ?? DEFAULT_POOLS_LIMIT,
       orderBy: orderBy ?? DEFAULT_ORDER_BY,
