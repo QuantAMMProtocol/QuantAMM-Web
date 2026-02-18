@@ -183,6 +183,7 @@ export const ProductDetailEventsGrid = forwardRef<
     () => ({
       columnDefs,
       rowHeight: 26,
+      getRowId: (params) => String(params.data?.id ?? ''),
       defaultColDef: {
         filter: 'agTextColumnFilter',
         sortable: true,
@@ -197,6 +198,35 @@ export const ProductDetailEventsGrid = forwardRef<
     }),
     [columnDefs]
   );
+  const sideBar = useMemo(
+    () => ({
+      toolPanels: [
+        {
+          id: 'columns',
+          labelDefault: 'Columns',
+          labelKey: 'columns',
+          iconKey: 'columns',
+          toolPanel: 'agColumnsToolPanel',
+          minWidth: 100,
+          maxWidth: 300,
+          width: 200,
+        },
+        {
+          id: 'filters',
+          labelDefault: 'Filters',
+          labelKey: 'filters',
+          iconKey: 'filter',
+          toolPanel: 'agFiltersToolPanel',
+          minWidth: 100,
+          maxWidth: 300,
+          width: 200,
+        },
+      ],
+      position: 'right' as const,
+      defaultToolPanel: 'none',
+    }),
+    []
+  );
 
   return (
     <AgGridReact
@@ -204,32 +234,7 @@ export const ProductDetailEventsGrid = forwardRef<
       rowData={rowData}
       gridOptions={gridOptions}
       columnDefs={columnDefs}
-      sideBar={{
-        toolPanels: [
-          {
-            id: 'columns',
-            labelDefault: 'Columns',
-            labelKey: 'columns',
-            iconKey: 'columns',
-            toolPanel: 'agColumnsToolPanel',
-            minWidth: 100,
-            maxWidth: 300,
-            width: 200,
-          },
-          {
-            id: 'filters',
-            labelDefault: 'Filters',
-            labelKey: 'filters',
-            iconKey: 'filter',
-            toolPanel: 'agFiltersToolPanel',
-            minWidth: 100,
-            maxWidth: 300,
-            width: 200,
-          },
-        ],
-        position: 'right',
-        defaultToolPanel: 'none',
-      }}
+      sideBar={sideBar}
     />
   );
 });
