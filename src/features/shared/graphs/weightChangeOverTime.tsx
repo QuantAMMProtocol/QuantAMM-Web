@@ -1,13 +1,16 @@
-import { FC, useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import { AgCharts } from 'ag-charts-react';
 import {
   AgAxisLabelFormatterParams,
   AgAreaSeriesOptions,
+  AgCartesianAxisOptions,
+  AgCartesianSeriesOptions,
   AgChartLegendOptions,
+  AgChartOptions,
+  AgChartThemeName,
   AgNumberAxisOptions,
   AgTimeAxisOptions,
   time,
-  AgChartThemeName,
 } from 'ag-charts-community';
 import 'ag-charts-enterprise';
 import { useAppSelector } from '../../../app/hooks';
@@ -28,14 +31,14 @@ interface WeightChangeOverTimeGraphProps {
 
 const normalisedTokenName = (token: string) => token.replace(/\./g, '-');
 
-export const WeightChangeOverTimeGraph: FC<WeightChangeOverTimeGraphProps> = ({
+function WeightChangeOverTimeGraphComponent({
   simulationRunBreakdown,
   yAxisOverride,
   legendOverride,
   tickIntervalInMonths = 6,
   overrideChartTheme,
   overrideXAxisInterval,
-}) => {
+}: WeightChangeOverTimeGraphProps) {
   const chartTheme = useAppSelector(selectAgChartTheme);
 
   const normalisedAreaData = useMemo(() => {
@@ -46,7 +49,7 @@ export const WeightChangeOverTimeGraph: FC<WeightChangeOverTimeGraphProps> = ({
     let data = getChartTimeSteps(simulationRunBreakdown);
 
     if (data.length > 200) {
-      //stacked chart is more cpu intensive, ~500 points is a good balance
+      // stacked chart is cpu intensive; reduce points to keep UI responsive
       const proportion = Math.ceil(data.length / 200);
       data = data.filter((_, index) => index % proportion === 0);
     }
@@ -92,8 +95,8 @@ export const WeightChangeOverTimeGraph: FC<WeightChangeOverTimeGraphProps> = ({
     return series;
   }, [simulationRunBreakdown]);
 
-  const timeAxisOption: AgTimeAxisOptions = useMemo(() => {
-    return {
+  const timeAxisOption = useMemo<AgTimeAxisOptions>(
+    () => ({
       type: 'time',
       interval: {
         step: time.month.every(overrideXAxisInterval ?? tickIntervalInMonths),
@@ -101,53 +104,68 @@ export const WeightChangeOverTimeGraph: FC<WeightChangeOverTimeGraphProps> = ({
       label: {
         format: '%Y-%m',
       },
-    };
-  }, [tickIntervalInMonths, overrideXAxisInterval]);
-
-  return (
-    <AgCharts
-      options={{
-        height: 230,
-        padding: {
-          right: 40,
-          top: 20,
-          bottom: 20,
-          left: 0,
-        },
-        data: normalisedAreaData,
-        axes: [
-          { ...timeAxisOption },
-          {
-            type: 'number',
-            position: 'left',
-            label: {
-              formatter: (params: AgAxisLabelFormatterParams) => {
-                return params.value.toFixed(2) + '%';
-              },
-            },
-            ...yAxisOverride,
-          },
-        ],
-        series: normalisedAreaSeries,
-        legend: {
-          ...legendOverride,
-        },
-        overlays: {
-          noData: {
-            text: 'No data',
-          },
-        },
-        theme: {
-          baseTheme: overrideChartTheme ? overrideChartTheme : chartTheme,
-          overrides: {
-            common: {
-              background: {
-                fill: 'transparent',
-              },
-            },
-          },
-        },
-      }}
-    />
+    }),
+    [tickIntervalInMonths, overrideXAxisInterval]
   );
-};
+
+  const axes = useMemo<AgCartesianAxisOptions[]>(
+    () => [
+      { ...timeAxisOption },
+      {
+        type: 'number',
+        position: 'left',
+        label: {
+          formatter: (params: AgAxisLabelFormatterParams) =>
+            params.value.toFixed(2) + '%',
+        },
+        ...yAxisOverride,
+      },
+    ],
+    [timeAxisOption, yAxisOverride]
+  );
+
+  const chartOptions = useMemo<AgChartOptions>(
+    () => ({
+      height: 230,
+      padding: {
+        right: 40,
+        top: 20,
+        bottom: 20,
+        left: 0,
+      },
+      data: normalisedAreaData,
+      axes,
+      series: normalisedAreaSeries as AgCartesianSeriesOptions[],
+      legend: {
+        ...legendOverride,
+      },
+      overlays: {
+        noData: {
+          text: 'No data',
+        },
+      },
+      theme: {
+        baseTheme: overrideChartTheme ? overrideChartTheme : chartTheme,
+        overrides: {
+          common: {
+            background: {
+              fill: 'transparent',
+            },
+          },
+        },
+      },
+    }),
+    [
+      axes,
+      chartTheme,
+      legendOverride,
+      normalisedAreaData,
+      normalisedAreaSeries,
+      overrideChartTheme,
+    ]
+  );
+
+  return <AgCharts options={chartOptions} />;
+}
+
+export const WeightChangeOverTimeGraph = memo(WeightChangeOverTimeGraphComponent);

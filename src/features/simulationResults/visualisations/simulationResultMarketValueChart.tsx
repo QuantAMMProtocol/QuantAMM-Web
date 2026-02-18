@@ -1,7 +1,7 @@
 import { AgCharts } from 'ag-charts-react';
 import * as agCharts from 'ag-charts-community';
 import { AgTimeAxisOptions } from 'ag-charts-community';
-import { useMemo } from 'react';
+import { memo, useMemo } from 'react';
 
 import styles from '../simulationResultSummary.module.css';
 import { useAppSelector } from '../../../app/hooks';
@@ -24,7 +24,7 @@ export interface SeriesConfig {
   stroke: string | undefined;
 }
 
-export function SimulationResultMarketValueChart(props: BreakdownProps) {
+function SimulationResultMarketValueChartComponent(props: BreakdownProps) {
   const simulationBreakdownResults = props.breakdowns;
   const simulationTimeRangeSelected = useAppSelector(
     selectSimulationResultTimeRangeSelection
@@ -99,27 +99,96 @@ export function SimulationResultMarketValueChart(props: BreakdownProps) {
     visibleBreakdowns,
   ]);
 
-  function getTimeAxisOption(dataLength: number): AgTimeAxisOptions {
-    return {
+  const visibleBreakdownStepsLength =
+    visibleBreakdowns[0]?.timeSteps.length ?? 1;
+
+  const timeAxisOption = useMemo<AgTimeAxisOptions>(
+    () => ({
       type: 'time',
       interval: {
         step:
           props.overrideXAxisInterval !== undefined
             ? agCharts.time.month.every(props.overrideXAxisInterval)
-            : dataLength > 350
+            : visibleBreakdownStepsLength > 350
               ? agCharts.time.month.every(6)
-              : dataLength > 150
+              : visibleBreakdownStepsLength > 150
                 ? agCharts.time.month.every(3)
                 : agCharts.time.month.every(1),
       },
       label: {
         format: '%Y-%m',
       },
-    };
-  }
+    }),
+    [props.overrideXAxisInterval, visibleBreakdownStepsLength]
+  );
 
-  const visibleBreakdownStepsLength =
-    visibleBreakdowns[0]?.timeSteps.length ?? 1;
+  const chartOptions = useMemo(
+    () => ({
+      height: props.overrideHeight ?? 500,
+      navigator: {
+        enabled: props.overrideNagivagtion ?? true,
+        height: 5,
+        spacing: 6,
+      },
+      padding: {
+        right: 40,
+      },
+      axes: [
+        timeAxisOption,
+        {
+          type: 'number' as const,
+          position: 'left' as const,
+          label: {
+            format: '$~s',
+          },
+          max: props.overrideYAxisMax ?? undefined,
+          min: props.overrideYAxisMin ?? undefined,
+          interval: props.overrideYAxisInterval
+            ? {
+                values: props.overrideYAxisInterval,
+              }
+            : undefined,
+        },
+      ],
+      series,
+      legend: {
+        position: 'top' as const,
+      },
+      overlays: {
+        noData: {
+          text: 'No data',
+        },
+      },
+      theme: {
+        baseTheme: chartTheme,
+        overrides: {
+          common: {
+            background: {
+              fill: 'transparent',
+            },
+          },
+          line: {
+            series: {
+              cursor: 'crosshair',
+              marker: {
+                enabled: false,
+              },
+            },
+          },
+        },
+      },
+    }),
+    [
+      chartTheme,
+      props.overrideHeight,
+      props.overrideNagivagtion,
+      props.overrideYAxisInterval,
+      props.overrideYAxisMax,
+      props.overrideYAxisMin,
+      series,
+      timeAxisOption,
+    ]
+  );
 
   return (
     <div>
@@ -132,63 +201,7 @@ export function SimulationResultMarketValueChart(props: BreakdownProps) {
         <Col span={24}>
           <Row className={styles.marketValueChart}>
             <Col span={24}>
-              <AgCharts
-                options={{
-                  height: props.overrideHeight ?? 500,
-                  navigator: {
-                    enabled: props.overrideNagivagtion ?? true,
-                    height: 5,
-                    spacing: 6,
-                  },
-                  padding: {
-                    right: 40,
-                  },
-                  axes: [
-                    getTimeAxisOption(visibleBreakdownStepsLength),
-                    {
-                      type: 'number',
-                      position: 'left',
-                      label: {
-                        format: '$~s',
-                      },
-                      max: props.overrideYAxisMax ?? undefined,
-                      min: props.overrideYAxisMin ?? undefined,
-                      interval: props.overrideYAxisInterval
-                        ? {
-                            values: props.overrideYAxisInterval,
-                          }
-                        : undefined,
-                    },
-                  ],
-                  series,
-                  legend: {
-                    position: 'top',
-                  },
-                  overlays: {
-                    noData: {
-                      text: 'No data',
-                    },
-                  },
-                  theme: {
-                    baseTheme: chartTheme,
-                    overrides: {
-                      common: {
-                        background: {
-                          fill: 'transparent',
-                        },
-                      },
-                      line: {
-                        series: {
-                          cursor: 'crosshair',
-                          marker: {
-                            enabled: false,
-                          },
-                        },
-                      },
-                    },
-                  },
-                }}
-              />
+              <AgCharts options={chartOptions} />
             </Col>
           </Row>
         </Col>
@@ -196,3 +209,7 @@ export function SimulationResultMarketValueChart(props: BreakdownProps) {
     </div>
   );
 }
+
+export const SimulationResultMarketValueChart = memo(
+  SimulationResultMarketValueChartComponent
+);
