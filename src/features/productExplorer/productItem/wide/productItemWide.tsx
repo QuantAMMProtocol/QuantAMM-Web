@@ -56,98 +56,10 @@ export const ProductItemWide: FC<ProductItemProps> = ({ product }) => {
     return !!product.timeSeries && product.timeSeries.length > 0;
   }, [product.timeSeries]);
 
-  const LoadingGraph = () => (
+  const renderLoadingGraph = () => (
     <div className={styles['product-item__card__loading']}>
       <Spin />
     </div>
-  );
-
-  const OverviewScoresColumn = () => (
-    <Col
-      span={3}
-      className={
-        product.overview.length > 0
-          ? styles['product-item__card-column']
-          : undefined
-      }
-    >
-      {product.overview.length > 0 ? (
-        <List
-          dataSource={Object.entries(product.overview)}
-          renderItem={(item) => (
-            <List.Item style={{ padding: 0 }}>
-              <Text
-                className={styles['product-item__card-scores__text']}
-                style={{
-                  color: getScoreColor(Number(item[1].value)),
-                }}
-              >
-                {String(item[1].metric)}
-              </Text>
-              <Text
-                className={styles['product-item__card-scores__text']}
-                style={{
-                  color: getScoreColor(Number(item[1].value)),
-                  marginLeft: 4,
-                }}
-              >
-                {String(item[1].value)} / {MAX_SCORE}
-              </Text>
-            </List.Item>
-          )}
-        />
-      ) : (
-        <div className={styles['product-item-graph']}>
-          <LoadingGraph />
-        </div>
-      )}
-    </Col>
-  );
-
-  const ChartsAndTokensColumns = () => (
-    <>
-      <Col span={2}>
-        {product.overview.length > 0 ? (
-          <div className={styles['product-item-graph']}>
-            <ProductItemOverviewGraph
-              data={product.overview}
-              isDarkTheme={isDarkTheme}
-              wide={true}
-              showScoreOverall={true}
-            />
-          </div>
-        ) : (
-          <LoadingGraph />
-        )}
-      </Col>
-      <Col span={2}>
-        {shouldShow ? (
-          <div className={styles['product-item-graph']}>
-            <ProductItemPerformanceLineGraph product={product} wide={true} />
-          </div>
-        ) : (
-          <LoadingGraph />
-        )}
-      </Col>
-      <Col
-        span={3}
-        className={shouldShow ? styles['product-item__card-column'] : undefined}
-        style={
-          shouldShow
-            ? {
-                padding: 0,
-                overflow: 'hidden',
-              }
-            : undefined
-        }
-      >
-        {shouldShow ? (
-          <ProductItemTokenList product={product} />
-        ) : (
-          <LoadingGraph />
-        )}
-      </Col>
-    </>
   );
 
   return (
@@ -174,8 +86,14 @@ export const ProductItemWide: FC<ProductItemProps> = ({ product }) => {
             >
               <div className={styles['product-item__card__title']}>
                 <Text
-                  ellipsis={{ tooltip: product.name }}
+                  title={product.name}
                   className={styles['product-item__card-top__text']}
+                  style={{
+                    display: 'block',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                  }}
                 >
                   {product.name}
                 </Text>
@@ -213,8 +131,88 @@ export const ProductItemWide: FC<ProductItemProps> = ({ product }) => {
               )}
             </Col>
 
-            <OverviewScoresColumn />
-            <ChartsAndTokensColumns />
+            <Col
+              span={3}
+              className={
+                product.overview.length > 0
+                  ? styles['product-item__card-column']
+                  : undefined
+              }
+            >
+              {product.overview.length > 0 ? (
+                <List
+                  dataSource={Object.entries(product.overview)}
+                  renderItem={(item) => (
+                    <List.Item style={{ padding: 0 }}>
+                      <Text
+                        className={styles['product-item__card-scores__text']}
+                        style={{
+                          color: getScoreColor(Number(item[1].value)),
+                        }}
+                      >
+                        {String(item[1].metric)}
+                      </Text>
+                      <Text
+                        className={styles['product-item__card-scores__text']}
+                        style={{
+                          color: getScoreColor(Number(item[1].value)),
+                          marginLeft: 4,
+                        }}
+                      >
+                        {String(item[1].value)} / {MAX_SCORE}
+                      </Text>
+                    </List.Item>
+                  )}
+                />
+              ) : (
+                <div className={styles['product-item-graph']}>
+                  {renderLoadingGraph()}
+                </div>
+              )}
+            </Col>
+            <Col span={2}>
+              {product.overview.length > 0 ? (
+                <div className={styles['product-item-graph']}>
+                  <ProductItemOverviewGraph
+                    data={product.overview}
+                    isDarkTheme={isDarkTheme}
+                    wide={true}
+                    showScoreOverall={true}
+                  />
+                </div>
+              ) : (
+                renderLoadingGraph()
+              )}
+            </Col>
+            <Col span={2}>
+              {shouldShow ? (
+                <div className={styles['product-item-graph']}>
+                  <ProductItemPerformanceLineGraph product={product} wide={true} />
+                </div>
+              ) : (
+                renderLoadingGraph()
+              )}
+            </Col>
+            <Col
+              span={3}
+              className={
+                shouldShow ? styles['product-item__card-column'] : undefined
+              }
+              style={
+                shouldShow
+                  ? {
+                      padding: 0,
+                      overflow: 'hidden',
+                    }
+                  : undefined
+              }
+            >
+              {shouldShow ? (
+                <ProductItemTokenList product={product} />
+              ) : (
+                renderLoadingGraph()
+              )}
+            </Col>
 
             <Col span={3} className={styles['product-item__card-column-right']}>
               <div className={styles['product-item__card__action']}>

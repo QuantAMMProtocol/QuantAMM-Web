@@ -134,7 +134,17 @@ export const ProductItem: FC<ProductItemProps> = ({ product }) => {
       <Card className={styles['product-item__card']} hoverable>
         <ProductItemBackground>
           <div className={styles['product-item__card__top']}>
-            <Text ellipsis={{ tooltip: product.name }}>{product.name}</Text>
+            <Text
+              title={product.name}
+              style={{
+                display: 'block',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {product.name}
+            </Text>
           </div>
           <Row className={styles['product-item__card-under-body']}>
             <Col span={8} style={{ textAlign: 'center' }}>
