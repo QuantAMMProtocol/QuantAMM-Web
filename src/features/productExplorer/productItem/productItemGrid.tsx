@@ -38,6 +38,11 @@ export const ProductItemGrid: FC<ProductItemGridProps> = ({ wide }) => {
     () => Object.keys(products).length > 0,
     [products]
   );
+  const sortedProducts = useMemo(
+    () => sort(Object.values(products)),
+    [products, sort]
+  );
+  const showLoadingProducts = loading && !areProductsLoaded;
 
   useEffect(() => {
     if (parent.current) {
@@ -95,15 +100,14 @@ export const ProductItemGrid: FC<ProductItemGridProps> = ({ wide }) => {
             }}
           >
             {wide && <ProductItemGridHeader />}
-            {(loading || !areProductsLoaded) &&
+            {showLoadingProducts &&
               loadingProducts.map((loadingProduct) => (
                 <Col xs={wide ? 24 : undefined} key={loadingProduct}>
                   {wide ? <ProductItemWideLoading /> : <ProductItemLoading />}
                 </Col>
               ))}
-            {!loading &&
-              areProductsLoaded &&
-              sort(Object.values(products)).map((product) => (
+            {areProductsLoaded &&
+              sortedProducts.map((product) => (
                 <Col xs={wide ? 24 : undefined} key={product.id}>
                   {wide ? (
                     <ProductItemWide product={product} />
@@ -113,7 +117,7 @@ export const ProductItemGrid: FC<ProductItemGridProps> = ({ wide }) => {
                 </Col>
               ))}
           </Row>
-          {!loading && areProductsLoaded && (
+          {areProductsLoaded && (
             <Row style={{ marginTop: 16 }} justify="center">
               <ProductExplorerPagination />
             </Row>
