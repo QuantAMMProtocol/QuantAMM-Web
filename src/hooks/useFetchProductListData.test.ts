@@ -33,6 +33,8 @@ describe('useFetchProductListData view-model logic', () => {
         loading: false,
         stubDataLoading: true,
         baseProductsLoading: false,
+        fullProductsLoading: false,
+        fullProductsError: undefined,
         isStubData: true,
       })
     ).toBe(true);
@@ -42,6 +44,8 @@ describe('useFetchProductListData view-model logic', () => {
         loading: false,
         stubDataLoading: false,
         baseProductsLoading: true,
+        fullProductsLoading: false,
+        fullProductsError: undefined,
         isStubData: false,
       })
     ).toBe(true);
@@ -51,6 +55,33 @@ describe('useFetchProductListData view-model logic', () => {
         loading: false,
         stubDataLoading: false,
         baseProductsLoading: false,
+        fullProductsLoading: false,
+        fullProductsError: undefined,
+        isStubData: false,
+      })
+    ).toBe(false);
+
+    expect(
+      getProductMapLoadingState({
+        loading: false,
+        stubDataLoading: false,
+        baseProductsLoading: false,
+        fullProductsLoading: true,
+        fullProductsError: undefined,
+        isStubData: false,
+      })
+    ).toBe(true);
+
+    expect(
+      getProductMapLoadingState({
+        loading: false,
+        stubDataLoading: false,
+        baseProductsLoading: false,
+        fullProductsLoading: true,
+        fullProductsError: {
+          status: 500,
+          data: {},
+        },
         isStubData: false,
       })
     ).toBe(false);
