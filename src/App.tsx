@@ -46,16 +46,13 @@ function App() {
         return;
       }
 
-      if (page === ROUTES.SIMULATION_RUNNER) {
+      if (page !== ROUTES.SIMULATION_RUNNER) {
+        dispatch(loadPriceHistoryAsync());
         dispatch(initialiseSimsToRun());
       }
     },
     [dispatch]
   );
-
-  useEffect(() => {
-    dispatch(loadPriceHistoryAsync());
-  }, [dispatch]);
 
   useEffect(() => {
     const segment = location.pathname.split('/')[1] ?? '';
