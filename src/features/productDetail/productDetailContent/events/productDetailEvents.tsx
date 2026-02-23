@@ -1,5 +1,5 @@
-import { FC, memo, useCallback, useRef, useState } from 'react';
-import { Col, Collapse, Empty, Row, Spin } from 'antd';
+import { FC, memo, MouseEvent, useCallback, useRef, useState } from 'react';
+import { Button, Col, Collapse, Empty, Row, Spin } from 'antd';
 import { AgGridReact } from 'ag-grid-react';
 import {
   GqlChain,
@@ -14,7 +14,6 @@ import {
 import { selectProductById } from '../../../productExplorer/productExplorerSlice';
 import { CURRENT_LIVE_FACTSHEETS } from '../../../documentation/factSheets/liveFactsheets';
 
-import { ProductDetailEventsHeader } from './productDetailEventsHeader';
 import { ProductDetailEventsGrid } from './productDetailEventsGrid';
 import { ProductDetailEventsHeatmap } from './productDetailEventsHeatmap';
 import { useExplorerBase } from '../productDetailUseExplorerBase';
@@ -58,10 +57,14 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = memo(
     const gridRef = useRef<AgGridReact<GqlPoolEvent>>(null);
 
     const rowData = poolEvents;
+    const isDesktop = !isMobile;
 
     const showSpinner = loading && !error && rowData.length === 0;
 
-    const heatmap = useHeatmapData(product, poolEvents);
+    const heatmap = useHeatmapData(
+      isMobile ? product : undefined,
+      isMobile ? poolEvents : undefined
+    );
     const handleCollapseChange = useCallback((activeKey: string | string[]) => {
       const isOpen = Array.isArray(activeKey)
         ? activeKey.includes(EVENTS_PANEL_KEY)
@@ -71,6 +74,44 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = memo(
         setHasRequestedData(true);
       }
     }, []);
+    const handleCsvExport = useCallback((event?: MouseEvent) => {
+      event?.stopPropagation();
+      gridRef.current?.api?.exportDataAsCsv();
+    }, []);
+
+    const content =
+      !hasRequestedData && isPanelOpen ? (
+        <Spin />
+      ) : showSpinner ? (
+        <Spin />
+      ) : error && rowData.length === 0 ? (
+        <div>Failed to load events.</div>
+      ) : !isDesktop ? (
+        <div className={styles.contentFullWidth}>
+          {!heatmap.heatmapData.length ? (
+            <Empty description="No swap data" />
+          ) : (
+            <ProductDetailEventsHeatmap
+              chartTheme={chartTheme}
+              data={heatmap.heatmapData}
+              xDomain={heatmap.xDomain}
+              yDomain={heatmap.yDomain}
+              addrNameMap={heatmap.addrNameMap}
+            />
+          )}
+        </div>
+      ) : (
+        <div className={styles.contentFullWidth}>
+          <div className={`${darkThemeAg} ${styles.gridWrapper}`}>
+            <ProductDetailEventsGrid
+              ref={gridRef}
+              rowData={rowData}
+              explorerBase={explorerBase}
+              thresholds={thresholds}
+            />
+          </div>
+        </div>
+      );
 
     return (
       <Row id="events" className={styles.eventsRow}>
@@ -78,51 +119,35 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = memo(
           <Collapse
             defaultActiveKey={[]}
             className={styles.eventsCollapse}
-            bordered={false}
             onChange={handleCollapseChange}
           >
-            <Panel key={EVENTS_PANEL_KEY} header="Events">
+            <Panel
+              key={EVENTS_PANEL_KEY}
+              header="Events"
+              extra={
+                isDesktop ? (
+                  <div
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
+                    onMouseDown={(e) => {
+                      e.stopPropagation();
+                    }}
+                  >
+                    <Button
+                      type="primary"
+                      size="small"
+                      onClick={handleCsvExport}
+                    >
+                      Download CSV
+                    </Button>
+                  </div>
+                ) : null
+              }
+            >
               <Row>
-                <Col span={24} className={styles.headerCol}>
-                  <ProductDetailEventsHeader
-                    isMobile={!!isMobile}
-                    showTitle={false}
-                    onCsv={() => gridRef.current?.api?.exportDataAsCsv()}
-                  />
-                </Col>
                 <Col span={24} className={styles.contentCol}>
-                  {!hasRequestedData && isPanelOpen ? (
-                    <Spin />
-                  ) : showSpinner ? (
-                    <Spin />
-                  ) : error && rowData.length === 0 ? (
-                    <div>Failed to load events.</div>
-                  ) : isMobile ? (
-                    <div className={styles.contentFullWidth}>
-                      {!heatmap.heatmapData.length ? (
-                        <Empty description="No swap data" />
-                      ) : (
-                        <ProductDetailEventsHeatmap
-                          chartTheme={chartTheme}
-                          data={heatmap.heatmapData}
-                          xDomain={heatmap.xDomain}
-                          yDomain={heatmap.yDomain}
-                          addrNameMap={heatmap.addrNameMap}
-                        />
-                      )}
-                    </div>
-                  ) : (
-                    <div className={styles.contentFullWidth}>
-                      <div className={`${darkThemeAg} ${styles.gridWrapper}`}>
-                        <ProductDetailEventsGrid
-                          ref={gridRef}
-                          rowData={rowData}
-                          explorerBase={explorerBase}
-                          thresholds={thresholds}
-                        />
-                      </div>
-                    </div>
-                  )}
+                  {content}
                 </Col>
               </Row>
             </Panel>

@@ -21,6 +21,7 @@ import {
   TableOutlined,
   BoxPlotOutlined,
 } from '@ant-design/icons';
+import { GqlChain } from '../../../../__generated__/graphql-types';
 
 import { FinancialMetricThresholds, Product } from '../../../../models';
 import {
@@ -29,12 +30,13 @@ import {
 } from '../../../shared/graphs';
 import { SimulationRunMetric } from '../../../simulationResults/simulationResultSummaryModels';
 import { ProductDetailDropdown } from '../components/productDetailDropdown';
+import { ProductDetailEvents } from '../events/productDetailEvents';
+import { ProductDetailSidebarStrategySummary } from '../../productDetailSidebar/productDetailSidebarStrategySummary';
 
 import { CURRENT_LIVE_FACTSHEETS } from '../../../documentation/factSheets/liveFactsheets';
 
 import styles from './productDetailSummary.module.scss';
 import { getMax, getMin } from './utils';
-import Title from 'antd/es/typography/Title';
 import { StrategyWorkflowCard } from './strategyWorkflowCard';
 import { AnalysisSimplifiedBreakdownTable } from '../../../simulationResults/breakdowns/simulationRunPerformanceSimpleTable';
 
@@ -321,7 +323,7 @@ export const ProductDetailSummaryDesktop: FC<
       }}
     >
       <Segmented
-        size="large"
+        size="small"
         value={metricsView}
         onChange={(v) => setMetricsView(v as 'gauge' | 'table')}
         options={[
@@ -406,6 +408,7 @@ export const ProductDetailSummaryDesktop: FC<
   return (
     <div className={styles['product-detail-summary__desktop']}>
       {poolWeightsCard}
+      <ProductDetailSidebarStrategySummary product={product} />
 
       {SHOW_STRATEGY_WORKFLOW_SECTION && (
         <Collapse
@@ -436,23 +439,16 @@ export const ProductDetailSummaryDesktop: FC<
       {/* Collapsible metrics section with icon toggle */}
       <Collapse
         defaultActiveKey={['metrics']}
-        className={styles['product-detail-summary__collapse']}
-        bordered={false}
       >
         <Panel
           key="metrics"
           header={
-            <div className={styles['product-detail-summary__title']}>
+            <span className={styles['product-detail-summary__title']}>
+              Simulated HODL Performance Metric Analysis
               <Tooltip title="This pool is new and does not have enough data for live financial metrics. This is a simulated performance metric analysis based on the test period (see factsheet). Once the pool has been running for a while it will become live metrics">
-                <Title level={4} style={{ margin: 0 }}>
-                  Simulated HODL Performance Metric Analysis {'  '}
-                  <WarningOutlined
-                    type="warning"
-                    style={{ color: 'orange' }}
-                  />{' '}
-                </Title>
+                <WarningOutlined style={{ color: 'orange' }} />
               </Tooltip>
-            </div>
+            </span>
           }
           extra={metricsToggle}
         >
@@ -618,6 +614,11 @@ export const ProductDetailSummaryDesktop: FC<
           )}
         </Panel>
       </Collapse>
+
+      <ProductDetailEvents
+        productId={product.id}
+        chain={product.chain as GqlChain}
+      />
 
       {returnDistributionCard}
     </div>

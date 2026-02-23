@@ -1,9 +1,7 @@
 .product-detail-summary__title {
-  display: flex;
-  flex-direction: row;
-  justify-content: start;
-  padding-left: 8px;
-  border-bottom: 1px solid var(--primary-lighter);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .product-detail-summary__container {

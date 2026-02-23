@@ -2,6 +2,7 @@
 import { useMemo, useState } from 'react';
 import { Card, Collapse, Divider, Tooltip, Typography } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
+import { GqlChain } from '../../../../__generated__/graphql-types';
 import { FinancialMetricThresholds, Product } from '../../../../models';
 import { SimulationRunMetric } from '../../../simulationResults/simulationResultSummaryModels';
 import {
@@ -9,6 +10,8 @@ import {
   ReturnDistributionGraph,
 } from '../../../shared/graphs';
 import { ComparableProductSelector } from '../comparableProduct/comparableProductSelector';
+import { ProductDetailEvents } from '../events/productDetailEvents';
+import { ProductDetailSidebarStrategySummary } from '../../productDetailSidebar/productDetailSidebarStrategySummary';
 import { getThresholdColor, getThresholdPostscript } from './utils';
 
 const { Text } = Typography;
@@ -318,6 +321,9 @@ export const ProductDetailSummaryMobile = ({
       {/* Hidden because currently live analytics is turned off, comparing factsheet with live is not great */}
       {compareProductPanel}
       {poolWeightCard}
+      <div style={{ width: '95%' }}>
+        <ProductDetailSidebarStrategySummary product={product} />
+      </div>
       <Card
         style={{
           borderRadius: 16,
@@ -475,6 +481,14 @@ export const ProductDetailSummaryMobile = ({
           )}
         </div>
       </Card>
+      <Divider />
+      <div style={{ width: '95%' }}>
+        <ProductDetailEvents
+          productId={product.id}
+          chain={product.chain as GqlChain}
+          isMobile
+        />
+      </div>
       <Divider />
       {returnDistributionCard}
     </div>

@@ -39,6 +39,17 @@ export const ProductDetailEventsGrid = forwardRef<
   AgGridReact<GqlPoolEvent>,
   EventsGridProps
 >(function EventsGrid({ rowData, explorerBase, thresholds }, ref) {
+  const usdFormatter = useMemo(
+    () =>
+      new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }),
+    []
+  );
+
   const columnDefs = useMemo(
     () => [
       {
@@ -107,21 +118,14 @@ export const ProductDetailEventsGrid = forwardRef<
         enableRowGroup: true,
         type: 'number',
         valueFormatter: (p: ValueFormatterParams) =>
-          p.value
-            ? new Intl.NumberFormat('en-US', {
-                style: 'currency',
-                currency: 'USD',
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              }).format(Number(p.value))
-            : '',
+          p.value ? usdFormatter.format(Number(p.value)) : '',
         cellStyle: { textAlign: 'right' as const },
       },
       {
         colId: 'sender',
         field: 'sender',
         headerName: 'Sender',
-        width: 160,
+        width: 145,
         enableRowGroup: true,
         cellRenderer: (p: ICellRendererParams) => {
           const url = `${explorerBase}/address/${p.value}`;
@@ -143,7 +147,7 @@ export const ProductDetailEventsGrid = forwardRef<
         colId: 'tx',
         field: 'tx',
         headerName: 'Tx',
-        width: 160,
+        width: 145,
         enableRowGroup: true,
         cellRenderer: (p: ICellRendererParams) => {
           const url = `${explorerBase}/tx/${p.value}`;
@@ -176,6 +180,7 @@ export const ProductDetailEventsGrid = forwardRef<
       thresholds.goldThreshold,
       thresholds.silverThreshold,
       thresholds.srcPrefix,
+      usdFormatter,
     ]
   );
 

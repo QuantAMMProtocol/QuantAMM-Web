@@ -5,13 +5,10 @@ import { selectProductById } from '../../productExplorer/productExplorerSlice';
 import { ProductDetailPoolGraph } from './productDetailPoolGraph';
 import { ProductDetailStats } from './productDetailStats';
 import { ProductDetailNav } from './productDetailNav';
-import { ProductDetailEvents } from './events/productDetailEvents';
 
 import sharedStyles from '../../../shared.module.scss';
 import { ProductDetailInfo } from '../productDetailSidebar/productDetailInfo';
-import { GqlChain } from '../../../__generated__/graphql-types';
 import { ProductDetailSidebarSocials } from '../productDetailSidebar/productDetailSidebarSocials';
-import { ProductDetailSidebarStrategySummary } from '../productDetailSidebar/productDetailSidebarStrategySummary';
 import { ProductDetailTable } from './components/productDetailTable';
 import styles from './productDetailContent.module.scss';
 
@@ -50,22 +47,8 @@ export const ProductDetailContent: FC<ProductDetailContentProps> = ({
               <></>
             )}
             <Row>
-              <Col span={24} className={styles.strategyCol}>
-                <ProductDetailSidebarStrategySummary product={product} />
-              </Col>
-            </Row>
-            <Row>
               <Col span={24}>
                 <ProductDetailStats productId={product.id} />
-              </Col>
-            </Row>
-            <Row>
-              <Col span={24}>
-                <ProductDetailEvents
-                  productId={product.id}
-                  chain={product.chain as GqlChain}
-                  isMobile={isMobile}
-                />
               </Col>
             </Row>
             {isMobile ? (

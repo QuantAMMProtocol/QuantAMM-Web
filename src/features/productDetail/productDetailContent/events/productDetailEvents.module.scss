@@ -1,24 +1,16 @@
 .eventsRow {
-  margin-top: 20px;
+  margin-top: 0;
 }
 
 .eventsCollapse {
   width: 100%;
 }
 
-.headerCol {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  padding-left: 8px;
-  border-bottom: 1px solid var(--primary-lighter);
-}
-
 .contentCol {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 20px;
+  margin-top: 0;
   padding-left: 12px;
   padding-right: 12px;
   width: 100%;
