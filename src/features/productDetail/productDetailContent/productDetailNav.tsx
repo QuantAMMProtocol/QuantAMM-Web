@@ -1,4 +1,5 @@
-import { memo, useEffect, useState } from 'react';
+import { memo, useCallback, useEffect, useMemo, useState } from 'react';
+import type { MouseEvent as ReactMouseEvent } from 'react';
 import { Affix, Anchor, Button } from 'antd';
 import { getBalancerPoolUrl } from '../../../utils';
 import { ProductModal } from '../modal/productModal';
@@ -39,6 +40,46 @@ function ProductDetailNavInternal({ productId, chain }: ProductDetailNavProps) {
   const baseBalancerUrl = getBalancerPoolUrl(chain, productId);
   const addLiquidityBalancerPoolUrl = `${baseBalancerUrl}/add-liquidity`;
   const removeLiquidityBalancerPoolUrl = `${baseBalancerUrl}/remove-liquidity`;
+  const anchorItems = useMemo(
+    () => [
+      {
+        key: 'graph',
+        href: '#graph',
+        title: 'Graph',
+      },
+      {
+        key: 'summary',
+        href: '#summary',
+        title: 'Summary',
+      },
+      {
+        key: 'metrics',
+        href: '#metrics',
+        title: 'Metrics',
+      },
+      {
+        key: 'events',
+        href: '#events',
+        title: 'Events',
+      },
+      {
+        key: 'distribution',
+        href: '#distribution',
+        title: 'Distribution',
+      },
+    ],
+    []
+  );
+  const handleAnchorClick = useCallback(
+    (_event: ReactMouseEvent<HTMLElement>, link: any) => {
+      window.dispatchEvent(
+        new CustomEvent('product-detail-nav-select', {
+          detail: { href: link?.href },
+        })
+      );
+    },
+    []
+  );
 
   return (
     <>
@@ -50,28 +91,8 @@ function ProductDetailNavInternal({ productId, chain }: ProductDetailNavProps) {
               direction="horizontal"
               affix
               className={styles['product-detail-nav__anchor']}
-              items={[
-                {
-                  key: 'graph',
-                  href: '#graph',
-                  title: 'Graph',
-                },
-                {
-                  key: 'summary',
-                  href: '#summary',
-                  title: 'Summary',
-                },
-                {
-                  key: 'details',
-                  href: '#details',
-                  title: 'Details',
-                },
-                {
-                  key: 'events',
-                  href: '#events',
-                  title: 'Events',
-                },
-              ]}
+              items={anchorItems}
+              onClick={handleAnchorClick}
             />
           </div>
 

@@ -30,7 +30,10 @@ export const ProductDetailContent: FC<ProductDetailContentProps> = ({
     <Content>
       {product?.id && product.id !== '' && (
         <>
-          <ProductDetailNav productId={product.id} chain={product.chain} />
+          <ProductDetailNav
+            productId={product.id}
+            chain={product.chain}
+          />
           <div className={sharedStyles.scrollable}>
             <ProductDetailPoolGraph productId={product.id} />
             {isMobile ? (

@@ -272,7 +272,7 @@ export const ProductDetailSummaryMobile = ({
   );
 
   const returnDistributionCard = (
-    <div style={{ width: '95%' }}>
+    <div id="distribution" style={{ width: '95%' }}>
       <Card title="Return distribution">
         <div>
           <Text strong>{product.name}</Text>
@@ -324,88 +324,90 @@ export const ProductDetailSummaryMobile = ({
       <div style={{ width: '95%' }}>
         <ProductDetailSidebarStrategySummary product={product} />
       </div>
-      <Card
-        style={{
-          borderRadius: 16,
-          boxShadow: '0 2px 6px rgba(0,0,0,0.25)',
-          marginTop: 12,
-          overflow: 'hidden',
-        }}
-        bordered={false}
-        title={<MetricHeader name={currentReturnAnalysisLabel} />}
-      >
-        <div style={{ padding: '4px 4px 0' }}>
-          {/* Product */}
-          <ValueRow
-            label={product.name}
-            value={selectedReturnAnalysis?.metricValue ?? 0}
-            gradeColor={
-              repr(
-                returnAnalysisThresholds,
-                currentReturnAnalysisLabel,
-                selectedBenchmarkReturnAnalysis?.metricValue ?? 0
-              ).color
-            }
-            gradeText={
-              repr(
-                returnAnalysisThresholds,
-                currentReturnAnalysisLabel,
-                selectedBenchmarkReturnAnalysis?.metricValue ?? 0
-              ).grade
-            }
-          />
-
-          {/* HODL */}
-          <ValueRow
-            label="HODL"
-            value={selectedBenchmarkReturnAnalysis?.metricValue ?? 0}
-            gradeColor={
-              repr(
-                returnAnalysisThresholds,
-                currentReturnAnalysisLabel,
-                selectedReturnAnalysis?.metricValue ?? 0
-              ).color
-            }
-            gradeText={
-              repr(
-                returnAnalysisThresholds,
-                currentReturnAnalysisLabel,
-                selectedReturnAnalysis?.metricValue ?? 0
-              ).grade
-            }
-          />
-
-          {/* Comparing product (optional) */}
-          {comparingProduct && (
+      <div id="metrics">
+        <Card
+          style={{
+            borderRadius: 16,
+            boxShadow: '0 2px 6px rgba(0,0,0,0.25)',
+            marginTop: 12,
+            overflow: 'hidden',
+          }}
+          bordered={false}
+          title={<MetricHeader name={currentReturnAnalysisLabel} />}
+        >
+          <div style={{ padding: '4px 4px 0' }}>
+            {/* Product */}
             <ValueRow
-              label={comparingProduct.name}
-              value={
-                comparingProductReturnAnalysis?.find(
-                  (x) => x.metricName == selectedReturnAnalysis?.metricName
-                )?.metricValue ?? 0
-              }
+              label={product.name}
+              value={selectedReturnAnalysis?.metricValue ?? 0}
               gradeColor={
                 repr(
                   returnAnalysisThresholds,
                   currentReturnAnalysisLabel,
-                  comparingProductReturnAnalysis?.find(
-                    (x) => x.metricName == selectedReturnAnalysis?.metricName
-                  )?.metricValue ?? 0
+                  selectedBenchmarkReturnAnalysis?.metricValue ?? 0
                 ).color
               }
               gradeText={
                 repr(
                   returnAnalysisThresholds,
                   currentReturnAnalysisLabel,
-                  comparingProductReturnAnalysis?.find(
-                    (x) => x.metricName == selectedReturnAnalysis?.metricName
-                  )?.metricValue ?? 0
+                  selectedBenchmarkReturnAnalysis?.metricValue ?? 0
                 ).grade
               }
             />
-          )}
-        </div>
-      </Card>
+
+            {/* HODL */}
+            <ValueRow
+              label="HODL"
+              value={selectedBenchmarkReturnAnalysis?.metricValue ?? 0}
+              gradeColor={
+                repr(
+                  returnAnalysisThresholds,
+                  currentReturnAnalysisLabel,
+                  selectedReturnAnalysis?.metricValue ?? 0
+                ).color
+              }
+              gradeText={
+                repr(
+                  returnAnalysisThresholds,
+                  currentReturnAnalysisLabel,
+                  selectedReturnAnalysis?.metricValue ?? 0
+                ).grade
+              }
+            />
+
+            {/* Comparing product (optional) */}
+            {comparingProduct && (
+              <ValueRow
+                label={comparingProduct.name}
+                value={
+                  comparingProductReturnAnalysis?.find(
+                    (x) => x.metricName == selectedReturnAnalysis?.metricName
+                  )?.metricValue ?? 0
+                }
+                gradeColor={
+                  repr(
+                    returnAnalysisThresholds,
+                    currentReturnAnalysisLabel,
+                    comparingProductReturnAnalysis?.find(
+                      (x) => x.metricName == selectedReturnAnalysis?.metricName
+                    )?.metricValue ?? 0
+                  ).color
+                }
+                gradeText={
+                  repr(
+                    returnAnalysisThresholds,
+                    currentReturnAnalysisLabel,
+                    comparingProductReturnAnalysis?.find(
+                      (x) => x.metricName == selectedReturnAnalysis?.metricName
+                    )?.metricValue ?? 0
+                  ).grade
+                }
+              />
+            )}
+          </div>
+        </Card>
+      </div>
       <Divider />
       <Card
         style={{

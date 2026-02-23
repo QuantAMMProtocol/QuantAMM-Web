@@ -1,4 +1,12 @@
-import { FC, memo, MouseEvent, useCallback, useRef, useState } from 'react';
+import {
+  FC,
+  memo,
+  MouseEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { Button, Col, Collapse, Empty, Row, Spin } from 'antd';
 import { AgGridReact } from 'ag-grid-react';
 import {
@@ -79,6 +87,37 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = memo(
       gridRef.current?.api?.exportDataAsCsv();
     }, []);
 
+    useEffect(() => {
+      const maybeOpenForTarget = (target?: string) => {
+        if (target === '#events') {
+          setIsPanelOpen(true);
+          setHasRequestedData(true);
+        }
+      };
+
+      maybeOpenForTarget(window.location.hash);
+
+      const onHashChange = () => maybeOpenForTarget(window.location.hash);
+      const onNavSelect = (event: Event) => {
+        const detail = (event as CustomEvent<{ href?: string }>).detail;
+        maybeOpenForTarget(detail?.href);
+      };
+
+      window.addEventListener('hashchange', onHashChange);
+      window.addEventListener(
+        'product-detail-nav-select',
+        onNavSelect as EventListener
+      );
+
+      return () => {
+        window.removeEventListener('hashchange', onHashChange);
+        window.removeEventListener(
+          'product-detail-nav-select',
+          onNavSelect as EventListener
+        );
+      };
+    }, []);
+
     const content =
       !hasRequestedData && isPanelOpen ? (
         <Spin />
@@ -117,7 +156,7 @@ export const ProductDetailEvents: FC<ProductDetailEventsProps> = memo(
       <Row id="events" className={styles.eventsRow}>
         <Col span={24}>
           <Collapse
-            defaultActiveKey={[]}
+            activeKey={isPanelOpen ? [EVENTS_PANEL_KEY] : []}
             className={styles.eventsCollapse}
             onChange={handleCollapseChange}
           >
