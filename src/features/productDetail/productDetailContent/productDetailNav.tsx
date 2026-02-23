@@ -8,6 +8,8 @@ import styles from './productDetailNav.module.scss';
 import { useAppSelector } from '../../../app/hooks';
 import { selectAcceptedTermsAndConditions } from '../../productExplorer/productExplorerSlice';
 
+const PRODUCT_DETAIL_SCROLL_CONTAINER_ID = 'product-detail-scroll-container';
+
 interface ProductDetailNavProps {
   productId: string;
   chain: string;
@@ -17,8 +19,9 @@ function ProductDetailNavInternal({ productId, chain }: ProductDetailNavProps) {
   const acceptedTermsAndConditions = useAppSelector(
     selectAcceptedTermsAndConditions
   );
-  const [targetOffset, setTargetOffset] = useState<number | undefined>(
-    undefined
+  const [targetOffset, setTargetOffset] = useState<number | undefined>(120);
+  const [anchorContainer, setAnchorContainer] = useState<HTMLElement | null>(
+    null
   );
   const [productModalUrl, setProductModalUrl] = useState<string | undefined>(
     undefined
@@ -26,8 +29,12 @@ function ProductDetailNavInternal({ productId, chain }: ProductDetailNavProps) {
   const [isWithdraw, setIsWithdraw] = useState(false);
 
   useEffect(() => {
-    setTargetOffset(window.innerHeight / 2);
-  }, []);
+    // Track sections relative to the product detail scroll container.
+    setAnchorContainer(
+      document.getElementById(PRODUCT_DETAIL_SCROLL_CONTAINER_ID)
+    );
+    setTargetOffset(120);
+  }, [productId]);
 
   const showProductModal = (url: string) => {
     setProductModalUrl(url);
@@ -40,6 +47,9 @@ function ProductDetailNavInternal({ productId, chain }: ProductDetailNavProps) {
   const baseBalancerUrl = getBalancerPoolUrl(chain, productId);
   const addLiquidityBalancerPoolUrl = `${baseBalancerUrl}/add-liquidity`;
   const removeLiquidityBalancerPoolUrl = `${baseBalancerUrl}/remove-liquidity`;
+  const getAnchorContainer = useCallback(() => {
+    return anchorContainer ?? document.documentElement;
+  }, [anchorContainer]);
   const anchorItems = useMemo(
     () => [
       {
@@ -86,14 +96,17 @@ function ProductDetailNavInternal({ productId, chain }: ProductDetailNavProps) {
       <Affix>
         <div className={styles['product-detail-nav__container']}>
           <div className={styles['product-detail-nav__anchor-container']}>
-            <Anchor
-              targetOffset={targetOffset}
-              direction="horizontal"
-              affix
-              className={styles['product-detail-nav__anchor']}
-              items={anchorItems}
-              onClick={handleAnchorClick}
-            />
+            {anchorContainer && (
+              <Anchor
+                targetOffset={targetOffset}
+                direction="horizontal"
+                affix={false}
+                className={styles['product-detail-nav__anchor']}
+                getContainer={getAnchorContainer}
+                items={anchorItems}
+                onClick={handleAnchorClick}
+              />
+            )}
           </div>
 
           <div className={styles['product-detail-nav__buttons-container']}>

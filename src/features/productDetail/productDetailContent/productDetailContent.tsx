@@ -34,7 +34,10 @@ export const ProductDetailContent: FC<ProductDetailContentProps> = ({
             productId={product.id}
             chain={product.chain}
           />
-          <div className={sharedStyles.scrollable}>
+          <div
+            id="product-detail-scroll-container"
+            className={sharedStyles.scrollable}
+          >
             <ProductDetailPoolGraph productId={product.id} />
             {isMobile ? (
               <ProductDetailInfo product={product} isMobile={isMobile} />
