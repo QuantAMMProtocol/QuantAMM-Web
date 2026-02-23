@@ -15,6 +15,7 @@ import { ProductItemPerformanceAreaGraph } from './productItemPerformanceAreaGra
 import { ProductItemBottom } from './productItemBottom';
 import { ProductItemBackground } from '../productItemBackground';
 import { getTvl } from '../productItemHelpers';
+import { ProductItemWide } from '../wide/productItemWide';
 import styles from './productItem.module.scss';
 
 const DEFAULT_ACTIVE_KEY = '1';
@@ -23,9 +24,14 @@ const { Text } = Typography;
 
 interface ProductItemProps {
   product: Product;
+  wide?: boolean;
 }
 
-export const ProductItem: FC<ProductItemProps> = ({ product }) => {
+export const ProductItem: FC<ProductItemProps> = ({ product, wide }) => {
+  if (wide) {
+    return <ProductItemWide product={product} />;
+  }
+
   const dispatch = useAppDispatch();
   const overrideTab = useAppSelector(selectOverrideTab);
   const isDarkTheme = useAppSelector(selectTheme);

@@ -10,6 +10,7 @@ import {
 import 'ag-charts-enterprise';
 import { Typography } from 'antd';
 import { useAppSelector } from '../../../app/hooks';
+import { useHasEnteredViewport } from '../../../hooks/useHasEnteredViewport';
 import { selectAgChartTheme } from '../../themes/themeSlice';
 import { productExplorerTranslation } from '../../productExplorer/translations';
 import {
@@ -51,8 +52,12 @@ export const ProductItemOverviewGraph: FC<ProductItemOverviewGraphProps> = ({
   widthOverride,
 }) => {
   const chartTheme = useAppSelector(selectAgChartTheme);
+  const { containerRef, hasEnteredViewport } =
+    useHasEnteredViewport<HTMLDivElement>();
 
   const totalScore = getTotalScore(data.map((item) => item.value ?? 0));
+  const chartWidth = widthOverride ?? (wide ? 100 : 288);
+  const chartHeight = heightOverride ?? (wide ? 100 : 240);
 
   const radarColor = useMemo(() => {
     return getTotalScoreColor(totalScore);
@@ -118,8 +123,58 @@ export const ProductItemOverviewGraph: FC<ProductItemOverviewGraphProps> = ({
     ];
   }, [intervalStepOverride, fontSizeOverride, orientationOverride, wide]);
 
+  const chartOptions = useMemo(
+    () => ({
+      width: chartWidth,
+      height: chartHeight,
+      data,
+      series,
+      axes,
+      legend: {
+        enabled: false,
+      },
+      overlays: {
+        noData: {
+          text: 'No data',
+        },
+      },
+      animation: {
+        enabled: !wide,
+      },
+      theme: {
+        baseTheme: chartTheme,
+        overrides: {
+          common: {
+            background: {
+              fill: 'transparent',
+            },
+          },
+          'radar-area': {
+            axes: {
+              'angle-category': {
+                label: {
+                  color: isDarkTheme ? '#FFFFEF' : '#0B1827',
+                },
+              },
+            },
+          },
+        },
+      },
+    }),
+    [
+      axes,
+      chartHeight,
+      chartTheme,
+      chartWidth,
+      data,
+      isDarkTheme,
+      series,
+      wide,
+    ]
+  );
+
   return (
-    <div className={styles['product-item__graph-overlay']}>
+    <div className={styles['product-item__graph-overlay']} ref={containerRef}>
       {showScoreOverall && (
         <div className={styles['product-item__graph-overlay__content']}>
           <Text strong style={{ fontSize: wide ? 9 : '' }}>
@@ -130,45 +185,11 @@ export const ProductItemOverviewGraph: FC<ProductItemOverviewGraphProps> = ({
           </Text>
         </div>
       )}
-      <AgCharts
-        options={{
-          width: widthOverride ?? (wide ? 100 : 288),
-          height: heightOverride ?? (wide ? 100 : 240),
-          data,
-          series,
-          axes,
-          legend: {
-            enabled: false,
-          },
-          overlays: {
-            noData: {
-              text: 'No data',
-            },
-          },
-          animation: {
-            enabled: !wide,
-          },
-          theme: {
-            baseTheme: chartTheme,
-            overrides: {
-              common: {
-                background: {
-                  fill: 'transparent',
-                },
-              },
-              'radar-area': {
-                axes: {
-                  'angle-category': {
-                    label: {
-                      color: isDarkTheme ? '#FFFFEF' : '#0B1827',
-                    },
-                  },
-                },
-              },
-            },
-          },
-        }}
-      />
+      {hasEnteredViewport ? (
+        <AgCharts options={chartOptions} />
+      ) : (
+        <div style={{ width: chartWidth, height: chartHeight }} />
+      )}
     </div>
   );
 };

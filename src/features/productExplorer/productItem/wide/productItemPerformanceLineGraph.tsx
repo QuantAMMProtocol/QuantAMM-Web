@@ -12,6 +12,7 @@ import { CURRENT_PERFORMANCE_PERIOD, Product } from '../../../../models';
 import { selectAgChartTheme } from '../../../themes/themeSlice';
 import { filterByTimeRange } from '../../../productDetail/productDetailContent/helpers';
 import { getCurrentPerformanceComponent } from '../shared/CurrentPerformance';
+import { useHasEnteredViewport } from '../../../../hooks/useHasEnteredViewport';
 
 import styles from './productItemPerformanceLineGraph.module.scss';
 
@@ -45,9 +46,13 @@ const mapPerformanceData = (product: Product) => {
 export const ProductItemPerformanceLineGraph: FC<
   ProductItemPerformanceGraphProps
 > = ({ product, wide }) => {
-  const mappedData = mapPerformanceData(product);
+  const { containerRef, hasEnteredViewport } =
+    useHasEnteredViewport<HTMLDivElement>();
+  const mappedData = useMemo(() => mapPerformanceData(product), [product]);
 
   const chartTheme = useAppSelector(selectAgChartTheme);
+  const chartWidth = wide ? 100 : 288;
+  const chartHeight = wide ? 100 : 240;
 
   const series: AgCartesianSeriesOptions[] = useMemo(() => {
     return [
@@ -105,43 +110,50 @@ export const ProductItemPerformanceLineGraph: FC<
     ];
   }, []);
 
+  const chartOptions = useMemo(
+    () => ({
+      width: chartWidth,
+      height: chartHeight,
+      data: mappedData,
+      series,
+      axes,
+      legend: {
+        enabled: false,
+      },
+      overlays: {
+        noData: {
+          text: 'No data',
+        },
+      },
+      animation: {
+        enabled: false,
+      },
+      theme: {
+        baseTheme: chartTheme,
+        overrides: {
+          common: {
+            background: {
+              fill: 'transparent',
+            },
+          },
+        },
+      },
+    }),
+    [axes, chartHeight, chartTheme, chartWidth, mappedData, series]
+  );
+
   return (
-    <div className={styles['product-item__graph-overlay']}>
+    <div className={styles['product-item__graph-overlay']} ref={containerRef}>
       <div className={styles['product-item__graph-overlay__content']}>
         <Text strong style={{ fontSize: 10 }}>
           {getCurrentPerformanceComponent(product)}
         </Text>
       </div>
-      <AgCharts
-        options={{
-          width: wide ? 100 : 288,
-          height: wide ? 100 : 240,
-          data: mappedData,
-          series,
-          axes,
-          legend: {
-            enabled: false,
-          },
-          overlays: {
-            noData: {
-              text: 'No data',
-            },
-          },
-          animation: {
-            enabled: false,
-          },
-          theme: {
-            baseTheme: chartTheme,
-            overrides: {
-              common: {
-                background: {
-                  fill: 'transparent',
-                },
-              },
-            },
-          },
-        }}
-      />
+      {hasEnteredViewport ? (
+        <AgCharts options={chartOptions} />
+      ) : (
+        <div style={{ width: chartWidth, height: chartHeight }} />
+      )}
     </div>
   );
 };
