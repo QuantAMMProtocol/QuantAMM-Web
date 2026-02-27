@@ -43,11 +43,12 @@ Create `.env.local` from `env.local.template`.
 | `VITE_BASE_URL` | Yes | Base URL for REST endpoints used by RTK Query services |
 | `VITE_GRAPH_TARGET` | Yes | GraphQL endpoint used by Apollo + GraphQL codegen |
 | `VITE_USE_STUBS_DATA` | Optional | Enables/disables stub product list flow in hooks |
-| `AG_GRID_LICENCE_KEY` | Required for enterprise features | AG Grid/AG Charts enterprise license key |
+| `VITE_AG_GRID_LICENSE_KEY` | Required for enterprise features | AG Grid/AG Charts enterprise license key |
 
 Notes:
 - Never commit `.env.local`.
 - `npm run codegen` reads `.env.local` via `dotenv_config_path=.env.local`.
+- `VITE_AG_GRID_LICENSE_KEY` must be set at build time for AG Grid/AG Charts enterprise features.
 
 ## Scripts
 
