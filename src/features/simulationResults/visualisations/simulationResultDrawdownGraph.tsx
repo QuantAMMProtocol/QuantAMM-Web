@@ -8,32 +8,11 @@ import { DownOutlined } from '@ant-design/icons';
 import { selectSimulationResultTimeRangeSelection } from '../../simulationRunner/simulationRunnerSlice';
 import { selectAgChartTheme } from '../../themes/themeSlice';
 import { BreakdownProps } from '../simulationResultsSummaryStep';
-import { useMemo, useState } from 'react';
+import { memo, useCallback, useMemo, useState } from 'react';
 import { SimulationResultTimestepDto } from '../../simulationRunner/simulationRunnerDtos';
 
-export function SimulationResultDrawdownChart(props: BreakdownProps) {
-  const simulationTimeRangeSelected = useAppSelector(
-    selectSimulationResultTimeRangeSelection
-  );
-  const chartTheme = useAppSelector(selectAgChartTheme);
-
-  const [drawdownType, setDrawdownType] = useState(
-    'Avg Daily Drawdown per week'
-  );
-
-  const onClick = ({ key }: { key: string }) => {
-    setDrawdownType(key);
-  };
-
-  const visibleBreakdowns = useMemo(
-    () =>
-      props.breakdowns.filter(
-        (x) => x.timeRange.name === simulationTimeRangeSelected
-      ),
-    [props.breakdowns, simulationTimeRangeSelected]
-  );
-
-  const items = [
+function SimulationResultDrawdownChartComponent(props: BreakdownProps) {
+  const drawdownItems = [
     {
       label: 'Avg Daily Drawdown per week',
       key: 'Avg Daily Drawdown per week',
@@ -57,6 +36,27 @@ export function SimulationResultDrawdownChart(props: BreakdownProps) {
     { label: 'Weekly CDaR', key: 'Weekly CDaR' },
     { label: 'Monthly CDaR', key: 'Monthly CDaR' },
   ];
+
+  const simulationTimeRangeSelected = useAppSelector(
+    selectSimulationResultTimeRangeSelection
+  );
+  const chartTheme = useAppSelector(selectAgChartTheme);
+
+  const [drawdownType, setDrawdownType] = useState(
+    'Avg Daily Drawdown per week'
+  );
+
+  const onClick = useCallback(({ key }: { key: string }) => {
+    setDrawdownType(key);
+  }, []);
+
+  const visibleBreakdowns = useMemo(
+    () =>
+      props.breakdowns.filter(
+        (x) => x.timeRange.name === simulationTimeRangeSelected
+      ),
+    [props.breakdowns, simulationTimeRangeSelected]
+  );
 
   const series = useMemo((): agCharts.AgCartesianSeriesOptions[] => {
     const seriesArray: agCharts.AgCartesianSeriesOptions[] = [];
@@ -113,6 +113,52 @@ export function SimulationResultDrawdownChart(props: BreakdownProps) {
     };
   }, [visibleBreakdowns]);
 
+  const chartOptions = useMemo(
+    () => ({
+      height: 400,
+      navigator: {
+        enabled: true,
+        height: 5,
+        spacing: 6,
+      },
+      axes: [
+        timeAxisOption,
+        {
+          type: 'number' as const,
+          position: 'left' as const,
+        },
+      ],
+      series,
+      legend: {
+        position: 'bottom' as const,
+      },
+      overlays: {
+        noData: {
+          text: 'No data',
+        },
+      },
+      theme: {
+        baseTheme: chartTheme,
+        overrides: {
+          common: {
+            background: {
+              fill: 'transparent',
+            },
+          },
+          line: {
+            series: {
+              cursor: 'crosshair',
+              marker: {
+                enabled: false,
+              },
+            },
+          },
+        },
+      },
+    }),
+    [chartTheme, series, timeAxisOption]
+  );
+
   return (
     <div>
       <div hidden={props.hideTitle}>
@@ -125,7 +171,7 @@ export function SimulationResultDrawdownChart(props: BreakdownProps) {
           <Col span={8}>
             <Dropdown
               menu={{
-                items,
+                items: drawdownItems,
                 onClick,
               }}
             >
@@ -144,7 +190,7 @@ export function SimulationResultDrawdownChart(props: BreakdownProps) {
           <Col span={24}>
             <Dropdown
               menu={{
-                items,
+                items: drawdownItems,
                 onClick,
               }}
             >
@@ -160,52 +206,13 @@ export function SimulationResultDrawdownChart(props: BreakdownProps) {
       </div>
       <Row className={styles.resultChartRow}>
         <Col span={24}>
-          <AgCharts
-            options={{
-              height: 400,
-              navigator: {
-                enabled: true,
-                height: 5,
-                spacing: 6,
-              },
-              axes: [
-                timeAxisOption,
-                {
-                  type: 'number',
-                  position: 'left',
-                },
-              ],
-              series,
-              legend: {
-                position: 'bottom',
-              },
-              overlays: {
-                noData: {
-                  text: 'No data',
-                },
-              },
-              theme: {
-                baseTheme: chartTheme,
-                overrides: {
-                  common: {
-                    background: {
-                      fill: 'transparent',
-                    },
-                  },
-                  line: {
-                    series: {
-                      cursor: 'crosshair',
-                      marker: {
-                        enabled: false,
-                      },
-                    },
-                  },
-                },
-              },
-            }}
-          />
+          <AgCharts options={chartOptions} />
         </Col>
       </Row>
     </div>
   );
 }
+
+export const SimulationResultDrawdownChart = memo(
+  SimulationResultDrawdownChartComponent
+);

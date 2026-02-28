@@ -1,4 +1,5 @@
 import { ApolloError } from '@apollo/client';
+import { useMemo } from 'react';
 import {
   GqlChain,
   GqlPoolEvent,
@@ -11,11 +12,13 @@ export const useFetchPoolEventsData = ({
   skip,
   poolId,
   chain,
+  enabled = true,
 }: {
   first: number | undefined;
   skip: number | undefined;
   poolId: string;
   chain: GqlChain;
+  enabled?: boolean;
 }): {
   poolEvents: GqlPoolEvent[];
   loading: boolean;
@@ -27,6 +30,7 @@ export const useFetchPoolEventsData = ({
     )?.launchUnixTimestamp ?? 0;
 
   const { data, loading, error } = useGetPoolEventsQuery({
+    skip: !enabled || !poolId,
     variables: {
       first,
       skip,
@@ -36,15 +40,20 @@ export const useFetchPoolEventsData = ({
       },
     },
   });
+  const poolEvents = useMemo(
+    () =>
+      (data?.poolEvents ?? [])
+        .map((event) => ({
+          ...event,
+          logIndex: 0,
+          userAddress: '',
+        }))
+        .filter((event) => event.timestamp >= launchUnixTimestamp),
+    [data?.poolEvents, launchUnixTimestamp]
+  );
 
   return {
-    poolEvents: (data?.poolEvents ?? [])
-      .map((event) => ({
-        ...event,
-        logIndex: 0,
-        userAddress: '',
-      }))
-      .filter((event) => event.timestamp >= launchUnixTimestamp),
+    poolEvents,
     loading,
     error,
   };

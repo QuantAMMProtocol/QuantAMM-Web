@@ -14,6 +14,7 @@ import {
   currencyFormatter,
   percentageFormatter,
 } from '../../../../utils/formatters';
+import { useHasEnteredViewport } from '../../../../hooks/useHasEnteredViewport';
 
 type PerformanceGraphData = MonthlyPerformance & {
   trendUp: boolean;
@@ -57,9 +58,13 @@ const SCALE_FACTOR = 1.3;
 export const ProductItemPerformanceAreaGraph: FC<
   ProductItemPerformanceGraphProps
 > = ({ data, wide }) => {
-  const mappedData = mapPerformanceData(data);
+  const { containerRef, hasEnteredViewport } =
+    useHasEnteredViewport<HTMLDivElement>();
+  const mappedData = useMemo(() => mapPerformanceData(data), [data]);
 
   const chartTheme = useAppSelector(selectAgChartTheme);
+  const chartWidth = wide ? 100 : 288;
+  const chartHeight = wide ? 100 : 240;
 
   const performanceList = useMemo(
     () => mappedData.map((item) => item.absReturn),
@@ -155,33 +160,42 @@ export const ProductItemPerformanceAreaGraph: FC<
     ];
   }, [mappedData, interval, min, max, wide]);
 
-  return (
-    <AgCharts
-      options={{
-        width: wide ? 100 : 288,
-        height: wide ? 100 : 240,
-        data: mappedData,
-        series,
-        axes,
-        legend: {
-          enabled: false,
+  const chartOptions = useMemo(
+    () => ({
+      width: chartWidth,
+      height: chartHeight,
+      data: mappedData,
+      series,
+      axes,
+      legend: {
+        enabled: false,
+      },
+      overlays: {
+        noData: {
+          text: 'No data',
         },
-        overlays: {
-          noData: {
-            text: 'No data',
-          },
-        },
-        theme: {
-          baseTheme: chartTheme,
-          overrides: {
-            common: {
-              background: {
-                fill: 'transparent',
-              },
+      },
+      theme: {
+        baseTheme: chartTheme,
+        overrides: {
+          common: {
+            background: {
+              fill: 'transparent',
             },
           },
         },
-      }}
-    />
+      },
+    }),
+    [axes, chartHeight, chartTheme, chartWidth, mappedData, series]
+  );
+
+  return (
+    <div ref={containerRef}>
+      {hasEnteredViewport ? (
+        <AgCharts options={chartOptions} />
+      ) : (
+        <div style={{ width: chartWidth, height: chartHeight }} />
+      )}
+    </div>
   );
 };

@@ -1,5 +1,5 @@
 import { Col, Row, Tabs, Spin } from 'antd';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { SimulationResultsSummaryStep } from '../../../simulationResults/simulationResultsSummaryStep';
 import { getBreakdown, Pool } from '../../../../services/breakdownService';
 import { SimulationRunBreakdown } from '../../../simulationResults/simulationResultSummaryModels';
@@ -11,6 +11,21 @@ export default function ArbitrumMacroSimulatorExample() {
   const [key, setKey] = useState<string>('2');
   const [breakdowns, setBreakdowns] = useState<SimulationRunBreakdown[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const seriesName = useMemo(
+    () => ({
+      'Power Channel': '#c7b283',
+      'Balancer Weighted': '#528aae',
+      HODL: '#52ad80',
+    }),
+    []
+  );
+  const seriesStrokeColor = useMemo(
+    () => ({
+      'Power Channel': 'ARBITRUM MACRO BTF',
+      'Balancer Weighted': 'Traditional DEX',
+    }),
+    []
+  );
 
   // Function to load breakdowns based on the selected tab
   const loadBreakdowns = async (poolNames: Pool[]) => {
@@ -56,15 +71,6 @@ export default function ArbitrumMacroSimulatorExample() {
     }); // Trigger loading of breakdowns
   }, [key]); // Dependency array ensures that effect runs when `key` changes
 
-  const seriesName = {
-    'Power Channel': '#c7b283',
-    'Balancer Weighted': '#528aae',
-    HODL: '#52ad80',
-  };
-  const seriesStrokeColor = {
-    'Power Channel': 'ARBITRUM MACRO BTF',
-    'Balancer Weighted': 'Traditional DEX',
-  };
   return (
     <div>
       <Row>

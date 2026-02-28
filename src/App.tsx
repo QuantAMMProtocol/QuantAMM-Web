@@ -20,7 +20,7 @@ const { Content, Header } = Layout;
 const isRoute = (value: string): value is ROUTES =>
   (Object.values(ROUTES) as string[]).includes(value);
 
-const AG_GRID_LICENSE_KEY = import.meta.env.AG_GRID_LICENCE_KEY ?? '';
+const AG_GRID_LICENSE_KEY = import.meta.env.VITE_AG_GRID_LICENSE_KEY ?? '';
 
 const initialiseSimsToRun = (): AppThunk => (dispatch, getState) => {
   if (getState().simRunner.simulationsToRun.length === 0) {
@@ -46,16 +46,13 @@ function App() {
         return;
       }
 
-      if (page === ROUTES.SIMULATION_RUNNER) {
+      if (page !== ROUTES.SIMULATION_RUNNER) {
+        dispatch(loadPriceHistoryAsync());
         dispatch(initialiseSimsToRun());
       }
     },
     [dispatch]
   );
-
-  useEffect(() => {
-    dispatch(loadPriceHistoryAsync());
-  }, [dispatch]);
 
   useEffect(() => {
     const segment = location.pathname.split('/')[1] ?? '';

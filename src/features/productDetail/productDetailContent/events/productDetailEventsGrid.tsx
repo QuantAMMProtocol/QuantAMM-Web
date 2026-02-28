@@ -39,6 +39,17 @@ export const ProductDetailEventsGrid = forwardRef<
   AgGridReact<GqlPoolEvent>,
   EventsGridProps
 >(function EventsGrid({ rowData, explorerBase, thresholds }, ref) {
+  const usdFormatter = useMemo(
+    () =>
+      new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }),
+    []
+  );
+
   const columnDefs = useMemo(
     () => [
       {
@@ -107,21 +118,14 @@ export const ProductDetailEventsGrid = forwardRef<
         enableRowGroup: true,
         type: 'number',
         valueFormatter: (p: ValueFormatterParams) =>
-          p.value
-            ? new Intl.NumberFormat('en-US', {
-                style: 'currency',
-                currency: 'USD',
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              }).format(Number(p.value))
-            : '',
+          p.value ? usdFormatter.format(Number(p.value)) : '',
         cellStyle: { textAlign: 'right' as const },
       },
       {
         colId: 'sender',
         field: 'sender',
         headerName: 'Sender',
-        width: 160,
+        width: 145,
         enableRowGroup: true,
         cellRenderer: (p: ICellRendererParams) => {
           const url = `${explorerBase}/address/${p.value}`;
@@ -143,7 +147,7 @@ export const ProductDetailEventsGrid = forwardRef<
         colId: 'tx',
         field: 'tx',
         headerName: 'Tx',
-        width: 160,
+        width: 145,
         enableRowGroup: true,
         cellRenderer: (p: ICellRendererParams) => {
           const url = `${explorerBase}/tx/${p.value}`;
@@ -176,6 +180,7 @@ export const ProductDetailEventsGrid = forwardRef<
       thresholds.goldThreshold,
       thresholds.silverThreshold,
       thresholds.srcPrefix,
+      usdFormatter,
     ]
   );
 
@@ -183,6 +188,7 @@ export const ProductDetailEventsGrid = forwardRef<
     () => ({
       columnDefs,
       rowHeight: 26,
+      getRowId: (params) => String(params.data?.id ?? ''),
       defaultColDef: {
         filter: 'agTextColumnFilter',
         sortable: true,
@@ -197,6 +203,35 @@ export const ProductDetailEventsGrid = forwardRef<
     }),
     [columnDefs]
   );
+  const sideBar = useMemo(
+    () => ({
+      toolPanels: [
+        {
+          id: 'columns',
+          labelDefault: 'Columns',
+          labelKey: 'columns',
+          iconKey: 'columns',
+          toolPanel: 'agColumnsToolPanel',
+          minWidth: 100,
+          maxWidth: 300,
+          width: 200,
+        },
+        {
+          id: 'filters',
+          labelDefault: 'Filters',
+          labelKey: 'filters',
+          iconKey: 'filter',
+          toolPanel: 'agFiltersToolPanel',
+          minWidth: 100,
+          maxWidth: 300,
+          width: 200,
+        },
+      ],
+      position: 'right' as const,
+      defaultToolPanel: 'none',
+    }),
+    []
+  );
 
   return (
     <AgGridReact
@@ -204,32 +239,7 @@ export const ProductDetailEventsGrid = forwardRef<
       rowData={rowData}
       gridOptions={gridOptions}
       columnDefs={columnDefs}
-      sideBar={{
-        toolPanels: [
-          {
-            id: 'columns',
-            labelDefault: 'Columns',
-            labelKey: 'columns',
-            iconKey: 'columns',
-            toolPanel: 'agColumnsToolPanel',
-            minWidth: 100,
-            maxWidth: 300,
-            width: 200,
-          },
-          {
-            id: 'filters',
-            labelDefault: 'Filters',
-            labelKey: 'filters',
-            iconKey: 'filter',
-            toolPanel: 'agFiltersToolPanel',
-            minWidth: 100,
-            maxWidth: 300,
-            width: 200,
-          },
-        ],
-        position: 'right',
-        defaultToolPanel: 'none',
-      }}
+      sideBar={sideBar}
     />
   );
 });

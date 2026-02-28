@@ -1,5 +1,7 @@
-import { FC, useMemo } from 'react';
+import { FC, memo, useMemo } from 'react';
 import {
+  AgCartesianAxisOptions,
+  AgChartOptions,
   AgHistogramSeriesOptions,
   AgCategoryAxisOptions,
   AgNumberAxisOptions,
@@ -29,7 +31,7 @@ const distributionBarSeries: AgHistogramSeriesOptions[] = [
   },
 ];
 
-export const ReturnDistributionGraph: FC<ReturnDistributionGraphProps> = ({
+const ReturnDistributionGraphComponent: FC<ReturnDistributionGraphProps> = ({
   marketValues = [],
   xAxisOverride,
   yAxisOverride,
@@ -42,74 +44,82 @@ export const ReturnDistributionGraph: FC<ReturnDistributionGraphProps> = ({
     );
   }, [marketValues]);
 
-  return (
-    <AgCharts
-      options={{
-        height: 230,
-        padding: {
-          left: 20,
-          right: 20,
-          top: 20,
-          bottom: 20,
+  const axes = useMemo<AgCartesianAxisOptions[]>(
+    () => [
+      {
+        type: 'number',
+        position: 'left',
+        title: {
+          text: 'Daily Return Count',
         },
-        data,
-        series: distributionBarSeries,
-        axes: [
-          {
-            type: 'number',
-            position: 'left',
-            title: {
-              text: 'Daily Return Count',
+        ...yAxisOverride,
+      },
+      {
+        type: 'number',
+        position: 'bottom',
+        title: {
+          text: 'Daily Return (%)',
+        },
+        ...xAxisOverride,
+      },
+    ],
+    [xAxisOverride, yAxisOverride]
+  );
+
+  const chartOptions = useMemo<AgChartOptions>(
+    () => ({
+      height: 230,
+      padding: {
+        left: 20,
+        right: 20,
+        top: 20,
+        bottom: 20,
+      },
+      data,
+      series: distributionBarSeries,
+      axes,
+      legend: {
+        enabled: false,
+      },
+      overlays: {
+        noData: {
+          text: 'No data to display',
+        },
+      },
+      theme: {
+        baseTheme: chartTheme,
+        overrides: {
+          common: {
+            background: {
+              fill: 'transparent',
             },
-            ...yAxisOverride,
           },
-          {
-            type: 'number',
-            position: 'bottom',
-            title: {
-              text: 'Daily Return (%)',
-            },
-            ...xAxisOverride,
-          },
-        ],
-        legend: {
-          enabled: false,
-        },
-        overlays: {
-          noData: {
-            text: 'No data to display',
-          },
-        },
-        theme: {
-          baseTheme: chartTheme,
-          overrides: {
-            common: {
-              background: {
-                fill: 'transparent',
+          line: {
+            series: {
+              stroke: '#DAAB43',
+              cursor: 'crosshair',
+              marker: {
+                fill: '#DAAB43',
+                enabled: false,
               },
             },
-            line: {
-              series: {
-                stroke: '#DAAB43',
-                cursor: 'crosshair',
-                marker: {
-                  fill: '#DAAB43',
+          },
+          histogram: {
+            axes: {
+              number: {
+                gridLine: {
                   enabled: false,
                 },
               },
             },
-            histogram: {
-              axes: {
-                number: {
-                  gridLine: {
-                    enabled: false,
-                  },
-                },
-              },
-            },
           },
         },
-      }}
-    />
+      },
+    }),
+    [axes, chartTheme, data]
   );
+
+  return <AgCharts options={chartOptions} />;
 };
+
+export const ReturnDistributionGraph = memo(ReturnDistributionGraphComponent);

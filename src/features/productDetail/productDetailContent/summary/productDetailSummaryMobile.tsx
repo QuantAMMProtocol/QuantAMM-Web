@@ -2,6 +2,7 @@
 import { useMemo, useState } from 'react';
 import { Card, Collapse, Divider, Tooltip, Typography } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
+import { GqlChain } from '../../../../__generated__/graphql-types';
 import { FinancialMetricThresholds, Product } from '../../../../models';
 import { SimulationRunMetric } from '../../../simulationResults/simulationResultSummaryModels';
 import {
@@ -9,9 +10,15 @@ import {
   ReturnDistributionGraph,
 } from '../../../shared/graphs';
 import { ComparableProductSelector } from '../comparableProduct/comparableProductSelector';
+import { ProductDetailEvents } from '../events/productDetailEvents';
+import { ProductDetailSidebarStrategySummary } from '../../productDetailSidebar/productDetailSidebarStrategySummary';
 import { getThresholdColor, getThresholdPostscript } from './utils';
 
 const { Text } = Typography;
+const WEIGHT_CHART_Y_AXIS_OVERRIDE = { label: { enabled: false } };
+const LEGEND_DISABLED_OVERRIDE = { enabled: false };
+const RETURN_DISTRIBUTION_Y_AXIS_OVERRIDE = { title: { enabled: false } };
+const SHOW_COMPARE_PRODUCT_PANEL = false;
 
 interface ProductDetailSummaryMobileProps {
   product: Product;
@@ -181,6 +188,18 @@ export const ProductDetailSummaryMobile = ({
       'Annualized Jensen’s Alpha (%)',
     [selectedBenchmarkReturnAnalysis]
   );
+  const productMarketValues = useMemo(
+    () => product.timeSeries?.map((x) => x.sharePrice) ?? [],
+    [product.timeSeries]
+  );
+  const benchmarkMarketValues = useMemo(
+    () => product.timeSeries?.map((x) => x.hodlSharePrice) ?? [],
+    [product.timeSeries]
+  );
+  const comparingProductMarketValues = useMemo(
+    () => comparingProduct?.timeSeries?.map((x) => x.sharePrice) ?? [],
+    [comparingProduct?.timeSeries]
+  );
 
   // Colors + grade text for the three entities per card
   const repr = (
@@ -192,8 +211,8 @@ export const ProductDetailSummaryMobile = ({
     grade: getThresholdPostscript(thresholds, metricName, v), // "(VERY GOOD)" etc.
   });
 
-  const CompareProductPanel = () => (
-    <div style={{ width: '95%' }} hidden={true}>
+  const compareProductPanel = SHOW_COMPARE_PRODUCT_PANEL ? (
+    <div style={{ width: '95%' }}>
       <Collapse
         items={[
           {
@@ -212,9 +231,9 @@ export const ProductDetailSummaryMobile = ({
         activeKey={isCompareProductOpen ? ['1'] : []}
       />
     </div>
-  );
+  ) : null;
 
-  const PoolWeightCard = () => (
+  const poolWeightCard = (
     <div style={{ width: '95%', marginTop: 12 }}>
       <Card title="Pool token weight over time [%]">
         <div>
@@ -222,8 +241,8 @@ export const ProductDetailSummaryMobile = ({
           <div style={{ height: '100%', width: '100%' }}>
             <ProductTokenWeightChangeOverTimeGraph
               product={product}
-              yAxisOverride={{ label: { enabled: false } }}
-              legendOverride={{ enabled: false }}
+              yAxisOverride={WEIGHT_CHART_Y_AXIS_OVERRIDE}
+              legendOverride={LEGEND_DISABLED_OVERRIDE}
             />
           </div>
           <Text strong>{product.name}</Text>
@@ -231,8 +250,8 @@ export const ProductDetailSummaryMobile = ({
             <ProductTokenWeightChangeOverTimeGraph
               product={product}
               isBenchmark={true}
-              yAxisOverride={{ label: { enabled: false } }}
-              legendOverride={{ enabled: false }}
+              yAxisOverride={WEIGHT_CHART_Y_AXIS_OVERRIDE}
+              legendOverride={LEGEND_DISABLED_OVERRIDE}
             />
           </div>
           {comparingProduct && (
@@ -241,8 +260,8 @@ export const ProductDetailSummaryMobile = ({
               <div style={{ height: '100%', width: '100%' }}>
                 <ProductTokenWeightChangeOverTimeGraph
                   product={comparingProduct}
-                  yAxisOverride={{ label: { enabled: false } }}
-                  legendOverride={{ enabled: false }}
+                  yAxisOverride={WEIGHT_CHART_Y_AXIS_OVERRIDE}
+                  legendOverride={LEGEND_DISABLED_OVERRIDE}
                 />
               </div>
             </div>
@@ -252,18 +271,16 @@ export const ProductDetailSummaryMobile = ({
     </div>
   );
 
-  const ReturnDistributionCard = () => (
-    <div style={{ width: '95%' }}>
+  const returnDistributionCard = (
+    <div id="distribution" style={{ width: '95%' }}>
       <Card title="Return distribution">
         <div>
           <Text strong>{product.name}</Text>
           <div style={{ height: '100%', width: '100%' }}>
             {(product.timeSeries?.length ?? 0) > 0 && (
               <ReturnDistributionGraph
-                marketValues={
-                  product.timeSeries?.map((x) => x.sharePrice) ?? []
-                }
-                yAxisOverride={{ title: { enabled: false } }}
+                marketValues={productMarketValues}
+                yAxisOverride={RETURN_DISTRIBUTION_Y_AXIS_OVERRIDE}
               />
             )}
           </div>
@@ -275,10 +292,8 @@ export const ProductDetailSummaryMobile = ({
           <div style={{ height: '100%', width: '100%' }}>
             {(product.timeSeries?.length ?? 0) > 0 && (
               <ReturnDistributionGraph
-                marketValues={
-                  product.timeSeries?.map((x) => x.hodlSharePrice) ?? []
-                }
-                yAxisOverride={{ title: { enabled: false } }}
+                marketValues={benchmarkMarketValues}
+                yAxisOverride={RETURN_DISTRIBUTION_Y_AXIS_OVERRIDE}
               />
             )}
           </div>
@@ -289,11 +304,8 @@ export const ProductDetailSummaryMobile = ({
               <div style={{ height: '100%', width: '100%' }}>
                 {(comparingProduct?.timeSeries?.length ?? 0) > 0 && (
                   <ReturnDistributionGraph
-                    marketValues={
-                      comparingProduct?.timeSeries?.map((x) => x.sharePrice) ??
-                      []
-                    }
-                    yAxisOverride={{ title: { enabled: false } }}
+                    marketValues={comparingProductMarketValues}
+                    yAxisOverride={RETURN_DISTRIBUTION_Y_AXIS_OVERRIDE}
                   />
                 )}
               </div>
@@ -307,90 +319,95 @@ export const ProductDetailSummaryMobile = ({
   return (
     <div>
       {/* Hidden because currently live analytics is turned off, comparing factsheet with live is not great */}
-      <CompareProductPanel />
-      <PoolWeightCard />
-      <Card
-        style={{
-          borderRadius: 16,
-          boxShadow: '0 2px 6px rgba(0,0,0,0.25)',
-          marginTop: 12,
-          overflow: 'hidden',
-        }}
-        bordered={false}
-        title={<MetricHeader name={currentReturnAnalysisLabel} />}
-      >
-        <div style={{ padding: '4px 4px 0' }}>
-          {/* Product */}
-          <ValueRow
-            label={product.name}
-            value={selectedReturnAnalysis?.metricValue ?? 0}
-            gradeColor={
-              repr(
-                returnAnalysisThresholds,
-                currentReturnAnalysisLabel,
-                selectedBenchmarkReturnAnalysis?.metricValue ?? 0
-              ).color
-            }
-            gradeText={
-              repr(
-                returnAnalysisThresholds,
-                currentReturnAnalysisLabel,
-                selectedBenchmarkReturnAnalysis?.metricValue ?? 0
-              ).grade
-            }
-          />
-
-          {/* HODL */}
-          <ValueRow
-            label="HODL"
-            value={selectedBenchmarkReturnAnalysis?.metricValue ?? 0}
-            gradeColor={
-              repr(
-                returnAnalysisThresholds,
-                currentReturnAnalysisLabel,
-                selectedReturnAnalysis?.metricValue ?? 0
-              ).color
-            }
-            gradeText={
-              repr(
-                returnAnalysisThresholds,
-                currentReturnAnalysisLabel,
-                selectedReturnAnalysis?.metricValue ?? 0
-              ).grade
-            }
-          />
-
-          {/* Comparing product (optional) */}
-          {comparingProduct && (
+      {compareProductPanel}
+      {poolWeightCard}
+      <div style={{ width: '95%' }}>
+        <ProductDetailSidebarStrategySummary product={product} />
+      </div>
+      <div id="metrics">
+        <Card
+          style={{
+            borderRadius: 16,
+            boxShadow: '0 2px 6px rgba(0,0,0,0.25)',
+            marginTop: 12,
+            overflow: 'hidden',
+          }}
+          bordered={false}
+          title={<MetricHeader name={currentReturnAnalysisLabel} />}
+        >
+          <div style={{ padding: '4px 4px 0' }}>
+            {/* Product */}
             <ValueRow
-              label={comparingProduct.name}
-              value={
-                comparingProductReturnAnalysis?.find(
-                  (x) => x.metricName == selectedReturnAnalysis?.metricName
-                )?.metricValue ?? 0
-              }
+              label={product.name}
+              value={selectedReturnAnalysis?.metricValue ?? 0}
               gradeColor={
                 repr(
                   returnAnalysisThresholds,
                   currentReturnAnalysisLabel,
-                  comparingProductReturnAnalysis?.find(
-                    (x) => x.metricName == selectedReturnAnalysis?.metricName
-                  )?.metricValue ?? 0
+                  selectedBenchmarkReturnAnalysis?.metricValue ?? 0
                 ).color
               }
               gradeText={
                 repr(
                   returnAnalysisThresholds,
                   currentReturnAnalysisLabel,
-                  comparingProductReturnAnalysis?.find(
-                    (x) => x.metricName == selectedReturnAnalysis?.metricName
-                  )?.metricValue ?? 0
+                  selectedBenchmarkReturnAnalysis?.metricValue ?? 0
                 ).grade
               }
             />
-          )}
-        </div>
-      </Card>
+
+            {/* HODL */}
+            <ValueRow
+              label="HODL"
+              value={selectedBenchmarkReturnAnalysis?.metricValue ?? 0}
+              gradeColor={
+                repr(
+                  returnAnalysisThresholds,
+                  currentReturnAnalysisLabel,
+                  selectedReturnAnalysis?.metricValue ?? 0
+                ).color
+              }
+              gradeText={
+                repr(
+                  returnAnalysisThresholds,
+                  currentReturnAnalysisLabel,
+                  selectedReturnAnalysis?.metricValue ?? 0
+                ).grade
+              }
+            />
+
+            {/* Comparing product (optional) */}
+            {comparingProduct && (
+              <ValueRow
+                label={comparingProduct.name}
+                value={
+                  comparingProductReturnAnalysis?.find(
+                    (x) => x.metricName == selectedReturnAnalysis?.metricName
+                  )?.metricValue ?? 0
+                }
+                gradeColor={
+                  repr(
+                    returnAnalysisThresholds,
+                    currentReturnAnalysisLabel,
+                    comparingProductReturnAnalysis?.find(
+                      (x) => x.metricName == selectedReturnAnalysis?.metricName
+                    )?.metricValue ?? 0
+                  ).color
+                }
+                gradeText={
+                  repr(
+                    returnAnalysisThresholds,
+                    currentReturnAnalysisLabel,
+                    comparingProductReturnAnalysis?.find(
+                      (x) => x.metricName == selectedReturnAnalysis?.metricName
+                    )?.metricValue ?? 0
+                  ).grade
+                }
+              />
+            )}
+          </div>
+        </Card>
+      </div>
       <Divider />
       <Card
         style={{
@@ -467,7 +484,15 @@ export const ProductDetailSummaryMobile = ({
         </div>
       </Card>
       <Divider />
-      <ReturnDistributionCard />
+      <div style={{ width: '95%' }}>
+        <ProductDetailEvents
+          productId={product.id}
+          chain={product.chain as GqlChain}
+          isMobile
+        />
+      </div>
+      <Divider />
+      {returnDistributionCard}
     </div>
   );
 };

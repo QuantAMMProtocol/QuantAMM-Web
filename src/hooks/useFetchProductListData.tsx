@@ -50,17 +50,30 @@ export const getProductMapLoadingState = ({
   loading,
   stubDataLoading,
   baseProductsLoading,
+  fullProductsLoading,
+  fullProductsError,
   isStubData,
 }: {
   loading: boolean;
   stubDataLoading: boolean;
   baseProductsLoading: boolean;
+  fullProductsLoading: boolean;
+  fullProductsError:
+    | FetchBaseQueryError
+    | SerializedError
+    | ApolloError
+    | undefined;
   isStubData: boolean;
 }) => {
   if (isStubData) {
-    return loading || stubDataLoading;
+    return loading || stubDataLoading || baseProductsLoading;
   }
-  return loading || baseProductsLoading;
+
+  if (fullProductsError) {
+    return loading || baseProductsLoading;
+  }
+
+  return loading || baseProductsLoading || fullProductsLoading;
 };
 
 const IS_STUB_DATA = isStubDataEnabled(import.meta.env.VITE_USE_STUBS_DATA);
@@ -157,28 +170,59 @@ export const useFetchProductListData = (
   }, [baseProductsError]);
 
   useEffect(() => {
-    if (fullProductsError) {
-      setError(fullProductsError);
-      setLoading(false);
+    if (IS_STUB_DATA) {
+      if (!baseProductsLoading && !baseProductsError && baseProductsData) {
+        setProductMap(baseProductsData);
+        setLoading(false);
+      }
+      return;
     }
-  }, [fullProductsError]);
 
-  useEffect(() => {
-    if (!baseProductsLoading && !baseProductsError && baseProductsData) {
+    const hasBaseProducts = Object.keys(baseProductsData).length > 0;
+    const hasFullProducts = Object.keys(fullProductsData).length > 0;
+
+    // Keep phased loading: render base rows first while full product enrichment is pending.
+    if (hasBaseProducts && !hasFullProducts && !fullProductsError) {
       setProductMap(baseProductsData);
-      setLoading(false);
+      setError(null);
+      return;
     }
-  }, [baseProductsData, baseProductsLoading, baseProductsError]);
 
-  useEffect(() => {
     if (!fullProductsLoading && !fullProductsError && fullProductsData) {
-      setProductMap(fullProductsData);
+      const isTrulyEmptyResult =
+        !baseProductsLoading && !hasBaseProducts;
+
+      if (hasFullProducts || isTrulyEmptyResult) {
+        setProductMap(fullProductsData);
+        setError(null);
+        setLoading(false);
+        return;
+      }
+    }
+
+    if (fullProductsError) {
+      if (
+        !baseProductsLoading &&
+        !baseProductsError &&
+        Object.keys(baseProductsData).length > 0
+      ) {
+        setProductMap(baseProductsData);
+        setError(null);
+      } else {
+        setError(fullProductsError);
+      }
       setLoading(false);
     }
-  }, [fullProductsData, fullProductsLoading, fullProductsError]);
+  }, [
+    baseProductsData,
+    baseProductsError,
+    baseProductsLoading,
+    fullProductsData,
+    fullProductsError,
+    fullProductsLoading,
+  ]);
 
   useEffect(() => {
-    setProductMap({});
     setLoading(true);
     setError(null);
   }, [activeFilters, textSearch, page, pageSize]);
@@ -189,9 +233,17 @@ export const useFetchProductListData = (
         loading,
         stubDataLoading,
         baseProductsLoading,
+        fullProductsLoading,
+        fullProductsError,
         isStubData: IS_STUB_DATA,
       }),
-    [stubDataLoading, baseProductsLoading, loading]
+    [
+      baseProductsLoading,
+      fullProductsError,
+      fullProductsLoading,
+      loading,
+      stubDataLoading,
+    ]
   );
 
   return {

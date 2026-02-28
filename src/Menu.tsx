@@ -73,8 +73,31 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
     [initialise, navigate, dispatch]
   );
 
-  function getMobileItems(): MenuItem[] {
-    return [
+  const liveProductChildren = useMemo(
+    () =>
+      liveProducts.factsheets
+        .filter((x) => x.status == 'LIVE')
+        .map((product) => ({
+          key:
+            ROUTES.PRODUCT_EXPLORER +
+            '/' +
+            product.poolChain +
+            '/' +
+            product.poolId,
+          label: `View ${product.iconTitle}`,
+          icon: (
+            <img
+              src={product.factsheetImage.image}
+              alt={product.iconTitle}
+              style={{ width: '16px', height: '16px' }}
+            />
+          ),
+        })),
+    [liveProducts.factsheets]
+  );
+
+  const mobileItems = useMemo<MenuItem[]>(
+    () => [
       {
         key: 'home',
         label: '',
@@ -90,25 +113,8 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
         key: 'view-products',
         label: 'View Products',
         type: 'submenu',
-        style: { marginLeft: 'auto' }, // Align to the right
-        children: liveProducts.factsheets
-          .filter((x) => x.status == 'LIVE')
-          .map((product) => ({
-            key:
-              ROUTES.PRODUCT_EXPLORER +
-              '/' +
-              product.poolChain +
-              '/' +
-              product.poolId,
-            label: `View ${product.iconTitle}`,
-            icon: (
-              <img
-                src={product.factsheetImage.image}
-                alt={product.iconTitle}
-                style={{ width: '16px', height: '16px' }}
-              />
-            ),
-          })),
+        style: { marginLeft: 'auto' },
+        children: liveProductChildren,
       },
       {
         key: 'Education',
@@ -126,11 +132,12 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
           },
         ],
       },
-    ];
-  }
+    ],
+    [liveProductChildren]
+  );
 
-  function getItems(): MenuItem[] {
-    return [
+  const desktopItems = useMemo<MenuItem[]>(
+    () => [
       {
         key: 'home',
         label: '',
@@ -146,25 +153,8 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
         key: 'view-products',
         label: 'View Products',
         type: 'submenu',
-        style: { marginLeft: 'auto' }, // Align to the right
-        children: liveProducts.factsheets
-          .filter((x) => x.status == 'LIVE')
-          .map((product) => ({
-            key:
-              ROUTES.PRODUCT_EXPLORER +
-              '/' +
-              product.poolChain +
-              '/' +
-              product.poolId,
-            label: `View ${product.iconTitle}`,
-            icon: (
-              <img
-                src={product.factsheetImage.image}
-                alt={product.iconTitle}
-                style={{ width: '16px', height: '16px' }}
-              />
-            ),
-          })),
+        style: { marginLeft: 'auto' },
+        children: liveProductChildren,
       },
       {
         key: 'About',
@@ -219,8 +209,9 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
         key: 'tos',
         label: 'Terms of Service',
       },
-    ];
-  }
+    ],
+    [liveProductChildren]
+  );
 
   return (
     <div
@@ -236,7 +227,7 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
         onClick={handleClick}
         selectedKeys={[current]}
         mode="horizontal"
-        items={isMobile ? getMobileItems() : getItems()}
+        items={isMobile ? mobileItems : desktopItems}
         overflowedIndicator={<MenuOutlined />}
         style={{
           width: '100%',

@@ -9,7 +9,7 @@ import { selectSimulationResultTimeRangeSelection } from '../../simulationRunner
 import { VaRTimestep } from '../simulationResultSummaryModels';
 import { selectAgChartTheme } from '../../themes/themeSlice';
 import { BreakdownProps } from '../simulationResultsSummaryStep';
-import { useMemo, useState } from 'react';
+import { memo, useCallback, useMemo, useState } from 'react';
 import { DownOutlined } from '@ant-design/icons';
 import { SimulationResultTimestepDto } from '../../simulationRunner/simulationRunnerDtos';
 
@@ -26,7 +26,12 @@ export interface VaRSeriesConfig {
   marker: Marker;
 }
 
-export function SimulationResultVaRChart(props: BreakdownProps) {
+function SimulationResultVaRChartComponent(props: BreakdownProps) {
+  const varItems = [
+    { label: 'Weekly CDaR', key: 'Weekly CDaR' },
+    { label: 'Monthly CDaR', key: 'Monthly CDaR' },
+  ];
+
   const simulationTimeRangeSelected = useAppSelector(
     selectSimulationResultTimeRangeSelection
   );
@@ -34,14 +39,9 @@ export function SimulationResultVaRChart(props: BreakdownProps) {
 
   const [varType, setVarType] = useState('Weekly CDaR');
 
-  const onClick = ({ key }: { key: string }) => {
+  const onClick = useCallback(({ key }: { key: string }) => {
     setVarType(key);
-  };
-
-  const items = [
-    { label: 'Weekly CDaR', key: 'Weekly CDaR' },
-    { label: 'Monthly CDaR', key: 'Monthly CDaR' },
-  ];
+  }, []);
 
   const visibleBreakdowns = useMemo(
     () =>
@@ -106,6 +106,52 @@ export function SimulationResultVaRChart(props: BreakdownProps) {
     };
   }, [visibleBreakdowns]);
 
+  const chartOptions = useMemo(
+    () => ({
+      height: 400,
+      navigator: {
+        enabled: true,
+        height: 5,
+        spacing: 6,
+      },
+      axes: [
+        timeAxisOption,
+        {
+          type: 'number' as const,
+          position: 'left' as const,
+        },
+      ],
+      series,
+      legend: {
+        position: 'bottom' as const,
+      },
+      overlays: {
+        noData: {
+          text: 'No data',
+        },
+      },
+      theme: {
+        baseTheme: chartTheme,
+        overrides: {
+          common: {
+            background: {
+              fill: 'transparent',
+            },
+          },
+          line: {
+            series: {
+              cursor: 'crosshair',
+              marker: {
+                enabled: false,
+              },
+            },
+          },
+        },
+      },
+    }),
+    [chartTheme, series, timeAxisOption]
+  );
+
   return (
     <div>
       <Row>
@@ -115,7 +161,7 @@ export function SimulationResultVaRChart(props: BreakdownProps) {
         <Col span={8}>
           <Dropdown
             menu={{
-              items,
+              items: varItems,
               onClick,
             }}
           >
@@ -130,52 +176,11 @@ export function SimulationResultVaRChart(props: BreakdownProps) {
       </Row>
       <Row className={styles.resultChartRow}>
         <Col span={24}>
-          <AgCharts
-            options={{
-              height: 400,
-              navigator: {
-                enabled: true,
-                height: 5,
-                spacing: 6,
-              },
-              axes: [
-                timeAxisOption,
-                {
-                  type: 'number',
-                  position: 'left',
-                },
-              ],
-              series,
-              legend: {
-                position: 'bottom',
-              },
-              overlays: {
-                noData: {
-                  text: 'No data',
-                },
-              },
-              theme: {
-                baseTheme: chartTheme,
-                overrides: {
-                  common: {
-                    background: {
-                      fill: 'transparent',
-                    },
-                  },
-                  line: {
-                    series: {
-                      cursor: 'crosshair',
-                      marker: {
-                        enabled: false,
-                      },
-                    },
-                  },
-                },
-              },
-            }}
-          />
+          <AgCharts options={chartOptions} />
         </Col>
       </Row>
     </div>
   );
 }
+
+export const SimulationResultVaRChart = memo(SimulationResultVaRChartComponent);

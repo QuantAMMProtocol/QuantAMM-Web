@@ -15,6 +15,7 @@ import { ProductItemPerformanceAreaGraph } from './productItemPerformanceAreaGra
 import { ProductItemBottom } from './productItemBottom';
 import { ProductItemBackground } from '../productItemBackground';
 import { getTvl } from '../productItemHelpers';
+import { ProductItemWide } from '../wide/productItemWide';
 import styles from './productItem.module.scss';
 
 const DEFAULT_ACTIVE_KEY = '1';
@@ -23,9 +24,10 @@ const { Text } = Typography;
 
 interface ProductItemProps {
   product: Product;
+  wide?: boolean;
 }
 
-export const ProductItem: FC<ProductItemProps> = ({ product }) => {
+const ProductItemCard: FC<Pick<ProductItemProps, 'product'>> = ({ product }) => {
   const dispatch = useAppDispatch();
   const overrideTab = useAppSelector(selectOverrideTab);
   const isDarkTheme = useAppSelector(selectTheme);
@@ -134,7 +136,17 @@ export const ProductItem: FC<ProductItemProps> = ({ product }) => {
       <Card className={styles['product-item__card']} hoverable>
         <ProductItemBackground>
           <div className={styles['product-item__card__top']}>
-            <Text ellipsis={{ tooltip: product.name }}>{product.name}</Text>
+            <Text
+              title={product.name}
+              style={{
+                display: 'block',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {product.name}
+            </Text>
           </div>
           <Row className={styles['product-item__card-under-body']}>
             <Col span={8} style={{ textAlign: 'center' }}>
@@ -175,4 +187,12 @@ export const ProductItem: FC<ProductItemProps> = ({ product }) => {
       </Card>
     </div>
   );
+};
+
+export const ProductItem: FC<ProductItemProps> = ({ product, wide }) => {
+  if (wide) {
+    return <ProductItemWide product={product} />;
+  }
+
+  return <ProductItemCard product={product} />;
 };

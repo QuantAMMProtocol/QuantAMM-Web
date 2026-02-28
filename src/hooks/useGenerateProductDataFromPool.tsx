@@ -13,6 +13,36 @@ import {
   getHistoricalTokenPrices,
 } from './fetchSnapshotDataUtils';
 
+export const generateProductDataFromPoolData = async (
+  poolData: GetPoolByIdQuery
+): Promise<Product> => {
+  if (!poolData.poolGetPool?.id) {
+    throw new Error('Missing pool data');
+  }
+
+  const pool = {
+    id: poolData.poolGetPool.id,
+    chain: poolData.poolGetPool.chain,
+  };
+
+  const poolSnapshotsMap = await getPoolSnapshotsMap([pool]);
+
+  const tokens = poolData.poolGetPool.poolTokens.map(
+    (token) => `${pool.chain}:${getTokenAddress(token)}`
+  );
+
+  const pricesResponses = await getHistoricalTokenPrices(tokens);
+  const tokenPricesMap = getTokenPriceMap(pricesResponses);
+
+  const timeSeriesData: ProductTimeSeriesData = getTimeSeriesDataForProduct(
+    poolData,
+    poolSnapshotsMap,
+    tokenPricesMap
+  );
+
+  return getProductFromPool(poolData, timeSeriesData);
+};
+
 export const useGenerateProductDataFromPool = (
   poolData?: GetPoolByIdQuery,
   isLoadingPools?: boolean,
@@ -37,31 +67,8 @@ export const useGenerateProductDataFromPool = (
         setLoading(true);
         setError(undefined);
         try {
-          const pool = {
-            id: poolData.poolGetPool.id,
-            chain: poolData.poolGetPool.chain,
-          };
-
-          const poolSnapshotsMap = await getPoolSnapshotsMap([pool]);
-
-          const tokens = poolData.poolGetPool.poolTokens.map(
-            (token) => `${pool.chain}:${getTokenAddress(token)}`
-          );
-
-          const pricesResponses = await getHistoricalTokenPrices(tokens);
-
-          const tokenPricesMap = getTokenPriceMap(pricesResponses);
-
-          const timeSeriesData: ProductTimeSeriesData =
-            getTimeSeriesDataForProduct(
-              poolData,
-              poolSnapshotsMap,
-              tokenPricesMap
-            );
-
-          const generatedProduct: Product = getProductFromPool(
-            poolData,
-            timeSeriesData
+          const generatedProduct = await generateProductDataFromPoolData(
+            poolData
           );
 
           if (isMounted) {

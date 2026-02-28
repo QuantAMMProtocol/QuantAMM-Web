@@ -1,6 +1,6 @@
 import { Button, Col, Row, Tooltip, Typography } from 'antd';
 import { ProductItemBackground } from '../../../productExplorer/productItem/productItemBackground';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { SimulationRunBreakdown } from '../../../simulationResults/simulationResultSummaryModels';
 import { getBreakdown, Pool } from '../../../../services/breakdownService';
 import { WeightChangeOverTimeGraph } from '../../../shared';
@@ -10,78 +10,6 @@ import styles from './landingDesktop.module.css';
 const { Title } = Typography;
 
 export function StrategySummary() {
-  const [breakdowns, setBreakdowns] = useState<SimulationRunBreakdown[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [strategy, setStrategy] = useState<string>('Momentum');
-
-  const [autoCycle, setAutoCycle] = useState<boolean>(true);
-
-  useEffect(() => {
-    let interval: NodeJS.Timeout | null = null;
-
-    if (autoCycle) {
-      const allStrageies = [
-        'Momentum',
-        'AntiMomentum',
-        'Channel Following',
-        'Power Channel',
-      ];
-
-      interval = setInterval(() => {
-        setStrategy((prevStrategy) => {
-          const currentIndex = allStrageies.indexOf(prevStrategy);
-          const nextIndex = (currentIndex + 1) % allStrageies.length;
-          return allStrageies[nextIndex];
-        });
-      }, 5000); // Change strategy every 5 seconds
-    }
-
-    return () => {
-      if (interval) {
-        clearInterval(interval);
-      }
-    };
-  }, [autoCycle]);
-
-  // Effect to load breakdowns whenever the tab key changes
-  useEffect(() => {
-    // Function to load breakdowns based on the selected tab
-    const loadBreakdowns = async (
-      poolNames: Pool[]
-    ): Promise<SimulationRunBreakdown[]> => {
-      setLoading(true); // Start loading
-      const fetchedBreakdowns = await Promise.all(
-        poolNames.map((poolName) => getBreakdown(poolName))
-      );
-      setBreakdowns(fetchedBreakdowns);
-      return fetchedBreakdowns;
-    };
-
-    const loadData = async (): Promise<SimulationRunBreakdown[]> => {
-      // Load breakdowns for the selected tab
-      return await loadBreakdowns([
-        'solExampleWeighted',
-        'solExampleMomentum',
-        'solExampleAntimomentum',
-        'solExamplePowerChannel',
-        'solExampleChannelFollowing',
-        'solExampleHodl',
-      ] as Pool[]); // Awaiting the asynchronous function here
-    };
-
-    if (loading) {
-      loadData()
-        .then((fetchedBreakdowns) => {
-          setBreakdowns(fetchedBreakdowns);
-        })
-        .catch((error) => {
-          console.error('Failed to load breakdowns:', error);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    }
-  }, [setBreakdowns, setLoading, breakdowns, loading]);
   const strategies = [
     {
       title: 'Momentum',
@@ -117,14 +45,122 @@ export function StrategySummary() {
     },
   ];
 
-  const traditionalDexBreakdown = breakdowns.find(
-    (x) => x.simulationRun.updateRule.updateRuleName === 'Balancer Weighted'
-  );
-  const selectedStrategyBreakdown = breakdowns.find(
-    (x) => x.simulationRun.updateRule.updateRuleName === strategy
+  const [breakdowns, setBreakdowns] = useState<SimulationRunBreakdown[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [strategy, setStrategy] = useState<string>('Momentum');
+
+  const [autoCycle, setAutoCycle] = useState<boolean>(true);
+  const overrideSeriesStrokeColor = useMemo(
+    () => ({
+      Momentum: '#c7b283',
+      AntiMomentum: '#c7b283',
+      'Channel Following': '#c7b283',
+      'Power Channel': '#c7b283',
+      'Balancer Weighted': '#528aae',
+    }),
+    []
   );
 
-  const StrategySelectorPanel = () => (
+  const overrideSeriesName = useMemo(
+    () => ({
+      Momentum: 'QuantAMM',
+      AntiMomentum: 'QuantAMM',
+      'Channel Following': 'QuantAMM',
+      'Power Channel': 'QuantAMM',
+      'Balancer Weighted': 'Traditional DEX',
+    }),
+    []
+  );
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout | null = null;
+    const autoCycleStrategies = [
+      'Momentum',
+      'AntiMomentum',
+      'Channel Following',
+      'Power Channel',
+    ];
+
+    if (autoCycle) {
+      interval = setInterval(() => {
+        setStrategy((prevStrategy) => {
+          const currentIndex = autoCycleStrategies.indexOf(prevStrategy);
+          const nextIndex = (currentIndex + 1) % autoCycleStrategies.length;
+          return autoCycleStrategies[nextIndex];
+        });
+      }, 5000); // Change strategy every 5 seconds
+    }
+
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [autoCycle]);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadData = async () => {
+      setLoading(true);
+
+      try {
+        const fetchedBreakdowns = await Promise.all(
+          (
+            [
+              'solExampleWeighted',
+              'solExampleMomentum',
+              'solExampleAntimomentum',
+              'solExamplePowerChannel',
+              'solExampleChannelFollowing',
+              'solExampleHodl',
+            ] as Pool[]
+          ).map((poolName) => getBreakdown(poolName))
+        );
+        if (isMounted) {
+          setBreakdowns(fetchedBreakdowns);
+        }
+      } catch (error) {
+        console.error('Failed to load breakdowns:', error);
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    };
+
+    void loadData();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const traditionalDexBreakdown = useMemo(
+    () =>
+      breakdowns.find(
+        (x) => x.simulationRun.updateRule.updateRuleName === 'Balancer Weighted'
+      ),
+    [breakdowns]
+  );
+
+  const selectedStrategyBreakdown = useMemo(
+    () =>
+      breakdowns.find((x) => x.simulationRun.updateRule.updateRuleName === strategy),
+    [breakdowns, strategy]
+  );
+
+  const marketValueBreakdowns = useMemo(
+    () =>
+      breakdowns.filter(
+        (x) =>
+          x.simulationRun.updateRule.updateRuleName === strategy ||
+          x.simulationRun.updateRule.updateRuleName === 'Balancer Weighted'
+      ),
+    [breakdowns, strategy]
+  );
+
+  const strategySelectorPanel = (
     <div className={styles.strategyPanel}>
       <h4 className={styles.textCenter}>ADAPTIVE STRATEGIES</h4>
       <p className={styles.textCenter}>
@@ -176,7 +212,7 @@ export function StrategySummary() {
     </div>
   );
 
-  const HoldingsChartsSection = () => (
+  const holdingsChartsSection = (
     <Row>
       <Col span={24} className={styles.chartSection}>
         <h4 className={styles.chartTitle}>Traditional DEX Pool Holdings</h4>
@@ -241,36 +277,19 @@ export function StrategySummary() {
           </Row>
           <Row>
             <Col span={6}>
-              <StrategySelectorPanel />
+              {strategySelectorPanel}
             </Col>
             <Col span={10}>
-              <HoldingsChartsSection />
+              {holdingsChartsSection}
             </Col>
             <Col span={8}>
               <div className={styles.summaryChartPanel}>
                 <SimulationResultMarketValueChart
-                  breakdowns={breakdowns.filter(
-                    (x) =>
-                      x.simulationRun.updateRule.updateRuleName === strategy ||
-                      x.simulationRun.updateRule.updateRuleName ===
-                        'Balancer Weighted'
-                  )}
+                  breakdowns={marketValueBreakdowns}
                   forceViewResults={true}
                   overrideXAxisInterval={24}
-                  overrideSeriesStrokeColor={{
-                    Momentum: '#c7b283',
-                    AntiMomentum: '#c7b283',
-                    'Channel Following': '#c7b283',
-                    'Power Channel': '#c7b283',
-                    'Balancer Weighted': '#528aae',
-                  }}
-                  overrideSeriesName={{
-                    Momentum: 'QuantAMM',
-                    AntiMomentum: 'QuantAMM',
-                    'Channel Following': 'QuantAMM',
-                    'Power Channel': 'QuantAMM',
-                    'Balancer Weighted': 'Traditional DEX',
-                  }}
+                  overrideSeriesStrokeColor={overrideSeriesStrokeColor}
+                  overrideSeriesName={overrideSeriesName}
                 />
               </div>
             </Col>

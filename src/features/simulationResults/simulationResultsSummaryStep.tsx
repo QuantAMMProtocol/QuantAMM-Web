@@ -10,7 +10,7 @@ import {
 } from '../simulationRunner/simulationRunnerSlice';
 
 import { Col, Menu, Row, Tabs } from 'antd';
-import { useEffect } from 'react';
+import { memo, useCallback, useEffect } from 'react';
 
 import {
   LineChartOutlined,
@@ -100,7 +100,10 @@ function getBreakdownMenuItems(): ItemType[] {
   ];
 }
 
-export function SimulationResultsSummaryStep(props: BreakdownProps) {
+function SimulationResultsSummaryStepComponent(props: BreakdownProps) {
+  const graphMenuItems = getGraphMenuItems();
+  const breakdownMenuItems = getBreakdownMenuItems();
+
   const runStatusIndex = useAppSelector(selectSimulationRunStatusStepIndex);
   const resultChartSelection = useAppSelector(
     selectSimulationResultChartSelection
@@ -111,7 +114,6 @@ export function SimulationResultsSummaryStep(props: BreakdownProps) {
   const timeRangeSelected = useAppSelector(
     selectSimulationResultTimeRangeSelection
   );
-  const chartSelection = useAppSelector(selectSimulationResultChartSelection);
 
   const dispatch = useAppDispatch();
 
@@ -127,7 +129,7 @@ export function SimulationResultsSummaryStep(props: BreakdownProps) {
     }
   }, [dispatch, props.breakdowns, timeRangeSelected]);
 
-  function getChart(): JSX.Element {
+  const getChart = (): JSX.Element => {
     if (resultChartSelection === 'MarketValueOverTime') {
       return (
         <SimulationResultMarketValueChart
@@ -167,9 +169,9 @@ export function SimulationResultsSummaryStep(props: BreakdownProps) {
     }
 
     return <div>No charts selected</div>;
-  }
+  };
 
-  function getBreakdown(): JSX.Element {
+  const getBreakdown = (): JSX.Element => {
     if (resultBreakdownSelection === 'MvSummary') {
       return (
         <SimulationRunMvSummaryBreakdown
@@ -181,9 +183,23 @@ export function SimulationResultsSummaryStep(props: BreakdownProps) {
       return <SimulationRunPerformanceAnalysisBreakdown {...props} />;
     }
     return <div>No Breakdown</div>;
-  }
+  };
 
-  const VisualisationTab = () => (
+  const handleChartSelection = useCallback(
+    (menuItem: { key: string }) => {
+      dispatch(changeChartSelected(menuItem.key));
+    },
+    [dispatch]
+  );
+
+  const handleBreakdownSelection = useCallback(
+    (menuItem: { key: string }) => {
+      dispatch(changeBreakdownSelected(menuItem.key));
+    },
+    [dispatch]
+  );
+
+  const visualisationTab = (
     <Row>
       <Col span={4}>
         <Row justify="center">
@@ -193,12 +209,9 @@ export function SimulationResultsSummaryStep(props: BreakdownProps) {
                 width: 200,
                 fontSize: 10,
               }}
-              defaultSelectedKeys={[chartSelection]}
-              items={getGraphMenuItems()}
-              activeKey={chartSelection}
-              onClick={(x) => {
-                dispatch(changeChartSelected(x.key));
-              }}
+              items={graphMenuItems}
+              activeKey={resultChartSelection}
+              onClick={handleChartSelection}
             />
           </Col>
         </Row>
@@ -213,7 +226,7 @@ export function SimulationResultsSummaryStep(props: BreakdownProps) {
     </Row>
   );
 
-  const BreakdownTab = () => (
+  const breakdownTab = (
     <Row>
       <Col span={4}>
         <Row justify="center">
@@ -223,11 +236,8 @@ export function SimulationResultsSummaryStep(props: BreakdownProps) {
                 width: 200,
                 fontSize: 10,
               }}
-              defaultSelectedKeys={[resultBreakdownSelection]}
-              items={getBreakdownMenuItems()}
-              onClick={(x) => {
-                dispatch(changeBreakdownSelected(x.key));
-              }}
+              items={breakdownMenuItems}
+              onClick={handleBreakdownSelection}
               activeKey={resultBreakdownSelection}
             />
           </Col>
@@ -242,13 +252,17 @@ export function SimulationResultsSummaryStep(props: BreakdownProps) {
       <Col span={24}>
         <Tabs>
           <TabPane tab="Result Visualisation" key={'vis'}>
-            <VisualisationTab />
+            {visualisationTab}
           </TabPane>
           <TabPane tab="Result Breakdown" key={'breakdown'}>
-            <BreakdownTab />
+            {breakdownTab}
           </TabPane>
         </Tabs>
       </Col>
     </Row>
   );
 }
+
+export const SimulationResultsSummaryStep = memo(
+  SimulationResultsSummaryStepComponent
+);

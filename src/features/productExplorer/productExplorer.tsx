@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { startTransition, useCallback, useEffect, useState } from 'react';
 import { Layout } from 'antd';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useRetrieveFiltersQuery } from '../../services/productRetrievalService';
@@ -20,6 +20,11 @@ import TermsOfServiceGateModal from '../documentation/landing/termsOfServiceModa
 export default function ProductExplorer() {
   const dispatch = useAppDispatch();
   const [horizontalView, setHorizontalView] = useState(true);
+  const handleHorizontalViewChange = useCallback((checked: boolean) => {
+    startTransition(() => {
+      setHorizontalView(checked);
+    });
+  }, []);
 
   const handleGateClose = () => dispatch(setAcceptedTermsAndConditions(true));
 
@@ -74,7 +79,7 @@ export default function ProductExplorer() {
           <>
             <ProductExplorerFilters
               horizontalView={horizontalView}
-              setHorizontalView={setHorizontalView}
+              setHorizontalView={handleHorizontalViewChange}
               isDark={isDark}
             />
             <ProductItemGrid wide={horizontalView} />
