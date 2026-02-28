@@ -27,11 +27,7 @@ interface ProductItemProps {
   wide?: boolean;
 }
 
-export const ProductItem: FC<ProductItemProps> = ({ product, wide }) => {
-  if (wide) {
-    return <ProductItemWide product={product} />;
-  }
-
+const ProductItemCard: FC<Pick<ProductItemProps, 'product'>> = ({ product }) => {
   const dispatch = useAppDispatch();
   const overrideTab = useAppSelector(selectOverrideTab);
   const isDarkTheme = useAppSelector(selectTheme);
@@ -191,4 +187,12 @@ export const ProductItem: FC<ProductItemProps> = ({ product, wide }) => {
       </Card>
     </div>
   );
+};
+
+export const ProductItem: FC<ProductItemProps> = ({ product, wide }) => {
+  if (wide) {
+    return <ProductItemWide product={product} />;
+  }
+
+  return <ProductItemCard product={product} />;
 };
