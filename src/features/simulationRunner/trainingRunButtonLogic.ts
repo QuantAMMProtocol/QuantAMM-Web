@@ -22,6 +22,7 @@ export type RetrieveTrainingInvoker = (payload: {
 }) => Promise<unknown>;
 
 const DEFAULT_RETRIEVE_TRAINING_URL = 'retrieveTraining';
+const STUB_FAILURE_FILENAMES = new Set(['__stub_fail__', 'stub-fail']);
 
 function asRecord(value: unknown): Record<string, unknown> {
   if (value && typeof value === 'object' && !Array.isArray(value)) {
@@ -127,6 +128,49 @@ function parseResponse(value: unknown): Record<string, unknown> {
   return potentialWrappedData;
 }
 
+function extractMessage(value: unknown): string {
+  if (typeof value === 'string') {
+    return value;
+  }
+  const record = asRecord(value);
+  const direct =
+    coerceString(record.message) ||
+    coerceString(record.error) ||
+    coerceString(record.detail) ||
+    coerceString(record.title);
+  if (direct) {
+    return direct;
+  }
+
+  if (record.data) {
+    const nested = extractMessage(record.data);
+    if (nested) {
+      return nested;
+    }
+  }
+
+  return '';
+}
+
+function getMutationErrorMessage(value: unknown): string | null {
+  const record = asRecord(value);
+  if (!record.error) {
+    return null;
+  }
+
+  const message = extractMessage(record.error) || extractMessage(record.data);
+  if (message) {
+    return message;
+  }
+
+  const status = coerceString(asRecord(record.error).status);
+  if (status) {
+    return `Training request failed (${status}).`;
+  }
+
+  return 'Training request failed.';
+}
+
 function getTrainingFilename(state: RootState, fallback: string): string {
   const filenameParam = state.simConfig.trainingParameters.trainingParameters.find(
     (parameter) => parameter.name === 'filename'
@@ -137,6 +181,10 @@ function getTrainingFilename(state: RootState, fallback: string): string {
   }
 
   return fallback;
+}
+
+function shouldStubFailure(filename: string): boolean {
+  return STUB_FAILURE_FILENAMES.has(filename.trim().toLowerCase());
 }
 
 export function buildTrainingRunDto(
@@ -226,6 +274,18 @@ export const createRunTrainingThunk = ({
 
     const nowIso = new Date().toISOString();
     const requestedFilename = getTrainingFilename(state, `train-btf-${Date.now()}`);
+
+    if (shouldStubFailure(requestedFilename)) {
+      dispatch(
+        failTrainingRun({
+          errorMessage:
+            'Stubbed training failure for UX testing (set filename to stub-fail or __stub_fail__).',
+          finishedAtIso: new Date().toISOString(),
+        })
+      );
+      return;
+    }
+
     const kickoffDto = buildTrainingRunDto(state, targetPool, requestedFilename);
 
     try {
@@ -233,6 +293,16 @@ export const createRunTrainingThunk = ({
         url: targetPool.updateRule.updateRuleTrainUrl,
         trainingDto: kickoffDto,
       });
+      const mutationErrorMessage = getMutationErrorMessage(rawResponse);
+      if (mutationErrorMessage) {
+        dispatch(
+          failTrainingRun({
+            errorMessage: mutationErrorMessage,
+            finishedAtIso: new Date().toISOString(),
+          })
+        );
+        return;
+      }
 
       const response = parseResponse(rawResponse);
       const runId =
@@ -335,6 +405,17 @@ export const createPollTrainingProgressThunk = ({
         url: retrieveUrl,
         trainingDto: pollingDto,
       });
+      const mutationErrorMessage = getMutationErrorMessage(rawResponse);
+      if (mutationErrorMessage) {
+        dispatch(
+          failTrainingRun({
+            errorMessage: mutationErrorMessage,
+            finishedAtIso: new Date().toISOString(),
+          })
+        );
+        return;
+      }
+
       const response = parseResponse(rawResponse);
       const status = normaliseStatus(response.status);
       const latestStep = resolveLatestStep(response);

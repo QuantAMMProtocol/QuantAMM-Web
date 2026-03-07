@@ -240,6 +240,7 @@ class TrainingDto(object):
             ],
             "rule": self.pool.updateRule.name,
             "optimisation_settings": optimisation_settings,
+            "return_val": objective_metric,
             "bout_offset": 30 * 24 * 60 * 6,
             "subsidary_pools": [],
         }

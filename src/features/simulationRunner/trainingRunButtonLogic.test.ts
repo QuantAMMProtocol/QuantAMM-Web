@@ -104,5 +104,80 @@ describe('trainingRunButtonLogic', () => {
       'No pools configured'
     );
   });
-});
 
+  it('marks training as failed when runTraining returns an RTK query error payload', async () => {
+    const store = configureStore({
+      reducer: {
+        simConfig: simulationRunConfigurationReducer,
+        simRunner: simulationRunnerReducer,
+      },
+      middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({ serializableCheck: false }),
+      preloadedState: makeState() as any,
+    });
+
+    const runTraining = vi.fn().mockResolvedValue({
+      error: {
+        status: 500,
+        data: {
+          message: 'Backend training endpoint failed',
+        },
+      },
+    });
+
+    await store.dispatch(
+      createRunTrainingThunk({
+        runTraining,
+      }) as any
+    );
+
+    const simRunnerState = store.getState().simRunner;
+    expect(runTraining).toHaveBeenCalledTimes(1);
+    expect(simRunnerState.trainingRunStatus).toBe('Failed');
+    expect(simRunnerState.trainingErrorMessage).toContain(
+      'Backend training endpoint failed'
+    );
+  });
+
+  it('supports a stubbed UX failure mode when filename is set to stub-fail', async () => {
+    const state = makeState();
+    const store = configureStore({
+      reducer: {
+        simConfig: simulationRunConfigurationReducer,
+        simRunner: simulationRunnerReducer,
+      },
+      middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({ serializableCheck: false }),
+      preloadedState: {
+        ...state,
+        simConfig: {
+          ...state.simConfig,
+          trainingParameters: {
+            trainingParameters:
+              state.simConfig.trainingParameters.trainingParameters.map(
+                (parameter) =>
+                  parameter.name === 'filename'
+                    ? { ...parameter, value: 'stub-fail' }
+                    : parameter
+              ),
+          },
+        },
+      } as any,
+    });
+
+    const runTraining = vi.fn();
+
+    await store.dispatch(
+      createRunTrainingThunk({
+        runTraining,
+      }) as any
+    );
+
+    const simRunnerState = store.getState().simRunner;
+    expect(runTraining).not.toHaveBeenCalled();
+    expect(simRunnerState.trainingRunStatus).toBe('Failed');
+    expect(simRunnerState.trainingErrorMessage).toContain(
+      'Stubbed training failure for UX testing'
+    );
+  });
+});
