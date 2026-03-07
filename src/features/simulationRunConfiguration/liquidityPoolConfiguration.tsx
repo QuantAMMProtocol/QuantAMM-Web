@@ -25,9 +25,9 @@ import 'ag-grid-enterprise';
 import {
   ColDef,
   FirstDataRenderedEvent,
+  GridSizeChangedEvent,
   GridOptions,
   ICellRendererParams,
-  SideBarDef,
 } from 'ag-grid-community';
 import { LiquidityPoolCoin } from './simulationRunConfigModels';
 import { selectAgGridTheme } from '../themes/themeSlice';
@@ -65,33 +65,6 @@ export function LiquidityPoolConfiguration() {
       ...selectedCoinCodes,
     ]).size;
   }, [poolConstituents, selectedCoinCodes]);
-
-  const sideBar: SideBarDef = {
-    toolPanels: [
-      {
-        id: 'columns',
-        labelDefault: 'Columns',
-        labelKey: 'columns',
-        iconKey: 'columns',
-        toolPanel: 'agColumnsToolPanel',
-        minWidth: 80,
-        maxWidth: 280,
-        width: 150,
-      },
-      {
-        id: 'filters',
-        labelDefault: 'Filters',
-        labelKey: 'filters',
-        iconKey: 'filter',
-        toolPanel: 'agFiltersToolPanel',
-        minWidth: 70,
-        maxWidth: 280,
-        width: 120,
-      },
-    ],
-    position: 'right',
-    defaultToolPanel: 'none',
-  };
 
   const columnDefs = useMemo<ColDef[]>(
     () => [
@@ -206,82 +179,68 @@ export function LiquidityPoolConfiguration() {
   );
 
   function onFirstDataRendered(params: FirstDataRenderedEvent) {
-    setTimeout(() => {
-      const columns = params.api.getColumns();
-      if (!columns || columns.length === 0) {
-        return;
-      }
-      params.api.autoSizeColumns(
-        columns.map((column) => column.getId()),
-        true
-      );
-    }, 200);
+    params.api.sizeColumnsToFit();
+  }
+
+  function onGridSizeChanged(params: GridSizeChangedEvent) {
+    params.api.sizeColumnsToFit();
   }
 
   return (
     <Row>
       <Col span={24}>
-        <Row className={styles.addCoinRow}>
+        <Row className={styles.addCoinRow} gutter={[8, 8]}>
           <Col span={24}>
-            <Col span={20}>
-              <Select
-                mode="multiple"
-                disabled={!coinDataLoaded}
-                allowClear
-                value={selectedCoinCodes}
-                className={styles.coinSelectInput}
-                placeholder="Select coins to add/modify"
-                onSelect={(item: string) => dispatch(upsertSelectedCoins(item))}
-                onDeselect={(item: string) =>
-                  dispatch(removeSelectedCoins(item))
-                }
-              >
-                {availableCoins.map(function (object) {
-                  return (
-                    <Option key={object.coinCode}>{object.coinCode}</Option>
-                  );
-                })}
-              </Select>
-            </Col>
-            <Col span={4}></Col>
+            <Select
+              mode="multiple"
+              disabled={!coinDataLoaded}
+              allowClear
+              value={selectedCoinCodes}
+              className={styles.coinSelectInput}
+              placeholder="Select coins to add/modify"
+              onSelect={(item: string) => dispatch(upsertSelectedCoins(item))}
+              onDeselect={(item: string) => dispatch(removeSelectedCoins(item))}
+            >
+              {availableCoins.map((object) => (
+                <Option key={object.coinCode}>{object.coinCode}</Option>
+              ))}
+            </Select>
           </Col>
-          <Col span={24}>
-            <Row>
-              <Col span={20}>
-                <InputNumber
-                  disabled={
-                    !coinDataLoaded || isRunLocked || totalSelectedPoolSize > 8
-                  }
-                  status={isInitialValueInvalid ? 'error' : undefined}
-                  addonBefore={'$'}
-                  value={initialMarketValue}
-                  placeholder="enter dollar value to add"
-                  className={styles.coinMarketValueInput}
-                  onChange={(e) => {
-                    dispatch(setSelectedInitialCoinAmount(e));
-                  }}
-                />
-              </Col>
-              <Col span={4}>
-                <Button
-                  disabled={
-                    !coinDataLoaded ||
-                    isRunLocked ||
-                    totalSelectedPoolSize > 8 ||
-                    initialMarketValue === 0 ||
-                    initialMarketValue === null
-                  }
-                  type="primary"
-                  icon={<PlusCircleOutlined />}
-                  onClick={() => {
-                    dispatch(updateLiquidityPoolConstituents());
-                    dispatch(clearSelectedCoins());
-                  }}
-                >
-                  {isRunLocked ? 'Reset' : 'Add'}
-                </Button>
-              </Col>
-            </Row>
+          <Col xs={24} md={18}>
+            <InputNumber
+              disabled={
+                !coinDataLoaded || isRunLocked || totalSelectedPoolSize > 8
+              }
+              status={isInitialValueInvalid ? 'error' : undefined}
+              addonBefore={'$'}
+              value={initialMarketValue}
+              placeholder="enter dollar value to add"
+              className={styles.coinMarketValueInput}
+              onChange={(e) => {
+                dispatch(setSelectedInitialCoinAmount(e));
+              }}
+            />
+          </Col>
+          <Col xs={24} md={6} className={styles.addCoinActionCol}>
+            <Button
+              block
+              disabled={
+                !coinDataLoaded ||
+                isRunLocked ||
+                totalSelectedPoolSize > 8 ||
+                initialMarketValue === 0 ||
+                initialMarketValue === null
+              }
+              type="primary"
+              icon={<PlusCircleOutlined />}
+              className={styles.addCoinButton}
+              onClick={() => {
+                dispatch(updateLiquidityPoolConstituents());
+                dispatch(clearSelectedCoins());
+              }}
+            >
+              {isRunLocked ? 'Reset' : 'Add'}
+            </Button>
           </Col>
         </Row>
         <Row>
@@ -296,7 +255,7 @@ export function LiquidityPoolConfiguration() {
                 gridOptions={gridOptions}
                 columnDefs={columnDefs}
                 onFirstDataRendered={onFirstDataRendered}
-                sideBar={sideBar}
+                onGridSizeChanged={onGridSizeChanged}
               ></AgGridReact>
             </div>
           </Col>

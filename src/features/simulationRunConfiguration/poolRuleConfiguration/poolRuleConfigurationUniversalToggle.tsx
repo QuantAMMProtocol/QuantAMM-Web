@@ -23,11 +23,13 @@ export function PoolRuleConfigurationUniversalToggle({
   return (
     <div
       id="UniversalToggle"
+      className={styles.universalToggleRow}
       hidden={
         localUpdateRule.updateRuleName.toLowerCase().indexOf('cowamm') !== -1 ||
         localUpdateRule.updateRuleName.toLowerCase().indexOf('gyro') !== -1
       }
     >
+      <span className={styles.universalToggleTitle}>Parameters applied to</span>
       <Radio.Group
         onChange={(e) => {
           const nextIsUniversal = e.target.value;
@@ -73,13 +75,6 @@ export function PoolRuleConfigurationUniversalToggle({
         className={styles.universalToggleGroup}
         value={isUniversal}
       >
-        <Radio.Button
-          value={true}
-          disabled
-          className={styles.universalToggleLabel}
-        >
-          Parameters applied to
-        </Radio.Button>
         <Radio.Button value={true} className={styles.universalToggleOption}>
           All Tokens
         </Radio.Button>

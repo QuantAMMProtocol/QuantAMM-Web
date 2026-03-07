@@ -108,3 +108,92 @@
   margin-left: 10px;
   width: 100%;
 }
+
+.runnerScrollLayout {
+  display: grid;
+  grid-template-columns: minmax(230px, 280px) minmax(0, 1fr);
+  column-gap: 16px;
+  padding: 12px;
+  align-items: start;
+}
+
+.runnerSidebar {
+  position: sticky;
+  top: 16px;
+  border: 1px solid rgba(230, 206, 151, 0.2);
+  border-radius: 12px;
+  padding: 12px;
+  background: rgba(20, 25, 31, 0.4);
+}
+
+.runnerHeaderActions {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.runnerActionButton {
+  flex: 1;
+}
+
+.runnerStepNavigation {
+  max-height: calc(100vh - 180px);
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.runnerSections {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+.runnerSectionCard {
+  border: 1px solid rgba(230, 206, 151, 0.2);
+  border-radius: 12px;
+  padding: 12px;
+  background: rgba(20, 25, 31, 0.25);
+  scroll-margin-top: 16px;
+}
+
+.runnerSectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.runnerSectionTitle {
+  margin: 0;
+  font-size: 20px;
+}
+
+.runnerSectionLocked {
+  font-size: 11px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: #a7a7a7;
+}
+
+.runnerLockedState {
+  border: 1px dashed rgba(230, 206, 151, 0.4);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+@media (max-width: 1200px) {
+  .runnerScrollLayout {
+    grid-template-columns: 1fr;
+    row-gap: 16px;
+  }
+
+  .runnerSidebar {
+    position: static;
+  }
+
+  .runnerStepNavigation {
+    max-height: none;
+  }
+}

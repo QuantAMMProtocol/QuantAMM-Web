@@ -32,7 +32,7 @@ import {
   SimulationRunBreakdown,
   SimulationRunLiquidityPoolSnapshot,
 } from '../simulationResults/simulationResultSummaryModels';
-import { ChangeEvent, useCallback, useRef, useState } from 'react';
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { SimulatorOptions } from './simulationOptions';
 import { PoolConstituentSelectionStep } from './sections/poolConstituentSelectionStep';
 import { SimulationRunnerHeader } from './sections/simulationRunnerHeader';
@@ -42,6 +42,7 @@ import {
 } from './sections/simulationRunnerImportResultsModal';
 import { CURRENT_LIVE_FACTSHEETS } from '../documentation/factSheets/liveFactsheets';
 import { Chain } from '../simulationRunConfiguration/simulationRunConfigModels';
+import runnerStyles from './simulationRunnerCommon.module.css';
 
 const formatSimulationRangeDate = (timestamp: number): string => {
   if (!timestamp) {
@@ -207,6 +208,17 @@ const buildLiveProductBreakdown = ({
   };
 };
 
+const RUNNER_STEP_TITLES = [
+  'Options',
+  'Pool',
+  'Time Range',
+  'Hooks',
+  'Final Review',
+  'Run Status',
+  'Results',
+  'Save Results',
+];
+
 export default function SimulationRunner() {
   const dispatch = useAppDispatch();
   const [getPoolById] = useGetPoolByIdLazyQuery();
@@ -232,17 +244,8 @@ export default function SimulationRunner() {
   const closeModal = useCallback(() => {
     setIsModalOpen(false);
   }, []);
-
-  const onChange = useCallback(
-    (value: number) => {
-      if (value === 5 && runStatusIndex !== 2) {
-        return;
-      }
-
-      dispatch(changeSimulationRunnerCurrentStepIndex(value));
-    },
-    [dispatch, runStatusIndex]
-  );
+  const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const hasMountedRef = useRef(false);
 
   const paramsFileInputRef = useRef<HTMLInputElement>(null);
   const resultsFileInputRef = useRef<HTMLInputElement>(null);
@@ -256,6 +259,7 @@ export default function SimulationRunner() {
   }, []);
 
   const handleResetClick = useCallback(() => {
+    setForceViewResults(false);
     dispatch(resetSimulationRunner());
     dispatch(resetSims());
     dispatch(changeSimulationRunnerCurrentStepIndex(0));
@@ -263,7 +267,8 @@ export default function SimulationRunner() {
   }, [dispatch]);
 
   const handleParamsFileChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => handleDownloadParams(event, dispatch),
+    (event: ChangeEvent<HTMLInputElement>) =>
+      handleDownloadParams(event, dispatch),
     [dispatch]
   );
 
@@ -308,7 +313,8 @@ export default function SimulationRunner() {
           (factsheet) => {
             const factsheetPoolId = factsheet.poolId.toLowerCase();
             return (
-              factsheetPoolId === productAddress || factsheetPoolId === productId
+              factsheetPoolId === productAddress ||
+              factsheetPoolId === productId
             );
           }
         );
@@ -316,7 +322,9 @@ export default function SimulationRunner() {
         let importedBreakdown: SimulationRunBreakdown | undefined;
 
         if (matchedFactsheet?.targetPoolJson) {
-          importedBreakdown = await getBreakdown(matchedFactsheet.targetPoolJson);
+          importedBreakdown = await getBreakdown(
+            matchedFactsheet.targetPoolJson
+          );
         } else {
           const timeSeries = product.timeSeries ?? [];
           if (timeSeries.length < 2) {
@@ -337,7 +345,9 @@ export default function SimulationRunner() {
               endDateString: endTimestamp
                 ? new Date(endTimestamp * 1000).toLocaleString()
                 : '',
-              tokens: [...new Set(product.poolConstituents.map((pc) => pc.coin))],
+              tokens: [
+                ...new Set(product.poolConstituents.map((pc) => pc.coin)),
+              ],
               returns: buildPortfolioReturnsForAnalysis(timeSeries),
               benchmarks: [Benchmark.HODL],
             },
@@ -377,11 +387,77 @@ export default function SimulationRunner() {
         setImportingLivePool(false);
       }
     },
-    [dispatch, getPoolById, importingLivePool, runFinancialAnalysis, runStatusIndex]
+    [
+      dispatch,
+      getPoolById,
+      importingLivePool,
+      runFinancialAnalysis,
+      runStatusIndex,
+    ]
   );
 
-  function getRunnerStep(): JSX.Element {
-    switch (currentStepIndex) {
+  const hasRunStarted =
+    runStatusIndex > 0 ||
+    currentStepIndex >= 5 ||
+    runTypeIndex !== 0 ||
+    results.length > 0;
+  const hasResults =
+    runStatusIndex === 2 || forceViewResults || results.length > 0;
+  const isStepLocked = useCallback(
+    (stepIndex: number) => {
+      if (stepIndex === 5) {
+        return !hasRunStarted;
+      }
+
+      if (stepIndex >= 6) {
+        return !hasResults;
+      }
+
+      return false;
+    },
+    [hasResults, hasRunStarted]
+  );
+
+  const onChange = useCallback(
+    (value: number) => {
+      if (isStepLocked(value)) {
+        return;
+      }
+
+      dispatch(changeSimulationRunnerCurrentStepIndex(value));
+    },
+    [dispatch, isStepLocked]
+  );
+
+  const scrollToStep = useCallback((stepIndex: number) => {
+    const targetSection = sectionRefs.current[stepIndex];
+    if (!targetSection) {
+      return;
+    }
+
+    targetSection.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!hasMountedRef.current) {
+      hasMountedRef.current = true;
+      return;
+    }
+
+    scrollToStep(currentStepIndex);
+  }, [currentStepIndex, scrollToStep]);
+
+  const getLockedState = (message: string): JSX.Element => (
+    <div className={runnerStyles.runnerLockedState}>
+      <p>{message}</p>
+    </div>
+  );
+
+  function getRunnerStepContent(stepIndex: number): JSX.Element {
+    switch (stepIndex) {
       case 0:
         return <SimulatorOptions />;
       case 1:
@@ -393,14 +469,28 @@ export default function SimulationRunner() {
       case 4:
         return <SimulationRunnerFinalReviewStep />;
       case 5:
+        if (!hasRunStarted) {
+          return getLockedState(
+            'Start a simulation run to unlock live run status tracking.'
+          );
+        }
+
         if (runTypeIndex === 1) {
           return <SimulationRunnerHistoricInProgress />;
         } else if (runTypeIndex === 2) {
           return <div>Training progress</div>;
         } else {
-          return <SimulationRunnerFinalReviewStep />;
+          return getLockedState(
+            'Run status will appear here once a simulation has started.'
+          );
         }
       case 6:
+        if (!hasResults) {
+          return getLockedState(
+            'Complete a simulation run or import results to unlock this section.'
+          );
+        }
+
         return (
           <SimulationResultsSummaryStep
             breakdowns={results}
@@ -408,6 +498,12 @@ export default function SimulationRunner() {
           />
         );
       case 7:
+        if (!hasResults) {
+          return getLockedState(
+            'Save results becomes available after you have completed or imported a run.'
+          );
+        }
+
         return (
           <SimulationResultSaveToCompareTab
             breakdowns={results}
@@ -420,15 +516,16 @@ export default function SimulationRunner() {
   }
 
   return (
-    <div>
+    <div className={runnerStyles.runnerScrollLayout}>
       <SimulationRunnerHeader
         currentStepIndex={currentStepIndex}
-        runStatusIndex={runStatusIndex}
+        hasRunStarted={hasRunStarted}
+        hasResults={hasResults}
         onChange={onChange}
         onImportClick={showModal}
         onResetClick={handleResetClick}
+        resetDisabled={runStatusIndex < 2 && !forceViewResults}
       />
-
       <SimulationRunnerImportResultsModal
         isOpen={isModalOpen}
         runStatusIndex={runStatusIndex}
@@ -442,8 +539,27 @@ export default function SimulationRunner() {
         onParamsFileChange={handleParamsFileChange}
         onResultsFileChange={handleResultsFileChange}
       />
-
-      {getRunnerStep()}
+      <div className={runnerStyles.runnerSections}>
+        {RUNNER_STEP_TITLES.map((stepTitle, index) => (
+          <div
+            key={stepTitle}
+            ref={(element) => {
+              sectionRefs.current[index] = element;
+            }}
+            className={runnerStyles.runnerSectionCard}
+          >
+            <div className={runnerStyles.runnerSectionHeader}>
+              <h2 className={runnerStyles.runnerSectionTitle}>
+                {index + 1}. {stepTitle}
+              </h2>
+              {isStepLocked(index) ? (
+                <span className={runnerStyles.runnerSectionLocked}>Locked</span>
+              ) : null}
+            </div>
+            {getRunnerStepContent(index)}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

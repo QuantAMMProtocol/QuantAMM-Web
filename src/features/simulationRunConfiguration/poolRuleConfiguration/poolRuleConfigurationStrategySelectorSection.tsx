@@ -83,22 +83,28 @@ export function PoolRuleConfigurationStrategySelectorSection({
             }
             className={styles.arbGroupContainer}
           >
-            <Radio.Group
-              onChange={(e) => setEnableArbBots(e.target.value)}
-              value={enableArbBots}
-              className={styles.arbBotsGroup}
-              size="small"
+            <Row
+              align="middle"
+              justify="space-between"
+              className={styles.arbRow}
             >
-              <Radio.Button disabled className={styles.arbBotsButton}>
-                Arbitrage Bots
-              </Radio.Button>
-              <Radio.Button value={true} className={styles.arbBotsButton}>
-                Automated
-              </Radio.Button>
-              <Radio.Button value={false} className={styles.arbBotsButton}>
-                None
-              </Radio.Button>
-            </Radio.Group>
+              <Col className={styles.arbLabel}>Arbitrage Bots</Col>
+              <Col>
+                <Radio.Group
+                  onChange={(e) => setEnableArbBots(e.target.value)}
+                  value={enableArbBots}
+                  className={styles.arbBotsGroup}
+                  size="small"
+                >
+                  <Radio.Button value={true} className={styles.arbBotsButton}>
+                    Automated
+                  </Radio.Button>
+                  <Radio.Button value={false} className={styles.arbBotsButton}>
+                    None
+                  </Radio.Button>
+                </Radio.Group>
+              </Col>
+            </Row>
           </div>
         </Col>
       </Row>

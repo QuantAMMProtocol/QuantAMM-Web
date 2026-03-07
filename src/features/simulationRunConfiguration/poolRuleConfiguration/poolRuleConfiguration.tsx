@@ -83,11 +83,11 @@ export function PoolRuleConfiguration() {
 
   return (
     <div>
-      <Row>
-        <Col span={8}>
+      <Row gutter={[20, 20]} className={styles.poolConfigurationRow}>
+        <Col xs={24} xl={12} xxl={10}>
           <LiquidityPoolConfiguration />
         </Col>
-        <Col span={8} className={styles.poolRuleCenterColumn}>
+        <Col xs={24} xl={12} xxl={8} className={styles.poolRuleCenterColumn}>
           <PoolRuleConfigurationCenterColumn
             coinDataLoaded={coinDataLoaded}
             isRunLocked={isRunLocked}

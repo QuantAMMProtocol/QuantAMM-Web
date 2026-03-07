@@ -83,7 +83,7 @@ export function SummaryAndContinueSection({
   onContinue,
 }: SummaryAndContinueSectionProps) {
   return (
-    <Col span={8}>
+    <Col xs={24} xl={24} xxl={6}>
       <Row className={styles.continueSection}>
         <Col span={24}>
           <ConfiguredSimulationsToRunSummary />
