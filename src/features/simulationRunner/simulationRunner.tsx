@@ -34,6 +34,7 @@ import {
 } from '../simulationResults/simulationResultSummaryModels';
 import { ChangeEvent, useCallback, useRef, useState } from 'react';
 import { SimulatorOptions } from './simulationOptions';
+import TrainBtfInProgress from '../trainBtf/trainBtfInProgress';
 import { PoolConstituentSelectionStep } from './sections/poolConstituentSelectionStep';
 import { SimulationRunnerHeader } from './sections/simulationRunnerHeader';
 import {
@@ -396,7 +397,7 @@ export default function SimulationRunner() {
         if (runTypeIndex === 1) {
           return <SimulationRunnerHistoricInProgress />;
         } else if (runTypeIndex === 2) {
-          return <div>Training progress</div>;
+          return <TrainBtfInProgress />;
         } else {
           return <SimulationRunnerFinalReviewStep />;
         }

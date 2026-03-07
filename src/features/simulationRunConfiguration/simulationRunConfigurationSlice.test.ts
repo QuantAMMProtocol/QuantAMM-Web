@@ -8,6 +8,7 @@ import {
   generateAndAddPoolToSim,
   getCurrentPrice,
   removeSim,
+  setTrainingParameterValue,
   upsertSelectedCoins,
   updatePoolWeights,
 } from './simulationRunConfigurationSlice';
@@ -299,5 +300,27 @@ describe('simulationRunConfigurationSlice view-model logic', () => {
       { unix: 2, value: 9 },
     ]);
     expect(otherHook?.hookTimeSteps).toEqual([{ unix: 222, value: 1 }]);
+  });
+
+  it('updates a training parameter value by parameter name', () => {
+    const baseState = simConfigReducer(undefined, { type: '@@INIT' });
+
+    const nextState = simConfigReducer(
+      baseState,
+      setTrainingParameterValue({
+        name: 'base_lr',
+        value: '0.25',
+      })
+    );
+
+    const updated = nextState.trainingParameters.trainingParameters.find(
+      (parameter) => parameter.name === 'base_lr'
+    );
+    const untouched = nextState.trainingParameters.trainingParameters.find(
+      (parameter) => parameter.name === 'optimiser'
+    );
+
+    expect(updated?.value).toBe('0.25');
+    expect(untouched?.value).toBe(baseState.trainingParameters.trainingParameters[2].value);
   });
 });

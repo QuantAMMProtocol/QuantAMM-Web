@@ -54,6 +54,20 @@ export const simConfigurationSlice = createSlice({
         updatePoolWeights(x.poolConstituents);
       });
     },
+    setTrainingParameterValue: (
+      state,
+      action: PayloadAction<{ name: string; value: string }>
+    ) => {
+      const targetParameter = state.trainingParameters.trainingParameters.find(
+        (parameter) => parameter.name === action.payload.name
+      );
+
+      if (!targetParameter) {
+        return;
+      }
+
+      targetParameter.value = action.payload.value;
+    },
     updatePriceHistoryLoadStatus: (state, action: PayloadAction<number>) => {
       state.status.priceHistoryLoad = action.payload;
     },
@@ -860,6 +874,7 @@ export const {
   setSelectedInitialCoinAmount,
   updateLiquidityPoolConstituents,
   setDateRange,
+  setTrainingParameterValue,
   addToSim,
   generateAndAddPoolToSim,
   addSimplifiedSelectionsToSimulatorPools,

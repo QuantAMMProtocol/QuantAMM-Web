@@ -4,6 +4,15 @@ export const CoinData = lazy(() => import('./features/coinData/coinData'));
 export const SimulationRunner = lazy(
   () => import('./features/simulationRunner/simulationRunner')
 );
+export const TrainBtfWorkflow = lazy(
+  () => import('./features/trainBtf/trainBtfWorkflow')
+);
+export const TrainBtfInProgress = lazy(
+  () => import('./features/trainBtf/trainBtfInProgress')
+);
+export const TrainBtfResults = lazy(
+  () => import('./features/trainBtf/trainBtfResults')
+);
 
 export const ProductExplorer = lazy(
   () => import('./features/productExplorer/productExplorer')

@@ -1,9 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import {
+  completeTrainingRun,
   completeRun,
+  failTrainingRun,
   failRun,
   getSimulationRunStatusIndex,
   initializeTimeRangeToRun,
+  startTrainingRun,
+  updateTrainingRunProgress,
   updateProgressPercent,
   updateStatus,
 } from './simulationRunnerSlice';
@@ -195,5 +199,55 @@ describe('simulationRunnerSlice view-model logic', () => {
     expect(failedState.simulationRunBreakdowns[0].simulationRunStatus).toBe(
       'backend timeout'
     );
+  });
+
+  it('tracks training lifecycle state and history in shared runner slice', () => {
+    const baseState = simulationRunnerReducer(undefined, { type: '@@INIT' });
+    const startedState = simulationRunnerReducer(
+      baseState,
+      startTrainingRun({
+        runId: 'run-1',
+        runLocation: './results/run-1.json',
+        startedAtIso: '2026-03-07T12:00:00.000Z',
+      })
+    );
+
+    const progressedState = simulationRunnerReducer(
+      startedState,
+      updateTrainingRunProgress({
+        status: 'Running',
+        latestStep: 3,
+        totalSteps: 10,
+        latestObjective: 1.2345,
+        updatedAtIso: '2026-03-07T12:01:00.000Z',
+      })
+    );
+
+    const completedState = simulationRunnerReducer(
+      progressedState,
+      completeTrainingRun({
+        finishedAtIso: '2026-03-07T12:02:00.000Z',
+        latestStep: 10,
+        totalSteps: 10,
+        latestObjective: 2.5,
+      })
+    );
+
+    const failedState = simulationRunnerReducer(
+      completedState,
+      failTrainingRun({
+        errorMessage: 'downstream parse error',
+        finishedAtIso: '2026-03-07T12:03:00.000Z',
+      })
+    );
+
+    expect(progressedState.trainingLatestStep).toBe(3);
+    expect(progressedState.trainingTotalSteps).toBe(10);
+    expect(progressedState.trainingLatestObjective).toBe(1.2345);
+    expect(completedState.trainingRunStatus).toBe('Complete');
+    expect(completedState.trainingRunHistory[0]?.status).toBe('Complete');
+    expect(failedState.trainingRunStatus).toBe('Failed');
+    expect(failedState.trainingErrorMessage).toBe('downstream parse error');
+    expect(failedState.trainingRunHistory[0]?.status).toBe('Failed');
   });
 });

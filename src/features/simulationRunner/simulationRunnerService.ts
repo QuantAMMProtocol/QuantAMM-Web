@@ -5,6 +5,29 @@ import {
   TrainingDto,
 } from './simulationRunnerDtos';
 
+function parsePossiblyStringifiedJson(response: unknown): unknown {
+  if (typeof response !== 'string') {
+    return response;
+  }
+
+  try {
+    return JSON.parse(response);
+  } catch {
+    return response;
+  }
+}
+
+function toRecordResponse(response: unknown): Record<string, unknown> {
+  const parsed = parsePossiblyStringifiedJson(response);
+  if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+    return parsed as Record<string, unknown>;
+  }
+
+  return {
+    value: parsed,
+  };
+}
+
 function getCookie(name: string) {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
@@ -48,8 +71,8 @@ export const simulationRunnerService = createApi({
         },
         body: JSON.stringify(bodyParam.trainingDto),
       }),
-      transformResponse: (response: string): string => {
-        return JSON.parse(response);
+      transformResponse: (response: unknown): Record<string, unknown> => {
+        return toRecordResponse(response);
       },
     }),
     retrieveTraining: builder.mutation({
@@ -63,12 +86,13 @@ export const simulationRunnerService = createApi({
         },
         body: JSON.stringify(bodyParam.trainingDto),
       }),
-      transformResponse: (response: string): string => {
-        return JSON.parse(response);
+      transformResponse: (response: unknown): Record<string, unknown> => {
+        return toRecordResponse(response);
       },
     }),
   }),
 });
 
 export const { useRunSimulationMutation } = simulationRunnerService;
-export const { useRunTrainingMutation } = simulationRunnerService;
+export const { useRunTrainingMutation, useRetrieveTrainingMutation } =
+  simulationRunnerService;

@@ -20,6 +20,9 @@ import {
   SimulationSavedResultComparison,
   SonicMacroFactSheet,
   SonicMacroSimulatorExample,
+  TrainBtfInProgress,
+  TrainBtfResults,
+  TrainBtfWorkflow,
   TermsOfService,
   TruflationBitcoinFactSheet,
   TruflationBitcoinSimulatorExample,
@@ -106,6 +109,12 @@ export const routes = createBrowserRouter([
       { path: ROUTES.COINS, element: <CoinData /> },
       { path: ROUTES.CONTACT, element: <ContactCompany /> },
       { path: ROUTES.SIMULATION_RUNNER, element: <SimulationRunner /> },
+      { path: ROUTES.TRAIN_BTF, element: <TrainBtfWorkflow /> },
+      {
+        path: ROUTES.TRAIN_BTF_IN_PROGRESS,
+        element: <TrainBtfInProgress />,
+      },
+      { path: ROUTES.TRAIN_BTF_RESULTS, element: <TrainBtfResults /> },
       {
         path: ROUTES.SIMULATION_COMPARER,
         element: <SimulationSavedResultComparison />,

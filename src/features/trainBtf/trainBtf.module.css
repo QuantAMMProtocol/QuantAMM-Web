@@ -1,0 +1,51 @@
+.pageContainer {
+  padding: 24px;
+}
+
+.headerBlock {
+  margin-bottom: 24px;
+}
+
+.subtitle {
+  margin-top: 8px;
+  color: #6b7280;
+}
+
+.sectionCard {
+  margin-bottom: 24px;
+  border-radius: 12px;
+}
+
+.sectionTitle {
+  margin-bottom: 4px;
+}
+
+.sectionDescription {
+  margin-bottom: 16px;
+  color: #6b7280;
+}
+
+.optimisationRow {
+  margin-bottom: 12px;
+}
+
+.runSummaryItem {
+  margin-bottom: 8px;
+}
+
+.progressCardsRow {
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+.progressCard {
+  border-radius: 12px;
+}
+
+.resultsActions {
+  margin-top: 16px;
+}
+
+.tableWrap {
+  margin-top: 16px;
+}

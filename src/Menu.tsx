@@ -127,6 +127,16 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
             icon: <FireOutlined />,
           },
           {
+            key: 'simulation-runner',
+            label: 'Historical Simulator',
+            icon: <LineChartOutlined />,
+          },
+          {
+            key: 'train-btf',
+            label: 'Train BTF',
+            icon: <LineChartOutlined />,
+          },
+          {
             key: 'tos',
             label: 'Terms of Service',
           },
@@ -191,6 +201,11 @@ export const MenuComponent: FC<MenuComponentProps> = ({ initialise }) => {
           {
             key: 'simulation-runner',
             label: 'Historical Simulator',
+            icon: <LineChartOutlined />,
+          },
+          {
+            key: 'train-btf',
+            label: 'Train BTF',
             icon: <LineChartOutlined />,
           },
           {
