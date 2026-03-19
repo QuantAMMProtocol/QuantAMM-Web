@@ -7,6 +7,7 @@ import type {
   AgTimeAxisOptions,
   AgTooltipRendererResult,
 } from 'ag-charts-community';
+import { time } from 'ag-charts-community';
 import { Grid, Row, Col } from 'antd';
 
 import styles from './productDetailPoolGraph.module.scss';
@@ -26,6 +27,7 @@ import {
 } from './components/productDetailDropdownSelect';
 import { ProductDetailGraphTimeRangeSelector } from './components/productDetailGraphTimeRangeSelector';
 import { filterByTimeRange } from './helpers';
+import { getProductDetailTimeAxisPreset } from './productDetailPoolGraphUtils';
 
 const { useBreakpoint } = Grid;
 
@@ -260,46 +262,6 @@ const ProductDetailPoolGraphImpl: FC<ProductDetailPoolGraphImplProps> = ({
     () => [...firstAxisSeries, ...secondaryAxisSeries],
     [firstAxisSeries, secondaryAxisSeries]
   );
-  // ---- time helpers (ms) ----
-  const HOUR = 60 * 60 * 1000;
-  const DAY = 24 * HOUR;
-  const WEEK = 7 * DAY;
-  const MONTH = 30 * DAY;
-  const getTimeAxisIntervalStepMs = useCallback(
-    (range: string | undefined, spanMs: number): number => {
-      const maxDataPoints = 4;
-      const oneDay = DAY;
-
-      if (isMobile) {
-        const daysForThreeLabels = Math.ceil(spanMs / (2 * oneDay));
-        return daysForThreeLabels * oneDay; // Adjusted for 3 labels on mobile
-      }
-
-      switch (range) {
-        case '7d':
-          return DAY;
-        case '1m':
-          return 2 * DAY;
-        case '3m':
-          return WEEK;
-        case '6m':
-          return 2 * WEEK;
-        case '1y':
-          return MONTH;
-        case 'max':
-          return Math.max(MONTH, Math.round(spanMs / 12));
-        default: {
-          if (spanMs <= maxDataPoints * oneDay) {
-            return oneDay; // Daily steps
-          } else {
-            const interval = Math.ceil(spanMs / (maxDataPoints * oneDay));
-            return interval * oneDay; // Adjusted interval to fit max data points
-          }
-        }
-      }
-    },
-    [DAY, MONTH, WEEK, isMobile]
-  );
 
   const totalSpanMs = useMemo(() => {
     if (filteredTs.length < 2) return 0;
@@ -308,31 +270,41 @@ const ProductDetailPoolGraphImpl: FC<ProductDetailPoolGraphImplProps> = ({
     return last - first;
   }, [filteredTs]);
 
-  const timeIntervalStepMs = useMemo(
-    () => getTimeAxisIntervalStepMs(selectedTimeRange, totalSpanMs),
-    [getTimeAxisIntervalStepMs, selectedTimeRange, totalSpanMs]
+  const timeAxisPreset = useMemo(
+    () => getProductDetailTimeAxisPreset(totalSpanMs, isMobile),
+    [totalSpanMs, isMobile]
   );
 
-  const timeLabelFormat = useMemo(() => {
-    if (!totalSpanMs) return '%b %Y';
-    return totalSpanMs <= 90 * DAY
-      ? isMobile
-        ? '%m/%y'
-        : '%d %b %Y'
-      : '%b %Y';
-  }, [totalSpanMs, DAY, isMobile]);
   const axes: (AgNumberAxisOptions | AgTimeAxisOptions)[] = useMemo(() => {
     const maxVol = filteredTs.length
       ? Math.max(...filteredTs.map((d) => d.volume24h ?? 0))
       : 0;
+
+    const timeAxisStep =
+      timeAxisPreset.intervalUnit === 'day'
+        ? time.day.every(timeAxisPreset.intervalStep)
+        : timeAxisPreset.intervalUnit === 'week'
+          ? time.monday.every(timeAxisPreset.intervalStep)
+          : timeAxisPreset.intervalUnit === 'month'
+            ? time.month.every(timeAxisPreset.intervalStep)
+            : time.year.every(timeAxisPreset.intervalStep);
 
     const base: (AgNumberAxisOptions | AgTimeAxisOptions)[] = [
       {
         type: 'time',
         position: 'bottom',
         nice: true,
-        label: { format: timeLabelFormat },
-        interval: { step: timeIntervalStepMs },
+        label: {
+          format: timeAxisPreset.labelFormat,
+          autoRotate: true,
+          autoRotateAngle: 320,
+          avoidCollisions: true,
+          minSpacing: timeAxisPreset.labelMinSpacing,
+        },
+        interval: {
+          step: timeAxisStep,
+          minSpacing: timeAxisPreset.intervalMinSpacing,
+        },
       },
       { type: 'number', position: 'left', keys: ['benchmarkValue', 'value'] },
       {
@@ -352,7 +324,7 @@ const ProductDetailPoolGraphImpl: FC<ProductDetailPoolGraphImplProps> = ({
       });
     }
     return base;
-  }, [filteredTs, selectedSecondAxis, timeLabelFormat, timeIntervalStepMs]);
+  }, [filteredTs, selectedSecondAxis, timeAxisPreset]);
 
   const options = useMemo(
     () => ({
