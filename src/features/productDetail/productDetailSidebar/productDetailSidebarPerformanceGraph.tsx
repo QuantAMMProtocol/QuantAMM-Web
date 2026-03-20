@@ -1,7 +1,6 @@
 import { FC } from 'react';
 import { PerformancePeriod, Product } from '../../../models';
 import { ProductItemPerformanceAreaGraph } from '../../productExplorer/productItem/card/productItemPerformanceAreaGraph';
-import { ProductDetailAnalyticsNotice } from '../productDetailAnalyticsNotice';
 
 import styles from './productDetailSidebarGraph.module.scss';
 
@@ -16,7 +15,6 @@ export const ProductDetailSidebarPerformanceGraph: FC<
   const performancePeriod: PerformancePeriod = { sharePrice: 0, return: 0 };
   return (
     <div className={styles['product-detail-sidebar-graph-wrapper']}>
-      <ProductDetailAnalyticsNotice />
       <div className={styles['product-detail-sidebar-graph']}>
         {product.oneWeekPerformance &&
           product.oneMonthPerformance &&

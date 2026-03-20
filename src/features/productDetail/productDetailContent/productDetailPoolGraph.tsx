@@ -28,7 +28,6 @@ import {
 import { ProductDetailGraphTimeRangeSelector } from './components/productDetailGraphTimeRangeSelector';
 import { filterByTimeRange } from './helpers';
 import { getProductDetailTimeAxisPreset } from './productDetailPoolGraphUtils';
-import { ProductDetailAnalyticsNotice } from '../productDetailAnalyticsNotice';
 
 const { useBreakpoint } = Grid;
 
@@ -355,9 +354,6 @@ const ProductDetailPoolGraphImpl: FC<ProductDetailPoolGraphImplProps> = ({
   return (
     <Row id="graph">
       <Col span={24}>
-        <div className={styles['product-detail-graph__notice']}>
-          <ProductDetailAnalyticsNotice />
-        </div>
         <div className={styles['product-detail-graph-container']}>
           <div className={styles['product-detail-graph__top-right']}>
             <ProductDetailGraphTimeRangeSelector
