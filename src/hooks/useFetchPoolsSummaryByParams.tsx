@@ -15,9 +15,19 @@ export const useFetchPoolsSummaryByParams = (
   params: GetPoolsSummaryQueryVariables,
   options?: {
     skip?: boolean;
+    includeDefaultWhereFilters?: boolean;
   }
 ) => {
   const { first, orderBy, orderDirection, skip, where } = params;
+  const includeDefaultWhereFilters = options?.includeDefaultWhereFilters ?? true;
+
+  const whereWithDefaults = includeDefaultWhereFilters
+    ? {
+        minTvl: DEFAULT_MIN_TVL,
+        tagNotIn: ['BLACK_LISTED'],
+        ...where,
+      }
+    : where;
 
   const { data, loading, error } = useGetPoolsSummaryQuery({
     skip: options?.skip ?? false,
@@ -26,11 +36,7 @@ export const useFetchPoolsSummaryByParams = (
       orderBy: orderBy ?? DEFAULT_ORDER_BY,
       orderDirection: orderDirection ?? DEFAULT_ORDER_DIRECTION,
       skip: skip ?? DEFAULT_SKIPPED_POOLS,
-      where: {
-        minTvl: DEFAULT_MIN_TVL,
-        tagNotIn: ['BLACK_LISTED'],
-        ...where,
-      },
+      where: whereWithDefaults,
     },
   });
 
