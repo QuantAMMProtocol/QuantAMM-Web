@@ -3,6 +3,7 @@ import { Button, Col, Row, Tag, Tooltip, Spin } from 'antd';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import {
+  useCallback,
   useEffect,
   useMemo,
   useRef,
@@ -82,6 +83,17 @@ export function BannerProductSection({ productData }: ProductBannerProps) {
   const timersRef = useRef<Record<string, number>>({});
   const [flashByKey, setFlashByKey] = useState<Record<string, FlashDir>>({});
 
+  const computeItdPerfPct = useCallback(
+    (currentPrice?: number, inceptionPrice?: number) => {
+      const cur = Number(currentPrice);
+      const inc = Number(inceptionPrice);
+      if (!Number.isFinite(cur) || !Number.isFinite(inc) || inc === 0)
+        return null;
+      return (cur / inc - 1) * 100;
+    },
+    []
+  );
+
   useEffect(() => {
     productData.forEach((p) => {
       const k = `${p.poolChain}:${p.poolId.toLowerCase()}`;
@@ -120,7 +132,7 @@ export function BannerProductSection({ productData }: ProductBannerProps) {
       Object.values(timersRef.current).forEach((t) => window.clearTimeout(t));
       timersRef.current = {};
     };
-  }, [neededPrices, productData]);
+  }, [computeItdPerfPct, neededPrices, productData]);
 
   const handleNavigation = (route?: string) => {
     if (route) navigate(route);
@@ -135,17 +147,6 @@ export function BannerProductSection({ productData }: ProductBannerProps) {
 
   const formatPct = (value: number) =>
     `${value >= 0 ? '+' : ''}${value.toFixed(1)}%`;
-
-  const computeItdPerfPct = (
-    currentPrice?: number,
-    inceptionPrice?: number
-  ) => {
-    const cur = Number(currentPrice);
-    const inc = Number(inceptionPrice);
-    if (!Number.isFinite(cur) || !Number.isFinite(inc) || inc === 0)
-      return null;
-    return (cur / inc - 1) * 100;
-  };
 
   const featuredPoolDiagnostics = useMemo(
     () =>
