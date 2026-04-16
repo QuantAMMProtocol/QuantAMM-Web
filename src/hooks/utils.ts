@@ -74,7 +74,7 @@ export const findClosestPrice = (
 
   for (const priceEntry of prices) {
     const diff = Math.abs(Number(priceEntry.timestamp) - targetTimestamp);
-    if (diff < range && diff < bestDiff) {
+    if (diff <= range && diff < bestDiff) {
       bestDiff = diff;
       bestPrice = priceEntry.price;
     }

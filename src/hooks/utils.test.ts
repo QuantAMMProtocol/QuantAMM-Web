@@ -50,6 +50,7 @@ describe('hooks/utils view-model logic', () => {
 
     expect(findClosestPrice(prices, 1704067200)).toBe(100);
     expect(findClosestPrice(prices, 1704067200 + 60 * 60 * 20)).toBe(110);
+    expect(findClosestPrice(prices, 1704067200 + 60 * 60 * 24)).toBe(110);
     expect(findClosestPrice(prices, 1704067200 + 60 * 60 * 80)).toBe(0);
   });
 

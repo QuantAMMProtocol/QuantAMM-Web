@@ -14,35 +14,37 @@ export const ProductDetailSidebarPerformanceGraph: FC<
   const performanceLength = product.dailyPerformance?.length ?? 0;
   const performancePeriod: PerformancePeriod = { sharePrice: 0, return: 0 };
   return (
-    <div className={styles['product-detail-sidebar-graph']}>
-      {product.oneWeekPerformance &&
-        product.oneMonthPerformance &&
-        product.threeMonthPerformance &&
-        product.sixMonthPerformance &&
-        product.oneYearPerformance &&
-        product.inceptionPerformance && (
-          <ProductItemPerformanceAreaGraph
-            data={[
-              product.inceptionPerformance,
-              performanceLength >= 7
-                ? product.oneWeekPerformance
-                : performancePeriod,
-              performanceLength >= 30
-                ? product.oneMonthPerformance
-                : performancePeriod,
-              performanceLength >= 90
-                ? product.threeMonthPerformance
-                : performancePeriod,
-              performanceLength >= 180
-                ? product.sixMonthPerformance
-                : performancePeriod,
-              performanceLength >= 365
-                ? product.oneYearPerformance
-                : performancePeriod,
-            ]}
-            wide={false}
-          />
-        )}
+    <div className={styles['product-detail-sidebar-graph-wrapper']}>
+      <div className={styles['product-detail-sidebar-graph']}>
+        {product.oneWeekPerformance &&
+          product.oneMonthPerformance &&
+          product.threeMonthPerformance &&
+          product.sixMonthPerformance &&
+          product.oneYearPerformance &&
+          product.inceptionPerformance && (
+            <ProductItemPerformanceAreaGraph
+              data={[
+                product.inceptionPerformance,
+                performanceLength >= 7
+                  ? product.oneWeekPerformance
+                  : performancePeriod,
+                performanceLength >= 30
+                  ? product.oneMonthPerformance
+                  : performancePeriod,
+                performanceLength >= 90
+                  ? product.threeMonthPerformance
+                  : performancePeriod,
+                performanceLength >= 180
+                  ? product.sixMonthPerformance
+                  : performancePeriod,
+                performanceLength >= 365
+                  ? product.oneYearPerformance
+                  : performancePeriod,
+              ]}
+              wide={false}
+            />
+          )}
+      </div>
     </div>
   );
 };

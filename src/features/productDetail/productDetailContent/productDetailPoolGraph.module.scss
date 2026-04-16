@@ -35,6 +35,10 @@
   }
 }
 
+.product-detail-graph__notice {
+  margin-bottom: 12px;
+}
+
 .product-detail-graph__top-right {
   grid-area: top-right;
   @include grid-area;

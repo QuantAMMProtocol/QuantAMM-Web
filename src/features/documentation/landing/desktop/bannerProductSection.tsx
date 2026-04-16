@@ -3,6 +3,7 @@ import { Button, Col, Row, Tag, Tooltip, Spin } from 'antd';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import {
+  useCallback,
   useEffect,
   useMemo,
   useRef,
@@ -51,7 +52,9 @@ export function BannerProductSection({ productData }: ProductBannerProps) {
     };
   }, [productData]);
 
-  const { data, loading } = useFetchPoolsSummaryByParams(params);
+  const { data, loading, error } = useFetchPoolsSummaryByParams(params, {
+    includeDefaultWhereFilters: false,
+  });
 
   const poolsByKey = useMemo(() => {
     const map: Record<string, { tvl: number; volume: number }> = {};
@@ -79,6 +82,17 @@ export function BannerProductSection({ productData }: ProductBannerProps) {
   const lastPricesRef = useRef<Record<string, number>>({});
   const timersRef = useRef<Record<string, number>>({});
   const [flashByKey, setFlashByKey] = useState<Record<string, FlashDir>>({});
+
+  const computeItdPerfPct = useCallback(
+    (currentPrice?: number, inceptionPrice?: number) => {
+      const cur = Number(currentPrice);
+      const inc = Number(inceptionPrice);
+      if (!Number.isFinite(cur) || !Number.isFinite(inc) || inc === 0)
+        return null;
+      return (cur / inc - 1) * 100;
+    },
+    []
+  );
 
   useEffect(() => {
     productData.forEach((p) => {
@@ -118,7 +132,7 @@ export function BannerProductSection({ productData }: ProductBannerProps) {
       Object.values(timersRef.current).forEach((t) => window.clearTimeout(t));
       timersRef.current = {};
     };
-  }, [neededPrices, productData]);
+  }, [computeItdPerfPct, neededPrices, productData]);
 
   const handleNavigation = (route?: string) => {
     if (route) navigate(route);
@@ -134,16 +148,69 @@ export function BannerProductSection({ productData }: ProductBannerProps) {
   const formatPct = (value: number) =>
     `${value >= 0 ? '+' : ''}${value.toFixed(1)}%`;
 
-  const computeItdPerfPct = (
-    currentPrice?: number,
-    inceptionPrice?: number
-  ) => {
-    const cur = Number(currentPrice);
-    const inc = Number(inceptionPrice);
-    if (!Number.isFinite(cur) || !Number.isFinite(inc) || inc === 0)
-      return null;
-    return (cur / inc - 1) * 100;
-  };
+  const featuredPoolDiagnostics = useMemo(
+    () =>
+      productData.map((tag) => {
+        const summaryKey = `${tag.poolChain}:${tag.poolId}`;
+        const priceKey = `${tag.poolChain}:${tag.poolId.toLowerCase()}`;
+        const poolSummary = poolsByKey[summaryKey];
+        const currentPrice = neededPrices[priceKey];
+        const itdPerfPct = computeItdPerfPct(currentPrice, tag.inceptionLpPrice);
+
+        return {
+          title: tag.title,
+          status: tag.status,
+          poolId: tag.poolId,
+          poolChain: tag.poolChain,
+          summaryKey,
+          priceKey,
+          summaryFound: Boolean(poolSummary),
+          tvl: poolSummary?.tvl ?? null,
+          volume24h: poolSummary?.volume ?? null,
+          currentPrice: currentPrice ?? null,
+          inceptionLpPrice: tag.inceptionLpPrice,
+          itdPerfPct,
+        };
+      }),
+    [computeItdPerfPct, neededPrices, poolsByKey, productData]
+  );
+
+  useEffect(() => {
+    if (loading) {
+      return;
+    }
+
+    console.groupCollapsed('[landing-page][featured-btf] pool item diagnostics');
+    console.log('featured pool config', productData);
+    console.log('pool summary query params', params);
+    console.log('pool summary raw response', data?.poolGetPools ?? []);
+    console.log('pool summary error', error ?? null);
+    console.log('mapped pool summaries', poolsByKey);
+    console.log('landing page LP prices', neededPrices);
+    console.log('featured pool diagnostics', featuredPoolDiagnostics);
+
+    const missingPoolSummaries = featuredPoolDiagnostics.filter(
+      (item) => !item.summaryFound
+    );
+
+    if (missingPoolSummaries.length > 0) {
+      console.warn(
+        'featured pools missing summary data',
+        missingPoolSummaries
+      );
+    }
+
+    console.groupEnd();
+  }, [
+    data,
+    error,
+    featuredPoolDiagnostics,
+    loading,
+    neededPrices,
+    params,
+    poolsByKey,
+    productData,
+  ]);
 
   return (
     <motion.div

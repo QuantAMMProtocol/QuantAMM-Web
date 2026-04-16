@@ -17,25 +17,32 @@ export default function LandingPage() {
   const dispatch = useAppDispatch();
   const handleGateClose = () => dispatch(setAcceptedTermsAndConditions(true));
 
-  const productData = CURRENT_LIVE_FACTSHEETS.factsheets.map((factsheet) => ({
-    title: factsheet.iconTitle,
-    imgSrc: factsheet.factsheetImage.image,
-    description: factsheet.iconDescription,
-    status: factsheet.status,
-    opacity: factsheet.iconOpacity,
-    imgWidth: '30%',
-    focus: factsheet.iconFocus,
-    poolId: factsheet.poolId,
-    poolChain: factsheet.poolChain,
-    inceptionLpPrice: factsheet.inceptionLpPrice,
-    factsheetRoute: '/factsheet/' + factsheet.poolId,
-    productExplorerRoute:
-      ROUTES.PRODUCT_EXPLORER +
-      '/' +
-      factsheet.poolChain.toUpperCase() +
-      '/' +
-      factsheet.poolId,
-  }));
+  const featuredPoolIds = new Set<string>([
+    ROUTES.TRUFLATIONBITCOINFACTSHEET,
+    ROUTES.SAFEHAVENFACTSHEET,
+  ]);
+
+  const productData = CURRENT_LIVE_FACTSHEETS.factsheets
+    .filter((factsheet) => featuredPoolIds.has(factsheet.poolId))
+    .map((factsheet) => ({
+      title: factsheet.iconTitle,
+      imgSrc: factsheet.factsheetImage.image,
+      description: factsheet.iconDescription,
+      status: factsheet.status,
+      opacity: factsheet.iconOpacity,
+      imgWidth: '30%',
+      focus: factsheet.iconFocus,
+      poolId: factsheet.poolId,
+      poolChain: factsheet.poolChain,
+      inceptionLpPrice: factsheet.inceptionLpPrice,
+      factsheetRoute: '/factsheet/' + factsheet.poolId,
+      productExplorerRoute:
+        ROUTES.PRODUCT_EXPLORER +
+        '/' +
+        factsheet.poolChain.toUpperCase() +
+        '/' +
+        factsheet.poolId,
+    }));
 
   //stub
   //productData.push({
